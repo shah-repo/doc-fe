@@ -97,7 +97,7 @@ Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.revision).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.revision).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -134,7 +134,7 @@ Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByArId", (params: {arId: string }) => {
-  cy.get(`[aria-colindex="6"] input`).arrowType(params.arId).wait(500);
+  cy.get(`[aria-colindex="6"] .k-filtercell > input`).arrowType(params.arId).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -163,12 +163,12 @@ Cypress.Commands.add("dlVerifyFilterByEffectiveDate", (params: {effectiveDate: s
 });
 
 Cypress.Commands.add("dlVerifyFilterClear", () => {
-  cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] .k-filtercell > input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
-  cy.get(`[aria-colindex="5"] .k-filtercell>input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="5"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="6"] .k-filtercell > input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "All");
   cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "All");
 });

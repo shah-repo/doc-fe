@@ -465,7 +465,7 @@ Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string 
 });
 
 Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
-  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
+  cy.get(`[aria-colindex="9"] .k-filtercell > input`).arrowType(params.orderDate).wait(500);
 });
 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {

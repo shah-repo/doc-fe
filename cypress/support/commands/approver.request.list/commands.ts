@@ -43,7 +43,7 @@ Cypress.Commands.add("alClearFilters", () => {
 });
 
 Cypress.Commands.add("alFilterByArId", (params: {arId: string }) => {
-  cy.get(`[aria-colindex="1"] input`).arrowType(params.arId).wait(500);
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).arrowType(params.arId).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -52,7 +52,7 @@ Cypress.Commands.add("alVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("alFilterByTitle", (params: {title: string }) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -81,9 +81,9 @@ Cypress.Commands.add("alVerifyFilterByStatus", (params: {status: string }) => {
 });
 
 Cypress.Commands.add("alVerifyFilterClear", () => {
-  cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] .k-filtercell > input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
 });
 

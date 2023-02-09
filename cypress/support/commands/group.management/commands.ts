@@ -186,7 +186,7 @@ Cypress.Commands.add("grpVerifyGroupTypeIsPresentOnFirstGroup", () => {
 });
 
 Cypress.Commands.add("grpSetNameFilter", (params: {name: string}) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.name).wait(500);
 });
 
 Cypress.Commands.add("grpSetMembersFilter", (params: {member: string}) => {
@@ -230,7 +230,7 @@ Cypress.Commands.add("grpFilterByType", (params: { type: string }) => {
 });
 
 Cypress.Commands.add("grpCheckIfNameFilterIsEmpty", () => {
-  cy.get(`[aria-colindex="2"] input`).should("be.empty");
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).should("be.empty");
 });
 
 Cypress.Commands.add("grpCheckIfMembersFilterIsEmpty", () => {
@@ -242,7 +242,7 @@ Cypress.Commands.add("grpCheckIfTypeFilterIsEmpty", () => {
 });
 
 Cypress.Commands.add("grpCheckIfNameFilterIsSet", (params: { name: string }) => {
-  cy.get(`[aria-colindex="2"] input`).should("have.value", params.name);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).should("have.value", params.name);
 });
 
 Cypress.Commands.add("grpCheckIfMembersFilterIsSet", (params: { member: string }) => {
@@ -321,7 +321,7 @@ Cypress.Commands.add("grpSaveGroupPatch", () => {
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
   cy.grpClearFilter();
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.name).wait(500);
   cy.get("tr.k-master-row").first().find("td").last().find("button").arrowClick();
   cy.grpCloseDialog();
 });
@@ -333,7 +333,7 @@ Cypress.Commands.add("grpClickEditGroupWithName", (params: {name: string}) => {
 
 Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: string}) => {
   cy.grpClearFilter();
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.name).wait(500);
   cy.get("tr.k-master-row").first().find("td").last().find("button").arrowClick();
 });
 
