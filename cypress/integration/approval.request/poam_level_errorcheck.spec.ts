@@ -409,6 +409,7 @@ context("Approval request landing page test", () => {
 
     it("Navigates to Approval Requests", () => {
       cy.navigToApprovalRequestListWithoutApi();
+      cy.wait(2000);
     });
 
     it("Choose AR", () => {
@@ -435,6 +436,7 @@ context("Approval request landing page test", () => {
 
     it("Navigates to Approval Requests", () => {
       cy.navigToApprovalRequestListWithoutApi();
+      cy.wait(1000);
     });
 
     it("Choose AR", () => {
