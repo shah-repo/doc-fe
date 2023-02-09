@@ -26,14 +26,10 @@ let createdSupplierFormDocument;
 let createdSupplierDocument;
 let createdPartDocument;
 let createdPOFormDocument;
-let receivingName;
-let receivePageDetailsId;
 let receivingDocumentTypeNew;
 let oldReceivingForm;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
-const TEXTFIELD_LABEL = "TEXT FIELD";
-const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
 const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
 const orderQty1 = "200";
@@ -1029,7 +1025,6 @@ context("Receivable record lifecycle", () => {
 
     it("Verify 'Create Lot' button is not shown in service lineitem", () => {
       SystemRequirement("REQ-3850");
-      cy.pause();
     });
 
     it("Save receivable", () => {
@@ -1053,9 +1048,8 @@ context("Receivable record lifecycle", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check if it follows DAM required approvers", () => {
-      cy.pause();
-    });
+    // it("Check if it follows DAM required approvers", () => {
+    // });
   });
 
   // context("Patch page details and verify receiving landing page", () => {
