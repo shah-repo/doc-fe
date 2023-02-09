@@ -118,7 +118,7 @@ context("Autocomplete 'Part Number in WO' test", () => {
       });
 
       it("Clicks on 'Add new part' button", () => {
-        cy.ptClickCreateNewPart();
+        cy.ptClickCreateNewPartWithoutApi();
       });
 
       it("Enter document title " + partsName, () => {

@@ -230,7 +230,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
-        cy.get("[value=\"X\"]").check({ force: true });
+        cy.fbSelectCheckboxValueNew({ value: "X" });
         cy.fbAddNewFieldButton();
       });
 
@@ -242,7 +242,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
-        cy.get("[value=\"Y\"]").check({ force: true });
+        cy.fbSelectCheckboxValueNew({ value: "Y" });
         cy.fbAddNewFieldButton();
       });
 

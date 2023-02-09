@@ -552,8 +552,8 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("Step #1").should("exist");
     });
 
-    it("Save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
