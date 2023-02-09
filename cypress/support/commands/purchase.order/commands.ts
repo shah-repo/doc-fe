@@ -498,6 +498,7 @@ Cypress.Commands.add("poApprove", () => {
 });
 
 Cypress.Commands.add("poApproveWithoutApi", () => {
+  cy.poClickOnPending();
   cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
