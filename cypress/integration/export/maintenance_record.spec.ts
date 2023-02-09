@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -502,10 +501,9 @@ context("Export maintenance record", () => {
         if (res.response) {
           const response = res.response.body;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldAppear();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -653,10 +651,9 @@ context("Export maintenance record", () => {
           if (res.response) {
             const response = res.response.body;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newUrl);
-            });
+            cy.visit(newUrl);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldAppear();
           }
         });
         cy.checkToastMessage({ exists: false });
@@ -735,10 +732,9 @@ context("Export maintenance record", () => {
           if (res.response) {
             const response = res.response.body;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newUrl);
-            });
+            cy.visit(newUrl);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldAppear();
           }
         });
         cy.checkToastMessage({ exists: false });

@@ -4,7 +4,6 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -863,11 +862,9 @@ context("Record inline Flow", () => {
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "RD-00004" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("tr.k-master-row").last().arrowClick();
-      });
-      cy.listLoadingElementShouldNotExist();
+      cy.get("tr.k-master-row").last().arrowClick();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Overview Tab and Predefined fields", () => {

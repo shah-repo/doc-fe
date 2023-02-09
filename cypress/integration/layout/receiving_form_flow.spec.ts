@@ -7,7 +7,6 @@ import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/docum
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -1915,9 +1914,8 @@ context("Receiving landing page test", () => {
     it("Fill the lot form", () => {
       cy.get("[name^='received']").clear().arrowType("100");
       cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-        cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
-      });
+      cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='lotForm']").arrowClick({ force: true }).autocompleteSelect("New Lot from Purchase Order Form");
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();

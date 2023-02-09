@@ -4,7 +4,6 @@
 import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -151,19 +150,19 @@ context("Regular Records test", () => {
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
+    });
 
-      context("Creates document and releases it", () => {
-        it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+    context("Creates document and releases it", () => {
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
 
-        it("Verify approvals field is automatically added", () => {
-          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
-        });
+      it("Verify approvals field is automatically added", () => {
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+      });
 
-        it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+      it("Approve and Release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -182,19 +181,19 @@ context("Regular Records test", () => {
     });
 
     it("Save Record'", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("Created Record appear in Recent tab", () => {
     it("Goto dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Record should appear in Recent", () => {
       SystemRequirement("REQ-5030");
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
+      cy.dashboardRecentTab();
+      cy.get(`[id="scrollable-auto-tabpanel-recent"] .MuiListItem-root`).eq(0)
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title");
     });
@@ -202,10 +201,8 @@ context("Regular Records test", () => {
 
   context("Add approvers to Record", () => {
     it("Open Record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.contains("RD-00003").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
+      cy.contains("RD-00003").arrowClick();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -233,10 +230,11 @@ context("Regular Records test", () => {
 
   context("Check notifications on dashboard", () => {
     it("Goto dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 2 users", () => {
+      cy.dashboardMyFeedTab();
       cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
@@ -263,17 +261,8 @@ context("Regular Records test", () => {
     });
 
     it("Click approve for the Record", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostApprovalsApprove], () => {
-          cy.contains("needs your approval for").eq(0).trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.dashboardToDoTab();
+      cy.dashApproverFirstFromListWithoutApi();
     });
   });
 
@@ -291,6 +280,7 @@ context("Regular Records test", () => {
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
+      cy.dashboardMyFeedTab();
       cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
@@ -302,20 +292,12 @@ context("Regular Records test", () => {
     });
 
     it("Click approve for the Record", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostApprovalsApprove], () => {
-          cy.contains("needs your approval for").trigger("mouseover");
-          cy.get("span > svg[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("span > svg[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.dashboardToDoTab();
+      cy.dashApproverFirstFromListWithoutApi();
     });
 
     it("Record notification should change to Released", () => {
+      cy.dashboardMyFeedTab();
       cy.contains("RELEASED").parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title");

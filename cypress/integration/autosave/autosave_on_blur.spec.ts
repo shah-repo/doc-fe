@@ -630,9 +630,8 @@ context("Autosave on blur", () => {
     //   cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
     //   cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
     //   cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
-    //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    //     cy.fbAddNewFieldButton();
-    //   });
+    //   cy.fbAddNewFieldButton();
+    //   cy.progressBarShouldNotExist();
     // });
 
     it("Add Instructions Media upload", () => {
@@ -913,10 +912,9 @@ context("Autosave on blur", () => {
 
     // Commented due to :ENC-13644
     // it("Select REQ and check for autosave", () => {
-    //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    //     cy.get("[data-cy^=\"fb-select-doc-\"]").autocompleteSelect("FM-00001");
-    //     cy.unClick();
-    //   });
+    //   cy.get("[data-cy^=\"fb-select-doc-\"]").autocompleteSelect("FM-00001");
+    //   cy.unClick();
+    //   cy.progressBarShouldNotExist();
     // });
 
     it("Delete Upload attachment and check for autosave", () => {

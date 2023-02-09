@@ -3,7 +3,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
 import { LotHistoryRecordOperators } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -233,10 +232,9 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
-        cy.unClick();
-      });
+      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
+      cy.unClick();
+      cy.progressBarShouldAppear();
     });
 
     it("Check field from other colaborator is disabled", () => {
