@@ -11,6 +11,7 @@ import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderNew } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 let createdCompany;
@@ -959,6 +960,14 @@ context("po withdraw submission ENC-12707", () => {
     });
   });
 
+  // The following is added to avoid bug ENC-14129
+  context(`Click on 3 dots and verify "Download HTML" button exists in UI`, () => {
+    it("Verify 'Download HTML' button is visible in released PO", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy='downloadHtml']").should("be.visible");
+    });
+  });
+
   context(`Verify that data is saved`, () => {
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
@@ -1108,6 +1117,7 @@ context("po withdraw submission ENC-12707", () => {
     });
 
     it("Verify Grand Total", () => {
+      SystemRequirement("REQ-1440");
       cy.get("[data-cy='poTotal']").should("have.text", level1Value);
     });
   });
