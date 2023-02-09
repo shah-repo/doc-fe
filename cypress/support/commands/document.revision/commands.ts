@@ -670,7 +670,7 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).arrowType(params.title).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
@@ -695,7 +695,7 @@ Cypress.Commands.add("drFilterDocListByDocIdAndName", (params: { docId: string; 
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).arrowType(params.title).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });

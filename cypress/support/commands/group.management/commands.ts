@@ -190,7 +190,7 @@ Cypress.Commands.add("grpSetNameFilter", (params: {name: string}) => {
 });
 
 Cypress.Commands.add("grpSetMembersFilter", (params: {member: string}) => {
-  cy.get(`[aria-colindex="3"] input`).arrowType(params.member);
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).arrowType(params.member);
 });
 
 Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
@@ -199,11 +199,11 @@ Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
 });
 
 Cypress.Commands.add("grpSetPermissionsFilter", (params: {permission: string}) => {
-  cy.get(`[aria-colindex="4"] input`).arrowType(params.permission).wait(500);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.permission).wait(500);
 });
 
 Cypress.Commands.add("grpSetTagsFilter", (params: {tag: string}) => {
-  cy.get(`[aria-colindex="5"] input`).arrowType(params.tag).wait(500);
+  cy.get(`[aria-colindex="5"] .k-filtercell>input`).arrowType(params.tag).wait(500);
 });
 
 Cypress.Commands.add("grpClearFilter", () => {
@@ -234,7 +234,7 @@ Cypress.Commands.add("grpCheckIfNameFilterIsEmpty", () => {
 });
 
 Cypress.Commands.add("grpCheckIfMembersFilterIsEmpty", () => {
-  cy.get(`[aria-colindex="3"] input`).should("be.empty");
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("be.empty");
 });
 
 Cypress.Commands.add("grpCheckIfTypeFilterIsEmpty", () => {
@@ -246,7 +246,7 @@ Cypress.Commands.add("grpCheckIfNameFilterIsSet", (params: { name: string }) => 
 });
 
 Cypress.Commands.add("grpCheckIfMembersFilterIsSet", (params: { member: string }) => {
-  cy.get(`[aria-colindex="3"] input`).should("have.value", params.member);
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("have.value", params.member);
 });
 
 Cypress.Commands.add("grpCheckIfTypeFilterIsSet", (params: { groupType: string }) => {
@@ -254,11 +254,11 @@ Cypress.Commands.add("grpCheckIfTypeFilterIsSet", (params: { groupType: string }
 });
 
 Cypress.Commands.add("grpCheckIfPermissionFilterIsSet", (params: { permission: string }) => {
-  cy.get(`[aria-colindex="4"] input`).should("have.value", params.permission);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).should("have.value", params.permission);
 });
 
 Cypress.Commands.add("grpCheckIfTagFilterIsSet", (params: { tag: string }) => {
-  cy.get(`[aria-colindex="5"] input`).should("have.value", params.tag);
+  cy.get(`[aria-colindex="5"] .k-filtercell>input`).should("have.value", params.tag);
 });
 
 Cypress.Commands.add("grpNavigateToDashboard", () => {

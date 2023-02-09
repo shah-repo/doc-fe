@@ -88,7 +88,7 @@ Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType
 });
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
-  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).arrowType(params.docId).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -106,7 +106,7 @@ Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByDocTitle", (params: {docTitle: string }) => {
-  cy.get(`[aria-colindex="3"] input`).eq(0).arrowType(params.docTitle);
+  cy.get(`[aria-colindex="3"] .k-filtercell input`).arrowType(params.docTitle);
   cy.landingPageLoadingElementShouldAppear();
 });
 
@@ -125,7 +125,7 @@ Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByOwner", (params: {owner: string }) => {
-  cy.get(`[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.get(`[aria-colindex="5"] .k-filtercell>input`).arrowType(params.owner).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -165,9 +165,9 @@ Cypress.Commands.add("dlVerifyFilterByEffectiveDate", (params: {effectiveDate: s
 Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
-  cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="5"] .k-filtercell>input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "All");
   cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "All");

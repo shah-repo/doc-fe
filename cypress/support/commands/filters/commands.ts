@@ -69,15 +69,15 @@ Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; e
   cy.get(`th[aria-colindex="2"] input`).arrowType(params.revision).wait(500);
   cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick();
   cy.get("ul>li").contains(params.eqState).arrowClick().wait(500);
-  cy.get(`th[aria-colindex="4"] input`).arrowType(params.title).wait(500);
-  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="4"] .k-filtercell>input`).arrowType(params.title).wait(500);
+  cy.get(`th[aria-colindex="5"] .k-filtercell>input`).arrowType(params.owner).wait(500);
   cy.get(`th[aria-colindex="6"] input`).arrowType(params.calDueDate).wait(500);
   cy.get(`th[aria-colindex="7"] input`).arrowType(params.pmDueDate).wait(500);
-  cy.get(`th[aria-colindex="8"] input`).arrowType(params.eqStatus).wait(500);
+  cy.get(`th[aria-colindex="8"] .k-filtercell >input`).arrowType(params.eqStatus).wait(500);
 });
 
 Cypress.Commands.add("filterEquipByOwnerAndLocation", (params: { location: string; owner: string }) => {
-  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="5"] .k-filtercell>input`).arrowType(params.owner).wait(500);
   cy.get(`th[aria-colindex="9"] input`).arrowType(params.location).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
