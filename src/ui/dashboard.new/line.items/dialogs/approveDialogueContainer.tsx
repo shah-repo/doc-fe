@@ -1,17 +1,19 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { ReactComponent as SuccessIcon } from "../../../../assets/images/success_icon.svg";
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import {
   ChangeRequestTransition,
-  ChangeRequestTransitionResponse,
+  ChangeRequestTransitionResponse
 } from "../../../../state/ducks/changeRequest/types";
 import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
 import { dashboardTodoActions } from "../../../../state/ducks/dashboard.new/todo";
 import {
   EffectiveDateFormValues,
-  PasswordFormValues,
+  PasswordFormValues
 } from "../../../change.request/form/types";
+import { toastSuccess } from "../../../components/notifications";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -45,12 +47,20 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
-    onSuccess: () => {
+    onSuccess: (response) => {
       onSuccess && onSuccess();
-
       effectiveDateDialog.close();
       transitionDialog.close();
-
+      toastSuccess(<>
+      <div style={{ display: "flex" }}>
+        <div><SuccessIcon style={{ height:"30px" }}/></div>
+        <div>
+          <div><span style={{ fontWeight: "bold", color: "#000" }}>You successfully approved a document</span></div>
+          <div>{response?.crId}{response?.title} has been approved.</div>
+        </div>
+      </div></>, {
+            closeButton: true,
+      });
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
