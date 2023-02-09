@@ -205,11 +205,16 @@ context("Layout Verification of maintainance records", () => {
         cy.navigToDocumentList();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
     });
   });
+
   context("Fill MR document attributes", () => {
     it("Verify predefiend fields title description doc id revision output type", () => {
       cy.verifyPredefiendFields();
@@ -277,6 +282,10 @@ context("Layout Verification of maintainance records", () => {
       it("Navigate to Document list", () => {
         cy.unClick();
         cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click on 'Create a document' button", () => {
@@ -433,6 +442,10 @@ context("Layout Verification of maintainance records", () => {
       cy.navigToEquipment();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on Add New Equipment button", () => {
       cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
       cy.listLoadingElementShouldNotExist();
@@ -558,6 +571,10 @@ context("Layout Verification of maintainance records", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Verify Cal is created in Alfa revision", () => {
         cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
       });
@@ -634,7 +651,7 @@ context("Layout Verification of maintainance records", () => {
     context("Fill the form", () => {
       it("Fill the record details'", () => {
         cy.drEnterDocumentTitle({ name: "MR Test title" });
-        cy.listLoadingElementShouldExist();
+        cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
       });
 
@@ -688,6 +705,10 @@ context("Layout Verification of maintainance records", () => {
         cy.wait(1000);
       });
 
+      it("Save the detail", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+
       it("Verify add FB Field textfield", () => {
         cy.get("[name^='maintainance-record-textfield']").should("exist");
         cy.get("[name^='maintainance-record-textfield']").arrowType("Test");
@@ -702,7 +723,6 @@ context("Layout Verification of maintainance records", () => {
         cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
     });
-
 
     context("Validate Right Side Panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {

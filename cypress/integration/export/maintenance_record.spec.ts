@@ -502,8 +502,8 @@ context("Export maintenance record", () => {
           const response = res.response.body;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
           cy.visit(newUrl);
-          cy.listLoadingElementShouldAppear();
-          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldAppear();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -652,8 +652,8 @@ context("Export maintenance record", () => {
             const response = res.response.body;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
             cy.visit(newUrl);
-            cy.listLoadingElementShouldAppear();
-            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldAppear();
           }
         });
         cy.checkToastMessage({ exists: false });
@@ -733,8 +733,8 @@ context("Export maintenance record", () => {
             const response = res.response.body;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
             cy.visit(newUrl);
-            cy.listLoadingElementShouldAppear();
-            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldAppear();
           }
         });
         cy.checkToastMessage({ exists: false });
