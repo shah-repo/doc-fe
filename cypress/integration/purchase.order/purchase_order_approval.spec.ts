@@ -426,7 +426,7 @@ context("PO approval test", () => {
     });
 
     it("Check approval icon if it's gray", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
+      cy.poAMCheckApprovalIconIfItsDisabled();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -465,7 +465,7 @@ context("PO approval test", () => {
     });
 
     it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
 
     it("Create document in 'Pending approval' state", () => {
