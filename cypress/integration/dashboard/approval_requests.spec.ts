@@ -304,36 +304,34 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.arSelectItem({ name: "CP-00004" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Add second document revision", () => {
-      cy.arSelectItemsTab();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
+      cy.arSelectItem({ name: "CP-00005" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click on Save button", () => {
       cy.arSaveApiCallWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email, noWait: true });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email, noWait: true });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[3].email, noWait: true });
@@ -399,12 +397,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00006" });
+      cy.arEnterItemDescription({ name: "CP-00006" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Save AR", () => {
@@ -436,7 +434,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(1).find("a").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.wait(3000);
       cy.arVerifyStatus({ status: "IN REVIEW" });
     });
@@ -681,7 +679,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -834,10 +832,10 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00007" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "form1 description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "form1 justification" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arEnterItemDescription({ name: "CP-00007" });
+      cy.arEnterItemDescription({ description: "form1 description" });
+      cy.arEnterItemJustification({ justification: "form1 justification" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -861,7 +859,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -1034,7 +1032,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

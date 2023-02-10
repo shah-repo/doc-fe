@@ -476,13 +476,14 @@ context("Deleting LHR Step using regular AR test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: "LHRT-00002" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: "LHRT-00002" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Add first Approver'", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -564,7 +565,7 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
   });
 

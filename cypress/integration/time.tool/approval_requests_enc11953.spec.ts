@@ -193,7 +193,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click on Save button", () => {
       cy.arSaveApiCallWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

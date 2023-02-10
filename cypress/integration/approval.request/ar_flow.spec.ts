@@ -490,10 +490,10 @@ context("Approval request form", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Checkbox option 2 checked", () => {
@@ -512,6 +512,7 @@ context("Approval request form", () => {
     it("Add first Approver'", () => {
       cy.arSelectChangeDetailsTab();
       cy.wait(1000);
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].name });
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
@@ -1005,10 +1006,10 @@ context("Approval request form", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arEnterItemDescription({ name: "CP-00005" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {

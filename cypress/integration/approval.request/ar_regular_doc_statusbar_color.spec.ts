@@ -317,15 +317,16 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.arAddItems();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arChoseSpecificProposedDocument({ name: otherFormDocId1 });
+        cy.arSelectItem({ name: otherFormDocId1 });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1035,12 +1036,12 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.arAddItems();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arChoseSpecificProposedDocument({ name: otherFormDocId2 });
+        cy.arSelectItem({ name: otherFormDocId2 });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Save AR", () => {
@@ -1378,10 +1379,10 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arAddItems();
-        cy.arChoseSpecificProposedDocument({ name: bulkId1 });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItem({ name: bulkId1 });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Add approvers to approval request on approver list", () => {
@@ -2081,10 +2082,10 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
       it("Add first document revision", () => {
         cy.arAddItems();
-        cy.arChoseSpecificProposedDocument({ name: bulkId2 });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItem({ name: bulkId2 });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Save AR", () => {

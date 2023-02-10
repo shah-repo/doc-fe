@@ -227,15 +227,16 @@ context("Document revise test", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arAddItems();
-        cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItem({ name: documentRevisionName });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
       it("Add first approver to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       });
 
@@ -310,10 +311,10 @@ context("Document revise test", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arAddItems();
-        cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arEnterItemDescription({ name: documentRevisionName });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Add first approver to approval request on approver list", () => {

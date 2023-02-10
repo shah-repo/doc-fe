@@ -1337,10 +1337,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: documentOne });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: documentOne });
+      cy.arEnterItemDescription({ description: "description" });
+      cy.arEnterItemJustification({ justification: "justification" });
+      cy.arClickAddItemDone();
     });
 
     it("Add created document revision", () => {
@@ -1348,10 +1348,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: documentTwo });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: documentTwo });
+      cy.arEnterItemDescription({ description: "description" });
+      cy.arEnterItemJustification({ justification: "justification" });
+      cy.arClickAddItemDone();
     });
 
     it(`Verify approver is disabled for ${roleOne}`, () => {
@@ -1372,6 +1372,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Add first approver to approval request on approver list", () => {
       SystemRequirement("REQ-4270");
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email });
     });
 
@@ -1548,7 +1549,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Send To Review", () => {
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Verify AR status is 'In Review'", () => {

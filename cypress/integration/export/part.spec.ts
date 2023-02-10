@@ -334,10 +334,10 @@ context("Export Part doc", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: "Part form" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: "Part form" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Save Approval Request", () => {
@@ -345,6 +345,7 @@ context("Export Part doc", () => {
     });
 
     it("Add Approver'", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 

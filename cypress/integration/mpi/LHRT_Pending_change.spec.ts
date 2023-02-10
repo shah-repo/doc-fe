@@ -672,10 +672,10 @@ context("LHRT Pending Change", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: "LHRT-00003 - rev 1 - LHRt document" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: "LHRT-00003 - rev 1 - LHRt document" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Save AR", () => {

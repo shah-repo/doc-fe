@@ -467,10 +467,10 @@ context("Approval request implementation tasks", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click on Save", () => {
@@ -482,6 +482,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

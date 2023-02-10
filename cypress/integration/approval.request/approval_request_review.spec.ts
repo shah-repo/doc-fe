@@ -185,10 +185,10 @@ context("Approval request form scenario", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItem({ name: sampleDocOneTitle });
+      cy.arEnterItemDescription({ description: "Document description" });
+      cy.arEnterItemJustification({ justification: "Justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
@@ -201,6 +201,7 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0940");
       cy.arSelectChangeDetailsTab();
       cy.wait(1000);
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[20].email });
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[22].email });
       cy.wait(2000);
