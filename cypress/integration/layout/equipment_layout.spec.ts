@@ -1606,7 +1606,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
-        cy.arSelectApproverTab();
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].email, noWait: true });
       });
 

@@ -88,7 +88,7 @@ declare global {
       arClickCreateAnAR(): Chainable<Subject>;
       arSelectDocumentTab(): Chainable<Subject>;
       arSelectChangeDetailsTab(): Chainable<Subject>;
-      arSelectApproverTab(): Chainable<Subject>;
+      arSelectApprovalTab(): Chainable<Subject>;
     }
   }
 }
@@ -600,7 +600,7 @@ Cypress.Commands.add("arSelectChangeDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("arSelectApproverTab", () => {
+Cypress.Commands.add("arSelectApprovalTab", () => {
   cy.get("[data-cy=\"tabId.approvals\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
