@@ -1011,7 +1011,13 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
   context("Verify Dashboard notification for Primary owner as CAL due", () => {
     it("Navigate to dashboard", () => {
       cy.wait(60000);
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
@@ -1037,6 +1043,12 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification as 'CAL will be due in 30 days'", () => {
@@ -1155,8 +1167,14 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
   context("Verify that the Primary owner did not receive notification as Preventative Maintenance due", () => {
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(60000);
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Primary owner did not received notification as 'Preventative Maintenance will be due in 30 days'", () => {
@@ -1183,6 +1201,12 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification as 'Preventative Maintenance will be due in 30 days'", () => {
@@ -1300,7 +1324,13 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
   context("Verify Dashboard notification for Primary owner as CAL due", () => {
     it("Navigate to dashboard", () => {
       cy.wait(60000);
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
@@ -1326,6 +1356,12 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification as 'Due for Calibration in 7 days'", () => {
@@ -1491,7 +1527,13 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
   context("Verify that the Primary owner did not receive notification as Preventative Maintenance due", () => {
     it("Navigate to dashboard", () => {
       cy.wait(60000);
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification not received as 'Preventative Maintenance will be due in 7 days'", () => {
@@ -1517,6 +1559,12 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the Dashboard notification as 'Preventative Maintenance will be due in 7 days'", () => {
