@@ -65,10 +65,10 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
-          <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
+          <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton}/>
           </Button>
-          <Button className={classes.actionButton} onClick = {addRevisionToChangeRequest}>
+          <Button data-cy="doneRecord" className={classes.actionButton} onClick = {addRevisionToChangeRequest}>
             <DoneIcon className={classes.iconButton} />
           </Button>
         </div>
