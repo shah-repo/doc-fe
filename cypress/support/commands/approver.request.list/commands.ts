@@ -70,7 +70,10 @@ Cypress.Commands.add("alVerifyFilterByOwner", (params: {owner: string }) => {
 });
 
 Cypress.Commands.add("alFilterByStatus", (params: {status: string }) => {
-  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right");
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.wait(1000);
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick().wait(500);
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
