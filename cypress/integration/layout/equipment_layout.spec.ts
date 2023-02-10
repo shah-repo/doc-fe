@@ -1594,7 +1594,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Add first document revision", () => {
-        cy.arAddItem();
+        cy.arAddItems();
         cy.arChoseSpecificProposedDocument({ name: "AR EQ title" });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

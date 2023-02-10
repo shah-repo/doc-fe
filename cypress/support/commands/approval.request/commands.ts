@@ -20,7 +20,7 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-      arAddItem(): Chainable<Subject>;
+      arAddItems(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
@@ -305,7 +305,7 @@ Cypress.Commands.add("arClickAddDocumentWithoutApi", () => {
   cy.wait(2000);
 });
 
-Cypress.Commands.add("arAddItem", () => {
+Cypress.Commands.add("arAddItems", () => {
   cy.contains("Add Item").arrowClick();
   cy.wait(2000);
 });
