@@ -368,7 +368,10 @@ context("Export MPI", () => {
     });
 
     it("Add created document", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "MPI document" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

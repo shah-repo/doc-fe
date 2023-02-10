@@ -224,11 +224,11 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it("Select document tab", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocumentWithoutApi();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

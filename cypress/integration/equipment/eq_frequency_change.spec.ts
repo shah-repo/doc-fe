@@ -980,7 +980,10 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Add first created document revision", () => {
-          cy.arClickAddDocument();
+          cy.arSelectItemsTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.arAddItems();
           cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
           cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
           cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -1249,7 +1252,10 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Add first created document revision", () => {
-            cy.arClickAddDocument();
+            cy.arSelectItemsTab();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.arAddItems();
             cy.arChoseSpecificProposedDocument({ name: "EQ-00002" });
             cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
             cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

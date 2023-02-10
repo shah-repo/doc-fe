@@ -486,8 +486,10 @@ context("Approval request form", () => {
     });
 
     it("Add created document revision", () => {
-      cy.drSelectDocumentTab();
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -999,8 +1001,10 @@ context("Approval request form", () => {
 
     it("Add created document revision with description", () => {
       SystemRequirement("REQ-4290", "REQ-4280");
-      cy.arSelectDocumentTab();
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

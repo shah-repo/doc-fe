@@ -207,7 +207,10 @@ context("Export DAM", () => {
     });
 
     it("Add created document", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "DAM doc" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

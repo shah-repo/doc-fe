@@ -198,7 +198,10 @@ context("Approval request email popup modal", () => {
     });
 
     it("Add first created document revision", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -208,7 +211,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Add second created document revision", () => {
-      cy.arClickAddDocument();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description 2" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document 2" });

@@ -457,7 +457,10 @@ context("Training Flow test", () => {
       cy.cmpClickCreateApprovalRequest();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
       cy.drEnterDocumentDescription({ description: "Description" });
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "approved form" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });

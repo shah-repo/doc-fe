@@ -298,7 +298,10 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Add first document revision", () => {
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
@@ -310,7 +313,10 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Add second document revision", () => {
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
@@ -387,7 +393,10 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Click on 'Add A Document'", () => {
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "CP-00006" });
@@ -819,7 +828,10 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Add document revision", () => {
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "CP-00007" });

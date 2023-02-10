@@ -1333,7 +1333,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: documentOne });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification" });
@@ -1341,7 +1344,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: documentTwo });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification" });

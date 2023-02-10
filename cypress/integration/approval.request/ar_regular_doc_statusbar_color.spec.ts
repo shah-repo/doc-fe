@@ -311,7 +311,10 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it(`Select the item as ${otherFormDocId1} created in last step`, () => {
-        cy.arClickAddDocumentWithoutApi();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arChoseSpecificProposedDocument({ name: otherFormDocId1 });
@@ -1022,14 +1025,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.arEnterApprovalRequestDescription({ description: otherArDesc2 });
       });
 
-      it("Select Documents tab", () => {
-        cy.drSelectDocumentTab();
+      it("Select Items tab", () => {
+        cy.arSelectItemsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Add first document revision", () => {
-        cy.arClickAddDocumentWithoutApi();
+      it("Add first item revision", () => {
+        cy.arAddItems();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arChoseSpecificProposedDocument({ name: otherFormDocId2 });
@@ -1371,7 +1374,10 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it(`Select the item as ${bulkId1} created in last step`, () => {
-        cy.arClickAddDocumentWithoutApi();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
         cy.arChoseSpecificProposedDocument({ name: bulkId1 });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -2068,13 +2074,13 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Select Documents tab", () => {
-        cy.drSelectDocumentTab();
+        cy.arSelectItemsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add first document revision", () => {
-        cy.arClickAddDocumentWithoutApi();
+        cy.arAddItems();
         cy.arChoseSpecificProposedDocument({ name: bulkId2 });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

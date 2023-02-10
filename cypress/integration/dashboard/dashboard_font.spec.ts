@@ -1307,7 +1307,10 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Add sample document one", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "FM-00006 - rev 1 - released doc2" });

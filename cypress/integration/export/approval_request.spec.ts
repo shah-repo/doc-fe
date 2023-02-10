@@ -296,7 +296,10 @@ context("Export for Approval Request", () => {
     });
 
     it("Add document", () => {
-      cy.arClickAddDocument();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: "FM-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -397,7 +400,10 @@ context("Export for Approval Request", () => {
       });
 
       it("Add document", () => {
-        cy.arClickAddDocument();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
         cy.arChoseSpecificProposedDocument({ name: "FM-00005" });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

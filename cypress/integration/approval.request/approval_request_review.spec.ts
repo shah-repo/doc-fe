@@ -180,9 +180,11 @@ context("Approval request form scenario", () => {
     });
 
     it("Add sample document one", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
       cy.wait(1000);
-      cy.arClickAddDocumentWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
@@ -231,7 +233,7 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
       cy.wait(1000);
       cy.get("div[name$=\"descriptionOfChange\"]").should("exist");
     });
@@ -332,8 +334,10 @@ context("Approval request form scenario", () => {
 
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
-      cy.arSelectDocumentTab();
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
     });
