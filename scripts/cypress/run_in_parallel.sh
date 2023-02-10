@@ -27,7 +27,7 @@ export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
 export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
 export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
-export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration/layout"}
+export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=${CYPRESS_TAKE_SCREENSHOT_AFTER_EACH:-false}
 # export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
@@ -70,7 +70,7 @@ export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
 
 if [[ -z "${NUMBER_OF_WORKERS_PER_RUN}" ]]; then
   ./scripts/cypress/utils/delete_failed_specs.sh
-  NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-3} ./scripts/cypress/utils/run_workers_in_parallel.sh
+  NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4} ./scripts/cypress/utils/run_workers_in_parallel.sh
 else
   for i in $(echo $NUMBER_OF_WORKERS_PER_RUN | sed "s/,/ /g")
   do
