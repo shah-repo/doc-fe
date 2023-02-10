@@ -141,14 +141,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
 
   const createNewDocument = (relatedPartDetails?) => {
-    let docDto = {
+    let docDto: any = {
       formDocument: {
         id: get(documentRevision, "formDocumentId"),
       },
       description: "",
       name: "",
       suffixName: "",
-      revision: documentRevision.revision,
       attachments: [],
       referenceTo: [],
       revisionChangeType: get(documentRevision, "revisionChangeType"),
@@ -165,13 +164,14 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
           id: get(documentRevision, "document.documentType.id"),
         },
       },
-      changeRequestId: documentRevision.changeRequest?.id ?? null,
-      status: documentRevision.status,
     };
 
     if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
       docDto = {
         ...docDto,
+        revision: documentRevision.revision,
+        changeRequestId: documentRevision.changeRequest?.id ?? null,
+        status: documentRevision.status,
         name: `${documentRevision.name}-${relatedPartDetails?.name}`,
         suffixName: relatedPartDetails?.name,
         document: { ...docDto.document, docId: `${documentRevision.document.docId}-${relatedPartDetails?.docId}` },
