@@ -64,12 +64,12 @@ Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
 });
 
 Cypress.Commands.add("supFilterByDocTitle", (params: {docTitle: string }) => {
-  cy.get(`[aria-colindex="2"] input`).clear().arrowType(params.docTitle).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).clear().arrowType(params.docTitle).wait(500);
 });
 
 Cypress.Commands.add("supFilterById", (params: {docId: string }) => {
-  cy.get(`[aria-colindex="1"] input`).clear();
-  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(1000);
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).clear();
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).arrowType(params.docId).wait(1000);
 });
 
 Cypress.Commands.add("supFilterByState", (params: {state: string}) => {

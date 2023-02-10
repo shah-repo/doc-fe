@@ -423,7 +423,7 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
@@ -437,7 +437,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatusWithoutApi", (params: { title: string; status: string }) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
