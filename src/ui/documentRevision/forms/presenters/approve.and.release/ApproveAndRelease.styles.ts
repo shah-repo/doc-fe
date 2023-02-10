@@ -28,6 +28,10 @@ export const styles = makeStyles((theme: Theme) =>
         backgroundColor: `${Colors.light_gray} !important`,
         borderTopLeftRadius: "100px",
       },
+      "&:disabled": {
+        backgroundColor: `${Colors.gray_goose} !important`,
+        color: `${Colors.gray} !important`,
+      },
       "borderTopLeftRadius": "100px",
       "borderBottomLeftRadius": "100px",
     },
