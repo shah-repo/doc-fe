@@ -4,6 +4,7 @@ import React from "react";
 import { DocumentRevisionFormHeaderProps, SM } from "../../../../..";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../../../ui/constants/urls";
 import Title from "../../../../../../ui/document.revision/form/title";
+import ChangeRequestLink from "../../../../../../ui/document.revision/summary/changeRequestLink";
 import Description from "../../../../../../ui/documentRevision/forms/presenters/Description";
 import { withDocumentRevisionFormHeader } from "./DocumentRevisionFormHeader.wrap";
 
@@ -22,7 +23,11 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
         pl={3.25}
         pr={3.75}
       >
-        <Box paddingBottom={1.25}>
+        {
+          type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
+            <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
+        }
+        <Box paddingBottom={1.25} paddingTop={1.25}>
           <Title
             name="name"
             documentTypeId={documentTypeId}
