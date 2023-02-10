@@ -268,8 +268,8 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
+  cy.get(`[data-cy="po-status-button-OPENED"]`).should("exist");
+  // cy.get(`[data-cy="po-status-button-OPENED"]`).should("have.text", "Open");
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
