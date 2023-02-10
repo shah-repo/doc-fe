@@ -50,6 +50,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayRevision,
   relatedParentPartDetails,
 }) => {
+
   const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
@@ -248,15 +249,14 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   )}
                 </Grid>
                 &nbsp;
-                <Grid item={true} className={classes.whiteDot}></Grid>
-                {displayRevision && <>&nbsp;
+                {displayRevision && <> <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
                   <Grid item={true}>
                     <Text
                       translation="form.builder.header.rev"
                       values={{ revision: displayRevision }}
                       dataCy="HeaderInfo-Rev"
                     />
-                  </Grid></>}
+                  </Grid> </>}
                 { isTypeMpiOutput &&
                   <>
                     <Grid item={true} className={classes.arrowPadding}>
