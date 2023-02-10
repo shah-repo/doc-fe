@@ -178,7 +178,6 @@ Cypress.Commands.add("ebApprove", () => {
 });
 
 Cypress.Commands.add("ebApproveWithoutApi", () => {
-  cy.poClickOnPending();
   cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true }).wait(1500);
   cy.get("input[name=\"password\"]").click().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);

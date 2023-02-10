@@ -694,7 +694,7 @@ context("PO test", () => {
       dateOfStepCompletion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
       dateOfStepCompletionOneMinuteLater = moment().add(1, "minutes")
         .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
     });
 
     it("Check if approver ID and date time are recorded", () => {
@@ -769,7 +769,7 @@ context("PO test", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1060,7 +1060,7 @@ context("PO test", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1130,7 +1130,7 @@ context("PO test", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

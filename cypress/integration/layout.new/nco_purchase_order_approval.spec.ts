@@ -677,7 +677,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
   context("Approve PO", () => {
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
     });
   });
 
