@@ -141,7 +141,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
 
   const createNewDocument = (relatedPartDetails?) => {
-    let docDto: any = {
+    let docDto = {
       formDocument: {
         id: get(documentRevision, "formDocumentId"),
       },
@@ -167,15 +167,14 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     };
 
     if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
-      docDto = {
-        ...docDto,
+      docDto = Object.assign(docDto, {
         revision: documentRevision.revision,
         changeRequestId: documentRevision.changeRequest?.id ?? null,
         status: documentRevision.status,
         name: `${documentRevision.name}-${relatedPartDetails?.name}`,
         suffixName: relatedPartDetails?.name,
         document: { ...docDto.document, docId: `${documentRevision.document.docId}-${relatedPartDetails?.docId}` },
-      };
+      });
     }
 
     createPartAsync.start(createRelatedPartAction, documentRevision.document.id, documentRevision.id, docDto,
