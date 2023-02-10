@@ -177,18 +177,18 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Add document revision", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arClickAddDocument();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.arSelectItem({ name: "CP-00004" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -200,7 +200,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.drSelectChangeDetailsTab();
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[3].email });
@@ -215,7 +215,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -233,6 +233,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         listItem:
         `${USERS[1].name}needs your approval for${aRID}Approval request form`,
       });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify 'IN REVIEW' notification received for all 3 users`, () => {
@@ -428,6 +434,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.checkToastMessage({ exists: false });
     });
 
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Verify AR notification status as 'APPROVED'", () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
@@ -478,6 +490,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -548,6 +566,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -672,6 +696,19 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it(`Verify for notification for 'APPROVED' AR will appear`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${aRID}Approval request formisAPPROVED`,
+      });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
@@ -690,13 +727,6 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
             `${USERS[3].name}APPROVED${aRID}Approval request form`,
-      });
-    });
-
-    it(`Verify for notification for 'APPROVED' AR will appear`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({
-        listItem:
-            `${aRID}Approval request formisAPPROVED`,
       });
     });
   });
@@ -743,10 +773,19 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
-    it("You should get a dashboard notification as CLOSED", () => {
+    it("Goto dashboard", () => {
       cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("You should get a dashboard notification as CLOSED", () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
             `${aRID}Approval request formisCLOSED`,
@@ -774,6 +813,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
 
     it("Goto dashboard", () => {
       cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
