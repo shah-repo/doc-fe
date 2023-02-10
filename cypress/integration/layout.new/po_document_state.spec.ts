@@ -375,7 +375,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context("Approve the PO → The PO is in the Released status", () => {
       it("Approve the PO", () => {
-        cy.ebApproveWithoutApi();
+        cy.poApproveWithoutApi();
       });
     });
 
@@ -422,7 +422,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Approve the PO", () => {
-            cy.ebApproveWithoutApi();
+            cy.poApproveWithoutApi();
           });
         });
       });
@@ -464,7 +464,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Approve the PO", () => {
-        cy.ebApproveWithoutApi();
+        cy.poApproveWithoutApi();
       });
     });
 
@@ -492,7 +492,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Approve the record", () => {
-          cy.ebApproveWithoutApi();
+          cy.poApproveWithoutApi();
         });
       }
     );

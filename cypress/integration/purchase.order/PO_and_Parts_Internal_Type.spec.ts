@@ -1656,7 +1656,7 @@ context("PO and parts ", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
@@ -1835,7 +1835,7 @@ context("PO and parts ", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

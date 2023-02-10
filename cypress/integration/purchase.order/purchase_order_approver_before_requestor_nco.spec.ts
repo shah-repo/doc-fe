@@ -1170,7 +1170,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
     });
   });
 

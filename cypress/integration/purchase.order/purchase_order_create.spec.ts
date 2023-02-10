@@ -1339,7 +1339,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
