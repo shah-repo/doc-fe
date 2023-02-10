@@ -1606,7 +1606,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
-        cy.get("[data-cy=\"tabId.approvals\"]").arrowClick({ force: true });
+        cy.arSelectApproverTab();
         cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].email, noWait: true });
       });
 
