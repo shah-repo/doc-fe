@@ -671,18 +671,18 @@ context("Test Engineering Build landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for EB ID", () => {
-        cy.get(`th[aria-colindex="1"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 1, input: "EB-00001" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="1"] .k-filtercell > input`).should("have.attr", "value", "EB-00001");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "EB-00001" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Revision", () => {
-        cy.get(`th[aria-colindex="2"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 2, input: "A" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="2"] .k-filtercell > input`).should("have.attr", "value", "A");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "A" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -696,19 +696,18 @@ context("Test Engineering Build landing page", () => {
       });
 
       it("Verify filter for Title", () => {
-        cy.get(`th[aria-colindex="4"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 4, input: "Engineering Build document" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="4"] .k-filtercell > input`)
-          .should("have.attr", "value", "Engineering Build document");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "Engineering Build document" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Owner", () => {
-        cy.get(`th[aria-colindex="5"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 5, input: USERS[1].name });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="5"] .k-filtercell > input`).should("have.attr", "value", USERS[1].name);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: USERS[1].name });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -722,32 +721,32 @@ context("Test Engineering Build landing page", () => {
       });
 
       it("Verify filter for Form ID", () => {
-        cy.get(`th[aria-colindex="7"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 7, input: "N/A" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="7"] .k-filtercell > input`).should("have.attr", "value", "N/A");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "N/A" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Part ID", () => {
-        cy.get(`th[aria-colindex="8"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 8, input: "N/A" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="8"] .k-filtercell > input`).should("have.attr", "value", "N/A");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "N/A" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] .k-filtercell > input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
         cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="4"] .k-filtercell > input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="7"] .k-filtercell > input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="8"] .k-filtercell > input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "" });
       });
     });
 
