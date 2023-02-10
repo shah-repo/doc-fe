@@ -1094,8 +1094,8 @@ context("AA Document Layout verification", () => {
     });
 
     it("Check training tab  and verify training related text", () => {
-      cy.get("#sm-tabpanel-1 svg").should("exist");
-      cy.get("#sm-tabpanel-1 p").should("contain.text",
+      cy.get("[id^='sm-tabpanel-'] svg").should("exist");
+      cy.get("[id^='sm-tabpanel-'] p").should("contain.text",
         "Training can be assigned to this document once it is released");
     });
 

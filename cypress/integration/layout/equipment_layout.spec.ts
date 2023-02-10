@@ -1587,15 +1587,26 @@ context("Layout Verification of EQ", () => {
         cy.arEnterApprovalRequestDescription({ description: "AR for eq description" });
       });
 
+      it("Navigate to Items tab", () => {
+        cy.get("[data-cy=\"tabCon-tabId.items\"]").arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
+      });
+
       it("Add first document revision", () => {
-        cy.arClickAddDocument();
+        cy.arAddItems();
         cy.arChoseSpecificProposedDocument({ name: "AR EQ title" });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arClickAddItemDone();
+      });
+
+      it("Save AR", () => {
+        cy.arSaveApiCall();
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].email, noWait: true });
       });
 

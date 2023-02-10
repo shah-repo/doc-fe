@@ -20,11 +20,13 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
+      arAddItems(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
+      arClickAddItemDone(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
       arAddApproverOnApproverListWithoutApi(params: { approver: string; noWait?: bool }): Chainable<Subject>;
       arAddApproverOnApproverListWithoutApiCall(params: { approver: string; noWait?: bool  }): Chainable<Subject>;
@@ -86,6 +88,7 @@ declare global {
       arClickCreateAnAR(): Chainable<Subject>;
       arSelectDocumentTab(): Chainable<Subject>;
       arSelectChangeDetailsTab(): Chainable<Subject>;
+      arSelectApprovalTab(): Chainable<Subject>;
     }
   }
 }
@@ -293,14 +296,21 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 
 Cypress.Commands.add("arClickAddDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
+    cy.contains("Add Item").arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arClickAddDocumentWithoutApi", () => {
-  cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
+  cy.contains("Add Item").arrowClick();
   cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("arAddItems", () => {
+  cy.contains("Add Item").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("arCloseAR", () => {
@@ -335,7 +345,13 @@ Cypress.Commands.add("arEnterJustificationAddDocumentsDialog", (params: { justif
 });
 
 Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
-  cy.get("[data-cy=\"arAddDocumentDialogAddBtn\"]").arrowClick();
+  cy.get("[data-cy='doneRecord']").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arClickAddItemDone", () => {
+  cy.get("[data-cy='doneRecord']").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -581,5 +597,10 @@ Cypress.Commands.add("arSelectDocumentTab", () => {
 
 Cypress.Commands.add("arSelectChangeDetailsTab", () => {
   cy.get("[data-cy=\"tabId.changedetails\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arSelectApprovalTab", () => {
+  cy.get("[data-cy=\"tabId.approvals\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
