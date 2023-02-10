@@ -432,11 +432,12 @@ context("PO test with default enlil form", () => {
         it("Save PO document", () => {
           cy.drClickSaveWithoutApiCall();
           cy.checkToastMessage({ exists: false });
-
+          cy.landingPageLoadingElementShouldNotExist();
         });
 
         it("Click 'Submit for Approval' button", () => {
           cy.pmSubmitForApprovalWithoutAPI();
+          cy.landingPageLoadingElementShouldNotExist();
         });
 
         it("Click 'Approve' button", () => {

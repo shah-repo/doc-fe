@@ -268,8 +268,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
+  cy.get(`[data-cy="po-status-button-OPENED"]`).should("exist");
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -498,6 +497,7 @@ Cypress.Commands.add("poApprove", () => {
 });
 
 Cypress.Commands.add("poApproveWithoutApi", () => {
+  cy.poClickOnPending();
   cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
