@@ -268,7 +268,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Navigate to Document tab", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
     });
 
     it("Check 'Approval Request Details' is displayed", () => {

@@ -416,7 +416,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
     CyRoutes.GetRequiredApproversDocRev,
   ],
   () => {
-    cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
+    cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

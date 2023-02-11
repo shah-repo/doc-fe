@@ -320,11 +320,14 @@ context("Document Attachment Flow", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00003" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00003" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {

@@ -941,9 +941,8 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"]`)
-          .should("not.contain.text", "PENDING APPROVAL");
+      it("Verify no PENDING text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"]`).should("not.contain.text", "PENDING");
       });
 
       it("Submit for approval'", () => {
@@ -952,13 +951,18 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"`)
-          .should("contain.text", "PENDING APPROVAL");
+      it("Verify 'PENDING' text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"`).should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashboardMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1009,20 +1013,26 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Add sample document one", () => {
-        cy.arClickAddDocument();
-        cy.arChoseSpecificProposedDocument({ name: "API Clinical Protocol" });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arSelectItem({ name: "API Clinical Protocol" });
+        cy.arEnterItemDescription({ description: "Document description" });
+        cy.arEnterItemJustification({ justification: "Justification for added document" });
+        cy.arClickAddItemDone();
       });
 
-      it("Click Create Approval Request", () => {
-        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      it("Click on Save button", () => {
+        cy.arSaveApiCallWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email, noWait: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1037,18 +1047,25 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Click send to review", () => {
-        cy.arClickSendToReview();
+        cy.arClickSendToReviewWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
+      it("Verify PENDING text is present on approval block", () => {
+        cy.arSelectApprovalTab();
         cy.get(`[data-cy="SummaryBaseProps-values"]`)
           .should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashboardMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1103,7 +1120,8 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.wait(3000);
       });
 
-      it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
+      it("Verify no PENDING text is present on approval block", () => {
+        cy.poClickOnPending();
         cy.get(`[name^="fb-po-approvals"]`)
           .should("not.contain.text", "PENDING");
       });
@@ -1114,13 +1132,19 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[name^="fb-po-approvals"]`)
-          .should("contain.text", "PENDING APPROVAL");
+      it("Verify PENDING text is present on approval block", () => {
+        cy.poClickOnPending();
+        cy.get(`[name^="fb-po-approvals"]`).should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
         cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashboardMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1181,9 +1205,9 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.wait(2000);
       });
 
-      it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
+      it("Verify no PENDING text is present on approval block", () => {
         cy.get(`[data-cy^="not-approved"`)
-          .should("not.contain.text", "PENDING APPROVAL");
+          .should("not.contain.text", "PENDING");
       });
 
       it("Submit for approval'", () => {
@@ -1193,13 +1217,18 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.wait(2000);
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"`)
-          .should("contain.text", "PENDING APPROVAL");
+      it("Verify PENDING text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"`).should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
         cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashboardMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
