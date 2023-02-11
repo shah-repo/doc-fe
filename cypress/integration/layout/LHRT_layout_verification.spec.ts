@@ -206,6 +206,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("select 'Training required' field", () => {
+        cy.pause();
         cy.get("[id=\"Checkbox-box\"]").eq(1).arrowClick();
       });
 
