@@ -220,7 +220,7 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get(`[name="editorProperties"] [type="checkbox"]`).check(item, { force: true });
+    cy.get(`[name^="checkbox-group-for-inline-"] input`).check(item, { force: true });
   });
 });
 
