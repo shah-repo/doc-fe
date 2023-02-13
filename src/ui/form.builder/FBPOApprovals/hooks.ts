@@ -9,7 +9,7 @@ import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
@@ -164,7 +164,7 @@ export const usePoApprovals = (
 
     const removeActions = map(ids, (approver) => {
       const approval = find(poApprovalsState?.activeApprovals, (a) => a.approver?.id === approver);
-      if (approval?.status === ApprovalStatus.Abandoned) {
+      if (approval?.status === ApprovalStatus.Abandoned || approval?.status === DocumentStatus.Draft) {
         return;
       }
       return poApprovalsState?.applyTransition("abandon", approval?.id, undefined);
