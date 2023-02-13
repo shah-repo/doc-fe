@@ -40,17 +40,17 @@ Cypress.Commands.add("dashboardRecentTab", () => {
 });
 
 Cypress.Commands.add("dashVerifyListItemExistsOnDashboard", (params: { listItem: string}) => {
-  cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).should("exist");
+  cy.get("[data-cy=dashboardFeedList] div>span").contains(params.listItem).should("exist");
 });
 
 Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listItem: string}) => {
-  cy.get("[data-cy=dashboardFeedList]>div")
+  cy.get("[data-cy=dashboardFeedList] div>span")
     .contains(params.listItem)
     .should("not.exist");
 });
 
 Cypress.Commands.add("dashGoToListItemFromDashboard", (params: { listItem: string}) => {
-  cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).find("a").first().arrowClick();
+  cy.get("[data-cy=dashboardFeedList] div>span").contains(params.listItem).find("a").first().arrowClick();
   cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });

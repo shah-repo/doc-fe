@@ -150,7 +150,7 @@ Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
 });
 
 Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
-  cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.docId).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).eq(0).clear().arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 

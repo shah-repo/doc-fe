@@ -23,8 +23,11 @@ declare global {
       arAddItems(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
+      arSelectItem(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
+      arEnterItemDescription(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
+      arEnterItemJustification(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
       arClickAddItemDone(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
@@ -86,7 +89,7 @@ declare global {
         sessionId: string;
       }): Chainable<Subject>;
       arClickCreateAnAR(): Chainable<Subject>;
-      arSelectDocumentTab(): Chainable<Subject>;
+      arSelectItemsTab(): Chainable<Subject>;
       arSelectChangeDetailsTab(): Chainable<Subject>;
       arSelectApprovalTab(): Chainable<Subject>;
     }
@@ -336,11 +339,23 @@ Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string 
   cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
 });
 
+Cypress.Commands.add("arSelectItem", (params: { name: string }) => {
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
+});
+
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {
   cy.get("[data-cy=\"descriptionOfChange\"]").arrowClick().arrowType(params.description).wait(500);
 });
 
+Cypress.Commands.add("arEnterItemDescription", (params: { description: string }) => {
+  cy.get("[data-cy=\"descriptionOfChange\"]").arrowClick().arrowType(params.description).wait(500);
+});
+
 Cypress.Commands.add("arEnterJustificationAddDocumentsDialog", (params: { justification: string }) => {
+  cy.get("[data-cy=\"justificationOfChange\"]").arrowClick().arrowType(params.justification).wait(500);
+});
+
+Cypress.Commands.add("arEnterItemJustification", (params: { justification: string }) => {
   cy.get("[data-cy=\"justificationOfChange\"]").arrowClick().arrowType(params.justification).wait(500);
 });
 
@@ -401,7 +416,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
     CyRoutes.GetRequiredApproversDocRev,
   ],
   () => {
-    cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
+    cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -409,7 +424,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
 });
 
 Cypress.Commands.add("arClickSendToReviewWithoutApi", () => {
-  cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick({ force: true });
   cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -590,8 +605,8 @@ Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled
   cy.get(`[data-cy="fb-approvers-${params.roleName}-check-${params.enabled ? "marked" : "disabled"}"]`).should("not.be.undefined");
 });
 
-Cypress.Commands.add("arSelectDocumentTab", () => {
-  cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
+Cypress.Commands.add("arSelectItemsTab", () => {
+  cy.get("[data-cy=\"tabId.items\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 

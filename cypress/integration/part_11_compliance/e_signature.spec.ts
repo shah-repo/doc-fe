@@ -434,7 +434,7 @@ context("E-signature test", () => {
     });
 
     it("Send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
