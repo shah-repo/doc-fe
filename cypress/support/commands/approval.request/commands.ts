@@ -340,7 +340,9 @@ Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string 
 });
 
 Cypress.Commands.add("arSelectItem", (params: { name: string }) => {
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").arrowClick();
   cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
+  cy.unClick();
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {
@@ -357,6 +359,7 @@ Cypress.Commands.add("arEnterJustificationAddDocumentsDialog", (params: { justif
 
 Cypress.Commands.add("arEnterItemJustification", (params: { justification: string }) => {
   cy.get("[data-cy=\"justificationOfChange\"]").arrowClick().arrowType(params.justification).wait(500);
+  cy.unClick();
 });
 
 Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
