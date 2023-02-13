@@ -660,8 +660,7 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[12].name} should not be present`, () => {
-      cy.get("[class=\"k-textbox\"]").eq(4).arrowType(`{backspace}`);
-      cy.get("[class=\"k-textbox\"]").eq(4).arrowType(USERS[12].name).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
