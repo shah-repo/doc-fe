@@ -416,6 +416,9 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arEnterItemDescription({ description: "added document description" });
       cy.arEnterItemJustification({ justification: "justification for added document" });
       cy.arClickAddItemDone();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Save AR", () => {
@@ -883,6 +886,9 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arEnterItemDescription({ description: "form1 description" });
       cy.arEnterItemJustification({ justification: "form1 justification" });
       cy.arClickAddItemDone();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Create Approval Request", () => {
@@ -1208,6 +1214,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(60000);
     });
   });
 
