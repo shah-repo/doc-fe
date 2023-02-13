@@ -414,13 +414,20 @@ context("All regular users on new dashboard", () => {
   });
 
   context("Verify Dashboard tabs", () => {
-    it("Dashboard should have 2 tabs - 'My Feed' and 'Recent'", () => {
-      cy.get("[role=tablist] button").eq(0).should("contain.text", "My Feed");
-      cy.get("[role=tablist] button").eq(1).should("contain.text", "Recent");
+    it("Dashboard should have 3 tabs - 'My Feed' and 'Recent'", () => {
+      cy.get("[role=tablist] button").eq(0).should("contain.text", "To Do");
+      cy.get("[role=tablist] button").eq(1).should("contain.text", "My Feed");
+      cy.get("[role=tablist] button").eq(2).should("contain.text", "Recent");
     });
   });
 
   context("My Feed tab contains", () => {
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Own AR and records that are in review and awaiting approval from other users", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00002")
@@ -495,6 +502,12 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -781,7 +794,13 @@ context("All regular users on new dashboard", () => {
 
   context("Owner should see pending PO in My Feed", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -930,7 +949,7 @@ context("All regular users on new dashboard", () => {
     });
 
     it("Verify updated info on PO notification", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
