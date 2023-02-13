@@ -37,6 +37,7 @@ import { useApproveAndRelease } from "../../../../hooks/docCustomization/useCust
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
+import Colors from "../../../../layout/theme/utils/colors";
 import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
@@ -64,6 +65,16 @@ const styles = makeStyles(() =>
     },
     dialogContent: {
       overflowY: "unset",
+    },
+    releaseButton: {
+      "border": `1px solid ${Colors.white}`,
+      "backgroundColor": Colors.white,
+      "color": Colors.navy,
+      "borderRadius": "100px",
+      "&:hover": {
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
+      },
     },
   },
   ));
@@ -434,16 +445,17 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
 
   // MARK: @render
-  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove || revisionStage !== 1) {
+  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove) {
     return null;
   }
 
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        {isNewLayout ? (
+        {isNewLayout && !isRecord ? (
           renderAsButton ?
             <SplitReleaseButton
+              revisionStage={revisionStage}
               onClick = {isRecord ? alertDialog.open : openDialog} />
             :
             <StyledMenuListItem button alignItems="flex-start">
@@ -456,6 +468,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             </StyledMenuListItem>
         ) : (
           <Button
+            className={isRecord ? classes.releaseButton : ""}
             color="secondary"
             variant="outlined"
             onClick={isRecord ? alertDialog.open : openDialog}

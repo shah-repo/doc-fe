@@ -198,21 +198,24 @@ context("Approval request email popup modal", () => {
     });
 
     it("Add first created document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.arSelectItemsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Add second created document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description 2" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document 2" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00005" });
+      cy.arEnterItemDescription({ description: "added document description 2" });
+      cy.arEnterItemJustification({ justification: "justification for added document 2" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -223,6 +226,7 @@ context("Approval request email popup modal", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.wait(2000);
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: SECOND_USER.email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: THIRD_USER.email });
@@ -230,7 +234,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -243,6 +247,12 @@ context("Approval request email popup modal", () => {
   context("Navigate to dashboard and send email to all approvers", () => {
     it("Navigate to dashboard", () => {
       cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -349,6 +359,12 @@ context("Approval request email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if approval request is 'In Review'", () => {

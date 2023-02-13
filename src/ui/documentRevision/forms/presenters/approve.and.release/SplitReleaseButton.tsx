@@ -16,8 +16,10 @@ const options = [{ label: "releaseButton.option.newAR", value: ARActions.NEW, ic
   { label: "releaseButton.option.existingAR", value: ARActions.EXISTING, icon: <ExistingAR />  }];
 
 const SplitReleaseButton: React.FunctionComponent<{
+  revisionStage? : number;
   onClick: (value?: string) => void;
 }> = ({
+  revisionStage,
   onClick,
 }) => {
 
@@ -52,6 +54,7 @@ const SplitReleaseButton: React.FunctionComponent<{
           <Button
             color="primary"
             onClick={handleClick}
+            disabled={revisionStage !== 1}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
             className={classes.buttonHover}

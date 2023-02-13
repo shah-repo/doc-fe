@@ -207,11 +207,14 @@ context("Export DAM", () => {
     });
 
     it("Add created document", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "DAM doc" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "DAM doc" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -219,6 +222,7 @@ context("Export DAM", () => {
     });
 
     it("Add Approver'", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 
@@ -251,7 +255,7 @@ context("Export DAM", () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to DAM", () => {

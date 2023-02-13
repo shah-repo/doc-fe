@@ -180,13 +180,15 @@ context("Approval request form scenario", () => {
     });
 
     it("Add sample document one", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
       cy.wait(1000);
-      cy.arClickAddDocumentWithoutApi();
-      cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: sampleDocOneTitle });
+      cy.arEnterItemDescription({ description: "Document description" });
+      cy.arEnterItemJustification({ justification: "Justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
@@ -199,6 +201,7 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0940");
       cy.arSelectChangeDetailsTab();
       cy.wait(1000);
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[20].email });
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[22].email });
       cy.wait(2000);
@@ -231,7 +234,7 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
       cy.wait(1000);
       cy.get("div[name$=\"descriptionOfChange\"]").should("exist");
     });
@@ -332,8 +335,10 @@ context("Approval request form scenario", () => {
 
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
-      cy.arSelectDocumentTab();
-      cy.arClickAddDocumentWithoutApi();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
     });

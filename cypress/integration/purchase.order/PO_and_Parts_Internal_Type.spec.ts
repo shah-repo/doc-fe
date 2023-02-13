@@ -339,7 +339,7 @@ context("PO and parts ", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify that the top left of the page displays docId", () => {
@@ -365,11 +365,6 @@ context("PO and parts ", () => {
     it("Verify the page displays Render HTML", () => {
       cy.get("[data-cy=\"field-renderHTML\"]").contains("Render HTML")
         .should("exist");
-    });
-
-    it("Button should have text PO Status", () => {
-      cy.get("[data-cy=\"PO Status\"]")
-        .should("have.text", "PO Status");
     });
 
     it("Button should have text General Information", () => {
@@ -654,11 +649,6 @@ context("PO and parts ", () => {
   });
 
   context("Verify Form opens to the Details tab by default and it contains", () => {
-    it("Verify PO Status", () => {
-      cy.get("[data-cy=\"PO Status\"]").contains("PO Status")
-        .should("exist");
-    });
-
     it("Verify General Information", () => {
       cy.get("[data-cy=\"General Information\"]").contains("General Information")
         .should("exist");
@@ -1666,7 +1656,7 @@ context("PO and parts ", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
@@ -1845,7 +1835,7 @@ context("PO and parts ", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

@@ -162,9 +162,7 @@ Cypress.Commands.add("navigToReceivableList", () => {
 });
 
 Cypress.Commands.add("navigToEquipment", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
-  });
+  cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
