@@ -112,6 +112,7 @@ export interface ChangeRequestTransitionResponse {
   id: string;
   crId: string;
   title: string;
+  state: string;
 }
 
 export interface ChangeRequestAvailableApprovers {
