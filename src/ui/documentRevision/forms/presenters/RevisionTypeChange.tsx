@@ -18,7 +18,7 @@ interface Props {
   isDocRevFirstDraft: boolean;
   showAdministrativeAndVoidChange: boolean;
   isRecord?: boolean;
-  isPO?: boolean;
+  isPORecord?: boolean;
   releasedDocRev?: DocumentRevision;
   isAlphaReleased: boolean;
 }
@@ -28,7 +28,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
   isDocRevFirstDraft,
   showAdministrativeAndVoidChange,
   isRecord,
-  isPO,
+  isPORecord,
   releasedDocRev,
   isAlphaReleased,
 }) => {
@@ -59,7 +59,6 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
     tooltipConfig: administrationTooltipConfig,
   } = useAdministrativeChange(documentTypeId);
   const numOfStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
-  const isPORecord = isPO && isRecord;
 
   if (!showRevisionSelect) {
     return null;
