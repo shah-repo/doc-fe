@@ -1407,6 +1407,8 @@
   "approvalRequest.grid.heading.item": "Item",
   "approvalRequest.grid.heading.description.of.change": "Description of change",
   "approvalRequest.grid.heading.justification.of.change": "Justification of change",
-  "approvalRequest.approved.success": "You successfully approved a document",
-  "approvalRequest.approved.message": "{crId} {title} has been approved."
+  "approvalRequest.status.APPROVED": "You successfully approved a document",
+  "approvalRequest.status.message.APPROVED": "{crId} {title} has been approved.",
+  "approvalRequest.status.CLOSED": "You successfully closed an AR!",
+  "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed."
 }
