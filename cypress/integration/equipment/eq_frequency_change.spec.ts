@@ -980,11 +980,14 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Add first created document revision", () => {
-          cy.arClickAddDocument();
-          cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
-          cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-          cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-          cy.arClickAddBtnOnAddDocumentsDialog();
+          cy.arSelectItemsTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.arAddItems();
+          cy.arSelectItem({ name: "EQ-00001" });
+          cy.arEnterItemDescription({ description: "added document description" });
+          cy.arEnterItemJustification({ justification: "justification for added document" });
+          cy.arClickAddItemDone();
         });
 
         it("Click Create Approval Request", () => {
@@ -992,11 +995,12 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Add approvers to approval request on approver list", () => {
+          cy.arSelectApprovalTab();
           cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
         });
 
         it("Click 'Send To Review'", () => {
-          cy.arClickSendToReview();
+          cy.arClickSendToReviewWithoutApi();
         });
 
         it("Approve AR", () => {
@@ -1249,11 +1253,14 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Add first created document revision", () => {
-            cy.arClickAddDocument();
-            cy.arChoseSpecificProposedDocument({ name: "EQ-00002" });
-            cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-            cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-            cy.arClickAddBtnOnAddDocumentsDialog();
+            cy.arSelectItemsTab();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.arAddItems();
+            cy.arEnterItemDescription({ name: "EQ-00002" });
+            cy.arEnterItemDescription({ description: "added document description" });
+            cy.arEnterItemJustification({ justification: "justification for added document" });
+            cy.arClickAddItemDone();
           });
 
           it("Click Create Approval Request", () => {
@@ -1265,7 +1272,7 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Click 'Send To Review'", () => {
-            cy.arClickSendToReview();
+            cy.arClickSendToReviewWithoutApi();
           });
 
           it("Approve AR", () => {

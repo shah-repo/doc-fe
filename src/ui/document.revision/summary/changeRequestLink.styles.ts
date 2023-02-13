@@ -8,6 +8,11 @@ export default makeStyles((theme) =>
       fontSize: "14px",
     },
 
+    listItemPadding: {
+      padding: 0,
+      paddingTop: theme.spacing(1),
+    },
+
     viewIcon: {
       "fill": Colors.hint_gray,
       "position": "relative",

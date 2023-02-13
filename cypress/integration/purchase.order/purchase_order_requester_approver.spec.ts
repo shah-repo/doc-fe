@@ -2090,7 +2090,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
   context("Approve PO by requestor", () => {
     it("Approve PO by requestor", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(delayms2);
     });

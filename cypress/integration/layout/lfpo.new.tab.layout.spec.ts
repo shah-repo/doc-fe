@@ -1152,8 +1152,7 @@ context("LFPO new layout verification", () => {
       cy.get("[data-cy=\"referenceTo\"] input").autocompleteSelect(docId);
       cy.progressBarShouldNotExist();
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
-        .parent().parent().parent().find("svg").arrowClick({ force: true });
+      cy.get(`[data-cy="field-referenceTo"] svg`).last().arrowClick({ force: true });
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {

@@ -836,7 +836,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it(`Filter document by status ${STATUS_TYPES_LABEL.WIP}, and select it`, () => {
-      cy.get(`[aria-colindex="2"] [class="k-input"]`, { timeout: 10_000 }).arrowClick({ force: true });
+      cy.get(`[aria-colindex="2"] [class="k-input"]`, { timeout: 10000 }).arrowClick({ force: true });
       cy.get("li").contains("WIP").arrowClick({ force: true }).wait(500);
       cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
@@ -1803,7 +1803,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
-        cy.get(`[aria-colindex="2"] [class="k-input"]`, { timeout: 10_000 }).arrowClick({ force: true });
+        cy.get(`[aria-colindex="2"] [class="k-input"]`, { timeout: 10000 }).arrowClick({ force: true });
         cy.get("li").contains("Released").arrowClick({ force: true }).wait(500);
         cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();

@@ -26,6 +26,8 @@ declare global {
       filterEquipByOwnerAndLocation(params: { location: string; owner: string }): Chainable<Subject>;
       filterRecordState(params: {state: string}): Chainable<Subject>;
       filterRecordVerifyRevisionFilter(params: {revision: string}): Chainable<Subject>;
+      filterLandingPageColumnFilter(params: { colIndex: number; input: string }): Chainable<Subject>;
+      filterVerifyLandingPageColumnFilterAttr(params: { colIndex: number; input: string }): Chainable<Subject>;
     }
   }
 }
@@ -64,20 +66,20 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
 
 Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; eqState: string;
   title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }) => {
-  cy.get(`th[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
-  cy.get(`th[aria-colindex="2"] input`).arrowType(params.revision).wait(500);
-  cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick();
+  cy.get(`th[aria-colindex="1"] .k-filtercell > input`).arrowType(params.docId).wait(500);
+  cy.get(`th[aria-colindex="2"] .k-filtercell > input`).arrowType(params.revision).wait(500);
+  cy.get(`th[aria-colindex="3"] .k-filtercell > span.k-input`).arrowClick();
   cy.get("ul>li").contains(params.eqState).arrowClick().wait(500);
-  cy.get(`th[aria-colindex="4"] input`).arrowType(params.title).wait(500);
-  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
-  cy.get(`th[aria-colindex="6"] input`).arrowType(params.calDueDate).wait(500);
-  cy.get(`th[aria-colindex="7"] input`).arrowType(params.pmDueDate).wait(500);
-  cy.get(`th[aria-colindex="8"] input`).arrowType(params.eqStatus).wait(500);
+  cy.get(`th[aria-colindex="4"] .k-filtercell > input`).arrowType(params.title).wait(500);
+  cy.get(`th[aria-colindex="5"] .k-filtercell > input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="6"] .k-filtercell > input`).arrowType(params.calDueDate).wait(500);
+  cy.get(`th[aria-colindex="7"] .k-filtercell > input`).arrowType(params.pmDueDate).wait(500);
+  cy.get(`th[aria-colindex="8"] .k-filtercell > input`).arrowType(params.eqStatus).wait(500);
 });
 
 Cypress.Commands.add("filterEquipByOwnerAndLocation", (params: { location: string; owner: string }) => {
-  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
-  cy.get(`th[aria-colindex="9"] input`).arrowType(params.location).wait(500);
+  cy.get(`th[aria-colindex="5"] .k-filtercell > input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="9"] .k-filtercell > input`).arrowType(params.location).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -148,4 +150,12 @@ Cypress.Commands.add("filterRecordVerifyRevisionFilter", (params: {revision: str
   cy.get(`td[role="gridcell"][data-grid-col-index="1"]`).each(($el) => {
     expect($el.text()).to.equal(params.revision);
   });
+});
+
+Cypress.Commands.add("filterLandingPageColumnFilter", (params: { colIndex: number; input: string }) => {
+  cy.get(`th[aria-colindex="${params.colIndex}"] .k-filtercell > input`).arrowType(params.input).wait(500);
+});
+
+Cypress.Commands.add("filterVerifyLandingPageColumnFilterAttr", (params: { colIndex: number; input: string }) => {
+  cy.get(`th[aria-colindex="${params.colIndex}"] .k-filtercell > input`).should("have.attr", "value", params.input);
 });

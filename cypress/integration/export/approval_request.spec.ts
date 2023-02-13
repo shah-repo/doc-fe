@@ -296,11 +296,14 @@ context("Export for Approval Request", () => {
     });
 
     it("Add document", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "FM-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "FM-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -308,6 +311,7 @@ context("Export for Approval Request", () => {
     });
 
     it("Add Approver'", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
@@ -328,7 +332,7 @@ context("Export for Approval Request", () => {
   context(`AR with ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
     context(`Check status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       it("Click 'Send To Review'", () => {
-        cy.arClickSendToReview();
+        cy.arClickSendToReviewWithoutApi();
       });
 
       it("Verify export", () => {
@@ -397,11 +401,14 @@ context("Export for Approval Request", () => {
       });
 
       it("Add document", () => {
-        cy.arClickAddDocument();
-        cy.arChoseSpecificProposedDocument({ name: "FM-00005" });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
+        cy.arEnterItemDescription({ name: "FM-00005" });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Click Create Approval Request", () => {

@@ -464,11 +464,11 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
 });
 
 Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string }) => {
-  cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.supplier).wait(500);
 });
 
 Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
-  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
+  cy.get(`[aria-colindex="9"] .k-filtercell > input`).arrowType(params.orderDate).wait(500);
 });
 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {

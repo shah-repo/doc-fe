@@ -391,7 +391,7 @@ context("po withdraw submission ENC-12707", () => {
     });
   });
 
-  context("Create a form for PO with outputtype as 'Purchase Order', approve and release it", () => {
+  context("Create a form for PO with outputtype as 'Purchase Order New', approve and release it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
       cy.progressBarShouldNotExist();
@@ -953,7 +953,7 @@ context("po withdraw submission ENC-12707", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(delayms1);
@@ -1345,7 +1345,7 @@ context("po withdraw submission ENC-12707", () => {
 
   context(`Approve the PO`, () => {
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(delayms1);

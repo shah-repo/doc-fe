@@ -244,11 +244,14 @@ context("Export Other internal doc", () => {
     });
 
     it("Add created document", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP form" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP form" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -256,6 +259,7 @@ context("Export Other internal doc", () => {
     });
 
     it("Add Approver'", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 

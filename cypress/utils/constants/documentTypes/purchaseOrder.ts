@@ -412,7 +412,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
   ],
 };
 
-// Added based on latest field_config and schema from demo in 22.4 release
+// Added based on latest field_config and schema from demo in 23.1 release
 export const PurchaseOrderNew:  IdocumentTypeDto = {
   documentTypeName: "Purchase Order New",
   documentTypeAcronym: "PO-",
@@ -501,7 +501,7 @@ export const PurchaseOrderNew:  IdocumentTypeDto = {
     },
     A4: {
       label: "Released",
-      visible: false,
+      visible: true,
     },
     A5: {
       label: "Pending Approval",
@@ -525,7 +525,7 @@ export const PurchaseOrderNew:  IdocumentTypeDto = {
     },
     P4: {
       label: "Released",
-      visible: false,
+      visible: true,
     },
     P5: {
       label: "Pending Approval",
@@ -535,36 +535,12 @@ export const PurchaseOrderNew:  IdocumentTypeDto = {
       label: "Draft",
       visible: true,
     },
+    V1: {
+      label: "Update PO",
+      visible: true,
+    },
   },
   schema: [
-    {
-      name: "po-status-built-in",
-      type: "select",
-      index: 0,
-      label: "PO Status",
-      tabId: "details",
-      options: [
-        {
-          text: "Open",
-          value: "Open",
-        },
-        {
-          text: "Closed",
-          value: "Closed",
-        },
-        {
-          text: "Cancelled",
-          value: "Cancelled",
-        },
-      ],
-      applicableOn: [
-        "ON_STATE_TO_IN_REVIEW",
-      ],
-      deleteDisabled: true,
-      validationAttribute: "PO Status",
-      deleteInFormDisabled: true,
-      applicableValidationSchema: true,
-    },
     {
       name: "po-items-built-in-summary",
       type: "purchaseordersummary",

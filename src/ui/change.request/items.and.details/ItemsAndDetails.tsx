@@ -41,6 +41,7 @@ const TopSection: React.FunctionComponent<{
         <Grid item>
           <Typography>
             <Button
+              data-cy="approvalRequest.items.button.addText"
               className={classes.btnMargin}
               disabled={!isButtonShown}
               color="primary"

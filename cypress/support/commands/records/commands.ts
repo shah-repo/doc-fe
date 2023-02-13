@@ -89,13 +89,13 @@ Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
 });
 
 Cypress.Commands.add("recFilterByTitle", (params: {revision: string }) => {
-  cy.get(`[aria-colindex="4"] input`).arrowType(params.revision);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.revision);
 });
 
 Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.get("#clearFilter").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.title).wait(500);
   cy.unClick();
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick({ force: true });
   cy.get("li").contains(params.status).scrollIntoView().arrowClick({ force: true }).wait(500);
@@ -109,7 +109,7 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
 Cypress.Commands.add("recFilterRecordListByIdAndStatus", (params: { id: string; status: string }) => {
   cy.get("#clearFilter").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="1"] input`).arrowType(params.id).wait(500);
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).arrowType(params.id).wait(500);
   cy.unClick();
   cy.get(`[aria-colindex="3"] [class="k-select"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
@@ -123,7 +123,7 @@ Cypress.Commands.add("recFilterRecordListByIdAndStatus", (params: { id: string; 
 Cypress.Commands.add("recFilterRecordListByIdAndStatusNw", (params: { id: string; status: string }) => {
   cy.get("#clearFilter").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="1"] input`).arrowType(params.id).wait(500);
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).arrowType(params.id).wait(500);
   cy.unClick();
   cy.get(`[aria-colindex="3"] [class="k-select"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
