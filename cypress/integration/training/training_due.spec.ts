@@ -12,7 +12,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -894,9 +893,9 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[1].name} and ${USERS[3].name} should present in Due tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 2);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[1].name.split(" ")[0]);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[3].name.split(" ")[0]);
@@ -966,9 +965,9 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[3].name} should present in Due tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 1);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[3].name.split(" ")[0]);
     });

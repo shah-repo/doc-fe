@@ -391,7 +391,7 @@
   "common.delete.document.type": "Delete Document Type",
   "common.export.dam.details": "Export DAM Details",
   "common.add.page.details": "Add Page Details",
-  "common.numeric.release": "N/A (Numeric Release)",
+  "common.numeric.release": "N/A",
   "common.document.type.name": "Document Type",
   "common.document.type.acronym": "Acronym",
   "common.document.type.mismatch": "Document type group or groupOptions don't match BE config.",
@@ -1406,5 +1406,7 @@
   "approvalRequest.items.button.addText": "Add Item",
   "approvalRequest.grid.heading.item": "Item",
   "approvalRequest.grid.heading.description.of.change": "Description of change",
-  "approvalRequest.grid.heading.justification.of.change": "Justification of change"
+  "approvalRequest.grid.heading.justification.of.change": "Justification of change",
+  "approvalRequest.approved.success": "You successfully approved a document",
+  "approvalRequest.approved.message": "{crId} {title} has been approved."
 }

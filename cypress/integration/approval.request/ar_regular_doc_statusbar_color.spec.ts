@@ -311,18 +311,22 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it(`Select the item as ${otherFormDocId1} created in last step`, () => {
-        cy.arClickAddDocumentWithoutApi();
+        cy.arSelectItemsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arChoseSpecificProposedDocument({ name: otherFormDocId1 });
+        cy.arAddItems();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItem({ name: otherFormDocId1 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1022,22 +1026,22 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.arEnterApprovalRequestDescription({ description: otherArDesc2 });
       });
 
-      it("Select Documents tab", () => {
-        cy.drSelectDocumentTab();
+      it("Select Items tab", () => {
+        cy.arSelectItemsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Add first document revision", () => {
-        cy.arClickAddDocumentWithoutApi();
+      it("Add first item revision", () => {
+        cy.arAddItems();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arChoseSpecificProposedDocument({ name: otherFormDocId2 });
+        cy.arSelectItem({ name: otherFormDocId2 });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Save AR", () => {
@@ -1371,11 +1375,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it(`Select the item as ${bulkId1} created in last step`, () => {
-        cy.arClickAddDocumentWithoutApi();
-        cy.arChoseSpecificProposedDocument({ name: bulkId1 });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
+        cy.arSelectItem({ name: bulkId1 });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Add approvers to approval request on approver list", () => {
@@ -2068,17 +2075,17 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Select Documents tab", () => {
-        cy.drSelectDocumentTab();
+        cy.arSelectItemsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add first document revision", () => {
-        cy.arClickAddDocumentWithoutApi();
-        cy.arChoseSpecificProposedDocument({ name: bulkId2 });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arAddItems();
+        cy.arSelectItem({ name: bulkId2 });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
       });
 
       it("Save AR", () => {

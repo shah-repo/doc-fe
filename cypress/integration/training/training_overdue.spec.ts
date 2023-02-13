@@ -12,7 +12,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -885,9 +884,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[2].name}, ${USERS[3].name} & ${USERS[4].name} should present in Overdue tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 3);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[4].name.split(" ")[0]);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[3].name.split(" ")[0]);
@@ -1009,9 +1006,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[2].name}, ${USERS[3].name} & ${USERS[4].name} should present in Overdue tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
       cy.get("#full-width-tabpanel-1 ul li").should("have.length", 3);
       cy.get("#full-width-tabpanel-1 ul li").should("contain", USERS[4].name.split(" ")[0]);
       cy.get("#full-width-tabpanel-1 ul li").should("contain", USERS[3].name.split(" ")[0]);

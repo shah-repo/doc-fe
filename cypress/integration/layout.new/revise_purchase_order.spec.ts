@@ -707,7 +707,7 @@ add the requestor to the approvals field - ENC-12706`,
       });
 
       it("Approve PO", () => {
-        cy.ebApproveWithoutApi();
+        cy.poApproveWithoutApi();
       });
 
       it("Verify PO is relased and released date", () => {

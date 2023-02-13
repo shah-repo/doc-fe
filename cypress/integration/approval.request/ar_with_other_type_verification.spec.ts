@@ -6,7 +6,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { CyRoutes } from "./../../support/routes";
 
 let createdCompany;
 let loginResponse;
@@ -367,14 +366,13 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
-        cy.fbEnterPlaceholder({ placeholder: " changed" });
-        cy.fbAddNewFieldButton();
-        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
 
-        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      });
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -465,11 +463,14 @@ context("Approval request implementation tasks", () => {
 
     it("Add created document revision", () => {
       cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
-      cy.arClickAddDocumentWithoutApi();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click on Save", () => {
@@ -481,6 +482,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

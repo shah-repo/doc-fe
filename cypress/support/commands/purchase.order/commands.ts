@@ -56,8 +56,8 @@ declare global {
       poAMSelectUsers(...list: string[]): Chainable<Subject>;
       poAMCheckForApproval(): Chainable<Subject>;
       poSaveDocument(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsRed(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsPrimary(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsDisabled(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
       poAMEnterPassword(): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
@@ -78,6 +78,7 @@ declare global {
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poClickOnPending(): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
       poApproveWithoutApi(): Chainable<Subject>;
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
@@ -142,8 +143,11 @@ Cypress.Commands.add("poCreateNew", () => {
 
 Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
   cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
+  cy.poClickOnPending();
   cy.contains("PO Approval sig");
-  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(params.name + " | DRAFT" + params.email);
+  cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(params.name);
+  cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(params.email);
+  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
 });
 
 Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
@@ -264,8 +268,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
+  cy.get(`[data-cy="po-status-button-OPENED"]`).should("exist");
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -383,12 +386,12 @@ Cypress.Commands.add("poAMCheckForApproval", () => {
   });
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsRed", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorPrimary\"]").should("exist");
+Cypress.Commands.add("poAMCheckApprovalIconIfItsPrimary", () => {
+  cy.get(`[data-cy="check-circle-primary"]`).should("exist");
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorDisabled\"]").should("exist");
+Cypress.Commands.add("poAMCheckApprovalIconIfItsDisabled", () => {
+  cy.get(`[data-cy="check-circle-disabled"]`).should("exist");
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
@@ -461,11 +464,11 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
 });
 
 Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string }) => {
-  cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.supplier).wait(500);
 });
 
 Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
-  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
+  cy.get(`[aria-colindex="9"] .k-filtercell > input`).arrowType(params.orderDate).wait(500);
 });
 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
@@ -475,6 +478,12 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
 
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("poClickOnPending", () => {
+  cy.get(`[data-cy="approval-block-common.pending"]`).arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poApprove", () => {
@@ -488,6 +497,7 @@ Cypress.Commands.add("poApprove", () => {
 });
 
 Cypress.Commands.add("poApproveWithoutApi", () => {
+  cy.poClickOnPending();
   cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);

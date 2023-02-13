@@ -8,7 +8,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { purchaseOrderDefaultSchema } from "../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { POPart } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -203,11 +202,11 @@ context("PO test with default enlil form", () => {
       });
 
       it("Click on 'Create PO' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY hh:mm A");
-          poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY hh:mm A");
-        });
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
+        poCreationDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY hh:mm A");
+        poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY hh:mm A");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Fill form fields", () => {
@@ -219,9 +218,8 @@ context("PO test with default enlil form", () => {
           SystemRequirement("REQ-1630");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-          });
+          cy.drSelectHistoryTab();
+          cy.progressBarShouldNotExist();
 
           cy.get("[data-cy='change-key-0']").contains(USERS[1].name);
           cy.get("time[data-cy=\"audit-time-0\"]")
@@ -432,20 +430,18 @@ context("PO test with default enlil form", () => {
         });
 
         it("Save PO document", () => {
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PatchDocRev], () => {
-              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-            });
+          cy.drClickSaveWithoutApiCall();
           cy.checkToastMessage({ exists: false });
-
+          cy.landingPageLoadingElementShouldNotExist();
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
+          cy.landingPageLoadingElementShouldNotExist();
         });
 
         it("Click 'Approve' button", () => {
-          cy.ebApproveWithoutApi();
+          cy.poApproveWithoutApi();
         });
       });
     });

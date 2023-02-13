@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -362,10 +361,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.fbClickButton({ el: "updateRecord" });
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.fbClickButton({ el: "updateRecord" });
     });
   });
 
@@ -379,12 +376,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select Record Type: 'Engineering Build'", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev,
-        CyRoutes.AvailableMaintenanceForms], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm").arrowClick();
-        cy.get("div[id^=react-select]").contains("Engineering Build").arrowClick();
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm").arrowClick();
+      cy.get("div[id^=react-select]").contains("Engineering Build").arrowClick();
     });
 
     it("Add TextFields value", () => {

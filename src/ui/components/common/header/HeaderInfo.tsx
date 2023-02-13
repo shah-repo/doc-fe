@@ -249,14 +249,14 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   )}
                 </Grid>
                 &nbsp;
-                <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
-                <Grid item={true}>
-                  <Text
-                    translation="form.builder.header.rev"
-                    values={{ revision: displayRevision }}
-                    dataCy="HeaderInfo-Rev"
-                  />
-                </Grid>
+                {displayRevision && <> <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
+                  <Grid item={true}>
+                    <Text
+                      translation="form.builder.header.rev"
+                      values={{ revision: displayRevision }}
+                      dataCy="HeaderInfo-Rev"
+                    />
+                  </Grid> </>}
                 { isTypeMpiOutput &&
                   <>
                     <Grid item={true} className={classes.arrowPadding}>

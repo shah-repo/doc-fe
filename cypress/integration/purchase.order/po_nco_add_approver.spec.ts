@@ -1023,12 +1023,15 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   // eslint-disable-next-line max-len
   context("Verify that since the Requestor does not fulfil the PO approval level then the system keeps the mark greyed out", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[11].name + " | DRAFT" + USERS[11].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[11].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[11].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
     it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
+      cy.poAMCheckApprovalIconIfItsDisabled();
     });
   });
 
@@ -1095,15 +1098,18 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
   });
 
-  context("Verify that if the Requestor fulfills the PO approval level in Red color", () => {
+  context("Verify that if the Requestor fulfills the PO approval level", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       SystemRequirement("REQ-5210");
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[2].name + " | DRAFT" + USERS[2].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[2].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[2].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
-    it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+    it("Check approval icon if it fulfill the PO approval level", () => {
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -1587,12 +1593,15 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   context("Verify that if the Requestor fulfills the PO approval level then the system should mark the approval level as fulfilled", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       SystemRequirement("REQ-5210");
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[12].name + " | DRAFT" + USERS[12].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[12].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[12].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
-    it("Check approval icon if it's colored in RED", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+    it("Check approval icon if the system should mark the approval level as fulfilled", () => {
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -1644,14 +1653,17 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
   });
 
-  context("Verify that if the Requestor fulfills the PO approval level in Red color", () => {
+  context("Verify that if the Requestor fulfills the PO approval level", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[1].name + " | DRAFT" + USERS[1].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[1].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[1].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
-    it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+    it("Check approval icon if itfulfills the PO approval level", () => {
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 

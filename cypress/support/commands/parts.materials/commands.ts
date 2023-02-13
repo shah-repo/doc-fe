@@ -36,6 +36,7 @@ declare global {
       lhrSubmitForApproval(): Chainable<Subject>;
       lhrSubmitForApprovalWithoutApi(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
+      ptClickCreateNewPartWithoutApi(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
       ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
       pmVerifyAddedMaterial(params: {
@@ -161,7 +162,9 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
 
 // eslint-disable-next-line max-len
 Cypress.Commands.add("pmAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
-  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView();
+  cy.get("[data-cy^=\"fb-approvals\"]").click();
+  cy.get("[data-cy^=\"fb-approvals\"]").autocompleteSelect(params.approver);
   cy.unClick();
   cy.wait(1000);
   cy.progressBarShouldNotExist();
@@ -207,6 +210,13 @@ Cypress.Commands.add("ptClickCreateNewPart", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("ptClickCreateNewPartWithoutApi", () => {
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });

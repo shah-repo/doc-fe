@@ -596,7 +596,7 @@ context("Test Engineering Build landing page", () => {
   });
 
   context("Verify EB landing page", () => {
-    it("Navigate to LHR landing page", () => {
+    it("Navigate to EB landing page", () => {
       cy.navigToEB();
     });
 
@@ -659,7 +659,7 @@ context("Test Engineering Build landing page", () => {
     });
 
     it(`Verify EB can be opened`, () => {
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
@@ -671,18 +671,18 @@ context("Test Engineering Build landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for EB ID", () => {
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="1"] input`).arrowType("EB-00001");
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "EB-00001");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "EB-00001" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "EB-00001" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for State", () => {
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] input`).arrowType("A");
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "A");
+      it("Verify filter for Revision", () => {
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 2, input: "A" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "A" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -690,24 +690,24 @@ context("Test Engineering Build landing page", () => {
         cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "Released");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Title", () => {
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="4"] input`).arrowType("Engineering Build document");
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "Engineering Build document");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 4, input: "Engineering Build document" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "Engineering Build document" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Owner", () => {
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).arrowType(USERS[1].name);
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", USERS[1].name);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 5, input: USERS[1].name });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: USERS[1].name });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -715,38 +715,38 @@ context("Test Engineering Build landing page", () => {
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="6"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "Last 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Form ID", () => {
-        cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="7"] input`).arrowType("N/A");
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "N/A");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 7, input: "N/A" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "N/A" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Part ID", () => {
-        cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="8"] input`).arrowType("N/A");
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "N/A");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 8, input: "N/A" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "N/A" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
         cy.get(`th[aria-colindex="3"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "" });
       });
     });
 
@@ -783,7 +783,7 @@ context("Test Engineering Build landing page", () => {
 
     context("Verify dropdown filters", () => {
       it("Verify EB ID dropdown filters", () => {
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
@@ -791,7 +791,7 @@ context("Test Engineering Build landing page", () => {
       it(`Verify EB ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("1");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "1" });
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -800,9 +800,9 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("EB-00001");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "EB-00001" });
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -811,9 +811,9 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("EB-00001");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "EB-00001" });
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -822,9 +822,9 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("EB-0000");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "EB-00001" });
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -833,9 +833,9 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("1");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "1" });
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -844,7 +844,7 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -854,7 +854,7 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
@@ -862,10 +862,9 @@ context("Test Engineering Build landing page", () => {
         cy.landingPageLoadingElementShouldNotExist();
       });
 
-
       it(`Verify EB ID "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -875,7 +874,7 @@ context("Test Engineering Build landing page", () => {
 
       it(`Verify EB ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });

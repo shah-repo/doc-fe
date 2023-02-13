@@ -668,11 +668,14 @@ context("LHRT Pending Change", () => {
     });
 
     it("select the created LHRT", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "LHRT-00003 - rev 1 - LHRt document" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "LHRT-00003 - rev 1 - LHRt document" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Save AR", () => {
