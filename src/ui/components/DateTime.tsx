@@ -1,6 +1,6 @@
 import * as React from "react";
 import Moment, { MomentProps } from "react-moment";
-import { TIME_ZONE } from "../../common/utils/date";
+import { MomentFormats, TIME_ZONE } from "../../common/utils/date";
 
 interface DateTimeProps extends MomentProps {
   value: string;
@@ -14,7 +14,7 @@ const DateTime: React.FunctionComponent<Props> = ({
   ...other
 }) => (
   <Moment
-    format={format || "LLL"}
+    format={format || MomentFormats.DateTime}
     tz={TIME_ZONE}
     {...other}
   >
