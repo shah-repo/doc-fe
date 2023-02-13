@@ -185,7 +185,7 @@ export function testHelpCenterModule(moduleData?: HelpCenterModuleData, params?:
       () => {
         context("Navigation close", () => {
           it("Navigate to Dashboard", () => {
-            cy.navigToDashboard();
+            cy.navigToDashboardWithoutApi();
           });
           it("Open HelpCenter navigation", () => {
             cy.openHelpCenterNavigation();

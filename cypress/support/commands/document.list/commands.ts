@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { integerType } from "aws-sdk/clients/iam";
-import { CyRoutes } from "../../routes";
 
 export { };
 
@@ -194,9 +193,7 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 });
 
 Cypress.Commands.add("dlSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-    cy.get("tr.k-master-row").first().arrowClick();
-  });
+  cy.get("tr.k-master-row").first().arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });
@@ -208,9 +205,7 @@ Cypress.Commands.add("dlSelectFirstDocumentWithoutApi", () => {
 });
 
 Cypress.Commands.add("dlSelectFirstDocumentItem", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-    cy.get("tr.k-master-row").first().children("td").first().arrowClick();
-  });
+  cy.get("tr.k-master-row").first().children("td").first().arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });
