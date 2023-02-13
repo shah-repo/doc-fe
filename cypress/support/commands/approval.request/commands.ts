@@ -286,8 +286,9 @@ Cypress.Commands.add("arClearFilters", () => {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
-  cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear().arrowType(params.description, { force: true })
-    .wait(500).unClick();
+  cy.get("[class^=\"public-DraftStyleDefault-block\"]").arrowClick().clear();
+  cy.get("[class^=\"public-DraftStyleDefault-block\"]").arrowType(params.description);
+  cy.wait(2000);
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
@@ -372,6 +373,7 @@ Cypress.Commands.add("arClickAddItemDone", () => {
   cy.get("[data-cy='doneRecord']").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string; noWait?: bool }) => {
