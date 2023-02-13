@@ -21,7 +21,7 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
       const poStatusField = find(payload.filters, { field: KendoGridFilterCell.PO_STATUS });
       if (poStatusField && payload?.filters && poStatusField.field === KendoGridFilterCell.PO_STATUS) {
         payload?.filters?.forEach((filter) => {
-          if (poStatusField.field === KendoGridFilterCell.PO_STATUS) {
+          if (filter.field === KendoGridFilterCell.PO_STATUS) {
             if ([POStatusLabelMapping.CLOSED, POStatusLabelMapping.VOIDED].includes(filter.value)) {
               filter.value = filter.value.toUpperCase();
             } else {
