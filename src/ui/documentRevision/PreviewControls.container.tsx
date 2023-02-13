@@ -492,6 +492,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <HeaderPOStatusOptions
             poStatus={documentRevision?.poStatus}
             docId={documentRevision?.id}
+            docRevOwner= {documentRevision?.owner?.user?.name}
+            updatedAt= {documentRevision?.updatedAt || ""}
+            version={documentRevision?.version}
           />
         )}
       </>

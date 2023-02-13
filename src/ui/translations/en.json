@@ -571,6 +571,7 @@
   "documentRevision.record.void.alert": "Are you sure you want to void this record?\nThis action cannot be undone.",
   "documentRevision.po.void.alert": "Are you sure you want to void this PO?\nThis action cannot be undone.",
   "documentRevision.po.open.alert": "Are you sure you want to open this PO?",
+  "documentRevision.po.status.update.failed": "PO Status update failed",
   "documentRevision.releasing": "Releasing {docId}, {title}",
   "transition.action.confirm": "Confirm",
   "transition.action.close.now": "Close Now",
