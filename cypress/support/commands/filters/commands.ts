@@ -92,7 +92,7 @@ Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string;
   cy.get("li").contains(params.state).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.wait(1000);
-  cy.get(`th[aria-colindex="4"]`).find(`input[class="k-textbox"]`).arrowType(params.title, { force: true }).wait(500);
+  cy.get(`th[aria-colindex="4"]`).find(`input[class="k-textbox"]`).arrowType(params.title, { delay: 200 }).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.wait(1000);
   cy.get(`[class="k-grid-content k-virtual-content"]`).scrollTo("right").wait(1000);
@@ -102,7 +102,8 @@ Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string;
   cy.get(`th[aria-colindex="6"] [class="k-select"]`).arrowClick();
   cy.get("li").contains(params.releasedDate).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.get(`th[aria-colindex="7"] [class="k-textbox"]`).arrowType(params.formId).wait(500);
+  cy.wait(1000);
+  cy.get(`th[aria-colindex="7"] [class="k-textbox"]`).arrowType(params.formId, { delay: 200 }).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
