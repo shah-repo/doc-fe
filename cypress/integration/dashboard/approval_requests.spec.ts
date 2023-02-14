@@ -310,6 +310,9 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arEnterItemDescription({ description: "added document description" });
       cy.arEnterItemJustification({ justification: "justification for added document" });
       cy.arClickAddItemDone();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Add second document revision", () => {
@@ -322,6 +325,9 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arEnterItemDescription({ description: "added document description" });
       cy.arEnterItemJustification({ justification: "justification for added document" });
       cy.arClickAddItemDone();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click on Save button", () => {
@@ -351,14 +357,21 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
   context("Check the dashboard", () => {
     it("AR should not appear on My Feed since AR is still in Draft", () => {
       cy.navigToDashboardWithoutApi();
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.contains("No pending actions").should("exist");
     });
 
+    it("Switch to Recent tab", () => {
+      cy.dashboardRecentTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("AR should appear in Recent", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
+      cy.get("#scrollable-auto-tab-recent").arrowClick();
+      cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
     });
@@ -397,12 +410,15 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterItemDescription({ name: "CP-00006" });
+      cy.arSelectItem({ name: "CP-00006" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arEnterItemDescription({ description: "added document description" });
       cy.arEnterItemJustification({ justification: "justification for added document" });
       cy.arClickAddItemDone();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Save AR", () => {
@@ -417,12 +433,13 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
+      cy.dashboardRecentTab();
+      cy.get("#scrollable-auto-tab-recent").arrowClick();
+      cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00002")
         .and("contain.text", "Second AR");
 
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(1)
+      cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(1)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
     });
@@ -430,8 +447,8 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
   context("Send AR to review and check dashboard", () => {
     it("Send AR to review", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(1).find("a").eq(0).arrowClick();
+      cy.get("#scrollable-auto-tab-recent").arrowClick();
+      cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(1).find("a").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arClickSendToReviewWithoutApi();
@@ -441,6 +458,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
     it("Goto dashboard", () => {
       cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -489,6 +512,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         .find("svg").eq(0).arrowClick();
     });
 
+    it("Switch to To Do tab", () => {
+      cy.dashboardToDoTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Hovering AR line item should display buttons", () => {
       cy.contains("needs your approval for").trigger("mouseover");
       cy.contains("needs your approval for").parent().parent().parent().parent().parent()
@@ -514,6 +543,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
 
     it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
@@ -558,8 +588,8 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("After approve, AR should appear in Recent items", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
+      cy.get("#scrollable-auto-tab-recent").arrowClick();
+      cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
     });
@@ -573,6 +603,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -656,6 +692,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -794,7 +836,15 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+    });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("verify notification on dashboard should be closed", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Approval request form")
@@ -832,10 +882,13 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arEnterItemDescription({ name: "CP-00007" });
+      cy.arSelectItem({ name: "CP-00007" });
       cy.arEnterItemDescription({ description: "form1 description" });
       cy.arEnterItemJustification({ justification: "form1 justification" });
       cy.arClickAddItemDone();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Create Approval Request", () => {
@@ -846,6 +899,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email, noWait: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -871,6 +925,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
     it("Goto dashboard", () => {
       cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -940,8 +1000,8 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("After approve, AR should appear in Recent items", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
+      cy.get("#scrollable-auto-tab-recent").arrowClick();
+      cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
         .and("contain.text", "Approval request form1");
     });
@@ -981,7 +1041,15 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+    });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("verify notification on dashboard should be closed", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
         .and("contain.text", "Approval request form1")
@@ -1025,6 +1093,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Add approver", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1145,6 +1214,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(60000);
     });
   });
 

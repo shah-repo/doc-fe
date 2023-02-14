@@ -35,6 +35,7 @@ import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter
 import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
 import useDidMount from "../../hooks/useDidMount";
+import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
@@ -55,7 +56,6 @@ import ClearFilters from "../table/ClearFilters";
 import { DataLoader } from "./DataLoader";
 import { KendoGridFilterCell, KendoGridProps } from "./interfaces";
 import KendoGridStyles from "./KendoGrid.styles";
-import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
 
 export function KendoGrid<T extends any>({
   tableName,
@@ -260,11 +260,7 @@ export function KendoGrid<T extends any>({
     />
   );
   const InputFilter = (props: GridFilterCellProps) => (
-    <InputFilterTemplate
-      {...props}
-      defaultItem={props.value}
-      value={props.value}
-    />
+    <InputFilterTemplate {...props} />
   );
 
   const filterCellMapping = {
