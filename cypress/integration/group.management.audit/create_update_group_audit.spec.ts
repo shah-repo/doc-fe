@@ -90,7 +90,7 @@ context("Group Creation Flow", () => {
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId,
       }).then(() => done());
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
@@ -174,7 +174,7 @@ context("Group Creation Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroup();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
@@ -375,7 +375,7 @@ context("Group Creation Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
@@ -613,7 +613,7 @@ context("Group Creation Flow", () => {
 
     it("Click cancel without saving the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
@@ -758,7 +758,7 @@ context("Group Creation Flow", () => {
 
     it("Click cancel without saving the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 

@@ -31,7 +31,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       name={`fb-approvers-${name}`}
       {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur  }}
     />
-    <Box display="flex" flexWrap="wrap">
+    <Box>
       <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
         {(group: FBRequiredApprover, id) => (
           <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5} >
