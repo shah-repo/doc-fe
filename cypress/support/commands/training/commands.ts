@@ -140,12 +140,13 @@ Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
 });
 
 Cypress.Commands.add("trLandingPageUsername", (params: {username}) => {
-  cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType(params.username).wait(500);
+  cy.get(`[aria-colindex="5"] [class="k-textbox"]`).arrowClick().wait(500);
+  cy.get(`[aria-colindex="5"] [class="k-textbox"]`).clear().arrowType(params.username).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
-  cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="4"] .k-filtercell > input`).clear().arrowType(params.title).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
