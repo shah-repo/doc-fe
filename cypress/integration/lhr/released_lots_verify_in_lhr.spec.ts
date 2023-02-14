@@ -918,10 +918,11 @@ context("Released_lots_verify_in_lhr", () => {
   context("Release CSL document", () => {
     it("Navigate to Lots", () => {
       cy.navigToLots();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox")
+      cy.get("[aria-colindex=\"1\"] .k-filtercell>input")
         .focus().arrowType(`LOT #${currentDate}01`);
     });
 
@@ -1027,7 +1028,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
+      cy.get("[aria-colindex=\"1\"] .k-filtercell>input").clear()
         .focus().arrowType(`LOT #${currentDate}01`);
     });
 
@@ -1051,7 +1052,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
+      cy.get("[aria-colindex=\"1\"] .k-filtercell>input").clear()
         .focus().arrowType(`LOT #${currentDate}02`);
     });
 
@@ -1154,7 +1155,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
+      cy.get("[aria-colindex=\"1\"] .k-filtercell>input").clear()
         .focus().arrowType(`LOT #${currentDate}01`);
     });
 

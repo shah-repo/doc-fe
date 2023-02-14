@@ -1784,7 +1784,8 @@ context("LHR & LHRS Flow", () => {
       });
 
       it(`Select '${USERS[2].name}' to Assign document to`, () => {
-        cy.drAssignDocumentTo({ username: USERS[2].name });
+        cy.get("input[id^='react-select']").eq(0).autocompleteSelect(USERS[2].name, { force: true }).wait(2000);
+        // cy.drAssignDocumentTo({ username: USERS[2].name });
         cy.wait(1000);
         cy.landingPageLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -1798,7 +1799,8 @@ context("LHR & LHRS Flow", () => {
       });
 
       it(`Select '${USERS[3].name}' to Assign document to`, () => {
-        cy.drAssignDocumentTo({ username: USERS[3].name });
+        cy.get("input[id^='react-select']").eq(0).autocompleteSelect(USERS[3].name, { force: true }).wait(2000);
+        // cy.drAssignDocumentTo({ username: USERS[3].name });
         cy.wait(1000);
         cy.landingPageLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -2884,9 +2886,11 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Navig to LHRs #1", () => {
+      cy.navigToLHRWithoutAPI();
+      cy.wait(1000);
       cy.contains("LHR-00001").eq(0).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
