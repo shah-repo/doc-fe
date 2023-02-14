@@ -31,19 +31,23 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       name={`fb-approvers-${name}`}
       {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur  }}
     />
-    <Box>
-      <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
-        {(group: FBRequiredApprover, id) => (
-          <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5} >
-            <CheckCircleIcon data-cy={`fb-approvers-${group.name}-check-${isIncluded?.(group) ? "marked" : "disabled"}`}
-              color={isIncluded?.(group) ? "primary" : "disabled"} />
-            <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
-          </Box>
-        )}
-      </FBMapWrapper>
-      {changeRequestApprovals && changeRequestApprovals.length > 0
-        && <Approvers dataProp={changeRequestApprovals}/>
-      }
+    <Box display="flex" flexDirection="row" flexWrap="wrap">
+      <Box display="flex" flexWrap="wrap" >
+        <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
+          {(group: FBRequiredApprover, id) => (
+            <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
+              <CheckCircleIcon data-cy={`fb-approvers-${group.name}-check-${isIncluded?.(group) ? "marked" : "disabled"}`}
+                color={isIncluded?.(group) ? "primary" : "disabled"} />
+              <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
+            </Box>
+          )}
+        </FBMapWrapper>
+      </Box>
+      <Box flexBasis="100%" >
+        {changeRequestApprovals && changeRequestApprovals.length > 0
+      && <Approvers dataProp={changeRequestApprovals}/>
+        }
+      </Box>
     </Box>
   </FBInput>
 );
