@@ -2810,12 +2810,15 @@ context("LHR & LHRS Flow", () => {
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("verify loader is present", () => {
         cy.get("[data-cy='LHR-Step-Progress-Bar']").should("be.visible");
       });
+
       it("verify Step 1 is completed", () => {
         cy.get("[data-cy='completed-steps']").contains("1").should("exist");
       });
+
       it("verify Step 2 is in progress", () => {
         cy.get("[data-cy='inprogress-steps']").contains("2").should("exist");
       });

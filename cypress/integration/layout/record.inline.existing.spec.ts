@@ -613,6 +613,7 @@ context("Record inline Flow", () => {
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
         cy.wait(3000);
+        cy.unClick();
       });
 
       it("Checkbox option 1 checked", () => {
@@ -687,12 +688,16 @@ context("Record inline Flow", () => {
       });
 
       it("Approve remaining Inline Approval if any", () => {
-        cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
-          if (el.text() === "Approve") {
-            cy.lhrApproveWithoutApi();
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
-            cy.wait(2000);
+        cy.contains("Approve").then((approve) => {
+          if (approve) {
+            cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
+              if (el.text() === "Approve") {
+                cy.lhrApproveWithoutApi();
+                cy.progressBarShouldNotExist();
+                cy.listLoadingElementShouldNotExist();
+                cy.wait(2000);
+              }
+            });
           }
         });
       });

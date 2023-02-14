@@ -438,6 +438,13 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
             },
             {
               icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
               path: "/document_type_management",
               type: "LINK",
               label: "Document Type Management",
