@@ -400,7 +400,11 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
             }
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
+                <PinIcon
+                  data-cy="pin-icon"
+                  onMouseEnter={onMouseHoverPinIcon}
+                  className={classes.cursorPointer}
+                />
               )}
               {pinHover && isPinShown && (
                 <StyleTooltip
@@ -409,6 +413,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <PinSolidIcon
+                    data-cy="pin-solid-icon"
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                     className={classes.cursorPointer}
@@ -422,6 +427,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <PinSolidIcon
+                    data-cy="pin-solid-icon"
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                     className={classes.cursorPointer}
@@ -441,7 +447,11 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                data-cy="pin-solid-icon"
+                onClick={handleUnPinClick}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
           </span>
         )}

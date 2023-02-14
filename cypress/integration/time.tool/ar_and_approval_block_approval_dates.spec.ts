@@ -962,7 +962,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Switch to myfeed tab", () => {
-        cy.dashboardMyFeedTab();
+        cy.dashOpenMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1065,7 +1065,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Switch to myfeed tab", () => {
-        cy.dashboardMyFeedTab();
+        cy.dashOpenMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1144,7 +1144,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Switch to myfeed tab", () => {
-        cy.dashboardMyFeedTab();
+        cy.dashOpenMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1228,7 +1228,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Switch to myfeed tab", () => {
-        cy.dashboardMyFeedTab();
+        cy.dashOpenMyFeedTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
