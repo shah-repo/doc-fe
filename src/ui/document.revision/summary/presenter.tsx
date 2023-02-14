@@ -88,6 +88,10 @@ const Presenter: React.FunctionComponent<Props> = ({
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
+  const relatedPartsViewOnly = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
+    status
+  );
 
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
@@ -168,7 +172,7 @@ const Presenter: React.FunctionComponent<Props> = ({
         {(isPart || isPartForm) &&
             <Grid item xs={12}>
               <RelatedPartsWrapper
-                viewOnly={true}
+                viewOnly={relatedPartsViewOnly}
                 documentRevision={dataProp}
                 relatedPartsStatus= {dataProp?.relatedPartsStatus} />
             </Grid>
