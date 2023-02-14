@@ -3,12 +3,9 @@ import { compact, difference, isEmpty, isEqual, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../state/reducers";
 import { store } from "../../../state/store";
 import { canEditDocumentRevision } from "../../documentRevision/helpers/documentRevisionPermissions";
 import Colors from "../../layout/theme/utils/colors";
@@ -43,10 +40,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-    const documentRevision = useSelector((state: ApplicationState) =>
-      documentRevisionsSelectors.getDocumentRevision(state, document?.id || ""));
     const isCurrentUserOperator = some(document?.document.operators, ["user.email", authUser.email ]);
-    const canEditDocRev = document && canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
+    const canEditDocRev = document && canEditDocumentRevision(document, authUser.email, isCurrentUserOperator);
 
     const {
       poApprovalsState,
