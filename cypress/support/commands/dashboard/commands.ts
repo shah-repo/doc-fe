@@ -8,9 +8,6 @@ import { CyRoutes } from "../../routes";
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      dashboardToDoTab(): Chainable<Subject>;
-      dashboardMyFeedTab(): Chainable<Subject>;
-      dashboardRecentTab(): Chainable<Subject>;
       dashVerifyListItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashVerifyListItemNotExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashGoToListItemFromDashboard(params: {listItem: string}): Chainable<Subject>;
@@ -19,25 +16,15 @@ declare global {
       dashVerifyNoPendingActions(): Chainable<Subject>;
       dashApproverFirstFromList(): Chainable<Subject>;
       dashApproverFirstFromListWithoutApi(): Chainable<Subject>;
+      dashOpenToDoTab(): Chainable<Subject>;
+      dashOpenMyFeedTab(): Chainable<Subject>;
+      dashOpenTrainingsTab(): Chainable<Subject>;
+      dashOpenRecentTab(): Chainable<Subject>;
+      dashDismissFirstItem(): Chainable<Subject>;
       checkStylePropExists(params: {content: string; props: any; elem?: string; index?: integer}): Chainable<Subject>;
     }
   }
 }
-
-Cypress.Commands.add("dashboardToDoTab", () => {
-  cy.get(`#scrollable-auto-tab-todo`).arrowClick();
-  cy.progressBarShouldNotExist();
-});
-
-Cypress.Commands.add("dashboardMyFeedTab", () => {
-  cy.get(`#scrollable-auto-tab-my-feed`).arrowClick();
-  cy.progressBarShouldNotExist();
-});
-
-Cypress.Commands.add("dashboardRecentTab", () => {
-  cy.get("#scrollable-auto-tab-recent").arrowClick();
-  cy.progressBarShouldNotExist();
-});
 
 Cypress.Commands.add("dashVerifyListItemExistsOnDashboard", (params: { listItem: string}) => {
   cy.get("[data-cy=dashboardFeedList] div>span").contains(params.listItem).should("exist");
@@ -102,6 +89,37 @@ Cypress.Commands.add("dashApproverFirstFromListWithoutApi", () => {
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("dashOpenToDoTab", () => {
+  cy.get("#scrollable-auto-tab-todo").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("dashOpenMyFeedTab", () => {
+  cy.get("#scrollable-auto-tab-my-feed").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("dashOpenTrainingsTab", () => {
+  cy.get("#scrollable-auto-tab-training").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("dashOpenRecentTab", () => {
+  cy.get("#scrollable-auto-tab-recent").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("dashDismissFirstItem", () => {
+  cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+  cy.get("[data-cy='dismiss-icon']").first().arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 // eslint-disable-next-line max-len

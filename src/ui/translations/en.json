@@ -287,6 +287,7 @@
   "common.changes": "Changes",
   "common.create": "Create",
   "common.uploading": "Uploading...",
+  "common.loading": "Loading…",
   "common.view.file": "View File",
   "common.file.not.loaded": "File not loaded",
   "common.previous": "Previous",

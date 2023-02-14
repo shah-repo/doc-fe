@@ -18,6 +18,7 @@ const DismissAction: React.FC<Props> = (props) => {
         arrow
       >
         <CloseIcon
+          data-cy="dismiss-icon"
           className={classes.cursorPointer}
           onClick={onClick}
         />
