@@ -335,7 +335,7 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -457,7 +457,7 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -512,7 +512,7 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -633,7 +633,7 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

@@ -236,7 +236,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -435,7 +435,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -495,7 +495,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -571,7 +571,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -704,7 +704,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -780,7 +780,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -818,7 +818,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

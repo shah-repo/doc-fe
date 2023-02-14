@@ -199,7 +199,11 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && isPinShown && (
-              <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
+              <PinIcon
+                data-cy="pin-icon"
+                onMouseEnter={onMouseHoverPinIcon}
+                className={classes.cursorPointer}
+              />
             )}
             {pinHover && isPinShown && (
               <StyleTooltip
@@ -208,6 +212,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
                 arrow
               >
                 <PinSolidIcon
+                  data-cy="pin-solid-icon"
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                   className={classes.cursorPointer}
@@ -226,7 +231,11 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                data-cy="pin-solid-icon"
+                onClick={handleUnPinClick}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
           </span>
         )}

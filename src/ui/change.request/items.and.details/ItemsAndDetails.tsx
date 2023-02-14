@@ -16,8 +16,14 @@ import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDet
 
 const Loader = () => {
   const classes = useStyles();
+
   return (
-    <div className={classes.loader}>Loading ...</div>
+    <div
+      data-cy="ar.items.loader"
+      className={classes.loader}
+    >
+      <Text translation="common.loading" />
+    </div>
   );
 };
 
