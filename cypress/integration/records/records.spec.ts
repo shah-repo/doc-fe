@@ -8,7 +8,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trCompleteDate } from "../../utils/constants/dateHandler";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -866,6 +866,12 @@ context("Records flow", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it(`Verify reject notification`, () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", "REJECTED")
@@ -1261,7 +1267,7 @@ context("Records flow", () => {
       it("Check if all filter values persist after changing landing page", () => {
         cy.filterCheckIfRecordsFilterPersists({
           docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
-          releasedDate: "Last 7 days", formId: "FM-00002",
+          releasedDate: trCompleteDate, formId: "FM-00002",
         });
       });
 
