@@ -423,7 +423,7 @@ context("All regular users on new dashboard", () => {
 
   context("My Feed tab contains", () => {
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -507,7 +507,7 @@ context("All regular users on new dashboard", () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -800,7 +800,7 @@ context("All regular users on new dashboard", () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

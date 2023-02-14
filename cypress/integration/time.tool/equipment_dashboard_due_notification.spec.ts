@@ -846,7 +846,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -913,7 +913,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         });
 
         it("Switch to myfeed tab", () => {
-          cy.dashboardMyFeedTab();
+          cy.dashOpenMyFeedTab();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -964,7 +964,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         });
 
         it("Switch to myfeed tab", () => {
-          cy.dashboardMyFeedTab();
+          cy.dashOpenMyFeedTab();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
