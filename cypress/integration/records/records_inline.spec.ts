@@ -268,7 +268,7 @@ context("Record inline Flow", () => {
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
         cy.fbFieldRequiredIfIn({ name: "Checkbox" });
-        cy.fbSelectCheckboxValue("3");
+        cy.fbSelectCheckboxValueList("3");
         cy.fbAddNewFieldButton();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
