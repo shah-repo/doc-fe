@@ -11,8 +11,6 @@ let loginResponse;
 
 const documentRevisionName = "New document for testing AR";
 
-// @todo: point 8.b.iii
-
 context("Express AR notifications", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -290,8 +288,11 @@ context("Express AR notifications", () => {
       cy.get("#confirmEffectiveDate").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-      cy.wait(3000);
+    });
+
+    it("There should be a banner notification that you have successfully closed an AR", () => {
+      cy.checkToastMessageContains({ message: "You successfully closed an AR" });
+      cy.wait(1000);
     });
 
     it("'To Do' tab should be empty", () => {
@@ -310,7 +311,7 @@ context("Express AR notifications", () => {
     });
 
     it("Dismiss item", () => {
-      cy.contains("CP-00002").eq(0).trigger("mouseover");
+      cy.contains("CLOSED").eq(0).trigger("mouseover");
       cy.get("[data-cy='dismiss-icon']").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
