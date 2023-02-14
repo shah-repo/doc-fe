@@ -85,7 +85,12 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   function resetAndCancelEdit() {
-    formState.reset();
+    // remove values for formState for keys
+    const removeKeys = ["proposedDocumentRevision", "descriptionOfChange", "justificationOfChange"];
+    removeKeys.forEach((item) => {
+      formState.setFieldValue(item, undefined);
+    });
+
     setIsEditRowVisible(false);
     itemsAndDetailsState.setViewItemActionsVisibility(true);
   }
