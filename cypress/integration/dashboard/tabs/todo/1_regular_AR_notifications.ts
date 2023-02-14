@@ -9,19 +9,21 @@ import { SystemRequirement } from "../../../../utils/context/systemRequirement";
 import { RevisionChangeType } from "../../../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../../../support/commands/company/commands";
 import { ClinicalProtocolDocType } from "../../../../utils/constants/documentTypes/clinicalProtocol";
+import { TrainingCurriculum } from "../../../../utils/constants/documentTypes/trainingCurriculum";
+import { GroupTag } from "../../../../../src/state/ducks/auth/types";
 
 let createdCompany;
 let loginResponse;
+let adminEmployee;
 let firstEmployee;
 let clinicalProtocolDocumentType;
 let group;
+let caGroup;
 let ARUrl;
 
 const documentRevisionName = "New document for testing AR";
 const ARTitle = "Approval request form";
 const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
-
-// @todo: point 2
 
 context("Regular AR notifications", () => {
   before(() => {
@@ -46,19 +48,54 @@ context("Regular AR notifications", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[3].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2]],
+            users: [USERS[1], USERS[2]],
             documentTypes: [
               ClinicalProtocolDocType,
+              { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           firstEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
+      });
+    });
+
+    it("[API] Login User Admin", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[3].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API] Get group", (done: any) => {
+      cy.grpGetGroups({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        caGroup = response.find((group) => group.name === "Company Admin");
+        done();
+      });
+    });
+
+    it("[API] Patch 'Company Admin' group", () => {
+      cy.grpPatchGroup({
+        groupId: caGroup.id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
+          tags: [
+            GroupTag.DASHBOARD_ADMIN,
+          ],
+        },
       });
     });
 
@@ -112,8 +149,39 @@ context("Regular AR notifications", () => {
     });
   });
 
+  context("Login as User Admin", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify Dashboard tabs", () => {
+    it("Dashboard should have 4 tabs - 'To Do', 'My Feed', 'Trainings' and 'Recent'", () => {
+      cy.get("[role=tablist] button").eq(0).should("contain.text", "To Do");
+      cy.get("[role=tablist] button").eq(1).should("contain.text", "My Feed");
+      SystemRequirement("REQ-5070");
+      cy.get("[role=tablist] button").eq(2).should("contain.text", "Trainings");
+      cy.get("[role=tablist] button").eq(3).should("contain.text", "Recent");
+    });
+    it("'To Do' tab should be selected by default", () => {
+      cy.get("#scrollable-auto-tab-todo[aria-selected='true']").should("exist");
+    });
+    it("Verify tabs as fixed", () => {
+      cy.verifyFixedTab();
+    });
+  });
+
   context("Login as User 1", () => {
     it("Logs user in", () => {
+      cy.authLogout();
       cy.authLogin({
         email: USERS[1].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
