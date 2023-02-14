@@ -1,12 +1,17 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, isEmpty, isEqual, map, some } from "lodash";
+import { compact, difference, get, isEmpty, isEqual, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { authSelectors } from "../../../state/ducks/auth";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../state/reducers";
 import { store } from "../../../state/store";
+import { canEditDocumentRevision } from "../../documentRevision/helpers/documentRevisionPermissions";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
 import FBDataStore from "../FBStore/FBDataStore";
@@ -39,6 +44,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
+    const currentUserEmail = useSelector(authSelectors.currentUserEmail);
+    const documentRevision = useSelector((state: ApplicationState) =>
+      documentRevisionsSelectors.getDocumentRevision(state, document?.id || ""));
+    const operators = get(document, "document.operators", []);
+    const availableOperators = operators.map((operator) => operator.user.email);
+    const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
+    const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
 
     const {
       poApprovalsState,
@@ -162,7 +174,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requester) => {
-        if (workspaceState) {
+        if (workspaceState && canEditDocRev) {
           updateApprovals({ prevRequester: prevRequester.current });
         }
         prevRequester.current = requester;
