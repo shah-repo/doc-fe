@@ -40,6 +40,7 @@ declare global {
       cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
+      cmpClickCreateApprovalRequestWithoutApi(): Chainable<Subject>;
       cmpVerifyNoPendingActions(): Chainable<Subject>;
       cmpVerifyCompanyAvatar(params: { name: string; avatarSource: string }): Chainable<Subject>;
       cmpVerifyCompanyLogo(params: { logoSource: string}): Chainable<Subject>;
@@ -253,6 +254,11 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("cmpClickCreateApprovalRequestWithoutApi", () => {
+  cy.get("[data-cy=\"change.request.create\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
