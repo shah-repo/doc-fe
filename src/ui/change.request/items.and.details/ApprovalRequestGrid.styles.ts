@@ -68,7 +68,6 @@ export default makeStyles((theme) =>
     },
     iconButton: {
       "fontSize": "16px",
-      "fill": "#000",
       "&:hover": {
         color: Colors.blue,
       },

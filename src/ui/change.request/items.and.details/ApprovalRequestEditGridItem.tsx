@@ -16,7 +16,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   showAutoComplete? : boolean;
   titleText?: string;
   handleRemove?: (docRevId: string) => void;
-  entry?: ApprovalRequestGridItem | any;
+  entry?: ApprovalRequestGridItem;
 }> = ({
   disabledOptions,
   formState,
@@ -75,7 +75,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             <DeleteIcon className={classes.iconButton}
               onClick={() =>  {
                 resetAndCancelEdit?.();
-                handleRemove?.(entry?.docRevId); }}/>
+                handleRemove?.(entry?.docRevId as string); }}/>
           </Button>
           <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton}/>
