@@ -25,6 +25,7 @@ interface OwnProps {
   chosenForm?: FBDocumentRevisionProps;
   hideSideBar?: boolean;
   currentDocRevId? : string;
+  inDialog?: boolean;
 }
 
 export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
@@ -43,6 +44,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   _formState,
   hideSideBar = false,
   currentDocRevId,
+  inDialog = false,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
@@ -97,6 +99,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       formInput={formInput}
       hideSideBar={hideSideBar}
       currentDocRevId={currentDocRevId}
+      inDialog={inDialog}
       {...props}
     />
   );
