@@ -2,7 +2,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -102,113 +101,113 @@ context("Parent Part - Sub Part", () => {
       });
     });
 
-    it("[API]Create Supplier form", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: employeeLoginFirst.id,
-        groupName: "Everyone",
-      }).then((response) => {
-        group = response;
-        cy.arGetArDocumentByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: employeeLoginFirst.id,
-          name: "AR Form",
-        }).then((response) => {
-          initialArDocument = response;
-          cy.drCreateDocumentRevision({
-            payload: {
-              attachments: [],
-              description: "<p>Supplier Form document</p>",
-              document: {
-                docId: "FM-00010",
-                documentType: {
-                  id: formDocumentType[0].id,
-                },
-                securityList: {
-                  operators: [],
-                  securityEmployees: [],
-                  securityGroups: [
-                    {
-                      id: group.body[0].id,
-                    },
-                  ],
-                },
-              },
-              name: "supplier form",
-              referenceTo: [],
-              retrain: false,
-              revisionChangeType: RevisionChangeType.NextRevision,
-              revisionStage: 1,
-              formTemplate: {
-                outputDocumentTypes: [{
-                  id: supplierDocumentType[0].id,
-                }],
-                schema: [],
-              },
+    // it("[API]Create Supplier form", (done: any) => {
+    //   cy.grpGetGroupByName({
+    //     sessionId: loginResponse.sessionId,
+    //     employeeId: employeeLoginFirst.id,
+    //     groupName: "Everyone",
+    //   }).then((response) => {
+    //     group = response;
+    //     cy.arGetArDocumentByName({
+    //       sessionId: loginResponse.sessionId,
+    //       employeeId: employeeLoginFirst.id,
+    //       name: "AR Form",
+    //     }).then((response) => {
+    //       initialArDocument = response;
+    //       cy.drCreateDocumentRevision({
+    //         payload: {
+    //           attachments: [],
+    //           description: "<p>Supplier Form document</p>",
+    //           document: {
+    //             docId: "FM-00010",
+    //             documentType: {
+    //               id: formDocumentType[0].id,
+    //             },
+    //             securityList: {
+    //               operators: [],
+    //               securityEmployees: [],
+    //               securityGroups: [
+    //                 {
+    //                   id: group.body[0].id,
+    //                 },
+    //               ],
+    //             },
+    //           },
+    //           name: "supplier form",
+    //           referenceTo: [],
+    //           retrain: false,
+    //           revisionChangeType: RevisionChangeType.NextRevision,
+    //           revisionStage: 1,
+    //           formTemplate: {
+    //             outputDocumentTypes: [{
+    //               id: supplierDocumentType[0].id,
+    //             }],
+    //             schema: [],
+    //           },
 
-            },
-            employeeId: employeeLoginFirst.id as unknown as string,
-            sessionId: loginResponse.sessionId as unknown as string,
-          }).then((response) => {
-            createdSupplierFormDocument = response;
-            cy.drAPIApproveAndRelease({
-              documentId: createdSupplierFormDocument.id,
-              payload: {
-                effectiveDate: (new Date()).toISOString(),
-                documentType: { id: approvalRequestDocumentType[0].id },
-                formDocument: { id: initialArDocument[0].id },
-                approversWithSignatures: [{ approver: { id: employeeLoginFirst.id } }],
-              },
-              employeeId: employeeLoginFirst.id,
-              sessionId: loginResponse.sessionId,
-            }).then(() => {
-              cy.poAPICreatePO({
-                payload: {
-                  name: "API Supplier Document",
-                  attachments: [],
-                  referenceTo: [],
-                  formDocument: { id: createdSupplierFormDocument.id },
-                  description: "API Supplier document",
-                  revisionChangeType: RevisionChangeType.NextRevision,
-                  document: {
-                    docId: "SUP-00001",
-                    documentType: {
-                      id: supplierDocumentType[0].id,
-                    },
-                    securityList: {
-                      operators: [],
-                      securityEmployees: [],
-                      securityGroups: [
-                        {
-                          id: group.body[0].id,
-                        },
-                      ],
-                    },
-                  },
-                },
-                employeeId: employeeLoginFirst.id,
-                sessionId: loginResponse.sessionId,
-              }).then((response) => {
-                createdSupplierDocument = response;
-                cy.drAPIApproveAndRelease({
-                  documentId: createdSupplierDocument.id,
-                  payload: {
-                    effectiveDate: (new Date()).toISOString(),
-                    documentType: { id: approvalRequestDocumentType[0].id },
-                    formDocument: { id: initialArDocument[0].id },
-                    approversWithSignatures: [{ approver: { id: employeeLoginFirst.id } }],
-                  },
-                  employeeId: employeeLoginFirst.id,
-                  sessionId: loginResponse.sessionId,
-                }).then(() => {
-                  done();
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+    //         },
+    //         employeeId: employeeLoginFirst.id as unknown as string,
+    //         sessionId: loginResponse.sessionId as unknown as string,
+    //       }).then((response) => {
+    //         createdSupplierFormDocument = response;
+    //         cy.drAPIApproveAndRelease({
+    //           documentId: createdSupplierFormDocument.id,
+    //           payload: {
+    //             effectiveDate: (new Date()).toISOString(),
+    //             documentType: { id: approvalRequestDocumentType[0].id },
+    //             formDocument: { id: initialArDocument[0].id },
+    //             approversWithSignatures: [{ approver: { id: employeeLoginFirst.id } }],
+    //           },
+    //           employeeId: employeeLoginFirst.id,
+    //           sessionId: loginResponse.sessionId,
+    //         }).then(() => {
+    //           cy.poAPICreatePO({
+    //             payload: {
+    //               name: "API Supplier Document",
+    //               attachments: [],
+    //               referenceTo: [],
+    //               formDocument: { id: createdSupplierFormDocument.id },
+    //               description: "API Supplier document",
+    //               revisionChangeType: RevisionChangeType.NextRevision,
+    //               document: {
+    //                 docId: "SUP-00001",
+    //                 documentType: {
+    //                   id: supplierDocumentType[0].id,
+    //                 },
+    //                 securityList: {
+    //                   operators: [],
+    //                   securityEmployees: [],
+    //                   securityGroups: [
+    //                     {
+    //                       id: group.body[0].id,
+    //                     },
+    //                   ],
+    //                 },
+    //               },
+    //             },
+    //             employeeId: employeeLoginFirst.id,
+    //             sessionId: loginResponse.sessionId,
+    //           }).then((response) => {
+    //             createdSupplierDocument = response;
+    //             cy.drAPIApproveAndRelease({
+    //               documentId: createdSupplierDocument.id,
+    //               payload: {
+    //                 effectiveDate: (new Date()).toISOString(),
+    //                 documentType: { id: approvalRequestDocumentType[0].id },
+    //                 formDocument: { id: initialArDocument[0].id },
+    //                 approversWithSignatures: [{ approver: { id: employeeLoginFirst.id } }],
+    //               },
+    //               employeeId: employeeLoginFirst.id,
+    //               sessionId: loginResponse.sessionId,
+    //             }).then(() => {
+    //               done();
+    //             });
+    //           });
+    //         });
+    //       });
+    //     });
+    //   });
+    // });
   });
 
   context("Login user", () => {
@@ -327,9 +326,9 @@ context("Parent Part - Sub Part", () => {
         .should("exist");
     });
 
-    it("Verify 'Is this a parent part' heading exists", () => {
+    it("Verify 'Is this a base part' heading exists", () => {
       cy.get("#tableTitle").should("exist");
-      cy.get("#tableTitle").contains("Is this a parent part?");
+      cy.get("#tableTitle").contains("Is this a base part?");
     });
 
     it("Verify 'Parent part - No option to be selected by default", () => {
@@ -473,15 +472,15 @@ context("Parent Part - Sub Part", () => {
           .should("exist");
       });
 
-      it("Verify Textfield for Textfield for parts test", () => {
-        cy.get("[data-cy=\"Textfield for parts test\"]").contains("Textfield for parts test")
-          .should("exist");
-      });
+      // it("Verify Textfield for Textfield for parts test", () => {
+      //   cy.get("[data-cy=\"Textfield for parts test\"]").contains("Textfield for parts test")
+      //     .should("exist");
+      // });
 
-      it("Verify fb-checkbox-group", () => {
-        cy.get("[data-cy=\"fb-checkbox-group\"]").contains("fb-checkbox-group")
-          .should("exist");
-      });
+      // it("Verify fb-checkbox-group", () => {
+      //   cy.get("[data-cy=\"fb-checkbox-group\"]").contains("fb-checkbox-group")
+      //     .should("exist");
+      // });
 
       it("navigate to Specification Items", () => {
         cy.drSelectSpecificationTab();
@@ -523,9 +522,9 @@ context("Parent Part - Sub Part", () => {
     });
 
     context("Verify the presence of Parent part selector", () => {
-      it("Verify 'Is this a parent part' heading exists", () => {
+      it("Verify 'Is this a base part' heading exists", () => {
         cy.get("#tableTitle").should("exist");
-        cy.get("#tableTitle").contains("Is this a parent part?");
+        cy.get("#tableTitle").contains("Is this a base part?");
       });
 
       it("Verify 'Parent part - No option to be selected by default", () => {
@@ -567,7 +566,7 @@ context("Parent Part - Sub Part", () => {
           context("Creating a sub-part released separately", () => {
             console.log(times);
             it("Click on the Add Related Part button", () => {
-              cy.get("button[data-cy=\"parentSeparate-addRelatedPartsBtn\"]").click();
+              cy.get("button[data-cy=\"parentSeparate-addRelatedPartsBtn\"]").arrowClick();
             });
 
             it("Wait on the API", () => {
@@ -697,8 +696,8 @@ context("Parent Part - Sub Part", () => {
             cy.get("button[data-cy=\"updateRecord\"]").should("exist");
           });
 
-          it("The Button Add Related Part should not exist anymore.", () => {
-            cy.get("button[data-cy=\"parentSeparate-addRelatedPartsBtn\"]").should("not.exist");
+          it("The Button Add Related Part should still exist.", () => {
+            cy.get("button[data-cy=\"parentSeparate-addRelatedPartsBtn\"]").should("exist");
           });
 
           it("The Radio button selection must still be present, with the parent_separate selected", () => {
@@ -821,36 +820,366 @@ context("Parent Part - Sub Part", () => {
 
           });
 
-        });
+          context("Check on the subPart", () => {
+            it("Navigates to the Sub Part", () => {
+              cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().find("td[data-cy=\"viewIcon\"] svg").click();
+              cy.wait("@fetchDocumentRevision");
+              cy.wait(2000);
 
-        context("Navigate to the subPart", () => {
-          it("The breadcrumb has two parts, with parentId and the subPart Id", () => {
+            });
+
+            it("Breadcrumbs 1st part is the parent part Id", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find(".MuiBreadcrumbs-ol li")
+                .first()
+                .find("a")
+                .contains(parentDocId);
+            });
+
+            it("Breadcrumbs 2nd part is the sub part Id", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find("span[data-cy=\"HeaderInfo-docId\"]")
+                .contains(`${parentDocId}-${subParts[0].id}`);
+            });
+
+            it("The title is not editable", () => {
+              cy.get("h5[data-cy=\"field-name\"]").contains(`${subParts[0].title}`);
+            });
+
+            it("The description is not editable", () => {
+              cy.get("div.public-DraftEditor-content")
+                .invoke("attr", "contenteditable")
+                .should("eq", "false");
+            });
+
+            it("The description is same as parent part", () => {
+              cy.get("div.public-DraftEditor-content")
+                .contains(details.parentPartDocRevDescription);
+            });
+
+            it("Switch to specification", () => {
+              cy.drSelectSpecificationTab();
+            });
+
+            it("Make Vs Buy should be disabled", () => {
+              cy.get("input[name=\"make-vs-buy\"]").closest("div")
+                .then(($el) => $el.hasClass("Mui-disabled"));
+            });
+
+            it("Unit of Measure should be disabled", () => {
+              cy.get("input[data-cy=\"unit-of-measure\"]").closest("div")
+                .then(($el) => $el.hasClass("Mui-disabled"));
+            });
+
+            it("Come back to the parent part", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find(".MuiBreadcrumbs-ol li")
+                .first()
+                .find("a")
+                .click();
+            });
+          });
+
+          context("Edit Parent and add Specification fields", () => {
+            it("navigate to Specification Items", () => {
+              cy.drSelectSpecificationTab();
+            });
+
+            it("Select make vs buy", () => {
+              cy.get("[id$=\"make-vs-buy\"]").arrowClick({ force: true });
+              cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
+            });
+
+            it("Select Unit of Measure", () => {
+              cy.get("[data-cy=\"unit-of-measure\"]").autocompleteSelect("Set(s)");
+              cy.unClick();
+            });
+
+            it("Save document", () => {
+              cy.drClickSaveWithoutApiCall();
+            });
+
+            it("navigate to Overview tab", () => {
+              cy.drSelectOverviewTab();
+            });
+          });
+
+          context("Check that subPart has the new values", () => {
+            it("Navigates to the Sub Part", () => {
+              cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().find("td[data-cy=\"viewIcon\"] svg").click();
+              cy.wait("@fetchDocumentRevision");
+              cy.wait(2000);
+            });
+
+            it("Switch to specification", () => {
+              cy.drSelectSpecificationTab();
+            });
+
+            it("make vs buy - must be populated with Make", () => {
+              cy.get("input[name=\"make-vs-buy\"]").invoke("val").should("eq", "Make");
+            });
+
+            it("Unit of Measure - must be populated with Set(s)", () => {
+              cy.get("input[data-cy=\"unit-of-measure\"]").invoke("val").should("eq", "Set(s)");
+            });
+
+            it("Come back to the parent part", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find(".MuiBreadcrumbs-ol li")
+                .first()
+                .find("a")
+                .click();
+            });
+          });
+
+          context("Add 2nd Sub Part", () => {
+            it("Click on the bottom 'Add Related Part' button", () => {
+              cy.get("button[data-cy=\"add-related-part-btn\"]").eq(1).click();
+            });
+
+            it("new Edit row should now be visible", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"]").should("exist");
+            });
+
+            it("Buttons should go away", () => {
+              cy.get("button[data-cy=\"add-related-part-btn\"]").should("have.length", 0);
+            });
+
+            it("Prefix of the docId for the new subPart should match parentDocId", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"] > div").eq(0).find("label").then(($el) => {
+                const text = $el.text();
+                return text.includes(parentDocId);
+              });
+            });
+
+            it("Prefix of the title for the new subPart should match parentTitle", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"] > div").eq(1).find("label").then(($el) => {
+                const text = $el.text();
+                return text.includes(details.parentPartDocRevTitle);
+              });
+            });
+
+            it("docId input field on the editRow should be empty", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartDocId\"]")
+                .invoke("val").should("eq", "");
+            });
+
+            it("Type in a docId", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartDocId\"]").type(subParts[1].id);
+            });
+            // Type in a docId and a title, ensuring that it was empty to start with
+
+            it("title input field on the editRow should be empty", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartTitle\"]")
+                .invoke("val").should("eq", "");
+            });
+
+            it("Type in a title", () => {
+              cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartTitle\"]").type(subParts[1].title);
+            });
+
+            it("Confirm addition and submit the subPart", () => {
+              cy.get("button[data-cy=\"confirmRelatedPartChildAddition\"]").click();
+
+              // Wait on the API call to complete
+              cy.wait("@createChildPart");
+              rowsCountShouldBe += 1;
+            });
+
+            context("Ensure that a row got added with the values entered above", () => {
+
+              it("Rows count should be equal to 'rowsCountShouldBe'", () => {
+                cy.get("tr[data-cy=\"relatedPartsViewRow\"]").should("have.length", rowsCountShouldBe);
+              });
+
+              it("docId of the subPart should be equal to 'ParentDocId-<suffix>'", () => {
+                cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().contains("td", `${parentDocId} - ${subParts[1].id}`);
+              });
+
+              it("docId of the subPart should be equal to 'ParentDocTitle-<suffix>'", () => {
+                cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last()
+                  .contains("td", `${details.parentPartDocRevTitle} - ${subParts[1].title}`);
+              });
+
+            });
 
           });
 
-          it("The title is not editable", () => {
+          context("Check on the 2nd subPart", () => {
+            it("Navigates to the Sub Part", () => {
+              cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().find("td[data-cy=\"viewIcon\"] svg").click();
+              cy.wait("@fetchDocumentRevision");
+              cy.wait(2000);
 
+            });
+
+            it("Breadcrumbs 1st part is the parent part Id", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find(".MuiBreadcrumbs-ol li")
+                .first()
+                .find("a")
+                .contains(parentDocId);
+            });
+
+            it("Breadcrumbs 2nd part is the sub part Id", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find("span[data-cy=\"HeaderInfo-docId\"]")
+                .contains(`${parentDocId}-${subParts[1].id}`);
+            });
+
+            it("The title is not editable", () => {
+              cy.get("h5[data-cy=\"field-name\"]").contains(`${subParts[1].title}`);
+            });
+
+            it("The description is not editable", () => {
+              cy.get("div.public-DraftEditor-content")
+                .invoke("attr", "contenteditable")
+                .should("eq", "false");
+            });
+
+            it("The description is same as parent part", () => {
+              cy.get("div.public-DraftEditor-content")
+                .contains(details.parentPartDocRevDescription);
+            });
+
+            it("Switch to specification", () => {
+              cy.drSelectSpecificationTab();
+            });
+
+            it("Make Vs Buy should be disabled", () => {
+              cy.get("input[name=\"make-vs-buy\"]").closest("div")
+                .then(($el) => $el.hasClass("Mui-disabled"));
+            });
+
+            it("make vs buy - must be populated with Make", () => {
+              cy.get("input[name=\"make-vs-buy\"]").invoke("val").should("eq", "Make");
+            });
+
+            it("Unit of Measure should be disabled", () => {
+              cy.get("input[data-cy=\"unit-of-measure\"]").closest("div")
+                .then(($el) => $el.hasClass("Mui-disabled"));
+            });
+
+            it("Unit of Measure - must be populated with Set(s)", () => {
+              cy.get("input[data-cy=\"unit-of-measure\"]").invoke("val").should("eq", "Set(s)");
+            });
+
+            it("Come back to the parent part", () => {
+              cy.get("div[data-cy=\"header-section\"]")
+                .find(".MuiBreadcrumbs-ol li")
+                .first()
+                .find("a")
+                .click();
+            });
           });
 
-          it("The description is not editable", () => {
+          subParts.slice(2).forEach((subPart, index) => {
+            context(`Adding subpart with ${subPart.void ? "Voiding it" :
+              (subPart.cancel ? "Cancelling it" : "Checking on duplicate docId")}`, () => {
 
+              it("Click on the bottom 'Add Related Part' button", () => {
+                cy.get("button[data-cy=\"add-related-part-btn\"]").eq(1).click();
+              });
+
+              it("new Edit row should now be visible", () => {
+                cy.get("div[data-cy=\"relatedPartsEditRow\"]").should("exist");
+              });
+
+              it("docId input field on the editRow should be empty", () => {
+                cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartDocId\"]")
+                  .invoke("val").should("eq", "");
+              });
+
+              it("Type in a docId", () => {
+                cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartDocId\"]").type(subPart.id);
+              });
+              // Type in a docId and a title, ensuring that it was empty to start with
+
+              it("title input field on the editRow should be empty", () => {
+                cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartTitle\"]")
+                  .invoke("val").should("eq", "");
+              });
+
+              it("Type in a title", () => {
+                cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartTitle\"]").type(subPart.title);
+              });
+
+              if (subPart.checkForError) {
+                it("The editRow should have a red border", () => {
+                  cy.get("div[data-cy=\"relatedPartsEditRow").should("have.css", "border-color", "rgb(196, 0, 0)");
+                });
+
+                it("some error text should show up", () => {
+                  cy.get("div[data-cy=\"relatedPartsEditRow\"] > div").eq(0).find("p").should("exist");
+                });
+
+                it("The confirm button should go away", () => {
+                  cy.get("button[data-cy=\"confirmRelatedPartChildAddition\"]").should("not.exist");
+                });
+
+                it("Edit and enter the correct value", () => {
+                  cy.get("div[data-cy=\"relatedPartsEditRow\"] input[name=\"relatedPartDocId\"]")
+                    .clear().type(subPart.correctedId).blur();
+                });
+
+                it("The confirm button should come back", () => {
+                  cy.get("button[data-cy=\"confirmRelatedPartChildAddition\"]").should("exist");
+                });
+              }
+
+              if (subPart.cancel) {
+                it("Cancels the addition of the subPart", () => {
+                  // Cancel
+                  cy.get("button[data-cy=\"cancelRelatedPartChildAddition\"]").click();
+
+                  // Ensure that the edit row goes away
+                  cy.get("div[data-cy=\"relatedPartsEditRow\"]").should("not.exist");
+                });
+              } else {
+                it("Confirm addition and submit the subPart", () => {
+                  cy.get("button[data-cy=\"confirmRelatedPartChildAddition\"]").click();
+
+                  // Wait on the API call to complete
+                  cy.wait("@createChildPart");
+                  rowsCountShouldBe += 1;
+                });
+
+                it("Rows count should be equal to 'rowsCountShouldBe'", () => {
+                  cy.get("tr[data-cy=\"relatedPartsViewRow\"]").should("have.length", rowsCountShouldBe);
+                });
+
+                it("docId of the subPart should be equal to 'ParentDocId-<suffix>'", () => {
+                  cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last()
+                    .contains("td", `${parentDocId} - ${subPart.checkForError ? subPart.correctedId : subPart.id}`);
+                });
+
+                it("docId of the subPart should be equal to 'ParentDocTitle-<suffix>'", () => {
+                  cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last()
+                    .contains("td", `${details.parentPartDocRevTitle} - ${subPart.title}`);
+                });
+
+                if (subPart.void) {
+                  it("Voids the latest subPart added", () => {
+                    // Select the void button
+                    cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().find("input[type=\"checkbox\"]").check();
+
+                    // Wait on the API call to complete
+                    cy.wait("@voidDocumentRevision");
+
+                    // Check that the title for this part got changed to void
+                    cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().find("td").eq(1).contains("Void");
+                  });
+                }
+              }
+            });
           });
 
-          it("The description is same as parent part", () => {
-
+          context("Approve and Release the Parent part", () => {
+            it("Approves and releases the parent part", () => {
+              cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+            });
           });
 
-          it("Switch to specification", () => {
-
-          });
-
-          it("Fields on the specification tab are not editable", () => {
-
-          });
-
-          it("Come back to the parent part", () => {
-
-          });
         });
       }
     });

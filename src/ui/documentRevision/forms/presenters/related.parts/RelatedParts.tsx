@@ -1,3 +1,4 @@
+
 import {
   Button,
   Checkbox,
@@ -317,7 +318,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           onChange={(e) => voidRelatedPart(listItem)}
         />
       </TableCell>
-      <TableCell align="center">
+      <TableCell align="center" data-cy="viewIcon">
         <RemoveRedEyeIcon color="primary"
           className={classes.viewIcon}
           onClick={(e) => viewRelatedPart(listItem.documentRevisionId, listItem.documentId)}></RemoveRedEyeIcon>
