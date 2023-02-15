@@ -610,6 +610,7 @@ context("Record inline Flow", () => {
       it("Select approver for  inline 3", () => {
         cy.get("[name*='fb-ia-firstd-inline-field'] input")
           .autocompleteSelect(`${USERS[1].name}`, { force: true });
+        cy.unClick();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
         cy.wait(3000);
@@ -687,12 +688,16 @@ context("Record inline Flow", () => {
       });
 
       it("Approve remaining Inline Approval if any", () => {
-        cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
-          if (el.text() === "Approve") {
-            cy.lhrApproveWithoutApi();
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
-            cy.wait(2000);
+        cy.contains("Approve").then((approve) => {
+          if (approve) {
+            cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
+              if (el.text() === "Approve") {
+                cy.lhrApproveWithoutApi();
+                cy.progressBarShouldNotExist();
+                cy.listLoadingElementShouldNotExist();
+                cy.landingPageLoadingElementShouldNotExist();
+              }
+            });
           }
         });
       });

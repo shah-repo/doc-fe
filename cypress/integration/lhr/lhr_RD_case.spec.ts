@@ -959,7 +959,7 @@ context("LHR: RD case specs", () => {
     it("Verify history tab is capturing the changes to R&D Build Type", () => {
       cy.drSelectHistoryTab();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"form.builder.audit.STRING_EDITED\"]").should("have.text", "Build Type Updated");
+      cy.get("[data-cy=\"form.builder.audit.STRING_EDITED\"]").should("have.text", "Build Type updated");
       cy.get("[data-cy=\"change-value-0-0\"]").should("have.text", "R&D");
     });
 

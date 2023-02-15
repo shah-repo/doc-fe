@@ -647,7 +647,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox")
+      cy.get("[aria-colindex=\"1\"] input")
         .arrowType(`LOT #${currentDate}01`);
     });
 
