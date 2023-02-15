@@ -663,6 +663,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click create document", () => {
       cy.recClickSaveBtn();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     context("Approve CSL", () => {
@@ -924,10 +926,10 @@ context("Released_lots_verify_in_lhr", () => {
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] .k-filtercell>input")
         .focus().arrowType(`LOT #${currentDate}01`);
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Click on LOT", () => {
-      cy.wait(1000);
       cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick({ force: true });
     });
 
@@ -1030,6 +1032,7 @@ context("Released_lots_verify_in_lhr", () => {
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] .k-filtercell>input").clear()
         .focus().arrowType(`LOT #${currentDate}01`);
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click on LOT", () => {
@@ -1054,6 +1057,7 @@ context("Released_lots_verify_in_lhr", () => {
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] .k-filtercell>input").clear()
         .focus().arrowType(`LOT #${currentDate}02`);
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Click on LOT", () => {
@@ -1157,6 +1161,7 @@ context("Released_lots_verify_in_lhr", () => {
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] .k-filtercell>input").clear()
         .focus().arrowType(`LOT #${currentDate}01`);
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Click on LOT", () => {
