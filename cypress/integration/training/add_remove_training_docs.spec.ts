@@ -733,6 +733,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Training record for doc1 should be as it is", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -746,6 +749,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Training record for doc3", () => {
       cy.trLandingPageDocId({ docId: releasedDoc3Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -760,6 +766,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Training record for doc2", () => {
       SystemRequirement("REQ-4570");
       cy.trLandingPageDocId({ docId: releasedDoc2Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
