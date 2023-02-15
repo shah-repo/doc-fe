@@ -86,6 +86,7 @@ context("Document Access Rights", () => {
 
     it("Open Group Management", () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.GROUP_MANAGEMENT });
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -270,6 +271,7 @@ context("Document Access Rights", () => {
 
     it("Filter document by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("User is not restricted.", () => {

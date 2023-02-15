@@ -670,13 +670,13 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title);
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
