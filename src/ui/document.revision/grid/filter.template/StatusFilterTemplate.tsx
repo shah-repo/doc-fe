@@ -50,10 +50,15 @@ export const StatusFilterTemplate = ({
         onChange={onDropdownChange}
         value={value || defaultItem}
         defaultItem={defaultItem}
-        itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory === HelpModule.PurchaseOrder &&
-           itemProps?.dataItem === startCase(toLower(DocumentRevisionStatus.Released)) ) ? startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
+        itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
+          HelpModule.PurchaseOrder &&
+           itemProps?.dataItem === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
+          startCase(toLower(DocumentRevisionStatus.Approved))
+          : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
-        valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory === HelpModule.PurchaseOrder && itemProps === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
+        valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
+          HelpModule.PurchaseOrder && itemProps
+          === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
           startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
       />
