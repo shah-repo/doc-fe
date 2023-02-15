@@ -753,7 +753,7 @@ context("Training notifications", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.pmSubmitForApprovalInThreeDotsWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

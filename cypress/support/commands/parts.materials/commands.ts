@@ -31,6 +31,7 @@ declare global {
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
       pmSubmitForApprovalWithoutAPI(): Chainable<Subject>;
+      pmSubmitForApprovalInThreeDotsWithoutAPI(): Chainable<Subject>;
       pmClearFilters(): Chainable<Subject>;
       pmSelectFirstDocument(): Chainable<Subject>;
       lhrSubmitForApproval(): Chainable<Subject>;
@@ -242,6 +243,14 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
 Cypress.Commands.add("pmSubmitForApprovalWithoutAPI", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0)
     .contains("Submit for approval").arrowClick({ force: true });
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("pmSubmitForApprovalInThreeDotsWithoutAPI", () => {
+  cy.get("[data-cy='HeaderMenuButton']").eq(0).arrowClick();
+  cy.get("[data-cy='ApproveAndRelease-button']").eq(1).arrowClick({ force: true });
   cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
