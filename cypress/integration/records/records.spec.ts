@@ -867,7 +867,7 @@ context("Records flow", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

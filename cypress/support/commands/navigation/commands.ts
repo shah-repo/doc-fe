@@ -67,11 +67,13 @@ Cypress.Commands.add("navigToDashboard", () => {
     });
 
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDashboardWithoutApi", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {

@@ -252,7 +252,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -362,7 +362,7 @@ context("Approval request email popup modal", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

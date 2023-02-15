@@ -232,7 +232,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
           >
             <span>
               {!closeHover && (
-                <CloseIcon className={classes.cursorPointer} onMouseEnter={onMouseHoverCloseIcon} />
+                <CloseIcon
+                  data-cy="close-icon"
+                  className={classes.cursorPointer}
+                  onMouseEnter={onMouseHoverCloseIcon}
+                />
               )}
               {closeHover && (
                 <StyleTooltip
@@ -241,6 +245,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <CloseSolidIcon
+                    data-cy="close-icon-solid"
                     className={classes.cursorPointer}
                     onClick={handleCloseClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -252,6 +257,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
               <span className={classes.actionIcon}>
                 {!pinHover && isPinShown && (
                   <PinIcon
+                    data-cy="pin-icon"
                     className={classes.cursorPointer}
                     onMouseEnter={onMouseHoverPinIcon}
                   />
@@ -263,6 +269,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                     arrow
                   >
                     <PinSolidIcon
+                      data-cy="pin-solid-icon"
                       onClick={handlePinClick}
                       onMouseLeave={onMouseLeaveActionIcons}
                       className={classes.cursorPointer}
@@ -279,6 +286,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <PinSolidIcon
+                    data-cy="pin-solid-icon"
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                     className={classes.cursorPointer}
@@ -299,6 +307,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
               arrow
             >
               <PinSolidIcon
+                data-cy="pin-solid-icon"
                 onClick={handleUnPinClick}
                 onMouseLeave={onMouseLeaveActionIcons}
                 className={classes.cursorPointer}

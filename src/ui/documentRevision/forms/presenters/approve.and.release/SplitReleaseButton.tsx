@@ -12,8 +12,18 @@ export enum ARActions {
   EXISTING = "existing"
 }
 
-const options = [{ label: "releaseButton.option.newAR", value: ARActions.NEW, icon: <NewARIcon />  },
-  { label: "releaseButton.option.existingAR", value: ARActions.EXISTING, icon: <ExistingAR />  }];
+const options = [
+  {
+    label: "releaseButton.option.newAR",
+    value: ARActions.NEW,
+    icon: <NewARIcon />,
+  },
+  {
+    label: "releaseButton.option.existingAR",
+    value: ARActions.EXISTING,
+    icon: <ExistingAR />,
+  },
+];
 
 const SplitReleaseButton: React.FunctionComponent<{
   revisionStage? : number;
@@ -62,6 +72,7 @@ const SplitReleaseButton: React.FunctionComponent<{
             <Text translation="releaseButton.option.expressAR" />
           </Button>
           <Button
+            data-cy="dropdown-arrow"
             color="primary"
             size="small"
             aria-controls={isOpened ? "split-button-menu" : undefined}
@@ -89,6 +100,7 @@ const SplitReleaseButton: React.FunctionComponent<{
                     {options.map((option, index) => (
                       <MenuItem
                         key={option.value}
+                        data-cy={`ar-${option.value}`}
                         divider
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >

@@ -305,7 +305,7 @@ context("Records test with Inline approval", () => {
     it("The owner should have a notification that Record rev 1 is for approval of User 2", () => {
       cy.navigToDashboardWithoutApi();
       cy.listLoadingElementShouldNotExist();
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
@@ -344,7 +344,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -443,7 +443,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -494,7 +494,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
