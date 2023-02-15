@@ -317,16 +317,15 @@ const RelatedPartViewRow: React.FunctionComponent<{
         <Checkbox
           checked={isVoided}
           disabled={isVoided || relatedPartsState.viewOnlyMode}
-          onChange={() => confirmationDialog.open()}
+          onChange={confirmationDialog.open}
         />
-        {
-          confirmationDialog.isOpen && (
-            <AlertDialog
-              dialog={confirmationDialog}
-              confirmAction={confirmAction}
-              message="documentRevision.void.alert"
-            />
-          )}
+        {confirmationDialog.isOpen && (
+          <AlertDialog
+            dialog={confirmationDialog}
+            confirmAction={confirmAction}
+            message="documentRevision.void.alert"
+          />
+        )}
       </TableCell>
       <TableCell align="center">
         <RemoveRedEyeIcon color="primary"
