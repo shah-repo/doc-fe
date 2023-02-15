@@ -5,6 +5,7 @@ import {
   dashboardTodoSelectors,
 } from "../../../state/ducks/dashboard.new/todo";
 import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/todo/constants";
+import { openDashboardToastr } from "../../components/notifications/DashboardStatus";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -40,6 +41,7 @@ const TodoContainer: React.FunctionComponent = () => {
     onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
+      openDashboardToastr();
       dispatch(dashboardTodoActions.loadMyFeedsList());
     },
   });

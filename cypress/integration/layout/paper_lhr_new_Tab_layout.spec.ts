@@ -1028,11 +1028,8 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Select the LHR", () => {
-      cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00001").wait(500);
-      cy.listLoadingElementShouldNotExist();
-      cy.dlSelectFirstDocument();
+      cy.contains("LHR-00001").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.wait(3000);
     });
 
     context("Verify Created LHR Doc", () => {
@@ -1215,9 +1212,7 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Select the LHR", () => {
-      cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00002").wait(500);
-      cy.progressBarShouldNotExist();
-      cy.dlSelectFirstDocument();
+      cy.contains("LHR-00002").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 

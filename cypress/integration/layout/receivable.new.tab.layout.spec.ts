@@ -1072,8 +1072,7 @@ context("Receiving landing page test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCall();
-      cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
-        .parent().parent().parent().find("svg").arrowClick({ force: true });
+      cy.get(`div[data-cy="field-referenceTo"] svg`).last().arrowClick({ force: true });
     });
 
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {

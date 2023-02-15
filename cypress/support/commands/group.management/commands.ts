@@ -40,8 +40,10 @@ declare global {
       grpAssignUserDialog(params: { name: string }): Chainable;
       grpRemoveUserDialog(params: { name: string }): Chainable;
       grpSaveGroup(): Chainable;
+      grpSaveGroupWithoutApi(): Chainable;
       grpCancelGroup(): Chainable;
       grpSaveGroupPatch(): Chainable;
+      grpSaveGroupPatchWithoutApi(): Chainable;
       grpSelectGroupWithoutClosingDialog(params: { name: string }): Chainable;
       grpSelectGroup(params: { name: string }): Chainable;
       grpCloseDialog(): Chainable;
@@ -186,11 +188,11 @@ Cypress.Commands.add("grpVerifyGroupTypeIsPresentOnFirstGroup", () => {
 });
 
 Cypress.Commands.add("grpSetNameFilter", (params: {name: string}) => {
-  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.name).wait(500);
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
 });
 
 Cypress.Commands.add("grpSetMembersFilter", (params: {member: string}) => {
-  cy.get(`[aria-colindex="3"] .k-filtercell>input`).arrowType(params.member);
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.member);
 });
 
 Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
@@ -199,11 +201,11 @@ Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
 });
 
 Cypress.Commands.add("grpSetPermissionsFilter", (params: {permission: string}) => {
-  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.permission).wait(500);
+  cy.get(`[aria-colindex="4"] input`).arrowType(params.permission).wait(500);
 });
 
 Cypress.Commands.add("grpSetTagsFilter", (params: {tag: string}) => {
-  cy.get(`[aria-colindex="5"] .k-filtercell>input`).arrowType(params.tag).wait(500);
+  cy.get(`[aria-colindex="5"] input`).arrowType(params.tag).wait(500);
 });
 
 Cypress.Commands.add("grpClearFilter", () => {
@@ -230,11 +232,11 @@ Cypress.Commands.add("grpFilterByType", (params: { type: string }) => {
 });
 
 Cypress.Commands.add("grpCheckIfNameFilterIsEmpty", () => {
-  cy.get(`[aria-colindex="2"] .k-filtercell > input`).should("be.empty");
+  cy.get(`[aria-colindex="2"] input`).should("be.empty");
 });
 
 Cypress.Commands.add("grpCheckIfMembersFilterIsEmpty", () => {
-  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("be.empty");
+  cy.get(`[aria-colindex="3"] input`).should("be.empty");
 });
 
 Cypress.Commands.add("grpCheckIfTypeFilterIsEmpty", () => {
@@ -242,11 +244,11 @@ Cypress.Commands.add("grpCheckIfTypeFilterIsEmpty", () => {
 });
 
 Cypress.Commands.add("grpCheckIfNameFilterIsSet", (params: { name: string }) => {
-  cy.get(`[aria-colindex="2"] .k-filtercell > input`).should("have.value", params.name);
+  cy.get(`[aria-colindex="2"] input`).should("have.value", params.name);
 });
 
 Cypress.Commands.add("grpCheckIfMembersFilterIsSet", (params: { member: string }) => {
-  cy.get(`[aria-colindex="3"] .k-filtercell>input`).should("have.value", params.member);
+  cy.get(`[aria-colindex="3"] input`).should("have.value", params.member);
 });
 
 Cypress.Commands.add("grpCheckIfTypeFilterIsSet", (params: { groupType: string }) => {
@@ -254,11 +256,11 @@ Cypress.Commands.add("grpCheckIfTypeFilterIsSet", (params: { groupType: string }
 });
 
 Cypress.Commands.add("grpCheckIfPermissionFilterIsSet", (params: { permission: string }) => {
-  cy.get(`[aria-colindex="4"] .k-filtercell>input`).should("have.value", params.permission);
+  cy.get(`[aria-colindex="4"] input`).should("have.value", params.permission);
 });
 
 Cypress.Commands.add("grpCheckIfTagFilterIsSet", (params: { tag: string }) => {
-  cy.get(`[aria-colindex="5"] .k-filtercell>input`).should("have.value", params.tag);
+  cy.get(`[aria-colindex="5"] input`).should("have.value", params.tag);
 });
 
 Cypress.Commands.add("grpNavigateToDashboard", () => {
@@ -307,6 +309,12 @@ Cypress.Commands.add("grpSaveGroup", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("grpSaveGroupWithoutApi", () => {
+  cy.get(`td[role="gridcell"] button`).eq(0).arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("grpCancelGroup", () => {
   cy.get(`td[role="gridcell"] button`).eq(1).arrowClick();
   cy.checkToastMessage({ exists: false });
@@ -319,9 +327,14 @@ Cypress.Commands.add("grpSaveGroupPatch", () => {
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("grpSaveGroupPatchWithoutApi", () => {
+  cy.get("#Group-createGroup").arrowClick();
+  cy.checkToastMessage({ exists: false });
+});
+
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
   cy.grpClearFilter();
-  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.name).wait(500);
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
   cy.get("tr.k-master-row").first().find("td").last().find("button").arrowClick();
   cy.grpCloseDialog();
 });
@@ -333,7 +346,7 @@ Cypress.Commands.add("grpClickEditGroupWithName", (params: {name: string}) => {
 
 Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: string}) => {
   cy.grpClearFilter();
-  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.name).wait(500);
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
   cy.get("tr.k-master-row").first().find("td").last().find("button").arrowClick();
 });
 

@@ -154,6 +154,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.wait(1000);
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {

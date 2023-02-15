@@ -1272,6 +1272,7 @@
   "dashboard.recent.container": "Recent Container",
   "dashboard.training.stats.container": "Training Stats Container (Chart & Line Items)",
   "dashboard.calibration.due": "is Due for Calibration in {noOfDays} days",
+  "dashboard.lineItems.status": "Notification dismissed.",
   "dashboard.preventive.maintenance.due": "is Due for Preventative Maintenance in {noOfDays} days",
   "header.welcome.back": "Welcome Back",
   "training.on": "Training on",
@@ -1410,6 +1411,8 @@
   "approvalRequest.grid.heading.justification.of.change": "Justification of change",
   "approvalRequest.status.APPROVED": "You successfully approved a document",
   "approvalRequest.status.message.APPROVED": "{crId} {title} has been approved.",
+  "approvalRequest.status.DRAFT": "You successfully rejected a document",
+  "approvalRequest.status.message.DRAFT": "{crId} {title} has been rejected.",
   "approvalRequest.status.CLOSED": "You successfully closed an AR!",
   "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed."
 }

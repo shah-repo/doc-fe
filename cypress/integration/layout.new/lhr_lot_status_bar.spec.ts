@@ -1093,7 +1093,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       it("Click on “Complete step", () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
-        // cy.pause();
       });
 
       it(`LHRS is ${STATUS_TYPES_LABEL.IN_REVIEW}  state`, () => {
