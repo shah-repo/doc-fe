@@ -1408,7 +1408,6 @@ context("LHR & LHRS Flow", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("Part document");
-        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.saveBarShouldNotExist();
       });
 
@@ -1785,7 +1784,6 @@ context("LHR & LHRS Flow", () => {
 
       it(`Select '${USERS[2].name}' to Assign document to`, () => {
         cy.get("input[id^='react-select']").eq(0).autocompleteSelect(USERS[2].name, { force: true }).wait(2000);
-        // cy.drAssignDocumentTo({ username: USERS[2].name });
         cy.wait(1000);
         cy.landingPageLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -1800,7 +1798,6 @@ context("LHR & LHRS Flow", () => {
 
       it(`Select '${USERS[3].name}' to Assign document to`, () => {
         cy.get("input[id^='react-select']").eq(0).autocompleteSelect(USERS[3].name, { force: true }).wait(2000);
-        // cy.drAssignDocumentTo({ username: USERS[3].name });
         cy.wait(1000);
         cy.landingPageLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();

@@ -1311,7 +1311,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(3000);
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click revise button", () => {
@@ -1324,7 +1324,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
       cy.drAdministrativeRevisionLevel();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(3000);
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clicks Save button", () => {
