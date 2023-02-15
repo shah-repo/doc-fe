@@ -13,7 +13,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -326,7 +326,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
               confirmAction={confirmAction}
               message="documentRevision.void.alert"
             />
-          )        }
+          )}
       </TableCell>
       <TableCell align="center">
         <RemoveRedEyeIcon color="primary"
