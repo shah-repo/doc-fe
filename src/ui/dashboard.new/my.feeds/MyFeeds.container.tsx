@@ -58,7 +58,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
 
   const dismissAction = useActionCreator(dashboardMyFeedsActions.dismissLineItem);
   const dismissAsync = useAsync({
-    onSuccess: (response) => {
+    onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
       toastSuccess(<><div style={{ display: "flex" }}>
