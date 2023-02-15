@@ -3,8 +3,10 @@ import {
   DropDownListChangeEvent,
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import { startCase, toLower } from "lodash";
 import * as React from "react";
 import { useIntl } from "react-intl";
+import { HelpModule } from "../../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
@@ -12,6 +14,7 @@ import { DisplayText, TranslatedText } from "../../../components/common/kendo/he
 interface Props extends GridFilterCellProps {
   defaultItem: string;
   data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[];
+  documentTypeCategory?: string;
 }
 
 export const StatusFilterTemplate = ({
@@ -19,6 +22,7 @@ export const StatusFilterTemplate = ({
   data,
   onChange,
   value,
+  documentTypeCategory,
 }: Props) => {
   const hasValue = (value: string) => value && value !== defaultItem;
   const intl = useIntl();
@@ -46,6 +50,12 @@ export const StatusFilterTemplate = ({
         onChange={onDropdownChange}
         value={value || defaultItem}
         defaultItem={defaultItem}
+        itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory === HelpModule.PurchaseOrder &&
+           itemProps?.dataItem === startCase(toLower(DocumentRevisionStatus.Released)) ) ? startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
+        return React.cloneElement(li, li.props, itemChildren); }}
+        valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory === HelpModule.PurchaseOrder && itemProps === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
+          startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
+        return React.cloneElement(li, li.props, itemChildren); }}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"

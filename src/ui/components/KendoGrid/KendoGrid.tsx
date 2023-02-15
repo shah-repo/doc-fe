@@ -15,11 +15,12 @@ import {
   GridNoRecords,
   GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, find, findIndex, map, set } from "lodash";
+import { cloneDeep, find, findIndex, map, set, startCase, toLower } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
+import { HelpModule } from "../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
@@ -173,6 +174,7 @@ export function KendoGrid<T extends any>({
   const StatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
+      documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
@@ -295,7 +297,11 @@ export function KendoGrid<T extends any>({
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
             cell={(props) =>
-              RenderCustomCell(
+            {
+              props.dataItem.displayStatus =  ((documentTypeCategory === HelpModule.PurchaseOrder &&
+                 props?.dataItem?.displayStatus === startCase(toLower(DocumentRevisionStatus.Released))) ?
+                startCase(toLower(DocumentRevisionStatus.Approved))  : props?.dataItem?.displayStatus );
+              return RenderCustomCell(
                 {
                   ...props,
                   cellRowClick: onRowClick,
@@ -303,7 +309,7 @@ export function KendoGrid<T extends any>({
                   tooltipField: column.tooltipField,
                 },
                 column.cell || ""
-              )
+              ); }
             }
             filterCell={
               filterCellMapping[column.filterCell as string]
