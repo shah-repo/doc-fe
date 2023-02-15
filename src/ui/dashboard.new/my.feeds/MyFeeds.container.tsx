@@ -1,4 +1,3 @@
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,12 +5,10 @@ import {
   dashboardMyFeedsSelectors,
 } from "../../../state/ducks/dashboard.new/my.feeds";
 import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
-import { toastSuccess } from "../../components/notifications";
-import Text from "../../components/Text";
+import { openDashboardToastr } from "../../components/notifications/DashboardStatus";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import Colors from "../../layout/theme/utils/colors";
 import { scrollToBottom } from "../line.items/common/Utils";
 import LineItemsPresenter from "./LineItems.presenter";
 
@@ -61,16 +58,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
-      toastSuccess(<><div style={{ display: "flex" }}>
-        <div><InfoOutlinedIcon color="primary"/></div>
-        <div style={{ color: Colors.black }}>
-          <div><span style={{ padding: "20px" }}>
-            <Text translation="dashboard.lineItems.status"/>
-          </span></div>
-        </div>
-      </div></>, {
-        closeButton: true,
-      });
+      openDashboardToastr();
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
