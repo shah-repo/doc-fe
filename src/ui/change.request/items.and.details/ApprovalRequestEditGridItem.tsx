@@ -3,8 +3,10 @@ import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import cx from "classnames";
 import React from "react";
+import { ReactComponent as DeleteIcon } from "../../../assets/images/trash-can 2.svg";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from "../../form.builder";
 import useStyles from "./ApprovalRequestGrid.styles";
+import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
   disabledOptions: string[];
@@ -13,6 +15,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   resetAndCancelEdit?: () => void;
   showAutoComplete? : boolean;
   titleText?: string;
+  handleRemove?: (docRevId: string) => void;
+  entry?: ApprovalRequestGridItem | any;
 }> = ({
   disabledOptions,
   formState,
@@ -20,6 +24,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   resetAndCancelEdit,
   showAutoComplete = true,
   titleText,
+  handleRemove,
+  entry,
 }) => {
   const classes = useStyles();
 
@@ -65,10 +71,17 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
+          <Button className={classes.actionButton}>
+            <DeleteIcon className={classes.iconButton}
+              onClick={() =>  {
+                resetAndCancelEdit?.();
+                handleRemove?.(entry?.docRevId); }}/>
+          </Button>
           <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton}/>
           </Button>
-          <Button data-cy="doneRecord" className={classes.actionButton} onClick = {addRevisionToChangeRequest}>
+          <Button data-cy="doneRecord"
+            className={cx(classes.actionButton, classes.actionButtonDone)} onClick = {addRevisionToChangeRequest}>
             <DoneIcon className={classes.iconButton} />
           </Button>
         </div>

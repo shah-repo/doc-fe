@@ -12,10 +12,6 @@ import useStyles from "./ApprovalRequestGrid.styles";
 import { generateDocTitleText } from "./helpers";
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
-import { Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import { useLocation } from "react-router-dom";
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -28,14 +24,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   handleRemove,
   viewItemActionsVisible,
 }) => {
-  const location = useLocation();
   const classes = useStyles();
 
   const {
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
-
-  const showDeleteButton = !location.pathname.includes(docRevId);
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);
@@ -94,7 +87,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   };
 
   return (
-    <div className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
+    <div onClick={() => editItem()} className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
       [classes.enclosingDivOpened]: isExpanded,
     })}>
       <div className={classes.itemRow}>
@@ -128,16 +121,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </ul>
         </div>
       }
-      { viewItemActionsVisible && <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
-        { showDeleteButton && <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
-          <DeleteIcon className={classes.iconButton}
-            onClick={() => handleRemove(docRevId)}/>
-        </Button>
-        }
-        <Button className={classes.actionButton}>
-          <EditIcon className={classes.iconButton} onClick={editItem}/>
-        </Button>
-      </div> }
     </div>
   );
 };
