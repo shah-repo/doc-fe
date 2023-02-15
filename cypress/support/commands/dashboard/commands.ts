@@ -11,6 +11,7 @@ declare global {
       dashVerifyListItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashVerifyPOItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashVerifyListItemNotExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
+      dashVerifyListItemDetailsExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashGoToListItemFromDashboard(params: {listItem: string}): Chainable<Subject>;
       dashToggleMoreDetailsForListItemNumber(params: {listItemNumb: number}): Chainable<Subject>;
       dashRejectApprovalForListItem(params: {listItem: string}): Chainable<Subject>;
@@ -39,6 +40,10 @@ Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listIt
   cy.get("[data-cy=dashboardFeedList] div>span")
     .contains(params.listItem)
     .should("not.exist");
+});
+
+Cypress.Commands.add("dashVerifyListItemDetailsExistsOnDashboard", (params: { listItem: string}) => {
+  cy.get("[data-cy=dashboardFeedList] ul>div").contains(params.listItem).should("exist");
 });
 
 Cypress.Commands.add("dashGoToListItemFromDashboard", (params: { listItem: string}) => {

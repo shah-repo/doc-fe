@@ -8,10 +8,10 @@ import { PurchaseOrderTest } from "../../../../utils/constants/documentTypes/pur
 import { RevisionChangeType } from "../../../../../src/state/ducks/documentRevisions/types";
 import { purchaseOrderDefaultSchema } from "../../../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../../../support/commands/company/commands";
-// import { IMAPEmailsInTesting } from '../../../support/commands/imap/commands'
+import { IMAPEmailsInTesting } from "../../../../support/commands/imap/commands";
+import "moment-timezone";
 import moment from "moment";
-// import { TIME_ZONE } from "../../../../../src/common/utils/date";
-// import { emailDateOffset } from "../../../../utils/constants/dateHandler";
+import { emailDateOffset } from "../../../../utils/constants/dateHandler";
 
 const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
 
@@ -25,9 +25,11 @@ let purchaseOrderDocumentType;
 let supplierDocumentType;
 let formDocumentType;
 let approvalRequestDocumentType;
-// let getEmailSetting;
-// let dateAfterEmailShouldArrive;
-// let emailsFromInbox;
+let partDocumentType;
+let createdPartDocument;
+let getEmailSetting;
+let dateAfterEmailShouldArrive;
+let emailsFromInbox;
 let poUrl;
 
 context("PO notifications", () => {
@@ -67,6 +69,7 @@ context("PO notifications", () => {
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           done();
         });
       });
@@ -80,6 +83,64 @@ context("PO notifications", () => {
       }).then((response) => {
         loginResponse = response;
         done();
+      });
+    });
+
+    it("[API] Create part document", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part document1</p>",
+              document: {
+                docId: "PRT-00001",
+                documentType: {
+                  id: partDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part document1",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            });
+          });
+        });
       });
     });
 
@@ -333,6 +394,12 @@ context("PO notifications", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Select Part Number", () => {
+        cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Enter Supplier Part Number", () => {
         cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
         cy.progressBarShouldNotExist();
@@ -392,9 +459,9 @@ context("PO notifications", () => {
         cy.progressBarShouldNotExist();
       });
 
-      it("Add an Approval", () => {
-        cy.get("[data-cy^='fb-po-approvals-']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      it("Verify that User 2 is automatically added as the approver", () => {
+        cy.get("[name^='fb-po-approvals-'] .MuiChip-root").contains(USERS[2].name)
+          .should("exist");
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -406,8 +473,8 @@ context("PO notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        // dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
-        cy.pmSubmitForApprovalWithoutAPI();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        cy.pmSubmitForApprovalInThreeDotsWithoutAPI();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -429,47 +496,38 @@ context("PO notifications", () => {
     });
   });
 
-  // @todo: 2.c, 2.d
+  context("Verify User 2 receives an email that a PO has been sent for review and they are approvers", () => {
+    it("Verify emails", () => {
+      SystemRequirement("REQ-2140");
+      getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+      };
 
-  // @todo: 2.e.i
-  // context("Verify User 2 receives an email that a PO has been sent for review and they are approvers", () => {
-  //   it("Verify emails", () => {
-  //     SystemRequirement("REQ-2140");
-  //     getEmailSetting =  {
-  //       to: CONFIG.TEST_EMAIL,
-  //       after: dateAfterEmailShouldArrive,
-  //       subject: "Can you please approve my request",
-  //       // eslint-disable-next-line @typescript-eslint/camelcase
-  //       include_body: true,
-  //     };
-  //
-  //     cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-  //       emailsFromInbox = emails;
-  //     });
-  //   });
-  //
-  //   it("Verify the emails that should be received", () => {
-  //     const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-  //       {
-  //         sentToUser: USERS[2].email,
-  //         contains: [
-  //           "Can you please approve my\r\n                                      request:)",
-  //           `Hi ${USERS[2].name}`,
-  //           "I sent a request for approval on",
-  //           "AR-00001 Approval request from newly created form",
-  //           "Thank you,",
-  //         ],
-  //       },
-  //     ];
-  //
-  //     cy.imapVerifyEmailsInList({
-  //       receivedEmails: emailsFromInbox,
-  //       emailsToTest: emailsThatShouldBeReceived,
-  //       getEmailsSincedate: dateAfterEmailShouldArrive,
-  //       assertNumberOfEmailsFoundInList: 1,
-  //     });
-  //   });
-  // });
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[2].email,
+          contains: [
+            `Hello <b>${USERS[2].name},</b><br/><br/>`,
+            `Record <b>POT-00001</b> is in review and you are an approver.`,
+          ],
+        },
+      ];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
 
   context("Verify tabs content", () => {
     it(`Verify PO line item contain icon, doc detail & datetime`, () => {
@@ -483,16 +541,14 @@ context("PO notifications", () => {
 
     it("Clicking on the arrow should show the PO details", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyListItemDetailsExistsOnDashboard({ listItem: `test_image.jpg` });
     });
-
-    // @todo: 4.a
 
     it("Hovering PO line item should display buttons", () => {
       cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
@@ -504,6 +560,15 @@ context("PO notifications", () => {
         .find("[data-cy='transition-approve']").should("exist");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
         .find("[data-cy='transition-reject']").should("exist");
+    });
+
+    it("Clicking on Download PDF should open the modal box for the PO PDF", () => {
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy='transition-download-pdf']").first().trigger("mouseover");
+      cy.get("[data-cy='download-pdf']").first().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.get("object[type='application/pdf']").should("exist");
+      cy.get("[data-cy='dialog-close']").first().arrowClick();
     });
 
     it("Reject PO", () => {
@@ -579,7 +644,7 @@ context("PO notifications", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.pmSubmitForApprovalInThreeDotsWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
