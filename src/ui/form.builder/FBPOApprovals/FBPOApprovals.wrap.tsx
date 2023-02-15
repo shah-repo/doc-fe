@@ -7,6 +7,7 @@ import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDi
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
+import { canEditDocumentRevision } from "../../documentRevision/helpers/documentRevisionPermissions";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
 import FBDataStore from "../FBStore/FBDataStore";
@@ -39,6 +40,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
+    const isCurrentUserOperator = some(document?.document.operators, ["user.email", authUser.email ]);
+    const canEditDocRev = document && canEditDocumentRevision(document, authUser.email, isCurrentUserOperator);
 
     const {
       poApprovalsState,
@@ -162,7 +165,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requester) => {
-        if (workspaceState) {
+        if (workspaceState && canEditDocRev) {
           updateApprovals({ prevRequester: prevRequester.current });
         }
         prevRequester.current = requester;

@@ -362,7 +362,13 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer}/>}
+            {!pinHover && (
+              <PinIcon
+                data-cy="pin-icon"
+                onMouseEnter={onMouseHoverPinIcon}
+                className={classes.cursorPointer}
+              />
+            )}
             {pinHover && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
@@ -370,6 +376,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 arrow
               >
                 <PinSolidIcon
+                  data-cy="pin-solid-icon"
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                   className={classes.cursorPointer}
@@ -385,7 +392,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                data-cy="pin-solid-icon"
+                onClick={handleUnPinClick}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
           </Box>
         )}

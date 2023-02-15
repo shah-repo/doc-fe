@@ -371,7 +371,7 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -487,7 +487,7 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
     });
 
     it("Switch to myfeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

@@ -357,14 +357,14 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
   context("Check the dashboard", () => {
     it("AR should not appear on My Feed since AR is still in Draft", () => {
       cy.navigToDashboardWithoutApi();
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.contains("No pending actions").should("exist");
     });
 
     it("Switch to Recent tab", () => {
-      cy.dashboardRecentTab();
+      cy.dashOpenRecentTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -433,7 +433,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.dashboardRecentTab();
+      cy.dashOpenRecentTab();
       cy.get("#scrollable-auto-tab-recent").arrowClick();
       cy.get("#scrollable-auto-tabpanel-recent").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00002")
@@ -463,7 +463,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -513,7 +513,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to To Do tab", () => {
-      cy.dashboardToDoTab();
+      cy.dashOpenToDoTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -608,7 +608,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -697,7 +697,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -839,7 +839,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -930,7 +930,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1044,7 +1044,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Switch to MyFeed tab", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
