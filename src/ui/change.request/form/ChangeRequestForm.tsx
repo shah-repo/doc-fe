@@ -37,6 +37,7 @@ type ChangeRequestFormProps =
   formInput?: Record<string, any>;
   hideSideBar: boolean;
   currentDocRevId?: string;
+  inDialog: boolean;
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -54,6 +55,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _documentRevisionFormState,
   hideSideBar = false,
   currentDocRevId,
+  inDialog = false,
 }) => {
   const { _tabsState } = SM.useStores();
 
@@ -70,6 +72,10 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const docTypeGroup = changeRequest?.documentType.group ?? "OTHER";
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
+
+  if (inDialog) {
+      _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
+  }
 
   if (tabConfig.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
     tabConfig.splice(1, 0, {
