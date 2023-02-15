@@ -243,11 +243,9 @@ context("Record inline Flow", () => {
     });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-          `RecordsRD-00003 Rev 1WIP`,
-        breadcrump: true,
+      cy.verifyListItemExistsOnHeaderNew({
+        docType: "Records", docId: "RD-00003",
+        revision: "Rev 1", status: "WIP", breadcrump: true,
       });
     });
 
@@ -349,11 +347,9 @@ context("Record inline Flow", () => {
     });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-          `RecordsRD-00003 Rev 1LAST SIGNED`,
-        breadcrump: true,
+      cy.verifyListItemExistsOnHeaderNew({
+        docType: "Records", docId: "RD-00003",
+        revision: "Rev 1", status: "LAST SIGNED", breadcrump: true,
       });
     });
 
@@ -427,11 +423,9 @@ context("Record inline Flow", () => {
     });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-          `RecordsRD-00003 Rev 1ARCHIVE`,
-        breadcrump: true,
+      cy.verifyListItemExistsOnHeaderNew({
+        docType: "Records", docId: "RD-00003",
+        revision: "Rev 1", status: "ARCHIVE", breadcrump: true,
       });
     });
 
@@ -465,11 +459,9 @@ context("Record inline Flow", () => {
     });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-          `RecordsRD-00003 Rev 2LAST SIGNED`,
-        breadcrump: true,
+      cy.verifyListItemExistsOnHeaderNew({
+        docType: "Records", docId: "RD-00003",
+        revision: "Rev 2", status: "LAST SIGNED", breadcrump: true,
       });
     });
 
@@ -503,11 +495,9 @@ context("Record inline Flow", () => {
     });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-          `RecordsRD-00003 Rev 3WIP`,
-        breadcrump: true,
+      cy.verifyListItemExistsOnHeaderNew({
+        docType: "Records", docId: "RD-00003",
+        revision: "Rev 3", status: "WIP", breadcrump: true,
       });
     });
 
@@ -552,11 +542,9 @@ context("Record inline Flow", () => {
     });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-          `RecordsRD-00003 Rev ARELEASED`,
-        breadcrump: true,
+      cy.verifyListItemExistsOnHeaderNew({
+        docType: "Records", docId: "RD-00003",
+        revision: "Rev A", status: "RELEASED", breadcrump: true,
       });
     });
 

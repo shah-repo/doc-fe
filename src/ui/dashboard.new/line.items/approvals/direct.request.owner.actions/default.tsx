@@ -195,7 +195,13 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
       />
       {hoverItem && !pinned && (
         <Box component="div" className={classes.actionIcons}>
-          {!pinHover && isPinShown && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+          {!pinHover && isPinShown && (
+            <PinIcon
+              data-cy="pin-icon"
+              onMouseEnter={onMouseHoverPinIcon}
+              className={classes.cursorPointer}
+            />
+          )}
           {pinHover && isPinShown && (
             <StyleTooltip
               title={<Text translation="common.pin" />}
@@ -203,6 +209,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
               arrow
             >
               <PinSolidIcon
+                data-cy="pin-solid-icon"
                 onClick={handlePinClick}
                 onMouseLeave={onMouseLeavePinIcon}
                 className={classes.cursorPointer}
@@ -221,7 +228,11 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
             placement="top"
             arrow
           >
-            <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+            <PinSolidIcon
+              data-cy="pin-solid-icon"
+              onClick={handleUnPinClick}
+              className={classes.cursorPointer}
+            />
           </StyleTooltip>
         </span>
       )}

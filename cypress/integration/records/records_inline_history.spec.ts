@@ -215,7 +215,7 @@ context("Record inline history Flow", () => {
     });
 
     it("Check 'Red' and 'Green' value on checkbox", () => {
-      cy.fbSelectCheckboxValue( "Red", "Green" );
+      cy.fbSelectCheckboxInlineValue( "Red", "Green" );
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -301,7 +301,7 @@ context("Record inline history Flow", () => {
     });
 
     it("Check 'Blue' value on checkbox", () => {
-      cy.fbSelectCheckboxValue( "Blue" );
+      cy.fbSelectCheckboxInlineValue( "Blue" );
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(5000);
