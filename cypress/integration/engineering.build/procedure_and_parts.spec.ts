@@ -537,7 +537,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.unClick();
     });
 
@@ -549,13 +549,9 @@ context("Procedure and parts flow test", () => {
 
     it("Submit for approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
-      cy.wait(1000);
       cy.drSelectDetailsTab();
     });
 
@@ -815,23 +811,18 @@ context("Procedure and parts flow test", () => {
       SystemRequirement("REQ-2990");
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
       cy.pmUploadAttachment({ fileName: "video.mp4" });
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Upload attachment 'image.jpg'", () => {
       cy.pmUploadAttachment({ fileName: "image.jpg" });
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Upload attachment 'test.docx'", () => {
       cy.pmUploadAttachment({ fileName: "test.docx" });
-      cy.wait(1000);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
@@ -844,7 +835,7 @@ context("Procedure and parts flow test", () => {
       SystemRequirement("REQ-3010");
       cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
       cy.wait(2000);
-      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
@@ -856,7 +847,6 @@ context("Procedure and parts flow test", () => {
       cy.get("div[id^=\"fb-mpiprocedure\"] p")
         .eq(1)
         .should("have.text", "Step #1 description");
-      cy.wait(2000);
     });
 
     it("Verify materials are copied", () => {
@@ -865,7 +855,6 @@ context("Procedure and parts flow test", () => {
         .eq(2).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 each");
       cy.get("[data-cy='form.builder.procedure.materials.title']")
         .eq(3).should("have.text", "Free text material | Test | Qty: 3 sets");
-
     });
 
     it("Verify equipments are copied", () => {
@@ -888,7 +877,6 @@ context("Procedure and parts flow test", () => {
     it("Remove step", () => {
       cy.get("[data-cy='remove-schema-item']").last().arrowClick({ force: true });
       cy.wait(1000);
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='form.builder.step.number']").eq(2).should("not.exist");
     });
@@ -898,8 +886,6 @@ context("Procedure and parts flow test", () => {
     it("Choose an existing part from the list of available parts", () => {
       SystemRequirement("REQ-3830");
       cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part for EB document");
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -909,9 +895,6 @@ context("Procedure and parts flow test", () => {
 
     it("Submit for Approval", () => {
       cy.drApproveAndReleaseDialog();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if the part is displayed in the document summary", () => {
@@ -919,7 +902,6 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.wait(2000);
       cy.ebApproveWithoutApi();
     });
   });
@@ -1035,12 +1017,12 @@ context("Procedure and parts flow test", () => {
         cy.wait(1000);
         SystemRequirement("REQ-3030");
         cy.get("#sm-tabpanel-2")
-          .contains("MT-00002 - New Material for procedure | each :3").should("exist");
+          .contains("MT-00002 - New Material for procedure | each: 3").should("exist");
       });
 
       it("Verify 'Free text material' has increased number of materials to '5'", () => {
         cy.get("#sm-tabpanel-2")
-          .contains("Free text material | sets :5").should("exist");
+          .contains("Free text material | sets: 5").should("exist");
       });
 
       it("Verify 'New Equipment for procedure' is added to equipments", () => {
@@ -1058,21 +1040,15 @@ context("Procedure and parts flow test", () => {
     context("Create EB and release it", () => {
       it("Submit for approval", () => {
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       context("Release the part", () => {
         it("Navigate to the part document", () => {
           cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
             const link = $el.attr("href");
-            cy.wrapWithWaitOnApiCalls([], () =>
-            {
-              cy.visit(CONFIG.FE_URL + link);
-            });
+            cy.visit(CONFIG.FE_URL + link);
+            cy.listLoadingElementShouldAppear();
             cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -1086,17 +1062,15 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy=\"BuildsPresenter-link-common.part.of\"]").then(($el) => {
             const link = $el.attr("href");
             cy.visit(CONFIG.FE_URL + link);
-            cy.wait(3000);
+            cy.listLoadingElementShouldAppear();
             cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
           });
 
           cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
             const link = $el.attr("href");
             cy.visit(CONFIG.FE_URL + link);
-            cy.wait(3000);
+            cy.listLoadingElementShouldAppear();
             cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -1142,7 +1116,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -1159,12 +1133,12 @@ context("Procedure and parts flow test", () => {
         cy.get("[data-cy='form.builder.materials']").eq(0).arrowClick();
         cy.wait(1000);
         cy.get("#sm-tabpanel-2")
-          .contains("PRT-00005 - Part document | each :2").should("exist");
+          .contains("PRT-00005 - Part document | each: 2").should("exist");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {
         cy.get("#sm-tabpanel-2")
-          .contains("Free text material | sets :3").should("exist");
+          .contains("Free text material | sets: 3").should("exist");
       });
 
       it("Verify 'Equipment document' is removed from equipment", () => {
@@ -1187,17 +1161,11 @@ context("Procedure and parts flow test", () => {
     context("Create EB", () => {
       it("Submit for approval", () => {
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       context("Verify that EB cannot be released unless 1st revision of part is released", () => {
         it("Try approving the EB", () => {
           cy.ebApproveWithoutApi();
-          cy.wait(1000);
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
         });
 
         it("Check for a toast error", () => {
@@ -1209,12 +1177,9 @@ context("Procedure and parts flow test", () => {
         it("Navigate to the part document", () => {
           cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
             const link = $el.attr("href");
-            cy.wrapWithWaitOnApiCalls([], () =>
-            {
-              cy.visit(CONFIG.FE_URL + link);
-            });
+            cy.visit(CONFIG.FE_URL + link);
+            cy.listLoadingElementShouldAppear();
             cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -1229,25 +1194,20 @@ context("Procedure and parts flow test", () => {
             const link = $el.attr("href");
 
             cy.visit(CONFIG.FE_URL + link);
-            cy.wait(3000);
+            cy.listLoadingElementShouldAppear();
             cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
           });
 
           cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
             const link = $el.attr("href");
             cy.visit(CONFIG.FE_URL + link);
-            cy.wait(3000);
+            cy.listLoadingElementShouldAppear();
             cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
           });
         });
 
         it("Approve record button click", () => {
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.ebApproveWithoutApi();
         });
 
         it("Check if Approved date exists", () => {
