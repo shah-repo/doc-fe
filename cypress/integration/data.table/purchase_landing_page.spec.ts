@@ -722,6 +722,7 @@ context("Purchase Order Landing Page", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
+    // this code is commented due to ENC-14153
     // it("Verify filter for 'PO Status'", () => {
     //   cy.get(`[aria-colindex="3"] input`).arrowType("N/A");
     //   cy.landingPageLoadingElementShouldNotExist();

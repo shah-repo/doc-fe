@@ -683,21 +683,21 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.dlClearFilters();
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] .k-filtercell >input`).eq(0).arrowType(params.docId).wait(500);
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).scrollIntoView().arrowClick({ force: true });
   cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndName", (params: { docId: string; title: string }) => {
   cy.dlClearFilters();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] .k-filtercell >input`).arrowType(params.docId).wait(500);
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title).wait(500);
-  cy.listLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
