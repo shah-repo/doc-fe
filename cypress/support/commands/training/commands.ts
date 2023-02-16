@@ -203,8 +203,7 @@ Cypress.Commands.add(
   "setTimeTravelToComplete",
   (params: { tasktype: string; days: string; status: string }) => {
     cy.reload();
-    cy.progressBarShouldNotExist();
-    cy.listLoadingElementShouldNotExist();
+    cy.landingPageLoadingElementShouldAppear();
     cy.get(`tr[data-grid-row-index="0"]`)
       .find("td")
       .should("contain.text", params.tasktype)

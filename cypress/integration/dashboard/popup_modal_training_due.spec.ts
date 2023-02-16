@@ -322,6 +322,13 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -760,10 +767,6 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
-
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
   });
 
   context("Use time tool to travel user back to future", () => {
@@ -818,10 +821,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Verify training notification", { retries: 3 }, () => {
       cy.wait(8000);
-      cy.get("[id='scrollable-auto-tab-0'").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", "DUE IN 7 DAYS");
@@ -929,7 +929,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1026,6 +1026,12 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Select 'MyFeed' tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("'Due in 7 days' should not exist", () => {
