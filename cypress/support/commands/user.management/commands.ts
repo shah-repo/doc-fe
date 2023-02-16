@@ -127,7 +127,7 @@ Cypress.Commands.add("usrNavigateToUserManagement", () => {
 });
 
 Cypress.Commands.add("usrFilterByEmail", (params: {email: string }) => {
-  cy.get(`th[aria-colindex="3"] .k-filtercell>input`).arrowType(params.email);
+  cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
   cy.landingPageLoadingElementShouldNotExist();
 });
 

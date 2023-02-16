@@ -756,6 +756,7 @@ context("Receiving landing page test", () => {
 
     it("Navigate to Records", () => {
       cy.navigToDocumentList();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlClearFilters();
     });
 
@@ -765,6 +766,7 @@ context("Receiving landing page test", () => {
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "FM-00004" });
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
     });
   });
@@ -886,6 +888,7 @@ context("Receiving landing page test", () => {
   context("Create Released Receiving record", () => {
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create Receiving Record", () => {
@@ -1324,11 +1327,13 @@ context("Receiving landing page test", () => {
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlClearFilters();
     });
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "RCT-00001" });
+      cy.landingPageLoadingElementShouldAppear();
       cy.dlSelectFirstDocument();
     });
   });
@@ -1392,11 +1397,13 @@ context("Receiving landing page test", () => {
   context("Open Receivable Released state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlClearFilters();
     });
 
     it("Select the Records", () => {
       cy.dlFilterByDocId({ docId: "RCT-00002" });
+      cy.landingPageLoadingElementShouldAppear();
       cy.dlSelectFirstDocument();
     });
   });
