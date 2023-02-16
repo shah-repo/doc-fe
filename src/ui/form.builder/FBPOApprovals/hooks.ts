@@ -23,6 +23,7 @@ interface CheckApprovalsArguments {
 export const usePoApprovals = (
   fieldName: string,
   id?: string,
+  canEditDocRev? : boolean,
 ) => {
   const dispatch = useDispatch();
   const { workspaceState, poApprovalsState } = FB.useStores();
@@ -187,7 +188,7 @@ export const usePoApprovals = (
   useEffect(() => reaction(
     () => Object.values((poApprovalsState?.groups ?? {})).slice(),
     (groups) => {
-      if (groups && workspaceState) {
+      if (groups && workspaceState && canEditDocRev) {
         updateSignatureGroupNames();
       }
     }

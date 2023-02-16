@@ -52,6 +52,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     } = usePoApprovals(
       name,
       outputId,
+      canEditDocRev,
     );
 
     const prevRequester = useRef<string>();
