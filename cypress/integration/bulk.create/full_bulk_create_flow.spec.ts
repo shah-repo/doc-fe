@@ -911,6 +911,7 @@ context("Bulk create flow", () => {
       it("Approve document", () => {
         SystemRequirement("REQ-4740");
         cy.ebApproveWithoutApi();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -918,6 +919,8 @@ context("Bulk create flow", () => {
   context("Verify created documents", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.reload();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clear filter", () => {
@@ -934,6 +937,7 @@ context("Bulk create flow", () => {
 
     it("Filter by doc-id", () => {
       cy.dlFilterByDocId({ docId: "TDT-00002" });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     context("Verify document one data", () => {
@@ -995,6 +999,7 @@ context("Bulk create flow", () => {
       it("Filter document two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first document", () => {

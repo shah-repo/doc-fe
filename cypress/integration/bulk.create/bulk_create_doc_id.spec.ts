@@ -1274,7 +1274,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify created docs", () => {
       it("Navigate to document list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
@@ -1299,6 +1299,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Filter by doc-id", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "FM-00004" });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Select first doc", () => {
@@ -1421,7 +1422,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify created docs", () => {
       it("Navigate to document list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();

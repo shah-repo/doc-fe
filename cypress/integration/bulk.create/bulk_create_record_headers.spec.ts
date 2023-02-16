@@ -679,7 +679,7 @@ context("Bulk create record headers", () => {
 
   context("Verify created records", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(30 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 2 });
@@ -687,6 +687,7 @@ context("Bulk create record headers", () => {
 
     it("Filter by record-id", () => {
       cy.dlFilterByDocId({ docId: "TDT-00002" });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     context("Verify voided record one data", () => {
@@ -715,6 +716,7 @@ context("Bulk create record headers", () => {
       it("Filter record two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {

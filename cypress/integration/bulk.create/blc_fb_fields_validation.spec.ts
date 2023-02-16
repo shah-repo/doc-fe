@@ -620,8 +620,8 @@ context("Test fb fields validation in BLC", () => {
 
   context("Verify created records", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
-      cy.wait(5 * 1000);
+      cy.navigToDashboardWithoutApi();
+      cy.wait(8 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 9 });
     });
@@ -631,6 +631,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record one", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00004" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -686,6 +687,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record one", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00005" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -742,6 +744,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record one", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00006" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -797,6 +800,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record one", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00007" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -857,6 +861,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record one", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00010" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -914,6 +919,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record two", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00008" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -973,6 +979,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter record two", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00011" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -1030,6 +1037,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter by record-id", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00009" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -1094,6 +1102,7 @@ context("Test fb fields validation in BLC", () => {
         it("Filter by record-id", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00012" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {

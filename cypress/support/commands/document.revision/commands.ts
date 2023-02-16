@@ -687,6 +687,7 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldAppear();
   cy.landingPageLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
