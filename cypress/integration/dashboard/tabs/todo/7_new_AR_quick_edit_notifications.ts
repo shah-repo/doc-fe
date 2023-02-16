@@ -10,8 +10,6 @@ let createdCompany;
 let loginResponse;
 let arUrl;
 
-// @todo: 8.b.iii
-
 context("Express AR notifications", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -302,6 +300,11 @@ context("Express AR notifications", () => {
     it("Close the AR", () => {
       cy.arCloseARFromDashboardWithoutApi();
       cy.wait(3000);
+    });
+
+    it("There should be a banner notification that you have successfully closed an AR", () => {
+      cy.checkToastMessageContains({ message: "You successfully closed an AR" });
+      cy.wait(1000);
     });
 
     it("'To Do' tab should be empty", () => {
