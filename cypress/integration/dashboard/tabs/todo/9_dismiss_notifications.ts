@@ -942,7 +942,7 @@ context("Dismiss notifications", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.recSubmitForApprovalWithoutAPI();
     });
   });
 
@@ -1281,7 +1281,7 @@ context("Dismiss notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.poAMCheckForApprovalWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1414,7 +1414,7 @@ context("Dismiss notifications", () => {
       });
 
       it("Click Submit for Approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.poAMCheckForApprovalWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
