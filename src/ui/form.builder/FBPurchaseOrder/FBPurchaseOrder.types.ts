@@ -28,10 +28,6 @@ export enum FBPurchaseOrderItemType {
   SERVICE = "service",
 }
 
-export enum DocumentCategory {
-  PurchaseOrder = "Purchase Order",
-}
-
 export interface FBPurchaseOrderItem {
   id: string;
   index: number;

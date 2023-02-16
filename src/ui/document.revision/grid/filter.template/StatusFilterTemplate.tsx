@@ -7,9 +7,8 @@ import { startCase, toLower } from "lodash";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest/types";
-import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentCategory, DocumentRevisionStatus, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import { DocumentCategory } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 
 interface Props extends GridFilterCellProps {
   defaultItem: string;
