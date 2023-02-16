@@ -582,7 +582,7 @@ context("Bulk create record headers", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApprovalWithoutAPI();
+          cy.lhrSubmitForApprovalWithoutApi();
         });
 
         context("Change doc type configuration, make label C not visible", () => {
@@ -668,7 +668,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {

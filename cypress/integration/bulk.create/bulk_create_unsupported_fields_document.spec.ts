@@ -370,22 +370,6 @@ context("Bulk create unsupported fields for documents", () => {
                       applicableValidationSchema: true,
                     },
                     {
-                      name: "-kv806ph2",
-                      tabId: "overview",
-                      type: "approvalMatrix",
-                      rules: "",
-                      hidden: false,
-                      deleted: false,
-                      applicableOn: [
-                        "ON_STATE_TO_IN_REVIEW",
-                      ],
-                      outputDisabled: false,
-                      validationMode: "default",
-                      validationAttribute: "",
-                      deleteInFormDisabled: false,
-                      applicableValidationSchema: true,
-                    },
-                    {
                       name: "blc-instruction-media-upload-kv80744w",
                       tabId: "overview",
                       type: "instructionsmediaupload",
@@ -859,7 +843,7 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {

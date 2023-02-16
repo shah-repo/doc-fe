@@ -704,7 +704,7 @@ context("Export Bulk", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.wait(3000);
     });
 

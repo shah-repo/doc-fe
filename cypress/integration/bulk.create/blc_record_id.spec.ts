@@ -716,7 +716,7 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
         cy.url().then((url: any) => {
           blc1 = url;
         });
@@ -799,7 +799,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApprovalWithoutAPI();
+          cy.lhrSubmitForApprovalWithoutApi();
           cy.url().then((url: any) => {
             blc2 = url;
           });
@@ -890,7 +890,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApprovalWithoutAPI();
+          cy.lhrSubmitForApprovalWithoutApi();
         });
 
         it("Approve BLC1", () => {

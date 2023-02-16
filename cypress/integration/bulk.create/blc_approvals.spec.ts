@@ -406,7 +406,7 @@ context("Bulk create approvals block/inline test", () => {
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
@@ -491,7 +491,7 @@ context("Bulk create approvals block/inline test", () => {
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {

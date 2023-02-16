@@ -730,7 +730,7 @@ context("Test invalid data for records", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {

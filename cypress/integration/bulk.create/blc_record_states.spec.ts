@@ -841,7 +841,7 @@ context("Bulk create record headers", () => {
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {

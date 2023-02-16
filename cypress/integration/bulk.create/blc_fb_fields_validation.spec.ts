@@ -610,7 +610,7 @@ context("Test fb fields validation in BLC", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Approve record", () => {

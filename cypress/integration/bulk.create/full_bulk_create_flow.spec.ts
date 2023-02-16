@@ -905,7 +905,7 @@ context("Bulk create flow", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve document", () => {
