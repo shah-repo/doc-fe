@@ -81,7 +81,7 @@ export const usePoApprovals = (
       && !isAdministrativeChange
       && poApprovalsState?.requireAdditionalApprovers;
 
-    if (!shouldUpdate) {
+    if (!shouldUpdate || !canEditDocRev) {
       return;
     }
 
@@ -195,7 +195,7 @@ export const usePoApprovals = (
   useEffect(() => reaction(
     () => Object.values((poApprovalsState?.groups ?? {})).slice(),
     (groups) => {
-      if (groups && workspaceState && canEditDocRev) {
+      if (groups && workspaceState) {
         updateSignatureGroupNames();
       }
     }
