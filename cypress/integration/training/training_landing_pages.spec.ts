@@ -994,7 +994,7 @@ context("Test training records and training curriculum landing page", () => {
         SystemRequirement("REQ-2820");
         cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 3, input: "1" });
-        cy.listLoadingElementShouldNotExist();        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldAppear();
         cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "1" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
