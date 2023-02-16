@@ -308,7 +308,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.cmpClickCreateApprovalRequestWithoutApi();
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -357,10 +357,11 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "DRAFT" });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: "DRAFT" });
     });
 
     it("Add first approver to approval request on approver list", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
     });
 
@@ -404,7 +405,7 @@ context("Document Attachment Flow", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "IN_REVIEW" });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
@@ -439,7 +440,7 @@ context("Document Attachment Flow", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "APPROVED" });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: "APPROVED" });
     });
 
     it("Close AR", () => {

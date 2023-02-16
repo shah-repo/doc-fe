@@ -88,7 +88,7 @@ Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
   cy.get(`[aria-colindex="1"] .k-filtercell >input`).arrowType(params.docId).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
@@ -97,7 +97,7 @@ Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
   cy.get(`[aria-colindex="2"] .k-filtercell >input`).arrowType(params.revision).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
@@ -125,7 +125,7 @@ Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
 
 Cypress.Commands.add("dlFilterByOwner", (params: {owner: string }) => {
   cy.get(`[aria-colindex="5"] .k-filtercell >input`).arrowType(params.owner).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
@@ -134,7 +134,7 @@ Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
 
 Cypress.Commands.add("dlFilterByArId", (params: {arId: string }) => {
   cy.get(`[aria-colindex="6"] .k-filtercell >input`).arrowType(params.arId).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
