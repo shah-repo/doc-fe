@@ -523,10 +523,6 @@ context("Forced training ENC-13669", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
-
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
   });
 
   context(`Verify Training Records with timestamp on 'Completed On' column for ${USERS[11].name}`, () => {
@@ -544,7 +540,13 @@ context("Forced training ENC-13669", () => {
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column for 'AR Form' should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocId({ docId: doc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -565,18 +567,26 @@ context("Forced training ENC-13669", () => {
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     // eslint-disable-next-line max-len
     it(`${USERS[11].name} with timestamp on 'Completed on' column for 'AR Form' should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocId({ docId: doc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -593,12 +603,14 @@ context("Forced training ENC-13669", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'One-Time Training Test' as document type", () => {
@@ -662,7 +674,7 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -673,6 +685,7 @@ context("Forced training ENC-13669", () => {
       cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.wait(5000);
     });
   });
@@ -691,14 +704,22 @@ context("Forced training ENC-13669", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`${USERS[11].name} with one Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
-      cy.trLandingPageUsername({ username: USERS[11].name }).wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", "Pending");
       cy.get("tr.k-master-row").should("have.length", 1);
     });
@@ -707,13 +728,18 @@ context("Forced training ENC-13669", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify ${USERS[12].name} does not have more than one row present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[12].name }).wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").should("have.length", 1);
     });
   });

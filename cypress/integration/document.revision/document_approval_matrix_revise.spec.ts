@@ -110,11 +110,11 @@ context("Document Approval Matrix Revise", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -199,13 +199,13 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateSupplierWithApiCall();
+      cy.drClickCreateSupplierWithoutApiCall();
     });
   });
 
   context("Approve & Release Document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -237,7 +237,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("Save and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check approvals enforcement", () => {
@@ -284,7 +284,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to matrix details tab", () => {
@@ -298,7 +298,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -350,7 +350,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("Save and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check approvals enforcement", () => {
@@ -398,7 +398,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to matrix details tab", () => {
@@ -417,11 +417,11 @@ context("Document Approval Matrix Revise", () => {
 
   context("'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and Release the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -451,7 +451,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("click on 'Approve and Release' button", () => {
