@@ -125,10 +125,8 @@ Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: stri
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostNewUserSetPassword, CyRoutes.SessionDetails], () => {
-    cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+  cy.progressBarShouldAppear();
 });
 
 Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {
