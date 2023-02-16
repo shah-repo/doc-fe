@@ -2,7 +2,7 @@ import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { cloneDeep, map } from "lodash";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from "../../../App";
 import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -73,9 +73,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-  if (inDialog) {
-      _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
-  }
 
   if (tabConfig.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
     tabConfig.splice(1, 0, {
@@ -84,6 +81,13 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       type: TabTypeOptions.ITEMS,
     });
   }
+
+  useEffect(() => {
+    if (inDialog) {
+      _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SMForm
