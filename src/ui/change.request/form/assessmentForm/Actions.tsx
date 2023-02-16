@@ -77,7 +77,6 @@ const DocRevActions: React.FunctionComponent<Props> = ({
       justify="flex-end"
       direction="row"
     >
-      {renderTransitionButton(canSendToReview, "in_review")}
       <SubmitButton
         id="submit"
         showNewButton={true}
@@ -85,6 +84,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         onClick={onFormClick}
         dataCy={label}
         label={label} />
+      {renderTransitionButton(canSendToReview, "in_review")}
       <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown/>
     </Grid>
   );
