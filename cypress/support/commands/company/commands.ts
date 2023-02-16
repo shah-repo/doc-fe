@@ -259,11 +259,8 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
 
 Cypress.Commands.add("cmpClickCreateApprovalRequestWithoutApi", () => {
   cy.get("[data-cy=\"change.request.create\"]").arrowClick();
-<<<<<<< HEAD
-=======
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
->>>>>>> 99eca6b933e1993009e564126a3a94e6008ca452
   cy.checkToastMessage({ exists: false });
 });
 
