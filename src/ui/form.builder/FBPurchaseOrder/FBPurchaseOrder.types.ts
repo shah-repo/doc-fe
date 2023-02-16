@@ -28,7 +28,7 @@ export enum FBPurchaseOrderItemType {
   SERVICE = "service",
 }
 
-export enum DocumentPOType {
+export enum DocumentCategory {
   PurchaseOrder = "Purchase Order",
 }
 

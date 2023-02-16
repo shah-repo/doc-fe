@@ -9,7 +9,7 @@ import { useIntl } from "react-intl";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import { DocumentPOType } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
+import { DocumentCategory } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 
 interface Props extends GridFilterCellProps {
   defaultItem: string;
@@ -51,13 +51,13 @@ export const StatusFilterTemplate = ({
         value={value || defaultItem}
         defaultItem={defaultItem}
         itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
-          DocumentPOType.PurchaseOrder &&
+          DocumentCategory.PurchaseOrder &&
            itemProps?.dataItem === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
           startCase(toLower(DocumentRevisionStatus.Approved))
           : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
         valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
-          DocumentPOType.PurchaseOrder && itemProps
+          DocumentCategory.PurchaseOrder && itemProps
           === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
           startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
