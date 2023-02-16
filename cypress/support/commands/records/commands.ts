@@ -39,6 +39,7 @@ declare global {
       equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       recFinalizeAndReleaseRecord(): Chainable<Subject>;
       recFinalizeAndReleaseRecordWithoutApi(): Chainable<Subject>;
+      recSubmitForApprovalWithoutAPI(): Chainable<Subject>;
     }
   }
 }
@@ -275,4 +276,12 @@ Cypress.Commands.add("recFinalizeAndReleaseRecord", () => {
     () => {
       cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
     });
+});
+
+Cypress.Commands.add("recSubmitForApprovalWithoutAPI", () => {
+  cy.get("[data-cy='ApproveAndRelease-button']").eq(0)
+    .contains("Submit for approval").arrowClick({ force: true });
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });

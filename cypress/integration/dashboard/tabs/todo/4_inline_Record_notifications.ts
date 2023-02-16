@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../../../support/config";
 import { IMPORTER_USER, USERS } from "../../../../utils/constants/users";
-// import { SystemRequirement } from "../../../../utils/context/systemRequirement";
+import { SystemRequirement } from "../../../../utils/context/systemRequirement";
 import { RecordDocumentType } from "../../../../utils/constants/documentTypes/testTypes";
 
 let createdCompany;
@@ -338,6 +338,125 @@ context("Inline Record notifications", () => {
         .should("contain.text", "APPROVED")
         .and("contain.text", "RD-00003")
         .and("contain.text", recordTitle);
+    });
+  });
+
+  context("Finalize and Release Record 2nd revision ", () => {
+    it("Open the Record", () => {
+      cy.visit(recordUrl);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on Revisions tab", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Open 2nd Revision", () => {
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("Revision 2").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Finalize and release button click'", () => {
+      cy.recFinalizeAndReleaseRecord();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify record as 'Rev A' revision", () => {
+      cy.get("[data-cy='revision']").contains("Revision A");
+    });
+  });
+
+  context("Finalize and Release Record 2nd revision ", () => {
+    it("Revise document", () => {
+      cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add User 2 as Approver", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
+    });
+
+    it("Click Submit for Approval", () => {
+      cy.recSubmitForApprovalWithoutAPI();
+    });
+  });
+
+  context("Login as User 2", () => {
+    it("Logs user in", () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify tabs content", () => {
+    it(`User should see Record AR notification from User 1`, () => {
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
+        .should("contain.text", USERS[1].name)
+        .and("contain.text", "needs your approval for")
+        .and("contain.text", "RD-00003")
+        .and("contain.text", recordTitle);
+    });
+
+    it("Approve Record AR", () => {
+      cy.dashApproverFirstFromListWithoutApi();
+      cy.wait(3000);
+    });
+
+    it("'To Do' tab should be empty", () => {
+      cy.contains("No pending actions").should("exist");
+    });
+  });
+
+  context("Login as User 1", () => {
+    it("Logs user in", () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify tabs content", () => {
+    it("Open My Feed tab", () => {
+      cy.dashOpenMyFeedTab();
+    });
+
+    it("User should get a notification that Record is Approved and released", () => {
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
+        .should("contain.text", "APPROVED")
+        .and("contain.text", "RD-00003")
+        .and("contain.text", recordTitle);
+    });
+
+    it("Dismiss item", () => {
+      cy.dashDismissFirstItem();
+      cy.wait(1000);
+    });
+
+    it("Dismissed item should disappear", () => {
+      SystemRequirement("REQ-5330");
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
+        .should("not.contain.text", "APPROVED");
     });
   });
 });
