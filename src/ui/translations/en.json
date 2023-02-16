@@ -1414,5 +1414,6 @@
   "approvalRequest.status.DRAFT": "You successfully rejected a document",
   "approvalRequest.status.message.DRAFT": "{crId} {title} has been rejected.",
   "approvalRequest.status.CLOSED": "You successfully closed an AR!",
-  "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed."
+  "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed.",
+  "form.builder.enter": "Enter"
 }
