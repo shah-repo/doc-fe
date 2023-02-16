@@ -10,7 +10,9 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import { store } from "../../../state/store";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
+import { canEditDocumentRevision } from "../../documentRevision/helpers/documentRevisionPermissions";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
 import FBDataStore from "../FBStore/FBDataStore";
@@ -23,10 +25,15 @@ interface CheckApprovalsArguments {
 export const usePoApprovals = (
   fieldName: string,
   id?: string,
-  canEditDocRev? : boolean,
 ) => {
   const dispatch = useDispatch();
   const { workspaceState, poApprovalsState } = FB.useStores();
+
+  const { document: documentRevision }  = workspaceState || {};
+  const authUser = store.getState().auth.user;
+  const isCurrentUserOperator = some(documentRevision?.document.operators, ["user.email", authUser.email ]);
+  const canEditDocRev = documentRevision &&
+  canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
 
   const getSignatureGroupName = (id: string) => {
     const approversGroups = compact(map(poApprovalsState?.groups, (group) =>
@@ -91,7 +98,7 @@ export const usePoApprovals = (
 
     const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status);
 
-    if (!shouldUpdateApprovers) {
+    if (!shouldUpdateApprovers || !canEditDocRev) {
       return;
     }
 
