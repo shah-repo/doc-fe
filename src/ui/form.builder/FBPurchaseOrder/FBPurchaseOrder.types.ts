@@ -28,6 +28,10 @@ export enum FBPurchaseOrderItemType {
   SERVICE = "service",
 }
 
+export enum DocumentPOType {
+  PurchaseOrder = "Purchase Order",
+}
+
 export interface FBPurchaseOrderItem {
   id: string;
   index: number;

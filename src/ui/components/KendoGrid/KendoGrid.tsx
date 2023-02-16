@@ -20,7 +20,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
-import { HelpModule } from "../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
@@ -35,6 +34,7 @@ import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.tem
 import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
 import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
+import { DocumentPOType } from "../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import useDidMount from "../../hooks/useDidMount";
 import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
@@ -298,7 +298,7 @@ export function KendoGrid<T extends any>({
             }
             cell={(props) =>
             {
-              props.dataItem.displayStatus =  ((documentTypeCategory === HelpModule.PurchaseOrder &&
+              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentPOType.PurchaseOrder &&
                  props?.dataItem?.displayStatus === startCase(toLower(DocumentRevisionStatus.Released))) ?
                 startCase(toLower(DocumentRevisionStatus.Approved))  : props?.dataItem?.displayStatus );
               return RenderCustomCell(
