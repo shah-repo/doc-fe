@@ -6,10 +6,10 @@ import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import { startCase, toLower } from "lodash";
 import * as React from "react";
 import { useIntl } from "react-intl";
-import { HelpModule } from "../../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+import { DocumentPOType } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 
 interface Props extends GridFilterCellProps {
   defaultItem: string;
@@ -51,13 +51,13 @@ export const StatusFilterTemplate = ({
         value={value || defaultItem}
         defaultItem={defaultItem}
         itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
-          HelpModule.PurchaseOrder &&
+          DocumentPOType.PurchaseOrder &&
            itemProps?.dataItem === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
           startCase(toLower(DocumentRevisionStatus.Approved))
           : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
         valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
-          HelpModule.PurchaseOrder && itemProps
+          DocumentPOType.PurchaseOrder && itemProps
           === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
           startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
