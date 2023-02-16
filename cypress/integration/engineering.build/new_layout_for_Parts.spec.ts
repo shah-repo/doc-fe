@@ -933,21 +933,22 @@ context("new_layout_for_Parts", () => {
     });
 
     it("verify that part landing page is pulling correct data for newly released part", () => {
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PRT-00004").wait(500);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("Test part").wait(500);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Giovanni Reynolds").wait(500);
-      cy.listLoadingElementShouldNotExist();
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PRT-00004");
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("Test part");
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Giovanni Reynolds");
+      cy.landingPageLoadingElementShouldAppear();
       cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
       cy.get("li").contains("Draft").arrowClick().wait(500);
-      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select PO from the list", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PRT-00004");
-      cy.dlSelectFirstDocument();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Approve and release document", () => {
@@ -960,23 +961,23 @@ context("new_layout_for_Parts", () => {
     });
 
     it("verify that part landing page is pulling correct data for newly released part", () => {
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PRT-00004").wait(500);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("Test part").wait(500);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Giovanni Reynolds").wait(500);
-      cy.listLoadingElementShouldNotExist();
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PRT-00004");
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("Test part");
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Giovanni Reynolds");
+      cy.landingPageLoadingElementShouldAppear();
       cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
       cy.get("li").contains("Released").arrowClick().wait(500);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType("AR-00004").wait(500);
-      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType("AR-00004");
+      cy.landingPageLoadingElementShouldAppear();
     });
   });
 
   context("Open Released Part and verify all the steps above", () => {
     it("Select PO from the list", () => {
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Verify Title 'Test part'", () => {

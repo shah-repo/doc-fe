@@ -157,11 +157,8 @@ Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) 
 });
 
 Cypress.Commands.add("ebSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("tr.k-master-row").first().arrowClick();
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("tr.k-master-row").first().arrowClick();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
