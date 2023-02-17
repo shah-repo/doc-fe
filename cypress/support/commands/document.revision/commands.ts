@@ -656,7 +656,7 @@ Cypress.Commands.add("drClickSaveWithoutApiCallExpectingToastError", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get(`div[data-cy="HeaderInfo-status"]>span`).should("contain", params.status);
+  cy.get(`[data-cy="HeaderInfo-status"]>span`).should("contain", params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {

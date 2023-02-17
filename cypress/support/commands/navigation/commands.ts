@@ -39,6 +39,7 @@ declare global {
       navigToTrainingRecords(): Chainable<Subject>;
       navigToTrainingCurriculums(): Chainable<Subject>;
       navigToAsyncTasks(): Chainable<Subject>;
+      navigToReceivableListWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -160,6 +161,11 @@ Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToReceivableListWithoutApi", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   cy.landingPageLoadingElementShouldNotExist();
 });
 

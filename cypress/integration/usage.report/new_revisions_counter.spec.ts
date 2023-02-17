@@ -1303,15 +1303,12 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
   context("Revise EB document", () => {
     it("Navigate to EB list", () => {
       cy.navigToEB();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select EB document", () => {
       cy.dlSelectFirstDocument();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Click revise button", () => {
