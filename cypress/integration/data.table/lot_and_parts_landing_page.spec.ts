@@ -2,12 +2,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -41,7 +42,7 @@ const owner = "OWNER";
 const arId = "AR ID";
 const status = "STATUS";
 const effectiveDate = "EFFECTIVE DATE";
-const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
+const lotDateSuffix = momentInPST().format("YYMMDD");
 
 context("Test Lots and Parts landing page", () => {
   before(() => {
