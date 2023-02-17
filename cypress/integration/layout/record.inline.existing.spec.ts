@@ -687,15 +687,20 @@ context("Record inline Flow", () => {
         cy.wait(2000);
       });
 
-      // comment out due to failure here not sure why inline approval button not exist
-      // xit("Approve remaining Inline Approval if any", () => {
-      //   cy.get(`[data-cy="form.builder.request.approve"]`).should("exist").then(() => {
-      //     cy.lhrApproveWithoutApi();
-      //     cy.progressBarShouldNotExist();
-      //     cy.listLoadingElementShouldNotExist();
-      //     cy.landingPageLoadingElementShouldNotExist();
-      //   });
-      // });
+      it("Approve remaining Inline Approval if any", () => {
+        cy.contains("Approve").then((approve) => {
+          if (approve) {
+            cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
+              if (el.text() === "Approve") {
+                cy.lhrApproveWithoutApi();
+                cy.progressBarShouldNotExist();
+                cy.listLoadingElementShouldNotExist();
+                cy.landingPageLoadingElementShouldNotExist();
+              }
+            });
+          }
+        });
+      });
 
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();

@@ -850,8 +850,6 @@ context("Verify Paper LHR", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.wait(1000);
         cy.get(`[data-cy="lhr-selected-part"]`).autocompleteSelect("Part document");
-        // cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
-        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get(`[data-cy="Part to be Manufactured"]`)
           .parent().parent().parent().parent().next("p")
@@ -1171,8 +1169,6 @@ context("Verify Paper LHR", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.wait(1000);
         cy.get(`[data-cy="lhr-selected-part"]`).autocompleteSelect("Part document");
-        // cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
-        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.saveBarShouldNotExist();
         cy.get(`[data-cy="Part to be Manufactured"]`)
           .parent().parent().parent().parent().next("p")
