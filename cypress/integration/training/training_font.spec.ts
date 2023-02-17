@@ -478,7 +478,7 @@ context("Training font test", { tags: ["@timetool"] }, () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

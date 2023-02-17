@@ -1135,7 +1135,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
       cy.wait(3000);
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

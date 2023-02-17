@@ -560,7 +560,13 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -678,6 +684,12 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   });
 
   context("Check pending training notification", () => {
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it(`Verify training notification`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });

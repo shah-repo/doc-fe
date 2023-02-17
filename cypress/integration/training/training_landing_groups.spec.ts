@@ -772,7 +772,7 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Verify trainings present on Training Curriculum page with no groups", () => {
     it("'user training title' should be present with no group", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(3000);
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();

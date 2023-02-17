@@ -322,6 +322,13 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -536,7 +543,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
   context("Submit for approval", () => {
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -644,7 +651,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       });
 
       it("Select 'Trainings' tab", () => {
-        cy.contains("Trainings").eq(0).arrowClick();
+        cy.dashOpenTrainingsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
