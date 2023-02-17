@@ -253,7 +253,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       handleSelection={handleDocTypeSelection}
       handleTemplateSelection={handleFormSelection}
       formIds={forms}
-      formIdsLoading={idAsync.asyncState.status === AsyncStatus.Active}
+      areFormIdsLoading={idAsync.asyncState.status === AsyncStatus.Active}
       {...{
         documentTypes,
         isRecord,

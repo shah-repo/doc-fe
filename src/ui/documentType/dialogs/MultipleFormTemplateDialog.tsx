@@ -19,7 +19,7 @@ import { styles } from "./FormListDialog/FormListDialog.styles";
 interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[];
   formIds: DocumentTypeByIdForm[];
-  formIdsLoading?: boolean;
+  areFormIdsLoading?: boolean;
   dialog: DialogHandler;
   handleSelection: (id: string) => void;
   handleTemplateSelection: (id: string) => void;
@@ -31,7 +31,7 @@ interface DocumentTypeDialogProps extends FormikProps<any> {
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
-  formIdsLoading = false,
+  areFormIdsLoading = false,
   documentTypes,
   handleSelection,
   handleTemplateSelection,
@@ -148,7 +148,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               size="sm"
               autocompleteProps={{
                 id: "MultipleFormTemplate-selectDocForm",
-                isLoading: formIdsLoading,
+                isLoading: areFormIdsLoading,
               }}
               options={activeDocTypes.map((docType) => ({
                 label: docType.documentTypeName,
@@ -158,7 +158,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               label={isRecord ? "record.select.type" : "supplier.select.type" }
               data-cy={isRecord ? "record.select.type" : "supplier.select.type" }
             />
-            {!formIdsLoading && formIds.length > 1 && (
+            {!areFormIdsLoading && formIds.length > 1 && (
               <AutocompleteField
                 name="selectForm"
                 size="sm"
