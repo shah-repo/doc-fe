@@ -158,8 +158,9 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               label={isRecord ? "record.select.type" : "supplier.select.type" }
               data-cy={isRecord ? "record.select.type" : "supplier.select.type" }
             />
-            {!areFormIdsLoading && formIds.length > 1 && (
+            {formIds.length > 1 && (
               <AutocompleteField
+                isDisabled={areFormIdsLoading}
                 name="selectForm"
                 size="sm"
                 autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
