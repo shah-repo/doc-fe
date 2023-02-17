@@ -1072,6 +1072,7 @@
   "form.builder.audit.replacement": "{type} replacement to {value} for step {step}",
   "form.builder.owner.input.warning": "There are contributors to the document. Contributors {contributors} should be added as approvers.",
   "form.builder.select": "Select",
+  "form.builder.enter": "Enter",
   "form.builder.change": "Change",
   "form.builder.lot.number": "Lot Number",
   "form.builder.parts.manufactured": "Part to be Manufactured",

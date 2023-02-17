@@ -140,25 +140,33 @@ Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
 });
 
 Cypress.Commands.add("trLandingPageUsername", (params: {username}) => {
-  cy.get(`[aria-colindex="5"] [class="k-textbox"]`).arrowClick().wait(500);
-  cy.get(`[aria-colindex="5"] [class="k-textbox"]`).clear().arrowType(params.username);
-  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`[aria-colindex="5"] .k-filtercell > input`).clear().arrowType(params.username, { force: true });
+  cy.wait(3000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
   cy.get(`[aria-colindex="4"] .k-filtercell > input`).clear().arrowType(params.title, { force: true });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.wait(2000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
   cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowClick().clear();
   cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.docId);
-  cy.landingPageLoadingElementShouldAppear();
+  cy.wait(2000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
   cy.get(`th[aria-colindex="8"] span.k-select`).arrowClick();
-  cy.get("ul>li[role=option]").contains(params.completed).arrowClick().wait(1000);
+  cy.get("ul>li[role=option]").contains(params.completed).arrowClick().wait(2000);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -169,17 +177,26 @@ Cypress.Commands.add("trLandingPageClearFilter", () => {
 
 Cypress.Commands.add("trLandingPageClearFilterWithoutApi", () => {
   cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-  cy.landingPageLoadingElementShouldAppear();
+  cy.wait(2000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageName", (params: {name}) => {
   cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.name);
-  cy.landingPageLoadingElementShouldAppear();
+  cy.wait(2000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPagetrId", (params: {trId}) => {
   cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType(params.trId);
-  cy.landingPageLoadingElementShouldAppear();
+  cy.wait(2000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDynamicParams", (params: {dynamicParams}) => {
@@ -203,8 +220,7 @@ Cypress.Commands.add(
   "setTimeTravelToComplete",
   (params: { tasktype: string; days: string; status: string }) => {
     cy.reload();
-    cy.progressBarShouldNotExist();
-    cy.listLoadingElementShouldNotExist();
+    cy.landingPageLoadingElementShouldAppear();
     cy.get(`tr[data-grid-row-index="0"]`)
       .find("td")
       .should("contain.text", params.tasktype)
