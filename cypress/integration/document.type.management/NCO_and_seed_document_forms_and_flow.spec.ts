@@ -740,7 +740,6 @@ context("NCO document type management with record doc type", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
-      cy.wait(2000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -872,7 +871,9 @@ context("NCO document type management with record doc type", () => {
     it("Check Seed document is created", () => {
       cy.dlClearFilters();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[aria-colindex="1"] input`).arrowType("FM-00003").should("exist");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "FM-00003" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`td[data-grid-col-index="2"]`).should("contain.text", "Seed document");
     });
   });
 });

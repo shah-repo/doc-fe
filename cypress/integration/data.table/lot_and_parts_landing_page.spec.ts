@@ -2,11 +2,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -40,6 +42,7 @@ const owner = "OWNER";
 const arId = "AR ID";
 const status = "STATUS";
 const effectiveDate = "EFFECTIVE DATE";
+const lotDateSuffix = momentInPST().format("YYMMDD");
 
 context("Test Lots and Parts landing page", () => {
   before(() => {
@@ -413,7 +416,7 @@ context("Test Lots and Parts landing page", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041301",
+            docId: `LOT #${lotDateSuffix}01`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -472,7 +475,7 @@ context("Test Lots and Parts landing page", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041302",
+            docId: `LOT #${lotDateSuffix}02`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -531,7 +534,7 @@ context("Test Lots and Parts landing page", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041303",
+            docId: `LOT #${lotDateSuffix}03`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -899,10 +902,10 @@ context("Test Lots and Parts landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for LOT #", () => {
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="1"] input`).arrowType("LOT #22041303");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}03` });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "LOT #22041303");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: `LOT #${lotDateSuffix}03` });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -916,37 +919,37 @@ context("Test Lots and Parts landing page", () => {
       });
 
       it("Verify filter for Part Number/Rev", () => {
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="3"] input`).arrowType("PRT-00005");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "PRT-00005" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "PRT-00005");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "PRT-00005" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Initial Quantity", () => {
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="4"] input`).arrowType("5");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 4, input: "5" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "5");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "5" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for Template", () => {
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).arrowType("FM-00008");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 5, input: "FM-00008" });
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "FM-00008");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "FM-00008" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
         cy.landingPageLoadingElementShouldAppear();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
       });
     });
 
@@ -983,7 +986,7 @@ context("Test Lots and Parts landing page", () => {
 
     context("Verify dropdown filters", () => {
       it("Verify LOT # dropdown filters", () => {
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
@@ -991,7 +994,7 @@ context("Test Lots and Parts landing page", () => {
       it(`Verify LOT # "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("1");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "1" });
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1000,9 +1003,9 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("LOT #22041303");
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}03` }).unClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1011,9 +1014,9 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("LOT #22041303");
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
+        cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}03` });
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1022,9 +1025,9 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("LOT #2204130");
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
+        cy.get("ul>li[role=option]").contains("Starts with").arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}0` });
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1033,9 +1036,9 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-        cy.get(`th[aria-colindex="1"] input`).arrowType("1");
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
+        cy.get("ul>li[role=option]").contains("Ends with").arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "1" });
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1044,7 +1047,7 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -1054,7 +1057,7 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
@@ -1062,10 +1065,9 @@ context("Test Lots and Parts landing page", () => {
         cy.landingPageLoadingElementShouldAppear();
       });
 
-
       it(`Verify LOT # "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -1075,7 +1077,7 @@ context("Test Lots and Parts landing page", () => {
 
       it(`Verify LOT # "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-        cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
@@ -1143,6 +1145,7 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Column grouping should be displayed`, () => {
       cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column");
       cy.unClick();
     });
@@ -1150,6 +1153,7 @@ context("Test Lots and Parts landing page", () => {
     it(`Verify grouping`, () => {
       cy.get("tr.k-grouping-row").should("not.exist");
       cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.get("tr.k-grouping-row").should("have.length", "1");
@@ -1159,7 +1163,7 @@ context("Test Lots and Parts landing page", () => {
     });
 
     it(`Verify Part can be opened`, () => {
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
@@ -1172,42 +1176,42 @@ context("Test Lots and Parts landing page", () => {
 
   context("Verify filters on each field", () => {
     it("Verify filter for PART ID", () => {
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PRT-00007");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PRT-00007" });
       cy.landingPageLoadingElementShouldAppear();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "PRT-00007");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "PRT-00007" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for Revision", () => {
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="2"] input`).arrowType("1");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "1" });
       cy.landingPageLoadingElementShouldAppear();
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "1");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "1" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for TITLE", () => {
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).arrowType("Part document3");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 3, input: "Part document3" });
       cy.landingPageLoadingElementShouldAppear();
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "Part document3");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "Part document3" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for Owner", () => {
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).arrowType(USERS[1].name);
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 4, input: USERS[1].name });
       cy.landingPageLoadingElementShouldAppear();
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", USERS[1].name);
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: USERS[1].name });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for AR ID", () => {
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="5"] input`).arrowType("AR-00003");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 5, input: "AR-00003" });
       cy.landingPageLoadingElementShouldAppear();
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "AR-00003");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "AR-00003" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
@@ -1232,11 +1236,11 @@ context("Test Lots and Parts landing page", () => {
     it("Verify clear filters", () => {
       cy.trClearFilters();
       cy.landingPageLoadingElementShouldAppear();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
       cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
       cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
     });
@@ -1275,7 +1279,7 @@ context("Test Lots and Parts landing page", () => {
 
   context("Verify dropdown filters", () => {
     it("Verify PART ID dropdown filters", () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
     });
@@ -1283,7 +1287,7 @@ context("Test Lots and Parts landing page", () => {
     it(`Verify PART ID "Does not contain" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("7");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "7" });
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1292,9 +1296,9 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Is equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PRT-00007");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PRT-00007" });
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1303,9 +1307,9 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Is not equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PRT-00007");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PRT-00007" });
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1314,9 +1318,9 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Starts with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PRT-0000");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PRT-0000" });
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1325,9 +1329,9 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Ends with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("7");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "7" });
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1336,7 +1340,7 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Is null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -1346,7 +1350,7 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Is not null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
@@ -1354,10 +1358,9 @@ context("Test Lots and Parts landing page", () => {
       cy.landingPageLoadingElementShouldAppear();
     });
 
-
     it(`Verify PART ID "Is empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
@@ -1367,7 +1370,7 @@ context("Test Lots and Parts landing page", () => {
 
     it(`Verify PART ID "Is not empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
