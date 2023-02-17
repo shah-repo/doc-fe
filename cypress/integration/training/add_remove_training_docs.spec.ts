@@ -519,7 +519,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -549,6 +549,12 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Clear Filter", () => {
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("4 records should be created", () => {
@@ -583,7 +589,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -602,6 +608,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column for 'released doc1' should be present`, () => {
@@ -621,6 +628,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -683,7 +691,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -713,15 +721,25 @@ context("Add/Remove Training docs from Training Curriculum", () => {
   context("Verify Training Records", () => {
     it("Navigate to Training Records", () => {
       cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Training record for doc1 should be as it is", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.trLandingPageUsername({ username: USERS[12].name });
@@ -731,9 +749,13 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Training record for doc3", () => {
       cy.trLandingPageDocId({ docId: releasedDoc3Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc3Id)
         .and("contain", USERS[11].name).and("contain", "Pending");
       cy.trLandingPageUsername({ username: USERS[12].name });
@@ -744,9 +766,13 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Training record for doc2", () => {
       SystemRequirement("REQ-4570");
       cy.trLandingPageDocId({ docId: releasedDoc2Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc2Id)
         .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);

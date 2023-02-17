@@ -5,6 +5,7 @@ import {
   dashboardMyFeedsSelectors,
 } from "../../../state/ducks/dashboard.new/my.feeds";
 import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
+import { openDashboardToastr } from "../../components/notifications/DashboardStatus";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -57,6 +58,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
+      openDashboardToastr();
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });

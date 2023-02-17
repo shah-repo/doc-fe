@@ -504,7 +504,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.get("[data-cy=\"transitionButton\"]").arrowClick();
+      cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -551,7 +551,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.get("[data-cy=\"transitionButton\"]").arrowClick();
+      cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -709,13 +709,14 @@ context("LHRt using regular AR test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arEnterItemDescription({ name: "LHRT-00002" });
+      cy.arSelectItem({ name: "LHRT-00002" });
       cy.arEnterItemDescription({ description: "added document description" });
       cy.arEnterItemJustification({ justification: "justification for added document" });
       cy.arClickAddItemDone();
     });
 
     it("Add first Approver'", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -727,7 +728,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click 'Send To Review'", () => {
-      cy.get("[data-cy=\"transitionButton\"]").arrowClick();
+      cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

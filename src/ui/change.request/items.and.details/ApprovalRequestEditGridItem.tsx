@@ -32,7 +32,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               <FBAutocompleteAsync
                 name="proposedDocumentRevision"
                 label="form.builder.document"
-                placeholder="form.builder.select.document"
+                placeholder="form.builder.select"
                 optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
                 optionValueType="id"
                 rules="required"
@@ -47,7 +47,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             <FBTextField
               name="descriptionOfChange"
               label="form.builder.description.of.change"
-              placeholder="form.builder.enter.text"
+              placeholder="form.builder.enter"
               rules="required"
               multiline={true}
               rows={1}
@@ -57,7 +57,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             <FBTextField
               name="justificationOfChange"
               label="form.builder.justification.of.change"
-              placeholder="form.builder.enter.text"
+              placeholder="form.builder.enter"
               rules="required"
               multiline={true}
               rows={1}

@@ -277,7 +277,7 @@ context("Document form upgrade", () => {
     it("Select the Record form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Record form" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -320,7 +320,7 @@ context("Document form upgrade", () => {
 
       cy.dlFilterByDocTitle({ docTitle: "Test document form" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -358,7 +358,7 @@ context("Document form upgrade", () => {
 
       cy.dlFilterByDocTitle({ docTitle: "Record form" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Revise button", () => {
@@ -403,7 +403,7 @@ context("Document form upgrade", () => {
 
       cy.dlFilterByDocId({ docId: "FM-00004" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Revise button", () => {
@@ -448,7 +448,7 @@ context("Document form upgrade", () => {
 
       cy.dlFilterByDocId({ docId: "TDT-00005" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on upgrade to new form", () => {
@@ -497,7 +497,7 @@ context("Document form upgrade", () => {
 
     it("Select Record", () => {
       cy.dlFilterByDocId({ docId: "RD-00002" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on upgrade to new form", () => {

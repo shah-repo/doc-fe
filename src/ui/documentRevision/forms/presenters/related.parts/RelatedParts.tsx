@@ -33,7 +33,9 @@ import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
+import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
+import useDialog from "../../../../hooks/useDialog";
 import useStyles from "./RelatedPart.styles";
 import RelatedPartsState from "./RelatedParts.state";
 
@@ -300,6 +302,12 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
   const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
 
+  const confirmationDialog = useDialog();
+  const confirmAction = () => {
+    voidRelatedPart(listItem);
+    confirmationDialog.close();
+  };
+
   return (
     <TableRow hover key={listItem.documentRevisionId}
       data-cy="relatedPartsViewRow"
@@ -315,8 +323,15 @@ const RelatedPartViewRow: React.FunctionComponent<{
         <Checkbox
           checked={isVoided}
           disabled={isVoided || relatedPartsState.viewOnlyMode}
-          onChange={(e) => voidRelatedPart(listItem)}
+          onChange={confirmationDialog.open}
         />
+        {confirmationDialog.isOpen && (
+          <AlertDialog
+            dialog={confirmationDialog}
+            confirmAction={confirmAction}
+            message="documentRevision.void.alert"
+          />
+        )}
       </TableCell>
       <TableCell align="center" data-cy="viewIcon">
         <RemoveRedEyeIcon color="primary"

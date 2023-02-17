@@ -405,7 +405,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(params.documentType);
   cy.wait(1500);
-  cy.get(`div[id^="react-select"]`).contains(params.documentType).arrowClick({ force: true });
+  cy.get(`[id^="react-select"]`).contains(params.documentType).arrowClick({ force: true });
   cy.unClick();
 });
 
@@ -682,13 +682,13 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title);
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
