@@ -454,6 +454,7 @@ context("Mpi Layout", () => {
 
         it("Verify attachments are copied", () => {
           cy.get("[data-cy='mediaUploadField']>div>div>div>div>div").eq(5).arrowClick();
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy='mediaUploadField'] ul>li div[title]").each(($el) => {
             const attachName = $el.text();
             expect(attachName).to.be.oneOf(["image", "test", "video"]);

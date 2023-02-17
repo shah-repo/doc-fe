@@ -192,7 +192,7 @@ context("Regular Records test", () => {
 
     it("Record should appear in Recent", () => {
       SystemRequirement("REQ-5030");
-      cy.dashboardRecentTab();
+      cy.dashOpenRecentTab();
       cy.get(`[id="scrollable-auto-tabpanel-recent"] .MuiListItem-root`).eq(0)
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title");
@@ -234,7 +234,7 @@ context("Regular Records test", () => {
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 2 users", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
@@ -261,7 +261,7 @@ context("Regular Records test", () => {
     });
 
     it("Click approve for the Record", () => {
-      cy.dashboardToDoTab();
+      cy.dashOpenToDoTab();
       cy.dashApproverFirstFromListWithoutApi();
     });
   });
@@ -280,7 +280,7 @@ context("Regular Records test", () => {
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
@@ -292,12 +292,12 @@ context("Regular Records test", () => {
     });
 
     it("Click approve for the Record", () => {
-      cy.dashboardToDoTab();
+      cy.dashOpenToDoTab();
       cy.dashApproverFirstFromListWithoutApi();
     });
 
     it("Record notification should change to Released", () => {
-      cy.dashboardMyFeedTab();
+      cy.dashOpenMyFeedTab();
       cy.contains("RELEASED").parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title");

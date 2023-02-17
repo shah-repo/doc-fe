@@ -414,13 +414,20 @@ context("All regular users on new dashboard", () => {
   });
 
   context("Verify Dashboard tabs", () => {
-    it("Dashboard should have 2 tabs - 'My Feed' and 'Recent'", () => {
-      cy.get("[role=tablist] button").eq(0).should("contain.text", "My Feed");
-      cy.get("[role=tablist] button").eq(1).should("contain.text", "Recent");
+    it("Dashboard should have 3 tabs - 'My Feed' and 'Recent'", () => {
+      cy.get("[role=tablist] button").eq(0).should("contain.text", "To Do");
+      cy.get("[role=tablist] button").eq(1).should("contain.text", "My Feed");
+      cy.get("[role=tablist] button").eq(2).should("contain.text", "Recent");
     });
   });
 
   context("My Feed tab contains", () => {
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Own AR and records that are in review and awaiting approval from other users", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00002")
@@ -495,6 +502,12 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -781,7 +794,13 @@ context("All regular users on new dashboard", () => {
 
   context("Owner should see pending PO in My Feed", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -855,13 +874,13 @@ context("All regular users on new dashboard", () => {
 
     it("Clicking on the arrow should show the PO details", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `test_image.jpg` });
     });
 
     it("Buttons for PO should be displayed", () => {
@@ -886,6 +905,12 @@ context("All regular users on new dashboard", () => {
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
       cy.cmpTurnOffAutosave();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click PO", () => {
@@ -930,15 +955,23 @@ context("All regular users on new dashboard", () => {
     });
 
     it("Verify updated info on PO notification", () => {
-      cy.navigToDashboard();
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyPOItemExistsOnDashboard({ listItem: `test_image.jpg` });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`${USERS[1].name} should see 2 pending PO on dashboard`, () => {
@@ -954,6 +987,12 @@ context("All regular users on new dashboard", () => {
   });
 
   context("Update notification on approve PO", () => {
+    it("Switch to To Do   tab", () => {
+      cy.dashOpenToDoTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Click approve for PO", () => {
       cy.contains("needs your approval for").eq(0).trigger("mouseover");
       cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
@@ -963,6 +1002,12 @@ context("All regular users on new dashboard", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("update PO approvals on dashboard", () => {
@@ -1006,6 +1051,12 @@ context("All regular users on new dashboard", () => {
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
       cy.cmpTurnOffAutosave();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("PO is in approved state on dashboard", () => {

@@ -454,18 +454,22 @@ context("Training Flow test", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedFormId = x.text(); });
       cy.navigToApprovalRequestList();
-      cy.cmpClickCreateApprovalRequest();
+      cy.cmpClickCreateApprovalRequestWithoutApi();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
       cy.drEnterDocumentDescription({ description: "Description" });
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "approved form" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "approved form" });
+      cy.arEnterItemDescription({ description: "Document description" });
+      cy.arEnterItemJustification({ justification: "Justification for added document" });
+      cy.arClickAddItemDone();
       cy.arSaveApiCall();
-      cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
+      cy.arSelectApprovalTab();
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email, noWait: true });
       cy.arSaveApiCall();
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.arApproveARWithoutApi();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
@@ -570,7 +574,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -736,7 +740,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -807,7 +811,7 @@ context("Training Flow test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Verify training notification", () => {
@@ -929,7 +933,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -961,7 +965,7 @@ context("Training Flow test", () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

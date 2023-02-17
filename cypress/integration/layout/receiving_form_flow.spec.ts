@@ -366,9 +366,8 @@ context("Receiving landing page test", () => {
 
     it("Filter document by ID", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="1"] input`).arrowType("FM-00004");
-      cy.listLoadingElementShouldNotExist();
-      cy.dlSelectFirstDocument();
+      cy.contains("FM-00004").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify that Approvals field is automatically added", () => {
@@ -531,9 +530,8 @@ context("Receiving landing page test", () => {
 
     it("Filter document by ID", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="1"] input`).arrowType("FM-00005");
-      cy.listLoadingElementShouldNotExist();
-      cy.dlSelectFirstDocument();
+      cy.contains("FM-00005").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify that Approvals field is automatically added", () => {

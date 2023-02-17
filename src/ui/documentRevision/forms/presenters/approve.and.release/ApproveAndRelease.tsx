@@ -445,7 +445,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
 
   // MARK: @render
-  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove || revisionStage !== 1) {
+  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove) {
     return null;
   }
 
@@ -455,6 +455,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         {isNewLayout && !isRecord ? (
           renderAsButton ?
             <SplitReleaseButton
+              revisionStage={revisionStage}
               onClick = {isRecord ? alertDialog.open : openDialog} />
             :
             <StyledMenuListItem button alignItems="flex-start">

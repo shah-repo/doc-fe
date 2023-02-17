@@ -240,7 +240,8 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
 });
 
 Cypress.Commands.add("pmSubmitForApprovalWithoutAPI", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0)
+    .contains("Submit for approval").arrowClick({ force: true });
   cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

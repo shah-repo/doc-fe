@@ -110,6 +110,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         doNotPrompt={doNotPrompt}
         hideSideBar={hideSideBar}
         currentDocRevId = {currentDocRevId}
+        inDialog={inDialog}
       />
     </FormContext.Provider>
   );

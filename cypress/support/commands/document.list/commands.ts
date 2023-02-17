@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { integerType } from "aws-sdk/clients/iam";
-import { CyRoutes } from "../../routes";
 
 export { };
 
@@ -89,7 +88,7 @@ Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
   cy.get(`[aria-colindex="1"] .k-filtercell >input`).arrowType(params.docId).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
@@ -98,7 +97,7 @@ Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
   cy.get(`[aria-colindex="2"] .k-filtercell >input`).arrowType(params.revision).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
@@ -126,7 +125,7 @@ Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
 
 Cypress.Commands.add("dlFilterByOwner", (params: {owner: string }) => {
   cy.get(`[aria-colindex="5"] .k-filtercell >input`).arrowType(params.owner).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
@@ -135,7 +134,7 @@ Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
 
 Cypress.Commands.add("dlFilterByArId", (params: {arId: string }) => {
   cy.get(`[aria-colindex="6"] .k-filtercell >input`).arrowType(params.arId).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
@@ -194,9 +193,7 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 });
 
 Cypress.Commands.add("dlSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-    cy.get("tr.k-master-row").first().arrowClick();
-  });
+  cy.get("tr.k-master-row").first().arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });
@@ -208,9 +205,7 @@ Cypress.Commands.add("dlSelectFirstDocumentWithoutApi", () => {
 });
 
 Cypress.Commands.add("dlSelectFirstDocumentItem", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-    cy.get("tr.k-master-row").first().children("td").first().arrowClick();
-  });
+  cy.get("tr.k-master-row").first().children("td").first().arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });

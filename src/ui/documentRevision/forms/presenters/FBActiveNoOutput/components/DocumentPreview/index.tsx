@@ -161,6 +161,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     };
   }, [_formState, initialValues, workspaceState, mode, formState, schema]);
 
+  useEffect(() => () => {
+    documentRevision.document.documentType = documentType;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Observer>
       {() => (

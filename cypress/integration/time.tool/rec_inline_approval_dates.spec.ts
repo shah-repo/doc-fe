@@ -346,10 +346,10 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
   });
 
   context("Request for approval and send notification to email", () => {
-    it("Verify no PENDING FOR APPROVAL text is present on first inline", () => {
+    it("Verify no PENDING text is present on first inline", () => {
       cy.get(`button[data-cy="fb-control-btn"]`).contains("Approve")
         .parentsUntil("button").parent().parent().parent()
-        .should("not.contain.text", "PENDING APPROVAL");
+        .should("not.contain.text", "PENDING");
     });
 
     it("Click request for approval on first inline", () => {
@@ -358,14 +358,20 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify PENDING FOR APPROVAL text is present on first inline", () => {
+    it("Verify PENDING text is present on first inline", () => {
       cy.get(`button[data-cy="fb-control-btn"]`).contains("Approve")
         .parentsUntil("button").parent().parent().parent()
-        .should("contain.text", "PENDING APPROVAL");
+        .should("contain.text", "PENDING");
     });
 
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -456,10 +462,10 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
   });
 
   context("Request for approval and send notification to email", () => {
-    it("Verify no PENDING FOR APPROVAL text is present on first inline", () => {
+    it("Verify no PENDING text is present on first inline", () => {
       cy.get(`[data-cy="form.builder.request.approval"]`).eq(1)
         .parentsUntil("button").parent().parent().parent()
-        .should("not.contain.text", "PENDING APPROVAL");
+        .should("not.contain.text", "PENDING");
     });
 
     it("Click request for approval on first inline", () => {
@@ -468,14 +474,20 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify PENDING FOR APPROVAL text is present on first inline", () => {
+    it("Verify PENDING text is present on first inline", () => {
       cy.get(`[data-cy="form.builder.request.approval"]`).eq(1)
         .parentsUntil("button").parent().parent().parent()
-        .should("contain.text", "PENDING APPROVAL");
+        .should("contain.text", "PENDING");
     });
 
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

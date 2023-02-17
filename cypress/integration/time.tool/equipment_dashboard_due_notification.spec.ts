@@ -845,6 +845,12 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
       cy.authLoginToDashboard({ USER: USERS[12], employeeId: coordinatorUser.id });
     });
 
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Verify Dashboard list", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days` });
       cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days` });
@@ -906,6 +912,12 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
             NavigationItems.DOCUMENT_CONTROL);
         });
 
+        it("Switch to myfeed tab", () => {
+          cy.dashOpenMyFeedTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
         it("Verify Dashboard list", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
@@ -949,6 +961,12 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
           cy.navigListExistsCheck(
             NavigationItems.DASHBOARD,
             NavigationItems.DOCUMENT_CONTROL);
+        });
+
+        it("Switch to myfeed tab", () => {
+          cy.dashOpenMyFeedTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify Dashboard list", () => {

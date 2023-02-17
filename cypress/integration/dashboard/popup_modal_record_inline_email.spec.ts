@@ -334,6 +334,12 @@ context("Records Inline approval email popup modal", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Check if Record is 'IN REVIEW'", () => {
       cy.get("[data-cy='dashboardFeedList']>div").contains("IN REVIEW").arrowClick();
     });
@@ -447,6 +453,13 @@ context("Records Inline approval email popup modal", () => {
       cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginFirst.id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -492,10 +505,19 @@ context("Records Inline approval email popup modal", () => {
       cy.wait(3000);
     });
 
-    it("Check if Record is 'In Review'", () => {
+    it("Navigate to Dashboard", () => {
       cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check if Record is 'IN REVIEW'", () => {
       cy.get("[data-cy='dashboardFeedList']>div").contains("IN REVIEW").arrowClick();
     });
 
@@ -606,6 +628,12 @@ context("Records Inline approval email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginFirst.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

@@ -370,7 +370,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add File Upload", () => {
@@ -1011,9 +1011,11 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Open EB", () => {
-      cy.navigToRecords();
+      cy.navigToRecords().wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlFilterByDocId({ docId: "EB-00001" });
-      cy.dlSelectFirstDocument();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlSelectFirstDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1298,7 +1300,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.url().then((url: any) => {
         ebUrl = url;
       });
@@ -1316,8 +1318,7 @@ context("Export Engineering Build doc", () => {
 
     it("Open EB", () => {
       cy.visit(ebUrl);
-      cy.wait(3000);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1341,8 +1342,7 @@ context("Export Engineering Build doc", () => {
   context("Open EB and export pdf by send mail", () => {
     it("Open EB", () => {
       cy.visit(ebUrl);
-      cy.wait(3000);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 

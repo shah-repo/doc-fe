@@ -158,7 +158,7 @@ context("Document revise test", () => {
 
   context("Verify 'Next Revision' change is shown on document list", () => {
     it("Navigate to created document", () => {
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Revise document with 'Next Revision' option", () => {
@@ -190,7 +190,7 @@ context("Document revise test", () => {
   context("Verify 'Upgrade to Next Revision Level' change is shown on document list", () => {
     context("Revise document to 'Upgrade to Next Revision Level'", () => {
       it("Navigate to created document", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Revise document with 'Next Revision' option", () => {
@@ -210,7 +210,7 @@ context("Document revise test", () => {
       });
 
       it("Click Create a Approval Request button", () => {
-        cy.cmpClickCreateApprovalRequest();
+        cy.cmpClickCreateApprovalRequestWithoutApi();
       });
 
       it("Enter title AR title: 'AR for Upgrade to Next Revision Level'", () => {
@@ -223,16 +223,24 @@ context("Document revise test", () => {
       });
 
       it("Add created document revision", () => {
-        cy.arClickAddDocument();
-        cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
+        cy.arSelectItem({ name: documentRevisionName });
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
+      });
+
+      it("Click Save button", () => {
+        cy.arSaveApiCallWithoutApi();
       });
 
       // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
       it("Add first approver to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       });
 
@@ -274,7 +282,7 @@ context("Document revise test", () => {
   context("Verify 'Obsolete' change is shown on document list", () => {
     context("Revise document to 'Obsolete'", () => {
       it("Navigate to created document", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Revise document with 'Obsolete' option", () => {
@@ -303,14 +311,22 @@ context("Document revise test", () => {
       });
 
       it("Add created document revision", () => {
-        cy.arClickAddDocument();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
         cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arEnterItemDescription({ description: "added document description" });
+        cy.arEnterItemJustification({ justification: "justification for added document" });
+        cy.arClickAddItemDone();
+      });
+
+      it("Click Save button", () => {
+        cy.arSaveApiCallWithoutApi();
       });
 
       it("Add first approver to approval request on approver list", () => {
+        cy.arSelectApprovalTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       });
 

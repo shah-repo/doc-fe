@@ -589,22 +589,32 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.get("#Checkbox-box").arrowClick();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedDoc2Id = x.text(); });
       cy.navigToApprovalRequestList();
-      cy.cmpClickCreateApprovalRequest();
+      cy.cmpClickCreateApprovalRequestWithoutApi();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentDescription({ description: "Description" });
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "approved doc2" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "approved doc2" });
+      cy.arEnterItemDescription({ description: "Document description" });
+      cy.arEnterItemJustification({ justification: "Justification for added document" });
+      cy.arClickAddItemDone();
       cy.arSaveApiCall();
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+      cy.arSelectApprovalTab();
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email, noWait: true });
       cy.arSaveApiCall();
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
       cy.arApproveARWithoutApi();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
@@ -712,7 +722,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -741,7 +751,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
   context("Check training notifications and completion text", () => {
     context(`Verify for ${USERS[1].name}`, () => {
       it("Goto Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
       });
 
       it("Verify training notifications", () => {
@@ -763,7 +773,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
       });
 
       it("Goto Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
       });
 
       it("Open training page for doc2", () => {
@@ -804,7 +814,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
       });
 
       it("Goto Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -915,7 +925,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -944,7 +954,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
   context("Check training notifications and completion text", () => {
     context(`Verify for ${USERS[1].name}`, () => {
       it("Goto Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

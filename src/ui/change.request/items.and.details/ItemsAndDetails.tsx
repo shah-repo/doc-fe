@@ -16,8 +16,14 @@ import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDet
 
 const Loader = () => {
   const classes = useStyles();
+
   return (
-    <div className={classes.loader}>Loading ...</div>
+    <div
+      data-cy="ar.items.loader"
+      className={classes.loader}
+    >
+      <Text translation="common.loading" />
+    </div>
   );
 };
 
@@ -41,6 +47,7 @@ const TopSection: React.FunctionComponent<{
         <Grid item>
           <Typography>
             <Button
+              data-cy="approvalRequest.items.button.addText"
               className={classes.btnMargin}
               disabled={!isButtonShown}
               color="primary"
@@ -84,7 +91,12 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   function resetAndCancelEdit() {
-    formState.reset();
+    // remove values for formState for keys
+    const removeKeys = ["proposedDocumentRevision", "descriptionOfChange", "justificationOfChange"];
+    removeKeys.forEach((item) => {
+      formState.setFieldValue(item, undefined);
+    });
+
     setIsEditRowVisible(false);
     itemsAndDetailsState.setViewItemActionsVisibility(true);
   }

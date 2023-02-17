@@ -1033,7 +1033,7 @@ context("Export training curriculum", () => {
 
   context("Check training notification for user 1", () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1193,7 +1193,7 @@ context("Export training curriculum", () => {
 
   context("Check training notification for user 1", () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

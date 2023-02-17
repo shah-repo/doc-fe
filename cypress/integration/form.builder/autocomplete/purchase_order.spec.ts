@@ -150,7 +150,7 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Click 'Approve' button", () => {
-        cy.ebApproveWithoutApi();
+        cy.poApproveWithoutApi();
         cy.wait(3000);
       });
     });

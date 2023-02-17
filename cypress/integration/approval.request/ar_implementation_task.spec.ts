@@ -224,15 +224,15 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it("Select document tab", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocumentWithoutApi();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -246,6 +246,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
     it("Add approvers to approval request on approver list", () => {
       cy.wait(1000);
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 

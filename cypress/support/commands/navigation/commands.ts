@@ -67,11 +67,13 @@ Cypress.Commands.add("navigToDashboard", () => {
     });
 
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDashboardWithoutApi", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
@@ -162,9 +164,7 @@ Cypress.Commands.add("navigToReceivableList", () => {
 });
 
 Cypress.Commands.add("navigToEquipment", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
-  });
+  cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
   cy.landingPageLoadingElementShouldNotExist();
 });
 

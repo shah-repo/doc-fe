@@ -16,7 +16,6 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -253,12 +252,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               }}
             />
           </Grid>}
-          {
-            type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
-            <Grid item xs={12}>
-              <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
-            </Grid>
-          }
           {enableRevision && <Grid item xs={6}>
             {/* hack for rerender revision stage */}
             <Observer>
