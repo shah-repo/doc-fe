@@ -205,7 +205,7 @@ context("Create new LHRT Layout Verification", () => {
         cy.intPageVerifyTrainingRequiredExist();
       });
 
-      xit("select 'Training required' field", () => {
+      it("select 'Training required' field", () => {
         cy.get("[id=\"Checkbox-box\"]").eq(1).arrowClick();
       });
 
@@ -395,7 +395,7 @@ context("Create new LHRT Layout Verification", () => {
         cy.fbAddNewFieldButton();
       });
 
-      xit("Add Select field", () => {
+      it("Add Select field", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
