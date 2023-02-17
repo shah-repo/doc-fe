@@ -632,18 +632,21 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("clear filers", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Training record for ${USERS[11].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -675,6 +678,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[role='dialog']>button").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Training record for ${USERS[13].name} should not be present`, () => {
@@ -683,6 +687,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[class="k-grid-norecords"]`).should("have.text", "No results found");
     });
 
@@ -692,6 +697,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[12].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -729,6 +735,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[14].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -738,6 +745,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check if 'I completed training on' message is displayed", () => {
@@ -767,6 +775,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[7].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -776,6 +785,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check if 'I completed training on' message is displayed", () => {
@@ -813,6 +823,7 @@ context("Add/Remove users from Training Curriculum", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify training notification should not present", () => {
