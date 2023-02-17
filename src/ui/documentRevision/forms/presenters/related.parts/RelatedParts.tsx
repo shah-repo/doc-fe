@@ -304,14 +304,30 @@ const RelatedPartViewRow: React.FunctionComponent<{
     confirmationDialog.close();
   };
 
+  const title = (isVoided ? listItem.name : `${rootPartName} ${listItem.suffixName && `- ${listItem.suffixName}`}`);
+
   return (
     <TableRow hover key={listItem.documentRevisionId}>
-      <TableCell align="left">
+      <TableCell align="left" className={classes.relatedPartViewRowCell}>
         {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
       </TableCell>
-      <TableCell align="left">
-        {isVoided && <span>{listItem.name}</span>}
-        {!isVoided && <span>{rootPartName} - <b>{listItem.suffixName}</b></span>}
+      <TableCell align="left" className={classes.relatedPartViewRowCell}>
+        <Tooltip title={
+          <span>
+            {isVoided ? listItem.name :
+              <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
+          </span>
+        }
+        disableHoverListener={!(title.length > 55)}
+        placement="bottom"
+        classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+        arrow >
+          <span className={classes.relatedPartViewRowTitleCell}>
+            {isVoided ? listItem.name :
+              <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
+          </span>
+        </Tooltip>
+
       </TableCell>
       <TableCell align="center">
         <Checkbox
