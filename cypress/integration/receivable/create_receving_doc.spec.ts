@@ -466,7 +466,8 @@ context("Create receivable test", () => {
   context("Create receivable", () => {
     context("Navigate to receivables list and click create", () => {
       it("Navigate to receivable list", () => {
-        cy.navigToReceivableList();
+        cy.progressBarShouldNotExist();
+        cy.navigToReceivableListWithoutApi();
       });
 
       it("Click create receivable", () => {
