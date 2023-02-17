@@ -16,7 +16,7 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { DocumentProposedId } from "../../../state/ducks/documents/types";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
+import { AsyncState, AsyncStatus } from "../../../state/types";
 import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
@@ -253,6 +253,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       handleSelection={handleDocTypeSelection}
       handleTemplateSelection={handleFormSelection}
       formIds={forms}
+      formIdsLoading={idAsync.asyncState.status === AsyncStatus.Active}
       {...{
         documentTypes,
         isRecord,
