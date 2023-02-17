@@ -796,7 +796,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check({ force: true });
       });
 
       it("Checkbox option 1 checked", () => {
@@ -1073,7 +1073,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
@@ -1274,7 +1274,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify created docs", () => {
       it("Navigate to document list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
@@ -1299,6 +1299,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Filter by doc-id", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "FM-00004" });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Select first doc", () => {
@@ -1338,7 +1339,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check({ force: true });
       });
 
       it("Checkbox option 1 checked", () => {
@@ -1411,7 +1412,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
@@ -1421,7 +1422,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify created docs", () => {
       it("Navigate to document list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
@@ -1430,6 +1431,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Filter docs by type", () => {
         cy.dlFilterByType({ type: "TPUP" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify doc-ids are correct for created doc", () => {
