@@ -459,6 +459,7 @@ context("Create receivable test", () => {
     context("Login user when he doesn't have privileges", () => {
       it("Login user to dashboard", () => {
         cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
+        cy.progressBarShouldNotExist();
       });
     });
   });
@@ -466,7 +467,6 @@ context("Create receivable test", () => {
   context("Create receivable", () => {
     context("Navigate to receivables list and click create", () => {
       it("Navigate to receivable list", () => {
-        cy.progressBarShouldNotExist();
         cy.navigToReceivableListWithoutApi();
       });
 
@@ -576,7 +576,7 @@ context("Create receivable test", () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
           cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.listLoadingElementShouldNotExist().wait(1000);
         });
 
         it("Click 'Submit for Approval' button", () => {
