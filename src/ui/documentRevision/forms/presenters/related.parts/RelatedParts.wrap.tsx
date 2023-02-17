@@ -78,7 +78,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const createPartAsync = useAsync({
     onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
-      console.log("Setting false");
       setSubPartBeingAdded(false);
       if (!createdDocumentRevision) {
         return;
@@ -148,10 +147,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const createNewDocument = (relatedPartDetails?) => {
     if (isSubPartBeingAdded) {
-      console.log("Returning false");
       return;
-    } else {
-      console.log("Check failed");
     }
 
     let docDto = {
