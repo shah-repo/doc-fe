@@ -598,14 +598,20 @@ context("Training by Groups", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Verify updation of training data", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
-      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -649,10 +655,15 @@ context("Training by Groups", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title update")
         .and("contain", USERS[12].name).and("contain", "Released").and("contain", "Group2, Group3");
     });
