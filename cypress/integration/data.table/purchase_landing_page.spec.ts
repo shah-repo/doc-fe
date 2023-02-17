@@ -722,13 +722,12 @@ context("Purchase Order Landing Page", () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
-    // this code is commented due to ENC-14153
-    // it("Verify filter for 'PO Status'", () => {
-    //   cy.get(`[aria-colindex="3"] input`).arrowType("N/A");
-    //   cy.landingPageLoadingElementShouldNotExist();
-    //   cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
-    //   cy.dlVerifyDocCounter({ docCounterNumber: 1 });
-    // });
+    it("Verify filter for 'PO Status'", () => {
+      cy.get(`[aria-colindex="3"] input`).arrowType("N/A");
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
+      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+    });
 
     it("Verify filter for 'Supplier'", () => {
       cy.filterLandingPageColumnFilter({ colIndex: 4, input: "N/A" });
@@ -767,7 +766,7 @@ context("Purchase Order Landing Page", () => {
       cy.landingPageLoadingElementShouldNotExist();
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "POT-00001" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "1" });
-      // cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "N/A" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "N/A" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "N/A" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "N/A" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 6, input: "N/A" });
@@ -780,7 +779,7 @@ context("Purchase Order Landing Page", () => {
       cy.landingPageLoadingElementShouldNotExist();
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
-      // cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
       cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 6, input: "" });

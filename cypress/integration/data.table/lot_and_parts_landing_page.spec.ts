@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -40,6 +41,7 @@ const owner = "OWNER";
 const arId = "AR ID";
 const status = "STATUS";
 const effectiveDate = "EFFECTIVE DATE";
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 context("Test Lots and Parts landing page", () => {
   before(() => {
@@ -413,7 +415,7 @@ context("Test Lots and Parts landing page", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041301",
+            docId: `LOT #${lotDateSuffix}01`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -472,7 +474,7 @@ context("Test Lots and Parts landing page", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041302",
+            docId: `LOT #${lotDateSuffix}02`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -531,7 +533,7 @@ context("Test Lots and Parts landing page", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041303",
+            docId: `LOT #${lotDateSuffix}03`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -900,9 +902,9 @@ context("Test Lots and Parts landing page", () => {
     context("Verify filters on each field", () => {
       it("Verify filter for LOT #", () => {
         cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
-        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "LOT #22041303" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}03` });
         cy.landingPageLoadingElementShouldAppear();
-        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "LOT #22041303" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: `LOT #${lotDateSuffix}03` });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -1002,7 +1004,7 @@ context("Test Lots and Parts landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "LOT #22041303" }).unClick();
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}03` }).unClick();
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1013,7 +1015,7 @@ context("Test Lots and Parts landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick().wait(500);
-        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "LOT #22041303" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}03` });
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
@@ -1024,7 +1026,7 @@ context("Test Lots and Parts landing page", () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick().wait(500);
-        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "LOT #2204130" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: `LOT #${lotDateSuffix}0` });
         cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
