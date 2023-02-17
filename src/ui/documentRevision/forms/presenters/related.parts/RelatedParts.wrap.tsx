@@ -72,11 +72,14 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   relatedPartsState.setViewOnlyMode(viewOnly);
 
   const [parentPartStatus, setParentPartStatus] = useState(relatedPartsStatus);
+  const [isSubPartBeingAdded, setSubPartBeingAdded] = useState(false);
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
   const createPartAsync = useAsync({
     onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
+      console.log("Setting false");
+      setSubPartBeingAdded(false);
       if (!createdDocumentRevision) {
         return;
       }
@@ -89,6 +92,9 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         // populate the list with the new added part
         relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
       }
+    },
+    onError: () => {
+      setSubPartBeingAdded(false);
     },
   });
 
@@ -141,6 +147,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
 
   const createNewDocument = (relatedPartDetails?) => {
+    if (isSubPartBeingAdded) {
+      console.log("Returning false");
+      return;
+    } else {
+      console.log("Check failed");
+    }
+
     let docDto = {
       formDocument: {
         id: get(documentRevision, "formDocumentId"),
@@ -177,6 +190,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       });
     }
 
+    setSubPartBeingAdded(true);
     createPartAsync.start(createRelatedPartAction, documentRevision.document.id, documentRevision.id, docDto,
       relatedPartDetails?.name, createPartAsync);
   };

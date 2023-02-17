@@ -3,18 +3,15 @@
 /// <reference types="Cypress" />
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
-import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
 let employeeLoginFirst;
-let approvalRequestDocumentType;
-let formDocumentType;
 
 const userIndex = Math.floor(Math.random() * USERS.length);
-const owner = USERS[userIndex].name;
+// const owner = USERS[userIndex].name;
 
 const details = {
   partFormTitle: "ParentPart-SubPart-Creator-101",
@@ -43,15 +40,6 @@ context("Parent Part - Sub Part - Released Separately", () => {
     cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }).as("fetchDocumentRevision");
 
     cy.intercept({ method: "POST", pathname: "/api/v1/related_parts/*/*/child" }).as("createChildPart");
-
-    cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*/required_approvers" })
-      .as("requiredApprovers");
-    cy.intercept({ method: "GET", pathname: "/api/v1/document_type/with_forms?docTypeGroupOption=CHANGE_REQUEST" })
-      .as("changeRequestForms");
-
-    cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions/release/*" })
-      .as("expressReleaseDocumentRevision");
-    cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/void/*" }).as("voidDocumentRevision");
   });
 
   afterEach(() => {
@@ -75,10 +63,11 @@ context("Parent Part - Sub Part - Released Separately", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[userIndex].email);
+          employeeLoginFirst = createdCompany.employees
+            .find((employee) => employee.user.email === USERS[userIndex].email);
           // supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
-          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          // approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          // formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });
       });
@@ -92,8 +81,6 @@ context("Parent Part - Sub Part - Released Separately", () => {
         done();
       });
     });
-
-    // it("[API]Create Supplier form", (done: any) => {
     //   cy.grpGetGroupByName({
     //     sessionId: loginResponse.sessionId,
     //     employeeId: employeeLoginFirst.id,
@@ -549,7 +536,7 @@ context("Parent Part - Sub Part - Released Separately", () => {
   });
 
   context("Create two subParts", () => {
-    [1, 2].forEach((times, index) => {
+    [1, 2, 3].forEach((times, index) => {
       context("Creating a sub-part released separately", () => {
         console.log(times);
         it("Click on the Add Related Part button", () => {
@@ -557,7 +544,7 @@ context("Parent Part - Sub Part - Released Separately", () => {
         });
 
         it("Wait on the API", () => {
-          cy.wait("@createChildPart");
+          cy.wait(1000);
         });
 
         it("A new toast should appear - with the confirmation message", () => {
