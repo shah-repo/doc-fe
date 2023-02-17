@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 
 import cx from "classnames";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
@@ -304,8 +304,8 @@ const RelatedPartViewRow: React.FunctionComponent<{
     confirmationDialog.close();
   };
 
-  const title = (isVoided ? listItem.name : `${rootPartName} ${listItem.suffixName && `- ${listItem.suffixName}`}`);
-
+  const titleCellRef = useRef<HTMLSpanElement>(null);
+  const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
   return (
     <TableRow hover key={listItem.documentRevisionId}>
       <TableCell align="left" className={classes.relatedPartViewRowCell}>
@@ -318,11 +318,11 @@ const RelatedPartViewRow: React.FunctionComponent<{
               <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
           </span>
         }
-        disableHoverListener={!(title.length > 55)}
+        disableHoverListener={!(scrollHeight > clientHeight)}
         placement="bottom"
         classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
         arrow >
-          <span className={classes.relatedPartViewRowTitleCell}>
+          <span ref={titleCellRef} className={classes.relatedPartViewRowTitleCell}>
             {isVoided ? listItem.name :
               <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
           </span>
