@@ -84,7 +84,7 @@ const ItemsAndDetails: React.FunctionComponent<{
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
-    removePrePopulatedFiled();
+    removePrePopulatedField();
   };
 
   function disabledOptions(): string[] {
@@ -93,13 +93,13 @@ const ItemsAndDetails: React.FunctionComponent<{
 
   function resetAndCancelEdit() {
     // remove values for formState for keys
-    removePrePopulatedFiled();
+    removePrePopulatedField();
 
     setIsEditRowVisible(false);
     itemsAndDetailsState.setViewItemActionsVisibility(true);
   }
 
-  const removePrePopulatedFiled = () => {
+  const removePrePopulatedField = () => {
     const removeKeys = ["proposedDocumentRevision", "descriptionOfChange", "justificationOfChange"];
     removeKeys.forEach((item) => {
       formState.setFieldValue(item, undefined);
