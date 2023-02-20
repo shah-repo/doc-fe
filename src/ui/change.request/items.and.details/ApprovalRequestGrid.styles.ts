@@ -261,6 +261,9 @@ export default makeStyles((theme) =>
     sectionTitle: {
       color: Colors.almost_black,
     },
+    link: {
+      textDecoration: "none",
+    },
   })
 );
 
