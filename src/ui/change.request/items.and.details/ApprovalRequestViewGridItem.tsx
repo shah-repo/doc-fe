@@ -15,7 +15,8 @@ import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndD
 import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -38,7 +39,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const showDeleteButton = !location.pathname.includes(docRevId);
 
   const [docTitle, setDocTitle] = useState(titleText);
-  const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);
+  const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
+  const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string; documentId: string}[]>([]);
   const [isExpanded, setExpanded] = useState(false);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
@@ -59,6 +61,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         .map((part: RelatedPartsListItem) => (
           {
             revId: part.documentRevisionId,
+            documentId: part.documentId,
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
           }
         ));
@@ -74,6 +77,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       }: FBDocumentRevisionResponse = await documentDetailsApi.fetch();
       const documentTitleText = generateDocTitleText(document.docId, displayRevision, name);
       setDocTitle(documentTitleText);
+      setDocRevDocumentId(document.id);
       if (document.documentType?.group === DOC_TYPE_GROUP.PART) {
         getRelatedParts(docRevId, displayRevision);
       }
@@ -105,7 +109,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
               <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
             </span>
           }
-          <span>{docTitle}</span>
+          { docRevDocumentId && <Link
+            to={documentVersionPath(docRevId, docRevDocumentId)}
+            target="_blank"
+            className={classes.link}
+          >
+            <span>{docTitle}</span>
+          </Link>
+          }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <span>{descriptionOfChange}</span>
@@ -122,7 +133,15 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <ul className={classes.docList}>
             {
               docRelatedParts.map((part) => (
-                <li key={part.revId} className={classes.docListItem}>{part.titleText}</li>
+                <li key={part.revId} className={classes.docListItem}>
+                  <Link
+                    to={documentVersionPath(part.revId, part.documentId)}
+                    target="_blank"
+                    className={classes.link}
+                  >
+                    {part.titleText}
+                  </Link>
+                </li>
               ))
             }
           </ul>

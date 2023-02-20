@@ -6,17 +6,22 @@ class ItemsAndDetailsState {
 
   constructor() {
     this.setViewItemActionsVisibility(true);
+    this.setApprovalRequestItemInEditMode("");
     this.setLoadingState(false);
-    this.setSubmitList(false);
   }
 
   @observable approvalRequestItemsList: ApprovalRequestGridItem[] = [];
+  @observable approvalRequstItemInEditMode = "";
   @observable viewItemActionsVisible = true;
   @observable loadingState = false;
   @observable submitList = false;
 
   @action setApprovalRequestItemsList(list: ApprovalRequestGridItem[]) {
     set(this, "approvalRequestItemsList", list);
+  }
+
+  @action setApprovalRequestItemInEditMode(id: string) {
+    set(this, "approvalRequstItemInEditMode", id);
   }
 
   @action add(item: ApprovalRequestGridItem) {
@@ -29,10 +34,6 @@ class ItemsAndDetailsState {
 
   @action setLoadingState(isVisible = false) {
     set(this, "loadingState", isVisible);
-  }
-
-  @action setSubmitList(submit) {
-    set(this, "submitList", submit);
   }
 }
 
