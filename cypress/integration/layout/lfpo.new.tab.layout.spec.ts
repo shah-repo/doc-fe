@@ -946,7 +946,7 @@ context("LFPO new layout verification", () => {
       it("Verify Quantity, Part Number, Usable Quantity, comment", () => {
         cy.get("[name='lot_quantity']").should("exist");
         cy.get("[name='lot_usable_quantity']").should("exist");
-        cy.get("[data-cy='lot_part']").should("exist");
+        cy.get("[data-cy='lot_part']").scrollIntoView().should("exist");
         cy.get("#RenderHTML").should("exist");
       });
 
@@ -1108,7 +1108,7 @@ context("LFPO new layout verification", () => {
     it("Verify Quantity, Part Number, Usable Quantity", () => {
       cy.get("[name='lot_quantity']").should("be.visible");
       cy.get("[name='lot_usable_quantity']").should("be.visible");
-      cy.get("[data-cy='lot_part']").should("be.visible");
+      cy.get("[data-cy='lot_part']").scrollIntoView().should("be.visible");
     });
 
     it("Verify Expiration Date, 100% inspection ride, Approval block", () => {
@@ -1282,8 +1282,7 @@ context("LFPO new layout verification", () => {
       cy.get("[name='lot_quantity']").should("have.value", "100");
       cy.get("[name^='textfield-for-inline']").should("be.visible");
       cy.get("[name='lot_usable_quantity']").should("be.visible");
-      cy.get("[data-cy='lot_part']").should("be.visible");
-      cy.get("[data-cy='lot_part']").should("have.value", "PRT-00005 - rev 1 - Part document");
+      cy.get("[data-cy='lot_part']").scrollIntoView().should("have.value", "PRT-00005 - rev 1 - Part document");
     });
 
     it("Verify Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {

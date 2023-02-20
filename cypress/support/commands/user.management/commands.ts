@@ -127,7 +127,7 @@ Cypress.Commands.add("usrNavigateToUserManagement", () => {
 });
 
 Cypress.Commands.add("usrFilterByEmail", (params: {email: string }) => {
-  cy.get(`th[aria-colindex="3"] .k-filtercell>input`).arrowType(params.email);
+  cy.get(`th[aria-colindex="3"] .k-textbox`).arrowType(params.email);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -192,7 +192,7 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.get("#clearFilter").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
+  cy.get(`th[aria-colindex="3"] .k-textbox`).arrowType(params.email);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").should("contain.text", params.email);
 });

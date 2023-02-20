@@ -312,6 +312,13 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -504,7 +511,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -560,7 +567,13 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -678,6 +691,12 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   });
 
   context("Check pending training notification", () => {
+    it("Switch to myfeed tab", () => {
+      cy.dashboardMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it(`Verify training notification`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });

@@ -707,6 +707,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     context("Login user when he doesn't have privileges", () => {
       it("Login user to dashboard", () => {
         cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+        cy.progressBarShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -718,7 +719,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
   context("Create Purchase Order document with two Products", () => {
     it("Click on 'Purchase Order' on sidebar", () => {
-      cy.navigToPurchaseOrder();
+      cy.navigToPurchaseOrderWithoutApi();
       cy.cmpTurnOffAutosave();
     });
 
@@ -754,10 +755,12 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
       it("Click on 'Add item' button", () => {
         cy.poAddNewFieldItem();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist().wait(500);
       });
 
       it("Select Part Number", () => {
-        cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
+        cy.poSelectPartNumberNew({ partNo: "PRT-00005 - 1" });
       });
 
       it("Enter Quantity Ordered", () => {
@@ -825,6 +828,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
       it("Save PO", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist().wait(1000);
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -1062,19 +1066,15 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("Click on 'overview' tab", () => {
       cy.drSelectOverviewTab();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist().wait(1000);
     });
 
     it("Click 'Submit for Approval' button", () => {
       cy.pmSubmitForApprovalWithoutAPI();
     });
 
-    it("Navigate to Details tab again", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Click 'Approve' button", () => {
-      cy.poApproveWithoutApi();
+      cy.ebApproveWithoutApi();
     });
 
     it("Click on update record", () => {
