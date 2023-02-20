@@ -19,6 +19,7 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import Colors from "../../../layout/theme/utils/colors";
+import { Translation } from "../../../translations/types";
 import TransitionDialog from "./transitionDialog/TransitionDialog";
 
 interface Props {
@@ -57,8 +58,8 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         <div><SuccessIcon style={{ height: "30px" }}/></div>
         <div style={{ color: Colors.black }}>
           <div><span style={{ fontWeight: "bold" }}>
-            <Text translation="approvalRequest.approved.success"/></span></div>
-          <div><Text translation="approvalRequest.approved.message"
+            <Text translation={`approvalRequest.status.${response?.state}` as Translation}/></span></div>
+          <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
             values={{ crId: response?.crId, title: response?.title }} />
           </div>
         </div>

@@ -282,7 +282,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             </span>
             {isPinShown && (
               <span className={classes.actionIcon}>
-                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+                {!pinHover && (
+                  <PinIcon
+                    data-cy="pin-icon"
+                    onMouseEnter={onMouseHoverPinIcon}
+                    className={classes.cursorPointer}
+                  />
+                )}
                 {pinHover && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
@@ -290,6 +296,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     arrow
                   >
                     <PinSolidIcon
+                      data-cy="pin-solid-icon"
                       onClick={handlePinClick}
                       onMouseLeave={onMouseLeaveActionIcons}
                       className={classes.cursorPointer}
@@ -306,6 +313,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <PinSolidIcon
+                    data-cy="pin-solid-icon"
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                     className={classes.cursorPointer}
@@ -326,6 +334,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               arrow
             >
               <PinSolidIcon
+                data-cy="pin-solid-icon"
                 onClick={handleUnPinClick}
                 onMouseLeave={onMouseLeaveActionIcons}
                 className={classes.cursorPointer}

@@ -9,6 +9,7 @@ import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
+import { RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import { FormContext } from "../../components/forms/FormContext";
@@ -88,6 +89,9 @@ const Presenter: React.FunctionComponent<Props> = ({
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
+  const relatedPartsViewOnly = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
+    status) || (dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER);
 
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
@@ -168,7 +172,7 @@ const Presenter: React.FunctionComponent<Props> = ({
         {(isPart || isPartForm) &&
             <Grid item xs={12}>
               <RelatedPartsWrapper
-                viewOnly={true}
+                viewOnly={relatedPartsViewOnly}
                 documentRevision={dataProp}
                 relatedPartsStatus= {dataProp?.relatedPartsStatus} />
             </Grid>

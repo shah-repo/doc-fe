@@ -251,6 +251,12 @@ context("Approval request email popup modal", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Check if approval request is 'In Review'", () => {
       cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
     });
@@ -353,6 +359,12 @@ context("Approval request email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if approval request is 'In Review'", () => {

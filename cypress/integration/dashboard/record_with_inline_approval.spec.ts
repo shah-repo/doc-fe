@@ -272,15 +272,18 @@ context("Records test with Inline approval", () => {
 
     it("Enter name", () => {
       cy.get("[name^=name-]").arrowType("test");
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+      cy.progressBarShouldAppear();
+      cy.wait(3000);
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[12].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-1-]").arrowClick().wait(500);
+      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(USERS[12].name);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.wait(3000);
     });
 
@@ -304,6 +307,9 @@ context("Records test with Inline approval", () => {
 
     it("The owner should have a notification that Record rev 1 is for approval of User 2", () => {
       cy.navigToDashboardWithoutApi();
+      cy.listLoadingElementShouldNotExist();
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
@@ -338,6 +344,12 @@ context("Records test with Inline approval", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -379,13 +391,19 @@ context("Records test with Inline approval", () => {
 
       cy.get("[name^=age-]").should("exist");
       cy.get("[name^=age-]").arrowType("10");
+      cy.unClick();
+      cy.progressBarShouldAppear();
+      cy.wait(3000);
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-2-]").arrowClick();
+      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(USERS[11].name);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Save Record'", () => {
@@ -432,6 +450,12 @@ context("Records test with Inline approval", () => {
       cy.checkToastMessage({ exists: false });
     });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Open Record", () => {
       cy.contains("RD-00003").arrowClick();
       cy.progressBarShouldNotExist();
@@ -472,7 +496,15 @@ context("Records test with Inline approval", () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("There should be a notification that rev A is released", () => {
@@ -515,6 +547,7 @@ context("Records test with Inline approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Status is 'In Review'", () => {
@@ -525,6 +558,12 @@ context("Records test with Inline approval", () => {
   context("Check notifications on dashboard", () => {
     it("Goto dashboard", () => {
       cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -572,6 +611,12 @@ context("Records test with Inline approval", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
     });
 
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
@@ -583,6 +628,12 @@ context("Records test with Inline approval", () => {
         .should("contain.text", `${USERS[11].name}`);
     });
 
+    it("Switch to To Do tab", () => {
+      cy.dashOpenToDoTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Click approve for the Record", () => {
       cy.contains("needs your approval for").trigger("mouseover");
       cy.get("span > svg[data-cy=\"transition-approve\"]").first().trigger("mouseover");
@@ -592,6 +643,12 @@ context("Records test with Inline approval", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record notification should change to Released", () => {

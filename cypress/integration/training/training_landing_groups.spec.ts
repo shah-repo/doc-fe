@@ -468,7 +468,7 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -630,7 +630,7 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -735,7 +735,7 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(5000);
@@ -772,7 +772,7 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Verify trainings present on Training Curriculum page with no groups", () => {
     it("'user training title' should be present with no group", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(3000);
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();

@@ -406,7 +406,7 @@ context("Bulk create approvals block/inline test", () => {
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
@@ -491,7 +491,7 @@ context("Bulk create approvals block/inline test", () => {
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
@@ -502,7 +502,7 @@ context("Bulk create approvals block/inline test", () => {
 
   context("Verify created records", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(30 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 12 });
@@ -517,6 +517,7 @@ context("Bulk create approvals block/inline test", () => {
         it("Filter approvals block records in WIP state", () => {
           SystemRequirement("REQ-4730");
           cy.filterRecordState({ state: "WIP" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Verify WIP records number", () => {
@@ -547,6 +548,7 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "ADT-00007" });
+            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -581,6 +583,7 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "ADT-00008" });
+            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -618,6 +621,8 @@ context("Bulk create approvals block/inline test", () => {
         it("Filter approvals block records in WIP state", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "AIT-" });
+          cy.landingPageLoadingElementShouldAppear();
+          cy.wait(1000);
         });
 
         it("Filter approvals block records in WIP state", () => {
@@ -652,6 +657,7 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "AIT-00013" });
+            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -686,6 +692,7 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "AIT-00014" });
+            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {

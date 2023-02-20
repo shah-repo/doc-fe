@@ -39,6 +39,7 @@ declare global {
       navigToTrainingRecords(): Chainable<Subject>;
       navigToTrainingCurriculums(): Chainable<Subject>;
       navigToAsyncTasks(): Chainable<Subject>;
+      navigToReceivableListWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -67,11 +68,13 @@ Cypress.Commands.add("navigToDashboard", () => {
     });
 
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDashboardWithoutApi", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
@@ -158,6 +161,11 @@ Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToReceivableListWithoutApi", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
