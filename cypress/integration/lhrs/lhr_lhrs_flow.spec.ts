@@ -1408,7 +1408,6 @@ context("LHR & LHRS Flow", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("Part document");
-        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.saveBarShouldNotExist();
       });
 
@@ -1784,7 +1783,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it(`Select '${USERS[2].name}' to Assign document to`, () => {
-        cy.drAssignDocumentTo({ username: USERS[2].name });
+        cy.get("input[id^='react-select']").eq(0).autocompleteSelect(USERS[2].name, { force: true }).wait(2000);
         cy.wait(1000);
         cy.landingPageLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -1798,7 +1797,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it(`Select '${USERS[3].name}' to Assign document to`, () => {
-        cy.drAssignDocumentTo({ username: USERS[3].name });
+        cy.get("input[id^='react-select']").eq(0).autocompleteSelect(USERS[3].name, { force: true }).wait(2000);
         cy.wait(1000);
         cy.landingPageLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -2810,12 +2809,15 @@ context("LHR & LHRS Flow", () => {
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("verify loader is present", () => {
         cy.get("[data-cy='LHR-Step-Progress-Bar']").should("be.visible");
       });
+
       it("verify Step 1 is completed", () => {
         cy.get("[data-cy='completed-steps']").contains("1").should("exist");
       });
+
       it("verify Step 2 is in progress", () => {
         cy.get("[data-cy='inprogress-steps']").contains("2").should("exist");
       });
@@ -2881,9 +2883,11 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Navig to LHRs #1", () => {
+      cy.navigToLHRWithoutAPI();
+      cy.wait(1000);
       cy.contains("LHR-00001").eq(0).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 

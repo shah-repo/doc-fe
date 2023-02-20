@@ -17,7 +17,7 @@ export default makeStyles((theme) =>
     tabContent: {
       width: "100%",
       position: "relative",
-      marginBottom: theme.spacing(3),
+      marginBottom: theme.spacing(6),
       opacity: 1,
       transition: "opacity .2s ease-in",
     },
@@ -265,6 +265,9 @@ export default makeStyles((theme) =>
     },
     sectionTitle: {
       color: Colors.almost_black,
+    },
+    link: {
+      textDecoration: "none",
     },
   })
 );

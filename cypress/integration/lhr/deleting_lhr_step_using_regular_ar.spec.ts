@@ -499,7 +499,7 @@ context("Deleting LHR Step using regular AR test", () => {
 
     it("Click 'Send To Review'", () => {
       cy.wait(2000);
-      cy.get("[data-cy=\"transitionButton\"]").arrowClick();
+      cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

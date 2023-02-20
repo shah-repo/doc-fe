@@ -716,7 +716,7 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
         cy.url().then((url: any) => {
           blc1 = url;
         });
@@ -799,7 +799,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApprovalWithoutAPI();
+          cy.lhrSubmitForApprovalWithoutApi();
           cy.url().then((url: any) => {
             blc2 = url;
           });
@@ -876,6 +876,9 @@ context("Bulk create public, private and reserved record-ids", () => {
 
         it("Upload template file", () => {
           cy.atchUploadTemplateForBLC({ fileName: "recordIDBLC1.xlsx" });
+          cy.wait(1000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click save document", () => {
@@ -887,7 +890,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApprovalWithoutAPI();
+          cy.lhrSubmitForApprovalWithoutApi();
         });
 
         it("Approve BLC1", () => {
@@ -910,7 +913,7 @@ context("Bulk create public, private and reserved record-ids", () => {
 
     context("Verify created record ids", () => {
       it("Navigate to record list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToRecords();
         cy.dlClearFilters();
@@ -920,6 +923,7 @@ context("Bulk create public, private and reserved record-ids", () => {
       context("Verify Test Private Pool records", () => {
         it("Filter docs by type", () => {
           cy.dlFilterByDocId({ docId: "TPP" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Verify doc-ids are correct for created doc", () => {
@@ -946,6 +950,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         it("Filter docs by type", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TPUP" });
+          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Verify doc-ids are correct for created doc", () => {

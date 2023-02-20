@@ -226,7 +226,7 @@ context("Group Landing Page Flow", () => {
       cy.grpSetTypeFilter({ type: GROUP_TYPE });
       cy.grpSetPermissionsFilter({ permission: PERMISSION });
       cy.grpSetTagsFilter({ tag: TAG });
-      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick({ force: true });
+      cy.get(`th[aria-colindex="6"] span.k-i-filter`).arrowClick({ force: true });
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
     });
 
@@ -252,11 +252,11 @@ context("Group Landing Page Flow", () => {
     it("Verify clear filter", () => {
       cy.dlClearFilters();
       cy.get(`th[aria-colindex="1"] span.k-input`).should("have.text", "All");
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 6, input: "" });
     });
 
     it(`Verify grouping`, () => {
@@ -295,7 +295,7 @@ context("Group Landing Page Flow", () => {
 
   context("Verify dropdown filter list", () => {
     it(`Verify dropdown filter list on Name header`, () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
       "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
     });

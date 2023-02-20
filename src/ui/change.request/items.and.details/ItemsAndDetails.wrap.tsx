@@ -1,13 +1,11 @@
 import { cloneDeep, map } from "lodash";
-import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import { useFormContext } from "../../components/forms/FormContext";
 import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from "../../form.builder";
-import { generateDocTitleText, newARDocRevToAdd, storeDataToFormData } from "./helpers";
+import { formDataToStoreData, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
@@ -73,26 +71,17 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
+    itemsAndDetailsState.setApprovalRequestItemInEditMode("");
     if (autosave) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
+    } else {
+      // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
+      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
+      itemsAndDetailsState.setApprovalRequestItemsList(entries);
     }
   };
 
-  useEffect(() => reaction(
-    () => itemsAndDetailsState.submitList,
-    (submission) => {
-      if (submission) {
-        if (currentDocRevId) {
-          const dataToSend: FBDocumentRevisionsValue[] =
-            storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
-          dataToSend.push(newARDocRevToAdd(currentDocRevId));
-          submitData(dataToSend);
-        }
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [itemsAndDetailsState.submitList]);
 
   useEffect(() => {
     if (asyncState && (asyncState.status === AsyncStatus.Success ||
@@ -111,7 +100,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       itemsAndDetailsState.setViewItemActionsVisibility(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [changeRequest]);
+  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? [])]);
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;
@@ -126,41 +115,16 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
           (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
       }
 
-      entries = documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
-        const entryInfo = {
-          justificationOfChange: item.justificationOfChange,
-          descriptionOfChange: item.descriptionOfChange,
-          docRevId: item.proposedDocumentRevision.id,
-          documentId: "",
-          id: item.id,
-          titleText: "",
-          displayRevision: "",
-          isPart: false,
-        };
+      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData);
+    }
 
-        const docRevId = item.proposedDocumentRevision.id;
-        if (docRevId === currentDocRevId) {
-          currentDocRevPresent = true;
-        }
-        const { displayRevision, name, document } =
-        documentRevisionsData.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
-        if (document) {
-          entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
-          entryInfo.isPart = document.documentType.group === DOC_TYPE_GROUP.PART;
-          entryInfo.documentId = document.id;
-          entryInfo.displayRevision = displayRevision;
-        }
-
-        return entryInfo;
-      });
+    if (changeRequest && !currentDocRevPresent && currentDocRevId) {
+      itemsAndDetailsState.setApprovalRequestItemInEditMode(currentDocRevId);
+    } else {
+      itemsAndDetailsState.setApprovalRequestItemInEditMode("");
     }
 
     itemsAndDetailsState.setApprovalRequestItemsList(entries);
-    if (changeRequest && !currentDocRevPresent && currentDocRevId) {
-      setTimeout(() => {
-        itemsAndDetailsState.setSubmitList(true);
-      }, 100);
-    }
   };
 
   return useObserver(() => (

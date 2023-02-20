@@ -393,6 +393,13 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
             },
             {
               icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
               path: "/document_type_management",
               type: "LINK",
               label: "Document Type Management",
@@ -1241,6 +1248,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
       cy.drClickReviseDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Clicks Save button", () => {
@@ -1295,14 +1303,12 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
   context("Revise EB document", () => {
     it("Navigate to EB list", () => {
       cy.navigToEB();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select EB document", () => {
       cy.dlSelectFirstDocument();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Click revise button", () => {
@@ -1315,6 +1321,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
       cy.drAdministrativeRevisionLevel();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clicks Save button", () => {

@@ -321,6 +321,13 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -738,6 +745,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
       cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -806,12 +814,10 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
     it("Verify training notification", { retries: 5 }, () => {
       cy.wait(8000);
-      cy.get("[id='scrollable-auto-tab-0'").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
@@ -913,7 +919,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1006,6 +1012,12 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboardWithoutApi();
+    });
+
+    it("Select 'MyFeed' tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("'OVERDUE' should not exist", () => {

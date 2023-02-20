@@ -251,6 +251,7 @@ context("Document list test", () => {
 
       it("Filter list by docId", () => {
         cy.dlFilterByDocId({ docId: "CP-00003" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by docId", () => {
@@ -260,7 +261,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
     });
 
@@ -271,6 +272,7 @@ context("Document list test", () => {
 
       it("Filter list by revision", () => {
         cy.dlFilterByRev({ revision: "1" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by revision", () => {
@@ -280,7 +282,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
       });
     });
 
@@ -291,6 +293,7 @@ context("Document list test", () => {
 
       it("Filter list by document title", () => {
         cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by document title", () => {
@@ -300,7 +303,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
     });
 
@@ -311,6 +314,7 @@ context("Document list test", () => {
 
       it("Filter list by type", () => {
         cy.dlFilterByType({ type: "CP" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by type", () => {
@@ -320,7 +324,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       });
     });
 
@@ -331,6 +335,7 @@ context("Document list test", () => {
 
       it("Filter list by owner", () => {
         cy.dlFilterByOwner({ owner: USERS[2].name });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by owner", () => {
@@ -340,7 +345,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       });
     });
 
@@ -351,6 +356,7 @@ context("Document list test", () => {
 
       it("Filter list by AR ID", () => {
         cy.dlFilterByArId({ arId: "AR99999" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by AR ID", () => {
@@ -360,7 +366,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
     });
 
@@ -371,6 +377,7 @@ context("Document list test", () => {
 
       it("Filter list by status", () => {
         cy.dlFilterByStatus({ status: "Released" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by status", () => {
@@ -380,7 +387,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       });
     });
 
@@ -391,6 +398,7 @@ context("Document list test", () => {
 
       it("Filter list by effective date", () => {
         cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by effective date", () => {
@@ -406,6 +414,7 @@ context("Document list test", () => {
 
       it("Filter list by status", () => {
         cy.dlFilterByStatus({ status: "Draft" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Filter list by document title", () => {
@@ -430,6 +439,7 @@ context("Document list test", () => {
         cy.dlVerifyFilterByDocTitle({ docTitle: secondDocumentRevName });
       });
     });
+
     context("Check clear button is clearing all filters", () => {
       it("Clear filters", () => {
         cy.dlClearFilters();
@@ -441,6 +451,7 @@ context("Document list test", () => {
       });
     });
   });
+
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0130");

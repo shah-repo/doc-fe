@@ -848,9 +848,8 @@ context("Verify Paper LHR", () => {
 
     context("Fill the document", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.wait(1000);
         cy.get(`[data-cy="lhr-selected-part"]`).autocompleteSelect("Part document");
-        // cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
-        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get(`[data-cy="Part to be Manufactured"]`)
           .parent().parent().parent().parent().next("p")
@@ -904,6 +903,7 @@ context("Verify Paper LHR", () => {
     context("Verify 'Paper LHR' document details on LHR landing page", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify 'Lot #'", () => {
@@ -970,12 +970,15 @@ context("Verify Paper LHR", () => {
 
       it(`Verify lot is same as earlier release`, () => {
         cy.get("#HeaderInfo-subtitle").should("contain.text", `${lotIdRef}01RD`);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
 
     context("Verify 'Paper LHR' document details on LHR landing page", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify 'Lot #'", () => {
@@ -1064,6 +1067,7 @@ context("Verify Paper LHR", () => {
     context("Verify 'Paper LHR' document details on LHR landing page", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify document is searchable with ID", () => {
@@ -1163,9 +1167,8 @@ context("Verify Paper LHR", () => {
 
     context("Fill the document", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.wait(1000);
         cy.get(`[data-cy="lhr-selected-part"]`).autocompleteSelect("Part document");
-        // cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
-        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.saveBarShouldNotExist();
         cy.get(`[data-cy="Part to be Manufactured"]`)
           .parent().parent().parent().parent().next("p")
@@ -1219,13 +1222,14 @@ context("Verify Paper LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
     context("Verify added attachment is present, remove it, add new one", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Select second LHR", () => {
@@ -1267,6 +1271,7 @@ context("Verify Paper LHR", () => {
     context("Verify 'Paper LHR' document details on LHR landing page", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify 'Lot #'", () => {
@@ -1335,6 +1340,7 @@ context("Verify Paper LHR", () => {
     context("Verify 'Paper LHR' document details on LHR landing page", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify 'Lot #'", () => {
@@ -1425,6 +1431,7 @@ context("Verify Paper LHR", () => {
     context("Verify 'Paper LHR' document details on LHR landing page", () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify document is searchable with ID", () => {

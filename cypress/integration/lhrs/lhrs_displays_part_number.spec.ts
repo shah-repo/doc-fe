@@ -330,7 +330,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     context(`Verify '${CSPartDocumentTitle}' is selected`, () => {
       it(`Verify '${CSPartDocumentTitle}' is selected for 'References'`, () => {
         cy.get("[data-cy=\"References-detail\"]")
-          .contains("CS-02001 - 1 - P ...").should("exist");
+          .contains("CS-02001 - 1 - Part document").should("exist");
       });
 
       it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {
@@ -634,7 +634,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       context(`Verify '${CSPartDocumentTitle}' is selected`, () => {
         it(`Verify '${CSPartDocumentTitle}' is selected for 'References'`, () => {
           cy.get("[data-cy=\"References-detail\"]")
-            .contains("CS-02001 - 1 - P ...").should("exist");
+            .contains("CS-02001 - 1 - Part document").should("exist");
         });
 
         it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {

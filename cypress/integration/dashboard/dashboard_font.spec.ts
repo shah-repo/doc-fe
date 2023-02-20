@@ -48,7 +48,7 @@ let equipmentDocumentType;
 let equipmentDocument;
 let lhrUrl;
 
-const ADMIN_USER = USERS[1];
+const ADMIN_USER = USERS[11];
 const trainingFormId = "FM-00002";
 const arId = "AR-00008";
 const poOrder = "PO-00001";
@@ -80,9 +80,9 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               RecordDocumentType,
@@ -97,7 +97,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           secondEmployee = createdCompany.employees.find(
-            (employee) => employee.user.email === USERS[2].email
+            (employee) => employee.user.email === USERS[12].email
           );
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -117,7 +117,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -362,6 +362,13 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
               ],
               type: "MENU",
               label: "Training",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
             },
           ],
         },
@@ -1227,7 +1234,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1323,7 +1330,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.arSelectApprovalTab();
-      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[12].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1411,15 +1418,15 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select User ${USERS[1].name} to train`, () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+    it(`Select User ${USERS[11].name} to train`, () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select User ${USERS[2].name} to train`, () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    it(`Select User ${USERS[12].name} to train`, () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1439,7 +1446,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
@@ -1501,7 +1508,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView();
-      cy.poAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.poAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1566,7 +1573,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Add approver", () => {
-      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -1595,7 +1602,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Add an Approval", () => {
-      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -1627,7 +1634,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -1668,7 +1675,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
   context("Verify dashboard training notification exists for 'training assigned'", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
     it(`Verify dashboard training notification exists as 'training is assigned to you'`, () => {
@@ -1711,7 +1718,13 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
   // eslint-disable-next-line max-len
   context(`Verify COMPLETED training notification exists as '${trainingFormId} Rev 1 released doc1 is COMPLETED'`, () => {
     it("Navigate to Dashboard", () => {
-      cy.grpNavigateToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1992,8 +2005,8 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Add first Approver as ${USERS[1].name}`, () => {
-      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(USERS[1].name);
+    it(`Add first Approver as ${USERS[11].name}`, () => {
+      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(USERS[11].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -2015,6 +2028,12 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
   context("Verify font for Record (Pending Approval) dialog box", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2044,11 +2063,11 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     // eslint-disable-next-line max-len
-    it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_14} form-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify ${USERS[11].name} has font-size ${FONT_SIZE_14} form-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_400}`, () => {
       cy.get("[data-cy='list-item-text']")
-        .contains(USERS[1].name).should("have.css", "font-size", FONT_SIZE_14);
+        .contains(USERS[11].name).should("have.css", "font-size", FONT_SIZE_14);
       cy.get("[data-cy='list-item-text']")
-        .contains(USERS[1].name).should("have.css", "font-family", soraSansserif);
+        .contains(USERS[11].name).should("have.css", "font-family", soraSansserif);
       cy.get("[data-cy='list-item-text']")
         .should("have.css", "line-height", LINE_HT_18);
       cy.get("[data-cy='list-item-text']")
@@ -2104,6 +2123,12 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it(`Verify record notification for Record released`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
@@ -2130,12 +2155,12 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context(`Verify font for 'Welcome back, ${USERS[1].name}!'`, () => {
+  context(`Verify font for 'Welcome back, ${USERS[11].name}!'`, () => {
     // eslint-disable-next-line max-len
     it(`Verify Welcome back, Username! font-size as ${FONT_SIZE_28} and form-family as ${soraSansserif} font-weight ${FONT_WT_300}`, () => {
-      cy.contains(`Welcome Back, ${USERS[1].name}!`).last().should("have.css", "font-size", FONT_SIZE_28);
-      cy.contains(`Welcome Back, ${USERS[1].name}!`).last().should("have.css", "font-family", soraSansserif);
-      cy.contains(`Welcome Back, ${USERS[1].name}!`).last().should("have.css", "font-weight", FONT_WT_300);
+      cy.contains(`Welcome Back, ${USERS[11].name}!`).last().should("have.css", "font-size", FONT_SIZE_28);
+      cy.contains(`Welcome Back, ${USERS[11].name}!`).last().should("have.css", "font-family", soraSansserif);
+      cy.contains(`Welcome Back, ${USERS[11].name}!`).last().should("have.css", "font-weight", FONT_WT_300);
     });
   });
 
@@ -2147,7 +2172,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
         days: "24 days",
         status: "COMPLETE",
       });
-      cy.wait(50000);
+      cy.wait(60000);
     });
 
     it("Goto Dashboard", () => {
@@ -2159,15 +2184,13 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
-      cy.get("[trainingstatus=\"DUE\"]")
-        .eq(0)
-        .should("have.text", "DUE IN 7 DAYS");
+      cy.get(`[trainingstatus="DUE"]`).eq(0).should("have.text", "DUE IN 7 DAYS");
     });
   });
 
@@ -2189,7 +2212,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
         days: "a month",
         status: "COMPLETE",
       });
-      cy.wait(50000);
+      cy.wait(60000);
     });
 
     it("Goto Dashboard", () => {
@@ -2200,15 +2223,13 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification OVERDUE", () => {
-      cy.get("[trainingstatus=\"OVERDUE\"]")
-        .eq(0)
-        .should("have.text", "OVERDUE");
+      cy.get(`[trainingstatus="OVERDUE"]`).eq(0).should("have.text", "OVERDUE");
     });
   });
 
@@ -2242,11 +2263,11 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     // eslint-disable-next-line max-len
-    it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_14} and form-family as ${soraSansserif}`, () => {
+    it(`Verify training status ${USERS[12].name} font-size as ${FONT_SIZE_14} and form-family as ${soraSansserif}`, () => {
       cy.get("[data-cy='list-item-text']")
-        .contains(USERS[2].name).should("have.css", "font-size", FONT_SIZE_14);
+        .contains(USERS[12].name).should("have.css", "font-size", FONT_SIZE_14);
       cy.get("[data-cy='list-item-text']")
-        .contains(USERS[2].name).should("have.css", "font-family", soraSansserif);
+        .contains(USERS[12].name).should("have.css", "font-family", soraSansserif);
     });
 
     it(`Close training status popup window`, () => {
@@ -2256,7 +2277,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
   context("Verify font for Recent tab: PO, TC, Document, Form", () => {
     it("Select 'Recent' tab", () => {
-      cy.contains("Recent").arrowClick();
+      cy.dashOpenRecentTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2294,7 +2315,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'My Feed' tab", () => {
-      cy.contains("My Feed").arrowClick();
+      cy.dashOpenMyFeedTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2307,13 +2328,13 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({
-        USER: USERS[2],
+        USER: USERS[12],
         employeeId: secondEmployee.id,
       });
     });
 
     it("Reject AR from dashboard", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[1].name}needs your approval for`)
+      cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[11].name}needs your approval for`)
         .parent()
         .parent()
         .parent().trigger("mouseover")
@@ -2329,15 +2350,21 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({
-        USER: USERS[1],
+        USER: USERS[11],
         employeeId: adminEmployee.id,
       });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify notification for REJECTED Approval Request`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[2].name}REJECTED${rejArId}`,
+          `${USERS[12].name}REJECTED${rejArId}`,
       });
     });
 

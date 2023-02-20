@@ -222,7 +222,7 @@ context("Suppliers landing page", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -256,11 +256,11 @@ context("Suppliers landing page", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
   });
 
@@ -401,40 +401,40 @@ context("Suppliers landing page", () => {
 
   context("Verify filters on each field", () => {
     it("Verify filter for ID", () => {
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="1"] input`).arrowType("SUP-00004");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "SUP-00004");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "SUP-00004" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "SUP-00004" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Supplier Name", () => {
       cy.dlClearFilters();
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "API supplier");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "API supplier" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "API supplier" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Supplier Level", () => {
       cy.dlClearFilters();
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).arrowType("open");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "open");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 3, input: "open" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "open" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Supplier Status", () => {
       cy.dlClearFilters();
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).arrowType("close");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "close");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 4, input: "close" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "close" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -452,20 +452,20 @@ context("Suppliers landing page", () => {
 
     it("Verify filter for Owner", () => {
       cy.dlClearFilters();
-      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="6"] input`).arrowType("Harry Bartoletti");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] input`).should("not.have.attr", "value", "Giovanni Reynolds");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 6, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 6, input: USERS[2].name });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.get(`th[aria-colindex="6"] .k-filtercell > input`).should("not.have.attr", "value", USERS[1].name);
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify filter for Approval ID", () => {
       cy.dlClearFilters();
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="7"] input`).arrowType("1");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "1");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "" });
+      cy.filterLandingPageColumnFilter({ colIndex: 7, input: "1" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "1" });
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -513,116 +513,122 @@ context("Suppliers landing page", () => {
   context("Verify dropdown filters", () => {
     it("Verify dropdown filters", () => {
       cy.grpClearFilter();
-      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
       "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
-      cy.dlClearFilters();
     });
 
     it(`Verify "Does not contain" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "API supplier" });
+      cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "API supplier" });
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 }).wait(500);
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is not equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "API supplier" });
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 }).wait(500);
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Starts with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "API supplier" });
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 }).wait(500);
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Ends with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="2"] input`).arrowType("API supplier");
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "API supplier" });
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 }).wait(500);
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 0 }).wait(500);
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is not null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is not empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="2"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Insert filter", () => {
-      cy.get(`th[aria-colindex="1"] input`).arrowType("SUP-00004").wait(500);
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "SUP-00004" });
     });
 
     it(`Crossed filter icon should appear `, () => {
@@ -630,7 +636,7 @@ context("Suppliers landing page", () => {
     });
 
     it(`Select option Contains and verify that the filter is functional`, () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Contains").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
@@ -639,17 +645,17 @@ context("Suppliers landing page", () => {
     });
 
     it("Verify that each filter from the dropdown list for each column in the landing page is functional", () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="4"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="5"] span.k-select`).arrowClick();
-      cy.get(`th[aria-colindex="6"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
+      cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+      cy.get(`th[aria-colindex="4"] span.k-i-filter`).arrowClick();
+      cy.get(`th[aria-colindex="5"] span.k-i-filter`).arrowClick();
+      cy.get(`th[aria-colindex="6"] span.k-i-filter`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to column with option Select field", () => {
-      cy.get(`[aria-colindex="5"] [class="k-input"]`).arrowClick();
+      cy.get(`[aria-colindex="5"] span.k-input`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("li").contains("Draft").arrowClick().wait(500);
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
@@ -661,7 +667,7 @@ context("Suppliers landing page", () => {
     });
 
     it("Select option from dropdown list", () => {
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });

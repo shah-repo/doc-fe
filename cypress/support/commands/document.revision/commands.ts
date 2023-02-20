@@ -304,6 +304,7 @@ Cypress.Commands.add("drSelectApprovalsTab", () => {
 Cypress.Commands.add("drSelectTrainingTab", () => {
   cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectProcedureTab", () => {
@@ -405,7 +406,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(params.documentType);
   cy.wait(1500);
-  cy.get(`div[id^="react-select"]`).contains(params.documentType).arrowClick({ force: true });
+  cy.get(`[id^="react-select"]`).contains(params.documentType).arrowClick({ force: true });
   cy.unClick();
 });
 
@@ -656,7 +657,7 @@ Cypress.Commands.add("drClickSaveWithoutApiCallExpectingToastError", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.get(`div[data-cy="HeaderInfo-status"]>span`).should("contain", params.status);
+  cy.get(`[data-cy="HeaderInfo-status"]>span`).should("contain", params.status);
 });
 
 Cypress.Commands.add("drGetDocIdElementFromUI", () => {
@@ -682,34 +683,34 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title);
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
   cy.dlClearFilters();
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] .k-filtercell >input`).eq(0).arrowType(params.docId).wait(500);
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).scrollIntoView().arrowClick({ force: true });
   cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndName", (params: { docId: string; title: string }) => {
   cy.dlClearFilters();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] .k-filtercell >input`).arrowType(params.docId).wait(500);
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
   cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title).wait(500);
-  cy.listLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.dlSelectFirstDocumentWithoutApi();
 });
 
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
