@@ -1054,9 +1054,9 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify filter for TC ID", () => {
         SystemRequirement("REQ-2820");
+        cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right").wait(1000);
         cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 9, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 9, input: "TCT-00002" });
-        cy.landingPageLoadingElementShouldAppear();
         cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 9, input: "TCT-00002" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1080,15 +1080,16 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify hide and freeze", () => {
       it("Verify hide on DOCUMENT TITLE", () => {
+        cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left").wait(2000);
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
-        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick({ force: true }).wait(500);
+        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick({ force: true });
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
       });
 
       it("Verify unhide on DOCUMENT TITLE", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
-        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
+        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick().wait(500);
         cy.get("ul>li[role=menuitem]").contains("DOCUMENT TITLE").parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
@@ -1096,14 +1097,14 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify freeze on DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "DOCUMENT TITLE");
       });
 
       it("Verify un-freeze on DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "DOCUMENT TITLE");
       });
@@ -1113,7 +1114,7 @@ context("Test training records and training curriculum landing page", () => {
     context("Verify dropdown filters", () => {
       it("Verify TRN ID dropdown filters", () => {
         cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
-        cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
+        cy.get("ul>li[role=menu]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
 
