@@ -71,7 +71,6 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
-    itemsAndDetailsState.setApprovalRequestItemInEditMode("");
     if (autosave) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
@@ -81,7 +80,6 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       itemsAndDetailsState.setApprovalRequestItemsList(entries);
     }
   };
-
 
   useEffect(() => {
     if (asyncState && (asyncState.status === AsyncStatus.Success ||
@@ -99,8 +97,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (mode === FBWorkspaceModeOptions.PREVIEW) {
       itemsAndDetailsState.setViewItemActionsVisibility(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? [])]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps, max-len
+  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), changeRequest?.formInput]);
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;

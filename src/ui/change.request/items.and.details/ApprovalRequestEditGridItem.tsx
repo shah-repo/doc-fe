@@ -3,6 +3,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import cx from "classnames";
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { ReactComponent as DeleteIcon } from "../../../assets/images/trash-can 2.svg";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from "../../form.builder";
 import useStyles from "./ApprovalRequestGrid.styles";
@@ -28,6 +29,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   entry,
 }) => {
   const classes = useStyles();
+
+  const location = useLocation();
+  const showDeleteButton = !location.pathname.includes(entry?.docRevId);
 
   return (
     <FBForm {...{ formState }} >
@@ -71,12 +75,12 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
-          <Button className={classes.actionButton}>
+          { showDeleteButton && <Button className={classes.actionButton}>
             <DeleteIcon className={classes.iconButton}
               onClick={() =>  {
                 resetAndCancelEdit?.();
                 handleRemove?.(entry?.docRevId as string); }}/>
-          </Button>
+          </Button> }
           <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton}/>
           </Button>

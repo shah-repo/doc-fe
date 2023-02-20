@@ -12,10 +12,7 @@ import useStyles from "./ApprovalRequestGrid.styles";
 import { generateDocTitleText } from "./helpers";
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
-import { Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
@@ -29,14 +26,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   handleRemove,
   viewItemActionsVisible,
 }) => {
-  const location = useLocation();
   const classes = useStyles();
 
   const {
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
-
-  const showDeleteButton = !location.pathname.includes(docRevId);
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
@@ -93,14 +87,16 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggleItem = () => {
+  const toggleItem = (event) => {
+    event.stopPropagation();
     setExpanded(!isExpanded);
   };
 
   return (
-    <div onClick={() => editItem()} className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
-      [classes.enclosingDivOpened]: isExpanded,
-    })}>
+    <div onClick={() => viewItemActionsVisible && editItem()}
+      className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
+        [classes.enclosingDivOpened]: isExpanded,
+      })}>
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
           {
@@ -113,6 +109,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             to={documentVersionPath(docRevId, docRevDocumentId)}
             target="_blank"
             className={classes.link}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
           >
             <span>{docTitle}</span>
           </Link>
@@ -147,16 +146,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </ul>
         </div>
       }
-      { viewItemActionsVisible && <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
-        { showDeleteButton && <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
-          <DeleteIcon className={classes.iconButton}
-            onClick={() => handleRemove(docRevId)}/>
-        </Button>
-        }
-        <Button className={classes.actionButton}>
-          <EditIcon className={classes.iconButton} onClick={editItem}/>
-        </Button>
-      </div> }
     </div>
   );
 };
