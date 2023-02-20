@@ -270,6 +270,13 @@ context("Training Flow test", () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -454,7 +461,7 @@ context("Training Flow test", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedFormId = x.text(); });
       cy.navigToApprovalRequestList();
-      cy.cmpClickCreateApprovalRequest();
+      cy.cmpClickCreateApprovalRequestWithoutApi();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
       cy.drEnterDocumentDescription({ description: "Description" });
       cy.arSelectItemsTab();
@@ -467,7 +474,7 @@ context("Training Flow test", () => {
       cy.arClickAddItemDone();
       cy.arSaveApiCall();
       cy.arSelectApprovalTab();
-      cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email, noWait: true });
       cy.arSaveApiCall();
       cy.arClickSendToReviewWithoutApi();
       cy.arApproveARWithoutApi();
@@ -574,7 +581,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -740,7 +747,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -790,20 +797,43 @@ context("Training Flow test", () => {
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`${USERS[11].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
         .and("contain", USERS[11].name).and("contain", "Pending");
     });
 
     it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
         .and("contain", USERS[12].name).and("contain", "Pending");
     });
@@ -811,7 +841,7 @@ context("Training Flow test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Verify training notification", () => {
@@ -854,9 +884,22 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
         .and("contain", USERS[11].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
@@ -933,7 +976,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -965,7 +1008,7 @@ context("Training Flow test", () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -994,6 +1037,7 @@ context("Training Flow test", () => {
       cy.trCompleteTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Training Records", () => {
@@ -1005,9 +1049,21 @@ context("Training Flow test", () => {
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPagetrId({ trId: forceTrainingRecordId });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId).and("contain", USERS[11].name)
         .and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");

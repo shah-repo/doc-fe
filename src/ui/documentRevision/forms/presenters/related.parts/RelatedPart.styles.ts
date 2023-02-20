@@ -184,6 +184,15 @@ export default makeStyles((theme) =>
     smallText: {
       fontSize: "12px",
     },
+    relatedPartViewRowTitleCell: {
+      "display": "-webkit-box",
+      "-webkit-line-clamp": 1,
+      "-webkit-box-orient": "vertical",
+      "overflow": "hidden",
+    },
+    relatedPartViewRowCell: {
+      paddingLeft: theme.spacing(1.25),
+    },
   })
 );
 

@@ -84,6 +84,7 @@ const ItemsAndDetails: React.FunctionComponent<{
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
+    removePrePopulatedField();
   };
 
   function disabledOptions(): string[] {
@@ -92,14 +93,18 @@ const ItemsAndDetails: React.FunctionComponent<{
 
   function resetAndCancelEdit() {
     // remove values for formState for keys
-    const removeKeys = ["proposedDocumentRevision", "descriptionOfChange", "justificationOfChange"];
-    removeKeys.forEach((item) => {
-      formState.setFieldValue(item, undefined);
-    });
+    removePrePopulatedField();
 
     setIsEditRowVisible(false);
     itemsAndDetailsState.setViewItemActionsVisibility(true);
   }
+
+  const removePrePopulatedField = () => {
+    const removeKeys = ["proposedDocumentRevision", "descriptionOfChange", "justificationOfChange"];
+    removeKeys.forEach((item) => {
+      formState.setFieldValue(item, undefined);
+    });
+  };
 
   function addRevisionToChangeRequest() {
     const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }

@@ -9,6 +9,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       dashVerifyListItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
+      dashVerifyPOItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashVerifyListItemNotExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashGoToListItemFromDashboard(params: {listItem: string}): Chainable<Subject>;
       dashToggleMoreDetailsForListItemNumber(params: {listItemNumb: number}): Chainable<Subject>;
@@ -28,6 +29,10 @@ declare global {
 
 Cypress.Commands.add("dashVerifyListItemExistsOnDashboard", (params: { listItem: string}) => {
   cy.get("[data-cy=dashboardFeedList] div>span").contains(params.listItem).should("exist");
+});
+
+Cypress.Commands.add("dashVerifyPOItemExistsOnDashboard", (params: { listItem: string}) => {
+  cy.get(`[data-cy="dashboardFeedList"] ul`).contains(params.listItem).should("exist");
 });
 
 Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listItem: string}) => {
