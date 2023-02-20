@@ -1071,7 +1071,6 @@ context("Export training curriculum", () => {
     });
 
     it(`Complete training for ${USERS[2].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });

@@ -502,12 +502,14 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it(`${USERS[11].name} with completed date inside 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", completedDate);
     });
 
     it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
