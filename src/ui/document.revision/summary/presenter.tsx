@@ -91,7 +91,7 @@ const Presenter: React.FunctionComponent<Props> = ({
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
   const relatedPartsViewOnly = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
-    status) || (dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER);
+    status) || (dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) || !dataProp?.relatedPartsStatus;
 
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
