@@ -92,7 +92,9 @@ const ItemsAndDetails: React.FunctionComponent<{
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
-    removePrePopulatedField();
+    if (itemsAndDetailsState.approvalRequstItemInEditMode === "") {
+      removePrePopulatedField();
+    }
   };
 
   function disabledOptions(): string[] {

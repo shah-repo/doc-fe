@@ -39,6 +39,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const showDeleteButton = !location.pathname.includes(docRevId);
 
   const [docTitle, setDocTitle] = useState(titleText);
+  const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string; documentId: string}[]>([]);
   const [isExpanded, setExpanded] = useState(false);
 
@@ -76,6 +77,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       }: FBDocumentRevisionResponse = await documentDetailsApi.fetch();
       const documentTitleText = generateDocTitleText(document.docId, displayRevision, name);
       setDocTitle(documentTitleText);
+      setDocRevDocumentId(document.id);
       if (document.documentType?.group === DOC_TYPE_GROUP.PART) {
         getRelatedParts(docRevId, displayRevision);
       }
@@ -107,13 +109,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
               <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
             </span>
           }
-          <Link
-            to={documentVersionPath(docRevId, documentId)}
+          { docRevDocumentId && <Link
+            to={documentVersionPath(docRevId, docRevDocumentId)}
             target="_blank"
             className={classes.link}
           >
             <span>{docTitle}</span>
           </Link>
+          }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <span>{descriptionOfChange}</span>
