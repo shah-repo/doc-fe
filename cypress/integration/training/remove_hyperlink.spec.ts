@@ -595,7 +595,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedDoc2Id = x.text(); });
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
       cy.cmpClickCreateApprovalRequestWithoutApi();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
       cy.unClick();

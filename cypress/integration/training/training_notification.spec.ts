@@ -312,6 +312,13 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
