@@ -304,6 +304,7 @@ Cypress.Commands.add("drSelectApprovalsTab", () => {
 Cypress.Commands.add("drSelectTrainingTab", () => {
   cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectProcedureTab", () => {
