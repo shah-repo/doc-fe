@@ -27,7 +27,6 @@ declare global {
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
       drSelectChangeDetailsTab(): Chainable<Subject>;
-      drSelectApprovalTab(): Chainable<Subject>;
       drCheckProgressBarAndListLoaderShouldNotExists(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
@@ -305,6 +304,7 @@ Cypress.Commands.add("drSelectApprovalsTab", () => {
 Cypress.Commands.add("drSelectTrainingTab", () => {
   cy.get("[data-cy=\"tabId.training\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectProcedureTab", () => {
@@ -324,11 +324,6 @@ Cypress.Commands.add("drSelectDocumentTab", () => {
 
 Cypress.Commands.add("drSelectChangeDetailsTab", () => {
   cy.get("[data-cy=\"tabId.changedetails\"]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
-});
-
-Cypress.Commands.add("drSelectApprovalTab", () => {
-  cy.get("[data-cy=\"tabId.approval\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -690,9 +685,9 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="3"] .k-filtercell >input`).arrowType(params.title);
   cy.landingPageLoadingElementShouldAppear();
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).scrollIntoView().arrowClick({ force: true });
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
+  cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.dlSelectFirstDocumentWithoutApi();
 });
