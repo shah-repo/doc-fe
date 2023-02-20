@@ -57,7 +57,7 @@ Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string 
 
 Cypress.Commands.add("trClearFilters", () => {
   cy.get("button[data-cy=clearFilter]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trApproveAR", () => {
@@ -141,25 +141,18 @@ Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
 
 Cypress.Commands.add("trLandingPageUsername", (params: {username}) => {
   cy.get(`[aria-colindex="5"] .k-filtercell > input`).clear().arrowType(params.username, { force: true });
-  cy.wait(3000);
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
   cy.get(`[aria-colindex="4"] .k-filtercell > input`).clear().arrowType(params.title, { force: true });
-  cy.wait(2000);
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
   cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowClick().clear();
   cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.docId);
-  cy.wait(2000);
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
