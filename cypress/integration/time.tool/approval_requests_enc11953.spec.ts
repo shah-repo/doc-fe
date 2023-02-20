@@ -180,7 +180,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arSelectItemsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arAddItems();
+      cy.arClickAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arSelectItem({ name: "CP-00004" });
@@ -200,7 +200,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arSelectApprovalTab();
+      cy.drSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[3].email });

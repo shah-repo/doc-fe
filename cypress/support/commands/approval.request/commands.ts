@@ -21,7 +21,7 @@ declare global {
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arEnterApprovalRequestDescriptionNew(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-      arAddItems(): Chainable<Subject>;
+      arClickAddItems(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arClickAddItem(): Chainable<Subject>;
       arClickSaveItem(): Chainable<Subject>;
@@ -96,6 +96,7 @@ declare global {
         sessionId: string;
       }): Chainable<Subject>;
       arClickCreateAnAR(): Chainable<Subject>;
+      arSelectDocumentTab(): Chainable<Subject>;
       arSelectItemsTab(): Chainable<Subject>;
       arSelectChangeDetailsTab(): Chainable<Subject>;
       arSelectApprovalTab(): Chainable<Subject>;
@@ -321,6 +322,12 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.contains("Add Item").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arClickAddItems", () => {
+  cy.contains("Add Item").arrowClick();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -671,6 +678,11 @@ Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled
 
 Cypress.Commands.add("arSelectItemsTab", () => {
   cy.get("[data-cy=\"tabId.items\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arSelectItemsTab", () => {
+  cy.get(`[data-cy="tabId.items"]`).arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
