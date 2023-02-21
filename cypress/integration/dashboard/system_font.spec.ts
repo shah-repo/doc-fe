@@ -560,9 +560,9 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'Approve and Release button' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Express AR button' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
       cy.checkStylePropExists({
-        content: "Approve and Release",
+        content: "Express AR",
         props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
       });
     });
@@ -866,9 +866,9 @@ context("User Creation Flow", () => {
     });
   });
 
-  context("Click on 'Approve and Release' button", () => {
-    it("Click on Approve and Release button", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  context("Click on 'Express AR' button", () => {
+    it("Click on Express AR button", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").contains("Express AR").arrowClick();
     });
 
     it("Click on Confirm without password entered", () => {
@@ -877,11 +877,11 @@ context("User Creation Flow", () => {
   });
 
   context("Verify 'Approve and Release' dialog window font", () => {
-    it(`Verify 'Approve and Release' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Approve and Release' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_600}`, () => {
       cy.get("[class=\"MuiDialogTitle-root\"]")
         .checkStylePropExists({
           content: "Approve and Release",
-          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_600 },
         });
     });
 
@@ -940,7 +940,7 @@ context("User Creation Flow", () => {
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.poApproveWithoutApi();
+      cy.poAMApproveButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
