@@ -3,7 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import cx from "classnames";
 import { isEmpty, map, some } from "lodash";
 import { useObserver } from "mobx-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Text from "../../components/Text";
 import { FBFormState } from "../../form.builder";
 import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
@@ -81,10 +81,20 @@ const ItemsAndDetails: React.FunctionComponent<{
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
 
+  useEffect(() => {
+    if (itemsAndDetailsState.approvalRequstItemInEditMode !== "") {
+      formState.setFieldValue("proposedDocumentRevision", { id: itemsAndDetailsState.approvalRequstItemInEditMode });
+      showEditRow();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemsAndDetailsState.approvalRequstItemInEditMode]);
+
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
-    removePrePopulatedField();
+    if (itemsAndDetailsState.approvalRequstItemInEditMode === "") {
+      removePrePopulatedField();
+    }
   };
 
   function disabledOptions(): string[] {

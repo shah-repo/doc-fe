@@ -200,7 +200,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arSelectApprovalTab();
+      cy.drSelectApprovalsTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[3].email });

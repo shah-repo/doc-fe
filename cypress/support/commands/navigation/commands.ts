@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
 import { NavigationItems } from "../../../utils/constants/navigationItems";
-import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -61,11 +60,7 @@ Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.PostDashboardFeedSearch,
-    () => {
-      cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
-    });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
 
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -95,40 +90,34 @@ Cypress.Commands.add("navigToRecords", () => {
 });
 
 Cypress.Commands.add("navigToParts", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.MANUFACTURING,
-        NavigationItems.PARTS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.PARTS,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLots", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.MANUFACTURING,
-        NavigationItems.LOTS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.LOTS,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLHR", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.MANUFACTURING,
-        NavigationItems.LHR,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.LHR,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -145,22 +134,18 @@ Cypress.Commands.add("navigToLHRWithoutAPI", () => {
 });
 
 Cypress.Commands.add("navigToEB", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.MANUFACTURING,
-        NavigationItems.EB,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.EB,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
-  });
+  cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -175,31 +160,23 @@ Cypress.Commands.add("navigToEquipment", () => {
 });
 
 Cypress.Commands.add("navigToEquipmentList", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetDocRevStatusesCategory],
-  () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.EQUIPMENT,
-        NavigationItems.EQUIPMENT_LIST,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.EQUIPMENT,
+      NavigationItems.EQUIPMENT_LIST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetDocRevStatusesCategory],
-  () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_CONTROL,
-        NavigationItems.DOCUMENT_LIST,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.DOCUMENT_LIST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -240,14 +217,12 @@ Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirm
 
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocTypeGroupOptions], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_CONTROL,
-        NavigationItems.APPROVAL_REQUEST,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.APPROVAL_REQUEST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -275,9 +250,7 @@ Cypress.Commands.add("navigToWorkOrders", () => {
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
-    cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
-  });
+  cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -287,14 +260,12 @@ Cypress.Commands.add("navigToPurchaseOrderWithoutApi", () => {
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.SUPPLIER_MANAGEMENT,
-        NavigationItems.SUPPLIER_LIST,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.SUPPLIER_MANAGEMENT,
+      NavigationItems.SUPPLIER_LIST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -339,14 +310,12 @@ Cypress.Commands.add("navigToTrainingRecords", () => {
 });
 
 Cypress.Commands.add("navigToTrainingCurriculums", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.TRAINING,
-        NavigationItems.TRAINING_CURRICULUMS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.TRAINING,
+      NavigationItems.TRAINING_CURRICULUMS,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
