@@ -12,10 +12,8 @@ import useStyles from "./ApprovalRequestGrid.styles";
 import { generateDocTitleText } from "./helpers";
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
-import { Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -28,17 +26,15 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   handleRemove,
   viewItemActionsVisible,
 }) => {
-  const location = useLocation();
   const classes = useStyles();
 
   const {
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
 
-  const showDeleteButton = !location.pathname.includes(docRevId);
-
   const [docTitle, setDocTitle] = useState(titleText);
-  const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);
+  const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
+  const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string; documentId: string}[]>([]);
   const [isExpanded, setExpanded] = useState(false);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
@@ -59,6 +55,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         .map((part: RelatedPartsListItem) => (
           {
             revId: part.documentRevisionId,
+            documentId: part.documentId,
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
           }
         ));
@@ -74,6 +71,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       }: FBDocumentRevisionResponse = await documentDetailsApi.fetch();
       const documentTitleText = generateDocTitleText(document.docId, displayRevision, name);
       setDocTitle(documentTitleText);
+      setDocRevDocumentId(document.id);
       if (document.documentType?.group === DOC_TYPE_GROUP.PART) {
         getRelatedParts(docRevId, displayRevision);
       }
@@ -89,14 +87,16 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggleItem = () => {
+  const toggleItem = (event) => {
+    event.stopPropagation();
     setExpanded(!isExpanded);
   };
 
   return (
-    <div className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
-      [classes.enclosingDivOpened]: isExpanded,
-    })}>
+    <div onClick={() => viewItemActionsVisible && editItem()}
+      className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
+        [classes.enclosingDivOpened]: isExpanded,
+      })}>
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
           {
@@ -105,7 +105,17 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
               <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
             </span>
           }
-          <span>{docTitle}</span>
+          { docRevDocumentId && <Link
+            to={documentVersionPath(docRevId, docRevDocumentId)}
+            target="_blank"
+            className={classes.link}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <span>{docTitle}</span>
+          </Link>
+          }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <span>{descriptionOfChange}</span>
@@ -122,22 +132,20 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <ul className={classes.docList}>
             {
               docRelatedParts.map((part) => (
-                <li key={part.revId} className={classes.docListItem}>{part.titleText}</li>
+                <li key={part.revId} className={classes.docListItem}>
+                  <Link
+                    to={documentVersionPath(part.revId, part.documentId)}
+                    target="_blank"
+                    className={classes.link}
+                  >
+                    {part.titleText}
+                  </Link>
+                </li>
               ))
             }
           </ul>
         </div>
       }
-      { viewItemActionsVisible && <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
-        { showDeleteButton && <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
-          <DeleteIcon className={classes.iconButton}
-            onClick={() => handleRemove(docRevId)}/>
-        </Button>
-        }
-        <Button className={classes.actionButton}>
-          <EditIcon className={classes.iconButton} onClick={editItem}/>
-        </Button>
-      </div> }
     </div>
   );
 };

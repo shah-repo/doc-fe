@@ -38,6 +38,7 @@ interface Props {
   subtitle?: any;
   displayRevision?: string;
   relatedParentPartDetails?: RelatedParentPartDetails;
+  documentTypeAcronym?: string;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -49,6 +50,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   subtitle,
   displayRevision,
   relatedParentPartDetails,
+  documentTypeAcronym,
 }) => {
 
   const intl = useIntl();
@@ -78,7 +80,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       title = DocTypeGroups.LHR;
     } else if (isEquipmentDocument) {
       title = intl.formatMessage({ id: "form.builder.equipment" });
-    } else if (SM.isNewLayout) {
+    } else if (documentTypeAcronym) {
+      title = documentTypeAcronym;
+    }
+    else if (SM.isNewLayout) {
       title = intl.formatMessage({ id: "navigation.document.list" });
     }
     return title;
@@ -94,7 +99,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
     iconLink = "/navigation_icons/microscope.svg";
   }
-  if (SM.isNewCRLayout) {
+  if (SM.isNewCRLayout || documentTypeAcronym) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
     iconLink = "/navigation_icons/change-order.svg";
   } else if (isTypeMpiOutput) {

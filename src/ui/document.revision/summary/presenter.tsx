@@ -89,9 +89,13 @@ const Presenter: React.FunctionComponent<Props> = ({
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
-  const relatedPartsViewOnly = isDocumentRevisionInStatus(
-    [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
-    status) || (dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER);
+
+  const relatedPartsViewOnly =
+        !dataProp?.relatedPartsStatus
+        || dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER
+        || isDocumentRevisionInStatus(
+          [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
+          status);
 
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl

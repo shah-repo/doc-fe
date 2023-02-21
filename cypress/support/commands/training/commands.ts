@@ -57,7 +57,7 @@ Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string 
 
 Cypress.Commands.add("trClearFilters", () => {
   cy.get("button[data-cy=clearFilter]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trApproveAR", () => {
@@ -133,7 +133,7 @@ Cypress.Commands.add("trApproveTraining", () => {
 
 Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
+  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"common.confirm\"]").click();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -141,33 +141,32 @@ Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
 
 Cypress.Commands.add("trLandingPageUsername", (params: {username}) => {
   cy.get(`[aria-colindex="5"] .k-filtercell > input`).clear().arrowType(params.username, { force: true });
-  cy.wait(3000);
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
   cy.get(`[aria-colindex="4"] .k-filtercell > input`).clear().arrowType(params.title, { force: true });
-  cy.wait(2000);
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
   cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowClick().clear();
   cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.docId);
-  cy.wait(2000);
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
   cy.get(`th[aria-colindex="8"] span.k-select`).arrowClick();
   cy.get("ul>li[role=option]").contains(params.completed).arrowClick().wait(2000);
   cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("trLandingPageOwner", (params: {owner}) => {
+  cy.get(`[aria-colindex="3"] .k-filtercell > input`).arrowClick().clear();
+  cy.get(`[aria-colindex="3"] .k-filtercell > input`).arrowType(params.owner);
+  cy.wait(3000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageClearFilter", () => {
