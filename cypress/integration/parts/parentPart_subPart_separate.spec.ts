@@ -535,7 +535,7 @@ context("Parent Part - Sub Part - Released Separately", () => {
 
   });
 
-  context("Create two subParts", () => {
+  context("Create three subParts", () => {
     [1, 2, 3].forEach((times, index) => {
       context("Creating a sub-part released separately", () => {
         console.log(times);
