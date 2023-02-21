@@ -77,7 +77,7 @@ context("Autocomplete 'Approval requests' test", () => {
       });
 
       it("Click Create a Approval Request button", () => {
-        cy.cmpClickCreateApprovalRequest();
+        cy.cmpClickCreateApprovalRequestWithoutApi();
       });
 
       it("Enter title AR title " + approvalRequestTitle, () => {
@@ -93,6 +93,7 @@ context("Autocomplete 'Approval requests' test", () => {
       });
 
       it("Add first approver to approval request on approver list", () => {
+        cy.drSelectApprovalsTab();
         cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
       });
     });
