@@ -26,7 +26,6 @@ import FormListContent from "../../../../change.request/form.list/dialog/FormLis
 import FormListHeader from "../../../../change.request/form.list/dialog/FormListHeader";
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
 import { ApproverPayload, InDraftAROption, TemplateOption } from "../../../../change.request/form/types";
-import { newARDocRevToAdd } from "../../../../change.request/items.and.details/helpers";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
 import { toastError } from "../../../../components/notifications";
@@ -260,10 +259,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       return;
     }
     const data = templateOptionToChangeRequestCreateBody(templateChosen);
-    // By default when creating a new CO, the current document revision should be auto linked
-    data.formInput = {
-      documentRevisions: [newARDocRevToAdd(docRevId)],
-    };
     createCRAsync.start(createCRAction, data, createCRAsync);
   };
 
