@@ -1083,7 +1083,7 @@ context("Test training records and training curriculum landing page", () => {
       it("Verify hide on DOCUMENT TITLE", () => {
         cy.get(`[class="k-grid-content k-virtual-content"]`).scrollTo("left").wait(500);
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick({ force: true }).wait(500);
         cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick({ force: true });
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
       });
