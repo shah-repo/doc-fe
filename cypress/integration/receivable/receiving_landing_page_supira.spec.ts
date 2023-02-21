@@ -1182,10 +1182,12 @@ context("Test Supplier Landing Page for Supira", () => {
   context("Verify Receiving landing page", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(1000);
     });
 
     it("Navigate to Receivable landing page", () => {
-      cy.navigToReceivableList();
+      cy.navigToReceivableListWithoutApi();
     });
 
     it("Verify landing page table is using Kendo grid", () => {
@@ -1234,23 +1236,33 @@ context("Test Supplier Landing Page for Supira", () => {
           searchTerm: "PRT-00007 - 1",
           expectedDocId: "RC-00006",
         },
-        {
-          header: COLUMN_HEADERS[7],
-          index: 8,
-          searchTerm: "Closed",
-          expectedDocId: "RC-00006",
-        },
       ].forEach((params) => {
         it(`Verify filter for ${params.header}`, () => {
           cy.dlClearFilters();
+          cy.landingPageLoadingElementShouldNotExist();
           cy.get(`th[aria-colindex="${params.index}"] input`).should("have.attr", "value", "");
           cy.get(`th[aria-colindex="${params.index}"] input`).arrowType(params.searchTerm);
+          cy.landingPageLoadingElementShouldNotExist();
           cy.get(`th[aria-colindex="${params.index}"] input`).should("have.attr", "value", params.searchTerm);
           cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
           cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
             expect(cell).to.contain(params.expectedDocId);
           } );
         });
+      });
+
+      // status uses dropdown, so different commands are used
+      it("Verify filter for State", () => {
+        cy.dlClearFilters();
+        cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "All");
+        cy.get(`th[aria-colindex="8"] span.k-input`).arrowClick();
+        cy.get("ul>li[role=option]").contains("Open").arrowClick();
+        cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "Open");
+        cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
+        cy.get("tr.k-master-row").first().find("td").eq(0).should( (cell) => {
+          expect(cell).to.contain("RC-00006");
+        } );
+        cy.dlClearFilters();
       });
 
       // State uses dropdown, so different commands are used
@@ -1353,16 +1365,18 @@ context("Test Supplier Landing Page for Supira", () => {
 
   context("Verify PART NUMBER/REV when RELEASED", () => {
     it("Navigate to Receivable landing page", () => {
-      cy.navigToReceivableList();
+      cy.navigToReceivableListWithoutApi();
     });
 
     it("Filter RECEIPT ID column", () => {
       cy.get(`th[aria-colindex="1"] input`).arrowType("RC-00005");
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Filter RECEIPT ID column", () => {
       cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="7"] input`).arrowType("PRT-00005 - 1");
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
@@ -1389,17 +1403,19 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Verify PART NUMBER/REV when REVISED", () => {
     it("Navigate to Receivable landing page", () => {
-      cy.navigToReceivableList();
+      cy.navigToReceivableListWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(1000);
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
@@ -1415,7 +1431,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Navigate to Receivable landing page", () => {
-      cy.navigToReceivableList();
+      cy.navigToReceivableListWithoutApi();
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
@@ -1434,26 +1450,27 @@ context("Test Supplier Landing Page for Supira", () => {
 
     it("Filter RCT-00001", () => {
       cy.get(`th[aria-colindex="1"] input`).arrowType("RCT-00001");
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Open first one in the list", () => {
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Navigate to Receivable landing page", () => {
-      cy.navigToReceivableList();
+      cy.navigToReceivableListWithoutApi();
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
