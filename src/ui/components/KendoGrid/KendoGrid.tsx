@@ -15,13 +15,13 @@ import {
   GridNoRecords,
   GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, find, findIndex, map, set, startCase, toLower } from "lodash";
+import { cloneDeep, find, findIndex, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DocumentCategory, DocumentRevisionStatus, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
 import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
@@ -298,8 +298,8 @@ export function KendoGrid<T extends any>({
             cell={(props) =>
             {
               props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder &&
-                 props?.dataItem?.displayStatus === startCase(toLower(DocumentRevisionStatus.Released))) ?
-                startCase(toLower(DocumentRevisionStatus.Approved))  : props?.dataItem?.displayStatus );
+                 props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released) ?
+                DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
               return RenderCustomCell(
                 {
                   ...props,

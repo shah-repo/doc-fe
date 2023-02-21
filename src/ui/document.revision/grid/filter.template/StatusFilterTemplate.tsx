@@ -3,11 +3,10 @@ import {
   DropDownListChangeEvent,
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import { startCase, toLower } from "lodash";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest/types";
-import { DocumentCategory, DocumentRevisionStatus, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
 interface Props extends GridFilterCellProps {
@@ -51,14 +50,14 @@ export const StatusFilterTemplate = ({
         defaultItem={defaultItem}
         itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
           DocumentCategory.PurchaseOrder &&
-           itemProps?.dataItem === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
-          startCase(toLower(DocumentRevisionStatus.Approved))
+           itemProps?.dataItem === DocumentRevisionStatusDisplay.Released ) ?
+          DocumentRevisionStatusDisplay.Approved
           : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
         valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
           DocumentCategory.PurchaseOrder && itemProps
-          === startCase(toLower(DocumentRevisionStatus.Released)) ) ?
-          startCase(toLower(DocumentRevisionStatus.Approved)) : li.props.children}</span>;
+          === DocumentRevisionStatusDisplay.Released ) ?
+          DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
       />
       <button
