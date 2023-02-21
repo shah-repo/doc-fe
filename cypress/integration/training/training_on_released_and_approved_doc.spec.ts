@@ -570,6 +570,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select AR", () => {
+      // eslint-disable-next-line max-len
       cy.arFilterARListByNameAndStatusWithoutApi({ title: "Approved document", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       cy.listLoadingElementShouldNotExist();
     });

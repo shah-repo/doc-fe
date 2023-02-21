@@ -699,12 +699,6 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });
 
-    // it("Switch to myfeed tab", () => {
-    //   cy.dashOpenMyFeedTab();
-    //   cy.progressBarShouldNotExist();
-    //   cy.listLoadingElementShouldNotExist();
-    // });
-
     it(`Click training notification and check doc with Approved status`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
       cy.arVerifyStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
