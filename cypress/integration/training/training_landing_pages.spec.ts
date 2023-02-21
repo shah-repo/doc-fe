@@ -768,11 +768,10 @@ context("Test training records and training curriculum landing page", () => {
       cy.get(`th>span>span>span[class="k-column-title"]`).eq(0).should("contain.text", "TRN ID");
       cy.get(`th[aria-colindex="1"][role="columnheader"]>span>span`).contains("TRN ID");
       cy.get(`th[aria-colindex="2"][role="columnheader"]>span>span`).contains("DOC ID");
-      // cy.dragAndDrop({
-      //   fromSelector: `th[aria-colindex="1"][role="columnheader"]>span>span`,
-      //   toSelector: `th[aria-colindex="2"][role="columnheader"]>span>span`,
-      // });
-      cy.pause();
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="1"][role="columnheader"]>span>span`,
+        toSelector: `th[aria-colindex="2"][role="columnheader"]>span>span`,
+      });
       cy.get(`th>span>span>span[class="k-column-title"]`).eq(0).should("contain.text", "DOC ID");
     });
 
@@ -1055,6 +1054,7 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify filter for TC ID", () => {
         SystemRequirement("REQ-2820");
+        cy.get(`[class="k-grid-content k-virtual-content"]`).scrollTo("right").wait(500);
         cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 9, input: "" });
         cy.filterLandingPageColumnFilter({ colIndex: 9, input: "TCT-00002" });
         cy.wait(2000);
@@ -1081,9 +1081,10 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify hide and freeze", () => {
       it("Verify hide on DOCUMENT TITLE", () => {
+        cy.get(`[class="k-grid-content k-virtual-content"]`).scrollTo("left").wait(500);
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
         cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
-        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick({ force: true });
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
       });
 
@@ -1253,11 +1254,10 @@ context("Test training records and training curriculum landing page", () => {
 
     it(`Verify drag and drop TRAINING CURRICULUM ID header on second slot`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TCT-");
-      // cy.dragAndDrop({
-      //   fromSelector: `th[aria-colindex="1"][role]>span>span`,
-      //   toSelector: `th[aria-colindex="2"][role]>span>span`,
-      // });
-      cy.pause();
+      cy.dragAndDrop({
+        fromSelector: `th[aria-colindex="1"][role]>span>span`,
+        toSelector: `th[aria-colindex="2"][role]>span>span`,
+      });
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "TCT-");
     });
 
@@ -1453,14 +1453,14 @@ context("Test training records and training curriculum landing page", () => {
     context("Verify hide and freeze", () => {
       it("Verify hide on STATE", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "STATE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
-        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
+        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick({ force: true });
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "STATE");
       });
 
       it("Verify unhide on STATE", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "STATE");
-        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
+        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick().wait(500);
         cy.get("ul>li[role=menuitem]").contains("STATE").parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "STATE");
@@ -1468,14 +1468,14 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify freeze on STATE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "STATE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "STATE");
       });
 
       it("Verify un-freeze on STATE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "STATE");
-        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "STATE");
       });
