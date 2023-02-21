@@ -180,7 +180,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arSelectItemsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.arClickAddItem();
+      cy.arAddItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arSelectItem({ name: "CP-00004" });

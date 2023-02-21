@@ -22,6 +22,7 @@ declare global {
       arEnterApprovalRequestDescriptionNew(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
+      arAddItems(): Chainable<Subject>;
       arClickAddItem(): Chainable<Subject>;
       arClickSaveItem(): Chainable<Subject>;
       arItemsLoaderShouldNotExist(): Chainable<Subject>;
