@@ -21,7 +21,6 @@ declare global {
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arEnterApprovalRequestDescriptionNew(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-      arClickAddItems(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arClickAddItem(): Chainable<Subject>;
       arClickSaveItem(): Chainable<Subject>;
@@ -322,12 +321,6 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.contains("Add Item").arrowClick();
   });
-  cy.listLoadingElementShouldNotExist();
-});
-
-Cypress.Commands.add("arClickAddItems", () => {
-  cy.contains("Add Item").arrowClick();
-  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
