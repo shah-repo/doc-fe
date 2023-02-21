@@ -312,6 +312,13 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -413,6 +420,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
@@ -504,7 +512,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -517,7 +525,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -539,6 +547,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it(`${USERS[11].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("center");
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[11].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
@@ -546,12 +555,14 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it(`${USERS[12].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[12].name }).wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
     });
 
     it(`${USERS[13].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[13].name }).wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[13].name).and("contain", "Pending");
@@ -560,9 +571,10 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -628,6 +640,10 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Clear Filters", () => {
+      cy.trClearFilters();
+    });
+
     it("Filters document by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: "released form", status: "Released" });
     });
@@ -638,12 +654,12 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Edit document description", () => {
-      cy.drEnterDocumentDescription({ description: "Edit description" });
-    });
-
     it("Save document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Edit document description", () => {
+      cy.drEnterDocumentDescription({ description: "Edit description" });
     });
 
     it("Approve and release FORM document", () => {
@@ -678,6 +694,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   });
 
   context("Check pending training notification", () => {
+
     it(`Verify training notification`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });
@@ -1037,11 +1054,14 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Navigate to approval request list and set effective date to 23 days from now", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Clear filters", () => {
       cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Filter list by status", () => {
@@ -1189,7 +1209,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context(`Check training notifications as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();

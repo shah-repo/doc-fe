@@ -444,6 +444,7 @@ context("Receivable list test", () => {
   context("Edit receivable", () => {
     it("Filter receivable list by id", () => {
       cy.recFilterByReceivableId({ id: "RC-00005" });
+      cy.wait(3000);
     });
 
     it("Enter first receivable on list", () => {
@@ -498,6 +499,7 @@ context("Receivable list test", () => {
     context("Verify filter by receivable id", () => {
       it("Filter list by id 'RC-00006'", () => {
         cy.recFilterByReceivableId({ id: "RC-00006" });
+        cy.wait(3000);
       });
 
       it("Verify filter by receivable id", () => {
@@ -554,6 +556,7 @@ context("Receivable list test", () => {
     context("Verify clear filter option", () => {
       it("Clear filter", () => {
         cy.dlClearFilters();
+        cy.wait(2000);
       });
 
       it("Verify filter clear", () => {
@@ -573,12 +576,15 @@ context("Receivable list test", () => {
       });
 
       it("Navigate back to receivables list", () => {
-        cy.navigToReceivableList();
+        cy.navigToReceivableListWithoutApi();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by owner", () => {
         SystemRequirement("REQ-1730");
         cy.recVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Verify filter by receivable id", () => {

@@ -370,22 +370,6 @@ context("Bulk create unsupported fields for documents", () => {
                       applicableValidationSchema: true,
                     },
                     {
-                      name: "-kv806ph2",
-                      tabId: "overview",
-                      type: "approvalMatrix",
-                      rules: "",
-                      hidden: false,
-                      deleted: false,
-                      applicableOn: [
-                        "ON_STATE_TO_IN_REVIEW",
-                      ],
-                      outputDisabled: false,
-                      validationMode: "default",
-                      validationAttribute: "",
-                      deleteInFormDisabled: false,
-                      applicableValidationSchema: true,
-                    },
-                    {
                       name: "blc-instruction-media-upload-kv80744w",
                       tabId: "overview",
                       type: "instructionsmediaupload",
@@ -859,7 +843,7 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
@@ -870,7 +854,7 @@ context("Bulk create unsupported fields for documents", () => {
 
   context("Verify created documents", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(30 * 1000);
       cy.navigToDocumentList();
       cy.dlClearFilters();
@@ -879,6 +863,7 @@ context("Bulk create unsupported fields for documents", () => {
 
     it("Filter by doc-id", () => {
       cy.dlFilterByDocId({ docId: "TDT-00002" });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     context("Verify document one data", () => {
@@ -1003,6 +988,7 @@ context("Bulk create unsupported fields for documents", () => {
       it("Filter document two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first document", () => {

@@ -126,9 +126,9 @@ context("User management landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for Name", () => {
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="1"] input`).arrowType(USERS[4].name);
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", USERS[4].name);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: USERS[4].name });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: USERS[4].name });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -141,9 +141,9 @@ context("User management landing page", () => {
       });
 
       it("Verify filter for Email", () => {
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="3"] input`).arrowType(USERS[4].email);
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", USERS[4].email);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: USERS[4].email });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: USERS[4].email });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -166,9 +166,9 @@ context("User management landing page", () => {
       it("Navigate to dashboard and comeback to verify filters are saved after navigating from page", () => {
         cy.navigToDashboard();
         cy.usrNavigateToUserManagement();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", USERS[4].name);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: USERS[4].name });
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Signed up");
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", USERS[4].email);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: USERS[4].email });
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "Everyone");
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Active");
 
@@ -176,9 +176,9 @@ context("User management landing page", () => {
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "Select Groups");
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
       });
@@ -186,7 +186,7 @@ context("User management landing page", () => {
 
     context("Verify dropdown filters", () => {
       it("Verify Email dropdown filters", () => {
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
@@ -194,50 +194,50 @@ context("User management landing page", () => {
       it(`Verify Email "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "2" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
       });
 
       it(`Verify Email "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType(USERS[1].email);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: USERS[1].email });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
       });
 
       it(`Verify Email "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType(USERS[1].email);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: USERS[1].email });
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
       });
 
       it(`Verify Email "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("enlil.testmail+cy");
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "enlil.testmail+cy" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
       });
 
       it(`Verify Email "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("cy1@gmail.com");
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "cy1@gmail.com" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
       });
 
       it(`Verify Email "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
@@ -245,7 +245,7 @@ context("User management landing page", () => {
 
       it(`Verify Email "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
@@ -253,7 +253,7 @@ context("User management landing page", () => {
 
       it(`Verify Email "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
@@ -261,7 +261,7 @@ context("User management landing page", () => {
 
       it(`Verify Email "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();

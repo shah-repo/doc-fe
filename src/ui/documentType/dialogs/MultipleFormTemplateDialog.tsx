@@ -19,6 +19,7 @@ import { styles } from "./FormListDialog/FormListDialog.styles";
 interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[];
   formIds: DocumentTypeByIdForm[];
+  areFormIdsLoading?: boolean;
   dialog: DialogHandler;
   handleSelection: (id: string) => void;
   handleTemplateSelection: (id: string) => void;
@@ -30,6 +31,7 @@ interface DocumentTypeDialogProps extends FormikProps<any> {
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
+  areFormIdsLoading = false,
   documentTypes,
   handleSelection,
   handleTemplateSelection,
@@ -144,7 +146,10 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
             <AutocompleteField
               name="selectType"
               size="sm"
-              autocompleteProps={{ id: "MultipleFormTemplate-selectDocForm" }}
+              autocompleteProps={{
+                id: "MultipleFormTemplate-selectDocForm",
+                isLoading: areFormIdsLoading,
+              }}
               options={activeDocTypes.map((docType) => ({
                 label: docType.documentTypeName,
                 value: docType.id,
@@ -153,15 +158,18 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               label={isRecord ? "record.select.type" : "supplier.select.type" }
               data-cy={isRecord ? "record.select.type" : "supplier.select.type" }
             />
-            {formIds.length > 1 && <AutocompleteField
-              name="selectForm"
-              size="sm"
-              autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
-              options={renderOptions()}
-              onClick={(option) => handleTemplateSelection(option.value)}
-              label={isRecord ? "record.select.template" : "supplier.select.form"}
-              data-cy={isRecord ? "record.select.template" : "supplier.select.form"}
-            />}
+            {formIds.length > 1 && (
+              <AutocompleteField
+                isDisabled={areFormIdsLoading}
+                name="selectForm"
+                size="sm"
+                autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
+                options={renderOptions()}
+                onClick={(option) => handleTemplateSelection(option.value)}
+                label={isRecord ? "record.select.template" : "supplier.select.form"}
+                data-cy={isRecord ? "record.select.template" : "supplier.select.form"}
+              />
+            )}
             <Button
               variant="text"
               color="secondary"

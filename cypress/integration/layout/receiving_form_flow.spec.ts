@@ -1819,6 +1819,7 @@ context("Receiving landing page test", () => {
 
     it("Submit for approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
     });
 
     it("Approve PO", () => {

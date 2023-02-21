@@ -15,7 +15,7 @@ definitions:
   steps:
     - step: &COMMON
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.3
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-2.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -25,7 +25,7 @@ definitions:
 
     - step: &COMMON_BUILD
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.3
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -36,7 +36,7 @@ definitions:
 
     - step: &COMMON_DEPLOY
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.3
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -430,6 +430,24 @@ definitions:
         script:
           - ./aws/bash_scripts/publish.sh "prod2"
         trigger: manual
+    #
+    # PROD 3
+    #
+    - step: &BUILD_PROD3
+        <<: *COMMON_BUILD
+        name: Building for Prod3
+        script:
+          - ./aws/bash_scripts/build.sh "prod3"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_PROD3
+        <<: *COMMON_DEPLOY
+        name: Deploy to Prod3
+        deployment: Prod3
+        script:
+          - ./aws/bash_scripts/publish.sh "prod3"
+        trigger: manual
 #
 # Pipelines
 #
@@ -529,6 +547,17 @@ pipelines:
     deploy-to-prod2-without-tests:
       - step: *BUILD_PROD2
       - step: *DEPLOY_PROD2
+
+    deploy-to-prod3:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_PROD3
+      - step: *DEPLOY_PROD3
+
+    deploy-to-prod3-without-tests:
+      - step: *BUILD_PROD3
+      - step: *DEPLOY_PROD3
 
     deploy-to-sandbox:
       - parallel:

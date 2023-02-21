@@ -336,6 +336,13 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -720,7 +727,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -781,10 +788,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
   context(`Login as company admin`, () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -1034,9 +1037,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[2].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
     });
@@ -1121,9 +1121,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[3].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
     });
@@ -1141,9 +1138,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[4].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
     });
