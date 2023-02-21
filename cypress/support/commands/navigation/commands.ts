@@ -79,7 +79,7 @@ Cypress.Commands.add("navigToDashboardWithoutApi", () => {
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
   cy.get("a[href=\"/document_type_management\"]").arrowClick();
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToRecords", () => {
@@ -91,7 +91,7 @@ Cypress.Commands.add("navigToRecords", () => {
     ],
   });
 
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToParts", () => {
@@ -104,7 +104,7 @@ Cypress.Commands.add("navigToParts", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLots", () => {
@@ -117,7 +117,7 @@ Cypress.Commands.add("navigToLots", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLHR", () => {
@@ -130,7 +130,7 @@ Cypress.Commands.add("navigToLHR", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLHRWithoutAPI", () => {
@@ -141,7 +141,7 @@ Cypress.Commands.add("navigToLHRWithoutAPI", () => {
       NavigationItems.LHR,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToEB", () => {
@@ -154,24 +154,24 @@ Cypress.Commands.add("navigToEB", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToReceivableListWithoutApi", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToEquipment", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToEquipmentList", () => {
@@ -186,22 +186,18 @@ Cypress.Commands.add("navigToEquipmentList", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetDocRevStatusesCategory],
-  () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_CONTROL,
-        NavigationItems.DOCUMENT_LIST,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.DOCUMENT_LIST,
+    ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentTypeManagement", () => {
@@ -211,7 +207,7 @@ Cypress.Commands.add("navigToDocumentTypeManagement", () => {
       NavigationItems.DOCUMENT_TYPE_MANAGEMENT,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToPageDetailsManagement", () => {
@@ -221,7 +217,7 @@ Cypress.Commands.add("navigToPageDetailsManagement", () => {
       NavigationItems.PAGE_DETAILS_MANAGEMENT,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirmPopup: boolean }) => {
@@ -249,7 +245,7 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToApprovalRequestListWithoutApi", () => {
@@ -260,7 +256,7 @@ Cypress.Commands.add("navigToApprovalRequestListWithoutApi", () => {
       NavigationItems.APPROVAL_REQUEST,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 
@@ -271,19 +267,19 @@ Cypress.Commands.add("navigToWorkOrders", () => {
       NavigationItems.MANUFACTURING,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToPurchaseOrderWithoutApi", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {
@@ -296,7 +292,7 @@ Cypress.Commands.add("navigToSuppliers", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToSuppliersWithoutApi", () => {
@@ -307,7 +303,7 @@ Cypress.Commands.add("navigToSuppliersWithoutApi", () => {
       NavigationItems.SUPPLIER_LIST,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 
@@ -335,7 +331,7 @@ Cypress.Commands.add("navigToTrainingRecords", () => {
       NavigationItems.TRAINING_RECORDS,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToTrainingCurriculums", () => {
@@ -348,7 +344,7 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToAsyncTasks", () => {
@@ -358,5 +354,5 @@ Cypress.Commands.add("navigToAsyncTasks", () => {
       NavigationItems.ASYNC_TASKS,
     ],
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
