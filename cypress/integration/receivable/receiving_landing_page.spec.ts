@@ -1118,14 +1118,14 @@ context("Receiving landing page test", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.wait(3000);
     });
   });
 
   context("Verify Receiving landing page", () => {
     it("Navigate to Receivings landing page", () => {
-      cy.navigToReceivableList();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.navigToReceivableListWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify landing page table is using Kendo grid", () => {
