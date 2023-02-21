@@ -1100,6 +1100,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
     it("Column grouping", () => {
       cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item").eq(0).should("have.text", "Group Column").click();
     });
 

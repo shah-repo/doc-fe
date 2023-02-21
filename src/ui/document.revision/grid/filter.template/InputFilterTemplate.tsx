@@ -9,8 +9,8 @@ import { DisplayText, TranslatedText } from "../../../components/common/kendo/he
 const valueOperators = [
   "contains",
   "doesnotcontain",
-  "isequalto",
-  "isnotequalto",
+  "eq",
+  "neq",
   "startswith",
   "endswith",
 ];

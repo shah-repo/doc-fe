@@ -480,7 +480,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
