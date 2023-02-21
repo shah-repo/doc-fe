@@ -660,6 +660,7 @@ context("Forced training flow", () => {
     });
 
     it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -672,6 +673,7 @@ context("Forced training flow", () => {
     });
 
     it(`${USERS[13].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
