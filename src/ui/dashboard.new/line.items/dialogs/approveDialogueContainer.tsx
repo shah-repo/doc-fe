@@ -59,9 +59,12 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         <div style={{ color: Colors.black }}>
           <div><span style={{ fontWeight: "bold" }}>
             <Text translation={`approvalRequest.status.${response?.state}` as Translation}/></span></div>
-          <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
-            values={{ crId: response?.crId, title: response?.title }} />
-          </div>
+          {response?.state === "IN_REVIEW" ?
+            <div><Text translation={"approvalRequest.status.message.IN_REVIEW_PENDING" as Translation}
+            /> </div> :
+            <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
+              values={{ crId: response?.crId, title: response?.title }} />
+            </div>}
         </div>
       </div></>, {
         closeButton: true,
