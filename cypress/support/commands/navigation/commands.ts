@@ -201,7 +201,7 @@ Cypress.Commands.add("navigToDocumentList", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentTypeManagement", () => {
@@ -278,7 +278,7 @@ Cypress.Commands.add("navigToPurchaseOrder", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToPurchaseOrderWithoutApi", () => {
@@ -296,7 +296,7 @@ Cypress.Commands.add("navigToSuppliers", () => {
       ],
     });
   });
-  cy.landingPageLoadingElementShouldAppear();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToSuppliersWithoutApi", () => {
