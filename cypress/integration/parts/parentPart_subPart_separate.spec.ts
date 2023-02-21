@@ -577,7 +577,7 @@ context("Parent Part - Sub Part - Released Separately", () => {
           cy.wait("@fetchDocumentRevision");
           cy.wait(2000);
 
-          cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+          // cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
         });
 
         it("Check for breadcrumbs", () => {

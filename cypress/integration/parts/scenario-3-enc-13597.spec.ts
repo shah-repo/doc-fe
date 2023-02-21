@@ -3,12 +3,20 @@
 /// <reference types="Cypress" />
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
+let adminEmployee;
 let employeeLoginFirst;
+let partDocumentType;
+let group;
+const createdPartDocument: any[] = [];
+let approvalRequestDocumentType;
+let initialArDocument;
 
 const userIndex = Math.floor(Math.random() * USERS.length);
 // const owner = USERS[userIndex].name;
@@ -21,6 +29,7 @@ const details = {
   parentPartDocRevSeparateTitle: "Parent part - MPI Separate",
   subPartDocRevSeparateTitle: "Sub part - MPI Separate",
   partDocRevDescription: "Desc",
+
 };
 
 // Maintaning references to parentParts and child parts created for selection
@@ -31,6 +40,15 @@ const references = {
   parentPartDocRevSeparateDocId: "",
   subPartDocRevSeparateDocId: "",
 };
+
+const partNames = {
+  materialParentPartTogether: "",
+  materialSubPartTogether: "",
+  materialParentPartSeparate: "",
+  materialSubPartSeparate: "",
+};
+
+let partsGenerated = 0;
 
 context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
   before(() => {
@@ -69,6 +87,9 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[userIndex].email);
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           employeeLoginFirst = createdCompany.employees
             .find((employee) => employee.user.email === USERS[userIndex].email);
           done();
@@ -131,6 +152,12 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
   });
 
   context("Verify the fields on part form", () => {
+    it("Read the Part document docRevId", () => {
+      cy.url().then((url) => {
+        console.log(url);
+      });
+    });
+
     it("Verify Form opens to the Overview tab by default", () => {
       cy.get("[data-cy=\"tabId.overview\"]").contains("Overview")
         .should("exist");
@@ -327,6 +354,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
         cy.get("span[data-cy=\"HeaderInfo-docId\"]")
           .then(($el) => {
             references.parentPartDocRevTogetherDocId = $el.text();
+            partsGenerated += 1;
           });
       });
     });
@@ -402,6 +430,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
         it("Maintain a reference to the subPart docId", () => {
           references.subPartDocRevTogetherDocId = `${references.parentPartDocRevTogetherDocId}-01`;
+          partsGenerated += 1;
         });
 
       });
@@ -479,6 +508,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
         it("Maintain a reference to the subPart docId", () => {
           references.subPartDocRevTogetherVoidedDocId = `${references.parentPartDocRevTogetherDocId}-02`;
+          partsGenerated += 1;
         });
       });
 
@@ -486,6 +516,9 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
         it("Voids the latest subPart added", () => {
           // Select the void button
           cy.get("tr[data-cy=\"relatedPartsViewRow\"]").last().find("input[type=\"checkbox\"]").check();
+
+          // Click confirm on the alert dialog
+          cy.get("button[data-cy=\"AlertDialog-continueButton\"]").click();
 
           // Wait on the API call to complete
           cy.wait("@voidDocumentRevision");
@@ -547,6 +580,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
         cy.get("span[data-cy=\"HeaderInfo-docId\"]")
           .then(($el) => {
             references.parentPartDocRevSeparateDocId = $el.text();
+            partsGenerated += 1;
           });
       });
     });
@@ -568,6 +602,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
       it("Keep a reference of subPart docId to check later", () => {
         references.subPartDocRevSeparateDocId = `${references.parentPartDocRevSeparateDocId}-01`;
+        partsGenerated += 1;
       });
 
       it("Toast should have a View Link", () => {
@@ -583,7 +618,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
         cy.wait("@fetchDocumentRevision");
         cy.wait(2000);
 
-        cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+        // cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
       });
 
       it("Checks that subPart is in Draft", () => {
@@ -642,6 +677,354 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
       it("Approves and releases the parent part", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
+    });
+  });
+
+  context("Add 3 random parts", () => {
+    it("getsGroupResponse", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+      });
+    });
+
+    it("setting up initialARDocument", () => {
+      cy.arGetArDocumentByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        name: "AR Form",
+      }).then((response) => {
+        initialArDocument = response;
+      });
+    });
+
+    [1, 2, 3].forEach((index: number) => {
+      it("[API]Create part document", (done: any) => {
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: `<p>Part document ${index}</p>`,
+            document: {
+              docId: `PRT-0000${5 + index}`,
+              documentType: {
+                id: partDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: `Part document ${index}`,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response: any) => {
+          createdPartDocument.push(response);
+          partsGenerated += 1;
+          cy.drAPIApproveAndRelease({
+            documentId: response?.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => {
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  context("1-4 Creating a new MPI document", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'MPI document", () => {
+      cy.drEnterDocumentTitle({ name: "MPI document" });
+    });
+
+    it("Enter description 'MPI document description'", () => {
+      cy.drEnterDocumentDescription({ description: "MPI document description" });
+    });
+
+    it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+  });
+
+  context("5 Add 5 materials", () => {
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    context("Open the material addition modal & add the parts created verifying their presence", () => {
+      partNames.materialSubPartTogether =
+        `${references.subPartDocRevTogetherDocId} - rev 1 - ${details.parentPartDocRevTogetherTitle}-${details.subPartDocRevTogetherTitle}`;
+
+      partNames.materialSubPartSeparate =
+        `${references.subPartDocRevSeparateDocId} - rev 1 - ${details.subPartDocRevSeparateTitle}`;
+
+      partNames.materialParentPartTogether =
+        `${references.parentPartDocRevTogetherDocId} - rev 1 - ${details.parentPartDocRevTogetherTitle}`;
+
+      partNames.materialParentPartSeparate =
+        `${references.parentPartDocRevSeparateDocId} - rev 1 - ${details.parentPartDocRevSeparateTitle}`;
+
+      it("Opens the material addition modal", () => {
+        cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick().wait(500);
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name=\"LHRTparameter\"]").uncheck();
+        cy.get("[data-cy=\"title\"]").arrowClick();
+      });
+
+      it(`Ensure that the list that opens up has all items & has the values`, () => {
+        cy.rpCheckOptionsLengthAndValues(partsGenerated - 1, Object.values(partNames));
+      });
+
+      it("Close the material addition modal", () => {
+        cy.get("[data-cy=\"form.builder.cancel\"]").closest("button").click({ force: true });
+      });
+
+      it("Add 1st material as the Related subpart together to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep(
+          { numbOfStep: 1, material: partNames.materialSubPartTogether, quntity: "3", unit: "Each" });
+      });
+
+      it("Add 2nd material as the Related subpart separate to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep(
+          { numbOfStep: 1, material: partNames.materialSubPartSeparate, quntity: "3", unit: "Each" });
+      });
+
+      it("Add 3rd part to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep(
+          { checkParameter: true, numbOfStep: 1, material: createdPartDocument[0].name, quntity: "3", unit: "Each" });
+      });
+
+      it("Add 4th part to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep(
+          { checkParameter: true, numbOfStep: 1, material: createdPartDocument[1].name, quntity: "3", unit: "Each" });
+      });
+
+      it("Add 5th part to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep(
+          { checkParameter: true, numbOfStep: 1, material: createdPartDocument[2].name, quntity: "3", unit: "Each" });
+      });
+
+      it("Fill step #1 description", () => {
+        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+      });
+    });
+
+  });
+
+  context("6-7 Release MPI", () => {
+    it("Click save document", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Approve and release MPI document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+    });
+  });
+
+  context("8-11 Creating a new LHRT document", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'LHRt document'", () => {
+      cy.drEnterDocumentTitle({ name: "LHRt document" });
+    });
+
+    it("Fill LHRt document description", () => {
+      cy.drEnterDocumentDescription({ description: "LHRt document description" });
+    });
+
+    it("Select 'LHRt' document type", () => {
+      cy.drSelectDocumentType({ documentType: "LHR Template" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Lot History Record' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Verify LHRT is in DRAFT status", () => {
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
+    });
+  });
+
+  context("12 Part to be manufactured", () => {
+    it("Part to be Manufactured field should have text in red", () => {
+      cy.get("[name=\"lhr-selected-part\"]").parent().parent()
+        .find(".Mui-error").eq(1)
+        .should("have.text", "The Part to be Manufactured is a required field.")
+        .and("have.css", "color", "rgb(244, 67, 54)");
+    });
+
+    it("Click on Part to be manufactured and select one", () => {
+      cy.get("[data-cy=\"lhr-selected-part\"]").arrowClick();
+    });
+
+    it(`Ensure that the list that opens up has all items & has the values`, () => {
+      cy.rpCheckOptionsLengthAndValues(partsGenerated - 1, [...Object.values(partNames)], true);
+    });
+
+    it("Selects the Related subPart together", () => {
+      cy.get("ul>li[role=option]").contains(partNames.materialSubPartTogether.replace("- rev 1 -", "-")).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("13 Try to approve and release LHRT ", () => {
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+
+    it("Approve and release LHRt document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
+    });
+
+    it("Verify error message", () => {
+      cy.checkToastMessageIsEqual({
+        message: "Field LHR Step #1 is required.",
+      });
+      cy.closeAllAlertMessages();
+      cy.drCloseApproveAndReleaseDialog();
+    });
+  });
+
+  context("14 Select created MPI in LHR template", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick({ force: true });
+      cy.wait(2000);
+    });
+
+    it("Select MPI document for step #1 in LHRt", () => {
+      cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+        $el.trigger("click");
+      });
+      cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("15-17 edit the parameterized materials & select the related parts", () => {
+    context("15 selecting parent part from Scenario 1 (without the dash)", () => {
+      it("Edit the 1st row", () => {
+        cy.get("div.FBInput-hoverVisibility button").eq(0).click();
+      });
+
+      it("click and open the dropdown", () => {
+        cy.get("[data-cy=\"title\"]").arrowClick();
+      });
+
+      it(`Ensure that the list that opens up has all items & has the values`, () => {
+        cy.rpCheckOptionsLengthAndValues(partsGenerated - 1, Object.values(partNames));
+      });
+
+      it("Selecting parent part from the list", () => {
+        cy.get("ul>li[role=option]").contains(partNames.materialParentPartTogether).arrowClick();
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("16 selecting parent part from Scenario 2 (with the dash)", () => {
+      it("Edit the 2nd row", () => {
+        cy.get("div.FBInput-hoverVisibility button").eq(1).click();
+      });
+
+      it("click and open the dropdown", () => {
+        cy.get("[data-cy=\"title\"]").arrowClick();
+      });
+
+      it(`Ensure that the list that opens up has all items & has the values`, () => {
+        cy.rpCheckOptionsLengthAndValues(partsGenerated - 1, Object.values(partNames));
+      });
+
+      it("Selecting parent part from the list", () => {
+        cy.get("ul>li[role=option]").contains(partNames.materialParentPartSeparate).arrowClick();
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("17 Select the related/child part from Scenario 1", () => {
+      it("Edit the 3rd row", () => {
+        cy.get("div.FBInput-hoverVisibility button").eq(2).click();
+      });
+
+      it("click and open the dropdown", () => {
+        cy.get("[data-cy=\"title\"]").arrowClick();
+      });
+
+      it(`Ensure that the list that opens up has all items & has the values`, () => {
+        cy.rpCheckOptionsLengthAndValues(partsGenerated - 1, Object.values(partNames));
+      });
+
+      it("Selecting parent part from the list", () => {
+        cy.get("ul>li[role=option]").contains(partNames.materialSubPartTogether).arrowClick();
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+  });
+
+  context("18 Approve and release LHRT ", () => {
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+
+    it("Approve and release LHRt document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 });

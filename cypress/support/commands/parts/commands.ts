@@ -8,6 +8,7 @@ declare global {
       muiSelect(selectId: string, text: string): Chainable<Subject>;
       rpConfirmReleasedParentPart(isSeparate: boolean, isSubPart?: boolean);
       rpSwitchAndPopulateSpecificationsTabPart();
+      rpCheckOptionsLengthAndValues(length: number, names: string[], removeRev?: boolean);
     }
   }
 }
@@ -77,4 +78,14 @@ Cypress.Commands.add("rpSwitchAndPopulateSpecificationsTabPart", () => {
 
   // navigate to Overview tab
   cy.drSelectOverviewTab();
+});
+
+Cypress.Commands.add("rpCheckOptionsLengthAndValues", (length: number, names: string[], removeRev?: boolean) => {
+  // partsGenerated also includes the voided subPart
+  cy.get("ul>li[role=option]").should("have.length", length);
+
+  // Check that the list has all the parts
+  names.forEach((name: string) => {
+    cy.get("ul>li[role=option]").contains(removeRev ? name.replace("- rev 1 -", "-") : name);
+  });
 });
