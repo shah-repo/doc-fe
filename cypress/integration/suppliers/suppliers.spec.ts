@@ -69,7 +69,7 @@ context("Create company via API and create Suppliers document", () => {
       cy.cmpCreateCompany({
         specFilePath: __filename,
         payload: {
-          companyAdminEmail: USERS[1].email,
+          companyAdminEmail: USERS[11].email,
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: IMPORTER_USER.email,
@@ -77,15 +77,15 @@ context("Create company via API and create Suppliers document", () => {
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
-          users: [USERS[2], USERS[3], USERS[4]],
+          users: [USERS[12], USERS[13], USERS[14]],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response: any) => {
         createdCompany = response;
-        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-        secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-        thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+        secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
+        thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[13].email);
         supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
         done();
       });
@@ -94,7 +94,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("[API] Login admin tester", (done: any) => {
     cy.authApiLogin({
-      email: USERS[1].email,
+      email: USERS[11].email,
       password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
     }).then((response) => {
       loginResponse = response;
@@ -143,7 +143,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Login user to dashboard", () => {
-    cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
   });
 
   context("Create supplier form", () => {
@@ -252,8 +252,8 @@ context("Create company via API and create Suppliers document", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -432,8 +432,8 @@ context("Create company via API and create Suppliers document", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -602,9 +602,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add approver to approvers list", () => {
-      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
-      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
-      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[3].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[12].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[13].email });
     });
 
     it("Submit for approval", () => {
@@ -615,13 +615,13 @@ context("Create company via API and create Suppliers document", () => {
       });
     });
 
-    context(`Approve supplier with approval block for user ${USERS[2].name}`, () => {
-      it(`Logout ${USERS[1].name}`, () => {
+    context(`Approve supplier with approval block for user ${USERS[12].name}`, () => {
+      it(`Logout ${USERS[11].name}`, () => {
         cy.authLogout();
       });
 
-      it(`Login ${USERS[2].name}`, () => {
-        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      it(`Login ${USERS[12].name}`, () => {
+        cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
       });
 
       it("Navigate to Supplier", () => {
@@ -640,13 +640,13 @@ context("Create company via API and create Suppliers document", () => {
       });
     });
 
-    context(`Approve supplier with approval block for user ${USERS[3].name}`, () => {
-      it(`Logout ${USERS[2].name}`, () => {
+    context(`Approve supplier with approval block for user ${USERS[13].name}`, () => {
+      it(`Logout ${USERS[12].name}`, () => {
         cy.authLogout();
       });
 
-      it(`Login ${USERS[3].name}`, () => {
-        cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
+      it(`Login ${USERS[13].name}`, () => {
+        cy.authLoginToDashboard({ USER: USERS[13], employeeId: thirdEmployee.id });
       });
 
       it("Navigate to Supplier", () => {
@@ -665,13 +665,13 @@ context("Create company via API and create Suppliers document", () => {
       });
     });
 
-    context(`Approve supplier with approval block for user ${USERS[1].name}`, () => {
-      it(`Logout ${USERS[3].name}`, () => {
+    context(`Approve supplier with approval block for user ${USERS[11].name}`, () => {
+      it(`Logout ${USERS[13].name}`, () => {
         cy.authLogout();
       });
 
-      it(`Login ${USERS[1].name}`, () => {
-        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      it(`Login ${USERS[11].name}`, () => {
+        cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
       });
 
       it("Navigate to Supplier", () => {
@@ -689,33 +689,33 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     context("Verify approval data", () => {
-      it(`Verify approval data for ${USERS[1].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[1].name}"]`).then(($el) => {
+      it(`Verify approval data for ${USERS[11].name}`, () => {
+        cy.get(`[data-cy="approved-${USERS[11].name}"]`).then(($el) => {
           const elementText = $el.text();
-          expect(elementText).to.include(USERS[1].name,);
-          expect(elementText).to.include(USERS[1].email);
+          expect(elementText).to.include(USERS[11].name,);
+          expect(elementText).to.include(USERS[11].email);
           expect(elementText).to.include("APPROVED");
           const containsSome = CheckForSome([dateOfApproval1, dateOfApproval1MinuteAfter]);
           expect(elementText).to.satisfy(containsSome);
         });
       });
 
-      it(`Verify approval data for ${USERS[2].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[2].name}"]`).then(($el) => {
+      it(`Verify approval data for ${USERS[12].name}`, () => {
+        cy.get(`[data-cy="approved-${USERS[12].name}"]`).then(($el) => {
           const elementText = $el.text();
-          expect(elementText).to.include(USERS[2].name,);
-          expect(elementText).to.include(USERS[2].email);
+          expect(elementText).to.include(USERS[12].name,);
+          expect(elementText).to.include(USERS[12].email);
           expect(elementText).to.include("APPROVED");
           const containsSome = CheckForSome([dateOfApproval2, dateOfApproval2MinuteAfter]);
           expect(elementText).to.satisfy(containsSome);
         });
       });
 
-      it(`Verify approval data for ${USERS[3].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[3].name}"]`).then(($el) => {
+      it(`Verify approval data for ${USERS[13].name}`, () => {
+        cy.get(`[data-cy="approved-${USERS[13].name}"]`).then(($el) => {
           const elementText = $el.text();
-          expect(elementText).to.include(USERS[3].name,);
-          expect(elementText).to.include(USERS[3].email);
+          expect(elementText).to.include(USERS[13].name,);
+          expect(elementText).to.include(USERS[13].email);
           expect(elementText).to.include("APPROVED");
           const containsSome = CheckForSome([dateOfApproval3, dateOfApproval3MinuteAfter]);
           expect(elementText).to.satisfy(containsSome);
@@ -828,7 +828,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].email });
       });
 
       it("Click 'Save' button", () => {
@@ -870,7 +870,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Add approver", () => {
-        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[3].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[13].email });
       });
 
       it("Click 'Save' button", () => {
@@ -895,9 +895,9 @@ context("Create company via API and create Suppliers document", () => {
         cy.authLogout();
       });
 
-      it(`Logs user in as ${USERS[3].name}`, () => {
+      it(`Logs user in as ${USERS[13].name}`, () => {
         cy.authLogin({
-          email: USERS[3].email,
+          email: USERS[13].email,
         });
       });
 
@@ -917,14 +917,20 @@ context("Create company via API and create Suppliers document", () => {
         cy.authLogout();
       });
 
-      it(`Logs user in as ${USERS[1].name}`, () => {
+      it(`Logs user in as ${USERS[11].name}`, () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
       it("Selects company", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashOpenMyFeedTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Verify reject notification`, () => {
@@ -948,21 +954,21 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Add first approval", () => {
-        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].email });
       });
 
       it("Add second approval", () => {
-        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[12].email });
       });
 
       it("Remove second Approver'", () => {
-        cy.contains(`${USERS[2].email}`).parent().next().arrowClick();
+        cy.contains(`${USERS[12].email}`).parent().next().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
       });
 
       it("Remove Approver who rejected request", () => {
-        cy.contains(`${USERS[3].email}`).parent().next().arrowClick();
+        cy.contains(`${USERS[13].email}`).parent().next().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
       });
@@ -1003,8 +1009,8 @@ context("Create company via API and create Suppliers document", () => {
         it("Verify the emails that should be received", () => {
           const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
             {
-              sentToUser: USERS[1].email,
-              contains: [`Hello <b>${USERS[1].name},</b>`,
+              sentToUser: USERS[11].email,
+              contains: [`Hello <b>${USERS[11].name},</b>`,
                 "Your documents are ready for download.",
                 "<button type=\"button\">DOWNLOAD</button>",
                 createdCompany.id],
@@ -1096,12 +1102,12 @@ context("Create company via API and create Suppliers document", () => {
             expect(el).match(/image.jpg/);
 
             // eslint-disable-next-line max-len
-            tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} -.*@.*| DRAFT`);
+            tmpRegex = new RegExp(`APPROVALS\\n${USERS[11].name} -.*@.*| DRAFT`);
             expect(el).match(tmpRegex);
 
             expect(el).match(/Checkbox\n1 2 3/);
 
-            tmpRegex = new RegExp(`${USERS[2].name}`);
+            tmpRegex = new RegExp(`${USERS[12].name}`);
             expect(el).not.match(tmpRegex);
 
             expect(el).not.match(/REJECTED/);
@@ -1175,8 +1181,8 @@ context("Create company via API and create Suppliers document", () => {
         it("Verify the emails that should be received", () => {
           const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
             {
-              sentToUser: USERS[1].email,
-              contains: [`Hello <b>${USERS[1].name},</b>`,
+              sentToUser: USERS[11].email,
+              contains: [`Hello <b>${USERS[11].name},</b>`,
                 "Your documents are ready for download.",
                 "<button type=\"button\">DOWNLOAD</button>",
                 createdCompany.id],
@@ -1267,12 +1273,12 @@ context("Create company via API and create Suppliers document", () => {
             expect(el).match(/image.jpg/);
 
             // eslint-disable-next-line max-len
-            tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+            tmpRegex = new RegExp(`APPROVALS\\n${USERS[11].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
             expect(el).match(tmpRegex);
 
             expect(el).match(/Checkbox\n1 2 3/);
 
-            tmpRegex = new RegExp(`${USERS[2].name}`);
+            tmpRegex = new RegExp(`${USERS[12].name}`);
             expect(el).not.match(tmpRegex);
 
             expect(el).not.match(/REJECTED/);

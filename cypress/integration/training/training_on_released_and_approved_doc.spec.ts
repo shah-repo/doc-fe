@@ -498,6 +498,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -569,7 +570,8 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select AR", () => {
-      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
+      // eslint-disable-next-line max-len
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: "Approved document", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -591,6 +593,7 @@ context("Training for same document that was first released and then revised and
       cy.listLoadingElementShouldNotExist();
     });
     it(`Training record for ${USERS[11].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "Approved document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -600,6 +603,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "Approved document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });

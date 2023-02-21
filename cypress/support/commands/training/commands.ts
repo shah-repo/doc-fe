@@ -137,14 +137,17 @@ Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
   cy.get("[data-cy=\"common.confirm\"]").click();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageUsername", (params: {username}) => {
+  cy.get(`[aria-colindex="5"] .k-filtercell > input`).arrowClick();
   cy.get(`[aria-colindex="5"] .k-filtercell > input`).clear().arrowType(params.username, { force: true });
   cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
+  cy.get(`[aria-colindex="4"] .k-filtercell > input`).arrowClick();
   cy.get(`[aria-colindex="4"] .k-filtercell > input`).clear().arrowType(params.title, { force: true });
   cy.landingPageLoadingElementShouldAppear();
 });

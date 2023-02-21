@@ -271,8 +271,10 @@ context("Purchase Supplier Update1", () => {
           req.reply((res) => {
             if (res.body !== "") {
               const response = res.body;
-              supplierFieldName = response.formTemplate.schema[4].name;
-              poFieldName = response.formTemplate.schema[6].name;
+              supplierFieldName =
+              response.formTemplate.schema.find((schemaList) => schemaList.label === "Supplier").name;
+              poFieldName =
+              response.formTemplate.schema.find((schemaList) => schemaList.label === "Purchase Order").name;
             }
           });
         }).as("response");
@@ -429,8 +431,8 @@ context("Purchase Supplier Update1", () => {
         cy.wait(2000);
       });
 
-      it("Approve the suppller", () => {
-        cy.poApproveWithoutApi();
+      it("Approve the supplier", () => {
+        cy.supplierApproveWithoutApi();
         cy.wait(2000);
       });
 
@@ -438,11 +440,11 @@ context("Purchase Supplier Update1", () => {
         cy.drClickReviseDocument();
         cy.drEnterDocumentTitle({ name: "1" });
         cy.drClickCreateDocumentWithoutApiCallForForms();
-
+        cy.wait(2000);
         cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.wait(2000);
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.wait(2000);
       });
 
@@ -458,6 +460,9 @@ context("Purchase Supplier Update1", () => {
       });
 
       it(`Select '${USERS[12].name}' for Requestor`, () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
         cy.get("[data-cy='po-requestor-autocomplete']").scrollIntoView().click().autocompleteSelect(USERS[12].name);
       });
 
@@ -485,11 +490,11 @@ context("Purchase Supplier Update1", () => {
         cy.drClickReviseDocument();
         cy.drEnterDocumentTitle({ name: "2" });
         cy.drClickCreateDocumentWithoutApiCallForForms();
-
+        cy.wait(2000);
         cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.wait(2000);
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.wait(2000);
       });
 
@@ -505,8 +510,9 @@ context("Purchase Supplier Update1", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
         cy.dlVerifyFilterByDocId({ docId: "PO-00001" });
-        cy.poListVerifyFilterBySupplier({ supplier: "New Supplier12" });
+        cy.poListVerifyFilterBySupplier({ supplier: "Supplier12" });
         cy.dlClearFilters();
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
@@ -531,6 +537,8 @@ context("Purchase Supplier Update1", () => {
 
       it("Approve PO", () => {
         cy.contains("PO-00001").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
         cy.poApproveWithoutApi();
         cy.wait(2000);
       });
@@ -559,7 +567,7 @@ context("Purchase Supplier Update1", () => {
         cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.wait(2000);
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.wait(2000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -576,7 +584,7 @@ context("Purchase Supplier Update1", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
         cy.dlVerifyFilterByDocId({ docId: "PO-00001" });
-        cy.poListVerifyFilterBySupplier({ supplier: "New Supplier12" });
+        cy.poListVerifyFilterBySupplier({ supplier: "Supplier12" });
       });
 
       it("Open released PO", () => {
@@ -626,6 +634,8 @@ context("Purchase Supplier Update1", () => {
       it("Submit for Approval", () => {
         cy.pmSubmitForApprovalWithoutAPI();
         cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Approve the doc", () => {
@@ -649,7 +659,7 @@ context("Purchase Supplier Update1", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
         cy.dlVerifyFilterByDocId({ docId: "PO-00001" });
-        cy.poListVerifyFilterBySupplier({ supplier: "New Supplier123" });
+        cy.poListVerifyFilterBySupplier({ supplier: "Supplier123" });
         cy.dlClearFilters();
       });
 
