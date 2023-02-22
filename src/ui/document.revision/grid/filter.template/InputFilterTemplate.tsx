@@ -5,6 +5,7 @@ import { debounce, isEmpty } from "lodash";
 import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+import { KendoGridFilterCellOperators } from "../../../components/KendoGrid/interfaces";
 
 const valueOperators = [
   "contains",
@@ -110,9 +111,7 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={clearFilter}
         hidden={
-          operator !== "contains" && operatorsList.includes(operator as string)
-            ? false
-            : isEmpty(value)
+          operator === KendoGridFilterCellOperators.CONTAINS && isEmpty(value)
         }
       >
         <span className="k-icon k-i-filter-clear" />
