@@ -338,6 +338,13 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -610,10 +617,6 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create a document", () => {
@@ -655,7 +658,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -725,7 +728,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -775,10 +778,6 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Use time tool to travel user back to future", () => {
@@ -827,7 +826,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -949,10 +948,6 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -1194,7 +1189,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1342,7 +1337,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1482,7 +1477,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("'Overdue' should not exist", () => {
@@ -1499,7 +1494,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1537,7 +1532,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1664,7 +1659,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
 
     it("Training tab should have separate line item for Overdue & Due", () => {
       SystemRequirement("REQ-5060");
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiListItem-root").should("have.length", 2);
@@ -1739,7 +1734,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1757,7 +1752,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

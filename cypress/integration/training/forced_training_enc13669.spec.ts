@@ -399,8 +399,9 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -601,9 +602,6 @@ context("Forced training ENC-13669", () => {
   context("Create new Training Curriculum record for TF and Release it", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
@@ -614,8 +612,9 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Select 'One-Time Training Test' as document type", () => {
-      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("One-Time Training Test");
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
+        .autocompleteSelect("One-Time Training Test", { force: true });
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
