@@ -21,7 +21,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
 import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
@@ -173,6 +173,7 @@ export function KendoGrid<T extends any>({
   const StatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
+      documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
@@ -295,7 +296,11 @@ export function KendoGrid<T extends any>({
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
             cell={(props) =>
-              RenderCustomCell(
+            {
+              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder &&
+                 props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released) ?
+                DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
+              return RenderCustomCell(
                 {
                   ...props,
                   cellRowClick: onRowClick,
@@ -303,7 +308,7 @@ export function KendoGrid<T extends any>({
                   tooltipField: column.tooltipField,
                 },
                 column.cell || ""
-              )
+              ); }
             }
             filterCell={
               filterCellMapping[column.filterCell as string]
