@@ -18,7 +18,9 @@ const createdPartDocument: any[] = [];
 let approvalRequestDocumentType;
 let initialArDocument;
 
-const userIndex = Math.floor(Math.random() * USERS.length);
+const userIndex = Math.floor(5 + Math.random() * (USERS.length - 5));
+console.log(userIndex);
+console.log(USERS[userIndex]);
 // const owner = USERS[userIndex].name;
 
 const details = {
@@ -48,6 +50,7 @@ const partNames = {
   materialSubPartSeparate: "",
 };
 
+let lhrDocUrl;
 let partsGenerated = 0;
 
 context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
@@ -960,6 +963,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
       });
 
       it("click and open the dropdown", () => {
+        cy.wait(500);
         cy.get("[data-cy=\"title\"]").arrowClick();
       });
 
@@ -969,6 +973,9 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
       it("Selecting parent part from the list", () => {
         cy.get("ul>li[role=option]").contains(partNames.materialParentPartTogether).arrowClick();
+        cy.get("[name=\"quantity\"]").arrowType("3");
+        cy.wait(500);
+        cy.get("[data-cy=\"unit\"]").autocompleteSelect("Each");
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -981,6 +988,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
       });
 
       it("click and open the dropdown", () => {
+        cy.wait(500);
         cy.get("[data-cy=\"title\"]").arrowClick();
       });
 
@@ -990,6 +998,9 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
       it("Selecting parent part from the list", () => {
         cy.get("ul>li[role=option]").contains(partNames.materialParentPartSeparate).arrowClick();
+        cy.get("[name=\"quantity\"]").arrowType("3");
+        cy.wait(500);
+        cy.get("[data-cy=\"unit\"]").autocompleteSelect("Each");
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1002,6 +1013,7 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
       });
 
       it("click and open the dropdown", () => {
+        cy.wait(500);
         cy.get("[data-cy=\"title\"]").arrowClick();
       });
 
@@ -1011,6 +1023,9 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
       it("Selecting parent part from the list", () => {
         cy.get("ul>li[role=option]").contains(partNames.materialSubPartTogether).arrowClick();
+        cy.get("[name=\"quantity\"]").arrowType("3");
+        cy.wait(500);
+        cy.get("[data-cy=\"unit\"]").autocompleteSelect("Each");
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1025,6 +1040,183 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
 
     it("Approve and release LHRt document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+    });
+  });
+
+  context("19-21 Create LHR from previous LHRT In Draft/WIP state", () => {
+    it("Click create new document from LHRt", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select 'R&D' build type", () => {
+      cy.get("[value=\"R&D\"]").check().wait(500);
+    });
+
+    it("Enter initial quantity", () => {
+      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10").unClick();
+    });
+
+    it("Add 'Due Date'", () => {
+      cy.poAddDateRequired();
+    });
+
+    it("Click save document", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Save lhrUrl", () => {
+      cy.url().then((url: any) => {
+        lhrDocUrl = url;
+      });
+    });
+  });
+
+  context("Add operator to work on LHRs", () => {
+    it("Click on sidebar permission icon to add Operators", () => {
+      cy.get("[data-cy='permission-icon']").arrowClick();
+    });
+
+    it(`Assign operator '${USERS[userIndex].name}'`, () => {
+      cy.drAssignDocumentTo({ username: USERS[userIndex].name });
+    });
+  });
+
+  context("21b Start LHRs #1", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
+    });
+
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("22 Verify all selected parts exist", () => {
+    it("Length of materials to equal 5", () => {
+      cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").should("have.length", 5);
+    });
+
+    it("Check materials step #1", () => {
+      Object.values(partNames).forEach((name: string) => {
+        cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
+          .contains(`${name.replace("- rev 1 -", "-")} - rev 1 | Qty: 3 each`);
+      });
+    });
+  });
+
+  context("23 Assign quantity and approver. Complete step", () => {
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10").unClick();
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8").unClick();
+    });
+
+    it("Enter 'Rejected quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2").unClick();
+    });
+
+    it("Click save document", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[userIndex].name });
+    });
+
+    it("Click save document", () => {
+      cy.wait(500);
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Complete step", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0)
+        .contains("Complete Step").arrowClick({ force: true });
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Approve step", () => {
+      cy.ebApproveWithoutApi();
+    });
+  });
+
+  context("24 Navigate to LHR to release it", () => {
+    it("Navigate to LHR", () => {
+      cy.visit(lhrDocUrl);
+      cy.listLoadingElementShouldAppear();
+      cy.saveBarShouldNotExist();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify completion date of LHRs #1 in LHR", () => {
+      cy.get("[data-cy=\"form.builder.step.complete\"]").eq(0)
+        .invoke("text")
+        .then((text) => {
+          expect(text).to.be
+            .oneOf(["Completed"]);
+        });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[userIndex].name });
+    });
+
+    it("Click save document", () => {
+      cy.lhrSaveWithoutApi();
+    });
+
+
+  });
+
+  context("24-26 Release LHR", () => {
+    it("Submit LHR for approval", () => {
+      cy.lhrSubmitForApprovalWithoutApi();
+    });
+
+    it("Approve LHR", () => {
+      cy.lhrApproveWithoutApi();
+    });
+
+    it("Verify status is 'Released'", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });
