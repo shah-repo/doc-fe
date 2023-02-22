@@ -109,7 +109,11 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
         className="k-button k-button-icon k-clear-button-visible"
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={clearFilter}
-        hidden={isEmpty(value)}
+        hidden={
+          operator !== "contains" && operatorsList.includes(operator as string)
+            ? false
+            : isEmpty(value)
+        }
       >
         <span className="k-icon k-i-filter-clear" />
       </button>
