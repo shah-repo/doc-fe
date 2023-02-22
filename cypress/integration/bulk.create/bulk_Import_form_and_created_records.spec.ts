@@ -705,7 +705,7 @@ context("Export Bulk", () => {
 
     it("Submit for approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
-      cy.wait(3000);
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
