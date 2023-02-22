@@ -517,7 +517,6 @@ context("Bulk create approvals block/inline test", () => {
         it("Filter approvals block records in WIP state", () => {
           SystemRequirement("REQ-4730");
           cy.filterRecordState({ state: "WIP" });
-          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Verify WIP records number", () => {
@@ -548,7 +547,6 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "ADT-00007" });
-            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -566,12 +564,12 @@ context("Bulk create approvals block/inline test", () => {
 
           it("Verify record release date", () => {
             cy.get("div[data-cy=releaseDate]").parent().parent().find("p")
-              .should("have.text", "11/18/2021");
+              .should("have.text", "11/18/2021 PST");
           });
 
           it("Verify record approve date", () => {
             cy.get(`div[data-cy="approved-${USERS[1].name}"]`)
-              .should("contain", "November 18, 2021");
+              .should("contain", "November 18, 2021 12:00 AM PST");
           });
         });
 
@@ -583,7 +581,6 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "ADT-00008" });
-            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -601,12 +598,12 @@ context("Bulk create approvals block/inline test", () => {
 
           it("Verify record release date", () => {
             cy.get("div[data-cy=releaseDate]").parent().parent().find("p")
-              .should("have.text", "11/18/2021");
+              .should("have.text", "11/18/2021 PST");
           });
 
           it("Verify record approve date", () => {
             cy.get(`div[data-cy="approved-${USERS[1].name}"]`)
-              .should("contain", "November 18, 2021");
+              .should("contain", "November 18, 2021 12:00 AM PST");
           });
         });
       });
@@ -621,7 +618,6 @@ context("Bulk create approvals block/inline test", () => {
         it("Filter approvals block records in WIP state", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "AIT-" });
-          cy.landingPageLoadingElementShouldAppear();
           cy.wait(1000);
         });
 
@@ -657,7 +653,6 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "AIT-00013" });
-            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -675,7 +670,7 @@ context("Bulk create approvals block/inline test", () => {
 
           it("Verify record release date", () => {
             cy.get("div[data-cy=releasedDate")
-              .should("contain.text", "Released Date: 11/18/2021");
+              .should("contain.text", "Released Date: 11/18/2021 PST");
           });
 
           it("Verify record approve date", () => {
@@ -692,7 +687,6 @@ context("Bulk create approvals block/inline test", () => {
           it("Filter by record-id", () => {
             cy.dlClearFilters();
             cy.dlFilterByDocId({ docId: "AIT-00014" });
-            cy.landingPageLoadingElementShouldAppear();
           });
 
           it("Select first record", () => {
@@ -710,7 +704,7 @@ context("Bulk create approvals block/inline test", () => {
 
           it("Verify record release date", () => {
             cy.get("div[data-cy=releasedDate]")
-              .should("contain.text", "Released Date: 11/18/2021");
+              .should("contain.text", "Released Date: 11/18/2021 PST");
           });
 
           it("Verify record approve date", () => {

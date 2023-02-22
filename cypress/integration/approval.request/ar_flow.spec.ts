@@ -213,10 +213,6 @@ context("Approval request form", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Navigate to Document tab", () => {
-      cy.drSelectDocumentTab();
-    });
-
     it("Add Checkbox group", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
@@ -497,6 +493,7 @@ context("Approval request form", () => {
     });
 
     it("Checkbox option 2 checked", () => {
+      cy.arSelectChangeDetailsTab();
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
@@ -587,6 +584,7 @@ context("Approval request form", () => {
     });
 
     it(`Verify reject notification`, () => {
+      cy.dashOpenMyFeedTab();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", USERS[1].name)
         .and("contain", STATUS_TYPES_LABEL.REJECTED)
@@ -1006,7 +1004,7 @@ context("Approval request form", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
-      cy.arEnterItemDescription({ name: "CP-00005" });
+      cy.arSelectItem({ name: "CP-00005" });
       cy.arEnterItemDescription({ description: "added document description" });
       cy.arEnterItemJustification({ justification: "justification for added document" });
       cy.arClickAddItemDone();
