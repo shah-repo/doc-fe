@@ -313,6 +313,13 @@ context("Test training records after refresh period passes", { tags: ["@timetool
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -820,12 +827,13 @@ context("Test training records after refresh period passes", { tags: ["@timetool
       cy.listLoadingElementShouldNotExist();
     });
 
-
     it("Verify training notification", () => {
       SystemRequirement("REQ-2460");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${releasedFormId}Rev 1 released form` });
       // eslint-disable-next-line max-len
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released formA training is assigned to you` });
+
+      cy.dashOpenMyFeedTab();
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${releasedFormId}Rev 1 released form` });
     });
   });
 
