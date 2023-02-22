@@ -542,7 +542,7 @@
   "documentRevision.audit.status.STRING_EDITED": "Updated status",
   "documentRevision.audit.poStatus.STRING_EDITED": "Updated PO status",
   "documentRevision.audit.poStatus.updated.by": "{name} {status} PO on {timestamp}",
-  "documentRevision.audit.poStatus.quantity.discrepancies": "This Purchase Order have quantity discrepancies that were not 100% received.",
+  "documentRevision.audit.poStatus.quantity.discrepancies": "This Purchase Order has quantity discrepancies that were not 100% received.",
   "documentRevision.audit.document.docId.STRING_NEW": "New Doc ID",
   "documentRevision.audit.document.type.STRING_NEW": "New document type",
   "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
