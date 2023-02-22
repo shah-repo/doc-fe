@@ -78,3 +78,16 @@ export enum KendoGridFilterCell {
   STATUS = "status",
   ASYNC_CREATED_AT = "createdAtt"
 }
+
+export enum KendoGridFilterCellOperators {
+  CONTAINS = "contains",
+  DOES_NOT_CONTAIN = "doesnotcontain",
+  EQ = "eq",
+  NEQ = "neq",
+  STARTS_WITH = "startswith",
+  ENDS_WITH = "endswith",
+  IS_NULL = "isnull",
+  IS_NOT_NULL = "isnotnull",
+  IS_EMPTY = "isempty",
+  IS_NOT_EMPTY = "isnotempty",
+}
