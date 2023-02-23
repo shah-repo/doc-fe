@@ -45,7 +45,7 @@ export const PurchaseOrderTest:  IdocumentTypeDto = {
       visible: true,
     },
     L: {
-      label: "Close PO",
+      label: "Correct PO",
       visible: true,
     },
     M: {
