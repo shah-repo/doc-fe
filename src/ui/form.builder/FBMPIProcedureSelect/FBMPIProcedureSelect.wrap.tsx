@@ -178,11 +178,11 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       if (isMaterial && isUndefined(quantity)) { return; }
       if (isMaterial && !usedOverride) { return; }
       if (isMaterial && quantity && quantity <= 0) {
-        toastError(intl.formatMessage({ id: "document.revision.quntity.positive.error" }));
+        toastError(intl.formatMessage({ id: "document.revision.quantity.positive.error" }));
         return;
       }
       if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
-        toastError(intl.formatMessage({ id: "document.revision.quntity.error" },
+        toastError(intl.formatMessage({ id: "document.revision.quantity.decimals.error" },
           { name: intl.formatMessage({ id: "form.builder.quantity" } ) }));
         return;
       }
