@@ -102,7 +102,7 @@ context("Inline Record notifications", () => {
 
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Open details tab", () => {
@@ -449,12 +449,12 @@ context("Inline Record notifications", () => {
     });
 
     it("Dismiss item", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismissed item should disappear", () => {
-      SystemRequirement("REQ-5330");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("not.contain.text", "APPROVED");
     });
