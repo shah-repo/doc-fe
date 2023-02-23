@@ -474,7 +474,7 @@ context("PO notifications", () => {
 
       it("Click 'Submit for Approval' button", () => {
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-        cy.pmSubmitForApprovalInThreeDotsWithoutAPI();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -502,6 +502,7 @@ context("PO notifications", () => {
       getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: "Record POT-00001 in review",
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -619,6 +620,7 @@ context("PO notifications", () => {
     });
 
     it("Dismiss item", () => {
+      SystemRequirement("REQ-5330");
       cy.contains("POT-00001").eq(0).trigger("mouseover");
       cy.get("[data-cy='dismiss-icon']").first().arrowClick();
       cy.progressBarShouldNotExist();
@@ -627,7 +629,6 @@ context("PO notifications", () => {
     });
 
     it("Dismissed item shouldn't be in the list", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("REJECTED").should("not.exist");
     });
   });
@@ -644,7 +645,7 @@ context("PO notifications", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApprovalInThreeDotsWithoutAPI();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
