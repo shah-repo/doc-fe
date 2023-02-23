@@ -480,7 +480,7 @@
             "visible": true
           },
           "L": {
-            "label": "Correct PO",
+            "label": "Close PO",
             "visible": true
           },
           "M": {
@@ -508,6 +508,10 @@
             "label": "Create PO",
             "visible": true
           },
+          "W": {
+            "label": "Revision Stage",
+            "visible": false
+          },
           "A1": {
             "label": "Draft",
             "visible": true
@@ -522,7 +526,7 @@
           },
           "A4": {
             "label": "Released",
-            "visible": false
+            "visible": true
           },
           "A5": {
             "label": "Pending Approval",
@@ -545,7 +549,8 @@
             "visible": true
           },
           "P4": {
-            "visible": false
+            "label": "Released",
+            "visible": true
           },
           "P5": {
             "label": "Pending Approval",
@@ -554,118 +559,133 @@
           "P6": {
             "label": "Draft",
             "visible": true
+          },
+          "V1": {
+            "label": "Update PO",
+            "visible": true
           }
         },
         "schema": [
           {
-            "name": "po-status-built-in",
-            "type": "select",
-            "index": 0,
-            "label": "PO Status",
-            "tabId": "details",
-            "options": [
-              {
-                "text": "Open",
-                "value": "Open"
-              },
-              {
-                "text": "Closed",
-                "value": "Closed"
-              },
-              {
-                "text": "Cancelled",
-                "value": "Cancelled"
-              }
-            ],
-            "applicableOn": [
+            "name":  "po-items-built-in-summary",
+            "type":  "purchaseordersummary",
+            "index":  1,
+            "label":  "Summary of Totals",
+            "tabId":  "details",
+            "lineItem":  "po-items-built-in",
+            "applicableOn":  [
               "ON_STATE_TO_IN_REVIEW"
             ],
-            "deleteDisabled": true,
-            "validationMode": "default",
-            "validationAttribute": "PO Status",
-            "deleteInFormDisabled": true,
-            "applicableValidationSchema": true
+            "deleteDisabled":  true,
+            "validationAttribute":  "Summary of Totals",
+            "deleteInFormDisabled":  true,
+            "applicableValidationSchema":  true
           },
           {
-            "name": "general-information-to-be-completed-by-requester-kc3oqlpn",
-            "type": "section",
-            "index": 1,
-            "label": "General Information",
-            "tabId": "details",
-            "applicableOn": [
+            "name":  "po-general-information-to-be-completed-by-requester-section",
+            "type":  "section",
+            "index":  2,
+            "label":  "General Information",
+            "tabId":  "details",
+            "applicableOn":  [
               "ON_STATE_TO_IN_REVIEW"
             ]
           },
           {
-            "name": "po-requestor-autocomplete",
-            "type": "autocomplete",
-            "index": 2,
-            "label": "Requestor",
-            "tabId": "details",
-            "rules": "required",
-            "optionId": "3",
-            "optionPath": "/change_requests/available_approvers",
-            "placeholder": "[Select requestor here]",
-            "applicableOn": [
+            "name":  "po-requestor-autocomplete",
+            "type":  "autocomplete",
+            "index":  3,
+            "label":  "Requestor",
+            "rules":  "required",
+            "tabId":  "details",
+            "hidden":  false,
+            "deleted":  false,
+            "optionId":  "3",
+            "optionPath":  "/change_requests/available_approvers",
+            "placeholder":  "[Select requestor here]",
+            "rulesObject":  {},
+            "applicableOn":  [
               "ON_STATE_TO_IN_REVIEW"
             ],
-            "deleteDisabled": true,
-            "optionLabelKey": "user.email",
-            "optionValueKey": "id",
-            "validationMode": "default",
-            "formValuesRules": {},
-            "validationAttribute": "Requestor",
-            "deleteInFormDisabled": true,
-            "applicableValidationSchema": true
-          },
-          {
-            "name": "po-supplier-built-in",
-            "type": "supplier",
-            "index": 3,
-            "label": "Supplier ",
-            "tabId": "details",
-            "applicableOn": [
-              "ON_STATE_TO_IN_REVIEW"
+            "deleteDisabled":  false,
+            "optionLabelKey":  "user.email",
+            "optionValueKey":  "id",
+            "outputDisabled":  false,
+            "validationMode":  "default",
+            "formValuesRules":  {},
+            "editorProperties":  [
+              "deleteDisabled"
             ],
-            "deleteDisabled": true,
-            "validationMode": "default",
-            "validationAttribute": "Supplier",
-            "deleteInFormDisabled": true,
-            "applicableValidationSchema": true
-          },
-          {
-            "name": "ordered-k6mlhan7",
-            "type": "datepicker",
-            "index": 4,
-            "label": "Order Date",
-            "tabId": "details",
-            "rules": "required",
-            "validators": {
-              "required": true
+            "validationAttribute":  "Requestor",
+            "deleteInFormDisabled":  true,
+            "sampleItemsIndicator":  {
+              "id":  "",
+              "enabled":  false,
+              "serialNumber":  0,
+              "sampleSection":  false
             },
-            "applicableOn": [
-              "ON_STATE_TO_IN_REVIEW"
-            ],
-            "deleteDisabled": true,
-            "validationMode": "default",
-            "formValuesRules": {},
-            "validationAttribute": "Order Date",
-            "deleteInFormDisabled": true,
-            "applicableValidationSchema": true
+            "applicableValidationSchema":  true
           },
           {
-            "name": "po-items-built-in",
-            "type": "purchaseorder",
-            "index": 5,
-            "label": "Purchase Order",
-            "tabId": "lineitems",
-            "applicableOn": [
+            "name":  "po-supplier-built-in",
+            "type":  "supplier",
+            "index":  4,
+            "label":  "Supplier ",
+            "tabId":  "details",
+            "applicableOn":  [
               "ON_STATE_TO_IN_REVIEW"
             ],
-            "deleteDisabled": true,
-            "validationAttribute": "Purchase Order",
-            "deleteInFormDisabled": true,
-            "applicableValidationSchema": true
+            "deleteDisabled":  true,
+            "validationAttribute":  "Supplier",
+            "deleteInFormDisabled":  true,
+            "applicableValidationSchema":  true
+          },
+          {
+            "name":  "po-order-date",
+            "type":  "datepicker",
+            "index":  5,
+            "label":  "Order Date",
+            "rules":  "required",
+            "tabId":  "details",
+            "hidden":  false,
+            "deleted":  false,
+            "validators":  {
+              "required":  true
+            },
+            "rulesObject":  {},
+            "applicableOn":  [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled":  false,
+            "outputDisabled":  false,
+            "validationMode":  "default",
+            "formValuesRules":  {},
+            "editorProperties":  [
+              "deleteDisabled"
+            ],
+            "validationAttribute":  "Order Date",
+            "deleteInFormDisabled":  true,
+            "sampleItemsIndicator":  {
+              "id":  "",
+              "enabled":  false,
+              "serialNumber":  0,
+              "sampleSection":  false
+            },
+            "applicableValidationSchema":  true
+          },
+          {
+            "name":  "po-items-built-in",
+            "type":  "purchaseorder",
+            "index":  6,
+            "label":  "Purchase Order",
+            "tabId":  "lineitems",
+            "applicableOn":  [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled":  true,
+            "validationAttribute":  "Purchase Order",
+            "deleteInFormDisabled":  true,
+            "applicableValidationSchema":  true
           }
         ]
       },
