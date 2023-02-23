@@ -428,7 +428,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
         .arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.unClick();
     });
 

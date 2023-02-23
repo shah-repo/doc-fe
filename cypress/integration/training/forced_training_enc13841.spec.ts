@@ -478,7 +478,7 @@ context("Forced training ENC-12313", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -578,14 +578,9 @@ context("Forced training ENC-12313", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Clear filters", () => {
-      cy.trClearFilters();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     // eslint-disable-next-line max-len
     it(`Verify user 1 with 'Completed on' column should have one pending item should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: doc1Name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -603,6 +598,7 @@ context("Forced training ENC-12313", () => {
     });
 
     it(`Verify user 2 with 'Completed on' column should have one pending item should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: doc1Name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -674,13 +670,8 @@ context("Forced training ENC-12313", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Clear filters", () => {
-      cy.trClearFilters();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it(`user 1 with timestamp on 'Completed on' column for ${doc1Name} should not have pending event`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: doc1Name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -713,14 +704,9 @@ context("Forced training ENC-12313", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Clear filters", () => {
-      cy.trClearFilters();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     // eslint-disable-next-line max-len
     it(`user 2 with timestamp on 'Completed on' column for ${doc1Name} should not have pending event`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: doc1Name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -757,7 +743,7 @@ context("Forced training ENC-12313", () => {
 
     it("Select 'One-Time Training Test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("One-Time Training Test");
+        .autocompleteSelect("One-Time Training Test", { force: true });
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();

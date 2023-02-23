@@ -383,7 +383,7 @@ context("Training for same document that was first released and then revised and
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
