@@ -753,7 +753,7 @@ context("Training notifications", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApprovalInThreeDotsWithoutAPI();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -921,6 +921,7 @@ context("Training notifications", () => {
 
     it("Reload the page and Check status as COMPLETE", { retries: 5 }, () => {
       cy.wait(5000);
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
@@ -1072,6 +1073,7 @@ context("Training notifications", () => {
 
     it("Reload the page and Check status as COMPLETE", { retries: 5 }, () => {
       cy.wait(5000);
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
@@ -1170,6 +1172,7 @@ context("Training notifications", () => {
 
     it("Reload the page and Check status as COMPLETE", { retries: 5 }, () => {
       cy.wait(5000);
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
