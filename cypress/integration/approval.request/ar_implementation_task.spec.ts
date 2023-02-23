@@ -208,6 +208,8 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
     it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Choose newly AR Form template", () => {
@@ -635,10 +637,11 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
-      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.APPROVED  });
+      cy.alFilterARByStatus({ status: STATUS_TYPES_LABEL.APPROVED  });
     });
 
     it(`Verify filter by STATUS as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
@@ -753,8 +756,9 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.alFilterByTitle({ title: "AR express release form" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Clear filters", () => {
@@ -763,7 +767,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
-      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED  });
+      cy.alFilterARByStatus({ status: STATUS_TYPES_LABEL.CLOSED  });
     });
 
     it(`Verify filter by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {

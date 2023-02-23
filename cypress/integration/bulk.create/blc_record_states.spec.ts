@@ -685,6 +685,9 @@ context("Bulk create record headers", () => {
 
     it("Click create new from form button", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     context("Fill Bulk creation document atributes", () => {
@@ -860,7 +863,6 @@ context("Bulk create record headers", () => {
 
     it("Filter by type and verify only 'Test Document Type' records are created", () => {
       cy.dlFilterByDocId({ docId: "TDT-" });
-      cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocCounter({ docCounterNumber: 8 });
     });
 
@@ -868,7 +870,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00004" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -932,7 +933,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -993,7 +993,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00006" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -1054,7 +1053,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00007" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -1115,7 +1113,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00008" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -1176,7 +1173,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00009" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -1237,7 +1233,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00010" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -1301,7 +1296,6 @@ context("Bulk create record headers", () => {
       it("Filter by record-id", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00011" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {

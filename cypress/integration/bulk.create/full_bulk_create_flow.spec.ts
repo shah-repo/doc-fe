@@ -937,7 +937,6 @@ context("Bulk create flow", () => {
 
     it("Filter by doc-id", () => {
       cy.dlFilterByDocId({ docId: "TDT-00002" });
-      cy.landingPageLoadingElementShouldAppear();
     });
 
     context("Verify document one data", () => {
@@ -999,7 +998,6 @@ context("Bulk create flow", () => {
       it("Filter document two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first document", () => {

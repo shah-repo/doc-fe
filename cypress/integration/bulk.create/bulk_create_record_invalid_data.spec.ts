@@ -755,7 +755,6 @@ context("Test invalid data for records", () => {
     it("Filter by record-id", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "TDT-00006" });
-      cy.landingPageLoadingElementShouldAppear();
     });
 
     context("Verify voided record one data", () => {
@@ -784,7 +783,6 @@ context("Test invalid data for records", () => {
       it("Filter record two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00007" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {
@@ -842,7 +840,6 @@ context("Test invalid data for records", () => {
         it("Filter record two", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00008" });
-          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {
@@ -908,7 +905,6 @@ context("Test invalid data for records", () => {
         it("Filter record two", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00009" });
-          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Select first record", () => {

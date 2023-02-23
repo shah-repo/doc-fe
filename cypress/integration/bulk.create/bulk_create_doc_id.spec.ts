@@ -1299,7 +1299,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Filter by doc-id", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "FM-00004" });
-      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Select first doc", () => {

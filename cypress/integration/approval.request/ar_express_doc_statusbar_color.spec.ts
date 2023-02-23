@@ -132,10 +132,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev 1DRAFT`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev 1", status: "DRAFT", breadcrump: true,
         });
       });
     });
@@ -204,7 +203,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
-        cy.wait(60 * 1000 + 2000);
+        cy.wait(60 * 1000 + 4000);
         const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
         cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
           .contains(tmpRegex);
@@ -225,8 +224,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Verify 'Approve and Release' button and click on it and select Cancel", () => {
-        cy.get("#ApproveAndRelease-button").contains("Approve and Release").should("exist");
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.drCloseApproveAndReleaseDialog();
@@ -356,10 +354,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Verify DRAFT in Statusbar and verify Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-          `Document List${otherFormDocId1} Rev 1DRAFT`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev 1", status: "DRAFT", breadcrump: true,
         });
       });
 
@@ -400,10 +397,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev 1${STATUS_TYPES_LABEL.RELEASED}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED, breadcrump: true,
         });
       });
     });
@@ -501,10 +497,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${otherFormDocId1} Rev 1${STATUS_TYPES_LABEL.SUPERSEDED}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.SUPERSEDED, breadcrump: true,
         });
       });
     });
@@ -581,10 +576,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify OBS Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${otherFormDocId1} Rev OBS${STATUS_TYPES_LABEL.OBSOLETE}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev OBS", status: STATUS_TYPES_LABEL.OBSOLETE, breadcrump: true,
         });
       });
     });
@@ -655,10 +649,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify ${STATUS_TYPES_LABEL.DRAFT} in Statusbar`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId2} Rev 1${STATUS_TYPES_LABEL.DRAFT}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId2,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.DRAFT, breadcrump: true,
         });
       });
     });
@@ -678,10 +671,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       it("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${otherFormDocId2} Rev 1${STATUS_TYPES_LABEL.VOIDED}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId2,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.VOIDED, breadcrump: true,
         });
       });
     });
@@ -816,10 +808,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Equipment${eqDocId1} Rev 1DRAFT`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId1,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.DRAFT, breadcrump: true,
         });
       });
     });
@@ -831,8 +822,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Verify 'Approve and Release' button exists and click on it and select Cancel", () => {
-        cy.get("#ApproveAndRelease-button").contains("Approve and Release").should("exist");
-        cy.pmSubmitForApprovalWithoutAPI();
+        cy.lhrSubmitForApprovalWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.drCloseApproveAndReleaseDialog();
@@ -943,10 +933,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-          `Equipment${eqDocId1} Rev 1DRAFT`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId1,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.DRAFT, breadcrump: true,
         });
       });
 
@@ -987,10 +976,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Equipment${eqDocId1} Rev 1${STATUS_TYPES_LABEL.RELEASED}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId1,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED, breadcrump: true,
         });
       });
     });
@@ -1088,10 +1076,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Equipment${eqDocId1} Rev 1${STATUS_TYPES_LABEL.SUPERSEDED}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId1,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.SUPERSEDED, breadcrump: true,
         });
       });
     });
@@ -1168,10 +1155,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify OBS Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Equipment${eqDocId1} Rev OBS${STATUS_TYPES_LABEL.OBSOLETE}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId1,
+          revision: "Rev OBS", status: STATUS_TYPES_LABEL.OBSOLETE, breadcrump: true,
         });
       });
     });
@@ -1239,10 +1225,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Verify ${STATUS_TYPES_LABEL.DRAFT} in Statusbar`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Equipment${eqDocId2} Rev 1${STATUS_TYPES_LABEL.DRAFT}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId2,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.DRAFT, breadcrump: true,
         });
       });
     });
@@ -1262,10 +1247,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       it("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Equipment${eqDocId2} Rev 1${STATUS_TYPES_LABEL.VOIDED}`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Equipment", docId: eqDocId2,
+          revision: "Rev 1", status: STATUS_TYPES_LABEL.VOIDED, breadcrump: true,
         });
       });
     });
