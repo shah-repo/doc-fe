@@ -183,6 +183,12 @@ export const withFBOnChange = <T extends FBInputProps>(
           if (QUANTITY_FIELDS.includes(name) && isMoreDigitsAfterDecimal(value, 10)) {
             showDecimalToastError(getFieldName(name), intl);
             value = toFixedDecimals(value);
+            /* TODO
+              Added to keep values in sync while comparing numbers with trailing decimal zeros.
+              Remove direct access to element after refactoring this whole HOC
+              to avoid updating state after each keypress
+            */
+            ev.target.value = value;
           }
           value = toNumber(value);
         }
