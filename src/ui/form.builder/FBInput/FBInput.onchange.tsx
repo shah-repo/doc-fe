@@ -1,12 +1,26 @@
-import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, toNumber, union } from "lodash";
+import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, throttle, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
 import { toastError } from "../../components/notifications";
-import { isMoreDigitsAfterDecimal } from "../../dashboard.new/line.items/common/Utils";
+import { isMoreDigitsAfterDecimal, toFixedDecimals } from "../../dashboard.new/line.items/common/Utils";
 import FBDataStore from "../FBStore/FBDataStore";
 import { FBFieldName } from "../helpers/FBFieldName";
+
+const QUANTITY_FIELDS = ["lhrs-start-quantity", "lhrs-accepted-quantity", "lhrs-rejected-quantity"];
+const DECIMAL_TOAST_TIMEOUT = 2000;
+const showDecimalToastError = throttle((name, intl) => {
+  toastError(
+    intl.formatMessage(
+      { id: "document.revision.quantity.decimals.error" },
+      { name }
+    ),
+    {
+      autoClose: DECIMAL_TOAST_TIMEOUT,
+    }
+  );
+}, DECIMAL_TOAST_TIMEOUT, { trailing: false });
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -166,11 +180,9 @@ export const withFBOnChange = <T extends FBInputProps>(
         const { type, name } = ev.target;
         let { value } = ev.target;
         if (type === "number" && value !== "") {
-          if (["lhrs-start-quantity",
-            "lhrs-accepted-quantity",
-            "lhrs-rejected-quantity"].includes(name) && isMoreDigitsAfterDecimal(value, 10)) {
-            toastError(intl.formatMessage({ id: "document.revision.quntity.error" }, { name: getFieldName(name) }));
-            return;
+          if (QUANTITY_FIELDS.includes(name) && isMoreDigitsAfterDecimal(value, 10)) {
+            showDecimalToastError(getFieldName(name), intl);
+            value = toFixedDecimals(value);
           }
           value = toNumber(value);
         }
