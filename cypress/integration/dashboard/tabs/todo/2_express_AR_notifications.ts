@@ -311,6 +311,7 @@ context("Express AR notifications", () => {
     });
 
     it("Dismiss item", () => {
+      SystemRequirement("REQ-5330");
       cy.contains("CLOSED").eq(0).trigger("mouseover");
       cy.get("[data-cy='dismiss-icon']").first().arrowClick();
       cy.progressBarShouldNotExist();
@@ -319,7 +320,6 @@ context("Express AR notifications", () => {
     });
 
     it("Dismissed item shouldn't be in the list", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("CLOSED").should("not.exist");
     });
   });
