@@ -1,6 +1,6 @@
 import { find, get, map, unionBy } from "lodash";
 import React from "react";
-import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
+import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceModeOptions, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
 import DocumentPreview from "../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -32,7 +32,13 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
 
     const { document: { document: { documentType = {} } = {} } = {} } = workspaceState || {};
     // Form options should remain disabled in output doc types, regardless of their state.
-    if (!checkIsDocumentForm(documentType?.groupOptions)) {
+    if (
+      ![
+        FBWorkspaceModeOptions.DESIGN,
+        FBWorkspaceModeOptions.FORMPREVIEW,
+      ].includes(workspaceState?.mode as FBWorkspaceModeOptions) &&
+      !checkIsDocumentForm(documentType?.groupOptions)
+    ) {
       previewDisabled = true;
       includeTransport = false;
     }

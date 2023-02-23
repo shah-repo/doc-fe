@@ -13,7 +13,7 @@ set +o allexport
 # Login to AWS
 echo "-------- Logging into AWS --------"
 
-if [ "${ENV}" == "prod" ] || [ "${ENV}" == "sandbox" ] || [ "${ENV}" == "prod2" ]; then
+if [ "${ENV}" == "prod" ] || [ "${ENV}" == "sandbox" ] || [ "${ENV}" == "prod2" ] || [ "${ENV}" == "prod3" ]; then
 	export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
 	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
 fi

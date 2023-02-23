@@ -67,6 +67,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
             resetAndCancelEdit={resetAndCancelEdit}
             showAutoComplete={false}
             titleText={entry.titleText}
+            handleRemove={handleRemove}
+            entry={entry}
           />
       }
       { !isEditMode &&
