@@ -183,19 +183,13 @@ context("Approval request implementation tasks", () => {
 
   context("Check predefined fields", () => {
     it("Verify Approvers", () => {
+      cy.drSelectApprovalsTab();
       cy.get(`[data-cy="Approvers"]`).should("exist");
     });
 
-    it("Select Documents tab", () => {
-      cy.drSelectDocumentTab();
-    });
-
-    it("Verify Approval Request Details", () => {
-      cy.get(`[data-cy="Approval Request Details"]`).should("exist");
-    });
-
-    it("Verify Add Document block", () => {
-      cy.get(`[data-cy="fb.add.document"]`).should("exist");
+    it("Verify Add Item block", () => {
+      cy.arSelectItemsTab();
+      cy.get(`[data-cy="approvalRequest.items.button.addText"]`).should("exist");
     });
 
     it("Select Change Details tab", () => {
@@ -238,7 +232,7 @@ context("Approval request implementation tasks", () => {
     it("Move component", () => {
       cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
       cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
+      cy.get(".drag-handle").eq(0)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
@@ -254,19 +248,9 @@ context("Approval request implementation tasks", () => {
       });
     });
 
-    it("Select Documents tab", () => {
-      cy.drSelectDocumentTab();
-    });
-
-    it("Verify Approval Request Details disabled", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "Approval Request Details", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
-    });
-
     it("Verify Add Document disabled", () => {
-      cy.get(`[data-cy="fb.add.document"]`).should("have.attr", "disabled");
+      cy.arSelectItemsTab();
+      cy.get(`[data-cy="approvalRequest.items.button.addText"]`).should("have.attr", "disabled");
     });
 
     it("Approve and release document", () => {
@@ -462,7 +446,6 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
-      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
       cy.arSelectItemsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

@@ -26,10 +26,16 @@ export const toFixed = (value: string | number) => {
     return value;
   }
   if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, 10)) {
-    const arr = value?.toString()?.split(".");
-    return toNumber(`${arr[0]}.${arr[1].slice(0, 10)}`);
+    return toNumber(toFixedDecimals(value));
   }
   else { return toNumber(value); }
+};
+export const toFixedDecimals = (value: string | number) => {
+  if (Number.isNaN(toNumber(value))) {
+    return value;
+  }
+  const arr = value?.toString()?.split(".");
+  return `${arr[0]}.${arr[1].slice(0, 10)}`;
 };
 export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split(".")[1]?.length > length;
 export const linearScale = (domain: number[], range: number[]) => {

@@ -687,7 +687,6 @@ context("Bulk create record headers", () => {
 
     it("Filter by record-id", () => {
       cy.dlFilterByDocId({ docId: "TDT-00002" });
-      cy.landingPageLoadingElementShouldAppear();
     });
 
     context("Verify voided record one data", () => {
@@ -716,7 +715,6 @@ context("Bulk create record headers", () => {
       it("Filter record two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
-        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Select first record", () => {

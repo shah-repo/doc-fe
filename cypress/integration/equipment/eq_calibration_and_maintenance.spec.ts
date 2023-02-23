@@ -1369,6 +1369,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify reject notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "REJECTED")
@@ -1593,6 +1594,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify approval notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "APPROVED")
@@ -1902,6 +1904,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify reject notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "REJECTED")
@@ -2124,6 +2127,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify approval notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "APPROVED")

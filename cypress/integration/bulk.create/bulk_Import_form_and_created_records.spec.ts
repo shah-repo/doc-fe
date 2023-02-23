@@ -704,8 +704,10 @@ context("Export Bulk", () => {
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApprovalWithoutApi();
-      cy.wait(3000);
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(5000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
@@ -723,7 +725,6 @@ context("Export Bulk", () => {
     it("Filter by record-id", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "BLC-00005" });
-      cy.landingPageLoadingElementShouldAppear();
       cy.dlSelectFirstDocument();
     });
 

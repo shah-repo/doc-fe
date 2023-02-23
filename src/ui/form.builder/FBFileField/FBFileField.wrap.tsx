@@ -16,7 +16,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     name = "",
     ...props
   }: T) => {
-    const { fileUploadState, workspaceState, formState, dialogState  } = FB.useStores();
+    const { fileUploadState, workspaceState, formState  } = FB.useStores();
     const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
 
@@ -69,7 +69,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
-      if (!dialogState?.open) {
+      if (workspaceState?.mode !== "preview") {
         fileFieldState?.upload(validFiles);
       }
     };
@@ -83,7 +83,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       reaction(
         () => fileFieldState?.data,
         (data) => {
-          if (!dialogState?.open) {
+          if (workspaceState?.mode !== "preview") {
             fileUploadState?.addFile(data);
           }
         }
