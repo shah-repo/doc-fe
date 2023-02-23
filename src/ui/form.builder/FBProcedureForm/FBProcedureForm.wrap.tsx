@@ -163,7 +163,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         return handleCancel?.();
       }
       if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
-        toastError(intl.formatMessage({ id: "document.revision.quntity.error" },
+        toastError(intl.formatMessage({ id: "document.revision.quantity.decimals.error" },
           { name: intl.formatMessage({ id: "form.builder.quantity" } ) }));
         return;
       }

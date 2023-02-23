@@ -207,6 +207,8 @@ context("DAM approvals in LHR", () => {
 
       it("Save document", () => {
         cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Approve and release document - create company", () => {
@@ -436,8 +438,8 @@ context("DAM approvals in LHR", () => {
           req.reply((res) => {
             if (res.body !== "") {
               const response = res.body;
-              supplierFieldName = response.formTemplate.schema[3].name;
-              poFieldName = response.formTemplate.schema[5].name;
+              supplierFieldName = response.formTemplate.schema.find((schemaList) => schemaList.type === "supplier");
+              poFieldName = response.formTemplate.schema.find((schemaList) => schemaList.label === "Purchase Order");
             }
           });
         }).as("response");
@@ -458,32 +460,32 @@ context("DAM approvals in LHR", () => {
                <div>
                   <strong>Supplier</strong>                                                                             
                   <ul>
-                     <li>Name: {{autocompletes.${supplierFieldName}.name}}</li>
-                     <li>Description: {{{autocompletes.${supplierFieldName}.description}}}</li>
+                     <li>Name: {{autocompletes.${supplierFieldName.name}.name}}</li>
+                     <li>Description: {{{autocompletes.${supplierFieldName.name}.description}}}</li>
                   </ul>
                </div>
                <div>
                   <strong>Ordered</strong>                                                                             
                   <ul>
-                     {{#documentRevision.formInput.${poFieldName}.items}}                        
+                     {{#documentRevision.formInput.${poFieldName.name}.items}}                        
                      <li>Name: {{serviceId}}{{^serviceId}}{{/serviceId}}</li>
                      <li>Description: {{description}}{{^description}}{{/description}}</li>
                      <li>Ordered: {{order}} {{units}}</li>
                      <li>GL codes: {{glCode}} </li>
-                     {{/documentRevision.formInput.${poFieldName}.items}}                  
+                     {{/documentRevision.formInput.${poFieldName.name}.items}}                  
                   </ul>
                </div>
                <div>
                   <strong>Total cost</strong>
                   <ul>
-                     <li>Total amount: {{documentRevision.formInput.${poFieldName}.totalAmount}}</li>
+                     <li>Total amount: {{documentRevision.formInput.${poFieldName.name}.totalAmount}}</li>
                   </ul>
                </div>
                <div>
                <strong>Tax</strong>                                                                             
                <ul>
-                  <li>Tax Rate: {{documentRevision.formInput.${poFieldName}.taxRate}}</li>
-                  <li>Tax: {{documentRevision.formInput.${poFieldName}.tax}}</li>
+                  <li>Tax Rate: {{documentRevision.formInput.${poFieldName.name}.taxRate}}</li>
+                  <li>Tax: {{documentRevision.formInput.${poFieldName.name}.tax}}</li>
                </ul>
               </div>
                <div>
@@ -605,6 +607,7 @@ context("DAM approvals in LHR", () => {
 
       it("Add approver", () => {
         cy.get("[data-cy^=\"fb-approvals-approvals-\"]").scrollIntoView().click().autocompleteSelect(USERS[1].name);
+        cy.wait(1000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
@@ -811,6 +814,8 @@ context("DAM approvals in LHR", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().click().autocompleteSelect(USERS[1].name);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -822,6 +827,8 @@ context("DAM approvals in LHR", () => {
       it("Submit for Approval", () => {
         cy.pmSubmitForApprovalWithoutAPI();
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Approve PO", () => {

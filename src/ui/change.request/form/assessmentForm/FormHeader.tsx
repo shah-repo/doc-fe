@@ -24,6 +24,7 @@ const FormHeader: React.FC<Props> = ({
         status={changeRequest.state}
         id={changeRequest.crId}
         name={changeRequest.title}
+        documentTypeAcronym={changeRequest?.documentType?.documentTypeAcronym}
       />
     )}
     <Grid item xs={changeRequest ? 6 : 12} justify="flex-end">

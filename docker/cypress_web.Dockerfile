@@ -1,5 +1,5 @@
 # official node image but in shifa ECR repo
-FROM 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:node_14.10.0
+FROM 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:node_18.13.0
 
 WORKDIR /opt/app
 

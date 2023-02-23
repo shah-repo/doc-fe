@@ -31,7 +31,7 @@ export enum MomentFormats {
   BriefDate = "MMM D, YYYY",
   ShortBriefDate = "MMM D",
   BriefDateTime = "MMM D, YYYY hh:mm A z",
-  DateTimeAlt = "D MMM YYYY hh:mm a",
+  DateTimeAlt = "D MMM YYYY hh:mm a z",
   DateTimeComplete = "M/D/YYYY hh:mm A z",
   DayMonthDateYear = "ddd MMMM D YYYY",
   DayMonthDateYearAlt = "ddd, MMMM D, YYYY",

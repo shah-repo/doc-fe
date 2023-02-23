@@ -611,7 +611,6 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Navigate to Supplier list", () => {
       cy.navigToSuppliers();
-      cy.reload();
     });
 
     it("verify supplier 1", () => {
@@ -688,6 +687,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
+      cy.wait(1000);
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

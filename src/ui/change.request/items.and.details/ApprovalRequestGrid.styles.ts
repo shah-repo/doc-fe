@@ -17,7 +17,7 @@ export default makeStyles((theme) =>
     tabContent: {
       width: "100%",
       position: "relative",
-      marginBottom: theme.spacing(3),
+      marginBottom: theme.spacing(6),
       opacity: 1,
       transition: "opacity .2s ease-in",
     },
@@ -68,7 +68,6 @@ export default makeStyles((theme) =>
     },
     iconButton: {
       "fontSize": "16px",
-      "fill": "#000",
       "&:hover": {
         color: Colors.blue,
       },
@@ -132,6 +131,7 @@ export default makeStyles((theme) =>
     },
     enclosingDivViewItem: {
       "backgroundColor": Colors.white,
+      "cursor": "pointer",
       "& .actionBtnClass": {
         display: "none",
       },
@@ -168,7 +168,6 @@ export default makeStyles((theme) =>
       },
     },
     actionButtonChildDiv: {
-      width: "100px",
       backgroundColor: Colors.dodger_blue,
       position: "absolute",
       right: 0,
@@ -179,13 +178,19 @@ export default makeStyles((theme) =>
     },
     actionButton: {
       backgroundColor: Colors.white,
-      padding: theme.spacing(.5),
+      borderRadius: "6px",
+      padding: theme.spacing(.6),
       minWidth: "auto",
       border: theme.spacing(1),
     },
     actionButtonDelete: {
       "& svg": {
         fill: Colors.latest_red_varient,
+      },
+    },
+    actionButtonDone: {
+      "& svg": {
+        color: Colors.navy,
       },
     },
     moreDetails: {
@@ -260,6 +265,9 @@ export default makeStyles((theme) =>
     },
     sectionTitle: {
       color: Colors.almost_black,
+    },
+    link: {
+      textDecoration: "none",
     },
   })
 );

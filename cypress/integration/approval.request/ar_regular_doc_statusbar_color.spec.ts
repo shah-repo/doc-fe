@@ -171,10 +171,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev ADRAFT`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev A", status: "DRAFT", breadcrump: true,
         });
       });
     });
@@ -349,7 +348,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       it("Verify AR state as 'IN REVIEW'", () => {
         cy.verifyListItemExistsOnHeader({
           listItem:
-            `Approval Requests${arId1} Rev`,
+            `Approval Requests${arId1}`,
           breadcrump: true,
         });
       });
@@ -395,10 +394,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev AIN REVIEW`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev A", status: "IN REVIEW", breadcrump: true,
         });
       });
     });
@@ -483,7 +481,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: otherArName, status: "IN_REVIEW" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: otherArName, status: "IN_REVIEW" });
       });
 
       it("Reject AR", () => {
@@ -526,10 +524,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify the document statusbar items as ${STATUS_TYPES_LABEL.PENDING_CHANGE}`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev APENDING CHANGE`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev A", status: "PENDING CHANGE", breadcrump: true,
         });
       });
     });
@@ -674,7 +671,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: otherArName, status: "DRAFT" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: otherArName, status: "DRAFT" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -725,10 +722,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev AAPPROVED`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev A", status: "APPROVED", breadcrump: true,
         });
       });
     });
@@ -800,7 +796,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: otherArName, status: "APPROVED" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: otherArName, status: "APPROVED" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -878,10 +874,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId1} Rev ARELEASED`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId1,
+          revision: "Rev A", status: "RELEASED", breadcrump: true,
         });
       });
     });
@@ -1057,6 +1052,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.drSelectApprovalsTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email, noWait: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1084,7 +1080,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: otherArName2, status: "DRAFT" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: otherArName2, status: "DRAFT" });
       });
 
       it("Send AR to review", () => {
@@ -1157,10 +1153,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Verify OBS Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
       it("Verify OBS Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-            `Document List${otherFormDocId2} Rev OBSOBSOLETE`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: otherFormDocId2,
+          revision: "Rev OBS", status: "OBSOLETE", breadcrump: true,
         });
       });
     });
@@ -1255,10 +1250,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${bulkId1} Rev ADRAFT`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: bulkId1,
+          revision: "Rev A", status: "DRAFT", breadcrump: true,
         });
       });
     });
@@ -1386,6 +1380,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.drSelectApprovalsTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email, noWait: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1400,7 +1395,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Submit the AR for review", () => {
       it("Click on 'Send to review'", () => {
-        cy.get(`[data-cy="transitionButton"]`).contains("Send to review").arrowClick();
+        cy.get(`[id="transitionButton"]`).contains("Send to review").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1408,7 +1403,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       it("Verify AR state as 'IN REVIEW'", () => {
         cy.verifyListItemExistsOnHeader({
           listItem:
-              `Approval Requests${arId2} Rev`,
+              `Approval Requests${arId2}`,
           breadcrump: true,
         });
       });
@@ -1452,10 +1447,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${bulkId1} Rev AIN REVIEW`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: bulkId1,
+          revision: "Rev A", status: "IN REVIEW", breadcrump: true,
         });
       });
     });
@@ -1546,7 +1540,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: bulkArName, status: "IN_REVIEW" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: bulkArName, status: "IN_REVIEW" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1589,10 +1583,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify the document statusbar items as ${STATUS_TYPES_LABEL.PENDING_CHANGE}`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${bulkId1} Rev APENDING CHANGE`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: bulkId1,
+          revision: "Rev A", status: "PENDING CHANGE", breadcrump: true,
         });
       });
     });
@@ -1717,7 +1710,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: bulkArName, status: "DRAFT" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: bulkArName, status: "DRAFT" });
       });
 
       it("Send AR to review", () => {
@@ -1768,10 +1761,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context(`Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag`, () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${bulkId1} Rev AAPPROVED`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: bulkId1,
+          revision: "Rev A", status: "APPROVED", breadcrump: true,
         });
       });
     });
@@ -1843,7 +1835,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: bulkArName, status: "APPROVED" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: bulkArName, status: "APPROVED" });
       });
 
       it("click on 'Close' button", () => {
@@ -1911,10 +1903,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Verify Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${bulkId1} Rev ARELEASED`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: bulkId1,
+          revision: "Rev A", status: "RELEASED", breadcrump: true,
         });
       });
     });
@@ -2101,6 +2092,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
+        cy.drSelectApprovalsTab();
         cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email, noWait: true });
       });
 
@@ -2125,7 +2117,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatusWithoutApi({ title: bulkArName2, status: "DRAFT" });
+        cy.arFilterListByNameAndStatusWithoutApi({ title: bulkArName2, status: "DRAFT" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -2197,10 +2189,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Verify OBS Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
       it("Verify OBS Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
-        cy.verifyListItemExistsOnHeader({
-          listItem:
-              `Document List${bulkId2} Rev OBSOBSOLETE`,
-          breadcrump: true,
+        cy.verifyListItemExistsOnHeaderNew({
+          docType: "Document List", docId: bulkId2,
+          revision: "Rev OBS", status: "OBSOLETE", breadcrump: true,
         });
       });
     });

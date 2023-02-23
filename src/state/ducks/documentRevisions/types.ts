@@ -24,6 +24,18 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
+export enum DocumentRevisionStatusDisplay {
+  Draft = "Draft",
+  PendingChange = "PendingChange",
+  InReview = "InReview",
+  Released = "Released",
+  Approved = "Approved",
+  Deprecated = "Deprecated",
+  Obsolete = "Obsolete",
+  Canceled = "Canceled",
+  Voided = "Voided",
+}
+
 export enum POStatusType {
   OPENED = "OPENED",
   CLOSED = "CLOSED",
@@ -36,6 +48,9 @@ export enum POStatusLabelMapping {
   VOIDED = "Voided"
 }
 
+export enum DocumentCategory {
+  PurchaseOrder = "Purchase Order",
+}
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
