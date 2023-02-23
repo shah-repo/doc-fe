@@ -247,6 +247,7 @@ context("Regular Record notifications", () => {
     });
 
     it("Dismiss item", () => {
+      SystemRequirement("REQ-5330");
       cy.contains("RD-00003").eq(0).trigger("mouseover");
       cy.get("[data-cy='dismiss-icon']").first().arrowClick();
       cy.progressBarShouldNotExist();
@@ -255,7 +256,6 @@ context("Regular Record notifications", () => {
     });
 
     it("Dismissed item shouldn't be in the list", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("REJECTED").should("not.exist");
     });
   });
@@ -272,7 +272,7 @@ context("Regular Record notifications", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Goto Dashboard", () => {
