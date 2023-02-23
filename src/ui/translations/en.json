@@ -1048,7 +1048,7 @@
   "form.builder.aql.value": "AQL: {value}{suffix}",
   "form.builder.percentage": "Percentage",
   "form.builder.value": "Value",
-  "form.builder.audit.STRING_NEW": "{label} added",
+  "form.builder.audit.STRING_NEW": "{label} Added",
   "form.builder.audit.STRING_EDITED": "{label} updated",
   "form.builder.audit.STRING_DELETED": "{label}  deleted",
   "form.builder.audit.ARRAY_NEW": "{label} added",
