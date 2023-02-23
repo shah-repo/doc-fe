@@ -542,7 +542,7 @@
   "documentRevision.audit.status.STRING_EDITED": "Updated status",
   "documentRevision.audit.poStatus.STRING_EDITED": "Updated PO status",
   "documentRevision.audit.poStatus.updated.by": "{name} {status} PO on {timestamp}",
-  "documentRevision.audit.poStatus.quantity.discrepancies": "This Purchase Order have quantity discrepancies that were not 100% received.",
+  "documentRevision.audit.poStatus.quantity.discrepancies": "This Purchase Order has quantity discrepancies that were not 100% received.",
   "documentRevision.audit.document.docId.STRING_NEW": "New Doc ID",
   "documentRevision.audit.document.type.STRING_NEW": "New document type",
   "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
@@ -1415,5 +1415,7 @@
   "approvalRequest.status.DRAFT": "You successfully rejected a document",
   "approvalRequest.status.message.DRAFT": "{crId} {title} has been rejected.",
   "approvalRequest.status.CLOSED": "You successfully closed an AR!",
-  "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed."
+  "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed.",
+  "approvalRequest.status.IN_REVIEW": "You successfully approved a document",
+  "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers"
 }

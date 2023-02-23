@@ -66,15 +66,23 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
 
 Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; eqState: string;
   title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }) => {
-  cy.get(`th[aria-colindex="1"] .k-filtercell > input`).arrowType(params.docId).wait(500);
-  cy.get(`th[aria-colindex="2"] .k-filtercell > input`).arrowType(params.revision).wait(500);
-  cy.get(`th[aria-colindex="3"] .k-filtercell > span.k-input`).arrowClick();
+  cy.get(`th[aria-colindex="1"] .k-filtercell > input`).arrowType(params.docId);
+  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`th[aria-colindex="2"] .k-filtercell > input`).arrowType(params.revision);
+  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick().wait(500);
   cy.get("ul>li").contains(params.eqState).arrowClick().wait(500);
-  cy.get(`th[aria-colindex="4"] .k-filtercell > input`).arrowType(params.title).wait(500);
-  cy.get(`th[aria-colindex="5"] .k-filtercell > input`).arrowType(params.owner).wait(500);
-  cy.get(`th[aria-colindex="6"] .k-filtercell > input`).arrowType(params.calDueDate).wait(500);
-  cy.get(`th[aria-colindex="7"] .k-filtercell > input`).arrowType(params.pmDueDate).wait(500);
-  cy.get(`th[aria-colindex="8"] .k-filtercell > input`).arrowType(params.eqStatus).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`th[aria-colindex="4"] .k-filtercell > input`).arrowType(params.title);
+  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`th[aria-colindex="5"] .k-filtercell > input`).arrowType(params.owner);
+  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`th[aria-colindex="6"] .k-filtercell > input`).arrowType(params.calDueDate);
+  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`th[aria-colindex="7"] .k-filtercell > input`).arrowType(params.pmDueDate);
+  cy.landingPageLoadingElementShouldAppear();
+  cy.get(`th[aria-colindex="8"] .k-filtercell > input`).arrowType(params.eqStatus);
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("filterEquipByOwnerAndLocation", (params: { location: string; owner: string }) => {

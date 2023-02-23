@@ -507,6 +507,7 @@ context("Receivable test with Page Details", () => {
 
     it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
+      cy.wait(1000);
     });
 
     it("Search for PO document and select it", () => {
@@ -517,11 +518,11 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve", () => {
-      cy.poApproveWithoutApi();
+      cy.ebApproveWithoutApi();
     });
   });
 });
