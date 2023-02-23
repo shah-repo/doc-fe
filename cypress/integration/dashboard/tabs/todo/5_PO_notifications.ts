@@ -515,8 +515,8 @@ context("PO notifications", () => {
         {
           sentToUser: USERS[2].email,
           contains: [
-            `Hello <b>${USERS[2].name},</b><br/><br/>`,
-            `Record <b>POT-00001</b> is in review and you are an approver.`,
+            `Hello <b>${USERS[2].name},</b>`,
+            `Record <b>POT-00001 </b> is in review and you are an approver.`,
           ],
         },
       ];
