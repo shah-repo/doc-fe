@@ -301,10 +301,6 @@ context("Scenario 3 - ENC-13597 Selecting Parts in MPI, LHR Template", () => {
       cy.drSelectOverviewTab();
     });
 
-    it("Save document", () => {
-      cy.drClickSaveWithoutApiCall();
-    });
-
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
