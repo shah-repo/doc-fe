@@ -494,7 +494,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             docId={documentRevision?.id}
             docRevOwner= {documentRevision?.owner?.user?.name}
             updatedAt= {documentRevision?.updatedAt || ""}
-            version={documentRevision?.version}
           />
         )}
       </>

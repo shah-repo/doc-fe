@@ -12,7 +12,6 @@ import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { Translation } from "../../../translations/types";
 import { toastError } from "../../notifications";
 import useStyles from "./HeaderPOStatus.styles";
 import { VoidPOStatusDialog } from "./VoidDialog";
@@ -22,11 +21,10 @@ interface Props {
   docId: string;
   docRevOwner: string;
   updatedAt: string;
-  version: number;
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  poStatus, docId, docRevOwner, updatedAt, version,
+  poStatus, docId, docRevOwner, updatedAt,
 }) => {
   const classes = useStyles();
   const dialog = useDialog();
@@ -139,14 +137,6 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     }
   };
 
-  const getAlertDialogMessage = () => {
-    if (isVoidedAction) {
-      return "documentRevision.po.void.alert";
-    } else if (isOpenedAction) {
-      return "documentRevision.po.open.alert";
-    }
-  };
-
   return (
     <>
       <ButtonGroup
@@ -189,15 +179,14 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       >
         {getMenuOptions()}
       </StyledMenu>
-      {((version === 1 && isVoidedAction) ||
-        isOpenedAction) && (
+      {isOpenedAction && (
         <AlertDialog
           confirmAction={confirmAction}
-          message={getAlertDialogMessage() as Translation}
+          message="documentRevision.po.open.alert"
           {...{ dialog }}
         />
       )}
-      {(version > 1 && isVoidedAction) && (
+      {isVoidedAction && (
         <VoidPOStatusDialog
           docRevId={docId}
           docRevOwner={docRevOwner}

@@ -21,7 +21,7 @@ import ClonePOButton from "../../../components/forms/ClonePOButton";
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
-import { FB, FBWorkspaceModeOptions } from "../../../form.builder";
+import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
@@ -224,8 +224,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     if (
       isVisible && values.id &&
       values.status === DocumentRevisionStatus.Draft &&
-      canApprove &&
-      !(isPO && FBWorkspaceModeOptions.FORM === mode)
+      canApprove
     ) {
       accessableButtons.push("approveAndReleaseButton");
     }
