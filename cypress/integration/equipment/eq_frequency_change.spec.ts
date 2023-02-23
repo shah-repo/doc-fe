@@ -1257,7 +1257,7 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
             cy.arAddItems();
-            cy.arEnterItemDescription({ name: "EQ-00002" });
+            cy.arSelectItem({ name: "EQ-00002" });
             cy.arEnterItemDescription({ description: "added document description" });
             cy.arEnterItemJustification({ justification: "justification for added document" });
             cy.arClickAddItemDone();
@@ -1268,6 +1268,7 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Add approvers to approval request on approver list", () => {
+            cy.arSelectApprovalTab();
             cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
           });
 
