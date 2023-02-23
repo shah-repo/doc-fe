@@ -317,7 +317,7 @@ Cypress.Commands.add("navigToTrainingCurriculums", () => {
       NavigationItems.TRAINING_CURRICULUMS,
     ],
   });
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("navigToAsyncTasks", () => {
