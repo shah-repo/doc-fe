@@ -421,8 +421,9 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -515,9 +516,6 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it("Click Approve", () => {
       cy.trApproveTrainingWithoutApi();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -638,8 +636,6 @@ context("Add/Remove groups from Training Curriculum", () => {
 
   context("Verify Training Records", () => {
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

@@ -86,6 +86,7 @@ declare global {
       poBuildInStatus(params: {status: string}): Chainable<Subject>;
       verifyPoApprovalSignature(params: {name: string; email: string}): Chainable<Subject>;
       verifyPoApprovalDisabled(params: {name: string; email: string}): Chainable<Subject>;
+      verifyPoBackspaceClearAllNotAvailable(): Chainable<Subject>;
     }
   }
 }
@@ -268,7 +269,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get(`[data-cy="po-status-button-OPENED"]`).should("exist");
+  cy.get(`[data-cy="po-status-button-OPENED"]`).parent().contains(params.status).should("exist");
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -481,7 +482,7 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
 });
 
 Cypress.Commands.add("poClickOnPending", () => {
-  cy.get(`[data-cy="approval-block-common.pending"]`).arrowClick();
+  cy.get(`[data-cy="approval-block-common.pending"]`).arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -518,4 +519,9 @@ Cypress.Commands.add("poCheckOrderDate", (params: {orderDate: string }) => {
 
 Cypress.Commands.add("poBuildInStatus", (params: {status: string }) => {
   cy.get("#mui-component-select-po-status-built-in").should("have.text", params.status);
+});
+
+Cypress.Commands.add("verifyPoBackspaceClearAllNotAvailable", () => {
+  cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
+  cy.unClick();
 });

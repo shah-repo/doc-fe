@@ -39,6 +39,7 @@ declare global {
       equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       recFinalizeAndReleaseRecord(): Chainable<Subject>;
       recFinalizeAndReleaseRecordWithoutApi(): Chainable<Subject>;
+      recSubmitForApprovalWithoutAPI(): Chainable<Subject>;
     }
   }
 }
@@ -150,7 +151,7 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 });
 
 
-Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm?: string}) => {
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(500);
   cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(500);
@@ -164,7 +165,7 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm?: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetSpecificDocumentType], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
@@ -205,7 +206,7 @@ Cypress.Commands.add("equipReloadDocument", () => {
 });
 
 
-Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm?: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
@@ -275,4 +276,12 @@ Cypress.Commands.add("recFinalizeAndReleaseRecord", () => {
     () => {
       cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
     });
+});
+
+Cypress.Commands.add("recSubmitForApprovalWithoutAPI", () => {
+  cy.get("[data-cy='ApproveAndRelease-button']").eq(0)
+    .contains("Submit for approval").arrowClick({ force: true });
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });

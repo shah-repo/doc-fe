@@ -382,7 +382,7 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -474,7 +474,7 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -491,6 +491,7 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "test training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "test training title").and("contain", "Developers");
@@ -562,7 +563,7 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Select 'One-Time Training test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("One-Time Training test");
+        .autocompleteSelect("One-Time Training test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -614,6 +615,7 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "One-Time training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
       cy.progressBarShouldNotExist();
@@ -636,7 +638,7 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -653,6 +655,7 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "One-Time training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title").and("contain", "Developers");
@@ -669,7 +672,7 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -777,7 +780,7 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "user training title" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "user training title").and("contain", "N/A");
     });

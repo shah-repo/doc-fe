@@ -83,7 +83,11 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
           disableBackdropClick={true}
         >
           <DialogTitle>
-            <IconButton className={classes.closeButton} onClick={dialogPDF.close}>
+            <IconButton
+              data-cy="dialog-close"
+              className={classes.closeButton}
+              onClick={dialogPDF.close}
+            >
               <CloseIcon />
             </IconButton>
           </DialogTitle>
@@ -97,7 +101,12 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
           </DialogContent>
         </Dialog>}
       </Backdrop>
-      {downloadPdfHover && <DownloadPdfSolidIcon onClick={handleClick}/>}
+      {downloadPdfHover && (
+        <DownloadPdfSolidIcon
+          data-cy="download-pdf"
+          onClick={handleClick}
+        />
+      )}
     </>
   );
 };
