@@ -267,7 +267,10 @@ export default makeStyles((theme) =>
       color: Colors.almost_black,
     },
     link: {
-      textDecoration: "none",
+      "textDecoration": "none",
+      "&:hover": {
+        textDecoration: "underline",
+      },
     },
   })
 );
