@@ -111,6 +111,13 @@ context("Express AR notifications", () => {
       cy.arEnterApprovalRequestDescriptionNew({ description: "AR Description" });
     });
 
+    it("Enter info for document item", () => {
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickSaveItem();
+      cy.arItemsLoaderShouldNotExist();
+    });
+
     it("Add User 2 as approver", () => {
       cy.drSelectApprovalsTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email, noWait: true });
@@ -213,6 +220,7 @@ context("Express AR notifications", () => {
     });
 
     it("Dismiss item", () => {
+      SystemRequirement("REQ-5330");
       cy.contains("AR-00001").eq(0).trigger("mouseover");
       cy.get("[data-cy='dismiss-icon']").first().arrowClick();
       cy.progressBarShouldNotExist();
@@ -221,7 +229,6 @@ context("Express AR notifications", () => {
     });
 
     it("Dismissed item shouldn't be in the list", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("REJECTED").should("not.exist");
     });
 
@@ -322,6 +329,7 @@ context("Express AR notifications", () => {
     });
 
     it("Dismiss item", () => {
+      SystemRequirement("REQ-5330");
       cy.contains("CLOSED").eq(0).trigger("mouseover");
       cy.get("[data-cy='dismiss-icon']").first().arrowClick();
       cy.progressBarShouldNotExist();
@@ -330,7 +338,6 @@ context("Express AR notifications", () => {
     });
 
     it("Dismissed item shouldn't be in the list", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("CLOSED").should("not.exist");
     });
   });
