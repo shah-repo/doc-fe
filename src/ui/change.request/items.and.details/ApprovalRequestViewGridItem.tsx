@@ -137,6 +137,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
                     to={documentVersionPath(part.revId, part.documentId)}
                     target="_blank"
                     className={classes.link}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
                   >
                     {part.titleText}
                   </Link>
