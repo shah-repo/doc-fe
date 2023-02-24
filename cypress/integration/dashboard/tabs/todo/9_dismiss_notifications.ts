@@ -899,7 +899,7 @@ context("Dismiss notifications", () => {
 
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify approvals field is automatically added", () => {
@@ -984,7 +984,7 @@ context("Dismiss notifications", () => {
 
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Open details tab", () => {
@@ -1464,27 +1464,30 @@ context("Dismiss notifications", () => {
 
   context("Dismiss notifications", () => {
     it("Dismiss item 1", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 2", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 3", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 4", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("'To Do' tab should be empty", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("No pending actions").should("exist");
     });
   });
@@ -1599,37 +1602,42 @@ context("Dismiss notifications", () => {
 
   context("Dismiss notifications", () => {
     it("Dismiss item 1", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 2", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 3", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 4", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 5", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("Dismiss item 6", () => {
+      SystemRequirement("REQ-5330");
       cy.dashDismissFirstItem();
       cy.wait(1000);
     });
 
     it("'To Do' tab should be empty", () => {
-      SystemRequirement("REQ-5330");
       cy.contains("No pending actions").should("exist");
     });
   });
