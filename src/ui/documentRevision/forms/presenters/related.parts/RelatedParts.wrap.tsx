@@ -155,6 +155,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       suffixName: "",
       attachments: [],
       referenceTo: [],
+      revisionStage: get(documentRevision, "revisionStage"),
       revisionChangeType: get(documentRevision, "revisionChangeType"),
       document: {
         docId: "",
