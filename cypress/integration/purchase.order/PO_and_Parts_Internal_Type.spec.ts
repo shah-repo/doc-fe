@@ -765,7 +765,7 @@ context("PO and parts ", () => {
     it("Select a document type as 'Purchase Order test'", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
-        .autocompleteSelect("Purchase Order test{enter}", { force: true });
+        .autocompleteSelect("Purchase Order test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1754,7 +1754,7 @@ context("PO and parts ", () => {
     it("Select a document type as 'Purchase Order test'", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
-        .autocompleteSelect("Purchase Order test{enter}", { force: true });
+        .autocompleteSelect("Purchase Order test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

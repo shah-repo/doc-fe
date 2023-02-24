@@ -1503,10 +1503,10 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.contains("2 PO Approval sig").should("exist");
       cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[11].name);
       cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[11].email);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
+      cy.get(`[data-cy="user-0-Pending-status-text"]`).contains("Pending Approval");
       cy.get(`[data-cy="user-name-1-DRAFT"]`).contains(USERS[12].name);
       cy.get(`[data-cy="user-email-1-DRAFT"]`).contains(USERS[12].email);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
+      cy.get(`[data-cy="user-1-Pending-status-text"]`).contains("Pending Approval");
     });
 
     it("Check approval icon if it's color", () => {

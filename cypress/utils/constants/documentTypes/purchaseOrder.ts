@@ -73,10 +73,6 @@ export const PurchaseOrderTest:  IdocumentTypeDto = {
       label: "Create PO",
       visible: true,
     },
-    W: {
-      label: "Revision Stage",
-      visible: false,
-    },
     A1: {
       label: "Draft",
       visible: true,
