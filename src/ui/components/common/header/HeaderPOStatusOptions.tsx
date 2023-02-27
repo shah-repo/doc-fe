@@ -3,6 +3,7 @@ import Menu, { MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as CaretIcon } from "../../../../assets/images/po_status_dropdown.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
@@ -11,24 +12,34 @@ import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { Translation } from "../../../translations/types";
+import { toastError } from "../../notifications";
 import useStyles from "./HeaderPOStatus.styles";
+import { VoidPOStatusDialog } from "./VoidDialog";
 
 interface Props {
   poStatus: POStatusType;
   docId: string;
+  docRevOwner: string;
+  updatedAt: string;
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  poStatus, docId,
+  poStatus, docId, docRevOwner, updatedAt,
 }) => {
   const classes = useStyles();
   const dialog = useDialog();
-  const async = useAsync();
+  const intl = useIntl();
+  const async = useAsync({
+    onError: () => {
+      toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+    },
+  });
   const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
   const updatePOAction = useActionCreator(documentRevisionsActions.updatePO);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
+  const isVoidedAction = POStatusType.VOIDED === action;
+  const isOpenedAction = POStatusType.OPENED === action;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -119,18 +130,10 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const confirmAction = () => {
     dialog.close();
-    if (action === POStatusType.VOIDED) {
+    if (isVoidedAction) {
       async.start(voidAction, docId, async);
-    } else if (action === POStatusType.OPENED) {
+    } else if (isOpenedAction) {
       async.start(updatePOAction, docId, { poStatus: POStatusType.OPENED }, async);
-    }
-  };
-
-  const getAlertDialogMessage = () => {
-    if (action === POStatusType.VOIDED) {
-      return "documentRevision.po.void.alert";
-    } else if (action === POStatusType.OPENED) {
-      return "documentRevision.po.open.alert";
     }
   };
 
@@ -176,11 +179,21 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       >
         {getMenuOptions()}
       </StyledMenu>
-      <AlertDialog
-        confirmAction={confirmAction}
-        message={getAlertDialogMessage() as Translation}
-        {...{ dialog }}
-      />
+      {isOpenedAction && (
+        <AlertDialog
+          confirmAction={confirmAction}
+          message="documentRevision.po.open.alert"
+          {...{ dialog }}
+        />
+      )}
+      {isVoidedAction && (
+        <VoidPOStatusDialog
+          docRevId={docId}
+          docRevOwner={docRevOwner}
+          updatedAt={updatedAt}
+          {...{ dialog }}
+        />
+      )}
     </>
   );
 };
