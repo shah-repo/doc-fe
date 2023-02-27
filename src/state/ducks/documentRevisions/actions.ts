@@ -321,6 +321,18 @@ const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<Documen
   },
 });
 
+const obsoletePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}${PO_ROOT_URL}/obsolete_void/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (response, dispatch) => {
+    dispatch(load(id));
+  },
+  onFailure: () => {
+    toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+  },
+});
+
 const setPrimaryAttachment = (
   docRevId: string,
   attachmentId: string,
@@ -470,6 +482,7 @@ export default {
   setPrimaryAttachment,
   voidDocument,
   updatePO,
+  obsoletePO,
   cloneDoc,
   finalizeAndRelease,
   getDocRevStatuses,

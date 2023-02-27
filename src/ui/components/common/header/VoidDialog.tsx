@@ -3,7 +3,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as AlertIcon } from "../../../../assets/images/alert.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { POStatusType, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { styles } from "../../../app/alert.dialog/AlertDialog.styles";
 import Text from "../../../components/Text";
 import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
@@ -27,27 +26,24 @@ export const VoidPOStatusDialog: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const formState = FB.useRef(FBFormState, {});
-  const save = useActionCreator(documentRevisionsActions.save);
+  const obsoletePO = useActionCreator(documentRevisionsActions.obsoletePO);
 
-  const voidDocAsync = useAsync({
+  const obsoletePOAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.loadAudit(docRevId));
     },
   });
 
   const voidRecord = () => {
-    // TODO change as per BE
-    voidDocAsync.start(
-      save,
+    obsoletePOAsync.start(
+      obsoletePO,
       docRevId,
       {
         description: `<p>Void</p>
         <p>${formState?.getValues().voidDescription}</p>
         <p>${docRevOwner}, ${updatedAt}</p>`,
-        poStatus: POStatusType.VOIDED,
-        revisionChangeType: RevisionChangeType.Obsolete,
       },
-      voidDocAsync,
+      obsoletePOAsync,
     );
   };
 
