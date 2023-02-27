@@ -103,7 +103,7 @@ context("Regular Record notifications", () => {
 
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify approvals field is automatically added", () => {
