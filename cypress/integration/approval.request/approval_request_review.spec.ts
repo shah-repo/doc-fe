@@ -236,23 +236,23 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0850");
       cy.arSelectItemsTab();
       cy.wait(1000);
-      cy.get("div[name$=\"descriptionOfChange\"]").should("exist");
+      cy.get("span").contains("Document description").should("exist");
     });
 
     it("Check Document's justification is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.get("div[name$=\"justificationOfChange\"]").should("exist");
+      cy.get("span").contains("Justification for added document").should("exist");
     });
 
     it("Check 'Add Document' button is disbaled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"fb.add.document\"]").should("be.disabled");
+      cy.get("[data-cy=\"approvalRequest.items.button.addText\"]").should("be.disabled");
     });
 
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.arSelectChangeDetailsTab();
+      cy.drSelectApprovalsTab();
       cy.wait(1000);
       cy.get("input[data-cy=\"fb-approvers-approvers\"]").should("not.be.disabled");
     });
@@ -340,7 +340,7 @@ context("Approval request form scenario", () => {
       cy.listLoadingElementShouldNotExist();
       cy.arAddItems();
       cy.arIsProposedDocumentEmpty();
-      cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
+      cy.get("[data-cy=\"clearRecord\"]").arrowClick();
     });
   });
 

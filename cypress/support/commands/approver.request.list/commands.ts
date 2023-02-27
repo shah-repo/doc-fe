@@ -22,6 +22,7 @@ declare global {
       alVerifyFilterByStatus(params: {status: string }): Chainable<Subject>;
       alVerifyFilterClear(): Chainable<Subject>;
       alVerifyDescriptionOnHover(params: {description: string }): Chainable<Subject>;
+      alFilterARByStatus(params: {status: string }): Chainable<Subject>;
     }
   }
 }
@@ -76,6 +77,15 @@ Cypress.Commands.add("alFilterByStatus", (params: {status: string }) => {
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick().wait(500);
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("alFilterARByStatus", (params: {status: string }) => {
+  cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right");
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.wait(2000);
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick().wait(1000);
+  cy.get("li").contains(params.status).arrowClick();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("alVerifyFilterByStatus", (params: {status: string }) => {

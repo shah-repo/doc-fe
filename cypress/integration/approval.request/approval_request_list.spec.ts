@@ -212,10 +212,12 @@ context("Approval request landing page test", () => {
   context("Prepare approval request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
-      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.drSelectApprovalsTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       cy.arSaveApiCallWithoutApi();
     });
@@ -251,6 +253,7 @@ context("Approval request landing page test", () => {
     context("Check AR ID filter", () => {
       it("Filter list by AR ID", () => {
         cy.alFilterByArId({ arId: "AR99999" });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Verify filter by AR ID", () => {
@@ -271,6 +274,7 @@ context("Approval request landing page test", () => {
 
       it("Filter list by TITLE", () => {
         cy.alFilterByTitle({ title: approvalRequestName2 });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Verify filter by TITLE", () => {
@@ -291,6 +295,7 @@ context("Approval request landing page test", () => {
 
       it("Filter list by OWNER", () => {
         cy.alFilterByOwner({ owner: USERS[2].name });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Verify filter by OWNER", () => {

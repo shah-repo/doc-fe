@@ -405,7 +405,7 @@ context("Export for Approval Request", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arAddItems();
-        cy.arEnterItemDescription({ name: "FM-00005" });
+        cy.arSelectItem({ name: "FM-00005" });
         cy.arEnterItemDescription({ description: "added document description" });
         cy.arEnterItemJustification({ justification: "justification for added document" });
         cy.arClickAddItemDone();

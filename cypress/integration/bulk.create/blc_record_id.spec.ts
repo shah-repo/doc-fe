@@ -923,7 +923,6 @@ context("Bulk create public, private and reserved record-ids", () => {
       context("Verify Test Private Pool records", () => {
         it("Filter docs by type", () => {
           cy.dlFilterByDocId({ docId: "TPP" });
-          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Verify doc-ids are correct for created doc", () => {
@@ -950,7 +949,6 @@ context("Bulk create public, private and reserved record-ids", () => {
         it("Filter docs by type", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TPUP" });
-          cy.landingPageLoadingElementShouldAppear();
         });
 
         it("Verify doc-ids are correct for created doc", () => {

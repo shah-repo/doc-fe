@@ -220,22 +220,23 @@ context("Status Bar of newly created ARs", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.drSelectApprovalsTab();
       cy.get("[data-cy='fb-approvers-approvers']").arrowClick();
       cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
     });
   });
 
   context("Verify DRAFT statusbar items", () => {
-    it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+    it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Approval RequestsAR-00001 Rev DRAFT`,
+            `Approval RequestsAR-00001 DRAFT`,
         breadcrump: true,
       });
     });
@@ -303,7 +304,7 @@ context("Status Bar of newly created ARs", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatusWithoutApi({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterListByNameAndStatusWithoutApi({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -330,7 +331,7 @@ context("Status Bar of newly created ARs", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatusWithoutApi({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterListByNameAndStatusWithoutApi({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -367,15 +368,18 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='changeOwner-submit']`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify header is fixed when page scroll", () => {
+      cy.drSelectApprovalsTab();
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
       cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
 
     it("Verify 'Send to review' in status bar", () => {
-      cy.get("[data-cy='transitionButton']").should("be.visible");
+      cy.get("[id='transitionButton']").should("be.visible");
       cy.arClickSendToReviewWithoutApi();
     });
 
@@ -383,10 +387,10 @@ context("Status Bar of newly created ARs", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
-    it("Verify IN_REVIEW Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+    it("Verify IN_REVIEW Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Approval RequestsAR-00001 Rev IN REVIEW`,
+            `Approval RequestsAR-00001 IN REVIEW`,
         breadcrump: true,
       });
     });
@@ -438,11 +442,11 @@ context("Status Bar of newly created ARs", () => {
     });
   });
 
-  context("Verify APPROVED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-    it("Verify APPROVED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+  context("Verify APPROVED Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
+    it("Verify APPROVED Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Approval RequestsAR-00001 Rev APPROVED`,
+            `Approval RequestsAR-00001 APPROVED`,
         breadcrump: true,
       });
     });
@@ -462,6 +466,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
@@ -473,6 +479,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
+      cy.drSelectApprovalsTab();
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
       cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
@@ -485,11 +492,11 @@ context("Status Bar of newly created ARs", () => {
     });
   });
 
-  context("Verify CLOSED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-    it("Verify CLOSED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+  context("Verify CLOSED Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
+    it("Verify CLOSED Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Approval RequestsAR-00001 Rev CLOSED`,
+            `Approval RequestsAR-00001 CLOSED`,
         breadcrump: true,
       });
     });
@@ -509,6 +516,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify the statusbar background-color as LIGHT GRAY(${Colors.medium_light_shade_gray})`, () => {
@@ -516,6 +525,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
+      cy.drSelectApprovalsTab();
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
       cy.closeAllAlertMessages();
       cy.get(`[data-cy="header-section"]`).should("be.visible");
@@ -530,7 +540,7 @@ context("Status Bar of newly created ARs", () => {
     it("Filter ar by name and status as DRAFT, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestName2, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterListByNameAndStatusWithoutApi({ title: approvalRequestName2, status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -547,11 +557,11 @@ context("Status Bar of newly created ARs", () => {
     });
   });
 
-  context("Verify VOIDED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-    it("Verify VOIDED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+  context("Verify VOIDED Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
+    it("Verify VOIDED Statusbar exists Icon, Landing page, Doc ID, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Approval RequestsAR-00002 Rev VOIDED`,
+            `Approval RequestsAR-00002 VOIDED`,
         breadcrump: true,
       });
     });
@@ -571,6 +581,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it(`Verify VOIDED statusbar background-color as RED(${Colors.latest_red_varient})`, () => {
@@ -578,6 +590,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
+      cy.drSelectApprovalsTab();
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
       cy.closeAllAlertMessages();
       cy.get(`[data-cy="header-section"]`).should("be.visible");
