@@ -11,6 +11,7 @@ import { GroupTag } from "../../../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { SQS_TYPES } from "../../../../../src/ui/async.tasks/types";
 import { SystemRequirement } from "../../../../utils/context/systemRequirement";
+import { momentInPST } from "../../../../utils/constants/dateHandler";
 
 let createdCompany;
 let loginResponse;
@@ -30,6 +31,7 @@ let createdClinicalProtocolForm;
 let createdTrainingCurriculumFormDocument;
 let releasedDoc1Id;
 let releasedDoc2Id;
+let trAssignedDate;
 
 context("Training notifications", () => {
   before(() => {
@@ -714,6 +716,10 @@ context("Training notifications", () => {
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("40");
+      trAssignedDate =  momentInPST()
+        .add(40, "days")
+        .subtract(10, "days")
+        .format("MMM D");
     });
 
     it("Select User 2 to train", () => {
@@ -802,8 +808,12 @@ context("Training notifications", () => {
   context("Verify tabs content", () => {
     it("Verify training notifications for both documents", () => {
       SystemRequirement("REQ-2470");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc2Id}Rev 1 released doc2` });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: `${releasedDoc1Id}Rev 1 released doc1A training is assigned to you${trAssignedDate}`,
+      });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem: `${releasedDoc2Id}Rev 1 released doc2A training is assigned to you${trAssignedDate}`,
+      });
     });
   });
 
@@ -877,11 +887,15 @@ context("Training notifications", () => {
   });
 
   context("Verify tabs content", () => {
-    it("Regular AR notification should be first in the list", () => {
+    it("Regular AR notification should appear on top", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", USERS[1].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00005");
+    });
+    it("Training notification should be after it", () => {
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
+        .should("contain.text", "A training is assigned to you");
     });
   });
 
