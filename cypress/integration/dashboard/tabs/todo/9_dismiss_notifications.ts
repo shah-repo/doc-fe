@@ -1541,7 +1541,7 @@ context("Dismiss notifications", () => {
         cy.wait(3000);
       });
 
-      it("Document can be approved", () => {
+      it("User can complete training", () => {
         cy.get("button[data-cy=training-complete]").should("exist");
       });
     });
@@ -1721,7 +1721,7 @@ context("Dismiss notifications", () => {
         cy.wait(3000);
       });
 
-      it("Document can be approved", () => {
+      it("User can complete training", () => {
         cy.get("button[data-cy=training-complete]").should("exist");
       });
     });
