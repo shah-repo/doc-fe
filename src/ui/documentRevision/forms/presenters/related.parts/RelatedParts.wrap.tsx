@@ -1,4 +1,5 @@
 import { Link, Typography } from "@material-ui/core";
+import { useFormikContext } from "formik";
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useCallback, useState } from "react";
@@ -67,6 +68,8 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const { workspaceState } = FB.useStores();
+  const formik = useFormikContext();
 
   const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
   relatedPartsState.setViewOnlyMode(viewOnly);
@@ -88,6 +91,8 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       } else if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
         // populate the list with the new added part
         relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
+        formik.submitForm();
+        workspaceState?.saveDocRev();
       }
     },
   });
@@ -150,6 +155,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       suffixName: "",
       attachments: [],
       referenceTo: [],
+      revisionStage: get(documentRevision, "revisionStage"),
       revisionChangeType: get(documentRevision, "revisionChangeType"),
       document: {
         docId: "",

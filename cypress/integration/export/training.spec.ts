@@ -331,7 +331,7 @@ context("Export training curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldAppear();
     });
 
@@ -493,7 +493,7 @@ context("Export training curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldAppear();
     });
 
@@ -587,7 +587,7 @@ context("Export training curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldAppear();
     });
 

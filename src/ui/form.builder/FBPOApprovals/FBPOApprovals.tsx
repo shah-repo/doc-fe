@@ -3,6 +3,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import cx from "classnames";
 import { orderBy } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
 import { ReactComponent as EmailSuccessIcon } from "../../../assets/images/email_success.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -50,6 +51,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   }, {} as Record<string, FBInlineApprovalBody[]>);
 
   const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
+  const intl = useIntl();
 
   return  (
     <FBProvider {...{ dialogState }}>
@@ -99,6 +101,9 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                   ? "common.pending"
                   : "APPROVED";
 
+                const poStatusHeaderTextMessage = intl.formatMessage({
+                  id: poStatusHeaderText,
+                });
                 return (
                   <ApprovalsBlock
                     headerText={poStatusHeaderText}
@@ -179,12 +184,13 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                     : (
                                       <Typography
                                         variant="caption"
+                                        data-cy={`user-${index}-${poStatusHeaderTextMessage}-status-text`}
                                         className={classes.stateText}
                                       >
                                         {approval.status === FBInlineApprovalStatusIdent.APPROVED && (
                                           <EmailSuccessIcon className={classes.successIcon} />
                                         )}
-                                        <Text data-cy={`status-${index}-${approval.status}`} message={poStatusText} />
+                                        <Text message={poStatusText} />
                                       </Typography>
                                     )
                                 }

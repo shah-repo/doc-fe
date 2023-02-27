@@ -436,7 +436,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -612,6 +612,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column for 'released doc1' should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -638,10 +639,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
 
     it("Find training 'test training title'", () => {
@@ -721,9 +718,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
   context("Verify Training Records", () => {
     it("Navigate to Training Records", () => {
       cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
@@ -732,6 +726,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Training record for doc1 should be as it is", () => {
+      cy.trClearFilters();
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -748,6 +743,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Training record for doc3", () => {
+      cy.trClearFilters();
       cy.trLandingPageDocId({ docId: releasedDoc3Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -764,6 +760,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Training record for doc2", () => {
+      cy.trClearFilters();
       SystemRequirement("REQ-4570");
       cy.trLandingPageDocId({ docId: releasedDoc2Id });
       cy.progressBarShouldNotExist();

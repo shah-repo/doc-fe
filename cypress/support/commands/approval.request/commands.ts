@@ -46,6 +46,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arFilterARListByNameAndStatusWithoutApi(params: { title: string; status: string }): Chainable<Subject>;
+      arFilterListByNameAndStatusWithoutApi(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
       arApproveARWithoutApi(): Chainable<Subject>;
       arSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
@@ -519,6 +520,18 @@ Cypress.Commands.add("arFilterARListByNameAndStatusWithoutApi", (params: { title
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
+  cy.get(".k-master-row").contains(params.title).arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arFilterListByNameAndStatusWithoutApi", (params: { title: string; status: string }) => {
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldAppear().wait(2000);
   cy.get(".k-master-row").contains(params.title).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

@@ -387,7 +387,7 @@ context("Add/Remove users from Training Curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -682,6 +682,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[13].name} should not be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[13].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -692,6 +693,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -730,6 +732,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[14].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[14].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -769,6 +772,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[7].name} should be present`, () => {
+      cy.trClearFilters();
       SystemRequirement("REQ-4560");
       cy.trLandingPageUsername({ username: USERS[7].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });

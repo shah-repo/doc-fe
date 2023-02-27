@@ -497,7 +497,7 @@ context("Training Flow test", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -674,7 +674,7 @@ context("Training Flow test", () => {
 
     it("Select 'One-Time Training test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("One-Time Training test");
+        .autocompleteSelect("One-Time Training test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -757,7 +757,7 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -922,7 +922,7 @@ context("Training Flow test", () => {
 
     it("Select 'One-Time Training test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("One-Time Training test");
+        .autocompleteSelect("One-Time Training test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
