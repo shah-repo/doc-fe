@@ -1,4 +1,5 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
+import { useFormikContext } from "formik";
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -36,6 +37,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     editorProperties,
     ...props
   }: T) => {
+    const formik = useFormikContext();
     const { formState, workspaceState } = FB.useStores();
     const isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
@@ -136,6 +138,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       } else if (!inputValue) {
         setModifiedOptions(options);
       }
+      formik.submitForm();
     };
 
     debounceFilterInput = debounce(onFilterInputChange, 1000);

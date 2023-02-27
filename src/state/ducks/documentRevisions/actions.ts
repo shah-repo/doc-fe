@@ -1,5 +1,7 @@
 import { PasswordType } from "aws-sdk/clients/cognitoidentityserviceprovider";
 import axios from "axios";
+import { intl } from "../../../common/intl";
+import { toastError } from "../../../ui/components/notifications";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
@@ -314,6 +316,21 @@ const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<Documen
   onSuccess: (response, dispatch) => {
     dispatch(load(id));
   },
+  onFailure: () => {
+    toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+  },
+});
+
+const obsoletePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}${PO_ROOT_URL}/obsolete_void/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (response, dispatch) => {
+    dispatch(load(id));
+  },
+  onFailure: () => {
+    toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+  },
 });
 
 const setPrimaryAttachment = (
@@ -465,6 +482,7 @@ export default {
   setPrimaryAttachment,
   voidDocument,
   updatePO,
+  obsoletePO,
   cloneDoc,
   finalizeAndRelease,
   getDocRevStatuses,

@@ -337,7 +337,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   isDocRevFirstDraft,
                   showAdministrativeAndVoidChange,
                   isRecord,
-                  isPO,
+                  isPORecord: isPO && FBWorkspaceModeOptions.FORM === mode,
                   releasedDocRev,
                   isAlphaReleased,
                 }}
