@@ -45,7 +45,6 @@ import "./commands/layout.new/commands";
 import "./commands/mpi/commands";
 import "./commands/navigation/commands";
 import "./commands/parts.materials/commands";
-import "./commands/parts/commands";
 import "./commands/purchase.order/commands";
 import "./commands/receivable/commands";
 import "./commands/records/commands";
