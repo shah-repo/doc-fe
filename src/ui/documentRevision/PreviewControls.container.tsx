@@ -39,7 +39,7 @@ import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
@@ -400,6 +400,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
   const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
   const isDocumentVoided = isDocumentRevisionVoided(documentRevision.status);
+  const isDocumentObsolete = isDocumentRevisionObsolete(documentRevision.status);
 
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
@@ -480,7 +481,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       <>
         {isPO &&
           documentRevision.poStatus &&
-          (isDocumentInReview || isDocumentDraft || isDocumentVoided) && (
+          (isDocumentInReview || isDocumentDraft || isDocumentVoided || isDocumentObsolete) && (
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
@@ -492,6 +493,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <HeaderPOStatusOptions
             poStatus={documentRevision?.poStatus}
             docId={documentRevision?.id}
+            docRevOwner= {documentRevision?.owner?.user?.name}
+            updatedAt= {documentRevision?.updatedAt || ""}
           />
         )}
       </>

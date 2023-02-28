@@ -55,6 +55,7 @@ declare global {
       poAMEnterLimit(params: {limit: string}): Chainable<Subject>;
       poAMSelectUsers(...list: string[]): Chainable<Subject>;
       poAMCheckForApproval(): Chainable<Subject>;
+      poAMCheckForApprovalWithoutApi(): Chainable<Subject>;
       poSaveDocument(): Chainable<Subject>;
       poAMCheckApprovalIconIfItsPrimary(): Chainable<Subject>;
       poAMCheckApprovalIconIfItsDisabled(): Chainable<Subject>;
@@ -385,6 +386,10 @@ Cypress.Commands.add("poAMCheckForApproval", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
     cy.get("#ApproveAndRelease-button").arrowClick();
   });
+});
+
+Cypress.Commands.add("poAMCheckForApprovalWithoutApi", () => {
+  cy.get("#ApproveAndRelease-button").arrowClick();
 });
 
 Cypress.Commands.add("poAMCheckApprovalIconIfItsPrimary", () => {
