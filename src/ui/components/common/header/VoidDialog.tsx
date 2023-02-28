@@ -1,7 +1,9 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from "@material-ui/core";
+import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as AlertIcon } from "../../../../assets/images/alert.svg";
+import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { styles } from "../../../app/alert.dialog/AlertDialog.styles";
 import Text from "../../../components/Text";
@@ -14,14 +16,12 @@ interface Props {
   dialog: DialogHandler;
   docRevId: string;
   docRevOwner: string;
-  updatedAt: string;
 }
 
 export const VoidPOStatusDialog: React.FunctionComponent<Props> = ({
   dialog,
   docRevId,
   docRevOwner,
-  updatedAt,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ export const VoidPOStatusDialog: React.FunctionComponent<Props> = ({
       {
         description: `<p>Void</p>
         <p>${formState?.getValues().voidDescription}</p>
-        <p>${docRevOwner}, ${updatedAt}</p>`,
+        <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.AsyncTasksDefaultDateTimeFormatter)}</p>`,
       },
       obsoletePOAsync,
     );
