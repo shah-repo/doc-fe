@@ -137,7 +137,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         setModifiedOptions(updatedOptions);
       } else if (!inputValue) {
         setModifiedOptions(options);
-        isPO && formik?.submitForm();
+        if (isPO) {
+          formik?.submitForm();
+        }
       }
     };
 
