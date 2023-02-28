@@ -41,7 +41,7 @@ export const VoidPOStatusDialog: React.FunctionComponent<Props> = ({
       {
         description: `<p>Void</p>
         <p>${formState?.getValues().voidDescription}</p>
-        <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.AsyncTasksDefaultDateTimeFormatter)}</p>`,
+        <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`,
       },
       obsoletePOAsync,
     );
