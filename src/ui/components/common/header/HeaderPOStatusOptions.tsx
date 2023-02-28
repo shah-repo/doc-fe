@@ -190,7 +190,6 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         <VoidPOStatusDialog
           docRevId={docId}
           docRevOwner={docRevOwner}
-          updatedAt={updatedAt}
           {...{ dialog }}
         />
       )}

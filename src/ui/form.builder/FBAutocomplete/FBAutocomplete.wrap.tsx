@@ -138,7 +138,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       } else if (!inputValue) {
         setModifiedOptions(options);
       }
-      formik.submitForm();
+      formik?.submitForm();
     };
 
     debounceFilterInput = debounce(onFilterInputChange, 1000);
