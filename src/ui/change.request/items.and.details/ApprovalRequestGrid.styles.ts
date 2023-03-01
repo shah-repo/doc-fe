@@ -231,6 +231,9 @@ export default makeStyles((theme) =>
     },
     docListItem: {
       padding: theme.spacing(.75, 0),
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
     },
     verticalDivider: {
       borderLeft: "2px solid white",
