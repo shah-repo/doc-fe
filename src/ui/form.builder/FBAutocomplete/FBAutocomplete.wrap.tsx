@@ -1,11 +1,10 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import { useFormikContext } from "formik";
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentLHR, checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
@@ -37,13 +36,11 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     editorProperties,
     ...props
   }: T) => {
-    const formik = useFormikContext();
     const { formState, workspaceState } = FB.useStores();
     const isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
       !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
-    const isPO = checkIsDocumentPO(workspaceState?.document?.document.documentType.groupOptions);
     const multiple = editorProperties?.includes("multiple") || props.multiple;
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
@@ -137,9 +134,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         setModifiedOptions(updatedOptions);
       } else if (!inputValue) {
         setModifiedOptions(options);
-        if (isPO) {
-          formik?.submitForm();
-        }
       }
     };
 
