@@ -92,9 +92,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
       }
     },
-    onError: () => {
-      setSubPartBeingAdded(false);
-    },
+    onError: () => setSubPartBeingAdded(false),
   });
 
   const showSuccessToast = (
