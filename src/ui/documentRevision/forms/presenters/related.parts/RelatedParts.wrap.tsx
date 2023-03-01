@@ -6,7 +6,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { toastSuccess } from "../../../../components/notifications";
@@ -135,13 +135,14 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({
-    onSuccess: ({ docRevId, name }: any) => {
-      relatedPartsState.updateRelatedPartsList(docRevId, name);
+    onSuccess: ({ docRevId, name, revisionChangeType }: any) => {
+      relatedPartsState.updateRelatedPartsList(docRevId, name, revisionChangeType);
     },
   });
 
-  const voidRelatedPart = (listItem: RelatedPartsListItem) => {
-    voidRelatedPartAsync.start(voidRelatedPartAction, listItem.documentRevisionId, voidRelatedPartAsync);
+  const voidRelatedPart = (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => {
+    voidRelatedPartAsync.start(voidRelatedPartAction,
+      listItem.documentRevisionId, revisionChangeType, voidRelatedPartAsync);
   };
 
 

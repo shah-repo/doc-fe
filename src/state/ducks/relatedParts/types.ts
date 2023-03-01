@@ -1,4 +1,4 @@
-import { DocumentRevisionStatus } from "../documentRevisions/types";
+import { DocumentRevisionStatus, RevisionChangeType } from "../documentRevisions/types";
 
 export enum RELATED_PARTS_STATUS {
   RELATED_SEPARATE = "related_separate",
@@ -24,4 +24,8 @@ export interface RelatedPartsListItem {
   name: string;
   status: DocumentRevisionStatus;
   relatedStatus?: RELATED_PARTS_STATUS;
+  version?: number;
+  revision?: number;
+  displayRevision?: string;
+  revisionChangeType?: RevisionChangeType;
 }

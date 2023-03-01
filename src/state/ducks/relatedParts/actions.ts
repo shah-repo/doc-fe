@@ -1,6 +1,6 @@
 import { apiAction } from "../../factories";
 import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
-import { DocumentRevision, DocumentRevisionEditRequestBody } from "../documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
 import { RelatedPartsChoiceRequestBody } from "./types";
 
@@ -37,11 +37,17 @@ const fetchAllRelatedParts =
   });
 
 const voidRelatedPart =
-  (documentRevisionId: string, async) => apiAction({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/void/${documentRevisionId}`,
+  (documentRevisionId: string, revisionChangeType: RevisionChangeType, async) => apiAction({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${documentRevisionId}`,
     method: "patch",
+    data: { revisionChangeType },
     onSuccess: (documentRevision: DocumentRevision) => {
-      async.successHandler?.callback({ docRevId: documentRevisionId, name: documentRevision.name });
+      async.successHandler?.callback(
+        {
+          docRevId: documentRevisionId,
+          name: documentRevision.name,
+          revisionChangeType: documentRevision.revisionChangeType,
+        });
     },
   });
 

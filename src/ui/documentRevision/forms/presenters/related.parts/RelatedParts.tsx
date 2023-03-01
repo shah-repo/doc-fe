@@ -18,7 +18,7 @@ import {
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
 
@@ -215,6 +215,7 @@ const RelatedPartGrid: React.FunctionComponent<{
           voidRelatedPart = {voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
           rootPartName= {documentRevision.name}
+          rootRevisionChangeType = {documentRevision.revisionChangeType}
           relatedPartsState = {relatedPartsState} />
         {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
           createNewDocument={createNewDocument} cancelEdit={cancelEdit} relatedPartsState={relatedPartsState}/>}
@@ -235,14 +236,16 @@ const RelatedPartGrid: React.FunctionComponent<{
 
 
 const RelatedPartList: React.FunctionComponent<{
-  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+  voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
+  rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
+  rootRevisionChangeType,
   relatedPartsState,
 }) => {
   const classes = useStyles();
@@ -264,13 +267,14 @@ const RelatedPartList: React.FunctionComponent<{
                 <Text translation="relatedParts.grid.heading.obsolete"/>
               </span>
             </TableCell>
-            <TableCell className={cx(classes.tableCell, classes.tableCellFour)} align="center"></TableCell>
+            <TableCell className={cx(classes.tableCell, classes.tableCellFour)} align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
-              key={listItem.documentRevisionId} rootPartName={rootPartName} relatedPartsState={relatedPartsState}/>
+              key={listItem.documentRevisionId} rootPartName={rootPartName}
+              rootRevisionChangeType={rootRevisionChangeType} relatedPartsState={relatedPartsState}/>
           ))}
         </TableBody>
       </Table>
@@ -281,26 +285,35 @@ const RelatedPartList: React.FunctionComponent<{
 
 const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
-  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+  voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
+  rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
 }> = ({
   listItem,
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
+  rootRevisionChangeType,
   relatedPartsState,
 }) => {
   const classes = useStyles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
   || listItem.status === DocumentRevisionStatus.Voided;
 
+  const revChangeTypeObs = listItem.revisionChangeType === RevisionChangeType.Obsolete;
+
   const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
 
   const confirmationDialog = useDialog();
+
+  const openConfirmDialog = () => {
+    confirmationDialog.open();
+  };
+
   const confirmAction = () => {
-    voidRelatedPart(listItem);
+    voidRelatedPart(listItem, !revChangeTypeObs ? RevisionChangeType.Obsolete : rootRevisionChangeType);
     confirmationDialog.close();
   };
 
@@ -330,20 +343,24 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
       </TableCell>
       <TableCell align="center">
-        <Checkbox
-          checked={isVoided}
-          disabled={isVoided || relatedPartsState.viewOnlyMode}
-          onChange={confirmationDialog.open}
-        />
-        {confirmationDialog.isOpen && (
-          <AlertDialog
-            dialog={confirmationDialog}
-            confirmAction={confirmAction}
-            message="documentRevision.void.alert"
-          />
-        )}
+        { listItem.version && listItem.version > 1 &&
+          <>
+            <Checkbox
+              checked={isVoided || revChangeTypeObs}
+              disabled={isVoided || relatedPartsState.viewOnlyMode}
+              onChange={openConfirmDialog}
+            />
+            {confirmationDialog.isOpen && (
+              <AlertDialog
+                dialog={confirmationDialog}
+                confirmAction={confirmAction}
+                message={!revChangeTypeObs ? "relatedParts.void.alert" : "relatedParts.void.bringBack"}
+              />
+            )}
+          </>
+        }
       </TableCell>
-      <TableCell align="center">
+      <TableCell align="right" className={classes.relatedPartEyeRowCell}>
         <RemoveRedEyeIcon color="primary"
           className={classes.viewIcon}
           onClick={(e) => viewRelatedPart(listItem.documentRevisionId, listItem.documentId)}></RemoveRedEyeIcon>
@@ -439,7 +456,7 @@ const RelatedParts: React.FunctionComponent<{
   createNewDocument: (relatedPartDetails?: any) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   fetchRelatedParts: (documentId: any) => void;
-  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+  voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,

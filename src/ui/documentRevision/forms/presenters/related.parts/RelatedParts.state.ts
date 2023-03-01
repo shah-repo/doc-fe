@@ -1,6 +1,6 @@
 import { get, set } from "lodash";
 import { action, observable } from "mobx";
-import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
+import { RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 import { Translation } from "../../../../translations/types";
 
@@ -20,11 +20,11 @@ class RelatedPartsState {
     this.relatedPartsList = list;
   }
 
-  @action updateRelatedPartsList(docRevId: string, name: string) {
+  @action updateRelatedPartsList(docRevId: string, name: string, revisionChangeType: RevisionChangeType) {
     this.relatedPartsList = this.relatedPartsList.map(
       (item) => {
         if (item.documentRevisionId === docRevId) {
-          item.status = DocumentRevisionStatus.Voided;
+          item.revisionChangeType = revisionChangeType;
           item.name = name;
         }
         return item;

@@ -193,6 +193,9 @@ export default makeStyles((theme) =>
     relatedPartViewRowCell: {
       paddingLeft: theme.spacing(1.25),
     },
+    relatedPartEyeRowCell: {
+      paddingRight: theme.spacing(1.25),
+    },
   })
 );
 
