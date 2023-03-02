@@ -32,6 +32,14 @@ class RelatedPartsState {
     );
   }
 
+
+  @action showParticularDocs = (docType) => {
+    const originalList: RelatedPartsListItem[]  = [...this.relatedPartsList]; // make a copy of the original list
+    console.log("docType", docType);
+    return docType === "Active" ? this.relatedPartsList.filter((item) => item.status !== DocumentRevisionStatus.Voided)
+      : originalList; // return the original list if docType is "All"
+  };
+
   @action addNewRelatedPart(createdDocumentRevision, suffixName) {
     const newRelatedPart = {
       documentId: get(createdDocumentRevision, "documentId"),

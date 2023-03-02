@@ -142,8 +142,8 @@ const RelatedPartGrid: React.FunctionComponent<{
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
-  fetchRelatedParts;
-  voidRelatedPart;
+  fetchRelatedParts: any;
+  voidRelatedPart: any;
   relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
@@ -157,6 +157,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [isButtonActive, setIsButtonActive] = useState("");
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
@@ -183,6 +184,10 @@ const RelatedPartGrid: React.FunctionComponent<{
     setShowButton(true);
   };
 
+  const handleClick = (strButton: string) => {
+    setIsButtonActive(strButton);
+    relatedPartsState.showParticularDocs(strButton);
+  };
   return useObserver(() => (
     <div className={classes.partsGrid}>
       <div>
@@ -194,7 +199,7 @@ const RelatedPartGrid: React.FunctionComponent<{
           </Grid>
 
           { showButton &&
-              <Grid item>
+              <Grid item className={classes.buttonGroup}>
                 <Typography>
                   <Button
                     className={classes.btnMargin}
@@ -205,6 +210,25 @@ const RelatedPartGrid: React.FunctionComponent<{
                     <Text translation="relatedParts.button.addText"/>
                   </Button>
                 </Typography>
+
+                <div className={classes.autoLayout}>
+                  <Typography>
+                    <Text translation="relatedParts.text.show" />{":"}&nbsp;
+                  </Typography>
+                </div>
+                <div className={classes.autoLayout}>
+                  <Typography style={{ fontWeight: (isButtonActive === "All") ? 600 : "normal" }} onClick={() => handleClick("All")}>
+                    <Text translation="common.all"/>
+                  </Typography>
+                </div>
+                <div className={classes.autoLayout} style={{ padding: "0 5px" }}>
+                  {" | "}
+                </div>
+                <div className={classes.autoLayout}>
+                  <Typography  style={{ fontWeight: (isButtonActive ===  "Active" ) ? 600 : "normal" }} onClick={() => handleClick("Active")}>
+                    <Text translation="common.active"/>
+                  </Typography>
+                </div>
               </Grid>
           }
         </Grid>
@@ -246,6 +270,7 @@ const RelatedPartList: React.FunctionComponent<{
   relatedPartsState,
 }) => {
   const classes = useStyles();
+
   return useObserver(() => (
     <div className={classes.fullWidth}>
       <Table aria-label="related parts table">
@@ -270,7 +295,7 @@ const RelatedPartList: React.FunctionComponent<{
         <TableBody>
           {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
-              key={listItem.documentRevisionId} rootPartName={rootPartName} relatedPartsState={relatedPartsState}/>
+              key={listItem.documentRevisionId} rootPartName={rootPartName} relatedPartsState={relatedPartsState} />
           ))}
         </TableBody>
       </Table>
@@ -307,7 +332,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const titleCellRef = useRef<HTMLSpanElement>(null);
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
   return (
-    <TableRow hover key={listItem.documentRevisionId}>
+    <TableRow hover key={listItem.documentRevisionId} style={{ background: isVoided ? "#FEF4F2" : "" }}>
       <TableCell align="left" className={classes.relatedPartViewRowCell}>
         {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
       </TableCell>
@@ -333,7 +358,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
         <Checkbox
           checked={isVoided}
           disabled={isVoided || relatedPartsState.viewOnlyMode}
-          onChange={confirmationDialog.open}
+          onChange={() => confirmationDialog.open()}
         />
         {confirmationDialog.isOpen && (
           <AlertDialog
@@ -357,6 +382,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
   createNewDocument: (details? : {docId: string; name: string}) => void;
   cancelEdit: () => void;
   relatedPartsState: RelatedPartsState;
+
 }> = ({
   documentRevision,
   createNewDocument,
@@ -453,7 +479,6 @@ const RelatedParts: React.FunctionComponent<{
 }) => {
 
   const classes = useStyles();
-
   const isRelatedPartsParent = ![RELATED_PARTS_STATUS.RELATED_SEPARATE,
     RELATED_PARTS_STATUS.RELATED_TOGETHER].includes(parentStatus);
 
@@ -481,3 +506,4 @@ const RelatedParts: React.FunctionComponent<{
 };
 
 export default RelatedParts;
+

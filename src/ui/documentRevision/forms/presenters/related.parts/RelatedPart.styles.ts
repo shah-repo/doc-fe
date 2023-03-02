@@ -56,6 +56,29 @@ export default makeStyles((theme) =>
     btnMargin: {
       marginRight: 0,
     },
+    OBS: {
+      fontWeight: 600,
+      fontSize: "14px",
+      textTransform: "capitalize",
+      color: "#EC2B00",
+      height: "42px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    buttonGroup: {
+      display: "flex",
+      alignItems: "center",
+      textAlign: "right",
+      fontSize: "12px",
+      cursor: "pointer",
+    },
+    autoLayout: {
+      flex: "none",
+      order: 1,
+      flexGrow: 0,
+
+    },
     dividerStyle: {
       margin: theme.spacing(0, 0, 1.5, 0),
     },
