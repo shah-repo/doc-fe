@@ -50,7 +50,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   const calcInitialValues = useMemo(() => {
-    initialValues.formInput = FBDataStore?.refreshData?.formInput ?? initialValues.formInput;
+    initialValues.formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
 
     return {
       ...initialValues,
@@ -59,7 +59,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   }, [initialValues, FBDataStore?.refreshData]);
 
   useObserver(() => {
-    calcInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? calcInitialValues.formInput;
+    calcInitialValues.formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? calcInitialValues.formInput;
   });
 
   const formInput = useMemo(() =>
