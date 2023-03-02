@@ -108,6 +108,12 @@ class FBEditorState {
     "lhrstep",
   ];
 
+  public static transformOptionsToString: FBInputType[] = [
+    "select",
+    "radiogroup",
+    "checkboxgroup",
+  ];
+
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure", "lhrstep"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
