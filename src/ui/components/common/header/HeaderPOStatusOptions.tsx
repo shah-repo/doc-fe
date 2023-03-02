@@ -4,9 +4,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { ReactComponent as CaretIcon } from "../../../../assets/images/po_status_dropdown.svg";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../ui/components/Text";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -21,10 +23,11 @@ interface Props {
   docId: string;
   docRevOwner: string;
   updatedAt: string;
+  documentRevision: DocumentRevision;
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  poStatus, docId, docRevOwner, updatedAt,
+  poStatus, docId, docRevOwner, updatedAt, documentRevision,
 }) => {
   const classes = useStyles();
   const dialog = useDialog();
@@ -40,6 +43,10 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
   const isVoidedAction = POStatusType.VOIDED === action;
   const isOpenedAction = POStatusType.OPENED === action;
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner
+    ? documentRevision?.owner.user.email === email : true;
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -142,7 +149,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       <ButtonGroup
         disableRipple
         aria-label="split button"
-        className={classes.buttonGroup}
+        className={isOwner ? classes.buttonGroup : cx(classes.buttonGroup, classes.disabled)}
       >
         <Button
           type="submit"
