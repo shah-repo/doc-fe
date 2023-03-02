@@ -145,6 +145,16 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       listItem.documentRevisionId, revisionChangeType, voidRelatedPartAsync);
   };
 
+  const removeRelatedPartAction = useActionCreator(relatedPartsActions.removeRelatedPart);
+  const removeRelatedPartAsync = useAsync({
+    onSuccess: ({ docRevId }: any) => {
+      relatedPartsState.filterRelatedPartsList(docRevId);
+    },
+  });
+  const handleRemove = (docRevId: string) => {
+    removeRelatedPartAsync.start(removeRelatedPartAction, docRevId, removeRelatedPartAsync);
+  };
+
 
   const createNewDocument = (relatedPartDetails?) => {
     let docDto = {
@@ -214,6 +224,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       parentStatusChanged = {parentPartStatusChanged}
       createNewDocument = {createNewDocument}
       viewRelatedPart = {viewRelatedPart}
+      handleRemove = {handleRemove}
       fetchRelatedParts = {fetchRelatedParts}
       voidRelatedPart = {voidRelatedPart}
       relatedPartsState = {relatedPartsState}

@@ -139,6 +139,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
+  handleRemove: (docRevId: string) => void;
   fetchRelatedParts;
   voidRelatedPart;
   relatedPartsState: RelatedPartsState;
@@ -146,6 +147,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   documentRevision,
   createNewDocument,
   viewRelatedPart,
+  handleRemove,
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
@@ -211,6 +213,7 @@ const RelatedPartGrid: React.FunctionComponent<{
         <RelatedPartList documentRevision={documentRevision}
           voidRelatedPart = {voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
+          handleRemove={handleRemove}
           rootPartName= {documentRevision.name}
           rootRevisionChangeType = {documentRevision.revisionChangeType}
           relatedPartsState = {relatedPartsState} />
@@ -241,6 +244,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
+  handleRemove: (docRevId: string) => void;
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
@@ -248,6 +252,7 @@ const RelatedPartList: React.FunctionComponent<{
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
+  handleRemove,
   rootPartName,
   rootRevisionChangeType,
   relatedPartsState,
@@ -289,6 +294,7 @@ const RelatedPartList: React.FunctionComponent<{
                     documentRevision={documentRevision}
                     // createNewDocument={createNewDocument}
                     cancelEdit={cancelLocalEdit}
+                    handleRemove={handleRemove}
                     relatedPartsState={relatedPartsState}
                     listItemBeingEdited={listItemBeingEdited}
                   /> :
@@ -404,12 +410,14 @@ const RelatedPartEditRow: React.FunctionComponent<{
   listItemBeingEdited?: ListItemEdited;
   createNewDocument?: (details? : {docId: string; name: string}) => void;
   cancelEdit: () => void;
+  handleRemove?: (docRevId: string) => void;
   relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
   listItemBeingEdited,
   createNewDocument,
   cancelEdit,
+  handleRemove,
   relatedPartsState,
 }) => {
   const [relatedPartDetails, setRelatedPartDetails] = React.useState({
@@ -478,7 +486,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             { showDeleteButton && <Button className={classes.actionButton}>
               <DeleteIcon className={classes.deleteIconButton}
                 onClick={() =>  {
-                  resetAndCancelEdit?.();
+                  handleRemove?.(listItemBeingEdited?.docRevId as string);
                 }}/>
             </Button> }
             <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
@@ -501,6 +509,7 @@ const RelatedParts: React.FunctionComponent<{
   parentStatusChanged: (value: any) => void;
   createNewDocument: (relatedPartDetails?: any) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
+  handleRemove: (docRevId: string) => void;
   fetchRelatedParts: (documentId: any) => void;
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   relatedPartsState: RelatedPartsState;
@@ -510,6 +519,7 @@ const RelatedParts: React.FunctionComponent<{
   parentStatusChanged,
   createNewDocument,
   viewRelatedPart,
+  handleRemove,
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
@@ -533,9 +543,14 @@ const RelatedParts: React.FunctionComponent<{
           </Grid>
         )}
         {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
-          <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument}
-            viewRelatedPart={viewRelatedPart} fetchRelatedParts = {fetchRelatedParts}
-            voidRelatedPart = {voidRelatedPart} relatedPartsState = {relatedPartsState}
+          <RelatedPartGrid
+            documentRevision={documentRevision}
+            createNewDocument={createNewDocument}
+            viewRelatedPart={viewRelatedPart}
+            handleRemove={handleRemove}
+            fetchRelatedParts = {fetchRelatedParts}
+            voidRelatedPart = {voidRelatedPart}
+            relatedPartsState = {relatedPartsState}
           />
         )}
       </div>}

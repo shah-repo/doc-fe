@@ -51,10 +51,21 @@ const voidRelatedPart =
     },
   });
 
+const removeRelatedPart = (docRevId: string, async) => apiAction({
+  url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
+  method: "delete",
+  onSuccess(data) {
+    if (async.successHandler?.callback) {
+      async.successHandler?.callback({ docRevId });
+    }
+  },
+});
+
 
 export default {
   createRelatedPart,
   parentPartChoiceAction,
   fetchAllRelatedParts,
   voidRelatedPart,
+  removeRelatedPart,
 };

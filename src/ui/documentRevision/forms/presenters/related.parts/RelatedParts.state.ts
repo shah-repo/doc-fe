@@ -32,6 +32,10 @@ class RelatedPartsState {
     );
   }
 
+  @action filterRelatedPartsList(docRevId: string) {
+    this.relatedPartsList = this.relatedPartsList.filter((item) => item.documentRevisionId !== docRevId);
+  }
+
   @action addNewRelatedPart(createdDocumentRevision, suffixName) {
     const newRelatedPart = {
       documentId: get(createdDocumentRevision, "documentId"),
