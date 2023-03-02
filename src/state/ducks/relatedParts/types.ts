@@ -29,3 +29,10 @@ export interface RelatedPartsListItem {
   displayRevision?: string;
   revisionChangeType?: RevisionChangeType;
 }
+
+export interface ListItemEdited {
+  docRevId: string;
+  docId?: string;
+  name?: string;
+  version?: number;
+}

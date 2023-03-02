@@ -5,13 +5,7 @@ import {
   FormControl,
   FormControlLabel,
   Grid, Radio,
-  RadioGroup,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
+  RadioGroup, TextField,
   Tooltip,
   Typography,
 } from "@material-ui/core";
@@ -19,7 +13,7 @@ import {
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
-import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
+import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
 
 
@@ -30,6 +24,8 @@ import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
+import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash-can 2.svg";
+
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
@@ -37,6 +33,7 @@ import Text from "../../../../components/Text";
 import useDialog from "../../../../hooks/useDialog";
 import useStyles from "./RelatedPart.styles";
 import RelatedPartsState from "./RelatedParts.state";
+import RelatedPartsTableHeader from "./RelatedPartsTableHeader";
 
 
 const ParentPartSelector: React.FunctionComponent<{
@@ -211,14 +208,20 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Divider className={classes.dividerStyle} />
       </div>
       <div>
-        <RelatedPartList
+        <RelatedPartList documentRevision={documentRevision}
           voidRelatedPart = {voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
           rootPartName= {documentRevision.name}
           rootRevisionChangeType = {documentRevision.revisionChangeType}
           relatedPartsState = {relatedPartsState} />
-        {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
-          createNewDocument={createNewDocument} cancelEdit={cancelEdit} relatedPartsState={relatedPartsState}/>}
+
+        {isEditRowVisible &&
+          <RelatedPartEditRow documentRevision={documentRevision}
+            createNewDocument={createNewDocument}
+            cancelEdit={cancelEdit}
+            relatedPartsState={relatedPartsState}
+          />
+        }
         {
           showButton && <Button
             className={classes.fullLengthButton}
@@ -241,43 +244,66 @@ const RelatedPartList: React.FunctionComponent<{
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
+  documentRevision: DocumentRevision;
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
   rootRevisionChangeType,
   relatedPartsState,
+  documentRevision,
 }) => {
   const classes = useStyles();
+
+  const [listItemBeingEdited, setListItemBeingEdited] = useState<ListItemEdited>({
+    docRevId: "",
+  });
+
+  const editRelatedPart = (listItem: RelatedPartsListItem) => {
+    setListItemBeingEdited({
+      docRevId: listItem.documentRevisionId,
+      docId: listItem.suffixNumber?.toString(),
+      name: listItem.suffixName,
+      version: listItem.version,
+    });
+  };
+
+  const cancelLocalEdit = () => {
+    setListItemBeingEdited({
+      docRevId: "",
+      docId: "",
+      name: "",
+    });
+  };
+
   return useObserver(() => (
     <div className={classes.fullWidth}>
-      <Table aria-label="related parts table">
-        <TableHead className={classes.tableHeadHeight}>
-          <TableRow>
-            <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">
-              <Text translation="relatedParts.grid.heading.docId"/>
-            </TableCell>
-            <TableCell className={classes.tableCell} align="left">
-              <span className={classes.verticalDivider}>
-                <Text translation="relatedParts.grid.heading.title"/>
-              </span>
-            </TableCell>
-            <TableCell className={cx(classes.tableCell, classes.tableCellThree)} align="center">
-              <span className={classes.verticalDivider}>
-                <Text translation="relatedParts.grid.heading.obsolete"/>
-              </span>
-            </TableCell>
-            <TableCell className={cx(classes.tableCell, classes.tableCellFour)} align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+      <div aria-label="related parts table">
+        <RelatedPartsTableHeader />
+        <div>
           {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
-            <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
-              key={listItem.documentRevisionId} rootPartName={rootPartName}
-              rootRevisionChangeType={rootRevisionChangeType} relatedPartsState={relatedPartsState}/>
+            <>
+              {
+                listItemBeingEdited.docRevId === listItem.documentRevisionId ?
+                  <RelatedPartEditRow
+                    documentRevision={documentRevision}
+                    // createNewDocument={createNewDocument}
+                    cancelEdit={cancelLocalEdit}
+                    relatedPartsState={relatedPartsState}
+                    listItemBeingEdited={listItemBeingEdited}
+                  /> :
+                  <RelatedPartViewRow listItem={listItem}
+                    editRelatedPart={editRelatedPart}
+                    voidRelatedPart={voidRelatedPart}
+                    viewRelatedPart={viewRelatedPart}
+                    key={listItem.documentRevisionId} rootPartName={rootPartName}
+                    rootRevisionChangeType={rootRevisionChangeType} relatedPartsState={relatedPartsState}
+                  />
+              }
+            </>
           ))}
-        </TableBody>
-      </Table>
+        </div>
+      </div>
     </div>
   ));
 };
@@ -286,6 +312,7 @@ const RelatedPartList: React.FunctionComponent<{
 const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
+  editRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
@@ -293,6 +320,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
 }> = ({
   listItem,
   voidRelatedPart,
+  editRelatedPart,
   viewRelatedPart,
   rootPartName,
   rootRevisionChangeType,
@@ -320,11 +348,13 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const titleCellRef = useRef<HTMLSpanElement>(null);
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
   return (
-    <TableRow hover key={listItem.documentRevisionId}>
-      <TableCell align="left" className={classes.relatedPartViewRowCell}>
+    <div key={listItem.documentRevisionId}
+      onClick={() => editRelatedPart(listItem)}
+      className={classes.itemRow}>
+      <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
         {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
-      </TableCell>
-      <TableCell align="left" className={classes.relatedPartViewRowCell}>
+      </div>
+      <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
         <Tooltip title={
           <span>
             {isVoided ? listItem.name :
@@ -341,8 +371,8 @@ const RelatedPartViewRow: React.FunctionComponent<{
           </span>
         </Tooltip>
 
-      </TableCell>
-      <TableCell align="center">
+      </div>
+      <div className={classes.tableCellThree}>
         { listItem.version && listItem.version > 1 &&
           <>
             <Checkbox
@@ -359,33 +389,37 @@ const RelatedPartViewRow: React.FunctionComponent<{
             )}
           </>
         }
-      </TableCell>
-      <TableCell align="right" className={classes.relatedPartEyeRowCell}>
+      </div>
+      <div className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)}>
         <RemoveRedEyeIcon color="primary"
           className={classes.viewIcon}
           onClick={(e) => viewRelatedPart(listItem.documentRevisionId, listItem.documentId)}></RemoveRedEyeIcon>
-      </TableCell>
-    </TableRow>
+      </div>
+    </div>
   );
 };
 
 const RelatedPartEditRow: React.FunctionComponent<{
   documentRevision: DocumentRevision;
-  createNewDocument: (details? : {docId: string; name: string}) => void;
+  listItemBeingEdited?: ListItemEdited;
+  createNewDocument?: (details? : {docId: string; name: string}) => void;
   cancelEdit: () => void;
   relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
+  listItemBeingEdited,
   createNewDocument,
   cancelEdit,
   relatedPartsState,
 }) => {
   const [relatedPartDetails, setRelatedPartDetails] = React.useState({
-    docId: "",
-    name: "",
+    docId: listItemBeingEdited?.docId ?? "",
+    name: listItemBeingEdited?.name ?? "",
   });
 
   const classes = useStyles();
+
+  const showDeleteButton = listItemBeingEdited?.version === 1 && listItemBeingEdited?.docRevId !== "";
 
   const resetAndCancelEdit = () => {
     setRelatedPartDetails({ docId: "", name: "" });
@@ -394,7 +428,12 @@ const RelatedPartEditRow: React.FunctionComponent<{
 
   const confirmEdit = () => {
     if (validateDocId()) {
-      createNewDocument(relatedPartDetails);
+      if (listItemBeingEdited?.docRevId) {
+        console.log("Need to update");
+      } else if (createNewDocument) {
+        createNewDocument(relatedPartDetails);
+      }
+
     }
   };
 
@@ -412,6 +451,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
           <label >{documentRevision?.document?.docId} - </label>
           <TextField
             className={classes.textField}
+            disabled={listItemBeingEdited?.version ? listItemBeingEdited.version > 1 : false}
             variant="outlined"
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
@@ -435,6 +475,12 @@ const RelatedPartEditRow: React.FunctionComponent<{
       {!relatedPartsState.docIdErrorMsg &&
         <div className={classes.actionButtonParentDiv}>
           <div className={classes.actionButtonChildDiv}>
+            { showDeleteButton && <Button className={classes.actionButton}>
+              <DeleteIcon className={classes.deleteIconButton}
+                onClick={() =>  {
+                  resetAndCancelEdit?.();
+                }}/>
+            </Button> }
             <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
               <ClearIcon className={classes.iconButton}/>
             </Button>
