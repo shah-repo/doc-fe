@@ -26,14 +26,17 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
 
     function getOptions(): FBSchemaProps[] {
       const scheme: FBSchemaProps[] = workspaceState?.getSchema() || workspaceState?.getValidationSchema();
+      const fieldName = formState?.getFieldValue("name");
       const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
-        const { type, deleted, multiple, label } = item || {};
+        const { type, deleted, multiple, label, name: schemaName } = item || {};
         const isExludedFromValidation =
           type && (
             FBEditorState.omitFinalValidation.includes(type)
             || !FBEditorState.underValidation(type)
           );
-        if (!type || isExludedFromValidation || !label || deleted) {
+        const shouldBeSkipped = !label || deleted || fieldName === schemaName;
+
+        if (!type || isExludedFromValidation || shouldBeSkipped) {
           return reduced;
         }
 
