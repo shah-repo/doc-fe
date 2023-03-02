@@ -1,7 +1,7 @@
 import { omit } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState, FBSchemeMultuValueTypes } from "..";
+import { FB, FBEditorState, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState, FBSchemeMultuValueTypes } from "..";
 
 export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   Component: React.FunctionComponent<T>
@@ -27,8 +27,15 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
     function getOptions(): FBSchemaProps[] {
       const scheme: FBSchemaProps[] = workspaceState?.getSchema() || workspaceState?.getValidationSchema();
       const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
-        const { type, deleted, multiple } = item || {};
-        if (!type || deleted) { return reduced; }
+        const { type, deleted, multiple, label } = item || {};
+        const isExludedFromValidation =
+          type && (
+            FBEditorState.omitFinalValidation.includes(type)
+            || !FBEditorState.underValidation(type)
+          );
+        if (!type || isExludedFromValidation || !label || deleted) {
+          return reduced;
+        }
 
         // Use only multi value fields for required if in validator
         if (name === "validators.required_if_in.name") {
