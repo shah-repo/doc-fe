@@ -1,20 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid, Radio,
-  RadioGroup,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Tooltip,
-  Typography
-} from "@material-ui/core";
+import { Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@material-ui/core";
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -158,11 +142,12 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
-  const [isButtonActive, setIsButtonActive] = useState("");
+  const [showOnlyActiveParts, setShowOnlyActiveParts] = useState(false);
   const { status } = documentRevision;
 
   const isReleased = isDocumentRevisionReleased(status);
 
+  // eslint-disable-next-line no-console
   console.log("isReleased: ", isReleased, "showButton: ", showButton);
 
   const showEditRow = () => {
@@ -190,17 +175,13 @@ const RelatedPartGrid: React.FunctionComponent<{
     setShowButton(true);
   };
 
-  const handleClick = (strButton: string) => {
-    setIsButtonActive(strButton);
-    if (strButton === "Active") {
-      console.log("active clicked");
-      relatedPartsState.relatedPartsList = relatedPartsState.activeRelatedPartsList;
-    }
-    if (strButton === "All") {
-      console.log("all clicked");
-      relatedPartsState.relatedPartsList = relatedPartsState.allRelatedPartsList;
-    }
-  };
+  const setActivePartsFilter = (state: boolean) => () => setShowOnlyActiveParts(state);
+
+  const partsToShow =
+    showOnlyActiveParts
+      ? relatedPartsState.activeRelatedPartsList
+      : relatedPartsState.relatedPartsList;
+
   return useObserver(() => (
     <div className={classes.partsGrid}>
       <div>
@@ -213,7 +194,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 
           { (showButton || isReleased) &&
               <Grid item className={classes.buttonGroup}>
-                <Typography disabled={isReleased}>
+                <Typography>
                   <Button
                     className={classes.btnMargin}
                     color="primary"
@@ -229,16 +210,22 @@ const RelatedPartGrid: React.FunctionComponent<{
                   </Typography>
                 </div>
                 <div className={classes.autoLayout}>
-                  <Typography style={{ fontWeight: (isButtonActive === "All") ? 600 : "normal" }} onClick={() => handleClick("All")}>
-                    <Text translation="common.all"/>
+                  <Typography
+                    style={{ fontWeight: !showOnlyActiveParts ? 600 : "normal" }}
+                    onClick={setActivePartsFilter(false)}
+                  >
+                    <Text translation="common.all" />
                   </Typography>
                 </div>
                 <div className={classes.autoLayout} style={{ padding: "0 5px" }}>
                   {" | "}
                 </div>
                 <div className={classes.autoLayout}>
-                  <Typography  style={{ fontWeight: (isButtonActive ===  "Active" ) ? 600 : "normal" }} onClick={() => handleClick("Active")}>
-                    <Text translation="common.active"/>
+                  <Typography
+                    style={{ fontWeight: showOnlyActiveParts ? 600 : "normal" }}
+                    onClick={setActivePartsFilter(true)}
+                  >
+                    <Text translation="common.active" />
                   </Typography>
                 </div>
               </Grid>
@@ -248,12 +235,20 @@ const RelatedPartGrid: React.FunctionComponent<{
       </div>
       <div>
         <RelatedPartList
-          voidRelatedPart = {voidRelatedPart}
+          voidRelatedPart={voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
-          rootPartName= {documentRevision.name}
-          relatedPartsState = {relatedPartsState} />
-        {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
-          createNewDocument={createNewDocument} cancelEdit={cancelEdit} relatedPartsState={relatedPartsState}/>}
+          rootPartName={documentRevision.name}
+          partsList={partsToShow}
+          viewOnlyMode={relatedPartsState.viewOnlyMode}
+        />
+        {isEditRowVisible && (
+          <RelatedPartEditRow
+            documentRevision={documentRevision}
+            createNewDocument={createNewDocument}
+            cancelEdit={cancelEdit}
+            relatedPartsState={relatedPartsState}
+          />
+        )}
         {
           showButton && <Button
             className={classes.fullLengthButton}
@@ -274,12 +269,14 @@ const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
-  relatedPartsState: RelatedPartsState;
+  partsList: RelatedPartsListItem[];
+  viewOnlyMode: boolean;
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
-  relatedPartsState,
+  viewOnlyMode,
+  partsList,
 }) => {
   const classes = useStyles();
 
@@ -305,9 +302,15 @@ const RelatedPartList: React.FunctionComponent<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
-            <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
-              key={listItem.documentRevisionId} rootPartName={rootPartName} relatedPartsState={relatedPartsState} />
+          {partsList.map((listItem: RelatedPartsListItem) => (
+            <RelatedPartViewRow
+              listItem={listItem}
+              voidRelatedPart={voidRelatedPart}
+              viewRelatedPart={viewRelatedPart}
+              key={listItem.documentRevisionId}
+              rootPartName={rootPartName}
+              viewOnlyMode={viewOnlyMode}
+            />
           ))}
         </TableBody>
       </Table>
@@ -321,13 +324,13 @@ const RelatedPartViewRow: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
-  relatedPartsState: RelatedPartsState;
+  viewOnlyMode: boolean;
 }> = ({
   listItem,
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
-  relatedPartsState,
+  viewOnlyMode,
 }) => {
   const classes = useStyles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
@@ -369,7 +372,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
       <TableCell align="center">
         <Checkbox
           checked={isVoided}
-          disabled={isVoided || relatedPartsState.viewOnlyMode}
+          disabled={isVoided || viewOnlyMode}
           onChange={() => confirmationDialog.open()}
         />
         {confirmationDialog.isOpen && (
