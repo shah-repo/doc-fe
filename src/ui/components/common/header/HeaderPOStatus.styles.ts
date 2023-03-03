@@ -37,10 +37,6 @@ export default makeStyles((theme: Theme) => ({
     margin: 0,
     padding: 0,
   },
-  disabled: {
-    pointerEvents: "none",
-    opacity: 0.5,
-  },
   defaultGroupButton: {
     "margin": 0,
     "padding": 0,
