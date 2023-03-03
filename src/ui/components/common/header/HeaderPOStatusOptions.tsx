@@ -21,10 +21,11 @@ interface Props {
   docId: string;
   docRevOwner: string;
   updatedAt: string;
+  isOwner: boolean;
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  poStatus, docId, docRevOwner, updatedAt,
+  poStatus, docId, docRevOwner, updatedAt, isOwner,
 }) => {
   const classes = useStyles();
   const dialog = useDialog();
@@ -143,6 +144,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         disableRipple
         aria-label="split button"
         className={classes.buttonGroup}
+        disabled={!isOwner}
       >
         <Button
           type="submit"
