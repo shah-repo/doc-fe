@@ -13,7 +13,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -35,6 +35,7 @@ import { useObserver } from "mobx-react";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
 import useDialog from "../../../../hooks/useDialog";
+import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
 import useStyles from "./RelatedPart.styles";
 import RelatedPartsState from "./RelatedParts.state";
 
@@ -158,6 +159,11 @@ const RelatedPartGrid: React.FunctionComponent<{
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState("");
+  const { status } = documentRevision;
+
+  const isReleased = isDocumentRevisionReleased(status);
+
+  console.log("isReleased: ", isReleased, "showButton: ", showButton);
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
@@ -186,7 +192,14 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   const handleClick = (strButton: string) => {
     setIsButtonActive(strButton);
-    relatedPartsState.showParticularDocs(strButton);
+    if (strButton === "Active") {
+      console.log("active clicked");
+      relatedPartsState.relatedPartsList = relatedPartsState.activeRelatedPartsList;
+    }
+    if (strButton === "All") {
+      console.log("all clicked");
+      relatedPartsState.relatedPartsList = relatedPartsState.allRelatedPartsList;
+    }
   };
   return useObserver(() => (
     <div className={classes.partsGrid}>
@@ -198,9 +211,9 @@ const RelatedPartGrid: React.FunctionComponent<{
             </Typography>
           </Grid>
 
-          { showButton &&
+          { (showButton || isReleased) &&
               <Grid item className={classes.buttonGroup}>
-                <Typography>
+                <Typography disabled={isReleased}>
                   <Button
                     className={classes.btnMargin}
                     color="primary"
@@ -210,7 +223,6 @@ const RelatedPartGrid: React.FunctionComponent<{
                     <Text translation="relatedParts.button.addText"/>
                   </Button>
                 </Typography>
-
                 <div className={classes.autoLayout}>
                   <Typography>
                     <Text translation="relatedParts.text.show" />{":"}&nbsp;

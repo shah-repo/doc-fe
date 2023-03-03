@@ -1,5 +1,5 @@
 import { get, set } from "lodash";
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 import { Translation } from "../../../../translations/types";
@@ -15,6 +15,8 @@ class RelatedPartsState {
   @observable viewOnlyMode = false;
   @observable loadingState = false;
   @observable docIdErrorMsg: string | Translation = "";
+
+  @observable docType: string | Translation="";
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
@@ -32,13 +34,12 @@ class RelatedPartsState {
     );
   }
 
-
-  @action showParticularDocs = (docType) => {
-    const originalList: RelatedPartsListItem[]  = [...this.relatedPartsList]; // make a copy of the original list
-    console.log("docType", docType);
-    return docType === "Active" ? this.relatedPartsList.filter((item) => item.status !== DocumentRevisionStatus.Voided)
-      : originalList; // return the original list if docType is "All"
-  };
+  @computed get activeRelatedPartsList() {
+    return this.relatedPartsList.filter((part) => part.status !== DocumentRevisionStatus.Voided);
+  }
+  @computed get allRelatedPartsList() {
+    return this.relatedPartsList;
+  }
 
   @action addNewRelatedPart(createdDocumentRevision, suffixName) {
     const newRelatedPart = {
