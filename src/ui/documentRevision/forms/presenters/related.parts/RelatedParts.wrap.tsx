@@ -79,18 +79,18 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
   const createPartAsync = useAsync({
-    onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
-      if (!createdDocumentRevision) {
+    onSuccess: ({ createdRelatedPart }: any) => {
+      if (!createdRelatedPart) {
         return;
       }
 
       if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
         // Show a toast
-        showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+        showSuccessToast(createdRelatedPart as RelatedPartsListItem, viewRelatedPart);
 
       } else if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
         // populate the list with the new added part
-        relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
+        relatedPartsState.addNewRelatedPart(createdRelatedPart);
         formik.submitForm();
         workspaceState?.saveDocRev();
       }
@@ -98,13 +98,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   });
 
   const showSuccessToast = (
-    docRevision: DocumentRevision,
+    relatedPartAdded: RelatedPartsListItem,
     viewRelatedPart: (docRevId: string, documentId: string) => void) => {
 
-    if (docRevision && docRevision.document) {
-      toastSuccess(<SuccessMsg docId={docRevision.document.docId}
-        viewRelatedPart={viewRelatedPart} documentRevisionId={docRevision.id}
-        documentId={docRevision.document.id}/>, {
+    if (relatedPartAdded) {
+      toastSuccess(<SuccessMsg docId={`${relatedPartAdded.rootDocId}-${relatedPartAdded.suffixNumber}`}
+        viewRelatedPart={viewRelatedPart} documentRevisionId={relatedPartAdded.documentRevisionId}
+        documentId={relatedPartAdded.documentId}/>, {
         closeButton: false,
       });
     }

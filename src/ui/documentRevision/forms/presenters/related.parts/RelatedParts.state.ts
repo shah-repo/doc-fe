@@ -1,4 +1,4 @@
-import { get, set } from "lodash";
+import { set } from "lodash";
 import { action, observable } from "mobx";
 import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 import { Translation } from "../../../../translations/types";
@@ -38,17 +38,8 @@ class RelatedPartsState {
     this.relatedPartsList = this.relatedPartsList.filter((item) => item.documentRevisionId !== docRevId);
   }
 
-  @action addNewRelatedPart(createdDocumentRevision, suffixName) {
-    const newRelatedPart = {
-      documentId: get(createdDocumentRevision, "documentId"),
-      rootDocId: get(createdDocumentRevision, "document.docId"),
-      name: get(createdDocumentRevision, "name"),
-      documentRevisionId: get(createdDocumentRevision, "id"),
-      status: get(createdDocumentRevision, "displayStatus"),
-      suffixName,
-    };
-
-    this.relatedPartsList.push(newRelatedPart);
+  @action addNewRelatedPart(createdRelatedPart: RelatedPartsListItem) {
+    this.relatedPartsList.push(createdRelatedPart);
   }
 
   @action validateDocId(parentPartDocId, userEnteredDocIdPortion, skipId = "") {
