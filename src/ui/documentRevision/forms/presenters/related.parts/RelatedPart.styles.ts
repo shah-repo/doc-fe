@@ -160,6 +160,7 @@ export default makeStyles((theme) =>
     },
     tableCellThree: {
       width: "15%",
+      position: "relative",
     },
     tableCellFour: {
       width: "10%",

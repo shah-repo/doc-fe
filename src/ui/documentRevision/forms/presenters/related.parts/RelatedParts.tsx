@@ -140,6 +140,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   createNewDocument: (details? : {docId: string; name: string}) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
+  handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   fetchRelatedParts;
   voidRelatedPart;
   relatedPartsState: RelatedPartsState;
@@ -148,6 +149,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   createNewDocument,
   viewRelatedPart,
   handleRemove,
+  handleUpdate,
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
@@ -214,6 +216,7 @@ const RelatedPartGrid: React.FunctionComponent<{
           voidRelatedPart = {voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
           handleRemove={handleRemove}
+          handleUpdate={handleUpdate}
           rootPartName= {documentRevision.name}
           rootRevisionChangeType = {documentRevision.revisionChangeType}
           relatedPartsState = {relatedPartsState} />
@@ -245,6 +248,7 @@ const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
+  handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
@@ -253,6 +257,7 @@ const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart,
   viewRelatedPart,
   handleRemove,
+  handleUpdate,
   rootPartName,
   rootRevisionChangeType,
   relatedPartsState,
@@ -260,25 +265,12 @@ const RelatedPartList: React.FunctionComponent<{
 }) => {
   const classes = useStyles();
 
-  const [listItemBeingEdited, setListItemBeingEdited] = useState<ListItemEdited>({
-    docRevId: "",
-  });
-
   const editRelatedPart = (listItem: RelatedPartsListItem) => {
-    setListItemBeingEdited({
-      docRevId: listItem.documentRevisionId,
-      docId: listItem.suffixNumber?.toString(),
-      name: listItem.suffixName,
-      version: listItem.version,
-    });
+    relatedPartsState.setListItemBeingEdited(listItem);
   };
 
   const cancelLocalEdit = () => {
-    setListItemBeingEdited({
-      docRevId: "",
-      docId: "",
-      name: "",
-    });
+    relatedPartsState.clearListItemBeingEdited();
   };
 
   return useObserver(() => (
@@ -289,14 +281,14 @@ const RelatedPartList: React.FunctionComponent<{
           {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <>
               {
-                listItemBeingEdited.docRevId === listItem.documentRevisionId ?
+                relatedPartsState.listItemBeingEdited.docRevId === listItem.documentRevisionId ?
                   <RelatedPartEditRow
                     documentRevision={documentRevision}
-                    // createNewDocument={createNewDocument}
                     cancelEdit={cancelLocalEdit}
                     handleRemove={handleRemove}
+                    handleUpdate={handleUpdate}
                     relatedPartsState={relatedPartsState}
-                    listItemBeingEdited={listItemBeingEdited}
+                    listItemBeingEdited={relatedPartsState.listItemBeingEdited}
                   /> :
                   <RelatedPartViewRow listItem={listItem}
                     editRelatedPart={editRelatedPart}
@@ -346,7 +338,8 @@ const RelatedPartViewRow: React.FunctionComponent<{
     confirmationDialog.open();
   };
 
-  const confirmAction = () => {
+  const confirmAction = (e) => {
+    e.stopPropagation();
     voidRelatedPart(listItem, !revChangeTypeObs ? RevisionChangeType.Obsolete : rootRevisionChangeType);
     confirmationDialog.close();
   };
@@ -355,7 +348,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
   return (
     <div key={listItem.documentRevisionId}
-      onClick={() => editRelatedPart(listItem)}
+      onClick={(e) => editRelatedPart(listItem)}
       className={classes.itemRow}>
       <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
         {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
@@ -384,7 +377,10 @@ const RelatedPartViewRow: React.FunctionComponent<{
             <Checkbox
               checked={isVoided || revChangeTypeObs}
               disabled={isVoided || relatedPartsState.viewOnlyMode}
-              onChange={openConfirmDialog}
+              onClick={(e) => {
+                e.stopPropagation();
+                openConfirmDialog();
+              }}
             />
             {confirmationDialog.isOpen && (
               <AlertDialog
@@ -399,7 +395,10 @@ const RelatedPartViewRow: React.FunctionComponent<{
       <div className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)}>
         <RemoveRedEyeIcon color="primary"
           className={classes.viewIcon}
-          onClick={(e) => viewRelatedPart(listItem.documentRevisionId, listItem.documentId)}></RemoveRedEyeIcon>
+          onClick={(e) => {
+            e.stopPropagation();
+            viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
+          }}></RemoveRedEyeIcon>
       </div>
     </div>
   );
@@ -411,6 +410,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
   createNewDocument?: (details? : {docId: string; name: string}) => void;
   cancelEdit: () => void;
   handleRemove?: (docRevId: string) => void;
+  handleUpdate?: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
@@ -418,6 +418,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
   createNewDocument,
   cancelEdit,
   handleRemove,
+  handleUpdate,
   relatedPartsState,
 }) => {
   const [relatedPartDetails, setRelatedPartDetails] = React.useState({
@@ -435,18 +436,19 @@ const RelatedPartEditRow: React.FunctionComponent<{
   };
 
   const confirmEdit = () => {
-    if (validateDocId()) {
-      if (listItemBeingEdited?.docRevId) {
-        console.log("Need to update");
-      } else if (createNewDocument) {
+    if (listItemBeingEdited?.docRevId && handleUpdate) {
+      if (validateDocId(relatedPartDetails.docId)) {
+        handleUpdate(listItemBeingEdited?.docRevId, relatedPartDetails.docId, relatedPartDetails.name);
+      }
+    } else {
+      if (validateDocId() && createNewDocument) {
         createNewDocument(relatedPartDetails);
       }
-
     }
   };
 
-  const validateDocId = () => (
-    relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId)
+  const validateDocId = (skipId?) => (
+    relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId, skipId)
   );
 
   return useObserver(() => (
@@ -510,6 +512,7 @@ const RelatedParts: React.FunctionComponent<{
   createNewDocument: (relatedPartDetails?: any) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
+  handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   fetchRelatedParts: (documentId: any) => void;
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   relatedPartsState: RelatedPartsState;
@@ -520,6 +523,7 @@ const RelatedParts: React.FunctionComponent<{
   createNewDocument,
   viewRelatedPart,
   handleRemove,
+  handleUpdate,
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
@@ -548,6 +552,7 @@ const RelatedParts: React.FunctionComponent<{
             createNewDocument={createNewDocument}
             viewRelatedPart={viewRelatedPart}
             handleRemove={handleRemove}
+            handleUpdate={handleUpdate}
             fetchRelatedParts = {fetchRelatedParts}
             voidRelatedPart = {voidRelatedPart}
             relatedPartsState = {relatedPartsState}

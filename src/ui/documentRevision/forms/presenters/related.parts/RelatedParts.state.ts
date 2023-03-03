@@ -1,7 +1,6 @@
 import { get, set } from "lodash";
 import { action, observable } from "mobx";
-import { RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
-import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
+import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 import { Translation } from "../../../../translations/types";
 
 class RelatedPartsState {
@@ -15,21 +14,24 @@ class RelatedPartsState {
   @observable viewOnlyMode = false;
   @observable loadingState = false;
   @observable docIdErrorMsg: string | Translation = "";
+  @observable listItemBeingEdited: ListItemEdited = {
+    docRevId: "",
+  };
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
   }
 
-  @action updateRelatedPartsList(docRevId: string, name: string, revisionChangeType: RevisionChangeType) {
+  @action updateRelatedPartsList(docRevId: string, data: ListItemUpdateData) {
     this.relatedPartsList = this.relatedPartsList.map(
       (item) => {
         if (item.documentRevisionId === docRevId) {
-          item.revisionChangeType = revisionChangeType;
-          item.name = name;
+          return { ...item, ...data };
         }
         return item;
       }
     );
+    this.clearListItemBeingEdited();
   }
 
   @action filterRelatedPartsList(docRevId: string) {
@@ -49,7 +51,7 @@ class RelatedPartsState {
     this.relatedPartsList.push(newRelatedPart);
   }
 
-  @action validateDocId(parentPartDocId, userEnteredDocIdPortion) {
+  @action validateDocId(parentPartDocId, userEnteredDocIdPortion, skipId = "") {
     this.docIdErrorMsg = "";
 
     if (!userEnteredDocIdPortion) {
@@ -62,10 +64,11 @@ class RelatedPartsState {
       this.docIdErrorMsg = "relatedParts.docId.onlyNumbers.msg";
 
     } else {
-      const docIdExists = this.relatedPartsList.filter(
-        (listItem: RelatedPartsListItem) => listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}`)
-        .length > 0;
-      if (docIdExists) {
+      const filteredList = this.relatedPartsList.filter(
+        (listItem: RelatedPartsListItem) =>
+          listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}` && userEnteredDocIdPortion !== skipId);
+
+      if (filteredList.length > 0) {
         this.docIdErrorMsg = "relatedParts.docId.exists.msg";
       }
     }
@@ -79,6 +82,21 @@ class RelatedPartsState {
 
   @action setLoadingState(isVisible = false) {
     set(this, "loadingState", isVisible);
+  }
+
+  @action setListItemBeingEdited(listItem: RelatedPartsListItem) {
+    this.listItemBeingEdited = {
+      docRevId: listItem.documentRevisionId,
+      docId: listItem.suffixNumber as unknown as string,
+      name: listItem.suffixName,
+      version: listItem.version,
+    };
+  }
+
+  @action clearListItemBeingEdited() {
+    this.listItemBeingEdited = {
+      docRevId: "",
+    };
   }
 }
 

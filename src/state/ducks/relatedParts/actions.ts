@@ -2,7 +2,7 @@ import { apiAction } from "../../factories";
 import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
 import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
-import { RelatedPartsChoiceRequestBody } from "./types";
+import { RelatedPartsChoiceRequestBody, RelatedPartsListItem } from "./types";
 
 
 const createRelatedPart =
@@ -54,9 +54,26 @@ const voidRelatedPart =
 const removeRelatedPart = (docRevId: string, async) => apiAction({
   url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
   method: "delete",
-  onSuccess(data) {
+  onSuccess() {
     if (async.successHandler?.callback) {
       async.successHandler?.callback({ docRevId });
+    }
+  },
+});
+
+const updateRelatedPart = (docRevId: string, data, async) => apiAction({
+  url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
+  method: "patch",
+  data,
+  onSuccess( relatedPart: RelatedPartsListItem) {
+    if (async.successHandler?.callback) {
+      async.successHandler?.callback(
+        {
+          docRevId,
+          suffixNumber: relatedPart.suffixNumber,
+          suffixName: relatedPart.suffixName,
+          rootDocId: relatedPart.rootDocId,
+        });
     }
   },
 });
@@ -68,4 +85,5 @@ export default {
   fetchAllRelatedParts,
   voidRelatedPart,
   removeRelatedPart,
+  updateRelatedPart,
 };

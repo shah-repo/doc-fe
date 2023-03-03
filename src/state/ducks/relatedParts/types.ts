@@ -18,7 +18,7 @@ export interface RelatedPartsChoiceRequestBody {
 export interface RelatedPartsListItem {
   documentId: string;
   rootDocId: string;
-  suffixNumber?: number;
+  suffixNumber?: string;
   suffixName?: string;
   documentRevisionId: string;
   name: string;
@@ -35,4 +35,12 @@ export interface ListItemEdited {
   docId?: string;
   name?: string;
   version?: number;
+}
+
+export interface ListItemUpdateData {
+  name?: string;
+  revisionChangeType?: RevisionChangeType;
+  suffixNumber?: string;
+  suffixName?: string;
+  rootDocId?: string;
 }

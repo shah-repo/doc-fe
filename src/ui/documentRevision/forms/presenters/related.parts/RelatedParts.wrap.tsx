@@ -121,30 +121,30 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-
+  // Fetch related parts list
   const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
   const fetchRelatedPartsAsync = useAsync({
     onSuccess: (relatedPartsList) => {
       relatedPartsState.setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
     },
   });
-
   const fetchRelatedParts = useCallback((documentRevisionId) => {
     fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentRevisionId, fetchRelatedPartsAsync);
   }, [fetchAllRelatedPartsAction, fetchRelatedPartsAsync]);
 
+  // Obsolete Related part
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId, name, revisionChangeType }: any) => {
-      relatedPartsState.updateRelatedPartsList(docRevId, name, revisionChangeType);
+      relatedPartsState.updateRelatedPartsList(docRevId, { name, revisionChangeType });
     },
   });
-
   const voidRelatedPart = (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => {
     voidRelatedPartAsync.start(voidRelatedPartAction,
       listItem.documentRevisionId, revisionChangeType, voidRelatedPartAsync);
   };
 
+  // Delete Related part
   const removeRelatedPartAction = useActionCreator(relatedPartsActions.removeRelatedPart);
   const removeRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId }: any) => {
@@ -155,7 +155,19 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     removeRelatedPartAsync.start(removeRelatedPartAction, docRevId, removeRelatedPartAsync);
   };
 
+  // Update Related part
+  const updateRelatedPartAction = useActionCreator(relatedPartsActions.updateRelatedPart);
+  const updateRelatedPartAsync = useAsync({
+    onSuccess: ({ docRevId, suffixNumber, suffixName, rootDocId }: any) => {
+      relatedPartsState.updateRelatedPartsList(docRevId, { suffixNumber, suffixName, rootDocId });
+    },
+  });
+  const handleUpdate = (docRevId: string, suffixNumber: string, suffixName: string) => {
+    const data = { suffixNumber, suffixName };
+    updateRelatedPartAsync.start(updateRelatedPartAction, docRevId, data, updateRelatedPartAsync);
+  };
 
+  // Creating Related part
   const createNewDocument = (relatedPartDetails?) => {
     let docDto = {
       formDocument: {
@@ -225,6 +237,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       createNewDocument = {createNewDocument}
       viewRelatedPart = {viewRelatedPart}
       handleRemove = {handleRemove}
+      handleUpdate = {handleUpdate}
       fetchRelatedParts = {fetchRelatedParts}
       voidRelatedPart = {voidRelatedPart}
       relatedPartsState = {relatedPartsState}
