@@ -4,25 +4,25 @@ import Colors from "../../../layout/theme/utils/colors";
 export const headerBackgroundStyles = makeStyles(() =>
   createStyles({
     GREEN_STATUS: {
-      background: Colors.green_blue,
+      backgroundColor: Colors.green_blue,
     },
     RED_STATUS: {
-      background: Colors.latest_red_varient,
+      backgroundColor: Colors.latest_red_varient,
     },
     CLOSED_STATUS: {
-      background: Colors.dawn,
+      backgroundColor: Colors.dawn,
     },
     PENDING_STATUS: {
-      background: Colors.school_bus_yellow,
+      backgroundColor: Colors.school_bus_yellow,
     },
     GRAY_STATUS: {
-      background: Colors.mandy,
+      backgroundColor: Colors.mandy,
     },
     WIP_STATUS: {
-      background: Colors.dodger_blue,
+      backgroundColor: Colors.dodger_blue,
     },
     undefined: {
-      background: Colors.dodger_blue,
+      backgroundColor: Colors.dodger_blue,
     },
   },
   ));

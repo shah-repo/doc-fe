@@ -75,11 +75,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   relatedPartsState.setViewOnlyMode(viewOnly);
 
   const [parentPartStatus, setParentPartStatus] = useState(relatedPartsStatus);
+  const [isSubPartBeingAdded, setSubPartBeingAdded] = useState(false);
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
   const createPartAsync = useAsync({
     onSuccess: ({ createdRelatedPart }: any) => {
+      setSubPartBeingAdded(false);
       if (!createdRelatedPart) {
         return;
       }
@@ -95,6 +97,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         workspaceState?.saveDocRev();
       }
     },
+    onError: () => setSubPartBeingAdded(false),
   });
 
   const showSuccessToast = (
@@ -169,6 +172,10 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   // Creating Related part
   const createNewDocument = (relatedPartDetails?) => {
+    if (isSubPartBeingAdded) {
+      return;
+    }
+
     let docDto = {
       formDocument: {
         id: get(documentRevision, "formDocumentId"),
@@ -206,6 +213,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       });
     }
 
+    setSubPartBeingAdded(true);
     createPartAsync.start(createRelatedPartAction, documentRevision.document.id, documentRevision.id, docDto,
       relatedPartDetails?.name, createPartAsync);
   };
