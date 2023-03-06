@@ -99,26 +99,29 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
 
-  if (isLHR) {
-    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
-      ...schemaItem,
-      index: i,
-      ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
-        stepIndex: size(
-          filter(
-            ro.slice(0, i + 1),
-            (step) =>
-              !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
-          )
-        ),
-      }),
-    }));
+  useEffect(() => {
+    if (isLHR) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+      schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+        ...schemaItem,
+        index: i,
+        ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
+          stepIndex: size(
+            filter(
+              ro.slice(0, i + 1),
+              (step) =>
+                !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
+            )
+          ),
+        }),
+      }));
 
-    smartReferencesFrom?.forEach((ele) => {
-      const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
-      ele.stepIndex = obj?.[0]?.stepIndex;
-    });
-  }
+      smartReferencesFrom?.forEach((ele) => {
+        const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
+        ele.stepIndex = obj?.[0]?.stepIndex;
+      });
+    }
+  }, [isLHR]);
 
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
