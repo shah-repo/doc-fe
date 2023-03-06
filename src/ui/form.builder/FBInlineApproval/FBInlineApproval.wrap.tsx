@@ -151,8 +151,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.groups),
       (data) => {
         if (!data) { return; }
-        const value = Array.from(map(groups as string[], (i) => data.get(i)));
-        map(value, (v) => concatOptions(v.employees, v.name));
+        const group = groups ? map(groups as string[], (groupName) => data.get(groupName)) : null;
+        map(group, (group) => concatOptions(group.joinedEmployees, group.name));
       }, {
         fireImmediately: true,
       },
