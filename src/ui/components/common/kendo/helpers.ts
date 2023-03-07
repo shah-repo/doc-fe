@@ -12,7 +12,7 @@ export const orderByLockedState = (
     .orderBy(["locked"], ["desc"])
     .map((column) => {
       column.reorderable = !column.locked;
-      column.orderIndex = column.locked ? 0 : column.orderIndex;
+      column.orderIndex = 0;
       column.disabled = false;
       return column;
     })
