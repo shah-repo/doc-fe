@@ -203,7 +203,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                     color="primary"
                     startIcon={<AddCircleIcon color="primary" />}
                     onClick={showEditRow}
-                    data-cy="add-related-part-btn"
+                    data-cy="addRelatedPartBtn"
                   >
                     <Text translation="relatedParts.button.addText"/>
                   </Button>
@@ -236,7 +236,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             variant="outlined"
             startIcon={<AddOutlinedIcon />}
             onClick={showEditRow}
-            data-cy="add-related-part-btn"
+            data-cy="addRelatedPartBtn"
           >
             <Text translation="relatedParts.button.addText"/>
           </Button>
@@ -375,7 +375,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           </span>
         </Tooltip>
       </div>
-      <div className={classes.tableCellThree}>
+      <div className={classes.tableCellThree} data-cy="obsoleteCheckbox">
         { listItem.version && listItem.version > 1 &&
           <>
             <Checkbox
@@ -491,7 +491,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
           />
         </div>
       </div>
-      <div className={classes.actionButtonParentDiv}>
+      <div className={classes.actionButtonParentDiv} data-cy="editRowActions">
         <div className={classes.actionButtonChildDiv}>
           { showDeleteButton &&
           <Button
