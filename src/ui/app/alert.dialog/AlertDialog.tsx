@@ -8,7 +8,7 @@ import { styles } from "./AlertDialog.styles";
 
 interface Props {
   confirmAction: (values?) => void;
-  cancelAction?: () => void;
+  cancelAction?: (e?) => void;
   message: Translation;
   dialog: DialogHandler;
   confirmLabel?: Translation;

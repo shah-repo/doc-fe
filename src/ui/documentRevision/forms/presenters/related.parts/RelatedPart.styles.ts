@@ -52,9 +52,27 @@ export default makeStyles((theme) =>
     },
     partsGrid: {
       marginBottom: theme.spacing(1.5),
+      marginTop: theme.spacing(1),
     },
     btnMargin: {
       marginRight: 0,
+    },
+    OBS: {
+      fontWeight: 600,
+      fontSize: "14px",
+      textTransform: "capitalize",
+      color: Colors.latest_red_varient,
+    },
+    buttonGroup: {
+      display: "flex",
+      alignItems: "center",
+      textAlign: "right",
+      fontSize: "12px",
+      cursor: "pointer",
+    },
+    filterOptions: {
+      fontSize: "14px",
+      marginLeft: theme.spacing(1.5),
     },
     dividerStyle: {
       margin: theme.spacing(0, 0, 1.5, 0),
@@ -98,6 +116,9 @@ export default makeStyles((theme) =>
     },
     normalFontWeight: {
       fontWeight: "normal",
+    },
+    boldFontWeight: {
+      fontWeight: 600,
     },
     actionButtonParentDiv: {
       width: "100%",
@@ -161,6 +182,7 @@ export default makeStyles((theme) =>
     tableCellThree: {
       width: "15%",
       position: "relative",
+      textAlign: "center",
     },
     tableCellFour: {
       width: "10%",
@@ -225,6 +247,9 @@ export default makeStyles((theme) =>
     relatedPartEyeRowCell: {
       textAlign: "right",
       paddingRight: theme.spacing(1.25),
+    },
+    voidedBackground: {
+      backgroundColor: Colors.light_red,
     },
   })
 );

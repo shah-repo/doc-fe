@@ -31,6 +31,7 @@ import { useObserver } from "mobx-react";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
 import useDialog from "../../../../hooks/useDialog";
+import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
 import useStyles from "./RelatedPart.styles";
 import RelatedPartsState from "./RelatedParts.state";
 import RelatedPartsTableHeader from "./RelatedPartsTableHeader";
@@ -158,6 +159,10 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [showOnlyActiveParts, setShowOnlyActiveParts] = useState(false);
+  const { status } = documentRevision;
+
+  const isReleased = isDocumentRevisionReleased(status);
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
@@ -184,6 +189,13 @@ const RelatedPartGrid: React.FunctionComponent<{
     setShowButton(true);
   };
 
+  const setActivePartsFilter = (state: boolean) => () => setShowOnlyActiveParts(state);
+
+  const partsToShow =
+    showOnlyActiveParts
+      ? relatedPartsState.activeRelatedPartsList
+      : relatedPartsState.relatedPartsList;
+
   return useObserver(() => (
     <div className={classes.partsGrid}
       data-cy="partsGrid">
@@ -195,8 +207,8 @@ const RelatedPartGrid: React.FunctionComponent<{
             </Typography>
           </Grid>
 
-          { showButton &&
-              <Grid item>
+          { (showButton || isReleased) &&
+              <Grid item className={classes.buttonGroup}>
                 <Typography>
                   <Button
                     className={classes.btnMargin}
@@ -208,6 +220,22 @@ const RelatedPartGrid: React.FunctionComponent<{
                     <Text translation="relatedParts.button.addText"/>
                   </Button>
                 </Typography>
+                <div className={classes.filterOptions}>
+                  <span>
+                    <Text translation="relatedParts.text.show" />{":"}&nbsp;
+                  </span>
+                  <span className={cx(!showOnlyActiveParts ? classes.boldFontWeight : classes.normalFontWeight)}
+                    onClick={setActivePartsFilter(false)}
+                  >
+                    <Text translation="common.all" />
+                  </span>
+                  <span> {" | "} </span>
+                  <span className={cx(showOnlyActiveParts ? classes.boldFontWeight : classes.normalFontWeight)}
+                    onClick={setActivePartsFilter(true)}
+                  >
+                    <Text translation="common.active" />
+                  </span>
+                </div>
               </Grid>
           }
         </Grid>
@@ -215,11 +243,12 @@ const RelatedPartGrid: React.FunctionComponent<{
       </div>
       <div>
         <RelatedPartList documentRevision={documentRevision}
-          voidRelatedPart = {voidRelatedPart}
+          voidRelatedPart={voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
           handleRemove={handleRemove}
           handleUpdate={handleUpdate}
           rootPartName= {documentRevision.name}
+          partsList={partsToShow}
           rootRevisionChangeType = {documentRevision.revisionChangeType}
           relatedPartsState = {relatedPartsState} />
 
@@ -253,6 +282,7 @@ const RelatedPartList: React.FunctionComponent<{
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   rootPartName: string;
+  partsList: RelatedPartsListItem[];
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
   documentRevision: DocumentRevision;
@@ -262,6 +292,7 @@ const RelatedPartList: React.FunctionComponent<{
   handleRemove,
   handleUpdate,
   rootPartName,
+  partsList,
   rootRevisionChangeType,
   relatedPartsState,
   documentRevision,
@@ -281,7 +312,7 @@ const RelatedPartList: React.FunctionComponent<{
       <div aria-label="related parts table">
         <RelatedPartsTableHeader />
         <div>
-          {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
+          {partsList.map((listItem: RelatedPartsListItem) => (
             <>
               {
                 relatedPartsState.listItemBeingEdited.docRevId === listItem.documentRevisionId ?
@@ -332,6 +363,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   || listItem.status === DocumentRevisionStatus.Voided;
 
   const revChangeTypeObs = listItem.revisionChangeType === RevisionChangeType.Obsolete;
+  const isStatusObsolete = listItem.status === DocumentRevisionStatus.Obsolete;
 
   const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
 
@@ -347,12 +379,19 @@ const RelatedPartViewRow: React.FunctionComponent<{
     confirmationDialog.close();
   };
 
+  const cancelAction = (e) => {
+    e.stopPropagation();
+    confirmationDialog.close();
+  };
+
   const titleCellRef = useRef<HTMLSpanElement>(null);
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
   return (
     <div key={listItem.documentRevisionId}
       onClick={(e) => editRelatedPart(listItem)}
-      className={classes.itemRow}
+      className={cx(classes.itemRow, {
+        [classes.voidedBackground]: isVoided,
+      })}
       data-cy="relatedPartsViewRow"
     >
       <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
@@ -378,18 +417,24 @@ const RelatedPartViewRow: React.FunctionComponent<{
       <div className={classes.tableCellThree} data-cy="obsoleteCheckbox">
         { listItem.version && listItem.version > 1 &&
           <>
-            <Checkbox
-              checked={isVoided || revChangeTypeObs}
-              disabled={isVoided || relatedPartsState.viewOnlyMode}
-              onClick={(e) => {
-                e.stopPropagation();
-                openConfirmDialog();
-              }}
-            />
+            {
+              isStatusObsolete ?
+                <span className={classes.OBS}>OBS</span>
+                :
+                <Checkbox
+                  checked = {isVoided || revChangeTypeObs}
+                  disabled={relatedPartsState.viewOnlyMode}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openConfirmDialog();
+                  }}
+                />
+            }
             {confirmationDialog.isOpen && (
               <AlertDialog
                 dialog={confirmationDialog}
                 confirmAction={confirmAction}
+                cancelAction={cancelAction}
                 message={!revChangeTypeObs ? "relatedParts.void.alert" : "relatedParts.void.bringBack"}
               />
             )}
@@ -416,6 +461,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
   handleRemove?: (docRevId: string) => void;
   handleUpdate?: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   relatedPartsState: RelatedPartsState;
+
 }> = ({
   documentRevision,
   listItemBeingEdited,
@@ -546,7 +592,6 @@ const RelatedParts: React.FunctionComponent<{
 }) => {
 
   const classes = useStyles();
-
   const isRelatedPartsParent = ![RELATED_PARTS_STATUS.RELATED_SEPARATE,
     RELATED_PARTS_STATUS.RELATED_TOGETHER].includes(parentStatus);
 
@@ -581,3 +626,4 @@ const RelatedParts: React.FunctionComponent<{
 };
 
 export default RelatedParts;
+

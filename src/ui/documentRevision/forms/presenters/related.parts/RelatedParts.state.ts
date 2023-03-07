@@ -1,5 +1,6 @@
 import { set } from "lodash";
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
+import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 import { Translation } from "../../../../translations/types";
 
@@ -17,6 +18,8 @@ class RelatedPartsState {
   @observable listItemBeingEdited: ListItemEdited = {
     docRevId: "",
   };
+
+  @observable docType: string | Translation="";
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
@@ -36,6 +39,16 @@ class RelatedPartsState {
 
   @action filterRelatedPartsList(docRevId: string) {
     this.relatedPartsList = this.relatedPartsList.filter((item) => item.documentRevisionId !== docRevId);
+  }
+
+  @computed get activeRelatedPartsList() {
+    return this.relatedPartsList.filter((part) =>
+      ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status)
+    );
+  }
+
+  @computed get allRelatedPartsList() {
+    return this.relatedPartsList;
   }
 
   @action addNewRelatedPart(createdRelatedPart: RelatedPartsListItem) {
