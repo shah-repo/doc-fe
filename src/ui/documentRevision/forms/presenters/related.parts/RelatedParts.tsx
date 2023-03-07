@@ -362,7 +362,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
   || listItem.status === DocumentRevisionStatus.Voided;
 
-  const revChangeTypeObs = listItem.revisionChangeType === RevisionChangeType.Obsolete;
+  const isRevChangeTypeObs = listItem.revisionChangeType === RevisionChangeType.Obsolete;
   const isStatusObsolete = listItem.status === DocumentRevisionStatus.Obsolete;
 
   const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
@@ -373,13 +373,13 @@ const RelatedPartViewRow: React.FunctionComponent<{
     confirmationDialog.open();
   };
 
-  const confirmAction = (e) => {
+  const confirmAction = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    voidRelatedPart(listItem, !revChangeTypeObs ? RevisionChangeType.Obsolete : rootRevisionChangeType);
+    voidRelatedPart(listItem, isRevChangeTypeObs ? rootRevisionChangeType : RevisionChangeType.Obsolete);
     confirmationDialog.close();
   };
 
-  const cancelAction = (e) => {
+  const cancelAction = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     confirmationDialog.close();
   };
@@ -422,7 +422,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 <span className={classes.OBS}>OBS</span>
                 :
                 <Checkbox
-                  checked = {isVoided || revChangeTypeObs}
+                  checked = {isVoided || isRevChangeTypeObs}
                   disabled={relatedPartsState.viewOnlyMode}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -435,7 +435,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 dialog={confirmationDialog}
                 confirmAction={confirmAction}
                 cancelAction={cancelAction}
-                message={!revChangeTypeObs ? "relatedParts.void.alert" : "relatedParts.void.bringBack"}
+                message={isRevChangeTypeObs ? "relatedParts.void.bringBack" : "relatedParts.void.alert"}
               />
             )}
           </>
@@ -497,7 +497,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
     }
   };
 
-  const validateDocId = (skipId?) => (
+  const validateDocId = (skipId?: string | undefined) => (
     relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId, skipId)
   );
 
@@ -517,7 +517,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
-            onBlur = {validateDocId}
+            onBlur = {(e) => validateDocId}
             value={relatedPartDetails.docId}
             error = {Boolean(relatedPartsState.docIdErrorMsg)}
             helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
@@ -544,9 +544,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             data-cy="deleteRelatedPartSubPart"
             className={classes.actionButton}>
             <DeleteIcon className={classes.deleteIconButton}
-              onClick={() =>  {
-                handleRemove?.(listItemBeingEdited?.docRevId as string);
-              }}/>
+              onClick={() => handleRemove?.(listItemBeingEdited?.docRevId as string)}/>
           </Button> }
           <Button
             data-cy="cancelRelatedPartSubPartAddition"

@@ -150,9 +150,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   // Delete Related part
   const removeRelatedPartAction = useActionCreator(relatedPartsActions.removeRelatedPart);
   const removeRelatedPartAsync = useAsync({
-    onSuccess: ({ docRevId }: any) => {
-      relatedPartsState.filterRelatedPartsList(docRevId);
-    },
+    onSuccess: ({ docRevId }: any) => relatedPartsState.filterRelatedPartsList(docRevId),
   });
   const handleRemove = (docRevId: string) => {
     removeRelatedPartAsync.start(removeRelatedPartAction, docRevId, removeRelatedPartAsync);

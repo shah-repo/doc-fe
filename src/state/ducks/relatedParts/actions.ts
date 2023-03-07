@@ -11,7 +11,7 @@ const createRelatedPart =
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}/${parentDocumentRevisionId}/child`,
     method: "post",
     data: body,
-    onSuccess: (createdRelatedPart) => {
+    onSuccess: (createdRelatedPart: RelatedPartsListItem) => {
       async.successHandler?.callback({ createdRelatedPart });
     },
   });

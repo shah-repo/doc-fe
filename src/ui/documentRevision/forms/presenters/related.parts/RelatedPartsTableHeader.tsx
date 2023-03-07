@@ -1,9 +1,6 @@
-import useStyles from "./RelatedPart.styles";
-
 import React from "react";
-
-// import cx from "classnames";
 import Text from "../../../../components/Text";
+import useStyles from "./RelatedPart.styles";
 
 const RelatedPartsTableHeader: React.FunctionComponent<{}> = () => {
   const classes = useStyles();
