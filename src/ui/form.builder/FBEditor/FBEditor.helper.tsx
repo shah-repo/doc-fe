@@ -1,25 +1,34 @@
-import { filter, includes, size, union } from "lodash";
+import { filter, includes, isString, size, union } from "lodash";
 import React from "react";
-import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType } from "..";
+import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType, FBOption } from "..";
 import { SM } from "../../../App";
+import { FBEditorOptionsProps } from "../FBEditorOptions/FBEditorOptions.types";
+import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 
-export const withFBEditorHelper = <T extends FBEditorHelperProps>(
+export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptionsProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
     openEditor,
+    optionsToString,
     ...props
   }: T) => {
     const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
     const { _documentRevisionFormState, _tabsState } = SM.useStores();
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
-      const { type, stepIndex } = props;
+      const { type, stepIndex, options } = props;
       if (includes(FBEditorState.pickStepIndex, type)) {
         const stepSections = filter(workspaceState?.getSchema(), (schemaItem) =>
           !schemaItem.deleted && includes(FBEditorState.pickStepIndex, schemaItem.type));
         props = {
           ...props,
           stepIndex: stepIndex || (size(stepSections) + 1),
+        };
+      }
+      if (includes(FBEditorState.transformOptionsToString, type) && !isString(options)) {
+        props = {
+          ...props,
+          options: optionsToString ? optionsToString(options as FBOption[]) : options,
         };
       }
       return props;
@@ -48,6 +57,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       if (includes(FBEditorState.pickCustomHandler, type)) {
         return customHandler(type);
       }
+
       const editorForm = FBEditorState.editor({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         inputProps: defaultProps(props!),
@@ -100,5 +110,5 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     });
   };
 
-  return (props: T) => Comp(props);
+  return withFBEditorOptions((props: T) => Comp(props));
 };

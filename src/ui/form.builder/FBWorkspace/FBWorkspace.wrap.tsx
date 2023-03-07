@@ -117,7 +117,9 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     React.useEffect(() => {
       map(formInput, (value, key) => {
-        workspaceState?.setFormInputSync(key, value);
+        if (!workspaceState?.formInputSync.get(key)) {
+          workspaceState?.setFormInputSync(key, value);
+        }
       });
     }, [formInput, workspaceState]);
 
