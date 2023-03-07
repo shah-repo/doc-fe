@@ -159,7 +159,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
-  const [showOnlyActiveParts, setShowOnlyActiveParts] = useState(false);
+
   const { status } = documentRevision;
 
   const isReleased = isDocumentRevisionReleased(status);
@@ -189,12 +189,7 @@ const RelatedPartGrid: React.FunctionComponent<{
     setShowButton(true);
   };
 
-  const setActivePartsFilter = (state: boolean) => () => setShowOnlyActiveParts(state);
-
-  const partsToShow =
-    showOnlyActiveParts
-      ? relatedPartsState.activeRelatedPartsList
-      : relatedPartsState.relatedPartsList;
+  const setActivePartsFilter = (state: boolean) => () => relatedPartsState.setShowOnlyActiveSubParts(state);
 
   return useObserver(() => (
     <div className={classes.partsGrid}
@@ -224,14 +219,16 @@ const RelatedPartGrid: React.FunctionComponent<{
                   <span>
                     <Text translation="relatedParts.text.show" />{":"}&nbsp;
                   </span>
-                  <span className={cx(!showOnlyActiveParts ? classes.boldFontWeight : classes.normalFontWeight)}
-                    onClick={setActivePartsFilter(false)}
+                  <span className={cx(relatedPartsState.showOnlyActiveSubParts
+                    ? classes.normalFontWeight : classes.boldFontWeight)}
+                  onClick={setActivePartsFilter(false)}
                   >
                     <Text translation="common.all" />
                   </span>
                   <span> {" | "} </span>
-                  <span className={cx(showOnlyActiveParts ? classes.boldFontWeight : classes.normalFontWeight)}
-                    onClick={setActivePartsFilter(true)}
+                  <span className={cx(relatedPartsState.showOnlyActiveSubParts
+                    ? classes.boldFontWeight : classes.normalFontWeight)}
+                  onClick={setActivePartsFilter(true)}
                   >
                     <Text translation="common.active" />
                   </span>
@@ -248,7 +245,6 @@ const RelatedPartGrid: React.FunctionComponent<{
           handleRemove={handleRemove}
           handleUpdate={handleUpdate}
           rootPartName= {documentRevision.name}
-          partsList={partsToShow}
           rootRevisionChangeType = {documentRevision.revisionChangeType}
           relatedPartsState = {relatedPartsState} />
 
@@ -282,7 +278,6 @@ const RelatedPartList: React.FunctionComponent<{
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   rootPartName: string;
-  partsList: RelatedPartsListItem[];
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
   documentRevision: DocumentRevision;
@@ -292,7 +287,6 @@ const RelatedPartList: React.FunctionComponent<{
   handleRemove,
   handleUpdate,
   rootPartName,
-  partsList,
   rootRevisionChangeType,
   relatedPartsState,
   documentRevision,
@@ -312,7 +306,7 @@ const RelatedPartList: React.FunctionComponent<{
       <div aria-label="related parts table">
         <RelatedPartsTableHeader />
         <div>
-          {partsList.map((listItem: RelatedPartsListItem) => (
+          {relatedPartsState.relatedSubParts.map((listItem: RelatedPartsListItem) => (
             <>
               {
                 relatedPartsState.listItemBeingEdited.docRevId === listItem.documentRevisionId ?

@@ -19,7 +19,7 @@ class RelatedPartsState {
     docRevId: "",
   };
 
-  @observable docType: string | Translation="";
+  @observable showOnlyActiveSubParts = false;
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
@@ -41,13 +41,16 @@ class RelatedPartsState {
     this.relatedPartsList = this.relatedPartsList.filter((item) => item.documentRevisionId !== docRevId);
   }
 
-  @computed get activeRelatedPartsList() {
-    return this.relatedPartsList.filter((part) =>
-      ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status)
-    );
+  @action setShowOnlyActiveSubParts(showOnlyActiveSubParts: boolean) {
+    this.showOnlyActiveSubParts = showOnlyActiveSubParts;
   }
 
-  @computed get allRelatedPartsList() {
+  @computed get relatedSubParts() {
+    if (this.showOnlyActiveSubParts) {
+      return this.relatedPartsList.filter((part) =>
+        ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status)
+      );
+    }
     return this.relatedPartsList;
   }
 
