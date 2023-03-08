@@ -596,7 +596,7 @@ const RelatedParts: React.FunctionComponent<{
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
             <FBButton label="relatedParts.button.addText"
-              dataCy="parentSeparateAddRelatedPartsBtn"
+              dataCy="parent-separate-add-related-parts-btn"
               onClick = {createNewDocument} />
           </Grid>
         )}
