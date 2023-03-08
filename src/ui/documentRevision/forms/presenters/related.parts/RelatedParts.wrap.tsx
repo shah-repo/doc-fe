@@ -237,16 +237,19 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
 
   return useObserver(() => (
-    <RelatedParts documentRevision={documentRevision}
+    <RelatedParts
       parentStatus = {parentPartStatus}
       parentStatusChanged = {parentPartStatusChanged}
-      createNewDocument = {createNewDocument}
-      viewRelatedPart = {viewRelatedPart}
-      handleRemove = {handleRemove}
-      handleUpdate = {handleUpdate}
-      fetchRelatedParts = {fetchRelatedParts}
-      voidRelatedPart = {voidRelatedPart}
-      relatedPartsState = {relatedPartsState}
+      {...{
+        documentRevision,
+        createNewDocument,
+        viewRelatedPart,
+        handleRemove,
+        handleUpdate,
+        fetchRelatedParts,
+        voidRelatedPart,
+        relatedPartsState,
+      }}
     />
   ));
 };

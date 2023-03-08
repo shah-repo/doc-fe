@@ -2,7 +2,7 @@ import React from "react";
 import Text from "../../../../components/Text";
 import useStyles from "./RelatedPart.styles";
 
-const RelatedPartsTableHeader: React.FunctionComponent<{}> = () => {
+const RelatedPartsTableHeader: React.FC = () => {
   const classes = useStyles();
   return (
     <div className={classes.tableHead} data-cy="related-parts-table">
