@@ -8,7 +8,7 @@ import { styles } from "./AlertDialog.styles";
 
 interface Props {
   confirmAction: (values?) => void;
-  cancelAction?: (e?) => void;
+  cancelAction?: (e: React.MouseEvent<HTMLElement>) => void;
   message: Translation;
   dialog: DialogHandler;
   confirmLabel?: Translation;

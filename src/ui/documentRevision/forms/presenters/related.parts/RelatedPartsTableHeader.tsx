@@ -5,7 +5,7 @@ import useStyles from "./RelatedPart.styles";
 const RelatedPartsTableHeader: React.FunctionComponent<{}> = () => {
   const classes = useStyles();
   return (
-    <div className={classes.tableHead} data-cy="relatedPartsTable">
+    <div className={classes.tableHead} data-cy="related-parts-table">
       <div className={classes.tableCellOne}>
         <Text translation="relatedParts.grid.heading.docId"/>
       </div>
