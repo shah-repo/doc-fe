@@ -65,6 +65,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
     columnLock.forEach((c, i) => {
       if (c.field === field) {
         c.locked = !c.locked;
+        c.orderIndex = !c.locked ? i : c.orderIndex;
       }
     });
     setColumnLock(columnLock);
