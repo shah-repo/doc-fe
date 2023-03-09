@@ -1,4 +1,4 @@
-import { difference, filter, find, get, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
@@ -148,10 +148,13 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ), []);
     // Groups list
     React.useEffect(() => reaction(
-      () => get(document, "document.securityGroups[0]"),
+      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.groups),
       (data) => {
         if (!data) { return; }
-        concatOptions(data?.activeEmployees, data.name);
+        map(groups as string[], (groupName: string) => {
+          const group = data.get(groupName);
+          concatOptions(group.joinedEmployees, group.name);
+        });
       }, {
         fireImmediately: true,
       },
