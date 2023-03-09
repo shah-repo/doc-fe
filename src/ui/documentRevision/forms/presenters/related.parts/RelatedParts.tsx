@@ -184,7 +184,8 @@ const RelatedPartGrid: React.FunctionComponent<{
   };
 
   return useObserver(() => (
-    <div className={classes.partsGrid}>
+    <div className={classes.partsGrid}
+      data-cy="partsGrid">
       <div>
         <Grid className={classes.gridCenterAlign} container>
           <Grid item>
@@ -201,6 +202,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                     color="primary"
                     startIcon={<AddCircleIcon color="primary" />}
                     onClick={showEditRow}
+                    data-cy="add-related-part-btn"
                   >
                     <Text translation="relatedParts.button.addText"/>
                   </Button>
@@ -224,6 +226,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             variant="outlined"
             startIcon={<AddOutlinedIcon />}
             onClick={showEditRow}
+            data-cy="add-related-part-btn"
           >
             <Text translation="relatedParts.button.addText"/>
           </Button>
@@ -248,7 +251,7 @@ const RelatedPartList: React.FunctionComponent<{
   const classes = useStyles();
   return useObserver(() => (
     <div className={classes.fullWidth}>
-      <Table aria-label="related parts table">
+      <Table aria-label="related parts table" data-cy="related-parts-table">
         <TableHead className={classes.tableHeadHeight}>
           <TableRow>
             <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">
@@ -307,7 +310,9 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const titleCellRef = useRef<HTMLSpanElement>(null);
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
   return (
-    <TableRow hover key={listItem.documentRevisionId}>
+    <TableRow hover key={listItem.documentRevisionId}
+      data-cy="relatedPartsViewRow"
+    >
       <TableCell align="left" className={classes.relatedPartViewRowCell}>
         {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
       </TableCell>
@@ -343,7 +348,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           />
         )}
       </TableCell>
-      <TableCell align="center">
+      <TableCell align="center" data-cy="viewIcon">
         <RemoveRedEyeIcon color="primary"
           className={classes.viewIcon}
           onClick={(e) => viewRelatedPart(listItem.documentRevisionId, listItem.documentId)}></RemoveRedEyeIcon>
@@ -390,7 +395,9 @@ const RelatedPartEditRow: React.FunctionComponent<{
       <div className={cx(classes.editRowParentDiv, {
         [classes.editRowParentNormal]: !relatedPartsState.docIdErrorMsg,
         [classes.editRowParentError]: Boolean(relatedPartsState.docIdErrorMsg),
-      })}>
+      })}
+      data-cy="relatedPartsEditRow"
+      >
         <div className={classes.editRowChildDivOne}>
           <label >{documentRevision?.document?.docId} - </label>
           <TextField
@@ -402,6 +409,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             value={relatedPartDetails.docId}
             error = {Boolean(relatedPartsState.docIdErrorMsg)}
             helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
+            name="relatedPartDocId"
           />
         </div>
         <div
@@ -412,21 +420,27 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             value = {relatedPartDetails.name}
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
-              setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
+              setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}
+            name="relatedPartTitle"
+          />
         </div>
       </div>
-      {!relatedPartsState.docIdErrorMsg &&
-        <div className={classes.actionButtonParentDiv}>
-          <div className={classes.actionButtonChildDiv}>
-            <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
-              <ClearIcon className={classes.iconButton}/>
-            </Button>
-            <Button className={classes.actionButton} onClick = {confirmEdit}>
-              <DoneIcon className={classes.iconButton} />
-            </Button>
-          </div>
+      <div className={classes.actionButtonParentDiv}>
+        <div className={classes.actionButtonChildDiv}>
+          <Button
+            data-cy="cancelRelatedPartChildAddition"
+            className={classes.actionButton} onClick = {resetAndCancelEdit}>
+            <ClearIcon className={classes.iconButton}/>
+          </Button>
+          { !relatedPartsState.docIdErrorMsg &&
+          <Button
+            data-cy="confirmRelatedPartChildAddition"
+            className={classes.actionButton} onClick = {confirmEdit}>
+            <DoneIcon className={classes.iconButton} />
+          </Button>
+          }
         </div>
-      }
+      </div>
     </>
   ));
 };
@@ -466,6 +480,7 @@ const RelatedParts: React.FunctionComponent<{
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
             <FBButton label="relatedParts.button.addText"
+              dataCy="parentSeparate-addRelatedPartsBtn"
               onClick = {createNewDocument} />
           </Grid>
         )}
