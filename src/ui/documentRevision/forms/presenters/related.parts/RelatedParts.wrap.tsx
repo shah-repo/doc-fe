@@ -6,7 +6,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { toastSuccess } from "../../../../components/notifications";
@@ -80,19 +80,19 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
   const createPartAsync = useAsync({
-    onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
+    onSuccess: ({ createdRelatedPart }: any) => {
       setSubPartBeingAdded(false);
-      if (!createdDocumentRevision) {
+      if (!createdRelatedPart) {
         return;
       }
 
       if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
         // Show a toast
-        showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+        showSuccessToast(createdRelatedPart as RelatedPartsListItem, viewRelatedPart);
 
       } else if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
         // populate the list with the new added part
-        relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
+        relatedPartsState.addNewRelatedPart(createdRelatedPart);
         formik.submitForm();
         workspaceState?.saveDocRev();
       }
@@ -101,13 +101,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   });
 
   const showSuccessToast = (
-    docRevision: DocumentRevision,
+    relatedPartAdded: RelatedPartsListItem,
     viewRelatedPart: (docRevId: string, documentId: string) => void) => {
 
-    if (docRevision && docRevision.document) {
-      toastSuccess(<SuccessMsg docId={docRevision.document.docId}
-        viewRelatedPart={viewRelatedPart} documentRevisionId={docRevision.id}
-        documentId={docRevision.document.id}/>, {
+    if (relatedPartAdded) {
+      toastSuccess(<SuccessMsg docId={`${relatedPartAdded.rootDocId}-${relatedPartAdded.suffixNumber}`}
+        viewRelatedPart={viewRelatedPart} documentRevisionId={relatedPartAdded.documentRevisionId}
+        documentId={relatedPartAdded.documentId}/>, {
         closeButton: false,
       });
     }
@@ -124,30 +124,51 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-
+  // Fetch related parts list
   const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
   const fetchRelatedPartsAsync = useAsync({
     onSuccess: (relatedPartsList) => {
       relatedPartsState.setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
     },
   });
-
   const fetchRelatedParts = useCallback((documentRevisionId) => {
     fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentRevisionId, fetchRelatedPartsAsync);
   }, [fetchAllRelatedPartsAction, fetchRelatedPartsAsync]);
 
+  // Obsolete Related part
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({
-    onSuccess: ({ docRevId, name }: any) => {
-      relatedPartsState.updateRelatedPartsList(docRevId, name);
+    onSuccess: ({ docRevId, name, revisionChangeType }: any) => {
+      relatedPartsState.updateRelatedPartsList(docRevId, { name, revisionChangeType });
     },
   });
-
-  const voidRelatedPart = (listItem: RelatedPartsListItem) => {
-    voidRelatedPartAsync.start(voidRelatedPartAction, listItem.documentRevisionId, voidRelatedPartAsync);
+  const voidRelatedPart = (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => {
+    voidRelatedPartAsync.start(voidRelatedPartAction,
+      listItem.documentRevisionId, revisionChangeType, voidRelatedPartAsync);
   };
 
+  // Delete Related part
+  const removeRelatedPartAction = useActionCreator(relatedPartsActions.removeRelatedPart);
+  const removeRelatedPartAsync = useAsync({
+    onSuccess: ({ docRevId }: any) => relatedPartsState.filterRelatedPartsList(docRevId),
+  });
+  const handleRemove = (docRevId: string) => {
+    removeRelatedPartAsync.start(removeRelatedPartAction, docRevId, removeRelatedPartAsync);
+  };
 
+  // Update Related part
+  const updateRelatedPartAction = useActionCreator(relatedPartsActions.updateRelatedPart);
+  const updateRelatedPartAsync = useAsync({
+    onSuccess: ({ docRevId, suffixNumber, suffixName, rootDocId }: any) => {
+      relatedPartsState.updateRelatedPartsList(docRevId, { suffixNumber, suffixName, rootDocId });
+    },
+  });
+  const handleUpdate = (docRevId: string, suffixNumber: string, suffixName: string) => {
+    const data = { suffixNumber, suffixName };
+    updateRelatedPartAsync.start(updateRelatedPartAction, docRevId, data, updateRelatedPartAsync);
+  };
+
+  // Creating Related part
   const createNewDocument = (relatedPartDetails?) => {
     if (isSubPartBeingAdded) {
       return;
@@ -216,14 +237,19 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
 
   return useObserver(() => (
-    <RelatedParts documentRevision={documentRevision}
+    <RelatedParts
       parentStatus = {parentPartStatus}
       parentStatusChanged = {parentPartStatusChanged}
-      createNewDocument = {createNewDocument}
-      viewRelatedPart = {viewRelatedPart}
-      fetchRelatedParts = {fetchRelatedParts}
-      voidRelatedPart = {voidRelatedPart}
-      relatedPartsState = {relatedPartsState}
+      {...{
+        documentRevision,
+        createNewDocument,
+        viewRelatedPart,
+        handleRemove,
+        handleUpdate,
+        fetchRelatedParts,
+        voidRelatedPart,
+        relatedPartsState,
+      }}
     />
   ));
 };

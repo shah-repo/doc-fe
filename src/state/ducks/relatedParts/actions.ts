@@ -1,8 +1,8 @@
 import { apiAction } from "../../factories";
 import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
-import { DocumentRevision, DocumentRevisionEditRequestBody } from "../documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
-import { RelatedPartsChoiceRequestBody } from "./types";
+import { RelatedPartsChoiceRequestBody, RelatedPartsListItem } from "./types";
 
 
 const createRelatedPart =
@@ -11,8 +11,8 @@ const createRelatedPart =
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}/${parentDocumentRevisionId}/child`,
     method: "post",
     data: body,
-    onSuccess: (document) => {
-      async.successHandler?.callback({ createdDocumentRevision: document, suffixName });
+    onSuccess: (createdRelatedPart: RelatedPartsListItem) => {
+      async.successHandler?.callback({ createdRelatedPart });
     },
   });
 
@@ -37,13 +37,46 @@ const fetchAllRelatedParts =
   });
 
 const voidRelatedPart =
-  (documentRevisionId: string, async) => apiAction({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/void/${documentRevisionId}`,
+  (documentRevisionId: string, revisionChangeType: RevisionChangeType, async) => apiAction({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${documentRevisionId}`,
     method: "patch",
+    data: { revisionChangeType },
     onSuccess: (documentRevision: DocumentRevision) => {
-      async.successHandler?.callback({ docRevId: documentRevisionId, name: documentRevision.name });
+      async.successHandler?.callback(
+        {
+          docRevId: documentRevisionId,
+          name: documentRevision.name,
+          revisionChangeType: documentRevision.revisionChangeType,
+        });
     },
   });
+
+const removeRelatedPart = (docRevId: string, async) => apiAction({
+  url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
+  method: "delete",
+  onSuccess() {
+    if (async.successHandler?.callback) {
+      async.successHandler?.callback({ docRevId });
+    }
+  },
+});
+
+const updateRelatedPart = (docRevId: string, data, async) => apiAction({
+  url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
+  method: "patch",
+  data,
+  onSuccess( relatedPart: RelatedPartsListItem) {
+    if (async.successHandler?.callback) {
+      async.successHandler?.callback(
+        {
+          docRevId,
+          suffixNumber: relatedPart.suffixNumber,
+          suffixName: relatedPart.suffixName,
+          rootDocId: relatedPart.rootDocId,
+        });
+    }
+  },
+});
 
 
 export default {
@@ -51,4 +84,6 @@ export default {
   parentPartChoiceAction,
   fetchAllRelatedParts,
   voidRelatedPart,
+  removeRelatedPart,
+  updateRelatedPart,
 };

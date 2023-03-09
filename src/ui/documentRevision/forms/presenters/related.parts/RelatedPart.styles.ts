@@ -52,9 +52,27 @@ export default makeStyles((theme) =>
     },
     partsGrid: {
       marginBottom: theme.spacing(1.5),
+      marginTop: theme.spacing(1),
     },
     btnMargin: {
       marginRight: 0,
+    },
+    OBS: {
+      fontWeight: 600,
+      fontSize: "14px",
+      textTransform: "capitalize",
+      color: Colors.latest_red_varient,
+    },
+    buttonGroup: {
+      display: "flex",
+      alignItems: "center",
+      textAlign: "right",
+      fontSize: "12px",
+      cursor: "pointer",
+    },
+    filterOptions: {
+      fontSize: "14px",
+      marginLeft: theme.spacing(1.5),
     },
     dividerStyle: {
       margin: theme.spacing(0, 0, 1.5, 0),
@@ -63,7 +81,6 @@ export default makeStyles((theme) =>
       display: "flex",
       width: "100%",
       alignItems: "flex-start",
-      borderRadius: theme.spacing(0, 0, .5, .5),
     },
     editRowParentNormal: {
       border: "1px solid",
@@ -100,19 +117,22 @@ export default makeStyles((theme) =>
     normalFontWeight: {
       fontWeight: "normal",
     },
+    boldFontWeight: {
+      fontWeight: 600,
+    },
     actionButtonParentDiv: {
       width: "100%",
       position: "relative",
-      marginBottom: theme.spacing(2.5),
+      marginBottom: theme.spacing(.25),
     },
     actionButtonChildDiv: {
-      width: "100px",
       backgroundColor: Colors.dodger_blue,
       position: "absolute",
       right: 0,
       borderRadius: theme.spacing(0, 0, .5, .5),
       display: "flex",
       justifyContent: "center",
+      zIndex: 21,
     },
     actionButton: {
       backgroundColor: Colors.white,
@@ -124,7 +144,13 @@ export default makeStyles((theme) =>
       "fontSize": "16px",
       "fill": "#000",
       "&:hover": {
-        color: Colors.blue,
+        fill: Colors.white,
+      },
+    },
+    deleteIconButton: {
+      "fontSize": "16px",
+      "&:hover": {
+        fill: Colors.white,
       },
     },
     viewIcon: {
@@ -133,12 +159,17 @@ export default makeStyles((theme) =>
       fontSize: "1.2rem",
       cursor: "pointer",
     },
-    tableHeadHeight: {
+    tableHead: {
       height: "40px",
-    },
-    tableCell: {
+
+      display: "flex",
+      alignItems: "center",
+
       backgroundColor: Colors.alice_blue,
-      color: "rgb(8, 11, 17)",
+      color: Colors.almost_black,
+
+      fontSize: "12px",
+      fontWeight: "bold",
     },
     tableCellOne: {
       width: "30%",
@@ -150,6 +181,8 @@ export default makeStyles((theme) =>
     },
     tableCellThree: {
       width: "15%",
+      position: "relative",
+      textAlign: "center",
     },
     tableCellFour: {
       width: "10%",
@@ -190,8 +223,33 @@ export default makeStyles((theme) =>
       "-webkit-box-orient": "vertical",
       "overflow": "hidden",
     },
+    itemRow: {
+      "display": "flex",
+      "alignItems": "center",
+      "width": "100%",
+      "minHeight": "48px",
+
+      "borderBottom": `1px solid ${Colors.platinum_grey}`,
+      "&:last-child": {
+        borderBottom: "1px solid transparent",
+      },
+
+      "cursor": "pointer",
+
+      "backgroundColor": Colors.white,
+      "&:hover": {
+        backgroundColor: Colors.lightest_grey,
+      },
+    },
     relatedPartViewRowCell: {
       paddingLeft: theme.spacing(1.25),
+    },
+    relatedPartEyeRowCell: {
+      textAlign: "right",
+      paddingRight: theme.spacing(1.25),
+    },
+    voidedBackground: {
+      backgroundColor: Colors.light_red,
     },
   })
 );
