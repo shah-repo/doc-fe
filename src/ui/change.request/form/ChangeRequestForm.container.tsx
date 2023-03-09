@@ -50,10 +50,10 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   const calcInitialValues = useMemo(() => {
-    initialValues.formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
+    const formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
 
     return {
-      ...initialValues,
+      ...initialValues, formInput,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues, FBDataStore?.refreshData]);

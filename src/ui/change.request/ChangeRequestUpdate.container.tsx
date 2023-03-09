@@ -13,6 +13,7 @@ import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
 import ChangeRequestSummaryContainer from "./summary/container";
@@ -50,6 +51,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
       setDoNotPrompt(true);
+      FBDataStore.setRefreshData(undefined);
       loadAudit(changeRequest.id);
     },
   });
