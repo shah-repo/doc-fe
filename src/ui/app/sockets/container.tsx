@@ -1,5 +1,4 @@
 import React from "react";
-import ApproverReleaseSockets from "./ApproverReleaseSockets";
 import ChangeRequestListSockets from "./ChangeRequestListSockets";
 import DocumentTypeSockets from "./DocumentTypeSockets";
 import EmployeeListSockets from "./EmployeeListSockets";
@@ -11,7 +10,6 @@ const SocketsContainer: React.FunctionComponent = () => (
     <EmployeeListSockets />
     <GroupsListSockets />
     <DocumentTypeSockets />
-    <ApproverReleaseSockets />
   </>
 );
 
