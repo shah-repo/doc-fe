@@ -1,7 +1,7 @@
-import { get, set } from "lodash";
-import { action, observable } from "mobx";
+import { set } from "lodash";
+import { action, computed, observable } from "mobx";
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
-import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
+import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 import { Translation } from "../../../../translations/types";
 
 class RelatedPartsState {
@@ -15,37 +15,50 @@ class RelatedPartsState {
   @observable viewOnlyMode = false;
   @observable loadingState = false;
   @observable docIdErrorMsg: string | Translation = "";
+  @observable listItemBeingEdited: ListItemEdited = {
+    docRevId: "",
+  };
+
+  @observable showOnlyActiveSubParts = false;
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
   }
 
-  @action updateRelatedPartsList(docRevId: string, name: string) {
+  @action updateRelatedPartsList(docRevId: string, data: ListItemUpdateData) {
     this.relatedPartsList = this.relatedPartsList.map(
       (item) => {
         if (item.documentRevisionId === docRevId) {
-          item.status = DocumentRevisionStatus.Voided;
-          item.name = name;
+          return { ...item, ...data };
         }
         return item;
       }
     );
+    this.clearListItemBeingEdited();
   }
 
-  @action addNewRelatedPart(createdDocumentRevision, suffixName) {
-    const newRelatedPart = {
-      documentId: get(createdDocumentRevision, "documentId"),
-      rootDocId: get(createdDocumentRevision, "document.docId"),
-      name: get(createdDocumentRevision, "name"),
-      documentRevisionId: get(createdDocumentRevision, "id"),
-      status: get(createdDocumentRevision, "displayStatus"),
-      suffixName,
-    };
-
-    this.relatedPartsList.push(newRelatedPart);
+  @action filterRelatedPartsList(docRevId: string) {
+    this.relatedPartsList = this.relatedPartsList.filter((item) => item.documentRevisionId !== docRevId);
   }
 
-  @action validateDocId(parentPartDocId, userEnteredDocIdPortion) {
+  @action setShowOnlyActiveSubParts(showOnlyActiveSubParts: boolean) {
+    this.showOnlyActiveSubParts = showOnlyActiveSubParts;
+  }
+
+  @computed get relatedSubParts() {
+    if (this.showOnlyActiveSubParts) {
+      return this.relatedPartsList.filter((part) =>
+        ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status)
+      );
+    }
+    return this.relatedPartsList;
+  }
+
+  @action addNewRelatedPart(createdRelatedPart: RelatedPartsListItem) {
+    this.relatedPartsList.push(createdRelatedPart);
+  }
+
+  @action validateDocId(parentPartDocId, userEnteredDocIdPortion, skipId = "") {
     this.docIdErrorMsg = "";
 
     if (!userEnteredDocIdPortion) {
@@ -58,10 +71,11 @@ class RelatedPartsState {
       this.docIdErrorMsg = "relatedParts.docId.onlyNumbers.msg";
 
     } else {
-      const docIdExists = this.relatedPartsList.filter(
-        (listItem: RelatedPartsListItem) => listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}`)
-        .length > 0;
-      if (docIdExists) {
+      const filteredList = this.relatedPartsList.filter(
+        (listItem: RelatedPartsListItem) =>
+          listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}` && userEnteredDocIdPortion !== skipId);
+
+      if (filteredList.length > 0) {
         this.docIdErrorMsg = "relatedParts.docId.exists.msg";
       }
     }
@@ -75,6 +89,21 @@ class RelatedPartsState {
 
   @action setLoadingState(isVisible = false) {
     set(this, "loadingState", isVisible);
+  }
+
+  @action setListItemBeingEdited(listItem: RelatedPartsListItem) {
+    this.listItemBeingEdited = {
+      docRevId: listItem.documentRevisionId,
+      docId: listItem.suffixNumber as unknown as string,
+      name: listItem.suffixName,
+      version: listItem.version,
+    };
+  }
+
+  @action clearListItemBeingEdited() {
+    this.listItemBeingEdited = {
+      docRevId: "",
+    };
   }
 }
 

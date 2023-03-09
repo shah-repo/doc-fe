@@ -2,7 +2,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import cx from "classnames";
 import React, { useEffect, useState } from "react";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "../../../state/ducks/relatedParts/constants";
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
 import { FBAutocompleteAsyncOption } from "../../form.builder";
@@ -14,6 +14,8 @@ import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndD
 
 import { Link } from "react-router-dom";
 import { documentVersionPath } from "../../document.revision/utils/paths";
+
+import InfoIcon from "@material-ui/icons/Info";
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -34,7 +36,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
-  const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string; documentId: string}[]>([]);
+  const [docRelatedParts, setDocRelatedParts] =
+    useState<{revId: string; titleText: string; documentId: string; revisionChangeType?: RevisionChangeType}[]>([]);
   const [isExpanded, setExpanded] = useState(false);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
@@ -50,13 +53,15 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     const relatedPartsResponse: RelatedPartsListItem[] = await documentDetailsApi.fetch();
     if (relatedPartsResponse.length > 0) {
       const childrenDetails = relatedPartsResponse
-        .filter((part: RelatedPartsListItem) => part.status !== DocumentRevisionStatus.Voided)
+        .filter((part: RelatedPartsListItem) =>
+          ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status))
         .filter((part: RelatedPartsListItem) => part.relatedStatus !== RELATED_PARTS_STATUS.RELATED_SEPARATE)
         .map((part: RelatedPartsListItem) => (
           {
             revId: part.documentRevisionId,
             documentId: part.documentId,
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
+            revisionChangeType: part.revisionChangeType,
           }
         ));
       setDocRelatedParts(childrenDetails);
@@ -143,6 +148,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
                   >
                     {part.titleText}
                   </Link>
+                  {
+                    part.revisionChangeType === RevisionChangeType.Obsolete
+                     && <InfoIcon color="secondary" />
+                  }
                 </li>
               ))
             }
