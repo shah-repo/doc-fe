@@ -41,12 +41,11 @@ const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
               id="UpgradeToLatest-upgrade"
             >
               <Text translation="common.upgrade" />
-            </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+            </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
               <StyledMenuListIcon><UpgradeToLatestIcon/></StyledMenuListIcon>
               <StyledMenuListItemText
                 id="UpgradeToLatest-upgrade"
                 primary={<Text translation="common.upgrade" />}
-                onClick={dialog.open}
               />
             </StyledMenuListItem>
           ) : (
