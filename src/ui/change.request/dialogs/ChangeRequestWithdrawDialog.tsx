@@ -49,7 +49,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
         id="OwnerChangerPresenter-changeOwner" onClick={dialog.open}>
         <Text message={label} />
       </StyledButton> :
-        <StyledMenuListItem button alignItems="flex-start">
+        <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
           <StyledMenuListIcon>
             <WithdrawSubmissionIcon />
           </StyledMenuListIcon>
@@ -57,7 +57,6 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
             id="OwnerChangerPresenter-changeOwner"
             data-cy="change.request.withdraw.alert"
             primary={<Text message={label} />}
-            onClick={dialog.open}
           />
         </StyledMenuListItem>
       ) : (

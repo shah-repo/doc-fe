@@ -120,7 +120,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
         </Button>
       )}
       {!renderAsButton && isNewLayout && (
-        <StyledMenuListItem button alignItems="flex-start">
+        <StyledMenuListItem button alignItems="flex-start" onClick={openDialog}>
           <StyledMenuListIcon>
             <ChangeOwnerIcon />
           </StyledMenuListIcon>
@@ -128,7 +128,6 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
             id="OwnerChangerPresenter-changeOwner"
             data-cy="changeOwner"
             primary={<Text translation="change.owner" />}
-            onClick={openDialog}
           />
         </StyledMenuListItem>
       )}

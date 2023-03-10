@@ -61,14 +61,13 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     button = renderAsButton
       ? null
       : (
-        <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
+        <StyledMenuListItem disabled={isActive} button alignItems="flex-start" onClick={handleClick}>
           <StyledMenuListIcon>
             {isPO ? <ViewPDFIcon /> : <DownloadHTMLIcon/>}
           </StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="downloadHtml"
             primary={<Text translation={ isPO ?  "common.view.pdf" : "common.download.html"} />}
-            onClick={handleClick}
           />
         </StyledMenuListItem>
       );
