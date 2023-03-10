@@ -39,7 +39,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 
   if (isNewLayout) {
     if (!renderAsButton) {
-      return (<StyledMenuListItem button alignItems="flex-start" onClick={() => handleAREmail()}>
+      return (<StyledMenuListItem button alignItems="flex-start" onClick={handleAREmail}>
         <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="exportToEmail"
@@ -53,7 +53,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         color="primary"
         style={{ margin: 0 }}
         data-cy="exportToEmail"
-        onClick={() => handleAREmail()}
+        onClick={handleAREmail}
       >
         <Text translation="common.send.to.email" />
       </StyledButton>
