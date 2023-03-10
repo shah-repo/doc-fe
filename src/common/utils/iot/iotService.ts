@@ -17,7 +17,7 @@ interface AwsMqttClient {
   _resubscribeTopics: any;
   subscribe: (topic: string) => Promise<void>;
   unsubscribe: (topic: any) => Promise<void>;
-  end: () => void;
+  end: (force?: boolean, cb?: () => void) => this;
 }
 
 interface IAwsMqttClient {
@@ -35,6 +35,8 @@ interface IAwsMqttClient {
 }
 
 type NotifType = (...args: any) => void;
+
+const REINITIALIZE_TIMEOUT = 5000;
 
 export class IotService {
   public static getInstance(): IotService {
@@ -61,6 +63,22 @@ export class IotService {
     if (this.mqttClientInstance) {
       this.mqttClientInstance.end();
     }
+  }
+
+  public reinitialize() {
+    loggerDebug("(createMqttClient) reinitialize connection");
+
+    if (!this.mqttClientInstance) {
+      return this.updateMqttClient(this.credentialsMqtt);
+    }
+
+    return new Promise((resolve, reject) => {
+      this.mqttClientInstance.end(true, () => {
+        this.updateMqttClient(this.credentialsMqtt)
+          .then(resolve)
+          .catch(reject);
+      });
+    });
   }
 
   public async subscribeToTopic(topic: string, notif: NotifType): Promise<any> {
@@ -143,6 +161,13 @@ export class IotService {
 
     this.mqttClientInstance.on("offline", () => {
       loggerDebug("(createMqttClient) on offline");
+
+      setTimeout(
+        () => {
+          this.reinitialize();
+        },
+        REINITIALIZE_TIMEOUT,
+      );
     });
 
     this.mqttClientInstance.on("disconnect", (packet) => {
