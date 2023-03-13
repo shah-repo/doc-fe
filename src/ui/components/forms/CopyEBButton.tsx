@@ -40,12 +40,11 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   const getUpdatedButton = () => {
     if (isNewLayout) {
       if (!renderAsButton) {
-        return (<StyledMenuListItem button alignItems="flex-start">
+        return (<StyledMenuListItem button alignItems="flex-start" onClick={openCloneModel}>
           <StyledMenuListIcon><CloneIcon/></StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="CloneEBButton"
             primary={<Text translation="documentRevision.clone.eb" />}
-            onClick={openCloneModel}
           />
         </StyledMenuListItem>);
       }

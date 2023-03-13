@@ -162,13 +162,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             >
               <Text message={reviseLabel} />
             </StyledButton> :
-              <StyledMenuListItem button alignItems="flex-start">
+              <StyledMenuListItem button alignItems="flex-start" onClick={cloneDocument}>
                 <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
                   data-cy="updateRecord"
                   primary={<Text message={reviseLabel} />}
-                  onClick={cloneDocument}
                 />
               </StyledMenuListItem>
           ) : (
@@ -200,7 +199,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 <Text message={updateLabel} />
               </StyledButton>
             ) : (
-              <StyledMenuListItem button alignItems="flex-start">
+              <StyledMenuListItem button alignItems="flex-start" onClick={cloneDocument}>
                 <StyledMenuListIcon>
                   <WithDrawSubmissionIcon />
                 </StyledMenuListIcon>
@@ -208,7 +207,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                   id="PreviewControlsContainer-revise"
                   data-cy="updateRecord"
                   primary={<Text message={updateLabel} />}
-                  onClick={cloneDocument}
+
                 />
               </StyledMenuListItem>
             )
@@ -243,12 +242,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={"common.create.new"} />
-        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={cloneOutputDocument}>
           <StyledMenuListItemText
             id="PreviewControlsContainer-createNew"
             data-cy="PreviewControlsContainer-createNew"
             primary={<Text translation="common.create.new" />}
-            onClick={cloneOutputDocument}
+
           />
         </StyledMenuListItem>
       ) : (
@@ -335,12 +334,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       data-cy="document.revision.withdraw.alert"
     >
       <Text translation="changeRequest.transition.withdrawn" />
-    </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
       <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
       <StyledMenuListItemText
         data-cy="document.revision.withdraw.alert"
         primary={<Text translation="changeRequest.transition.withdrawn" />}
-        onClick={dialog.open}
       />
     </StyledMenuListItem>}
     <AlertDialog
@@ -358,12 +356,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       data-cy="PreviewControlsContainer-access"
     >
       <Text translation="document.request.access" />
-    </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={onSubmit}>
       <StyledMenuListItemText
         id="PreviewControlsContainer-access"
         data-cy="PreviewControlsContainer-access"
         primary={<Text translation="document.request.access" />}
-        onClick={onSubmit}
       />
     </StyledMenuListItem>
   );

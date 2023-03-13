@@ -59,6 +59,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
           button
           disabled={async.asyncState.status === AsyncStatus.Active}
           alignItems="flex-start"
+          onClick={dialog.open}
         >
           <StyledMenuListIcon>
             <VoidDocumentIcon />
@@ -67,7 +68,6 @@ const VoidButton: React.FunctionComponent<Props> = ({
             id="void-button"
             data-cy="void-button"
             primary={<Text translation="common.void" />}
-            onClick={dialog.open}
           />
         </StyledMenuListItem>
       ) : (
