@@ -9,27 +9,22 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-
-import cx from "classnames";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
-import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
-import { FBButton } from "../../../../form.builder";
-
-
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
-
-import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash-can 2.svg";
-
+import cx from "classnames";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash-can 2.svg";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
+import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
+import { FBButton } from "../../../../form.builder";
 import useDialog from "../../../../hooks/useDialog";
 import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
 import useStyles from "./RelatedPart.styles";
@@ -208,8 +203,9 @@ const RelatedPartGrid: React.FunctionComponent<{
                   <Button
                     className={classes.btnMargin}
                     color="primary"
-                    startIcon={<AddCircleIcon color="primary" />}
+                    startIcon={<AddCircleIcon color={isReleased ? COLOR_TYPES.DISABLED : COLOR_TYPES.PRIMARY} />}
                     onClick={showEditRow}
+                    disabled={isReleased}
                     data-cy="add-related-part-btn"
                   >
                     <Text translation="relatedParts.button.addText"/>
