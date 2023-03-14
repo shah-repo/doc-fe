@@ -15,7 +15,7 @@ const baseTheme = createTheme({
   shape,
 });
 
-const theme = createTheme({
+export const themeNext = createTheme({
   ...baseTheme,
   overrides: overrides(baseTheme),
   props: props(baseTheme),
@@ -24,7 +24,7 @@ const theme = createTheme({
 const Theme: React.FC = ({
   children,
 }) => (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={themeNext}>
     {/* TODO Add ScopedCssBaseline here after upgrading MUI */}
     {children}
   </ThemeProvider>

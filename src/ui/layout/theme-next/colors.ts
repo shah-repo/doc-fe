@@ -4,7 +4,7 @@ enum Colors {
   textBlack="#080B11",
   textGray="#767B87",
   textDisabled="#9A9FAB",
-  btnDisabled="#ABB0BA",
+  buttonDisabled="#ABB0BA",
   stroke="#D3D5DB",
   hover="#EBEFF7",
   background="#F9FBFF",
@@ -12,14 +12,16 @@ enum Colors {
 
   // Primary
   primary="#011FBB",
+  primaryBg="#EDF3FF",
   primaryDark="#011994",
   primaryLight="#4D88FF",
-  primaryBg="#EDF3FF",
+  primaryGradient="#4C69FF",
   primaryHighlight="#F5F8FF",
 
   // Secondary
   secondary="#01A6C7",
   secondaryBg="#E6F6F9",
+  secondaryLight="#E1E7F2",
   secondaryHighlight="#F2FBFC",
 
   // Success
@@ -36,6 +38,7 @@ enum Colors {
 
   // Shades
   white="#FFF",
+  whiteDimmed="rgba(255, 255, 255, .5)",
   gray="#F9F9F9",
   black="#000",
 

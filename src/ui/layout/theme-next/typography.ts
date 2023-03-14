@@ -39,26 +39,32 @@ const typography = (): TypographyOptions => ({
   h5: {
     fontSize: ".875rem",
     lineHeight: 1.25,
+    fontWeight: 600,
   },
   h6: {
     fontSize: ".75rem",
     lineHeight: 1.25,
+    fontWeight: 600,
   },
   subtitle1: {
     fontSize: ".875rem",
     lineHeight: 1.25,
+    fontWeight: 400,
   },
   subtitle2: {
     fontSize: ".75rem",
     lineHeight: 1.25,
+    fontWeight: 400,
   },
   caption: {
-    fontSize: ".625rem",
+    fontSize: ".875rem",
     lineHeight: 1.25,
+    fontWeight: 600,
   },
   overline: {
     fontSize: ".625rem",
     lineHeight: 1.25,
+    fontWeight: 600,
   },
   button: {
     fontSize: ".75rem",
