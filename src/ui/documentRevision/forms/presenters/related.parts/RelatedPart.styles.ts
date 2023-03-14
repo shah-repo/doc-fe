@@ -40,6 +40,7 @@ export default makeStyles((theme) =>
     },
     customTooltip: {
       backgroundColor: Colors.black,
+      whiteSpace: "pre-wrap",
     },
     customArrow: {
       color: Colors.black,
@@ -154,10 +155,12 @@ export default makeStyles((theme) =>
       },
     },
     viewIcon: {
-      fill: Colors.cerulean,
-      marginTop: theme.spacing(.5),
-      fontSize: "1.2rem",
-      cursor: "pointer",
+      "marginTop": theme.spacing(.5),
+      "fontSize": "1.2rem",
+      "cursor": "pointer",
+      "&:hover": {
+        fill: Colors.black,
+      },
     },
     tableHead: {
       height: "40px",
@@ -228,18 +231,12 @@ export default makeStyles((theme) =>
       "alignItems": "center",
       "width": "100%",
       "minHeight": "48px",
-
       "borderBottom": `1px solid ${Colors.platinum_grey}`,
       "&:last-child": {
         borderBottom: "1px solid transparent",
       },
-
       "cursor": "pointer",
-
       "backgroundColor": Colors.white,
-      "&:hover": {
-        backgroundColor: Colors.lightest_grey,
-      },
     },
     relatedPartViewRowCell: {
       paddingLeft: theme.spacing(1.25),

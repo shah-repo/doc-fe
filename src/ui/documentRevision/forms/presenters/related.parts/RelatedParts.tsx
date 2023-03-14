@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Checkbox,
   Divider,
@@ -7,14 +8,14 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
-import { FBButton } from "../../../../form.builder";
+import { FBButton, FBTooltip } from "../../../../form.builder";
 
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -22,7 +23,12 @@ import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
-import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
+// import RemoveRedEyeOutlinedIcon from "@material-ui/icons/RemoveRedEyeOutlined";
+import { ReactComponent as EmptyIcon } from "../../../../../assets/images/view.svg";
+import { ReactComponent as SolidIcon } from "../../../../../assets/images/view_solid.svg";
+
+// /home/infinity/enlil/doc-fe/src/assets/images/view_solid.svg
+
 
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash-can 2.svg";
 
@@ -353,6 +359,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   relatedPartsState,
 }) => {
   const classes = useStyles();
+  const [isHover, setIsHover] = useState(false);
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
   || listItem.status === DocumentRevisionStatus.Voided;
 
@@ -414,15 +421,18 @@ const RelatedPartViewRow: React.FunctionComponent<{
             {
               isStatusObsolete ?
                 <span className={classes.OBS}>OBS</span>
-                :
-                <Checkbox
-                  checked = {isVoided || isRevChangeTypeObs}
-                  disabled={relatedPartsState.viewOnlyMode}
-                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    e.stopPropagation();
-                    openConfirmDialog();
-                  }}
-                />
+                : <FBTooltip title="relatedParts.checkbox.hoverMSG" placement="top" arrow
+                  classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+                >
+                  <Checkbox
+                    checked = {isVoided || isRevChangeTypeObs}
+                    disabled={relatedPartsState.viewOnlyMode}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => {
+                      e.stopPropagation();
+                      openConfirmDialog();
+                    }}
+                  />
+                </FBTooltip>
             }
             {confirmationDialog.isOpen && (
               <AlertDialog
@@ -435,14 +445,30 @@ const RelatedPartViewRow: React.FunctionComponent<{
           </>
         }
       </div>
-      <div className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon">
-        <RemoveRedEyeIcon color="primary"
-          className={classes.viewIcon}
-          onClick={(e: React.MouseEvent<SVGElement>) => {
-            e.stopPropagation();
-            viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-          }}></RemoveRedEyeIcon>
-      </div>
+      <Box className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon">
+        <Box onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}>
+          <FBTooltip title="relatedParts.created.modal.quickView" placement="top" arrow
+            classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          >
+            {
+              isHover
+                ? <SolidIcon
+                  className={classes.viewIcon}
+                  onClick={(e: React.MouseEvent<SVGElement>) => {
+                    e.stopPropagation();
+                    viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
+                  }}></SolidIcon>
+                : <EmptyIcon
+                  className={classes.viewIcon}
+                  onClick={(e: React.MouseEvent<SVGElement>) => {
+                    e.stopPropagation();
+                    viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
+                  }}></EmptyIcon>
+            }
+          </FBTooltip>
+        </Box>
+      </Box>
     </div>
   );
 };
