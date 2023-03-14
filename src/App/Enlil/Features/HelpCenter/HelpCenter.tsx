@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as HelpIcon } from "../../../../assets/images/help-md.svg";
 import useDialog from "../../../../ui/hooks/useDialog";
-import Theme from "../../../../ui/layout/theme-next";
+import { withThemeNext } from "../../../../ui/layout/theme-next";
 import HelpCenterContent from "./components/HelpCenterContent/HelpCenterContent";
 import HelpCenterNavigation from "./components/HelpCenterNavigation/HelpCenterNavigation";
 import en from "./data/content-en";
@@ -48,7 +48,7 @@ const HelpCenter: React.FC<Props> = ({ persistent }) => {
   }, [persistent, contentDialog, currentModule, previousModule]);
 
   return (
-    <Theme>
+    <>
       <IconButton color="inherit" size="small" onClick={openMenu} data-cy="help-center.opener">
         <HelpIcon />
       </IconButton>
@@ -65,8 +65,8 @@ const HelpCenter: React.FC<Props> = ({ persistent }) => {
           handleCloseDialog={contentDialog.close}
         />
       )}
-    </Theme>
+    </>
   );
 };
 
-export default HelpCenter;
+export default withThemeNext(HelpCenter);
