@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import * as Yup from "yup";
 import { Translation } from "../../../../translations/types";
 
@@ -43,7 +43,7 @@ export const emailSchema = Yup.string()
 export const requiredSchema = Yup.string()
   .required("validators.required");
 
-export const validator = (...validators: Validator[]): Validator => (value: any): Translation | undefined => {
+const validatorFactory = (...validators: Validator[]): Validator => (value: any): Translation | undefined => {
   for (const validatorFn of validators) {
     const error = validatorFn(value);
 
@@ -52,6 +52,30 @@ export const validator = (...validators: Validator[]): Validator => (value: any)
     }
   }
 };
+
+export const validator = (() => {
+  const memo: {
+    validators: Validator[];
+    finalValidator: Validator;
+  }[] = [];
+
+  return (...validators: Validator[]): Validator => {
+    const memoValidator = memo.find((el) => isEqual(el.validators, validators));
+
+    if (memoValidator) {
+      return memoValidator.finalValidator;
+    }
+
+    const newValidator = {
+      validators,
+      finalValidator: validatorFactory(...validators),
+    };
+
+    memo.push(newValidator);
+
+    return newValidator.finalValidator;
+  };
+})();
 
 export const timeTravelValidator = Yup.object().shape({
   year: Yup.string()
