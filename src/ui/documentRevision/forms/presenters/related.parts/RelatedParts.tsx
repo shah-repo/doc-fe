@@ -8,7 +8,7 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -24,8 +24,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 // import RemoveRedEyeOutlinedIcon from "@material-ui/icons/RemoveRedEyeOutlined";
-import { ReactComponent as EmptyIcon } from "../../../../../assets/images/view.svg";
-import { ReactComponent as SolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { ReactComponent as EmptyIcon } from "../../../../../assets/images/eye-fa1.svg";
+import { ReactComponent as SolidIcon } from "../../../../../assets/images/eye-fa2.svg";
 
 // /home/infinity/enlil/doc-fe/src/assets/images/view_solid.svg
 
