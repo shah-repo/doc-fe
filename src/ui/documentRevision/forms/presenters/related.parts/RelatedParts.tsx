@@ -24,8 +24,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
 // import RemoveRedEyeOutlinedIcon from "@material-ui/icons/RemoveRedEyeOutlined";
-import { ReactComponent as EmptyIcon } from "../../../../../assets/images/eye-fa1.svg";
-import { ReactComponent as SolidIcon } from "../../../../../assets/images/eye-fa2.svg";
+import { ReactComponent as EmptyEyeIcon } from "../../../../../assets/images/eye-fa1.svg";
+import { ReactComponent as SolidEyeIcon } from "../../../../../assets/images/eye-fa2.svg";
 
 // /home/infinity/enlil/doc-fe/src/assets/images/view_solid.svg
 
@@ -453,18 +453,18 @@ const RelatedPartViewRow: React.FunctionComponent<{
           >
             {
               isHover
-                ? <SolidIcon
+                ? <SolidEyeIcon
                   className={classes.viewIcon}
                   onClick={(e: React.MouseEvent<SVGElement>) => {
                     e.stopPropagation();
                     viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-                  }}></SolidIcon>
-                : <EmptyIcon
+                  }}></SolidEyeIcon>
+                : <EmptyEyeIcon
                   className={classes.viewIcon}
                   onClick={(e: React.MouseEvent<SVGElement>) => {
                     e.stopPropagation();
                     viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-                  }}></EmptyIcon>
+                  }}></EmptyEyeIcon>
             }
           </FBTooltip>
         </Box>
