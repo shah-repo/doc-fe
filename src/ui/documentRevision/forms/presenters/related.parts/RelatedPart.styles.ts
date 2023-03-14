@@ -159,7 +159,7 @@ export default makeStyles((theme) =>
       "fontSize": "1.2rem",
       "cursor": "pointer",
       "&:hover": {
-        fill: Colors.black,
+        fill: Colors.mirage,
       },
     },
     tableHead: {
