@@ -48,9 +48,9 @@ const HelpCenter: React.FC<Props> = ({ persistent }) => {
   }, [persistent, contentDialog, currentModule, previousModule]);
 
   return (
+    <>
       <IconButton color="inherit" size="small" onClick={openMenu} data-cy="help-center.opener">
         <HelpIcon />
-    <>
       </IconButton>
       <HelpCenterNavigation
         anchorEl={anchorEl}
