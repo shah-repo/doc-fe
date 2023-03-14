@@ -1,9 +1,9 @@
-import moment from "moment";
+import moment, { MomentInput } from "moment";
 import "moment-timezone";
 
 export const TIME_ZONE = "America/Los_Angeles";
 
-type DateTypes = Date | string | number | undefined;
+type DateTypes = MomentInput | Date | string | number | undefined;
 
 export const getStartOfDayDateString = (date: DateTypes, format = "") =>
   moment(date).tz(TIME_ZONE).startOf("day").format(format);
