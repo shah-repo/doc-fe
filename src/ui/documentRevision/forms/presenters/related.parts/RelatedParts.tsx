@@ -19,7 +19,6 @@ import { FBButton, FBTooltip } from "../../../../form.builder";
 
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
@@ -247,15 +246,20 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Divider className={classes.dividerStyle} />
       </div>
       <div>
-        <RelatedPartList documentRevision={documentRevision}
-          voidRelatedPart={voidRelatedPart}
-          viewRelatedPart={viewRelatedPart}
-          handleRemove={handleRemove}
-          handleUpdate={handleUpdate}
+        <RelatedPartList
           rootPartName= {documentRevision.name}
           rootRevisionChangeType = {documentRevision.revisionChangeType}
-          relatedPartsState = {relatedPartsState} />
-
+          {
+            ...{
+              documentRevision,
+              voidRelatedPart,
+              viewRelatedPart,
+              handleRemove,
+              handleUpdate,
+              relatedPartsState,
+              isReleased,
+            }
+          }/>
         {isEditRowVisible &&
           <RelatedPartEditRow documentRevision={documentRevision}
             createNewDocument={createNewDocument}
@@ -264,12 +268,13 @@ const RelatedPartGrid: React.FunctionComponent<{
           />
         }
         {
-          showButton && <Button
+          (showButton || isReleased) && <Button
             className={classes.fullLengthButton}
             variant="outlined"
-            startIcon={<AddOutlinedIcon />}
+            startIcon={<AddCircleIcon color={isReleased ? COLOR_TYPES.DISABLED : COLOR_TYPES.PRIMARY} />}
             onClick={showEditRow}
             data-cy="add-related-part-btn"
+            disabled={isReleased}
           >
             <Text translation="relatedParts.button.addText"/>
           </Button>
@@ -289,6 +294,7 @@ const RelatedPartList: React.FunctionComponent<{
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
   documentRevision: DocumentRevision;
+  isReleased: boolean;
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
@@ -298,11 +304,14 @@ const RelatedPartList: React.FunctionComponent<{
   rootRevisionChangeType,
   relatedPartsState,
   documentRevision,
+  isReleased,
 }) => {
   const classes = useStyles();
 
   const editRelatedPart = (listItem: RelatedPartsListItem) => {
-    relatedPartsState.setListItemBeingEdited(listItem);
+    if (!relatedPartsState.viewOnlyMode && !isReleased) {
+      relatedPartsState.setListItemBeingEdited(listItem);
+    }
   };
 
   const cancelLocalEdit = () => {
@@ -326,12 +335,20 @@ const RelatedPartList: React.FunctionComponent<{
                     relatedPartsState={relatedPartsState}
                     listItemBeingEdited={relatedPartsState.listItemBeingEdited}
                   /> :
-                  <RelatedPartViewRow listItem={listItem}
-                    editRelatedPart={editRelatedPart}
-                    voidRelatedPart={voidRelatedPart}
-                    viewRelatedPart={viewRelatedPart}
-                    key={listItem.documentRevisionId} rootPartName={rootPartName}
-                    rootRevisionChangeType={rootRevisionChangeType} relatedPartsState={relatedPartsState}
+                  <RelatedPartViewRow
+                    key={listItem.documentRevisionId}
+                    {
+                      ... {
+                        listItem,
+                        voidRelatedPart,
+                        editRelatedPart,
+                        viewRelatedPart,
+                        rootPartName,
+                        rootRevisionChangeType,
+                        relatedPartsState,
+                        isReleased,
+                      }
+                    }
                   />
               }
             </>
@@ -351,6 +368,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
+  isReleased: boolean;
 }> = ({
   listItem,
   voidRelatedPart,
@@ -359,6 +377,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   rootPartName,
   rootRevisionChangeType,
   relatedPartsState,
+  isReleased,
 }) => {
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
@@ -418,23 +437,20 @@ const RelatedPartViewRow: React.FunctionComponent<{
         </Tooltip>
       </div>
       <div className={classes.tableCellThree} data-cy="obsolete-checkbox">
-        { listItem.version && listItem.version > 1 &&
+        { (listItem.version && listItem.version > 1) ?
           <>
             {
               isStatusObsolete ?
                 <span className={classes.OBS}>OBS</span>
-                : <FBTooltip title="relatedParts.checkbox.hoverMSG" placement="top" arrow
-                  classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
-                >
-                  <Checkbox
-                    checked = {isVoided || isRevChangeTypeObs}
-                    disabled={relatedPartsState.viewOnlyMode}
-                    onClick={(e: React.MouseEvent<HTMLElement>) => {
-                      e.stopPropagation();
-                      openConfirmDialog();
-                    }}
-                  />
-                </FBTooltip>
+                :
+                <Checkbox
+                  checked = {isVoided || isRevChangeTypeObs}
+                  disabled={relatedPartsState.viewOnlyMode || isReleased}
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {
+                    e.stopPropagation();
+                    openConfirmDialog();
+                  }}
+                />
             }
             {confirmationDialog.isOpen && (
               <AlertDialog
@@ -444,6 +460,14 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 message={isRevChangeTypeObs ? "relatedParts.void.bringBack" : "relatedParts.void.alert"}
               />
             )}
+          </>
+          :
+          <>
+            <FBTooltip title="relatedParts.checkbox.hoverMSG" placement="top" arrow
+              classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+            >
+              <InfoIcon color={COLOR_TYPES.DISABLED} />
+            </FBTooltip>
           </>
         }
       </div>
