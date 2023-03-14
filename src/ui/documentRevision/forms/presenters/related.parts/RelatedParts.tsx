@@ -458,13 +458,11 @@ const RelatedPartViewRow: React.FunctionComponent<{
             )}
           </>
           :
-          <>
-            <FBTooltip title="relatedParts.checkbox.hover.msg" placement="top" arrow
-              classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
-            >
-              <InfoIcon color={COLOR_TYPES.DISABLED} />
-            </FBTooltip>
-          </>
+          <FBTooltip title="relatedParts.checkbox.hover.msg" placement="top" arrow
+            classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          >
+            <InfoIcon color={COLOR_TYPES.DISABLED} />
+          </FBTooltip>
         }
       </div>
       <Box className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon" onMouseEnter={() => setIsHover(true)}
