@@ -8,6 +8,14 @@ export enum RELATED_PARTS_STATUS {
   PARENT_TOGETHER = "parent_together"
 }
 
+export enum COLOR_TYPES {
+  PRIMARY = "primary",
+  SECONDARY = "secondary",
+  DISABLED = "disabled",
+  INHERIT ="inherit",
+  ERROR ="ERROR"
+}
+
 export interface RelatedPartsChoiceRequestBody {
   documentId: string;
   documentRevisionId: string;
