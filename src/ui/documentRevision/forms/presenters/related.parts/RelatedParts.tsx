@@ -8,7 +8,7 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -34,6 +34,7 @@ import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash
 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
+import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
 import useDialog from "../../../../hooks/useDialog";
@@ -214,8 +215,9 @@ const RelatedPartGrid: React.FunctionComponent<{
                   <Button
                     className={classes.btnMargin}
                     color="primary"
-                    startIcon={<AddCircleIcon color="primary" />}
+                    startIcon={<AddCircleIcon color={isReleased ? COLOR_TYPES.DISABLED : COLOR_TYPES.PRIMARY} />}
                     onClick={showEditRow}
+                    disabled={isReleased}
                     data-cy="add-related-part-btn"
                   >
                     <Text translation="relatedParts.button.addText"/>
