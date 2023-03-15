@@ -513,12 +513,15 @@ const RelatedPartEditRow: React.FunctionComponent<{
     name: listItemBeingEdited?.name ?? "",
   });
 
+  const skipId = listItemBeingEdited?.docId ?? "";
+
   const classes = useStyles();
 
   const showDeleteButton = listItemBeingEdited?.version === 1 && listItemBeingEdited?.docRevId !== "";
 
   const resetAndCancelEdit = () => {
     setRelatedPartDetails({ docId: "", name: "" });
+    relatedPartsState.resetDocIdErrorMsg();
     cancelEdit();
   };
 
@@ -528,7 +531,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
     }
 
     if (listItemBeingEdited?.docRevId && handleUpdate) {
-      if (validateDocId(relatedPartDetails.docId)) {
+      if (validateDocId()) {
         handleUpdate(listItemBeingEdited?.docRevId, relatedPartDetails.docId, relatedPartDetails.name);
       }
     } else {
@@ -538,7 +541,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
     }
   };
 
-  const validateDocId = (skipId?: string | undefined) => (
+  const validateDocId = () => (
     relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId, skipId)
   );
 
@@ -558,7 +561,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
-            onBlur = {() => validateDocId((relatedPartDetails.docId))}
+            onBlur = {validateDocId}
             value={relatedPartDetails.docId}
             error = {Boolean(relatedPartsState.docIdErrorMsg)}
             helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
