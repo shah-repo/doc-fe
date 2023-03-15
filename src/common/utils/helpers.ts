@@ -6,7 +6,7 @@ import striptags from "striptags";
 import Config from "../../config";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
 import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
-import { debounce } from "lodash";
+import { debounce, DebounceSettings } from "lodash";
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
 
@@ -76,7 +76,7 @@ export const sortStringsByKey = (key: string) => (a, b) => {
 
 export const emptyFunction = () => undefined;
 
-export function asyncDebounce(func, wait?, options?) {
+export function asyncDebounce(func: (...args: any) => any, wait?: number, options?: DebounceSettings) {
   const debounced = debounce(
     (resolve, reject, args) => {
       func(...args).then(resolve).catch(reject);

@@ -1,11 +1,11 @@
 import React, { FC, useCallback, memo } from "react";
 import { useIntl } from "react-intl";
-import CreatableField from "../../components/forms/fields/Autocomplete/Creatable";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
-import { useTitle } from "../../hooks/docCustomization/useCustomization";
-import { FB } from "../../form.builder";
-import TitleState from "./Title.state";
-import { asyncDebounce } from "../../../common/utils/helpers";
+import CreatableField from "../../../components/forms/fields/Autocomplete/Creatable";
+import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
+import { useTitle } from "../../../hooks/docCustomization/useCustomization";
+import { FB } from "../../../form.builder";
+import TitleState from "./state";
+import { asyncDebounce } from "../../../../common/utils/helpers";
 
 interface TitleProps {
   name: string;
@@ -14,7 +14,7 @@ interface TitleProps {
   value?: string;
 }
 
-const Title: FC<TitleProps> = ({
+const Index: FC<TitleProps> = ({
   documentTypeId = "",
   name = "name",
   ...props
@@ -59,4 +59,4 @@ const Title: FC<TitleProps> = ({
   );
 };
 
-export default memo(Title);
+export default memo(Index);
