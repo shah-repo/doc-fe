@@ -157,14 +157,12 @@ export default makeStyles((theme) =>
     },
     viewIcon: {
       marginTop: theme.spacing(.5),
-      fontSize: "14px",
       cursor: "pointer",
     },
     viewIconHover: {
       color: Colors.mirage,
     },
     circleIcon: {
-      fontSize: "14px",
       color: COLOR_TYPES.DISABLED,
     },
     tableHead: {
