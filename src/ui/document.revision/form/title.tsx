@@ -1,11 +1,11 @@
 import React, { FC, useCallback, memo } from "react";
 import { useIntl } from "react-intl";
-import { debounce } from "lodash";
 import CreatableField from "../../components/forms/fields/Autocomplete/Creatable";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useTitle } from "../../hooks/docCustomization/useCustomization";
 import { FB } from "../../form.builder";
 import TitleState from "./Title.state";
+import { asyncDebounce } from "../../../common/utils/helpers";
 
 interface TitleProps {
   name: string;
@@ -24,7 +24,7 @@ const Title: FC<TitleProps> = ({
   const titleState = FB.useRef(TitleState);
 
   const loadOptions = useCallback(
-    debounce(
+    asyncDebounce(
       async (inputValue: string) => {
         const data = await titleState.searchByName(inputValue);
 
@@ -33,7 +33,7 @@ const Title: FC<TitleProps> = ({
           value: name,
         }));
       },
-      500,
+      300,
     ),
     [titleState]
   );
