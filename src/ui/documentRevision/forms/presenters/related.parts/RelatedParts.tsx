@@ -474,25 +474,16 @@ const RelatedPartViewRow: React.FunctionComponent<{
         <FBTooltip title="relatedParts.created.modal.quick.view" placement="top" arrow
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
         >
-          {
-            isHover
-              ? <FontAwesomeIcon
-                icon={solid("eye")}
-                className= {cx(classes.viewIcon, classes.viewIconHover)}
-                onClick={(e: React.MouseEvent<SVGElement>) => {
-                  e.stopPropagation();
-                  viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-                } }
-              />
-              : <FontAwesomeIcon
-                icon={regular("eye")}
-                className={classes.viewIcon}
-                onClick={(e: React.MouseEvent<SVGElement>) => {
-                  e.stopPropagation();
-                  viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-                }}
-              />
-          }
+          <FontAwesomeIcon
+            icon={isHover ? solid("eye") : regular("eye") }
+            className={cx(classes.viewIcon, {
+              [classes.viewIconHover]: isHover,
+            })}
+            onClick={(e: React.MouseEvent<SVGElement>) => {
+              e.stopPropagation();
+              viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
+            } }
+          />
         </FBTooltip>
       </Box>
     </div>
