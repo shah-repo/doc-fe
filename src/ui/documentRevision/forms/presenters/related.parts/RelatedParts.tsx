@@ -461,7 +461,8 @@ const RelatedPartViewRow: React.FunctionComponent<{
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
             <FontAwesomeIcon icon={solid("circle-info")}
-              style={{ fontSize: "14px", color: `${COLOR_TYPES.DISABLED} !important` }}/>
+              className={classes.circleIcon}
+            />
           </FBTooltip>
         }
       </div>
@@ -477,7 +478,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             isHover
               ? <FontAwesomeIcon
                 icon={solid("eye")}
-                className={classes.viewIcon}
+                className= {cx(classes.viewIcon, classes.viewIconHover)}
                 onClick={(e: React.MouseEvent<SVGElement>) => {
                   e.stopPropagation();
                   viewRelatedPart(listItem.documentRevisionId, listItem.documentId);

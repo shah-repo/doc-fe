@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import Colors from "../../../../layout/theme/utils/colors";
 
 export default makeStyles((theme) =>
@@ -158,14 +159,18 @@ export default makeStyles((theme) =>
       marginTop: theme.spacing(.5),
       fontSize: "14px",
       cursor: "pointer",
-      fill: `${Colors.mirage} !important`,
+    },
+    viewIconHover: {
+      color: Colors.mirage,
+    },
+    circleIcon: {
+      fontSize: "14px",
+      color: COLOR_TYPES.DISABLED,
     },
     tableHead: {
       height: "40px",
-
       display: "flex",
       alignItems: "center",
-
       backgroundColor: Colors.alice_blue,
       color: Colors.almost_black,
 
