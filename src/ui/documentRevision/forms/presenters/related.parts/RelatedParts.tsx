@@ -8,7 +8,7 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import cx from "classnames";
