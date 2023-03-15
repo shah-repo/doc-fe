@@ -73,7 +73,7 @@ class RelatedPartsState {
     } else {
       const filteredList = this.relatedPartsList.filter(
         (listItem: RelatedPartsListItem) =>
-          listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}` && userEnteredDocIdPortion !== skipId);
+          listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}` && userEnteredDocIdPortion === skipId);
 
       if (filteredList.length > 0) {
         this.docIdErrorMsg = "relatedParts.docId.exists.msg";

@@ -476,6 +476,10 @@ const RelatedPartEditRow: React.FunctionComponent<{
   };
 
   const confirmEdit = () => {
+    if (relatedPartsState.docIdErrorMsg) {
+      return;
+    }
+
     if (listItemBeingEdited?.docRevId && handleUpdate) {
       if (validateDocId(relatedPartDetails.docId)) {
         handleUpdate(listItemBeingEdited?.docRevId, relatedPartDetails.docId, relatedPartDetails.name);
@@ -507,7 +511,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
-            onBlur = {() => validateDocId}
+            onBlur = {() => validateDocId((relatedPartDetails.docId))}
             value={relatedPartDetails.docId}
             error = {Boolean(relatedPartsState.docIdErrorMsg)}
             helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
@@ -541,13 +545,12 @@ const RelatedPartEditRow: React.FunctionComponent<{
             className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton}/>
           </Button>
-          { !relatedPartsState.docIdErrorMsg &&
           <Button
             data-cy="confirm-related-part-sub-part-addition"
-            className={classes.actionButton} onClick = {confirmEdit}>
+            className={classes.actionButton}
+            onClick = {confirmEdit}>
             <DoneIcon className={classes.iconButton} />
           </Button>
-          }
         </div>
       </div>
     </>
