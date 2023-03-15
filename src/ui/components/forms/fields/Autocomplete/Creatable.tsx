@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useIntl } from "react-intl";
 import { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
-import CreatableSelect, { CreatableProps } from "react-select/creatable";
+import AsyncCreatableSelect, { Props as AsyncCreatableSelectProps } from "react-select/async-creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
 import { SM } from "../../../../../App";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
@@ -16,8 +16,8 @@ import { selectStyles } from "./Autocomplete";
 import { OptionType } from "./types";
 
 interface AutocompleteOwnProps extends FieldOwnProps {
-  creatableProps: SelectComponentsProps & CreatableProps<any>;
-  options: OptionType[];
+  creatableProps: SelectComponentsProps & AsyncCreatableSelectProps<any>;
+  options?: OptionType[];
   isDisabled?: boolean;
   placeholder?: string;
   labelProps?: BoxProps;
@@ -117,7 +117,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           onClick={() => { setShowOnlyText(false); }}
         >{inputValue || titlePlaceholder}
         </Box>}
-          {!showOnlyText && <CreatableSelect
+          {!showOnlyText && <AsyncCreatableSelect
             inputValue={inputValue}
             value={value}
             styles={{

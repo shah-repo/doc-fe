@@ -1,45 +1,43 @@
-import { uniqBy } from "lodash";
-import React, { useMemo } from "react";
+import React, { FC, useCallback, memo } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { debounce } from "lodash";
 import CreatableField from "../../components/forms/fields/Autocomplete/Creatable";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useTitle } from "../../hooks/docCustomization/useCustomization";
+import { FB } from "../../form.builder";
+import TitleState from "./Title.state";
 
-interface OwnProps {
+interface TitleProps {
   name: string;
   documentTypeId?: string;
   disabled?: boolean;
   value?: string;
 }
 
-type Props = OwnProps;
-
-const Title: React.FunctionComponent<Props> = ({
+const Title: FC<TitleProps> = ({
   documentTypeId = "",
   name = "name",
   ...props
 }) => {
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useTitle(documentTypeId);
-  const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
-  const options = useMemo(
-    () =>
-      uniqBy(documents, (document) => document.name)
-        .map((document) => ({
-          label: document.name,
-          value: document.name,
-        })),
-    [documents],
+  const titleState = FB.useRef(TitleState);
+
+  const loadOptions = useCallback(
+    debounce(
+      async (inputValue: string) => {
+        const data = await titleState.searchByName(inputValue);
+
+        return data?.results.map(({ name }) => ({
+          label: name,
+          value: name,
+        }));
+      },
+      500,
+    ),
+    [titleState]
   );
 
-  if (options.length === 0 && props.value) {
-    options.push({
-      label: props.value,
-      value: props.value,
-    });
-  }
   if (!isVisible) {
     return null;
   }
@@ -48,14 +46,17 @@ const Title: React.FunctionComponent<Props> = ({
     <CustomLabelTooltip {...{ tooltipConfig }}>
       <CreatableField
         name={name}
-        creatableProps={{ id: "Title-field" }}
+        creatableProps={{
+          loadOptions,
+          id: "Title-field",
+        }}
         isDisabled={props.disabled}
         placeholder={intl.formatMessage({ id: "form.builder.enter.title" })}
         labelProps={{ margin: 0 }}
-        {...{ options, label }}
+        {...{ label }}
       />
     </CustomLabelTooltip>
   );
 };
 
-export default React.memo(Title);
+export default memo(Title);
