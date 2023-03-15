@@ -12,7 +12,7 @@ import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
-import { selectStyles } from "./Autocomplete";
+import { selectStyles, selectTheme } from "./Autocomplete";
 import { OptionType } from "./types";
 
 interface AutocompleteOwnProps extends FieldOwnProps {
@@ -147,6 +147,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 zIndex: 5,
               }),
             }}
+            theme={selectTheme}
             autoFocus={true}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}

@@ -5,7 +5,7 @@ import Select, { components } from "react-select";
 import { ReactComponent as DeleteIcon } from "../../../../assets/images/circle-remove.svg";
 import { GroupType } from "../../../../state/ducks/auth/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import { selectStyles, selectTheme } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 
 interface Props {
@@ -43,6 +43,7 @@ const ParentGroups: React.FunctionComponent<Props> = ({
           value={parentGroups}
           components={{ MultiValueRemove }}
           styles={selectStyles}
+          theme={selectTheme}
         />
       </Box>
     </Grid>
