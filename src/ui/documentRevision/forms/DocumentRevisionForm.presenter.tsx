@@ -311,6 +311,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
+          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
+            <Grid item xs={12}>
+              <RevisionTypeChange
+                isDisabled={isDisabledInput}
+                {...{
+                  documentTypeId,
+                  isDocRevFirstDraft,
+                  showAdministrativeAndVoidChange,
+                  isRecord,
+                  isPORecord: isPO && FBWorkspaceModeOptions.FORM === mode,
+                  releasedDocRev,
+                  isAlphaReleased,
+                }}
+              />
+            </Grid>
+          )}
           {isPart && documentRevision?.parentParts && (
             <Grid item xs={12}>
               <BuildsContainer
@@ -328,22 +344,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
           }
-          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
-            <Grid item xs={12}>
-              <RevisionTypeChange
-                isDisabled={isDisabledInput}
-                {...{
-                  documentTypeId,
-                  isDocRevFirstDraft,
-                  showAdministrativeAndVoidChange,
-                  isRecord,
-                  isPORecord: isPO && FBWorkspaceModeOptions.FORM === mode,
-                  releasedDocRev,
-                  isAlphaReleased,
-                }}
-              />
-            </Grid>
-          )}
           {showOutputSection ? (
             <>
               {!isDCO && (isPO || outputIsPO
