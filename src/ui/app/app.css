@@ -1,7 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap");
 
 * {
   scroll-behavior: inherit !important;
+}
+
+/* Reset style for search field */
+input[type="search"] {
+  -webkit-appearance: textfield;
+  appearance: textfield;
+}
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+  -webkit-appearance: none;
 }
 
 /* use "hide-scroll" class to hide scrollbars but keep functionality */
@@ -28,21 +41,21 @@
 }
 
 :root {
-  --navy: #011FBB;
-  --almost_black: #080B11;
-  --alabaster: #F9FBFF;
-  --medium-grey: #7D7E81;
-  --water: #EEF3FF;
-  --soft-peach: #EBEDF2;
-  --zeron: #F5F8FF;
-  --white: #FFFFFF;
-  --font_gray: #767B87;
-  --iron-gray: #D3D3E2;
-  --light-gray: #CCD4D9;
-  --dawn: #A2A2A2;
-  --lavender-mist: #E2E8F0;
-  --zircon: #F2F9FF;
-  --dodger_blue: #4D88FF;
+  --navy: #011fbb;
+  --almost_black: #080b11;
+  --alabaster: #f9fbff;
+  --medium-grey: #7d7e81;
+  --water: #eef3ff;
+  --soft-peach: #ebedf2;
+  --zeron: #f5f8ff;
+  --white: #ffffff;
+  --font_gray: #767b87;
+  --iron-gray: #d3d3e2;
+  --light-gray: #ccd4d9;
+  --dawn: #a2a2a2;
+  --lavender-mist: #e2e8f0;
+  --zircon: #f2f9ff;
+  --dodger_blue: #4d88ff;
 }
 
 body {
@@ -351,7 +364,7 @@ td#kendo-expandable-column[role="gridcell"] {
   border-radius: 4px;
 }
 
-.k-columnmenu-item>.k-icon.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-grid-menu-icon {
   color: transparent;
   height: 16px;
   width: 18px;
@@ -359,17 +372,17 @@ td#kendo-expandable-column[role="gridcell"] {
   margin-right: 10px;
 }
 
-.k-columnmenu-item>.k-icon.k-i-lock.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-i-lock.k-grid-menu-icon {
   background: url("../../assets/images/freeze.svg");
   background-repeat: no-repeat;
 }
 
-.k-columnmenu-item>.k-icon.k-i-unlock.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-i-unlock.k-grid-menu-icon {
   background: url("../../assets/images/unfreeze.svg");
   background-repeat: no-repeat;
 }
 
-.k-columnmenu-item>.k-icon.k-i-preview.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-i-preview.k-grid-menu-icon {
   background: url("../../assets/images/hide.svg");
   background-repeat: no-repeat;
 }
@@ -385,16 +398,15 @@ td#kendo-expandable-column[role="gridcell"] {
 
 .MuiMenuItem-root span,
 .MuiAutocomplete-listbox {
-  font-family: "Sora"
+  font-family: "Sora";
 }
 
 .Toastify__toast,
 .Toastify__toast-body,
 .Toastify__toast-container,
 .Toastify__close-button {
-  font-family: 'Sora';
+  font-family: "Sora";
 }
-
 
 .containing-box-scrollbar::-webkit-scrollbar {
   background-color: transparent;

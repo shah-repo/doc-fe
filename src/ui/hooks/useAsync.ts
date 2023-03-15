@@ -46,8 +46,11 @@ const useAsync = <T>({
     setAsyncState(ASYNC_DEFAULT_STATE);
   };
 
+  const isLoading = asyncState.status === AsyncStatus.Active;
+
   return {
     asyncState,
+    isLoading,
     start,
     reset,
     successHandler,

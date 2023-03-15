@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import Colors from "../../../../layout/theme/utils/colors";
 
 export default makeStyles((theme) =>
@@ -40,6 +41,7 @@ export default makeStyles((theme) =>
     },
     customTooltip: {
       backgroundColor: Colors.black,
+      whiteSpace: "pre-wrap",
     },
     customArrow: {
       color: Colors.black,
@@ -154,17 +156,19 @@ export default makeStyles((theme) =>
       },
     },
     viewIcon: {
-      fill: Colors.cerulean,
       marginTop: theme.spacing(.5),
-      fontSize: "1.2rem",
       cursor: "pointer",
+    },
+    viewIconHover: {
+      color: Colors.mirage,
+    },
+    circleIcon: {
+      color: COLOR_TYPES.DISABLED,
     },
     tableHead: {
       height: "40px",
-
       display: "flex",
       alignItems: "center",
-
       backgroundColor: Colors.alice_blue,
       color: Colors.almost_black,
 
@@ -228,18 +232,12 @@ export default makeStyles((theme) =>
       "alignItems": "center",
       "width": "100%",
       "minHeight": "48px",
-
       "borderBottom": `1px solid ${Colors.platinum_grey}`,
       "&:last-child": {
         borderBottom: "1px solid transparent",
       },
-
       "cursor": "pointer",
-
       "backgroundColor": Colors.white,
-      "&:hover": {
-        backgroundColor: Colors.lightest_grey,
-      },
     },
     relatedPartViewRowCell: {
       paddingLeft: theme.spacing(1.25),

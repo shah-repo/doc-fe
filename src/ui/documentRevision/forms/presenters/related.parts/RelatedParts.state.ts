@@ -83,6 +83,10 @@ class RelatedPartsState {
     return !this.docIdErrorMsg;
   }
 
+  @action resetDocIdErrorMsg() {
+    set(this, "docIdErrorMsg", "");
+  }
+
   @action setViewOnlyMode(viewOnly) {
     set(this, "viewOnlyMode", viewOnly);
   }
