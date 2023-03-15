@@ -155,12 +155,10 @@ export default makeStyles((theme) =>
       },
     },
     viewIcon: {
-      "marginTop": theme.spacing(.5),
-      "fontSize": "1.2rem",
-      "cursor": "pointer",
-      "&:hover": {
-        fill: Colors.mirage,
-      },
+      marginTop: theme.spacing(.5),
+      fontSize: "14px",
+      cursor: "pointer",
+      fill: `${Colors.mirage} !important`,
     },
     tableHead: {
       height: "40px",

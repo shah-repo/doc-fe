@@ -8,7 +8,7 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -18,13 +18,12 @@ import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../.
 import { FBButton, FBTooltip } from "../../../../form.builder";
 
 
+import { regular, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
 import InfoIcon from "@material-ui/icons/Info";
-import { ReactComponent as EmptyEyeIcon } from "../../../../../assets/images/eye-fa1.svg";
-import { ReactComponent as SolidEyeIcon } from "../../../../../assets/images/eye-fa2.svg";
-
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash-can 2.svg";
 
 import { reaction } from "mobx";
@@ -461,29 +460,37 @@ const RelatedPartViewRow: React.FunctionComponent<{
           <FBTooltip title="relatedParts.checkbox.hover.msg" placement="top" arrow
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
-            <InfoIcon color={COLOR_TYPES.DISABLED} />
+            <FontAwesomeIcon icon={solid("circle-info")}
+              style={{ fontSize: "14px", color: `${COLOR_TYPES.DISABLED} !important` }}/>
           </FBTooltip>
         }
       </div>
-      <Box className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon" onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}>
+      <Box
+        className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon"
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+      >
         <FBTooltip title="relatedParts.created.modal.quick.view" placement="top" arrow
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
         >
           {
             isHover
-              ? <SolidEyeIcon
+              ? <FontAwesomeIcon
+                icon={solid("eye")}
                 className={classes.viewIcon}
                 onClick={(e: React.MouseEvent<SVGElement>) => {
                   e.stopPropagation();
                   viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-                }}></SolidEyeIcon>
-              : <EmptyEyeIcon
+                } }
+              />
+              : <FontAwesomeIcon
+                icon={regular("eye")}
                 className={classes.viewIcon}
                 onClick={(e: React.MouseEvent<SVGElement>) => {
                   e.stopPropagation();
                   viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-                }}></EmptyEyeIcon>
+                }}
+              />
           }
         </FBTooltip>
       </Box>
