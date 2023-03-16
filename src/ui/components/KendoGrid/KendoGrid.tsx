@@ -421,7 +421,6 @@ export function KendoGrid<T extends any>({
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
-      {console.log("width", width)}
       <KendoGlobalization>
         <KendoTable
           style={{ width: `${width}px` }}
