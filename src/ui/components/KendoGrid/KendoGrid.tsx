@@ -421,6 +421,7 @@ export function KendoGrid<T extends any>({
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
+      {console.log("width", width)}
       <KendoGlobalization>
         <KendoTable
           style={{ width: `${width}px` }}
@@ -474,9 +475,9 @@ export function KendoGrid<T extends any>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <>
+    <div className={classes.kendoGridContainer}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </>
+    </div>
   );
 }
