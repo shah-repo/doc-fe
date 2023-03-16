@@ -13,7 +13,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     padding: "10px 30px 0px",
   },
   kendoGridContainer: {
-    position: "inherit !important" as any,
+    position: "inherit !important" as "inherit",
   },
 }));
 export default KendoGridStyles;
