@@ -1,10 +1,15 @@
 import { Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import DocumentRevisionSidebarState from "../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
 import { Nullable } from "../../state/ducks/common/types";
+import { STATUS_TYPES_LABEL } from "../../state/ducks/dashboard.new/my.feeds/types";
+import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../state/reducers";
+import { checkIsDocumentPO } from "../../ui/documentRevision/helpers/checkDocumentGroup";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
@@ -67,7 +72,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDeprecated = isDocumentRevisionDeprecated(status);
   const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
   const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
-
+  const documentType = useSelector((state: ApplicationState) =>
+    documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+  const isPO = checkIsDocumentPO(documentType?.groupOptions);
 
   if (isRecord) {
     if (isReleased) {
@@ -129,10 +136,10 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           &nbsp;
           {versionNumber}
           {isStatusVisible && (
-            <Typography variant="h6" component="span" className={classes.displayStatus}>
+            <Typography data-cy="revision-status" variant="h6" component="span" className={classes.displayStatus}>
               <CustomLabelTooltip {...{ tooltipConfig }}>
                 <>
-                  &nbsp; - <Text message={displayStatus} />
+                  &nbsp; - <Text message={isPO && isReleased ? STATUS_TYPES_LABEL.APPROVED : displayStatus} />
                 </>
               </CustomLabelTooltip>
             </Typography>
