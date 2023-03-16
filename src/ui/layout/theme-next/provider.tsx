@@ -15,7 +15,7 @@ const baseTheme = createTheme({
   shape,
 });
 
-const themeNext = createTheme({
+export const themeNext = createTheme({
   ...baseTheme,
   overrides: overrides(baseTheme),
   props: props(baseTheme),
