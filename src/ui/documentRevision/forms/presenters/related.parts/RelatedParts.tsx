@@ -8,7 +8,7 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -457,12 +457,19 @@ const RelatedPartViewRow: React.FunctionComponent<{
             )}
           </>
           :
-          <FBTooltip title="relatedParts.checkbox.hover.msg" placement="top" arrow
+          !isVoided &&
+          <FBTooltip title="relatedParts.checkbox.hover.msg"
+            placement="top" arrow style={{ cursor: "default !important" }}
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
-            <FontAwesomeIcon icon={solid("circle-info")}
-              className={classes.circleIcon}
-            />
+            <Box
+              onClick={(e) => e.stopPropagation()}
+              className={classes.defaultCursor}>
+              <Checkbox
+                disabled
+                classes={{ disabled: classes.disabled }}
+              />
+            </Box>
           </FBTooltip>
         }
       </div>
