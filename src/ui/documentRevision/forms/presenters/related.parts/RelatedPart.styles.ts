@@ -158,6 +158,8 @@ export default makeStyles((theme) =>
     viewIcon: {
       marginTop: theme.spacing(.5),
       cursor: "pointer",
+      color: Colors.raven,
+
     },
     viewIconHover: {
       color: Colors.mirage,
