@@ -1,79 +1,117 @@
-import { IconButton } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { useTheme, WithStyles, withStyles } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import CloseIcon from "@material-ui/icons/Close";
+import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dialog as MuiDialog, DialogActions, DialogContent, DialogTitle, LinearProgress, Typography, useMediaQuery } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
+import { themeNext, withThemeNext } from "../../layout/theme-next";
+import { Button, IconButton } from "../forms/fields-next";
+import { renderNode } from "../forms/fields-next/utils";
 import Text from "../Text";
-import styles from "./Dialog.styles";
-import { DialogAction, DialogResponsiveProps } from "./utils/types";
+import useStyles from "./Dialog.styles";
+import { DialogActionsProps, DialogCloseReason, DialogProps } from "./Dialog.types";
 
-type Props =  DialogResponsiveProps & WithStyles<typeof styles>;
+const DefaultDialogActions: React.FC<DialogActionsProps> = ({
+  confirmLabel,
+  confirmProps,
+  onConfirm,
+  cancelLabel,
+  cancelProps,
+  onCancel,
+}) => (
+  <>
+    {cancelLabel && (
+      <Button kind={cancelProps?.kind ?? "ghost"} {...cancelProps} onClick={onCancel}>
+        {renderNode(cancelLabel)}
+      </Button>
+    )}
+    {confirmLabel && (
+      <Button {...confirmProps} onClick={onConfirm}>
+        {renderNode(confirmLabel)}
+      </Button>
+    )}
+  </>
+);
 
-const DialogWindow: React.FunctionComponent<Props> = ({
-  classes,
+const Dialog: React.FC<DialogProps> = ({
   breakpoint = "xs",
+  classes: dialogClasses,
   title,
-  contentRenderer,
+  className,
+  loading,
+  hideCloseButton,
+  children,
   actions,
-  onActionClick,
-  dialogHandler,
+  actionsRef,
+  confirmLabel,
+  cancelLabel,
+  confirmProps,
+  cancelProps,
+  titleProps,
+  contentProps = { dividers: true },
+  actionsProps,
+  onConfirm,
+  onCancel,
+  onClose,
+  onSubmit,
   ...props
 }) => {
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down(breakpoint));
-
-  const handleAction = (action: DialogAction) => () => {
-    if (onActionClick) {
-      onActionClick(action);
-    }
-    dialogHandler.close();
-  };
-
-  const titleRenderer = () => (
-    <DialogTitle>
-      <Text message={title} />
-    </DialogTitle>
-  );
-
-  const actionsRenderer = () => (
-    <DialogActions>
-      {actions && actions.map((type) => actionRenderer(type))}
-    </DialogActions>
-  );
+  const classes = useStyles({ dividers: contentProps.dividers });
+  const isFullScreen = useMediaQuery(themeNext.breakpoints.down(breakpoint));
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
+  const handleClose = (eventName: DialogCloseReason) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => onClose?.(event, eventName);
 
-  const actionRenderer = (type: DialogAction) => (
-    <Button key={type} onClick={handleAction(type)} color="primary">
-      <Text message={type} />
-    </Button>
-  );
+  const shouldDisplayActions = actions || confirmLabel || cancelLabel || actionsRef;
 
   return (
-    <div>
-      <Dialog
-        {...props}
-        fullScreen={fullScreen}
-        open={dialogHandler.isOpen}
-        onClose={dialogHandler.close}
-        onSubmit={preventPropagation}
-      >
-        <IconButton className={classes.closeButton} onClick={dialogHandler.close}>
-          <CloseIcon />
+    <MuiDialog
+      {...props}
+      fullScreen={isFullScreen}
+      onClose={(event, reason) => onClose?.(event, reason as DialogCloseReason)}
+      onSubmit={onSubmit ?? preventPropagation}
+      classes={{
+        paper: className,
+        ...dialogClasses,
+      }}
+    >
+      {!hideCloseButton && (
+        <IconButton kind="boxed" className={classes.close} onClick={handleClose(DialogCloseReason.CLOSE_CLICK)}>
+          <FontAwesomeIcon icon={regular("xmark")} />
         </IconButton>
-        {title && titleRenderer()}
-        <DialogContent>
-          {contentRenderer && contentRenderer()}
-        </DialogContent>
-        {actions && actionsRenderer()}
-      </Dialog>
-    </div>
+      )}
+      {title && (
+        <DialogTitle
+          {...titleProps}
+          className={cx(titleProps?.className, classes.title, { [classes.titleWithClose]: !hideCloseButton })}
+        >
+          {
+            typeof title === "string"
+              ? <Typography variant="caption"><Text message={title} /></Typography>
+              : title
+          }
+          {loading && <LinearProgress className={classes.loading} />}
+        </DialogTitle>
+      )}
+      {!title && loading && <LinearProgress className={cx(classes.loading, classes.loadingAtTop)} />}
+      <DialogContent
+        {...contentProps}
+        className={cx(contentProps.className, classes.content)}
+      >
+        {children}
+      </DialogContent>
+      {shouldDisplayActions && (
+        <DialogActions {...actionsProps} ref={actionsRef}>
+          {actions ?? (!actionsRef && (
+            <DefaultDialogActions
+              {...{ cancelLabel, confirmLabel, confirmProps, cancelProps, onConfirm }}
+              onCancel={onCancel ?? handleClose(DialogCloseReason.CANCEL_CLICK)}
+            />
+          ))}
+        </DialogActions>
+      )}
+    </MuiDialog>
   );
 };
 
-export default withStyles(styles)(DialogWindow);
+export default withThemeNext(Dialog);

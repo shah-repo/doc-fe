@@ -22,7 +22,7 @@ import { FBFormState, FBSchemaProps } from "../../../../form.builder";
 import { StyledCancelFBButton } from "../../../../form.builder/FBButton/StyledCancelFBButton";
 import Colors from "../../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../../types";
-import { styles } from "./ApproveAndRelease.styles";
+import useStyles from "./ApproveAndRelease.styles";
 
 interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
@@ -75,7 +75,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   // MARK: @config
 
   // MARK: @styles
-  const classes = styles();
+  const classes = useStyles();
 
   // MARK: @actions
 

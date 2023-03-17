@@ -1,11 +1,10 @@
-import { Button, ClickAwayListener, Grid, Grow, MenuItem, MenuList, Paper, Popper } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import { ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
 import React from "react";
-import { StyledButtonGroup } from "../../../../../App/Shifamed/Components/forms/presenters/StyledButtonGroup";
 import { ReactComponent as ExistingAR } from "../../../../../assets/images/existing_ar.svg";
 import { ReactComponent as NewARIcon } from "../../../../../assets/images/new_ar.svg";
+import { SplitButton, SplitButtonMenu } from "../../../../components/forms/fields-next";
 import Text from "../../../../components/Text";
-import { styles } from "./ApproveAndRelease.styles";
+import useMenu from "../../../../hooks/useMenu";
 
 export enum ARActions {
   NEW = "new",
@@ -26,97 +25,51 @@ const options = [
 ];
 
 const SplitReleaseButton: React.FunctionComponent<{
-  revisionStage? : number;
-  onClick: (value?: string) => void;
+  className?: string;
+  disableExpessAR?: boolean;
+  onClick: (value?: ARActions) => void;
 }> = ({
-  revisionStage,
+  className,
+  disableExpessAR,
   onClick,
 }) => {
+  const releaseMenu = useMenu();
 
-  const [isOpened, setOpen] = React.useState(false);
-  const anchorRef = React.useRef<HTMLDivElement>(null);
+  const handleClick = (option?: ARActions) => () => onClick(option);
 
-  const handleClick = () => {
-    onClick();
-  };
-
-  const handleMenuItemClick = (event, index) => {
-    onClick(options[index].value);
-    setOpen(false);
-  };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event: React.MouseEvent<Document, MouseEvent>) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-    setOpen(false);
-  };
-  const classes = styles();
   return (
-    <Grid container direction="column" alignItems="center">
-      <Grid item xs={12}>
-        <StyledButtonGroup variant="contained" disableRipple  color="primary"
-          ref={anchorRef} aria-label="Release options">
-          <Button
-            color="primary"
-            onClick={handleClick}
-            disabled={revisionStage !== 1}
-            id="ApproveAndRelease-button"
-            data-cy="ApproveAndRelease-button"
-            className={classes.buttonHover}
+    <SplitButton
+      className={className}
+      buttonText="releaseButton.option.expressAR"
+      onClick={handleClick()}
+      onToggle={releaseMenu.open}
+      kind="white"
+      buttonProps={{
+        "disabled": disableExpessAR,
+        "id": "ApproveAndRelease-button",
+        "data-cy": "ApproveAndRelease-button",
+      }}
+      toggleProps={{
+        "data-cy": "dropdown-arrow",
+      }}
+    >
+      <SplitButtonMenu
+        anchorEl={releaseMenu.anchor}
+        onClose={releaseMenu.close}
+      >
+        {options.map((option, index) => (
+          <MenuItem
+            divider
+            key={option.value}
+            data-cy={`ar-${option.value}`}
+            onClick={handleClick(option.value)}
           >
-            <Text translation="releaseButton.option.expressAR" />
-          </Button>
-          <Button
-            data-cy="dropdown-arrow"
-            color="primary"
-            size="small"
-            aria-controls={isOpened ? "split-button-menu" : undefined}
-            aria-expanded={isOpened}
-            aria-label="Select AR strategy"
-            aria-haspopup="menu"
-            className={classes.hoverArrow}
-            onClick={handleToggle}
-          >
-            <ArrowDropDownIcon />
-          </Button>
-        </StyledButtonGroup>
-        <Popper open={isOpened}  className={classes.dropDown}  anchorEl={anchorRef.current}
-          role={undefined} transition disablePortal>
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin: placement === "bottom" ? "center top" : "center bottom",
-              }}
-            >
-              <Paper >
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList id="split-button-menu" disablePadding>
-                    {options.map((option, index) => (
-                      <MenuItem
-                        key={option.value}
-                        data-cy={`ar-${option.value}`}
-                        divider
-                        onClick={(event) => handleMenuItemClick(event, index)}
-                      >
-                        <span style={{ paddingRight: "15px" }}>{option.icon}</span>
-
-                        <Text message={option.label} />
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </Grid>
-    </Grid>
+            <ListItemIcon>{option.icon}</ListItemIcon>
+            <ListItemText><Text message={option.label} /></ListItemText>
+          </MenuItem>
+        ))}
+      </SplitButtonMenu>
+    </SplitButton>
   );
 };
 
