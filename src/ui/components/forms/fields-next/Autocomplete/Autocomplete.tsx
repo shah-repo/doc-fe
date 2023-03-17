@@ -5,8 +5,8 @@ import formControlState from "@material-ui/core/FormControl/formControlState";
 import MuiAutocomplete from "@material-ui/lab/Autocomplete";
 import { omit } from "lodash";
 import React, { useEffect, useState } from "react";
+import { TextField } from "..";
 import { withThemeNext } from "../../../../layout/theme-next";
-import TextField from "../TextField";
 import useStyles from "./Autocomplete.styles";
 import { AutocompleteProps } from "./Autocomplete.types";
 
