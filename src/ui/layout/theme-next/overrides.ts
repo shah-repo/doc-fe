@@ -38,7 +38,11 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       },
     },
     contained: {
-      boxShadow: "none",
+      "boxShadow": "none",
+      "&$disabled": {
+        backgroundColor: Colors.buttonDisabled,
+        color: Colors.white,
+      },
     },
     containedPrimary: {
       "backgroundColor": Colors.primary,
