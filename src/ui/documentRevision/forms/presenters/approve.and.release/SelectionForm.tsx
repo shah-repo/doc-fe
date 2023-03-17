@@ -5,13 +5,15 @@ import { Autocomplete, FormField } from "../../../../components/forms/fields-nex
 import { DialogHandler } from "../../../../hooks/useDialog";
 import useStyles from "./ApproveAndRelease.styles";
 
+type Option = TemplateOption & InDraftAROption;
+
 interface Props {
   title: string;
   loading: boolean;
   handler: DialogHandler;
   options: TemplateOption[] | InDraftAROption[];
   confirmLabel: string;
-  onConfirm: (option?: TemplateOption | InDraftAROption) => void;
+  onConfirm: (option: Option) => void;
 }
 
 const SelectionForm: React.FC<Props> = ({
@@ -23,7 +25,7 @@ const SelectionForm: React.FC<Props> = ({
   loading,
 }) => {
   const classes = useStyles();
-  const [selectedOption, setSelectedOption] = useState<typeof options[number]>();
+  const [selectedOption, setSelectedOption] = useState<Option>();
 
   const closeDialog = () => {
     setSelectedOption(undefined);
@@ -42,7 +44,7 @@ const SelectionForm: React.FC<Props> = ({
       }}
       cancelLabel="common.cancel"
       onClose={closeDialog}
-      onConfirm={() => onConfirm(selectedOption)}
+      onConfirm={() => selectedOption && onConfirm(selectedOption)}
     >
       <FormField
         label="common.choose.template"
@@ -52,8 +54,8 @@ const SelectionForm: React.FC<Props> = ({
         <Autocomplete
           value={selectedOption}
           options={options}
-          getOptionLabel={(option: TemplateOption | InDraftAROption) => option.label}
-          onChange={(e, value) => setSelectedOption(value)}
+          getOptionLabel={(option: Option) => option.label}
+          onChange={(e, value: Option) => setSelectedOption(value)}
         />
       </FormField>
     </Dialog>

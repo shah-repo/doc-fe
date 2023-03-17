@@ -497,7 +497,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         handler={templateSelectionDialog}
         options={templateOptions}
         confirmLabel="common.create"
-        onConfirm={(option) => processCreatingRevision(option as TemplateOption)}
+        onConfirm={(option: TemplateOption) => processCreatingRevision(option)}
       />
       <SelectionForm
         title="page.title.changeRequestOpen"
@@ -505,7 +505,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         handler={existingDraftARSelectionDialog}
         options={inDraftAROptions}
         confirmLabel="common.open"
-        onConfirm={(option) => processChosenApprovalRequest(option as InDraftAROption)}
+        onConfirm={(option: InDraftAROption) => processChosenApprovalRequest(option)}
       />
       {approvalRequestDialog.isOpen && (
         <ChangeRequestEditDialog
