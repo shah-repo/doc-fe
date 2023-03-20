@@ -441,6 +441,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 <Checkbox
                   checked = {isVoided || isRevChangeTypeObs}
                   disabled={relatedPartsState.viewOnlyMode || isReleased}
+                  classes={{ disabled: classes.disabled }}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {
                     e.stopPropagation();
                     openConfirmDialog();
