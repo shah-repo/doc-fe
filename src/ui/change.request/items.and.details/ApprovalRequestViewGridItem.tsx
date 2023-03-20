@@ -101,7 +101,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
         [classes.enclosingDivOpened]: isExpanded,
-      })}>
+      })}
+      data-cy="enclosing-div-view-item">
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
           {
