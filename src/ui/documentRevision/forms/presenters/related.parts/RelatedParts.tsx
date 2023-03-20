@@ -459,7 +459,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           :
           !isVoided &&
           <FBTooltip title="relatedParts.checkbox.hover.msg"
-            placement="top" arrow style={{ cursor: "default !important" }}
+            placement="top" arrow
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
             <Box
