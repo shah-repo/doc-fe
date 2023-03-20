@@ -1,5 +1,4 @@
 import { createStyles, makeStyles } from "@material-ui/core";
-import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import Colors from "../../../../layout/theme/utils/colors";
 
 export default makeStyles((theme) =>
@@ -144,7 +143,7 @@ export default makeStyles((theme) =>
     },
     iconButton: {
       "fontSize": "16px",
-      "fill": "#000",
+      "fill": Colors.black,
       "&:hover": {
         fill: Colors.white,
       },
@@ -158,12 +157,20 @@ export default makeStyles((theme) =>
     viewIcon: {
       marginTop: theme.spacing(.5),
       cursor: "pointer",
+      color: Colors.raven,
     },
     viewIconHover: {
       color: Colors.mirage,
     },
-    circleIcon: {
-      color: COLOR_TYPES.DISABLED,
+    disabled: {
+      color: `${Colors.dawn} !important`,
+      backgroundColor: `${Colors.bright_gray} !important`,
+      width: 18,
+      height: 18,
+      borderRadius: 3,
+    },
+    defaultCursor: {
+      cursor: "default",
     },
     tableHead: {
       height: "40px",
@@ -171,7 +178,6 @@ export default makeStyles((theme) =>
       alignItems: "center",
       backgroundColor: Colors.alice_blue,
       color: Colors.almost_black,
-
       fontSize: "12px",
       fontWeight: "bold",
     },
