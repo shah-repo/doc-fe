@@ -441,6 +441,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 <Checkbox
                   checked = {isVoided || isRevChangeTypeObs}
                   disabled={relatedPartsState.viewOnlyMode || isReleased}
+                  classes={{ disabled: classes.disabled }}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {
                     e.stopPropagation();
                     openConfirmDialog();
@@ -457,12 +458,19 @@ const RelatedPartViewRow: React.FunctionComponent<{
             )}
           </>
           :
-          <FBTooltip title="relatedParts.checkbox.hover.msg" placement="top" arrow
+          !isVoided &&
+          <FBTooltip title="relatedParts.checkbox.hover.msg"
+            placement="top" arrow
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
-            <FontAwesomeIcon icon={solid("circle-info")}
-              className={classes.circleIcon}
-            />
+            <Box
+              onClick={(e) => e.stopPropagation()}
+              className={classes.defaultCursor}>
+              <Checkbox
+                disabled
+                classes={{ disabled: classes.disabled }}
+              />
+            </Box>
           </FBTooltip>
         }
       </div>

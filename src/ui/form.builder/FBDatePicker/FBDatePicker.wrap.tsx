@@ -3,9 +3,10 @@ import moment from "moment";
 import React, { useEffect } from "react";
 import { FB } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
+import { PO_ORDER_DATE } from "../../../state/ducks/documentRevisions/constants";
+import { useFormContext } from "../../components/forms/FormContext";
 import FBDatePickerState from "./FBDatePicker.state";
 import { FBDatePickerProps } from "./FBDatePicker.types";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
@@ -47,7 +48,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       // Populate with a default value if there is no default value, no initialValue, the editorProperties has
       //  defaultCurrentDate & the documentRevision is an output
       const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate && isOutput;
-      if (isUnderDefault) {
+      if (isUnderDefault && name !== PO_ORDER_DATE) {
         const nowDate = (new Date()).toISOString();
         datePickerState?.setValue(nowDate);
         save(nowDate);
