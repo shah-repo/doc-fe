@@ -1,0 +1,46 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "ecmaVersion": 2020
+  },
+  "extends": [
+    "react-app",
+    "standard-with-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "rules": {
+    "operator-linebreak": ["error", "before"],
+    "no-multiple-empty-lines": ["error", { "maxBOF": 0, "max": 1, "maxEOF": 0 } ],
+    "react/jsx-curly-brace-presence": ["error"],
+    "react/jsx-tag-spacing": ["error"],
+    "react/self-closing-comp": ["error"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "comma-dangle": "off",
+    "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-useless-constructor": "error",
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "never"],
+    "no-unused-expressions": "off",
+    "@typescript-eslint/no-unused-expressions": ["error"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "none"
+      },
+      "singleline": {
+        "delimiter": "comma",
+        "requireLast": false
+      }
+    }]
+  }
+}
