@@ -21,12 +21,14 @@ const IconButton: React.FC<IconButtonProps> = ({
       square: ["text", "default"],
       simple: ["text", "default"],
       boxed: ["contained", "default"],
+      destructive: ["text", "default"],
     },
   );
   const classes = useStyles({ size });
-  const isSquare = kind && ["square", "boxed"].includes(kind);
+  const isSquare = kind && ["square", "boxed", "destructive"].includes(kind);
   const isBoxed = kind === "boxed";
   const isSimple = kind === "simple";
+  const isDesctructive = kind === "destructive";
 
   return (
     <Button
@@ -40,6 +42,7 @@ const IconButton: React.FC<IconButtonProps> = ({
           [classes.square]: isSquare,
           [classes.simple]: isSimple,
           [classes.boxed]: isBoxed,
+          [classes.destructive]: isDesctructive,
         },
         className
       )}

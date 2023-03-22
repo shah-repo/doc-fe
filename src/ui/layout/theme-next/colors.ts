@@ -40,6 +40,7 @@ enum Colors {
   white="#FFF",
   whiteDimmed="rgba(255, 255, 255, .5)",
   gray="#F9F9F9",
+  lightGray="#F5F5F5",
   black="#000",
 
   // Statuses
