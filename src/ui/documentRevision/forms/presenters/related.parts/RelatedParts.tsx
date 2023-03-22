@@ -2,14 +2,19 @@ import {
   Box,
   Button,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Divider,
   FormControl,
   FormControlLabel,
-  Grid, Radio,
+  Grid, IconButton, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { ReactComponent as NewTabIcon } from "../../../../../assets/images/new_tab.svg";
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -28,9 +33,11 @@ import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash
 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
+import { Link } from "react-router-dom";
 import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useDialog from "../../../../hooks/useDialog";
 import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
 import useStyles from "./RelatedPart.styles";
@@ -140,7 +147,7 @@ const ParentPartSelector: React.FunctionComponent<{
 const RelatedPartGrid: React.FunctionComponent<{
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
-  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  // viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   fetchRelatedParts;
@@ -149,7 +156,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 }> = ({
   documentRevision,
   createNewDocument,
-  viewRelatedPart,
+  // viewRelatedPart,
   handleRemove,
   handleUpdate,
   fetchRelatedParts,
@@ -248,7 +255,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             ...{
               documentRevision,
               voidRelatedPart,
-              viewRelatedPart,
+              // viewRelatedPart,
               handleRemove,
               handleUpdate,
               relatedPartsState,
@@ -282,7 +289,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 
 const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
-  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  // viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   rootPartName: string;
@@ -292,7 +299,7 @@ const RelatedPartList: React.FunctionComponent<{
   isReleased: boolean;
 }> = ({
   voidRelatedPart,
-  viewRelatedPart,
+  // viewRelatedPart,
   handleRemove,
   handleUpdate,
   rootPartName,
@@ -337,7 +344,7 @@ const RelatedPartList: React.FunctionComponent<{
                         listItem,
                         voidRelatedPart,
                         editRelatedPart,
-                        viewRelatedPart,
+                        // viewRelatedPart,
                         rootPartName,
                         rootRevisionChangeType,
                         relatedPartsState,
@@ -359,7 +366,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   editRelatedPart: (listItem: RelatedPartsListItem) => void;
-  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  // viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
@@ -368,7 +375,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   listItem,
   voidRelatedPart,
   editRelatedPart,
-  viewRelatedPart,
+  // viewRelatedPart,
   rootPartName,
   rootRevisionChangeType,
   relatedPartsState,
@@ -403,6 +410,30 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
   const titleCellRef = useRef<HTMLSpanElement>(null);
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
+
+  // Open Modal on-eye-icon click
+
+  const relatedSubPartDialog = useDialog();
+  // const dispatch = useDispatch();
+
+  const openDialog = () => {
+    relatedSubPartDialog.open();
+  };
+
+  // const closeDialog = () => {
+  //   relatedSubPartDialog.close();
+  //   dispatch(documentRevisionsActions.reload(listItem.documentRevisionId));
+  // };
+
+  const closeDialog = (e) => {
+    e.stopPropagation();
+    relatedSubPartDialog.close();
+    // dispatch(documentRevisionsActions.reload(listItem.documentRevisionId));
+  };
+
+  // const changeRequestDetails = useSelector((state: ApplicationState) =>
+  //   changeRequestsSelectors.getChangeRequest(state, listItem.documentRevisionId));
+
   return (
     <div key={listItem.documentRevisionId}
       onClick={() => editRelatedPart(listItem)}
@@ -412,7 +443,16 @@ const RelatedPartViewRow: React.FunctionComponent<{
       data-cy="related-parts-view-row"
     >
       <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
-        {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
+        <Link
+          to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
+          target="_blank"
+          className={classes.link}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          <span>  {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b> </span>
+        </Link>
       </div>
       <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
         <Tooltip title={
@@ -441,7 +481,6 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 <Checkbox
                   checked = {isVoided || isRevChangeTypeObs}
                   disabled={relatedPartsState.viewOnlyMode || isReleased}
-                  classes={{ disabled: classes.disabled }}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {
                     e.stopPropagation();
                     openConfirmDialog();
@@ -489,10 +528,53 @@ const RelatedPartViewRow: React.FunctionComponent<{
             })}
             onClick={(e: React.MouseEvent<SVGElement>) => {
               e.stopPropagation();
-              viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
+              openDialog();
+              // viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
             } }
           />
         </FBTooltip>
+        {
+          relatedSubPartDialog.isOpen &&
+                <Dialog
+                  disableBackdropClick={true}
+                  disableEnforceFocus
+                  classes={{
+                    root: classes.root,
+                    paper: classes.paper,
+                  }}
+                  scroll="paper"
+                  disableEscapeKeyDown={true}
+                  maxWidth={false}
+                  open={relatedSubPartDialog.isOpen}
+                  onSubmit={(event: React.FormEvent) => event.stopPropagation()}
+                  id="ApprovalRequest-dialog"
+                >
+                  <DialogTitle style={{ display: "flex", justifyContent: "space-between" }} disableTypography>
+                    <Typography style={{ display: "flex" }}>
+                      <Text translation="approvalRequest.dialog.title" />
+                    </Typography>
+                    <div style={{ display: "flex" }}>
+                      <IconButton
+                        className={classes.close}
+                        size="small"
+                      // onClick={handleOpenNewTab}
+                      >
+                        <NewTabIcon />
+                      </IconButton>
+                      <IconButton
+                        className={classes.close}
+                        size="small"
+                        onClick={closeDialog}
+                      >
+                        <CloseIcon />
+                      </IconButton></div>
+                  </DialogTitle>
+                  <DialogContent dividers
+                  >
+                    <div>nITIN </div>
+                  </DialogContent>
+                </Dialog>
+        }
       </Box>
     </div>
   );
@@ -621,7 +703,7 @@ const RelatedParts: React.FunctionComponent<{
   parentStatus?: RELATED_PARTS_STATUS;
   parentStatusChanged: (value: any) => void;
   createNewDocument: (relatedPartDetails?: any) => void;
-  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  // viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   fetchRelatedParts: (documentId: any) => void;
@@ -632,7 +714,7 @@ const RelatedParts: React.FunctionComponent<{
   parentStatus = RELATED_PARTS_STATUS.PARENT_NO,
   parentStatusChanged,
   createNewDocument,
-  viewRelatedPart,
+  // viewRelatedPart,
   handleRemove,
   handleUpdate,
   fetchRelatedParts,
@@ -661,7 +743,7 @@ const RelatedParts: React.FunctionComponent<{
           <RelatedPartGrid
             documentRevision={documentRevision}
             createNewDocument={createNewDocument}
-            viewRelatedPart={viewRelatedPart}
+            // viewRelatedPart={viewRelatedPart}
             handleRemove={handleRemove}
             handleUpdate={handleUpdate}
             fetchRelatedParts = {fetchRelatedParts}
