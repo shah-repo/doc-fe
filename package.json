@@ -117,15 +117,18 @@
     "node": "v18.13.0"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider --max_old_space_size=8192 build",
-    "test": "react-scripts --openssl-legacy-provider --expose-gc test --logHeapUsage",
+    "start": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider start",
+    "build": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider --max_old_space_size=8192 build",
+    "test": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc --ext .ts,.tsx src",
     "lint_cypress": "eslint -c cypress/.eslintrc --ext .ts,.tsx cypress/integration",
     "lint:fix": "yarn lint --fix",
     "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=0",
     "postinstall": "patch-package"
+  },
+  "eslintConfig": {
+    "extends": "shared-config"
   },
   "browserslist": [
     "chrome >= 66",
