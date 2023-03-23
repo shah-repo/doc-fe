@@ -53,10 +53,8 @@
     // @todo: remove each warning rule override below. Don't forget to uncomment correct rule above.
     "@typescript-eslint/array-type": ["warn"],
     "@typescript-eslint/ban-ts-comment": ["warn"],
-    "@typescript-eslint/ban-ts-ignore": ["warn"],
     "@typescript-eslint/ban-types": ["warn"],
     "@typescript-eslint/brace-style": ["warn"],
-    "@typescript-eslint/camelcase": ["warn"],
     "@typescript-eslint/comma-dangle": ["warn", "always-multiline"],
     "@typescript-eslint/consistent-type-assertions": ["warn"],
     "@typescript-eslint/default-param-last": ["warn"],
