@@ -37,7 +37,7 @@ import { Link } from "react-router-dom";
 import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
+import { documentPreviewPath, documentVersionPath } from "../../../../document.revision/utils/paths";
 import useDialog from "../../../../hooks/useDialog";
 import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
 import useStyles from "./RelatedPart.styles";
@@ -147,7 +147,7 @@ const ParentPartSelector: React.FunctionComponent<{
 const RelatedPartGrid: React.FunctionComponent<{
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
-  // viewRelatedPart: (docRevId: string, documentId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   fetchRelatedParts;
@@ -156,7 +156,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 }> = ({
   documentRevision,
   createNewDocument,
-  // viewRelatedPart,
+  viewRelatedPart,
   handleRemove,
   handleUpdate,
   fetchRelatedParts,
@@ -255,7 +255,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             ...{
               documentRevision,
               voidRelatedPart,
-              // viewRelatedPart,
+              viewRelatedPart,
               handleRemove,
               handleUpdate,
               relatedPartsState,
@@ -289,7 +289,7 @@ const RelatedPartGrid: React.FunctionComponent<{
 
 const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
-  // viewRelatedPart: (docRevId: string, documentId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   rootPartName: string;
@@ -299,7 +299,7 @@ const RelatedPartList: React.FunctionComponent<{
   isReleased: boolean;
 }> = ({
   voidRelatedPart,
-  // viewRelatedPart,
+  viewRelatedPart,
   handleRemove,
   handleUpdate,
   rootPartName,
@@ -344,7 +344,7 @@ const RelatedPartList: React.FunctionComponent<{
                         listItem,
                         voidRelatedPart,
                         editRelatedPart,
-                        // viewRelatedPart,
+                        viewRelatedPart,
                         rootPartName,
                         rootRevisionChangeType,
                         relatedPartsState,
@@ -366,7 +366,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   listItem: RelatedPartsListItem;
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void;
   editRelatedPart: (listItem: RelatedPartsListItem) => void;
-  // viewRelatedPart: (docRevId: string, documentId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
   rootRevisionChangeType: RevisionChangeType;
   relatedPartsState: RelatedPartsState;
@@ -375,7 +375,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   listItem,
   voidRelatedPart,
   editRelatedPart,
-  // viewRelatedPart,
+  viewRelatedPart,
   rootPartName,
   rootRevisionChangeType,
   relatedPartsState,
@@ -420,16 +420,21 @@ const RelatedPartViewRow: React.FunctionComponent<{
     relatedSubPartDialog.open();
   };
 
-  // const closeDialog = () => {
-  //   relatedSubPartDialog.close();
-  //   dispatch(documentRevisionsActions.reload(listItem.documentRevisionId));
-  // };
-
   const closeDialog = (e) => {
     e.stopPropagation();
     relatedSubPartDialog.close();
-    // dispatch(documentRevisionsActions.reload(listItem.documentRevisionId));
   };
+
+  //  const handleOpenNewTab = () => {
+  //   window.open(changeRequestPreviewPath(changeRequestId));
+  // };
+
+  const handleOpenNewTab = () => {
+    // viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
+    window.open(documentPreviewPath(listItem.documentRevisionId, listItem.documentId));
+
+  };
+
 
   // const changeRequestDetails = useSelector((state: ApplicationState) =>
   //   changeRequestsSelectors.getChangeRequest(state, listItem.documentRevisionId));
@@ -557,7 +562,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                       <IconButton
                         className={classes.close}
                         size="small"
-                      // onClick={handleOpenNewTab}
+                        onClick={handleOpenNewTab}
                       >
                         <NewTabIcon />
                       </IconButton>
@@ -703,7 +708,7 @@ const RelatedParts: React.FunctionComponent<{
   parentStatus?: RELATED_PARTS_STATUS;
   parentStatusChanged: (value: any) => void;
   createNewDocument: (relatedPartDetails?: any) => void;
-  // viewRelatedPart: (docRevId: string, documentId: string) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: (docRevId: string, suffixNumber: string, suffixName: string) => void;
   fetchRelatedParts: (documentId: any) => void;
@@ -714,7 +719,7 @@ const RelatedParts: React.FunctionComponent<{
   parentStatus = RELATED_PARTS_STATUS.PARENT_NO,
   parentStatusChanged,
   createNewDocument,
-  // viewRelatedPart,
+  viewRelatedPart,
   handleRemove,
   handleUpdate,
   fetchRelatedParts,
@@ -743,7 +748,7 @@ const RelatedParts: React.FunctionComponent<{
           <RelatedPartGrid
             documentRevision={documentRevision}
             createNewDocument={createNewDocument}
-            // viewRelatedPart={viewRelatedPart}
+            viewRelatedPart={viewRelatedPart}
             handleRemove={handleRemove}
             handleUpdate={handleUpdate}
             fetchRelatedParts = {fetchRelatedParts}
