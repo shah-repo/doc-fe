@@ -1,12 +1,10 @@
 import { debounce, get, has, isEmpty, set } from "lodash";
 import React, { useMemo } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { SM } from "../../App";
 import { authSelectors } from "../../state/ducks/auth";
 import { changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ChangeRequest, ChangeRequestEditRequestBody } from "../../state/ducks/changeRequest/types";
-import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import ChangeRequestFormContainer from "../change.request/form/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../change.request/form/transform";
@@ -15,6 +13,7 @@ import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
 import ChangeRequestSummaryContainer from "./summary/container";
@@ -46,15 +45,18 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
   { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, inDialog = false, currentDocRevId }) => {
 
-  const dispatch = useDispatch();
-  const { _documentRevisionFormState } = SM.useStores();
+
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
 
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
       setDoNotPrompt(true);
-      dispatch(documentRevisionsActions.reload(_documentRevisionFormState?.documentRevision?.id as string));
+      FBDataStore?.setRefreshData({
+        ...FBDataStore?.refreshData,
+        changeRequest: { ...FBDataStore?.refreshData?.changeRequest, formInput: initialValues.formInput },
+      });
+
       loadAudit(changeRequest.id);
     },
   });
