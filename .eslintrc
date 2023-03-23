@@ -26,7 +26,11 @@
     "no-useless-constructor": "off",
     "@typescript-eslint/no-useless-constructor": "error",
     "semi": "off",
-    "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/semi": [
+      "error",
+      // @todo: turn back to "never"
+      "always"
+    ],
     "no-unused-expressions": "off",
     "@typescript-eslint/no-unused-expressions": ["error"],
     "no-unused-vars": "off",
