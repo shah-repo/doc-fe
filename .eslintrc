@@ -51,6 +51,7 @@
 //    ],
     // These are temporary rules ovverides to slowly fix our codebase
     // @todo: remove each warning rule override below. Don't forget to uncomment correct rule above.
+    // @todo: after all fixes, remove "size: 2x" from bitbucket-pipelines.yml &COMMON step, which was increased because of big amount of warnings.
     "@typescript-eslint/array-type": ["warn"],
     "@typescript-eslint/ban-ts-comment": ["warn"],
     "@typescript-eslint/ban-types": ["warn"],
