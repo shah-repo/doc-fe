@@ -82,13 +82,13 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
 
   const handleEditGroup = (groupId: string, values: GroupRequestBody) => {
     const isGroupNameChanged = !(selectedGroup && (selectedGroup.name === values.name));
-    const initialDeactivedMember = toMembersOptions(
+    const initialDeactivedMembers = toMembersOptions(
       (selectedGroup?.employees.filter((e) => !e.active) as unknown) as GetEmployeeResponse[]) ?? [];
 
     dispatch(
       groupManagementActions.editGroup(
         groupId,
-        toEditRequestBody(isGroupNameChanged, values, [...initialDeactivedMember, ...members], parentGroups),
+        toEditRequestBody(isGroupNameChanged, values, [...initialDeactivedMembers, ...members], parentGroups),
         editGroupAsync,
       ),
     );
