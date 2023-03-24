@@ -771,6 +771,7 @@
   "form.builder.add.line.item": "ADD LINE ITEM",
   "form.builder.field.level.name": "Level name",
   "form.builder.field.limit": "Limit",
+  "form.builder.field.threshold": "Threshold",
   "form.builder.field.qunatity.ordered": "Quantity Ordered",
   "form.builder.field.ordered": "Ordered",
   "form.builder.field.received": "Receipt Qty",

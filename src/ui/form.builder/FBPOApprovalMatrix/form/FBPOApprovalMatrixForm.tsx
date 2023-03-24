@@ -27,6 +27,12 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
       name="limit"
       rules="required"
     />
+    <FBTextField
+      inputProps={{ type: "number" }}
+      label="form.builder.field.threshold"
+      name="threshold"
+      rules="required"
+    />
     {signatureStages?.map((level) => (
       <Box key={level} borderTop="1px solid lightgray">
         <Typography variant="h6" style={{ paddingTop: 20 }}>

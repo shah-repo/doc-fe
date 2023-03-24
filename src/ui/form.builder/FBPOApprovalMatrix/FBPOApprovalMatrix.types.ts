@@ -53,6 +53,7 @@ export interface POApprovalMatrixLevel {
   id: string;
   name: string;
   limit: number;
+  threshold: number;
   signatures: Signature[];
 }
 
