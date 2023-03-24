@@ -35,6 +35,7 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
 
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
+  const [editMembers, setEditMembers] = useState<OptionType[]>([]);
   const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
 
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
@@ -44,6 +45,9 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
       setGroup(toGroupOptions(selectedGroup));
       setMembers(toMembersOptions(
         (selectedGroup.employees.filter((e) => e.active) as unknown) as GetEmployeeResponse[])
+      );
+      setEditMembers(toMembersOptions(
+        (selectedGroup.employees as unknown) as GetEmployeeResponse[])
       );
       setParentGroups(toParentOptions((selectedGroup.parents as unknown) as Group[]));
     }
@@ -85,7 +89,7 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
     dispatch(
       groupManagementActions.editGroup(
         groupId,
-        toEditRequestBody(isGroupNameChanged, values, members, parentGroups),
+        toEditRequestBody(isGroupNameChanged, values, editMembers, parentGroups),
         editGroupAsync,
       ),
     );
