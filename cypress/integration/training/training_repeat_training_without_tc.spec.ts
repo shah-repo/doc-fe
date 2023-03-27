@@ -405,7 +405,7 @@ context("Repeat Training without Training Curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -476,7 +476,7 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -502,12 +502,14 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it(`${USERS[11].name} with completed date inside 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", completedDate);
     });
 
     it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");

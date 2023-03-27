@@ -12,10 +12,10 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -334,6 +334,13 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -648,7 +655,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -704,6 +711,9 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
 
     it("Save training", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
@@ -713,9 +723,10 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -726,6 +737,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
@@ -742,6 +754,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
       cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -752,12 +765,13 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+
     it("Verify training notification", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
     });
 
     it("No notification under Training tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.contains("No pending actions").should("exist");
@@ -794,10 +808,6 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -840,6 +850,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
@@ -852,6 +863,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
@@ -862,6 +874,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
@@ -890,15 +903,16 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[1].name} and ${USERS[3].name} should present in Due tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 2);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[1].name.split(" ")[0]);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[3].name.split(" ")[0]);
     });
 
     it("Chart - Due in 7 Days should have 2", () => {
+      SystemRequirement("REQ-5040");
       cy.intercept({ method: "GET", pathname: "/api/v1/training_record/dueSummary/*" }, (req) => {
         req.reply((res) => {
           expect(res.body.DUE).to.equal(2);
@@ -911,9 +925,6 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[1].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
       cy.progressBarShouldNotExist();
@@ -929,7 +940,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -961,9 +972,9 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[3].name} should present in Due tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 1);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[3].name.split(" ")[0]);
     });
@@ -994,7 +1005,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1009,10 +1020,6 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Goto Dashboard", () => {
       cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
@@ -1020,7 +1027,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Select 'Trainings' tab", () => {
-      cy.contains("Trainings").eq(0).arrowClick();
+      cy.dashOpenTrainingsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

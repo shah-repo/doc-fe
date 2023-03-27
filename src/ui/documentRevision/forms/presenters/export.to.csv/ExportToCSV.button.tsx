@@ -114,10 +114,10 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
         renderAsButton ? <StyledButton
           color="primary" data-cy="exportCSVButton" onClick={dialog.open}>
           <Text translation="common.export" />
-        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
           <StyledMenuListIcon><ExportIcon/></StyledMenuListIcon>
           <StyledMenuListItemText
-            data-cy="exportCSVButton" onClick={dialog.open}
+            data-cy="exportCSVButton"
             primary={<Text translation="common.export" />}
           />
         </StyledMenuListItem>

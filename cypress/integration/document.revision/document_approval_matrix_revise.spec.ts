@@ -3,7 +3,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -111,19 +110,19 @@ context("Document Approval Matrix Revise", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -143,9 +142,9 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.drAddAnotherRoleBtn();
-      });
+      cy.drAddAnotherRoleBtn();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -157,9 +156,9 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -194,19 +193,19 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
-      cy.drClickCreateSupplierWithApiCall();
+      cy.drClickCreateSupplierWithoutApiCall();
     });
   });
 
   context("Approve & Release Document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -238,7 +237,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("Save and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check approvals enforcement", () => {
@@ -263,12 +262,8 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-        });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -289,7 +284,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to matrix details tab", () => {
@@ -303,7 +298,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -321,12 +316,8 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-        });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -359,7 +350,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("Save and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check approvals enforcement", () => {
@@ -384,12 +375,8 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-        });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -411,7 +398,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to matrix details tab", () => {
@@ -430,11 +417,11 @@ context("Document Approval Matrix Revise", () => {
 
   context("'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and Release the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -464,7 +451,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("click on 'Approve and Release' button", () => {
@@ -481,12 +468,8 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-        });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });

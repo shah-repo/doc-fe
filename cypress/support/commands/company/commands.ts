@@ -40,6 +40,7 @@ declare global {
       cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
+      cmpClickCreateApprovalRequestWithoutApi(): Chainable<Subject>;
       cmpVerifyNoPendingActions(): Chainable<Subject>;
       cmpVerifyCompanyAvatar(params: { name: string; avatarSource: string }): Chainable<Subject>;
       cmpVerifyCompanyLogo(params: { logoSource: string}): Chainable<Subject>;
@@ -240,6 +241,7 @@ Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSo
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
+  cy.wait(1000);
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
@@ -250,6 +252,13 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"change.request.create\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("cmpClickCreateApprovalRequestWithoutApi", () => {
+  cy.get("[data-cy=\"change.request.create\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });

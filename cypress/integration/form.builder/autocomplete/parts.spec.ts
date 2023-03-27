@@ -6,7 +6,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -122,7 +121,7 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
@@ -156,7 +155,7 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -213,6 +212,7 @@ context("Autocomplete 'Parts' test", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -282,6 +282,7 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 1 for Parts form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
@@ -348,6 +349,7 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 3 for Parts form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
@@ -603,10 +605,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Clicks on 'Add new part' button", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.DocPreview], () => {
-          cy.ptClickCreateNewPart();
-        });
+        cy.ptClickCreateNewPart();
       });
 
       it("Enter document title 'Parts document title'", () => {
@@ -631,7 +630,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate to specification tab", () => {
@@ -658,7 +657,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Extract document Id", () => {
@@ -848,10 +847,8 @@ context("Autocomplete 'Parts' test", () => {
 
     context("Approve and release FORM document", () => {
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.fbClickButton({ el: "updateRecord" });
       });
 
       it("Get created Parts ID", () => {
@@ -1080,7 +1077,7 @@ context("Autocomplete 'Parts' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

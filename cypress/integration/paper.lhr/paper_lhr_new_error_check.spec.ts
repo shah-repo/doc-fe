@@ -529,13 +529,13 @@ context("Paper new process LHR", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("Approve and release form", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -570,13 +570,17 @@ context("Paper new process LHR", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
   context("Approve and release form", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -766,6 +770,7 @@ context("Paper new process LHR", () => {
 
     it("Enter Intial Quantity field value to 1.5e-8", () => {
       cy.get(`[name="lhr_initial_quantity"]`).arrowType("1.5e-8");
+      cy.lhrSaveWithoutApi();
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -778,6 +783,8 @@ context("Paper new process LHR", () => {
 
     it("Verify Initial Quantity is displayed as 1.5e-8", () => {
       cy.get(`[name="lhr_initial_quantity"]`).should("have.value", "1.5e-8");
+      cy.unClick();
+      cy.saveBarShouldNotExist();
     });
 
     it("Verify 'The End Quantity is a required field.' is displayed", () => {
@@ -797,6 +804,7 @@ context("Paper new process LHR", () => {
     it("Enter End Quantity field value to 150000", () => {
       cy.get(`[name="lhr-end-quantity"]`).arrowType("150000");
       cy.unClick();
+      cy.lhrSaveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -908,6 +916,8 @@ context("Paper new process LHR", () => {
   context("Click save document", () => {
     it("Click save document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -1009,21 +1019,22 @@ context("Paper new process LHR", () => {
     });
 
     it("Add approver", () => {
-      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.landingPageLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
   context("Approve and released paper LHR", () => {
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and Release document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -1080,20 +1091,23 @@ context("Paper new process LHR", () => {
     });
 
     it("Add approver", () => {
-      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
   context("Approve and released paper LHR", () => {
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Approve and Release document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it(`Check doc in ${STATUS_TYPES_LABEL.RELEASED} status and subtitle contains same lot number`, () => {

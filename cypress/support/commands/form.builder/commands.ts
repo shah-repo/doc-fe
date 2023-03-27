@@ -37,6 +37,9 @@ declare global {
       fbSelectCustomControl(): Chainable<Subject>;
       fbClickAddNewHiddenBtn(): Chainable<Subject>;
       fbSelectCheckboxValue(...list: string[]): Chainable<Subject>;
+      fbSelectCheckboxValueList(...list: string[]): Chainable<Subject>;
+      fbSelectCheckboxInlineValue(...list: string[]): Chainable<Subject>;
+      fbSelectCheckboxValueNew(params: { value: string }): Chainable<Subject>;
       fbUnSelectCheckboxValue(...list: string[]): Chainable<Subject>;
       fbInlineApprovalHisotryCheck(...list: string[]): Chainable<Subject>;
       fbSelectRadioButtonValue(params: { value: string }): Chainable<Subject>;
@@ -219,8 +222,24 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[type=\"checkbox\"]").check(item, { force: true });
+    cy.get(`[name="editorProperties"] [type="checkbox"]`).check(item, { force: true });
   });
+});
+
+Cypress.Commands.add("fbSelectCheckboxValueList", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[name="validators.required_if_in.value"] input`).check(item, { force: true });
+  });
+});
+
+Cypress.Commands.add("fbSelectCheckboxInlineValue", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[name^="checkbox-group-for-inline-"] input`).check(item, { force: true });
+  });
+});
+
+Cypress.Commands.add("fbSelectCheckboxValueNew", (params: { value: string }) => {
+  cy.get(`[value="${params.value}"]`).check({ force: true });
 });
 
 Cypress.Commands.add("fbCheckFieldsExistSectionList", (...list: string[]) => {
@@ -345,7 +364,7 @@ Cypress.Commands.add("fbEnterTextEditor", (params: { value: string }) => {
 
 Cypress.Commands.add("fbGroupOptions", (...list: string[]) => {
   list.forEach(function(item, i) {
-    cy.get("[data-cy=\"options\"]").arrowType((i === list.length - 1) ? item : item + "{enter}" );
+    cy.get("[data-cy=\"options\"]").arrowType((i === list.length - 1) ? item : item + "{enter}" ).wait(500);
   });
 });
 
@@ -518,6 +537,8 @@ Cypress.Commands.add("verifyFieldRequiredDocumentType", () => {
 Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string }) => {
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
+  cy.unClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
 });
 

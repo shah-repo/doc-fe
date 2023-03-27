@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -49,15 +48,6 @@ context("FORM Field test", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[1].email,
-      }).then((response) => {
-        loginResponse = response;
-        done();
-      });
-    });
   });
 
   context("Login user", () => {
@@ -97,7 +87,7 @@ context("FORM Field test", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Create FORM document with Form fields", () => {
@@ -105,6 +95,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0020", "FB-0030");
         cy.fbAddNewField();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
         cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
         cy.fbEnterNameValue({ name: "rows", value: "2" });
@@ -116,7 +107,9 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0120");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+        SystemRequirement("FB-0040");
         cy.fbGroupOptions("option1", "option2");
         cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -126,6 +119,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0140", "FB-0150");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
         cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
         cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
@@ -137,6 +131,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0060", "FB-0170", "FB-0180", "FB-0190");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
         cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -146,6 +141,7 @@ context("FORM Field test", () => {
       it("Add Date picker", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -159,6 +155,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0070");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
         cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -169,6 +166,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0130");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
         cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
         cy.fbGroupOptions("option1", "option2");
@@ -184,6 +182,7 @@ context("FORM Field test", () => {
       it("Add Radio Button group", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
@@ -208,6 +207,7 @@ context("FORM Field test", () => {
       it("Add File Upload", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -216,6 +216,7 @@ context("FORM Field test", () => {
       it("Add Blank Template Form", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
         cy.fbAddNewFieldButton();
         cy.elUploadAttachment({ fileName: "image.jpg", el: "fb-attachment-field-fb-blank-template-" });
@@ -224,6 +225,7 @@ context("FORM Field test", () => {
       it("Add Quantity", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -232,6 +234,7 @@ context("FORM Field test", () => {
       it("Add Timer", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Timer" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -240,6 +243,7 @@ context("FORM Field test", () => {
       it("Add Purchase Order", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Purchase Order" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -248,6 +252,7 @@ context("FORM Field test", () => {
       it("Add Receive Purchase Order", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -256,6 +261,7 @@ context("FORM Field test", () => {
       it("Add PO Approval Matrix", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PO Approval Matrix" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -264,6 +270,7 @@ context("FORM Field test", () => {
       it("Add Instructions Media upload", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -272,6 +279,7 @@ context("FORM Field test", () => {
       it("Add Evidence Media upload", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -288,6 +296,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0080");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-equipment" });
         cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -298,6 +307,7 @@ context("FORM Field test", () => {
         SystemRequirement("FB-0100", "FB-0110", "FB-0160");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
         cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
         cy.fbSelectCheckboxName("editorConfig.rangeOption",
@@ -309,6 +319,7 @@ context("FORM Field test", () => {
       it("Add Section", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-section" });
         cy.fbSelectCheckboxValue("inspectionSection");
         cy.fbAddNewFieldButton();
@@ -317,6 +328,7 @@ context("FORM Field test", () => {
       it("Add Subsection", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Subsection" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
         cy.fbAddNewFieldButton();
       });
@@ -324,6 +336,7 @@ context("FORM Field test", () => {
       it("Add Step", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-step" });
         cy.fbAddNewFieldButton();
       });
@@ -331,28 +344,27 @@ context("FORM Field test", () => {
       it("Add Approvals", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Approvals" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-approvals" });
-        cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add Inline Approval", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
         cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add Request Approval", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Request Approval" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-request-approval" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -361,6 +373,7 @@ context("FORM Field test", () => {
       it("Add Checkpoint", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Checkpoint" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-checkpoint" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -369,6 +382,7 @@ context("FORM Field test", () => {
       it("Add Create a Label", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Create a Label" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-create-label" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -377,6 +391,7 @@ context("FORM Field test", () => {
       it("Add Implementation Task", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-task" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -385,30 +400,35 @@ context("FORM Field test", () => {
       it("Add Instructions 'MPI'", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "MPI" });
+        SystemRequirement("FB-0010");
         cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
         cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
 
-      it("Add Instructions 'Select Document(s)'", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-      });
+      // This is commented Due to ENC-13644
+      // it("Add Instructions 'Select Document(s)'", () => {
+      //   cy.fbClickAddNewHiddenBtn();
+      //   cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
+      //   SystemRequirement("FB-0010");
+      //   cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
+      //   cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
+      //   cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbAddNewFieldButton();
+      // });
 
       it("Add Actions 'Action Button'", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Actions", field: "Action Button" });
-        cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+        cy.get("input[value^=\"SendEmailWithFormToFill\"]").check();
+        cy.get("input[value^=\"SendSurveyEmailWithFormToFill\"]").check();
+        cy.unClick();
         cy.fbAddNewFieldButton();
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -523,12 +543,13 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "fb-editor-actions-cancel" });
       });
 
-      it("Verify Purchase Order attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-purchase-order" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      });
+      // code is commented for ENC-13939
+      // it("Verify Purchase Order attributes", () => {
+      //   cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
+      //   cy.fbVerifyNameValue({ name: "label", value: "fb-purchase-order" });
+      //   cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      // });
 
       it("Verify Receive Purchase Order attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });
@@ -652,13 +673,14 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "fb-editor-actions-cancel" });
       });
 
-      it("Verify Select Document attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-doc" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-select-doc" });
-        cy.get("[data-cy=\"options\"]").parent().should("contain", "AR Form");
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      });
+      // This is commented Due to ENC-13644
+      // it("Verify Select Document attributes", () => {
+      //   cy.fbClickLabelEditHiddenBtn({ label: "fb-select-doc" });
+      //   cy.fbVerifyNameValue({ name: "label", value: "fb-select-doc" });
+      //   cy.get("[data-cy=\"options\"]").parent().should("contain", "AR Form");
+      //   cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      // });
 
       it("Verify Action Button attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
@@ -736,7 +758,7 @@ context("FORM Field test", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Verify updated Quantity field", () => {
@@ -755,9 +777,7 @@ context("FORM Field test", () => {
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -792,7 +812,7 @@ context("FORM Field test", () => {
       });
 
       it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 

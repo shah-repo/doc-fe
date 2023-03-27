@@ -18,6 +18,11 @@ export type FBPurchaseOrderProps =
   loading?: boolean;
 };
 
+export enum FBPurchaseOrderModeOptions {
+  FORM = "form",
+  PREVIEW = "preview"
+}
+
 export enum FBPurchaseOrderItemType {
   PRODUCT = "product",
   SERVICE = "service",

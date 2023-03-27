@@ -205,26 +205,29 @@ context("Approval request landing page test", () => {
 
   context("Check approval list defaults to draft and in review status for AR at start of session", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
   });
 
   context("Prepare approval request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      cy.drSelectApprovalsTab();
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to ar list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Clear filters", () => {
@@ -250,6 +253,7 @@ context("Approval request landing page test", () => {
     context("Check AR ID filter", () => {
       it("Filter list by AR ID", () => {
         cy.alFilterByArId({ arId: "AR99999" });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Verify filter by AR ID", () => {
@@ -270,6 +274,7 @@ context("Approval request landing page test", () => {
 
       it("Filter list by TITLE", () => {
         cy.alFilterByTitle({ title: approvalRequestName2 });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Verify filter by TITLE", () => {
@@ -290,6 +295,7 @@ context("Approval request landing page test", () => {
 
       it("Filter list by OWNER", () => {
         cy.alFilterByOwner({ owner: USERS[2].name });
+        cy.landingPageLoadingElementShouldAppear();
       });
 
       it("Verify filter by OWNER", () => {
@@ -337,11 +343,11 @@ context("Approval request landing page test", () => {
       });
 
       it("Navigate to Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
       });
 
       it("Navigate back to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
       });
 
       it("Verify filter by status", () => {

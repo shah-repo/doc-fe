@@ -576,7 +576,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Enter Part Description", () => {
-      cy.poEnterPartDescription({ partDescription: "PRT-XXXXX is a non-enlil part" });
+      cy.get("[name=\"partNumberTitle\"]").type("PRT-XXXXX is a non-enlil part", { delay: 1000 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -677,7 +677,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
   context("Approve PO", () => {
     it("Approve PO", () => {
-      cy.ebTryToApprove();
+      cy.poApproveWithoutApi();
     });
   });
 

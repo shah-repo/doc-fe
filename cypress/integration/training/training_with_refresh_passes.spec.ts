@@ -17,6 +17,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -312,6 +313,13 @@ context("Test training records after refresh period passes", { tags: ["@timetool
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -600,7 +608,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -671,7 +679,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -819,11 +827,13 @@ context("Test training records after refresh period passes", { tags: ["@timetool
       cy.listLoadingElementShouldNotExist();
     });
 
-
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${releasedFormId}Rev 1 released form` });
+      SystemRequirement("REQ-2460");
       // eslint-disable-next-line max-len
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released formA training is assigned to you` });
+
+      cy.dashOpenMyFeedTab();
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${releasedFormId}Rev 1 released form` });
     });
   });
 

@@ -166,10 +166,12 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wait(3000);
     });
   });
 
@@ -182,10 +184,13 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
 
     it("Select released NCO Form", () => {
       cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(3000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -492,13 +497,16 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
   context("Check PO exists & verify the official predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Check filters for document type management", () => {
       cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.filterDocTypeManagement({
         status: "Active", documentType: "Purchase Order", acronym: "PO-",
         privateNumber: "Yes", redline: "No", qms: "Yes", needsSignature: "Yes", training: "No",
@@ -883,23 +891,27 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
     });
   });
 
-  context("Verify that if the Requestor fulfills the PO approval level in Gray color", () => {
+  context("Verify that if the Requestor fulfills the PO approval level in Gray", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      SystemRequirement("REQ-5210");
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[11].name + " | DRAFT" + USERS[11].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[11].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[11].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
-    it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
+    it("Check approval icon if it fulfills the PO approval level", () => {
+      cy.poAMCheckApprovalIconIfItsDisabled();
     });
   });
 
-  context("Verify that history tab is capturing requestor added and approver added", () => {
+  context("Verify that history tab is capturing requestor added and approver Added", () => {
     it("Check history entry for 'Requestor Added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor added")
+      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[11].name);
     });
 
@@ -966,12 +978,16 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
   // eslint-disable-next-line max-len
   context("Verify that if the Requestor fulfills the PO approval level then the system should mark the approval level as fulfilled", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      SystemRequirement("REQ-5210");
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[12].name + " | DRAFT" + USERS[12].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[12].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[12].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
     it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -1027,6 +1043,7 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
     });
 
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5200");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[12].name} - ${USERS[12].email}`);
     });
   });
@@ -1429,6 +1446,7 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
     });
 
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5200");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[11].name} - ${USERS[11].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1474,12 +1492,16 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
   // eslint-disable-next-line max-len
   context("Verify that if the Requestor fulfills the PO approval level then the system should mark the approval level as fulfilled", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      SystemRequirement("REQ-5210");
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[12].name + " | DRAFT" + USERS[12].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[12].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[12].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
     it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 

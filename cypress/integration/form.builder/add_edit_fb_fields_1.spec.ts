@@ -6,7 +6,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
@@ -219,7 +218,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.get(`input[name="validators.required_if"]`).check();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
       cy.get(`[data-cy="validators.required_if.value"]`).arrowType("A" );
-      cy.fbAddNewFieldButton();
+      cy.get("[data-cy='common.add']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -414,11 +413,12 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Edit Purchase Order", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order1" });
-      cy.fbAddNewFieldButton();
-    });
+    // code is commented for ENC-13939
+    // it("Edit Purchase Order", () => {
+    //   cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
+    //   cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order1" });
+    //   cy.fbAddNewFieldButton();
+    // });
 
     it("Edit Receive Purchase Order", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });
@@ -451,7 +451,7 @@ context("Add and edit FB fields - Test 1", () => {
   context("Verify Updation of Fields on reload page", () => {
     it("reload page", () => {
       cy.navigToDocumentList();
-      cy.drFilterDocListByNameAndStatus({ title: "New Document Revision", status: "Draft" });
+      cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00002", status: "Draft" });
     });
 
     it("Verify TextField", () => {
@@ -522,9 +522,10 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("fb-timer1").should("exist");
     });
 
-    it("Verify Purchase Order", () => {
-      cy.contains("fb-purchase-order1").should("exist");
-    });
+    // code is commented for ENC-13939
+    // it("Verify Purchase Order", () => {
+    //   cy.contains("fb-purchase-order1").should("exist");
+    // });
 
     it("Verify Receive Purchase Order", () => {
       cy.contains("fb-receive-purchase-order1").should("exist");
@@ -541,11 +542,9 @@ context("Add and edit FB fields - Test 1", () => {
     it("Upload attachment 'video.mp4'", () => {
       SystemRequirement("REQ-2990");
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-        cy.pmUploadAttachment({ fileName: "video.mp4" });
-      });
+      cy.pmUploadAttachment({ fileName: "video.mp4" });
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -553,10 +552,8 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("Step #1").should("exist");
     });
 
-    it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -611,6 +608,7 @@ context("Add and edit FB fields - Test 1", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -686,6 +684,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -832,6 +831,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 5 in document", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[4];
       if (el.includes("Page 5 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );

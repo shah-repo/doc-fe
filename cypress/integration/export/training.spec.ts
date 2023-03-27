@@ -5,7 +5,6 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -276,6 +275,10 @@ context("Export training curriculum", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -309,13 +312,11 @@ context("Export training curriculum", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -329,12 +330,9 @@ context("Export training curriculum", () => {
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test", { force: true });
+      cy.progressBarShouldAppear();
     });
 
     it("Enter training title 'training'", () => {
@@ -346,7 +344,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -354,11 +352,11 @@ context("Export training curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Open details tab", () => {
@@ -390,10 +388,7 @@ context("Export training curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-        });
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it(`Verify training status should be '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
@@ -401,7 +396,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -416,7 +411,7 @@ context("Export training curriculum", () => {
 
   context("TC with In Review status", () => {
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Verify export", () => {
@@ -429,7 +424,7 @@ context("Export training curriculum", () => {
 
   context("TC with Released status", () => {
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
     });
 
     it("Verify export", () => {
@@ -444,17 +439,16 @@ context("Export training curriculum", () => {
     it("Revise document with 'Obsolete' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.drClickSaveWithoutApiCall().wait(500);
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      cy.get("[name=\"voidDescription\"]").arrowType("test");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"common.true\"]").arrowClick({ multiple: true });
-      });
+      cy.get("[name=\"voidDescription\"]").arrowType("test").unClick();
+      cy.get("[data-cy=\"common.true\"]").arrowClick({ multiple: true });
+      cy.progressBarShouldAppear();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
     });
 
     it("Verify export", () => {
@@ -471,9 +465,9 @@ context("Export training curriculum", () => {
     });
 
     it("Select 'Superseded' record", () => {
-      cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -489,17 +483,18 @@ context("Export training curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test", { force: true });
+      cy.progressBarShouldAppear();
     });
 
     it("Enter training title 'training'", () => {
@@ -511,7 +506,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -523,7 +518,7 @@ context("Export training curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Open details tab", () => {
@@ -555,10 +550,7 @@ context("Export training curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-        });
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it(`Verify training status should be '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
@@ -566,7 +558,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -585,17 +577,18 @@ context("Export training curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test", { force: true });
+      cy.progressBarShouldAppear();
     });
 
     it("Enter training title 'training'", () => {
@@ -607,7 +600,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -615,7 +608,7 @@ context("Export training curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Open details tab", () => {
@@ -647,22 +640,19 @@ context("Export training curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-        });
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
     });
 
     it("revise TC", () => {
@@ -670,7 +660,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click Cancel draft", () => {

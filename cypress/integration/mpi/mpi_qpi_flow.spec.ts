@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -231,100 +230,97 @@ context("Mpi/Qpi flow", () => {
           SystemRequirement("REQ-3050");
           cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
+      });
 
-        context("Fill step #1 and check autosave", () => {
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Add attachment and check autosave", () => {
-            cy.contains("Step #1").parentsUntil("li")
-              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.elUploadAttachment({
-                fileName: "image.jpg",
-                el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-              });
-            });
-          });
-
-          it("While autosaving, fill step #1 description and check autosave", () => {
-            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
-              req.reply((res) => {
-                res.setDelay(10000);
-                res.setThrottle(10);
-              });
-            }).as("response");
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-            cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
-          });
-
-          it("Delete attachment and check autosave", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.get(`[id="fb-mediaalbum-upload-mpi-procedure-built-in.attachments"]`).parent()
-                .find("button").eq(3).click({ force: true });
-            });
-          });
-
-          it("Add 'Material one' to step #1 and check autosave", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-
-          it("While autosaving, add 'Equipment one' to step #1 and check autosave", () => {
-            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
-              req.reply((res) => {
-                res.setDelay(10000);
-                res.setThrottle(10);
-              });
-            }).as("response");
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-            cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
-          });
-
-          it("While autosaving, delete Material and check for autosave", () => {
-            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
-              req.reply((res) => {
-                res.setDelay(10000);
-                res.setThrottle(10);
-              });
-            }).as("response");
-            cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
-              .find("button").last().click();
-            cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
-          });
+      context("Fill step #1 and check autosave", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
         });
 
-        context("Refresh page and check data should exist", () => {
-          it("Refresh the page", () => {
-            cy.reload();
+        it("Add attachment and check autosave", () => {
+          cy.contains("Step #1").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
           });
-
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Step description should be exist", () => {
-            cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").next()
-              .should("have.text", "Description of step one");
-          });
-
-          it("Equipment should be exist", () => {
-            cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]")
-              .should("have.text", "ET-00003 - Equipment one");
-          });
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         });
 
-        context("Release MPI and verify state", () => {
-          it("Approve and release MPI document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        it("While autosaving, fill step #1 description and check autosave", () => {
+          cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+            req.reply((res) => {
+              res.setDelay(10000);
+              res.setThrottle(10);
             });
-          });
+          }).as("response");
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+        });
 
-          it("Verify MPI state should be 'Released'", () => {
-            SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-          });
+        it("Delete attachment and check autosave", () => {
+          cy.get(`[id="fb-mediaalbum-upload-mpi-procedure-built-in.attachments"]`).parent()
+            .find("button").eq(3).click({ force: true });
+          cy.progressBarShouldAppear();
+        });
+
+        it("Add 'Material one' to step #1 and check autosave", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
+
+        it("While autosaving, add 'Equipment one' to step #1 and check autosave", () => {
+          cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+            req.reply((res) => {
+              res.setDelay(10000);
+              res.setThrottle(10);
+            });
+          }).as("response");
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+          cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+        });
+
+        it("While autosaving, delete Material and check for autosave", () => {
+          cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+            req.reply((res) => {
+              res.setDelay(10000);
+              res.setThrottle(10);
+            });
+          }).as("response");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
+            .find("button").last().click();
+          cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+        });
+      });
+
+      context("Refresh page and check data should exist", () => {
+        it("Refresh the page", () => {
+          cy.reload();
+        });
+
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
+        });
+
+        it("Step description should be exist", () => {
+          cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").next()
+            .should("have.text", "Description of step one");
+        });
+
+        it("Equipment should be exist", () => {
+          cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]")
+            .should("have.text", "ET-00003 - Equipment one");
+        });
+      });
+
+      context("Release MPI and verify state", () => {
+        it("Approve and release MPI document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        });
+
+        it("Verify MPI state should be 'Released'", () => {
+          SystemRequirement("REQ-3050");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
     });
@@ -340,6 +336,10 @@ context("Mpi/Qpi flow", () => {
 
         it("Click on 'Create a document' button", () => {
           cy.cmpClickCreateNewDocument();
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
         });
       });
 
@@ -361,45 +361,45 @@ context("Mpi/Qpi flow", () => {
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
+      });
 
-        context("Fill step #1", () => {
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
-
-          it("Add 'Material one' to step #1", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-
-          it("Add 'Equipment one' to step #1", () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+      context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
         });
 
-        context("Release MPI and verify state", () => {
-          it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+        it("Fill step #1 description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        });
 
-          it("Approve and release MPI document with selecting approver", () => {
-            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-          });
+        it("Add 'Material one' to step #1", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
 
-          it("Verify MPI state should be 'In Review'", () => {
-            SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
-          });
+        it("Add 'Equipment one' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Release MPI and verify state", () => {
+        it("Click save document", () => {
+          cy.drClickSaveWithoutApiCall();
+        });
+
+        it("Approve and release MPI document with selecting approver", () => {
+          cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+        });
+
+        it("Verify MPI state should be 'In Review'", () => {
+          SystemRequirement("REQ-3050");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
     });
@@ -416,19 +416,7 @@ context("Mpi/Qpi flow", () => {
 
     context("Approve document in review", () => {
       it("approve document", () => {
-        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first()
-          .trigger("mouseover");
-        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
-        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
-      });
-
-      it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`)
-          .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
-          () => {
-            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-          });
+        cy.arApproveARFromDashboardWithoutApi();
       });
     });
 
@@ -464,6 +452,10 @@ context("Mpi/Qpi flow", () => {
         it("Click on 'Create a document' button", () => {
           cy.cmpClickCreateNewDocument();
         });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
       });
 
       context("Fill in the MPI attributes and verify state", () => {
@@ -484,45 +476,45 @@ context("Mpi/Qpi flow", () => {
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
+      });
 
-        context("Fill step #1", () => {
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
-
-          it("Add 'Material one' to step #1", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-
-          it("Add 'Equipment one' to step #1", () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+      context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
         });
 
-        context("Release MPI and verify state", () => {
-          it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+        it("Fill step #1 description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        });
 
-          it("Approve and release MPI document with selecting approver", () => {
-            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-          });
+        it("Add 'Material one' to step #1", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
 
-          it("Verify MPI state should be 'In Review'", () => {
-            SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
-          });
+        it("Add 'Equipment one' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Release MPI and verify state", () => {
+        it("Click save document", () => {
+          cy.drClickSaveWithoutApiCall();
+        });
+
+        it("Approve and release MPI document with selecting approver", () => {
+          cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+        });
+
+        it("Verify MPI state should be 'In Review'", () => {
+          SystemRequirement("REQ-3050");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
     });
@@ -547,6 +539,7 @@ context("Mpi/Qpi flow", () => {
       it("Confirm password", () => {
         cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+        cy.progressBarShouldAppear();
       });
     });
 
@@ -582,6 +575,10 @@ context("Mpi/Qpi flow", () => {
         it("Click on 'Create a document' button", () => {
           cy.cmpClickCreateNewDocument();
         });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
       });
 
       context("Fill in the QPI attributes and verify state", () => {
@@ -602,47 +599,45 @@ context("Mpi/Qpi flow", () => {
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
+      });
 
-        context("Fill step #1", () => {
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
-
-          it("Add 'Material one' to step #1", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-
-          it("Add 'Equipment one' to step #1", () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+      context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
         });
 
-        context("Release QPI and verify state", () => {
-          it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+        it("Fill step #1 description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        });
 
-          it("Approve and release QPI document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-            });
-          });
+        it("Add 'Material one' to step #1", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
 
-          it("Verify QPI state should be 'Released'", () => {
-            SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-          });
+        it("Add 'Equipment one' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Release QPI and verify state", () => {
+        it("Click save document", () => {
+          cy.drClickSaveWithoutApiCall();
+        });
+
+        it("Approve and release QPI document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        });
+
+        it("Verify QPI state should be 'Released'", () => {
+          SystemRequirement("REQ-3050");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
     });
@@ -658,6 +653,10 @@ context("Mpi/Qpi flow", () => {
 
         it("Click on 'Create a document' button", () => {
           cy.cmpClickCreateNewDocument();
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
         });
       });
 
@@ -679,45 +678,45 @@ context("Mpi/Qpi flow", () => {
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
+      });
 
-        context("Fill step #1", () => {
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
-
-          it("Add 'Material one' to step #1", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-
-          it("Add 'Equipment one' to step #1", () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+      context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
         });
 
-        context("Release QPI and verify state", () => {
-          it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+        it("Fill step #1 description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        });
 
-          it("Approve and release QPI document with selecting approver", () => {
-            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-          });
+        it("Add 'Material one' to step #1", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
 
-          it("Verify QPI state should be 'In Review'", () => {
-            SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
-          });
+        it("Add 'Equipment one' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Release QPI and verify state", () => {
+        it("Click save document", () => {
+          cy.drClickSaveWithoutApiCall();
+        });
+
+        it("Approve and release QPI document with selecting approver", () => {
+          cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+        });
+
+        it("Verify QPI state should be 'In Review'", () => {
+          SystemRequirement("REQ-3050");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
     });
@@ -734,17 +733,7 @@ context("Mpi/Qpi flow", () => {
 
     context("Approve document in review", () => {
       it("approve document", () => {
-        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
-        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
-        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
-      });
-      it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`)
-          .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
-          () => {
-            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-          });
+        cy.arApproveARFromDashboardWithoutApi();
       });
     });
 
@@ -780,6 +769,10 @@ context("Mpi/Qpi flow", () => {
         it("Click on 'Create a document' button", () => {
           cy.cmpClickCreateNewDocument();
         });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
       });
 
       context("Fill in the QPI attributes and verify state", () => {
@@ -800,45 +793,45 @@ context("Mpi/Qpi flow", () => {
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
+      });
 
-        context("Fill step #1", () => {
-          it("Select Procedure tab", () => {
-            cy.drSelectProcedureTab();
-          });
-
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
-
-          it("Add 'Material one' to step #1", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-
-          it("Add 'Equipment one' to step #1", () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+      context("Fill step #1", () => {
+        it("Select Procedure tab", () => {
+          cy.drSelectProcedureTab();
         });
 
-        context("Release QPI and verify state", () => {
-          it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+        it("Fill step #1 description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        });
 
-          it("Approve and release QPI document with selecting approver", () => {
-            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-          });
+        it("Add 'Material one' to step #1", () => {
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
 
-          it("Verify QPI state should be 'In Review'", () => {
-            SystemRequirement("REQ-3050");
-            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
-          });
+        it("Add 'Equipment one' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Release QPI and verify state", () => {
+        it("Click save document", () => {
+          cy.drClickSaveWithoutApiCall();
+        });
+
+        it("Approve and release QPI document with selecting approver", () => {
+          cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+        });
+
+        it("Verify QPI state should be 'In Review'", () => {
+          SystemRequirement("REQ-3050");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
     });
@@ -863,6 +856,7 @@ context("Mpi/Qpi flow", () => {
       it("Confirm password", () => {
         cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+        cy.progressBarShouldAppear();
       });
     });
 

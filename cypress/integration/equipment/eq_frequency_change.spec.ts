@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -919,12 +918,8 @@ context("Equipment due date calculation while changing frequency", () => {
         cy.drClickReviseDocument();
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Click save to confirm revise", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to CalPmHistoryTab ", () => {
@@ -932,15 +927,35 @@ context("Equipment due date calculation while changing frequency", () => {
       });
 
       it("Change frequency on PM from 365 to 60", () => {
-        cy.get(`input[name$="frequency"]`).eq(0).clear().arrowType("60");
-      });
-
-      it("Change frequency on Calibration from 365 to 60", () => {
-        cy.get(`input[name$="frequency"]`).eq(1).clear().arrowType("60");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
+        cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{backspace}`);
+        cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{backspace}`);
+        cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{backspace}`);
+        cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{selectall}{backspace}`);
+        cy.wait(2000);
+        cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType("60");
       });
 
       it("Click save to confirm revise", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+      });
+
+      it("Change frequency on Calibration from 365 to 60", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
+        cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{backspace}`);
+        cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{backspace}`);
+        cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{backspace}`);
+        cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{selectall}{backspace}`);
+        cy.wait(2000);
+        cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType("60");
+      });
+
+      it("Click save to confirm revise", () => {
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       context("Approve EQ to revision B with AR", () => {
@@ -965,31 +980,35 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Add first created document revision", () => {
-          cy.arClickAddDocument();
-          cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
-          cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-          cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-          cy.arClickAddBtnOnAddDocumentsDialog();
+          cy.arSelectItemsTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.arAddItems();
+          cy.arSelectItem({ name: "EQ-00001" });
+          cy.arEnterItemDescription({ description: "added document description" });
+          cy.arEnterItemJustification({ justification: "justification for added document" });
+          cy.arClickAddItemDone();
         });
 
         it("Click Create Approval Request", () => {
-          cy.arSaveApiCall();
+          cy.arSaveApiCallWithoutApi();
         });
 
         it("Add approvers to approval request on approver list", () => {
+          cy.arSelectApprovalTab();
           cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
         });
 
         it("Click 'Send To Review'", () => {
-          cy.arClickSendToReview();
+          cy.arClickSendToReviewWithoutApi();
         });
 
         it("Approve AR", () => {
-          cy.arApproveAR();
+          cy.arApproveARWithoutApi();
         });
 
         it("Close AR", () => {
-          cy.arCloseAR();
+          cy.arCloseARWithoutApi();
         });
       });
 
@@ -1019,10 +1038,9 @@ context("Equipment due date calculation while changing frequency", () => {
               const response = res.response.body;
               calDocId = response.documentId;
               const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newUrl);
-              });
+              cy.visit(newUrl);
+              cy.listLoadingElementShouldAppear();
+              cy.progressBarShouldNotExist();
             }
           });
           cy.checkToastMessage({ exists: false });
@@ -1062,11 +1080,11 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Create 'Preventative maintenance document'", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("navigate to overview tab", () => {
@@ -1078,13 +1096,11 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
         });
 
         it("Verify status is 'Released'", () => {
@@ -1094,9 +1110,7 @@ context("Equipment due date calculation while changing frequency", () => {
 
       context("Navigate to EQ-00001 and verify due dates", () => {
         it("Navigate to Equipment document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-            cy.visit(eqLowerFrequencyURL);
-          });
+          cy.visit(eqLowerFrequencyURL);
           cy.listLoadingElementShouldNotExist();
         });
 
@@ -1180,7 +1194,7 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Click save to confirm revise", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Navigate to CalPmHistoryTab ", () => {
@@ -1188,15 +1202,33 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Change frequency on PM from 5 to 20", () => {
-          cy.get(`input[name$="frequency"]`).eq(0).clear().arrowType("20");
-        });
-
-        it("Change frequency on Calibration from 5 to 20", () => {
-          cy.get(`input[name$="frequency"]`).eq(1).clear().arrowType("20");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
+          cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{backspace}`);
+          cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{backspace}`);
+          cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType(`{selectall}{backspace}`);
+          cy.wait(2000);
+          cy.get("[data-cy=\"pm-ki5wtk5l.frequency\"]").arrowType("20");
         });
 
         it("Click save to confirm revise", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
+        });
+
+        it("Change frequency on Calibration from 5 to 20", () => {
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
+          cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{backspace}`);
+          cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{backspace}`);
+          cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType(`{selectall}{backspace}`);
+          cy.wait(2000);
+          cy.get("[data-cy=\"calibration-ki5wtyj0.frequency\"]").arrowType("20");
+        });
+
+        it("Click save to confirm revise", () => {
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         context("Approve EQ to revision B with AR", () => {
@@ -1221,31 +1253,35 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Add first created document revision", () => {
-            cy.arClickAddDocument();
-            cy.arChoseSpecificProposedDocument({ name: "EQ-00002" });
-            cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-            cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-            cy.arClickAddBtnOnAddDocumentsDialog();
+            cy.arSelectItemsTab();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.arAddItems();
+            cy.arSelectItem({ name: "EQ-00002" });
+            cy.arEnterItemDescription({ description: "added document description" });
+            cy.arEnterItemJustification({ justification: "justification for added document" });
+            cy.arClickAddItemDone();
           });
 
           it("Click Create Approval Request", () => {
-            cy.arSaveApiCall();
+            cy.arSaveApiCallWithoutApi();
           });
 
           it("Add approvers to approval request on approver list", () => {
+            cy.arSelectApprovalTab();
             cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
           });
 
           it("Click 'Send To Review'", () => {
-            cy.arClickSendToReview();
+            cy.arClickSendToReviewWithoutApi();
           });
 
           it("Approve AR", () => {
-            cy.arApproveAR();
+            cy.arApproveARWithoutApi();
           });
 
           it("Close AR", () => {
-            cy.arCloseAR();
+            cy.arCloseARWithoutApi();
           });
         });
 
@@ -1275,10 +1311,9 @@ context("Equipment due date calculation while changing frequency", () => {
                 const response = res.response.body;
                 calDocId = response.documentId;
                 const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-                cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                  CyRoutes.GetAvailableApprovers], () => {
-                  cy.visit(newUrl);
-                });
+                cy.visit(newUrl);
+                cy.listLoadingElementShouldAppear();
+                cy.progressBarShouldNotExist();
               }
             });
             cy.checkToastMessage({ exists: false });
@@ -1318,11 +1353,11 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickCreateDocumentWithoutApiCallForForms();
           });
 
           it("Create 'Preventative maintenance document'", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.drClickCreateDocumentWithoutApiCall();
           });
 
           it("navigate to overview tab", () => {
@@ -1334,13 +1369,11 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Submit for approval", () => {
-            cy.pmSubmitForApproval();
+            cy.pmSubmitForApprovalWithoutAPI();
           });
 
           it("Approve record", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-              cy.ebApprove();
-            });
+            cy.ebApproveWithoutApi();
           });
 
           it("Verify status is 'Released'", () => {
@@ -1350,9 +1383,7 @@ context("Equipment due date calculation while changing frequency", () => {
 
         context("Navigate to EQ-00002 and verify due dates", () => {
           it("Navigate to Equipment document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-              cy.visit(eqHigherFrequencyURL);
-            });
+            cy.visit(eqHigherFrequencyURL);
             cy.listLoadingElementShouldNotExist();
           });
 

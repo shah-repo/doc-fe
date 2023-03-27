@@ -574,7 +574,7 @@ context("Training user groups test", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -657,7 +657,7 @@ context("Training user groups test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -694,7 +694,7 @@ context("Training user groups test", () => {
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

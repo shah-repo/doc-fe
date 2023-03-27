@@ -12,12 +12,14 @@ export const styles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     activeLinkBox: {
-      color: Colors.navy,
-      textDecoration: "none",
-      fontWeight: 600,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
+      "color": Colors.navy,
+      "textDecoration": "none",
+      "fontWeight": 600,
+      "fontSize": "14px",
+      "lineHeight": "24px",
+      "& span": {
+        color: Colors.navy,
+      },
     },
     inActiveLinkBox: {
       color: Colors.font_gray,

@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -189,6 +188,10 @@ context("LHR Upgrade", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create MPI document", () => {
@@ -220,51 +223,49 @@ context("LHR Upgrade", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    context("Fill step #1", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
       });
 
-      context("Fill step #1", () => {
-        it("Select Procedure tab", () => {
-          cy.drSelectProcedureTab();
-        });
-
-        it("Fill step #1 description", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Add 'Part document' to step #1", () => {
-          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
-        });
-
-        it("Add 'Equipment one' to step #1", () => {
-          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-        });
+      it("Fill step #1 description", () => {
+        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
       });
 
-      context("Release MPI", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+      it("Add 'Part document' to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
+      });
 
-        it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
-        });
+      it("Add 'Equipment one' to step #1", () => {
+        cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+      });
+    });
 
-        it("Get created MPI ID", () => {
-          cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { mpiID = x.text(); });
-        });
+    context("Release MPI", () => {
+      it("Click save document", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+
+      it("Approve and release MPI document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      });
+
+      it("Get created MPI ID", () => {
+        cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { mpiID = x.text(); });
       });
     });
   });
 
   context("Create LHRt document", () => {
     context("Start document creation flow", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to Document list", () => {
         cy.unClick();
         cy.navigToDocumentList();
@@ -297,49 +298,51 @@ context("LHR Upgrade", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       });
 
-      context("Select created MPI in LHR template", () => {
-        it("Select Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
+      it("Add 'Part document' in reference", () => {
+        cy.drSelectReferences("Part document");
+      });
+    });
 
-        it("Click 'LHR Step'", () => {
-          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
-        });
-
-        it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document", { force: true });
-        });
+    context("Select created MPI in LHR template", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
-      context("Release LHRt", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
 
-        it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+      it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document", { force: true });
+      });
+    });
+
+    context("Release LHRt", () => {
+      it("Click save document", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+
+      it("Approve and release LHRt document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
 
   context("Create LHR", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter initial quantity", () => {
@@ -356,7 +359,8 @@ context("LHR Upgrade", () => {
     });
 
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickSaveWithoutApiCall();
+
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
@@ -375,7 +379,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Click Revise document button", () => {
-      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      cy.drClickReviseDocument();
     });
 
     it("change Part title to 'Part document 1'", () => {
@@ -384,16 +388,15 @@ context("LHR Upgrade", () => {
     });
 
     it("Click on 'Save for Approval' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drClickSaveWithoutApiCall();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Verfiy banner and Part on LHR after change Part", () => {
     it("Navigate to LHR", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhrDocUrl);
-      });
+      cy.visit(lhrDocUrl);
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Verfiy banner should not be present", () => {
@@ -410,9 +413,8 @@ context("LHR Upgrade", () => {
   context("Complete first step in LHR", () => {
     context("Start LHRs #1", () => {
       it("Navigate to LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhrDocUrl);
-        });
+        cy.visit(lhrDocUrl);
+        cy.listLoadingElementShouldAppear();
       });
 
       it("Select Details tab", () => {
@@ -424,7 +426,7 @@ context("LHR Upgrade", () => {
       });
 
       it("Click 'START MPI'", () => {
-        cy.mpiStartStep({ stepNumber: 1 });
+        cy.mpiStartStepWithoutApi({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {
@@ -447,27 +449,28 @@ context("LHR Upgrade", () => {
         cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
       });
 
+      it("Click save document", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+
       it("Select Overview tab", () => {
         cy.drSelectOverviewTab();
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Complete step", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve step", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
@@ -484,7 +487,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Click Revise document button", () => {
-      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      cy.drClickReviseDocument();
     });
 
     it("change MPI title to 'MPI document 1'", () => {
@@ -493,16 +496,15 @@ context("LHR Upgrade", () => {
     });
 
     it("Click on 'Save for Approval' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drClickSaveWithoutApiCall();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Verfiy banner and MPI on LHR after change MPI", () => {
     it("Navigate to LHR", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhrDocUrl);
-      });
+      cy.visit(lhrDocUrl);
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Verfiy banner should not be present", () => {

@@ -27,6 +27,7 @@ import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
 import { DocTypeGroups } from "../../../common/types";
 import useStyles from "./approverActions.styles";
+import DismissAction from "../../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -52,8 +53,9 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const ARApproverActionItemPresenter: React.FC<Props> = ({
   id,
@@ -71,17 +73,21 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const hoverItem = hoverItemId === id;
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -101,6 +107,10 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
   };
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
+
   return (
     <>
       <StyledListItem
@@ -280,32 +290,49 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon}  className={classes.cursorPointer}/>}
-            {pinHover && (
+            {!pinHover && isPinShown && (
+              <PinIcon
+                data-cy="pin-icon"
+                onMouseEnter={onMouseHoverPinIcon}
+                className={classes.cursorPointer}
+              />
+            )}
+            {pinHover && isPinShown && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
                 <PinSolidIcon
+                  data-cy="pin-solid-icon"
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                   className={classes.cursorPointer}
                 />
               </StyleTooltip>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
-        {pinned && (
+        {isUnpinShown && (
           <Box component="div" className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                data-cy="pin-solid-icon"
+                onClick={handleUnPinClick}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
           </Box>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

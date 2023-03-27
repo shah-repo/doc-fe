@@ -26,6 +26,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     const { workspaceMode: mode } = formState || {};
     const { id } = workspaceState || {};
     defaultValue = defaultValue || formState?.getFieldValue(name);
+
+    if (!["justificationOfChange", "descriptionOfChange"].includes(name)) {
+      value = value ?? formState?.getFieldValue(name);
+    }
+
     const intl = useIntl();
     disabled = (
       disabled ||
@@ -67,6 +72,9 @@ export const withFBTextField = <T extends FBTextFieldProps>(
          (name.includes(".justificationOfChange") ||  name.includes(".descriptionOfChange"))) {
         submitForm();
         return;
+      }
+      if (!workspaceState?.autosave && name?.includes("lhrs-start-quantity")) {
+        workspaceState?.saveDocRev(formState?.getValues(), true);
       }
     };
 

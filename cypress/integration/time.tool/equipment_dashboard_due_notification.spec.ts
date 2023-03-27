@@ -38,6 +38,7 @@ const ADMIN_USER = USERS[11];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
 const delay1 = 5000;
+const delay2 = 10000;
 
 context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
   before(() => {
@@ -831,7 +832,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
       cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(delay1);
+      cy.wait(delay2);
     });
   });
 
@@ -842,6 +843,12 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
     it("Log user in", () => {
       cy.authLoginToDashboard({ USER: USERS[12], employeeId: coordinatorUser.id });
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Dashboard list", () => {
@@ -905,6 +912,12 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
             NavigationItems.DOCUMENT_CONTROL);
         });
 
+        it("Switch to myfeed tab", () => {
+          cy.dashOpenMyFeedTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
         it("Verify Dashboard list", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
@@ -948,6 +961,12 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
           cy.navigListExistsCheck(
             NavigationItems.DASHBOARD,
             NavigationItems.DOCUMENT_CONTROL);
+        });
+
+        it("Switch to myfeed tab", () => {
+          cy.dashOpenMyFeedTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify Dashboard list", () => {

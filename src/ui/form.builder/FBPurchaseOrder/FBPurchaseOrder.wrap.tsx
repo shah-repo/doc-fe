@@ -28,6 +28,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   }: T) => {
 
     const dispatch = useDispatch();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const headerContext = React.useContext(FormHeaderContext)!;
     const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState, poReceiveState } = FB.useStores();

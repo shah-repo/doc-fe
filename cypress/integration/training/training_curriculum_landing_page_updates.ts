@@ -374,6 +374,13 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -661,7 +668,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -679,7 +686,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -827,7 +834,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -845,7 +852,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -969,6 +976,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.wait(10000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -977,12 +985,14 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify the changed group names", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00003").wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00003").and("contain", "Group1 Test", "Async Tasks 1");
     });
@@ -997,7 +1007,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1015,7 +1025,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1088,12 +1098,20 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Revise TC", () => {
       cy.drClickReviseDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
@@ -1107,24 +1125,27 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
@@ -1188,6 +1209,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.wait(10000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -1196,12 +1218,14 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify the changed group names", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00004").wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00004").and("contain", "Group2 TA Test", "Group3 test");
     });
@@ -1216,7 +1240,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1234,9 +1258,10 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
@@ -1255,12 +1280,14 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
@@ -1273,12 +1300,14 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3 test");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training status should be 'Draft'", () => {
@@ -1289,12 +1318,14 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -1305,12 +1336,21 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Revise TC", () => {
       cy.drClickReviseDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
@@ -1327,17 +1367,17 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.unClick();
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
@@ -1405,6 +1445,7 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00005").wait(500);
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00005").and("contain", "Group4 test");
     });
@@ -1415,13 +1456,15 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.recCreateRecordFromLandingPage();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -1437,15 +1480,17 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
@@ -1487,12 +1532,14 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -1503,12 +1550,21 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Revise TC", () => {
       cy.drClickReviseDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
@@ -1524,28 +1580,31 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
       cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Group Management", () => {
@@ -1593,11 +1652,18 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify the changed group names", () => {
       cy.trClearFilters();
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00006").wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`[aria-colindex="1"] .k-filtercell > input`).clear().arrowType("TC-00006").wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00006").and("contain", "Group5 test");
     });
   });

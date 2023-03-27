@@ -146,14 +146,15 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
     // Groups list
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.groups),
       (data) => {
         if (!data) { return; }
-        const value = Array.from(map(groups as string[], (i) => data.get(i)));
-        map(value, (v) => concatOptions(v.employees, v.name));
+        map(groups as string[], (groupName: string) => {
+          const group = data.get(groupName);
+          concatOptions(group.joinedEmployees, group.name);
+        });
       }, {
         fireImmediately: true,
       },
@@ -175,7 +176,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @helpers
     function concatOptions(approvers: FBEmployee[], listGroup: string) {
-      let options = map(approvers, (o) => ({ ...o, listGroup }));
+      const approversList = approvers.filter((employee) => employee.active);
+      let options = map(approversList, (o) => ({ ...o, listGroup }));
       options = sortBy(unionBy(inlineApprovalState?.options || [], options, "id"), "listGroup");
       inlineApprovalState?.setOptions(options as FBInlineApprovalOptions[]);
     }

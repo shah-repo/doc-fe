@@ -14,6 +14,7 @@ import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trAssign
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -499,6 +500,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
   context("Verify PDF file downloaded", () => {
     it("Extract download link from gmail", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -563,6 +565,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
@@ -634,6 +637,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 3 of training form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new
@@ -675,7 +679,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -735,6 +739,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Enter training refresh period days", () => {
+      SystemRequirement("REQ-4540");
       cy.get("[name=training-validity]").arrowType("40");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -770,7 +775,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1191,7 +1196,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
   context(`Check for first user no ${TrainingStatus.OVERDUE} training notification exists`, () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1216,7 +1221,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
   context("Complete Training for first user and verify expire on 40 days", () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1618,7 +1623,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();

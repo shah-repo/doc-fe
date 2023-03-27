@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -371,22 +370,6 @@ context("Bulk create unsupported fields for documents", () => {
                       applicableValidationSchema: true,
                     },
                     {
-                      name: "-kv806ph2",
-                      tabId: "overview",
-                      type: "approvalMatrix",
-                      rules: "",
-                      hidden: false,
-                      deleted: false,
-                      applicableOn: [
-                        "ON_STATE_TO_IN_REVIEW",
-                      ],
-                      outputDisabled: false,
-                      validationMode: "default",
-                      validationAttribute: "",
-                      deleteInFormDisabled: false,
-                      applicableValidationSchema: true,
-                    },
-                    {
                       name: "blc-instruction-media-upload-kv80744w",
                       tabId: "overview",
                       type: "instructionsmediaupload",
@@ -746,11 +729,11 @@ context("Bulk create unsupported fields for documents", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -778,11 +761,11 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
-            .arrowClick();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
+          .arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -800,7 +783,7 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -808,11 +791,11 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -856,22 +839,22 @@ context("Bulk create unsupported fields for documents", () => {
       });
 
       it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
 
   context("Verify created documents", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(30 * 1000);
       cy.navigToDocumentList();
       cy.dlClearFilters();

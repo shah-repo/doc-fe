@@ -12,7 +12,6 @@ import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.sv
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
@@ -28,6 +27,7 @@ import { DocTypeGroups } from "../../common/types";
 import { getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import useStyles from "./pendingReview.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -64,9 +64,10 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   pendingEmailSentAt: Nullable<string>;
+  dismissLineItem?: (id: string) => void;
 }
 const PendingReviewPresenter: React.FC<Props> = ({
   id,
@@ -84,6 +85,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   pendingEmailSentAt,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -97,11 +99,14 @@ const PendingReviewPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const hoverItem = hoverItemId === id;
   const onMouseHoverListItem = () => {
@@ -130,9 +135,12 @@ const PendingReviewPresenter: React.FC<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     }
   };
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -282,32 +290,49 @@ const PendingReviewPresenter: React.FC<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-            {pinHover && (
+            {!pinHover && isPinShown && (
+              <PinIcon
+                data-cy="pin-icon"
+                onMouseEnter={onMouseHoverPinIcon}
+                className={classes.cursorPointer}
+              />
+            )}
+            {pinHover && isPinShown && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
                 <PinSolidIcon
+                  data-cy="pin-solid-icon"
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                   className={classes.cursorPointer}
                 />
               </StyleTooltip>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
-        {pinned && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                data-cy="pin-solid-icon"
+                onClick={handleUnPinClick}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

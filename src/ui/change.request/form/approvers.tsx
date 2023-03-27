@@ -14,6 +14,7 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import { ApproveAndReleaseFormValues } from "../../documentRevision/forms/types";
+import Colors from "../../layout/theme/utils/colors";
 import { toUniqGroupOptions } from "./transform";
 
 
@@ -143,7 +144,7 @@ const Approvers: React.FunctionComponent<Props> = ({
     return (
       <div style={{ display: "flex" }} key={value}>
         <div>{label}</div>
-        <div style={{ marginLeft: "10px", color: "#ccc" }}>
+        <div style={{ marginLeft: "10px", color: Colors.font_gray }}>
           {groups ? uniqueValues.join(",  ") : ""}
         </div>
       </div>);

@@ -4,12 +4,13 @@ import {
   dashboardMyFeedsActions,
   dashboardMyFeedsSelectors,
 } from "../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
+import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
+import { openDashboardToastr } from "../../components/notifications/DashboardStatus";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import { scrollToBottom } from "../line.items/common/Utils";
-import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
+import LineItemsPresenter from "./LineItems.presenter";
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
   const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
@@ -50,6 +51,19 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   };
   const unPinLineItem = (pinnedItemId: string) => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
+  };
+
+  const dismissAction = useActionCreator(dashboardMyFeedsActions.dismissLineItem);
+  const dismissAsync = useAsync({
+    onSuccess: () => {
+      setOffset(MY_FEEDS_INITIAL_OFFSET);
+      setOverallLimit(MY_FEEDS_LIMIT);
+      openDashboardToastr();
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    },
+  });
+  const dismissLineItem = (id: string) => {
+    dismissAsync.start(dismissAction, id, dismissAsync);
   };
 
   const async = useAsync();
@@ -67,11 +81,11 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     }, 2000);
   };
   return (
-    <MyFeedsLineItemPresenter
+    <LineItemsPresenter
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
         pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
-        dialogPDF,
+        dialogPDF, dismissLineItem,
       }}
       onLoadMoreData={onLoadMoreData}
     />

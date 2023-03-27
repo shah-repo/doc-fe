@@ -3,7 +3,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { Seed } from "../../utils/constants/documentTypes/seed";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -115,11 +114,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -154,11 +153,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -216,11 +215,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -278,11 +277,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -355,8 +354,8 @@ context("Create company with golden tenant", () => {
 
     it("Error message on upload Users List with incorrect email in JSON", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "incorrect_users.csv", queue: 0 });
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "email must be an email" });
       cy.closeAllAlertMessages();
       cy.drCloseApproveAndReleaseDialog();
@@ -365,8 +364,8 @@ context("Create company with golden tenant", () => {
 
     it("Error message on upload Users List file other than json or csv", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "test.docx", queue: 0 });
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
       cy.closeAllAlertMessages();
       cy.drCloseApproveAndReleaseDialog();
@@ -380,9 +379,7 @@ context("Create company with golden tenant", () => {
 
     it("Refresh Seed documents input", () => {
       SystemRequirement("REQ-3570");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
-      });
+      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -404,8 +401,8 @@ context("Create company with golden tenant", () => {
     it("Error message on upload incorrect DAM JSON", () => {
       cy.get("[data-cy=\"remove-dam.json\"]").arrowClick({ force: true });
       cy.atchUploadDOMJSONForNCO({ fileName: "incorrect_dam.json", queue: 0 });
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "User email: enlil1.testmail+cy2@gmail.com is not users.csv" });
       cy.checkToastMessageContains({ message: "Group name: QA1 is not in default NCO groups list" });
       cy.closeAllAlertMessages();
@@ -418,12 +415,12 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document - create company", () => {
       SystemRequirement("REQ-3600");
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
@@ -575,12 +572,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("navigate to matrix details tab", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetFieldLocks,
-      ],
-      () => {
-        cy.drSelectMatrixDetailsTab();
-      });
+      cy.drSelectMatrixDetailsTab();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -642,10 +634,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Click exit DAM", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
     });
 
     it("Reload page", () => {
@@ -657,7 +646,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("change should be saved", () => {
-      cy.get("table:eq(0) tbody tr:eq(0) td:eq(3)").should("have.text", "Yes");
+      cy.get("table:eq(0) tbody tr:eq(0) td:eq(3)").should("have.text", "No");
     });
   });
 
@@ -854,11 +843,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {

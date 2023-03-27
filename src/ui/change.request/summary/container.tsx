@@ -28,12 +28,14 @@ import ChangeSummaryForm from "./ChangeSummaryForm";
 interface OwnProps {
   changeRequest: ChangeRequest;
   currentUserEmail: string;
+  hideSideBar?: boolean;
 }
 type Props = OwnProps & SMFormHOCProps;
 
 const Container: React.FunctionComponent<Props> = ({
   changeRequest,
   currentUserEmail,
+  hideSideBar = false,
   _formState,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
@@ -106,6 +108,7 @@ const Container: React.FunctionComponent<Props> = ({
       canEdit={canEdit}
       canChangeOwnership={canChangeOwnership}
       displayLastSaved={displayLastSaved}
+      hideSideBar={hideSideBar}
       {...props}
     />
   );

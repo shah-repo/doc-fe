@@ -7,7 +7,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -544,7 +543,7 @@ context("Bulk create flow", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Select details tab", () => {
@@ -567,7 +566,7 @@ context("Bulk create flow", () => {
 
     context("Create and release form", () => {
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -602,7 +601,7 @@ context("Bulk create flow", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     context("Add form fields that will be used in bulk creation", () => {
@@ -748,11 +747,11 @@ context("Bulk create flow", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -788,10 +787,10 @@ context("Bulk create flow", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify only allowed documents are on list for bulk document form", () => {
@@ -826,7 +825,7 @@ context("Bulk create flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Select Overview tab", () => {
@@ -834,11 +833,11 @@ context("Bulk create flow", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -871,7 +870,7 @@ context("Bulk create flow", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Submit for approval", () => {
@@ -902,16 +901,17 @@ context("Bulk create flow", () => {
 
     context("Create bulk documents", () => {
       it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve document", () => {
         SystemRequirement("REQ-4740");
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -919,6 +919,8 @@ context("Bulk create flow", () => {
   context("Verify created documents", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.reload();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clear filter", () => {

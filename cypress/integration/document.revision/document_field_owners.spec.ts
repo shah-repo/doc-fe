@@ -3,7 +3,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
 import { LotHistoryRecordOperators } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -111,7 +110,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Click on 'Create Document' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on 'Add a field'", () => {
@@ -147,22 +146,22 @@ context("Document Field Owners Test", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Change build type to 'R&D'", () => {
       cy.unClick();
       cy.get(`[value="R&D"]`).check();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -206,10 +205,10 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^='text-field-for']").arrowType("Test First Field");
-        cy.unClick();
-      });
+      cy.get("[name^='text-field-for']").arrowType("Test First Field");
+      cy.unClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Logout as current user`, () => {
@@ -233,10 +232,9 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
-        cy.unClick();
-      });
+      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
+      cy.unClick();
+      cy.progressBarShouldAppear();
     });
 
     it("Check field from other colaborator is disabled", () => {
@@ -256,9 +254,7 @@ context("Document Field Owners Test", () => {
 
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
     it("Navigate to records list", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev, CyRoutes.GetDocRevStatusesCategory], () => {
-        cy.navigToRecords();
-      });
+      cy.navigToRecords();
       cy.wait(2000);
     });
 
@@ -289,9 +285,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Navigate to records list", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev, CyRoutes.GetDocRevStatusesCategory], () => {
-        cy.navigToRecords();
-      });
+      cy.navigToRecords();
       cy.wait(2000);
     });
 
@@ -308,9 +302,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Add Approver on document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
-      });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[7].name });
     });
 
     it("Submit for Approval", () => {

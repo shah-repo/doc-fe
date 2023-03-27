@@ -9,7 +9,6 @@ import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { momentInPST } from "../../utils/constants/dateHandler";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -304,88 +303,109 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Request approval for first inline", () => {
-    context("Navigate to record inline", () => {
-      it("Navigate to records list", () => {
-        cy.navigToRecords();
-      });
-
-      it("Click on first record", () => {
-        cy.dlSelectFirstDocument();
-      });
+    it("Navigate to record inline", () => {
+      cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    context("Fill first textfield and add inline approval", () => {
-      it("Navigate to details tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      it("Enter text 'First entry' in textfield for inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
-          cy.unClick();
-        });
-      });
-
-      it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick().wait(1000);
-          cy.get("ul>li[role=option]").contains(USERS[1].email).arrowClick();
-          cy.unClick();
-        });
-      });
-
-      context("Request for approval and send notification to email", () => {
-        it("Verify no PENDING FOR APPROVAL text is present on first inline", () => {
-          cy.get(`button[data-cy="fb-control-btn"]`).contains("Approve")
-            .parentsUntil("button").parent().parent().parent()
-            .should("not.contain.text", "PENDING APPROVAL");
-        });
-
-        it("Click request for approval on first inline", () => {
-          cy.get(`div[data-cy="form.builder.request.approval"]`).arrowClick();
-        });
-
-        it("Verify PENDING FOR APPROVAL text is present on first inline", () => {
-          cy.get(`button[data-cy="fb-control-btn"]`).contains("Approve")
-            .parentsUntil("button").parent().parent().parent()
-            .should("contain.text", "PENDING APPROVAL");
-        });
-
-        it("Navigate to dashboard", () => {
-          cy.navigToDashboard();
-        });
-
-        it("Check if approval request is 'In Review'", () => {
-          cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
-        });
-
-        it("Check if pop-up modal has pending with all the approvers", () => {
-          cy.get("h2").should("contain.text", "PENDING (1)");
-          cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", USERS[1].name);
-          cy.get("h2").should("contain.text", "APPROVED (0)");
-        });
-
-        it("Click on 'EMAIL ALL'", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime());
-          cy.get("button").contains("EMAIL ALL").arrowClick();
-        });
-
-        it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
-          cy.contains("EMAIL SENT TO ALL").should("exist");
-          cy.get("button[aria-label=close]").eq(1).arrowClick();
-          cy.get("button[aria-label=close]").eq(0).arrowClick();
-        });
-      });
+    it("Click on first record", () => {
+      cy.dlSelectFirstDocumentWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
+
+  context("Fill first textfield and add inline approval", () => {
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter text 'First entry' in textfield for inline", () => {
+      cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select approver for first inline", () => {
+      cy.get("input[data-cy*=\"fb-ia-inline-field\"]").arrowClick();
+      cy.get("input[data-cy*=\"fb-ia-inline-field\"]").autocompleteSelect(USERS[1].email);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Request for approval and send notification to email", () => {
+    it("Verify no PENDING text is present on first inline", () => {
+      cy.get(`button[data-cy="fb-control-btn"]`).contains("Approve")
+        .parentsUntil("button").parent().parent().parent()
+        .should("not.contain.text", "PENDING");
+    });
+
+    it("Click request for approval on first inline", () => {
+      cy.get(`div[data-cy="form.builder.request.approval"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify PENDING text is present on first inline", () => {
+      cy.get(`button[data-cy="fb-control-btn"]`).contains("Approve")
+        .parentsUntil("button").parent().parent().parent()
+        .should("contain.text", "PENDING");
+    });
+
+    it("Navigate to dashboard", () => {
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check if approval request is 'In Review'", () => {
+      cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check if pop-up modal has pending with all the approvers", () => {
+      cy.get("h2").should("contain.text", "PENDING (1)");
+      cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", USERS[1].name);
+      cy.get("h2").should("contain.text", "APPROVED (0)");
+    });
+
+    it("Click on 'EMAIL ALL'", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime());
+      cy.get("button").contains("EMAIL ALL").arrowClick();
+    });
+
+    it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
+      cy.contains("EMAIL SENT TO ALL").should("exist");
+      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      cy.get("button[aria-label=close]").eq(0).arrowClick();
+    });
+  });
+
 
   context("Time travel one day back to the future", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {
@@ -398,84 +418,102 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Request approval for second inline", () => {
-    context("Navigate to record inline", () => {
-      it("Navigate to records list", () => {
-        cy.navigToRecords();
-      });
-
-      it("Click on first record", () => {
-        cy.dlSelectFirstDocument();
-      });
+    it("Navigate to records list", () => {
+      cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    context("Fill second textfield and add inline approval", () => {
-      it("Navigate to details tab", () => {
-        cy.drSelectDetailsTab();
-      });
+    it("Click on first record", () => {
+      cy.dlSelectFirstDocumentWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
 
-      it("Enter text 'First entry' in second textfield for inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
-            .type("First entry");
-          cy.unClick();
-        });
-      });
+  context("Fill second textfield and add inline approval", () => {
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-      it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("input[data-cy*=\"fb-ia-second-inline-field\"]").arrowClick().wait(1000);
-          cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
-          cy.unClick();
-        });
-      });
+    it("Enter text 'First entry' in second textfield for inline", () => {
+      cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+        .type("First entry");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-      context("Request for approval and send notification to email", () => {
-        it("Verify no PENDING FOR APPROVAL text is present on first inline", () => {
-          cy.get(`[data-cy="form.builder.request.approval"]`).eq(1)
-            .parentsUntil("button").parent().parent().parent()
-            .should("not.contain.text", "PENDING APPROVAL");
-        });
+    it("Select approver for second inline", () => {
+      cy.get("input[data-cy*=\"fb-ia-second-inline-field\"]").arrowClick().wait(1000);
+      cy.get("input[data-cy*=\"fb-ia-second-inline-field\"]").autocompleteSelect(USERS[2].email);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
 
-        it("Click request for approval on first inline", () => {
-          cy.get(`div[data-cy="form.builder.request.approval"]`).eq(1).arrowClick();
-        });
+  context("Request for approval and send notification to email", () => {
+    it("Verify no PENDING text is present on first inline", () => {
+      cy.get(`[data-cy="form.builder.request.approval"]`).eq(1)
+        .parentsUntil("button").parent().parent().parent()
+        .should("not.contain.text", "PENDING");
+    });
 
-        it("Verify PENDING FOR APPROVAL text is present on first inline", () => {
-          cy.get(`[data-cy="form.builder.request.approval"]`).eq(1)
-            .parentsUntil("button").parent().parent().parent()
-            .should("contain.text", "PENDING APPROVAL");
-        });
+    it("Click request for approval on first inline", () => {
+      cy.get(`div[data-cy="form.builder.request.approval"]`).eq(1).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-        it("Navigate to dashboard", () => {
-          cy.navigToDashboard();
-        });
+    it("Verify PENDING text is present on first inline", () => {
+      cy.get(`[data-cy="form.builder.request.approval"]`).eq(1)
+        .parentsUntil("button").parent().parent().parent()
+        .should("contain.text", "PENDING");
+    });
 
-        it("Check if approval request is 'In Review'", () => {
-          cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
-        });
+    it("Navigate to dashboard", () => {
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-        it("Check if pop-up modal has pending with all the approvers", () => {
-          cy.get("h2").should("contain.text", "PENDING (2)");
-          cy.get("[class='MuiCollapse-wrapperInner']")
-            .should("contain.text", USERS[1].name)
-            .and("contain.text", USERS[2].name);
-          cy.get("h2").should("contain.text", "APPROVED (0)");
-        });
+    it("Switch to myfeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-        it("Click on 'EMAIL ALL'", () => {
-          cy.get("button").contains("EMAIL ALL").arrowClick();
-        });
+    it("Check if approval request is 'In Review'", () => {
+      cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-        it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
-          cy.contains("EMAIL SENT TO ALL").should("exist");
-          cy.get("button[aria-label=close]").eq(1).arrowClick();
-          cy.get("button[aria-label=close]").eq(0).arrowClick();
-        });
-      });
+    it("Check if pop-up modal has pending with all the approvers", () => {
+      cy.get("h2").should("contain.text", "PENDING (2)");
+      cy.get("[class='MuiCollapse-wrapperInner']")
+        .should("contain.text", USERS[1].name)
+        .and("contain.text", USERS[2].name);
+      cy.get("h2").should("contain.text", "APPROVED (0)");
+    });
+
+    it("Click on 'EMAIL ALL'", () => {
+      cy.get("button").contains("EMAIL ALL").arrowClick();
+    });
+
+    it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
+      cy.contains("EMAIL SENT TO ALL").should("exist");
+      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
   });
 

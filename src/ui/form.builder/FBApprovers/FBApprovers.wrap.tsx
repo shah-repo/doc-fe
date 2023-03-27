@@ -6,6 +6,7 @@ import React, { useMemo } from "react";
 import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
+import Colors from "../../layout/theme/utils/colors";
 
 export const withFBApprovers = <T extends FBApproversProps>(
   Component: React.FunctionComponent<T>,
@@ -29,6 +30,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
     const schema = workspaceState?.getSchema();
+    const changeRequestApprovals = workspaceState?.changeRequest?.approvals;
     const { name: docRevName } = useMemo(() => find(schema, { type: "documentRevisions" }) || {}, [schema]);
     const docRevFormValue = formState?.getFieldValue(docRevName);
     const documentRevisions = useMemo(() => map(docRevFormValue, "proposedDocumentRevision.id"), [docRevFormValue]);
@@ -111,7 +113,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
           <b>{option.user?.name}</b>&nbsp; ({option.user?.email})
           {!isEmpty(requiredGroups) && (
-            <Box>
+            <Box color={Colors.font_gray}>
               &nbsp;{`- ${requiredGroups.join(", ")}`}
             </Box>
           )}
@@ -176,6 +178,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       groups,
       defaultValue,
       disabled,
+      changeRequestApprovals,
     });
   };
 

@@ -7,7 +7,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_16, FONT_WT_400, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_12, LINE_HT_15_96, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_24, LINE_HT_25_6, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
@@ -1089,12 +1088,9 @@ context("LHR steps verification", () => {
 
   context("Click on “Initiate New LHR”", () => {
     it("Select a document type Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
-        cy.get("div[id^=react-select]").contains(new RegExp("^Lot History Record$", "g")).arrowClick();
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
+      cy.get("div[id^=react-select]").contains(new RegExp("^Lot History Record$", "g")).arrowClick();
+      cy.progressBarShouldNotExist();
     });
 
     it("turnoff autosave", () => {
@@ -1278,7 +1274,7 @@ context("LHR steps verification", () => {
   context("Verify The side bar options Revision's fonts", () => {
     it(`Verify Revisions font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"note-icon\"]").arrowClick();
-      cy.get("[data-cy=\"document.revision.docVersion\"]")
+      cy.get("[data-cy=\"Revisions\"]")
         .checkStylePropExists({
           content: "Revisions",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
@@ -1300,6 +1296,11 @@ context("LHR steps verification", () => {
           content: "Owner",
           props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
         });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(3000);
     });
   });
 

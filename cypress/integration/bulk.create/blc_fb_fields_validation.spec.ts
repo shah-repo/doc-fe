@@ -6,7 +6,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -381,11 +380,11 @@ context("Test fb fields validation in BLC", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -413,11 +412,11 @@ context("Test fb fields validation in BLC", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
-            .arrowClick();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
+          .arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -435,7 +434,7 @@ context("Test fb fields validation in BLC", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -443,11 +442,11 @@ context("Test fb fields validation in BLC", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -480,7 +479,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -508,7 +507,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -540,7 +539,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -568,7 +567,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -603,7 +602,7 @@ context("Test fb fields validation in BLC", () => {
     });
 
     it("Save bulk document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Click on 'Overview' tab", () => {
@@ -611,18 +610,18 @@ context("Test fb fields validation in BLC", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Verify created records", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
-      cy.wait(5 * 1000);
+      cy.navigToDashboardWithoutApi();
+      cy.wait(8 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 9 });
     });

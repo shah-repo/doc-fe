@@ -6,7 +6,6 @@ import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { intl } from "../../../common/intl";
 import { isTranslation } from "../../translations/types";
 import FBFieldOutputWrapper from "../FBFieldOutputWrapper/FBFieldOutputWrapper";
-import FormBuilderDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
   Component: React.FunctionComponent<T>
@@ -22,11 +21,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
-
-    React.useEffect(() => {
-      FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component({ ...schemaItem, gutter: false });

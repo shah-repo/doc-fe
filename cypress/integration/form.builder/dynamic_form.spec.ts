@@ -6,7 +6,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -112,7 +111,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add section field", () => {
@@ -268,16 +267,14 @@ context("Dynamic Form Test", () => {
 
     it("upload file in Instructions Media upload", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").first().arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-        cy.pmUploadAttachment({ fileName: "video.mp4" });
-      });
+      cy.pmUploadAttachment({ fileName: "video.mp4" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -334,6 +331,7 @@ context("Dynamic Form Test", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -405,6 +403,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       expect(el).match(/Page 1 of 4/);
       if (el.includes("Page 1 of 4")) {
@@ -449,7 +448,7 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`1(.*)2(.*)3`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/fb-datepicker\nfb-fileupload\nfb-paragraph/);
+        expect(el).match(/fb-fileupload\nfb-paragraph/);
 
         tmpRegex = new RegExp( `fb-radiobutton-group\n(.*)option1(.*)option2`, "gi" );
         expect(el).match(tmpRegex);
@@ -500,6 +499,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 4 in document", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[3];
       expect(el).match(/Page 4 of 4/);
       if (el.includes("Page 4 of 4")) {
@@ -524,7 +524,7 @@ context("Dynamic Form Test", () => {
 
   context("Approve and Release form", () => {
     it("Approve and release form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
@@ -700,7 +700,7 @@ context("Dynamic Form Test", () => {
         tmpRegex = new RegExp(`1(.*)2(.*)3`);
         expect(el).match(tmpRegex);
 
-        expect(el).match(/fb-datepicker\nfb-fileupload\nfb-paragraph/);
+        expect(el).match(/fb-fileupload\nfb-paragraph/);
 
         tmpRegex = new RegExp( `fb-radiobutton-group\n(.*)option1(.*)option2`, "gi" );
         expect(el).match(tmpRegex);
@@ -805,7 +805,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on 'Add a field'", () => {
@@ -813,6 +813,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'New Dynamic Form' field", () => {
+      SystemRequirement("REQ-0550");
       cy.fbSelectItemFromNewFieldList({ section: "Custom Controls", field: "New Dynamic Form" });
     });
 
@@ -820,24 +821,28 @@ context("Dynamic Form Test", () => {
       cy.fbClickAddNewHiddenBtn();
     });
 
+    it("Select 'Text Field 1' field", () => {
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.wait(1000);
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType("New Text Field 1");
+      cy.fbSelectCheckboxValue("copyableValue");
+      cy.get("[data-cy='common.add']").arrowClick();
+    });
+
     it("Select 'Text Field 2' field", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-    });
-
-    it("Give label to 'Text Field' as 'New Text Field 2'", () => {
-      cy.fbAddLabelName({ name: "New Text Field 2" });
-    });
-
-    it("Add 'Text Field' field", () => {
-      cy.fbAddNewFieldButton();
+      cy.wait(1000);
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType("New Text Field 2");
+      cy.fbSelectCheckboxValue("copyableValue");
+      cy.get("[data-cy='common.add']").arrowClick();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Open new document", () => {
@@ -853,7 +858,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Enters text inside 'New Text Field 1' dynamic form field", () => {
-      cy.get("[data-cy*=\"new-text-field\"]").eq(0).arrowType("Some text for Dynamic Form field");
+      cy.get("[data-cy*=\"new-text-field-1\"]").arrowType("Some text for Dynamic Form field");
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
@@ -871,14 +876,11 @@ context("Dynamic Form Test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 });

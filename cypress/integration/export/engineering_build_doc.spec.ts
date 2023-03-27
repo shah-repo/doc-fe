@@ -8,11 +8,11 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -340,6 +340,10 @@ context("Export Engineering Build doc", () => {
       cy.navigToDocumentList();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
     });
@@ -366,7 +370,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add File Upload", () => {
@@ -396,7 +400,7 @@ context("Export Engineering Build doc", () => {
       cy.get("input[name=\"validationMode\"]").eq(1).arrowClick();
       cy.get(`input[name="validators.required_if"]`).check();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
-      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Y" );
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Y").wait(500);
       cy.fbAddNewFieldButton();
     });
 
@@ -417,7 +421,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -474,6 +478,7 @@ context("Export Engineering Build doc", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -545,6 +550,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Verify page 1 of EB form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new
@@ -618,6 +624,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Verify page 4 of EB form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new
@@ -636,7 +643,7 @@ context("Export Engineering Build doc", () => {
 
   context("Approve and release the form", () => {
     it("Approve and release the form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -883,24 +890,26 @@ context("Export Engineering Build doc", () => {
 
     it("Upload video.mp4 as attachment", () => {
       cy.atchUploadAttachment({ fileName: "video.mp4" });
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Fill fields", () => {
       cy.get("[data-cy^=fb-textfield-] input").arrowType("textfield");
+      cy.unClick();
+
       cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
+        cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
+          fileContent: fileContent.toString(),
+          fileName: "test.docx",
+          mimeType: "*",
+          filePath: `fixtures/test.docx`,
         });
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the EB", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Choose an existing part from the list of available parts", () => {
@@ -912,35 +921,21 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Add material document to step #1", () => {
-      cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("ul>li[role=option]").contains("Materials document").arrowClick();
-      cy.get("[name=\"quantity\"]").arrowType("2");
-      cy.get("[data-cy=\"unit\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains("Each").arrowClick();
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.ebAddMaterialDocument({
+        title: "Materials document",
+        value: "2",
+        name: "Each",
+      });
     });
 
     it("Add equipment document to step #1", () => {
-      cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
-      cy.unClick();
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.ebAddEquipmentDocument({ title: "Equipment document" });
     });
 
     it("Upload attachment 'test_image.jpg' to step #1", () => {
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
+      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).scrollIntoView().arrowClick();
       cy.pmUploadAttachment({ fileName: "test_image.jpg" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Enter description to step #2", () => {
@@ -948,15 +943,13 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Save the EB", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Add material document to step #2", () => {
       cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(1).arrowClick();
+      cy.listLoadingElementShouldNotExist().wait(500);
       cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       cy.get("[name=\"quantity\"]").arrowType("3");
       cy.get("[data-cy=\"unit\"]").arrowClick();
@@ -966,17 +959,15 @@ context("Export Engineering Build doc", () => {
 
     it("Add equipment document to step #2", () => {
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(1).arrowClick();
+      cy.listLoadingElementShouldNotExist().wait(500);
       cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
       cy.unClick();
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 
     it("Upload attachment 'image.jpg' to step #2", () => {
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
+      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).scrollIntoView().arrowClick();
       cy.fixture("image.jpg").then((fileContent) => {
         cy.get("[id^=\"fb-mediaalbum-upload\"]").eq(1).attachFile({
           fileContent: fileContent.toString(),
@@ -985,17 +976,21 @@ context("Export Engineering Build doc", () => {
           filePath: `fixtures/${"image.jpg"}`,
         });
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
+      cy.listLoadingElementShouldAppear();
+    });
+
+    it("Save the EB", () => {
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Add Step #3", () => {
       cy.get("[data-cy=\"form.builder.add.step\"]").eq(1).arrowClick();
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the EB", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         ebUrl = url;
       });
@@ -1016,24 +1011,24 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Open EB", () => {
-      cy.navigToRecords();
+      cy.navigToRecords().wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlFilterByDocId({ docId: "EB-00001" });
-      cy.dlSelectFirstDocument();
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlSelectFirstDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Reject button", () => {
       cy.get("[data-cy=\"common.reject\"]").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });
 
   context(`Login as EB owner`, () => {
     it("Log out user", () => {
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.authLogout();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1047,14 +1042,12 @@ context("Export Engineering Build doc", () => {
   context("Open EB and export pdf by send mail", () => {
     it("Open EB", () => {
       cy.visit(ebUrl);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -1068,6 +1061,7 @@ context("Export Engineering Build doc", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
+
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
@@ -1270,53 +1264,43 @@ context("Export Engineering Build doc", () => {
 
     it("Add material document to step #3", () => {
       cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(2).arrowClick();
+      cy.listLoadingElementShouldNotExist().wait(500);
       cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       cy.get("[name=\"quantity\"]").arrowType("4");
       cy.get("[data-cy=\"unit\"]").arrowClick();
       cy.get("ul>li[role=option]").contains("Each").arrowClick();
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
     });
 
     it("Add equipment document to step #3", () => {
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(2).arrowClick();
+      cy.listLoadingElementShouldNotExist().wait(500);
       cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
       cy.unClick();
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
     });
 
     it("Upload attachment 'dummy.pdf' to step #3", () => {
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-        cy.fixture("dummy.pdf").then((fileContent) => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-            cy.get("[id^=\"fb-mediaalbum-upload\"]").eq(2).attachFile({
-              fileContent: fileContent.toString(),
-              fileName: "dummy.pdf",
-              mimeType: "*",
-              filePath: `fixtures/${"dummy.pdf"}`,
-            });
-          });
+      cy.get(`[data-cy="albumMediaButton"]`).eq(0).scrollIntoView().arrowClick();
+      cy.fixture("dummy.pdf").then((fileContent) => {
+        cy.get("[id^=\"fb-mediaalbum-upload\"]").eq(2).attachFile({
+          fileContent: fileContent.toString(),
+          fileName: "dummy.pdf",
+          mimeType: "*",
+          filePath: `fixtures/${"dummy.pdf"}`,
         });
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Save the EB", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.url().then((url: any) => {
         ebUrl = url;
       });
@@ -1334,12 +1318,12 @@ context("Export Engineering Build doc", () => {
 
     it("Open EB", () => {
       cy.visit(ebUrl);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Approve button", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1358,7 +1342,7 @@ context("Export Engineering Build doc", () => {
   context("Open EB and export pdf by send mail", () => {
     it("Open EB", () => {
       cy.visit(ebUrl);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 

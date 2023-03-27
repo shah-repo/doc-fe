@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -746,7 +745,7 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -835,10 +834,8 @@ context("Create new LHRT Layout Verification", () => {
       cy.get("input[data-cy='lhrstep-built-in']").then(($el) => {
         $el.trigger("click");
       });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
-      });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -865,10 +862,8 @@ context("Create new LHRT Layout Verification", () => {
       cy.get("input[data-cy^='lhr-step']").then(($el) => {
         $el.trigger("click");
       });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy^='lhr-step']").autocompleteSelect("PI-00009");
-      });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy^='lhr-step']").autocompleteSelect("PI-00009");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -902,9 +897,9 @@ context("Create new LHRT Layout Verification", () => {
 
     it("Verify material", () => {
       cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
-        .should("have.text", "MT-00004 - Material one | sets :2");
+        .should("have.text", "MT-00004 - Material one | sets: 2");
       cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(1)
-        .should("have.text", "MT-00006 - Material two | boxes :4");
+        .should("have.text", "MT-00006 - Material two | boxes: 4");
     });
 
     it("Verify equipment", () => {
@@ -942,9 +937,9 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Release LHRT", () => {
     it("Approve and release MPI document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 

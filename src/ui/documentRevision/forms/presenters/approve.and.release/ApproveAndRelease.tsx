@@ -1,12 +1,11 @@
-import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
+import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListItem } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../../../App/Shifamed/Utils/SM/SM";
@@ -22,10 +21,13 @@ import { DocumentTypeById } from "../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
-import { toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
-import { ApproverPayload, TemplateOption } from "../../../../change.request/form/types";
+import ChangeRequestEditDialog from "../../../../change.request/dialogs/ChangeRequestEditDialog";
+import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
+import { ApproverPayload, InDraftAROption, TemplateOption } from "../../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import { Button } from "../../../../components/forms/fields-next";
 import { FormContext } from "../../../../components/forms/FormContext";
+import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import { FB } from "../../../../form.builder";
 import CustomLabelTooltip from "../../../../hooks/docCustomization/CustomLabelTooltip";
@@ -35,7 +37,10 @@ import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
+import useStyles from "./ApproveAndRelease.styles";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
+import SelectionForm from "./SelectionForm";
+import SplitReleaseButton, { ARActions } from "./SplitReleaseButton";
 
 interface Props {
   id?: string;
@@ -51,17 +56,6 @@ interface Props {
   isInlineApproval: boolean;
   renderAsButton?: boolean;
 }
-
-const styles = makeStyles(() =>
-  createStyles({
-    dialogPaper: {
-      overflowY: "unset",
-    },
-    dialogContent: {
-      overflowY: "unset",
-    },
-  },
-  ));
 
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
   id,
@@ -80,16 +74,20 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
-  const documentRevision = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, docRevId));
+  const documentRevision = useSelector(
+    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId)
+  );
 
   // MARK: @state
   const [documentTypeGroups, setDocTypeGroups] = useState<Group[]>([]);
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
+  const [inDraftAROptions, setInDraftAROptions] = useState<InDraftAROption[]>([]);
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
+  const [changeRequestId, setChangeRequestId] = useState<string>("");
+  const [optionChosen, setOptionChosen] = useState<string>();
 
   // MARK: @config
   const isNewLayout = SM.isNewLayout;
@@ -99,9 +97,17 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
-  const classes = styles();
-  const dialog = useDialog();
+  const classes = useStyles();
+
+  const expressApprovalDialog = useDialog();
+  const templateSelectionDialog = useDialog();
+  const existingDraftARSelectionDialog = useDialog();
+  const approvalRequestDialog = useDialog();
+
   const alertDialog = useDialog();
+
+  const dispatch = useDispatch();
+
   const transformedDocTypeGroups = ([] as Group[]).concat(...documentTypeGroups);
   const initialValues = {
     password: "",
@@ -117,13 +123,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
   const finalizeAction = useActionCreator(documentRevisionsActions.finalizeAndRelease);
   const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
-  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const create = useActionCreator(changeRequestsActions.create);
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
-
   // MARK: @async
-  const async = useAsync({ onSuccess: dialog.close });
+  const async = useAsync({ onSuccess: expressApprovalDialog.close });
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
@@ -150,6 +154,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     },
   });
 
+  // Templates Call
+  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const asyncGetDocTypeByGroup = useAsync({
     onSuccess: (data: DocumentTypeById[] = []) => {
       const options = flatten(
@@ -164,8 +170,78 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         )
       );
       setTemplateOptions(options);
+      if (!optionChosen) {
+        templateSelectionDialog.close();
+      }
     },
   });
+
+  // Existing Draft CO calls
+  const getDraftApprovalRequestsAction = useActionCreator(changeRequestsActions.draftApprovalRequestsList);
+  const asyncGetDraftApprovalRequests = useAsync({
+    onSuccess: (data: Pick<ChangeRequest, "crId" | "title" | "id">[] = []) => {
+      const options = data.map((option) => ({
+        label: `${option.crId} - ${option.title}`,
+        value: option.id,
+        crId: option.crId,
+      }));
+      if (options.length === 0) {
+        toastError("No Approval Requests in Draft");
+        return;
+      }
+      setInDraftAROptions(options);
+    },
+  });
+
+  const createCRAction = useActionCreator(changeRequestsActions.create);
+  const createCRAsync = useAsync<ChangeRequest>({
+    onSuccess: (createdChangeRequest?) => {
+      if (createdChangeRequest) {
+        setChangeRequestId(createdChangeRequest.id);
+        templateSelectionDialog.close();
+        approvalRequestDialog.open();
+      }
+    },
+    onError: (err) => {
+      toastError(err as string);
+    },
+  });
+
+  useEffect(() => {
+    if (templateOptions.length === 1 && optionChosen === ARActions.NEW) {
+      templateSelectionDialog.close();
+      processCreatingRevision(templateOptions[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [templateOptions]);
+
+  useEffect(() => {
+    if (inDraftAROptions.length === 1) {
+      existingDraftARSelectionDialog.close();
+      processChosenApprovalRequest(inDraftAROptions[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inDraftAROptions]);
+
+
+  const processCreatingRevision = (templateChosen?: TemplateOption) => {
+    if (!templateChosen) {
+      return;
+    }
+    const data = templateOptionToChangeRequestCreateBody(templateChosen);
+    createCRAsync.start(createCRAction, data, createCRAsync);
+  };
+
+  const processChosenApprovalRequest = (approvalRequestChosen?: InDraftAROption) => {
+    if (!approvalRequestChosen) {
+      return;
+    }
+
+    setChangeRequestId(approvalRequestChosen.value);
+
+    existingDraftARSelectionDialog.close();
+    approvalRequestDialog.open();
+  };
 
   const asyncAR = useAsync<ChangeRequest>({
     onSuccess: (createdChangeRequest?) => {
@@ -225,27 +301,58 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   );
 
   // MARK: @methods
-  const openDialog = () => {
+  const openDialog = (option?: ARActions) => {
     async.reset();
-    if (showApprovers && docRevId) {
-      asyncGroups.start(
-        getGroupsByStage,
-        docRevId,
-        asyncGroups,
+    setOptionChosen(option);
+
+    if (!option && docRevId) {
+      expressApprovalDialog.open();
+
+      if (showApprovers) {
+        asyncGroups.start(
+          getGroupsByStage,
+          docRevId,
+          asyncGroups,
+        );
+      }
+
+      asyncGetDocTypeByGroup.start(
+        getDocTypeByGroupAction,
+        { docTypeGroupOption: "CHANGE_REQUEST" },
+        asyncGetDocTypeByGroup
       );
     }
-    asyncGetDocTypeByGroup.start(
-      getDocTypeByGroupAction,
-      { docTypeGroupOption: "CHANGE_REQUEST" },
-      asyncGetDocTypeByGroup);
-    dialog.open();
+
+    if (option === ARActions.NEW) {
+      templateSelectionDialog.open();
+
+      asyncGetDocTypeByGroup.start(
+        getDocTypeByGroupAction,
+        { docTypeGroupOption: "CHANGE_REQUEST" },
+        asyncGetDocTypeByGroup
+      );
+    }
+
+    if (option === ARActions.EXISTING) {
+      existingDraftARSelectionDialog.open();
+
+      asyncGetDraftApprovalRequests.start(
+        getDraftApprovalRequestsAction,
+        asyncGetDraftApprovalRequests
+      );
+    }
   };
 
   const closeDialog = () => {
     setFormDocument("");
     setDocumentType("");
     setSelectedInvalid(false);
-    dialog.close();
+    expressApprovalDialog.close();
+  };
+
+  const closeCRDialog = () => {
+    approvalRequestDialog.close();
+    dispatch(documentRevisionsActions.reload(docRevId));
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
@@ -312,36 +419,38 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     );
   };
 
-
   // MARK: @render
-  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove || revisionStage !== 1) {
+  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove) {
     return null;
   }
 
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        {isNewLayout ? (
-          renderAsButton ? <StyledButton
-            color="primary"
-            onClick={isRecord ? alertDialog.open : openDialog}
-            id="ApproveAndRelease-button"
-            data-cy="ApproveAndRelease-button"
-          >
-            <Text message={isRecord ? "record.finalize.and.release" : label} />
-          </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
-            <StyledMenuListItemText
-              id="ApproveAndRelease-button"
-              data-cy="ApproveAndRelease-button"
-              primary={ <Text message={isRecord ? "record.finalize.and.release" : label} />}
-              onClick={isRecord ? alertDialog.open : openDialog}
-            />
-          </StyledMenuListItem>
+        {isNewLayout && !isRecord ? (
+          renderAsButton
+            ? (
+              <SplitReleaseButton
+                className={classes.button}
+                disableExpessAR={revisionStage !== 1}
+                onClick={openDialog}
+              />
+            )
+            : (
+              <StyledMenuListItem button alignItems="flex-start">
+                <StyledMenuListItemText
+                  id="ApproveAndRelease-button"
+                  data-cy="ApproveAndRelease-button"
+                  primary={<Text message={label} />}
+                  onClick={() => openDialog()}
+                />
+              </StyledMenuListItem>
+            )
         ) : (
           <Button
-            color="secondary"
-            variant="outlined"
-            onClick={isRecord ? alertDialog.open : openDialog}
+            kind="white"
+            className={classes.button}
+            onClick={() => isRecord ? alertDialog.open() : openDialog()}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
           >
@@ -350,13 +459,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         )}
       </CustomLabelTooltip>
       {
-        dialog.isOpen &&
+        expressApprovalDialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           fullWidth={true}
           maxWidth="xs"
-          open={dialog.isOpen}
+          open={expressApprovalDialog.isOpen}
           onSubmit={(event: React.FormEvent) => event.stopPropagation()}
           classes={{ paper: classes.dialogContent }}
           id="ApproveAndRelease-dialog"
@@ -382,6 +491,30 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           </DialogContent>
         </Dialog>
       }
+      <SelectionForm
+        title="page.title.changeRequestCreate"
+        loading={asyncGetDocTypeByGroup.isLoading || createCRAsync.isLoading}
+        handler={templateSelectionDialog}
+        options={templateOptions}
+        confirmLabel="common.create"
+        onConfirm={(option: TemplateOption) => processCreatingRevision(option)}
+      />
+      <SelectionForm
+        title="page.title.changeRequestOpen"
+        loading={asyncGetDraftApprovalRequests.isLoading}
+        handler={existingDraftARSelectionDialog}
+        options={inDraftAROptions}
+        confirmLabel="common.open"
+        onConfirm={(option: InDraftAROption) => processChosenApprovalRequest(option)}
+      />
+      {approvalRequestDialog.isOpen && (
+        <ChangeRequestEditDialog
+          changeRequestId={changeRequestId}
+          approvalRequestDialog={approvalRequestDialog}
+          closeDialog={closeCRDialog}
+          currentDocRevId={docRevId}
+        />
+      )}
       <AlertDialog
         message="record.release.alert"
         dialog={alertDialog}

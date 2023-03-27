@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -508,7 +507,7 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Add Text Field", () => {
@@ -519,7 +518,7 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Save Form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate to Procedure tab", () => {
@@ -533,11 +532,11 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Save Form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -575,7 +574,7 @@ context("Verify New Layout for EB Document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add Text Field", () => {
@@ -586,7 +585,7 @@ context("Verify New Layout for EB Document", () => {
     });
 
     it("Save Form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -649,7 +648,7 @@ context("Verify New Layout for EB Document", () => {
         });
 
         it("Save Form", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
       });
 
@@ -718,7 +717,7 @@ context("Verify New Layout for EB Document", () => {
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -752,7 +751,7 @@ context("Verify New Layout for EB Document", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -954,6 +953,7 @@ context("Verify New Layout for EB Document", () => {
         cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Turn off autosave", () => {
@@ -988,11 +988,15 @@ context("Verify New Layout for EB Document", () => {
     context("Verify Access Permissions tab", () => {
       it("Open access permissions tab", () => {
         cy.drSelectPermissionTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
+        cy.progressBarShouldNotExist();
       });
 
       it("Add another user permission", () => {
         cy.drAddUserFromPermissionTab(userOne);
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
       });
 
@@ -1000,9 +1004,7 @@ context("Verify New Layout for EB Document", () => {
         cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab(groupOne);
-        });
+        cy.drAddGroupFromPermissionTab(groupOne);
       });
     });
 
@@ -1093,24 +1095,21 @@ context("Verify New Layout for EB Document", () => {
 
       it("Add material document", () => {
         cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-        cy.get("[data-cy=\"title\"]").arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.get("ul>li[role=option]").contains("Part for EB document").arrowClick({ force: true });
+        cy.wait(2000);
+        cy.get("[data-cy=\"title\"]").autocompleteSelect("Part for EB document");
         cy.get("[name=\"quantity\"]").arrowType("2");
-        cy.get("[data-cy=\"unit\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Each").arrowClick();
+        cy.get("[data-cy=\"unit\"]").autocompleteSelect("Each");
+        // cy.get("ul>li[role=option]").contains("Each").arrowClick();
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       });
 
       it("Add equipment document", () => {
         cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
-        cy.get("[data-cy=\"title\"]").arrowClick();
-        cy.wait(1000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
+        cy.wait(3000);
+        cy.get("[data-cy=\"title\"]").autocompleteSelect("Equipment document");
+        cy.wait(3000);
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       });
     });
@@ -1316,21 +1315,23 @@ context("Verify New Layout for EB Document", () => {
     context("Verify Access Permissions tab", () => {
       it("Open access permissions tab", () => {
         cy.drSelectPermissionTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add another user permission", () => {
         cy.drAddUserFromPermissionTab(userTwo);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add another group permission", () => {
         cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab(groupTwo);
-        });
+        cy.drAddGroupFromPermissionTab(groupTwo);
       });
     });
 
@@ -1354,7 +1355,6 @@ context("Verify New Layout for EB Document", () => {
         cy.drSelectHistoryTab();
         cy.get(`[data-cy="History-detail"]`).should("be.visible");
       });
-
       verifyHistoryContent(history, groupTwo);
     });
 
@@ -1382,15 +1382,15 @@ context("Verify New Layout for EB Document", () => {
   context("Approve and Release engineering build document", () => {
     it("Add Approver", () => {
       cy.drSelectOverviewTab();
-      cy.pmAddApproverOnApproverList({ approver: owner });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve engineering build document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -1565,11 +1565,15 @@ context("Verify New Layout for EB Document", () => {
       context("Verify Access Permissions tab", () => {
         it("Open access permissions tab", () => {
           cy.drSelectPermissionTab();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another user permission", () => {
           cy.drAddUserFromPermissionTab(userThree);
           cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
           cy.progressBarShouldNotExist();
         });
 
@@ -1577,9 +1581,7 @@ context("Verify New Layout for EB Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupThree);
-          });
+          cy.drAddGroupFromPermissionTab(groupThree);
         });
       });
 

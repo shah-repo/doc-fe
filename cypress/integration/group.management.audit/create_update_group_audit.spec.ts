@@ -90,19 +90,23 @@ context("Group Creation Flow", () => {
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId,
       }).then(() => done());
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
   context("Login company admin", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigates to Group management", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -170,12 +174,12 @@ context("Group Creation Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroup();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
   context("Check if the history is created for first official group", () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     context("Check history in group managment page", () => {
       it("Open history panel", () => {
         cy.grpHistoryClickOpenButton();
@@ -248,6 +252,8 @@ context("Group Creation Flow", () => {
   context("Create second official group and click cancel", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'Add Group'", () => {
@@ -320,6 +326,8 @@ context("Group Creation Flow", () => {
   context("Edit Group A and click save", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click edit button of Group A", () => {
@@ -341,6 +349,8 @@ context("Group Creation Flow", () => {
 
     it("Remove one existing permission from the group", () => {
       cy.grpEditRemovePermissions("GROUP_CREATE_UNOFFICIAL");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add one new permission in the group", () => {
@@ -365,12 +375,12 @@ context("Group Creation Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
   context("Check if the history is created for edited 'Group A'", () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     context("Check history in group managment page", () => {
       it("Open history panel", () => {
         cy.grpHistoryClickOpenButton();
@@ -532,10 +542,14 @@ context("Group Creation Flow", () => {
     context("Check history in user managment page", () => {
       it("Navigates to user management", () => {
         cy.usrNavigateToUserManagement();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open history panel", () => {
         cy.usrHistoryClickOpenButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify no new record is added", () => {
@@ -544,6 +558,8 @@ context("Group Creation Flow", () => {
 
       it("Close history panel", () => {
         cy.usrHistoryClickCloseButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -551,6 +567,8 @@ context("Group Creation Flow", () => {
   context("Edit existing group 'API group' and save", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click edit button of 'API group'", () => {
@@ -595,7 +613,7 @@ context("Group Creation Flow", () => {
 
     it("Click cancel without saving the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 
@@ -740,7 +758,7 @@ context("Group Creation Flow", () => {
 
     it("Click cancel without saving the group", () => {
       cy.grpSaveGroupPatch();
-      currentDate = momentInPST().format("MMM D, YYYY hh:m");
+      currentDate = momentInPST().format("MMM D, YYYY hh:mm");
     });
   });
 

@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -119,15 +118,19 @@ context("Records email popup modal", () => {
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
+    // it("Turn off autosave", () => {
+    //   cy.cmpTurnOffAutosave();
+    // });
   });
 
   context("Fill in document attributes", () => {
@@ -153,7 +156,9 @@ context("Records email popup modal", () => {
 
     context("Creates document and releases it", () => {
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify approvals field is automatically added", () => {
@@ -161,7 +166,9 @@ context("Records email popup modal", () => {
       });
 
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -169,19 +176,25 @@ context("Records email popup modal", () => {
   context("Create record with newly created form", () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Create a Record button", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Record Document' form", () => {
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
+    // it("Turn off autosave", () => {
+    //   cy.cmpTurnOffAutosave();
+    // });
 
     it("Enter title Record title: " + recordTitle, () => {
       cy.drEnterDocumentTitle({ name: recordTitle });
@@ -192,29 +205,37 @@ context("Records email popup modal", () => {
     });
 
     it("Select approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: FIRST_USER.name });
 
-      cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: SECOND_USER.name });
 
-      cy.pmAddApproverOnApproverList({ approver: THIRD_USER.name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: THIRD_USER.name });
 
       cy.unClick();
     });
 
     it("Save Record'", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Finalize and release button click'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to dashboard and send email to all approvers", () => {
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if Record is 'In Review'", () => {
@@ -307,10 +328,9 @@ context("Records email popup modal", () => {
     it("Approve Record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldAppear();
     });
   });
 
@@ -321,6 +341,12 @@ context("Records email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if Record is 'In Review'", () => {
@@ -419,10 +445,9 @@ context("Records email popup modal", () => {
     it("Approve Record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldAppear();
     });
   });
 
@@ -449,9 +474,9 @@ context("Records email popup modal", () => {
     it("Approve Record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
     });
 

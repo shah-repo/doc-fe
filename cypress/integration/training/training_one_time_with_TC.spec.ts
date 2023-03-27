@@ -477,6 +477,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -545,6 +546,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 1 for training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
@@ -609,6 +611,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 3 for training form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
@@ -674,6 +677,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Navigate to Details tab", () => {
@@ -833,6 +837,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 1 for draft document", () => {
+      SystemRequirement("REQ-3760", "REQ-3790");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -913,7 +918,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1053,6 +1058,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 1 for released document", () => {
+      SystemRequirement("REQ-3760", "REQ-3790");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -1129,7 +1135,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
       cy.wait(3000);
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1169,6 +1175,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");

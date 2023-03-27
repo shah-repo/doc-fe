@@ -6,7 +6,7 @@ const FBPurchaseOrderClasses = makeStyles({
     "width": "100%",
     "tableLayout": "fixed",
     "& th": {
-      padding: "14px 8px",
+      padding: "14px 5px 14px 15px",
       whiteSpace: "nowrap",
       background: Colors.water,
       boxShadow: `{0 1px 0 ${Colors.chinese_silver}}`,
@@ -50,8 +50,12 @@ const FBPurchaseOrderClasses = makeStyles({
     borderBottom: "none",
   },
   sum: {
-    verticalAlign: "baseline",
-    borderBottom: "none",
+    "verticalAlign": "baseline",
+    "borderBottom": "none",
+    "& tr": {
+      borderLeft: 0,
+      background: Colors.white,
+    },
   },
 });
 

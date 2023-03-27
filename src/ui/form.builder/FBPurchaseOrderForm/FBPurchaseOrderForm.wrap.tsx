@@ -31,9 +31,16 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
 
     handlePartTitle = (_ev: any, value?: DocumentRevision) => {
       const item = formState?.getValues() as FBPurchaseOrderItem;
+      const partNumber = item.partNumber;
+
       purchaseOrderState?.setPartNumber(item.partNumber);
-      formState?.setFieldValue("partNumberTitle", value?.name, true);
-      formState?.setFieldValue("partNumberDocId", generateDocIdLabel(value));
+      formState?.setFieldValue("partNumberTitle", partNumber ? value?.name : "", true);
+      if (partNumber) {
+        formState?.setFieldValue("partNumberDocId", generateDocIdLabel(value));
+      } else {
+        formState?.omitFieldValue("partNumber");
+        formState?.omitFieldValue("partNumberDocId");
+      }
     };
 
     handleTotal = () => {
@@ -59,6 +66,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
           formState?.setFieldFinalValidationRules("supplierPartNumber", "required_without:partNumber");
         }
         else {
+          purchaseOrderState?.setPartNumber(undefined);
           formState?.removeFieldRules("partNumber");
           formState?.removeFieldRules("supplierPartNumber");
         }

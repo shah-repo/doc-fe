@@ -20,6 +20,7 @@ import AuditAttachment from "./AuditAttachment";
 import AuditAutocomplete from "./AuditAutocomplete";
 import AuditDownloadS3link from "./AuditDownloadS3link";
 import AuditProcedure from "./AuditProcedure";
+import DateTime from "./DateTime";
 import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
@@ -166,6 +167,33 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               name: audit.owner?.user.name,
             }}
           />
+        );
+        break;
+      case "poStatus":
+        returnValue = (
+          <>
+            <Text
+              dataCy={dataCy}
+              translation="documentRevision.audit.poStatus.updated.by"
+              values={{
+                status: <Text translation={audit.nextValue as Translation} />,
+                name: audit.ownerName,
+                timestamp: (
+                  <DateTime
+                    data-cy={`${dataCy}-date-time`}
+                    value={audit.timestamp}
+                    format={MomentFormats.BriefDateTime}
+                  />
+                ),
+              }}
+            />
+            {audit?.hasPoReceivedQtyFlag && (
+              <Text
+                dataCy={`${dataCy}-quantity-discrepancies`}
+                translation="documentRevision.audit.poStatus.quantity.discrepancies"
+              />
+            )}
+          </>
         );
         break;
       case "securityGroups":

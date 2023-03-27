@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -108,13 +107,14 @@ context("Autosave on leaving page while data is still not saved", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddNewFieldButton();
+      cy.saveBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Create new document from 'Form'", () => {
@@ -219,10 +219,9 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Enter value for custom text field", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Test edit field second time");
-        cy.unClick();
-      });
+      cy.get("[name^=fb-textfield-]").arrowType("Test edit field second time");
+      cy.unClick();
+      cy.saveBarShouldNotExist();
     });
 
     it("Save document", () => {

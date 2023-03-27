@@ -9,7 +9,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -497,7 +496,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
@@ -535,11 +534,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -600,6 +599,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing bulk create form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -669,6 +669,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Verify page 1 for bulk create form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
@@ -742,6 +743,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
+        SystemRequirement("REQ-4870");
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
         tmpRegex = new RegExp( `AR-000061N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
@@ -779,10 +781,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
+        cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -794,7 +796,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check({ force: true });
       });
 
       it("Checkbox option 1 checked", () => {
@@ -802,7 +804,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -814,11 +816,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Add first Approver'", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Add second Approver'", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
       it("Remove second Approver'", () => {
@@ -833,7 +835,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -847,7 +849,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Check doc WIP status and click on Send To Email", () => {
@@ -1067,15 +1069,15 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it("Check doc Released status and click on Send To Email", () => {
@@ -1272,7 +1274,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify created docs", () => {
       it("Navigate to document list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
@@ -1321,10 +1323,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
+        cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -1336,7 +1338,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check({ force: true });
       });
 
       it("Checkbox option 1 checked", () => {
@@ -1344,7 +1346,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -1352,11 +1354,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -1370,7 +1372,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
 
@@ -1401,7 +1403,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -1409,17 +1411,17 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
     context("Verify created docs", () => {
       it("Navigate to document list and verify count", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
         cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
@@ -1428,6 +1430,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Filter docs by type", () => {
         cy.dlFilterByType({ type: "TPUP" });
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify doc-ids are correct for created doc", () => {

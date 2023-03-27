@@ -567,7 +567,7 @@ context("Intermediate page validation", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "FbTrainingText" });
-      cy.fbAddField();
+      cy.fbAddNewFieldButton();
     });
 
     it("Add radio button group", () => {
@@ -579,8 +579,8 @@ context("Intermediate page validation", () => {
       cy.get("input[value^='visibility']").check();
       cy.get(`input[name="validators.required_if"]`).check();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("FbTrainingText");
-      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Yes");
-      cy.fbAddField();
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Yes").wait(500);
+      cy.fbAddNewFieldButton();
     });
 
     it("Verify form preview button in Overview Tab", () => {
@@ -599,13 +599,12 @@ context("Intermediate page validation", () => {
     });
 
     it("Remove value 'Yes' in text field Text1 Radio button group should be hidden", () => {
-      cy.get("[name^='fb-training-text']").last().arrowType("Ye").clear();
+      cy.get("[name^='fb-training-text']").last().clear();
       cy.get("[name^='radio-btn-group-for-inline']").last().should("not.be.visible");
       cy.get("[data-cy='RadioBtnGroup for inline']").should("not.be.visible");
     });
 
     it("Close the preview mode dialog", () => {
-      cy.get("[name^='fb-training-text']").last().arrowType("Yes");
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
   });
@@ -616,7 +615,7 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
       cy.get("input[value^='default']").check();
       cy.get(`input[name="validators.required_if"]`).uncheck();
-      cy.fbAddField();
+      cy.fbAddNewFieldButton();
     });
 
     it("Open form preview", () => {

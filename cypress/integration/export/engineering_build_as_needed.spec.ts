@@ -751,13 +751,11 @@ context("Procedure and parts flow test", () => {
 
   context("Save & Release", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -843,7 +841,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -854,21 +852,17 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add step description", () => {
-          cy.wrapWithWaitOnApiCalls([], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
-          });
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Add files to the step Attachments field", () => {
-          cy.wrapWithWaitOnApiCalls([], () => {
-            cy.contains("Step #2").parentsUntil("li")
-              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-            cy.elUploadAttachment({
-              fileName: "test_image.jpg",
-              el: "fb-mediaalbum-upload-",
-            });
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-",
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -905,7 +899,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Save the document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Add Approvers", () => {
@@ -917,7 +911,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Approve record button click", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
 

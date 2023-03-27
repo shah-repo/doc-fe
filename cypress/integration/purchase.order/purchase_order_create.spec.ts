@@ -263,6 +263,7 @@ context("Create company with JSON's", () => {
       cy.cmpClickCreateNewDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it(`Enters title '${ncoFormName}'`, () => {
@@ -279,6 +280,7 @@ context("Create company with JSON's", () => {
 
     it("Select 'New Company Record' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
+      cy.wait(2000);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -287,10 +289,12 @@ context("Create company with JSON's", () => {
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(2000);
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.wait(2000);
     });
   });
 
@@ -307,6 +311,7 @@ context("Create company with JSON's", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(2000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -325,18 +330,26 @@ context("Create company with JSON's", () => {
 
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
       cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
       cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
       cy.get("[name*='approved-dam-json-is-used-']").check("Yes");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload DOM JSON", () => {
@@ -384,10 +397,14 @@ context("Create company with JSON's", () => {
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document for create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Log out user", () => {
@@ -454,10 +471,14 @@ context("Create company with JSON's", () => {
 
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -494,6 +515,7 @@ context("Create company with JSON's", () => {
 
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.wait(3000);
       });
     });
 
@@ -537,7 +559,7 @@ context("Create company with JSON's", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -568,6 +590,8 @@ context("Create company with JSON's", () => {
 
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -648,6 +672,7 @@ context("Create company with JSON's", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(2000);
     });
 
     it("PO Status is a Select Field", () => {
@@ -700,9 +725,10 @@ context("Create company with JSON's", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("PO table field labeled 'Purchase Order'", () => {
-      cy.get(`[data-cy="Purchase Order"]`).should("have.text", "Purchase Order");
-    });
+    // The following code is commented as per the ENC-13706
+    // it("PO table field labeled 'Purchase Order'", () => {
+    //   cy.get(`[data-cy="Purchase Order"]`).should("have.text", "Purchase Order");
+    // });
 
     it("PO table field cannot be deleted", () => {
       cy.get(".fb-field-wrapper-po-items-built-in>div>div>div>[data-cy='remove-schema-item']")
@@ -1313,7 +1339,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

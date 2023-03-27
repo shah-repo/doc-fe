@@ -1,12 +1,18 @@
-import { Box } from "@material-ui/core";
+import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import cx from "classnames";
 import { orderBy } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
+import { ReactComponent as EmailSuccessIcon } from "../../../assets/images/email_success.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
+import Text from "../../../ui/components/Text";
+import { getInitalsFromName } from "../../components/icons/avatar/helpers";
+import Colors from "../../layout/theme/utils/colors";
+import ApprovalsBlock from "./ApprovalsBlock";
+import useStyles from "./FBPOApprovals.styles";
 import { FBPOApprovalsProps } from "./FBPOApprovals.types";
 import { withFBPOApprovals } from "./FBPOApprovals.wrap";
 
@@ -28,90 +34,192 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   disabledOptions,
   disableChipDelete,
   ...props
-}) => (
-  <FBProvider {...{ dialogState }}>
-    <FBDialog />
-    <FBInput {...props} {...{ name }} type="poapprovals">
-      <Box>
-        <FBSection
-          name={`fb-po-approvals-section-${name}`}
-          {...{ label }}
-        />
-        <FBAutocompleteAsync
-          name={name}
-          label="form.builder.approvers"
-          optionId={FBAutocompleteAsyncOption.availableApprovers}
-          gutter={false}
-          multiple
-          withState
-          omitFormValue
-          filterSelectedOptions
-          disableClearable
-          disableBackspace
-          {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
-        />
-        <Box display="flex" flexWrap="wrap" my={2}>
-          <FBMapWrapper<FBRequiredApprover[]> collection={orderBy(groups, "documentStage")}>
-            {(group: FBRequiredApprover) => (
-              <Box display="flex" key={`fb-po-approvals-group-${group.id}`} mr={2.5}>
-                <CheckCircleIcon color={isIncluded?.(group) ? "primary" : "disabled"} />
-                <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
-              </Box>
-            )}
-          </FBMapWrapper>
+}) => {
+  const classes = useStyles();
+
+  const approvalsByStatus = approvals?.reduce((list, approval) => {
+    if (!approval.status) {
+      return list;
+    }
+
+    if (!list[approval.status]) {
+      list[approval.status] = [];
+    }
+    list[approval.status].push(approval);
+
+    return list;
+  }, {} as Record<string, FBInlineApprovalBody[]>);
+
+  const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
+  const intl = useIntl();
+
+  return  (
+    <FBProvider {...{ dialogState }}>
+      <FBDialog />
+      <FBInput {...props} {...{ name }} type="poapprovals">
+        <Box>
+          <FBSection
+            name={`fb-po-approvals-section-${name}`}
+            {...{ label }}
+          />
+          <FBAutocompleteAsync
+            name={name}
+            label="form.builder.approvers"
+            optionId={FBAutocompleteAsyncOption.availableApprovers}
+            gutter={false}
+            multiple
+            withState
+            omitFormValue
+            filterSelectedOptions
+            disableClearable
+            disableBackspace
+            disableChipDelete
+            {...{ disabled, renderOption, loading, disabledOptions }}
+          />
+          <Box display="flex" flexWrap="wrap" my={2}>
+            <FBMapWrapper<FBRequiredApprover[]> collection={orderBy(groups, "documentStage")}>
+              {(group: FBRequiredApprover) => (
+                <Box display="flex" data-cy={ isIncluded?.(group) ? "check-circle-primary" : "check-circle-disabled" }
+                  key={`fb-po-approvals-group-${group.id}`} mr={2.5}>
+                  <CheckCircleIcon style = {{ color: isIncluded?.(group) ? Colors.green_blue : "disabled" }} />
+                  <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
+                </Box>
+              )}
+            </FBMapWrapper>
+          </Box>
+          <Box>
+            <FBMapWrapper<Record<string, FBInlineApprovalBody[]>>
+              collection={approvalsByStatus as Record<string, FBInlineApprovalBody[]>}
+            >
+              {(approvals, status) => {
+
+                const poStatusText = pendingStates.includes(status)
+                  ? "common.pending.approval"
+                  : "APPROVED";
+
+                const poStatusHeaderText = pendingStates.includes(status)
+                  ? "common.pending"
+                  : "APPROVED";
+
+                const poStatusHeaderTextMessage = intl.formatMessage({
+                  id: poStatusHeaderText,
+                });
+                return (
+                  <ApprovalsBlock
+                    headerText={poStatusHeaderText}
+                    itemsCount={approvals.length}
+                    key={status}
+                  >
+                    <List className={classes.approvalsList}>
+                      <FBMapWrapper<FBInlineApprovalBody[]>
+                        collection={approvals}
+                      >
+                        {(approval, index: number) => {
+                          const isUserNeedToApprove =
+                          documentStatus === DocumentRevisionStatus.InReview
+                          && approval.approver?.user.id === currentUser
+                          && approval.status === FBInlineApprovalStatusIdent.PENDING;
+
+                          return (
+                            <ListItem
+                              divider={index < approvals.length - 1}
+                              key={approval.id}
+                              className={classes.listItem}
+                            >
+                              <ListItemAvatar>
+                                <Avatar
+                                  className={classes.avatar}
+                                  src={approval.approver.user.avatar}
+                                  style={{ backgroundColor: approval.approver.user.initialColor }}
+                                  alt={approval.approver.user.name}
+                                >
+                                  {!approval.approver.user.avatar && getInitalsFromName(approval.approver.user.name)}
+                                </Avatar>
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={
+                                  <Typography
+                                    variant="h6"
+                                    component="h6"
+                                    data-cy={`user-name-${index}-${approval.status}`}
+                                    className={classes.nameText}
+                                  >
+                                    {approval.approver.user.name}
+                                  </Typography>
+                                }
+                                secondary={
+                                  <Typography
+                                    variant="caption"
+                                    data-cy={`user-email-${index}-${approval.status}`}
+                                    className={classes.emailText}
+                                  >
+                                    {approval.approver.user.email}
+                                  </Typography>
+                                }
+                              />
+                              <ListItemText
+                                className={classes.stateInfo}
+                                primary={
+                                  isUserNeedToApprove
+                                    ? (
+                                      <Box flexGrow={1} textAlign="right">
+                                        {/*
+                                          TODO
+                                          Review as outlined afer fixing FBButton or use other generic button component
+                                        */}
+                                        <FBButton
+                                          label="common.reject"
+                                          size="small"
+                                          className={cx(classes.poButton, classes.poRejectButton)}
+                                          onClick={() => approvalTransition("reject", approval.id)}
+                                        />
+                                        <FBButton
+                                          label="form.builder.request.approve"
+                                          size="small"
+                                          className={classes.poButton}
+                                          onClick={() => onApproveClick?.(approval.id || "")}
+                                        />
+                                      </Box>
+                                    )
+                                    : (
+                                      <Typography
+                                        variant="caption"
+                                        data-cy={`user-${index}-${poStatusHeaderTextMessage}-status-text`}
+                                        className={classes.stateText}
+                                      >
+                                        {approval.status === FBInlineApprovalStatusIdent.APPROVED && (
+                                          <EmailSuccessIcon className={classes.successIcon} />
+                                        )}
+                                        <Text message={poStatusText} />
+                                      </Typography>
+                                    )
+                                }
+                                secondary={
+                                  (status === FBInlineApprovalStatusIdent.APPROVED) && (
+                                    <Typography
+                                      variant="caption"
+                                      className={classes.dateText}
+                                      data-cy={`date-timestamp-${index}-${approval.status}`}
+                                    >
+                                      {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
+                                    </Typography>
+                                  )
+                                }
+                              />
+                            </ListItem>
+                          );
+                        }}
+                      </FBMapWrapper>
+                    </List>
+                  </ApprovalsBlock>
+                );
+              }}
+            </FBMapWrapper>
+          </Box>
         </Box>
-        <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals as FBInlineApprovalBody[]}>
-          {(approval: FBInlineApprovalBody, index) => {
-            const isApproved = isDocumentRevisionApproved(approval.status);
-            return (
-              <Box mb={4} key={index}>
-                <Box
-                  key={`fb-po-approvals-info-${approval.id}-${index}`}
-                  pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                >
-                  <Box fontWeight="bold">
-                    { isApproved ? approval.approverName :  approval.approver?.user.name }
-                  </Box>
-                  {approval.status && approval.approverGroup && isApproved && (
-                    <Box>&nbsp;| {approval.approverGroup?.join(", ")}</Box>
-                  )}
-                  {approval.status && <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>}
-                  {approval.reviewedAt && isApproved && (
-                    <Box>&nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}</Box>
-                  )}
-                  {documentStatus === DocumentRevisionStatus.InReview
-                    && approval.status === ApprovalStatus.Pending
-                    && currentUser === approval.approver?.user.id
-                    && (
-                      <Box flexGrow={1} textAlign="right">
-                        <FBButton
-                          label="common.reject"
-                          size="small"
-                          style={{ fontSize: "11px" }}
-                          onClick={() => approvalTransition("reject", approval.id)}
-                        />
-                        <FBButton
-                          label="form.builder.request.approve"
-                          size="small"
-                          style={{ fontSize: "11px" }}
-                          onClick={() => onApproveClick?.(approval.id || "")}
-                        />
-                      </Box>
-                    )}
-                </Box>
-                <Box mt={1}>
-                  { isApproved ? approval.approverEmail : approval.approver?.user.email }
-                </Box>
-              </Box>
-            ); }
-          }
-        </FBMapWrapper>
-      </Box>
-    </FBInput>
-  </FBProvider>
-);
+      </FBInput>
+    </FBProvider>
+  );
+};
 
 export default withFBPOApprovals(FBPOApprovals);

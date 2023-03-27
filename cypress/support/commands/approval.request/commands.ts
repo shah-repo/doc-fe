@@ -19,32 +19,50 @@ declare global {
       arSelectARForm(params: { formTitle: string }): Chainable<Subject>;
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
+      arEnterApprovalRequestDescriptionNew(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
       arClickAddDocumentWithoutApi(): Chainable<Subject>;
+      arAddItems(): Chainable<Subject>;
+      arClickAddItem(): Chainable<Subject>;
+      arClickSaveItem(): Chainable<Subject>;
+      arItemsLoaderShouldNotExist(): Chainable<Subject>;
       arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
+      arSelectItem(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
+      arEnterItemDescription(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
+      arEnterItemJustification(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
+      arClickAddItemDone(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
+      arAddApproverOnApproverListWithoutApi(params: { approver: string; noWait?: bool }): Chainable<Subject>;
       arAddApproverOnApproverListWithoutApiCall(params: { approver: string; noWait?: bool  }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
+      arClickSendToReviewWithoutApi(): Chainable<Subject>;
+      arClickSendToReviewNew(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
       arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arFilterARListByNameAndStatusWithoutApi(params: { title: string; status: string }): Chainable<Subject>;
+      arFilterListByNameAndStatusWithoutApi(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
       arApproveARWithoutApi(): Chainable<Subject>;
       arSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       arApproveARFromDashboard(): Chainable<Subject>;
+      arApproveARFromDashboardWithoutApi(): Chainable<Subject>;
+      arRejectARFromDashboardWithoutApi(): Chainable<Subject>;
+      arCloseARFromDashboardWithoutApi(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
+      arWithdrawSubmissionWithoutApi(): Chainable<Subject>;
       arIsProposedDocumentEmpty(): Chainable<Subject>;
       arRejectComfirmationAR(): Chainable<Subject>;
       arRejectComfirmationARNew(): Chainable<Subject>;
       arSelectFirstDocument(): Chainable<Subject>;
+      arSelectFirstDocumentWithoutApi(): Chainable<Subject>;
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
@@ -80,7 +98,9 @@ declare global {
       }): Chainable<Subject>;
       arClickCreateAnAR(): Chainable<Subject>;
       arSelectDocumentTab(): Chainable<Subject>;
+      arSelectItemsTab(): Chainable<Subject>;
       arSelectChangeDetailsTab(): Chainable<Subject>;
+      arSelectApprovalTab(): Chainable<Subject>;
     }
   }
 }
@@ -275,8 +295,21 @@ Cypress.Commands.add("arClearFilters", () => {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
-  cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear().arrowType(params.description, { force: true })
-    .wait(500).unClick();
+  cy.get("[class^=\"public-DraftStyleDefault-block\"]").arrowClick().clear();
+  cy.get("[class^=\"public-DraftStyleDefault-block\"]").arrowType(params.description);
+  cy.wait(2000);
+});
+
+Cypress.Commands.add("arEnterApprovalRequestDescriptionNew", (params: { description: string }) => {
+  cy.get("[data-cy=\"description\"]").eq(2).arrowClick().wait(1000);
+  cy.get(`[data-cy="description"] [contenteditable]`).eq(1).clear().arrowType(params.description);
+  cy.unClick();
+});
+
+Cypress.Commands.add("arEnterApprovalRequestDescriptionNew", (params: { description: string }) => {
+  cy.get("[data-cy=\"description\"]").eq(2).arrowClick().wait(1000);
+  cy.get(`[data-cy="description"] [contenteditable]`).eq(1).clear().arrowType(params.description);
+  cy.unClick();
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
@@ -288,14 +321,35 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 
 Cypress.Commands.add("arClickAddDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
+    cy.contains("Add Item").arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arClickAddDocumentWithoutApi", () => {
-  cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
+  cy.contains("Add Item").arrowClick();
   cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("arAddItems", () => {
+  cy.contains("Add Item").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("arClickAddItem", () => {
+  cy.get("[data-cy='approvalRequest.items.button.addText']").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arClickSaveItem", () => {
+  cy.get("[data-cy='doneRecord']").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arItemsLoaderShouldNotExist", () => {
+  cy.get("[data-cy='ar.items.loader']", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("arCloseAR", () => {
@@ -321,7 +375,17 @@ Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string 
   cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
 });
 
+Cypress.Commands.add("arSelectItem", (params: { name: string }) => {
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").arrowClick();
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
+  cy.unClick();
+});
+
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {
+  cy.get("[data-cy=\"descriptionOfChange\"]").arrowClick().arrowType(params.description).wait(500);
+});
+
+Cypress.Commands.add("arEnterItemDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"descriptionOfChange\"]").arrowClick().arrowType(params.description).wait(500);
 });
 
@@ -329,10 +393,22 @@ Cypress.Commands.add("arEnterJustificationAddDocumentsDialog", (params: { justif
   cy.get("[data-cy=\"justificationOfChange\"]").arrowClick().arrowType(params.justification).wait(500);
 });
 
+Cypress.Commands.add("arEnterItemJustification", (params: { justification: string }) => {
+  cy.get("[data-cy=\"justificationOfChange\"]").arrowClick().arrowType(params.justification).wait(500);
+  cy.unClick();
+});
+
 Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
-  cy.get("[data-cy=\"arAddDocumentDialogAddBtn\"]").arrowClick();
+  cy.get("[data-cy='doneRecord']").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arClickAddItemDone", () => {
+  cy.get("[data-cy='doneRecord']").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string; noWait?: bool }) => {
@@ -348,9 +424,19 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("arAddApproverOnApproverListWithoutApi", (params: { approver: string; noWait?: bool }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.approver).arrowClick({ force: true });
+  cy.unClick().wait(500);
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string; noWait?: bool  }) => {
   cy.get(`[data-cy="fb-approvers-approvers"]`).arrowClick({ force: true });
-  cy.get(`[data-cy=\"fb-approvers-approvers"]`).autocompleteSelect(params.approver);
+  cy.get(`[data-cy="fb-approvers-approvers"]`).autocompleteSelect(params.approver);
   cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -370,9 +456,22 @@ Cypress.Commands.add("arClickSendToReview", () => {
     CyRoutes.GetRequiredApproversDocRev,
   ],
   () => {
-    cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
+    cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arClickSendToReviewWithoutApi", () => {
+  cy.get("[data-cy=\"changeRequest.transition.in_review\"]").arrowClick({ force: true });
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arClickSendToReviewNew", () => {
+  cy.get("#transitionButton").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
@@ -401,7 +500,7 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
@@ -415,12 +514,24 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatusWithoutApi", (params: { title: string; status: string }) => {
-  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
+  cy.get(".k-master-row").contains(params.title).arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arFilterListByNameAndStatusWithoutApi", (params: { title: string; status: string }) => {
+  cy.get(`[aria-colindex="2"] .k-filtercell > input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldAppear().wait(2000);
   cy.get(".k-master-row").contains(params.title).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -442,7 +553,7 @@ Cypress.Commands.add("arApproveARWithoutApi", () => {
   cy.get("button[aria-label=approve]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
@@ -455,6 +566,36 @@ Cypress.Commands.add("arApproveARFromDashboard", () => {
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arApproveARFromDashboardWithoutApi", () => {
+  cy.contains("needs your approval for").trigger("mouseover");
+  cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arRejectARFromDashboardWithoutApi", () => {
+  cy.contains("needs your approval for").trigger("mouseover");
+  cy.get("[data-cy='transition-reject']").first().arrowClick();
+  cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy='passwordConfirm']").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arCloseARFromDashboardWithoutApi", () => {
+  cy.contains("APPROVED").trigger("mouseover");
+  cy.get(`[data-cy="close-icon"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="close-icon-solid"]`).first().arrowClick();
+  cy.get("#confirmEffectiveDate").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -473,6 +614,14 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
     CyRoutes.DocRevPreview], () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
+});
+
+Cypress.Commands.add("arWithdrawSubmissionWithoutApi", () => {
+  cy.get("div[class=\"MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end\"]")
+    .find("button[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("arCloseARFromMenu", () => {
@@ -524,16 +673,32 @@ Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("arSelectFirstDocumentWithoutApi", () => {
+  cy.get("tr.k-master-row").first().arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
 Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {
   cy.get(`[data-cy="fb-approvers-${params.roleName}-check-${params.enabled ? "marked" : "disabled"}"]`).should("not.be.undefined");
 });
 
-Cypress.Commands.add("arSelectDocumentTab", () => {
-  cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
+Cypress.Commands.add("arSelectItemsTab", () => {
+  cy.get("[data-cy=\"tabId.items\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arSelectItemsTab", () => {
+  cy.get(`[data-cy="tabId.items"]`).arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arSelectChangeDetailsTab", () => {
   cy.get("[data-cy=\"tabId.changedetails\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arSelectApprovalTab", () => {
+  cy.get("[data-cy=\"tabId.approvals\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });

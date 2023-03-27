@@ -10,7 +10,9 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import { store } from "../../../state/store";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
+import { canEditDocumentRevision } from "../../documentRevision/helpers/documentRevisionPermissions";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
 import FBDataStore from "../FBStore/FBDataStore";
@@ -26,6 +28,12 @@ export const usePoApprovals = (
 ) => {
   const dispatch = useDispatch();
   const { workspaceState, poApprovalsState } = FB.useStores();
+
+  const { document: documentRevision }  = workspaceState || {};
+  const authUser = store.getState().auth.user;
+  const isCurrentUserOperator = some(documentRevision?.document.operators, ["user.email", authUser.email ]);
+  const canEditDocRev = documentRevision &&
+  canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
 
   const getSignatureGroupName = (id: string) => {
     const approversGroups = compact(map(poApprovalsState?.groups, (group) =>
@@ -73,7 +81,7 @@ export const usePoApprovals = (
       && !isAdministrativeChange
       && poApprovalsState?.requireAdditionalApprovers;
 
-    if (!shouldUpdate) {
+    if (!shouldUpdate || !canEditDocRev) {
       return;
     }
 
@@ -90,7 +98,7 @@ export const usePoApprovals = (
 
     const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status);
 
-    if (!shouldUpdateApprovers) {
+    if (!shouldUpdateApprovers || !canEditDocRev) {
       return;
     }
 
@@ -98,8 +106,7 @@ export const usePoApprovals = (
     const requester = formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
     const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
 
-    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
-    const isAdministrativeChange = administativeRevisionTypes.includes(revisionChangeType as RevisionChangeType);
+    const isAdministrativeChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
 
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
@@ -209,7 +216,8 @@ export const usePoApprovals = (
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
       if (id && [ApprovalStatus.Approved, ApprovalStatus.Rejected].includes(data?.status as ApprovalStatus)) {
         // TODO investigate why reload here sometimes causes blink and returns to prev state
-        return dispatch(documentRevisionsActions.load(id));
+        // sometimes it is showing prev state of documentRevision so added this hard reload.
+        document.location.reload(); // documentRevision values are not consistent.
       }
       updateSignatureGroupNames();
     }

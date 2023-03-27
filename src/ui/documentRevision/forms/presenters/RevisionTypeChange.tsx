@@ -18,6 +18,7 @@ interface Props {
   isDocRevFirstDraft: boolean;
   showAdministrativeAndVoidChange: boolean;
   isRecord?: boolean;
+  isPORecord?: boolean;
   releasedDocRev?: DocumentRevision;
   isAlphaReleased: boolean;
 }
@@ -27,6 +28,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
   isDocRevFirstDraft,
   showAdministrativeAndVoidChange,
   isRecord,
+  isPORecord,
   releasedDocRev,
   isAlphaReleased,
 }) => {
@@ -123,7 +125,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
         </Box>
         <Box>
           {
-            showObsolete && !isDocRevFirstDraft &&
+            showObsolete && !isDocRevFirstDraft && !isPORecord &&
             <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
               <>
                 <RadioButton
@@ -143,7 +145,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
         </Box>
         <Box>
           {
-            showAdministrationChange && !isDocRevFirstDraft &&
+            showAdministrationChange && !isPORecord && !isDocRevFirstDraft &&
             <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
               <>
                 <RadioButton

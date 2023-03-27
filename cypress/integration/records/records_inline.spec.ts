@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -223,6 +222,8 @@ context("Record inline Flow", () => {
 
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add textfield", () => {
@@ -230,6 +231,8 @@ context("Record inline Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
         cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add inline approval", () => {
@@ -242,6 +245,8 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Checkbox group", () => {
@@ -252,6 +257,8 @@ context("Record inline Flow", () => {
         cy.fbOpenValidation();
         cy.fbFieldRequired();
         cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
@@ -261,8 +268,10 @@ context("Record inline Flow", () => {
         cy.fbOpenValidation();
         cy.get("input[value^=\"visibility\"]").check();
         cy.fbFieldRequiredIfIn({ name: "Checkbox" });
-        cy.fbSelectCheckboxValue("3");
+        cy.fbSelectCheckboxValueList("3");
         cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add second textfield", () => {
@@ -270,6 +279,8 @@ context("Record inline Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Second textfield for inline" });
         cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add second inline approval", () => {
@@ -280,6 +291,8 @@ context("Record inline Flow", () => {
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddField();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -308,7 +321,7 @@ context("Record inline Flow", () => {
       });
     });
 
-    context("Verify email for  record form notification", () => {
+    context("Verify email for record form notification", () => {
       it("Get emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
@@ -343,6 +356,7 @@ context("Record inline Flow", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file containing record form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -409,6 +423,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
@@ -478,6 +493,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 3 of record form", () => {
+        SystemRequirement("REQ-4870");
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
 
@@ -504,7 +520,7 @@ context("Record inline Flow", () => {
 
     context("Release document", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -741,17 +757,19 @@ context("Record inline Flow", () => {
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     context("Fill in document attributes", () => {
       it("Enter title 'Record Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Record Document Revision" });
-        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Upload attachment 'image.jpg'", () => {
         cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
-        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(1000);
+        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(500);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -765,6 +783,8 @@ context("Record inline Flow", () => {
 
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Checkbox option 1 checked", () => {
@@ -774,14 +794,14 @@ context("Record inline Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry").wait(1000);
+        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter text 'First entry' in second textfield for inline", () => {
-        cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+        cy.get(`[data-cy^="second-textfield-for-inline"] input`)
           .type("First entry");
         cy.unClick();
         cy.progressBarShouldNotExist();
@@ -789,53 +809,50 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-field\"] input")
-              .autocompleteSelect(`${USERS[2].name}`, { force: true });
-          });
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`[name*="fb-ia-inline-field"] input`).arrowClick();
+        cy.get(`[name*="fb-ia-inline-field"] input`)
+          .autocompleteSelect(`${USERS[2].name}`, { force: true });
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Select second approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-inline-field\"] input").arrowClick().wait(1000);
-            cy.get("[name^=\"fb-ia-inline-field\"] input")
-              .autocompleteSelect(`${USERS[3].name}`, { force: true });
-          });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name^=\"fb-ia-inline-field\"] input").arrowClick();
+        cy.get("[name^=\"fb-ia-inline-field\"] input")
+          .autocompleteSelect(`${USERS[3].name}`, { force: true });
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Remove second approver for first inline", () => {
         cy.pmDeleteApproverFromApproverList({ approver: `${USERS[3].name} - ${USERS[3].email}` });
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .autocompleteSelect(`${USERS[2].name}`, { force: true });
-          });
+        cy.get(`[name*="fb-ia-second-inline-field"] input`).arrowClick();
+        cy.get(`[name*="fb-ia-second-inline-field"] input`)
+          .autocompleteSelect(`${USERS[2].name}`, { force: true });
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.wait(2000);
       });
 
       it("Select second approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .autocompleteSelect("enlil.testmail+cy3");
-          });
+        cy.get(`[name*="fb-ia-second-inline-field"] input`).arrowClick();
+        cy.get(`[name*="fb-ia-second-inline-field"] input`)
+          .autocompleteSelect(`${USERS[3].name}`, { force: true });
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.wait(2000);
@@ -843,17 +860,28 @@ context("Record inline Flow", () => {
 
       it("Remove second approver for second inline", () => {
         cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().next().arrowClick();
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
+      });
+
+      it("Click on Save", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Send request for approval", () => {
-        cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
+        cy.get(`[data-cy="form.builder.request.approval"]`).first().arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Check inline record creation default to numeric revision", () => {
+        SystemRequirement("REQ-1020");
         cy.drClickRevisionsSidePanel();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -943,8 +971,6 @@ context("Record inline Flow", () => {
             });
           }
         });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify file size of the downloaded zip file", () => {
@@ -1038,366 +1064,346 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.SessionDetails,
-          CyRoutes.GetRequiredApproversDocRev,
-        ], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Details' tab", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.GetFieldLocks,
-        ], () => {
-          cy.drSelectDetailsTab();
-        });
+        cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check system creates new major revision after inline approve", () => {
         SystemRequirement("REQ-1040");
         cy.drClickRevisionsSidePanel();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.recCheckRevisionStage({ stage: "Revision 2" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
-      context("Change textfield and approve again", () => {
-        it("Enter text 'Second entry' in textfield for inline", () => {
-          SystemRequirement("REQ-1080", "REQ-1100");
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails,
-            CyRoutes.GetRequiredApproversDocRev,
-          ], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
-            cy.unClick();
-            cy.progressBarShouldNotExist();
-          });
-        });
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
 
-        it("Save record", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Navigate to Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
-
-        it("Verify system asks for another approval afer changing section", () => {
-          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100", "REQ-1090");
-          cy.get("[data-cy^=\"form.builder.approval.pending\"]")
-            .first()
-            .should("have.text", "Inline approval pending");
-        });
-
-        it("Approve first Inline Approval", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.listLoadingElementShouldNotExist();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.checkToastMessage({ exists: false });
-        });
-
-        it("Navigate to Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
-
-        it("Approve second Inline Approval", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.listLoadingElementShouldNotExist();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
-          cy.checkToastMessage({ exists: false });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+    context("Change textfield and approve again", () => {
+      it("Enter text 'Second entry' in textfield for inline", () => {
+        SystemRequirement("REQ-1080", "REQ-1100");
+        cy.get(`[data-cy^="textfield-for-inline"] input`).scrollIntoView();
+        cy.get(`[data-cy^="textfield-for-inline"] input`).arrowClick();
+        cy.get(`[data-cy^="textfield-for-inline"] input`).arrowType(", Second entry");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
-      context("Edit and try to release it ", () => {
-        it("Navigate to Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
-
-        it("Enter text 'Third entry' in textfield for inline", () => {
-          SystemRequirement("REQ-1080");
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
-            cy.unClick();
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
-          });
-        });
-
-        it("Save record", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Navigate to Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
-
-        it("Approve Inline Approval", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
-          cy.checkToastMessage({ exists: false });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+      it("Save record", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
-      context("Approve and Release document", () => {
-        it("Approve and release it", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.recApproveAndReleaseInlineRecord();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      context("Check only last record is shown on list and that it is in alpha state", () => {
-        it("Navigate to records", () => {
-          cy.navigToRecords();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Clear filters", () => {
-          SystemRequirement("REQ-1110");
-          cy.dlClearFilters();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Check if there is only one record in list", () => {
-          SystemRequirement("REQ-1110", "REQ-2790");
-          cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        });
-
-        it("Filter record by name and status, and select it", () => {
-          SystemRequirement("REQ-0120");
-          cy.recFilterByTitle({ revision: "Record Document Revision" });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.wait(1000);
-          cy.recFilterByStatus({ status: "Released" });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.DocPreview,
-            CyRoutes.GetRequiredApproversDocRev,
-          ], () => {
-            cy.get("tr.k-master-row").first().arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Verify record is in alpha state", () => {
-          SystemRequirement("REQ-1060");
-          cy.drClickRevisionsSidePanel();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.recCheckRevisionStage({ stage: "Revision A" });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it(`Check doc status for ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
-          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-          cy.arCheckTitleInEditableAndMatches({ name: "Record Document Revision" });
-          cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
-            recDocId = $docIdElement.text();
-          });
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-          cy.sendToEmail();
-        });
-
-        it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-          cy.checkToastMessageContains({
-            message: "File will be sent to your email shortly.",
-          });
-        });
+      it("Verify system asks for another approval afer changing section", () => {
+        SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100", "REQ-1090");
+        cy.get("[data-cy^=\"form.builder.approval.pending\"]")
+          .first()
+          .should("have.text", "Inline approval pending");
       });
 
-      context("Verify email notification", () => {
-        it("Get emails", () => {
-          const getEmailSetting =  {
-            to: CONFIG.TEST_EMAIL,
-            after: dateAfterEmailShouldArrive,
-            subject: `Export for document ${recDocId}`,
-          };
+      it("Approve first Inline Approval", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.checkToastMessage({ exists: false });
+        cy.wait(5000);
+      });
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          });
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Approve second Inline Approval", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(10000);
+      });
+    });
+
+    context("Edit and try to release it ", () => {
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Enter text 'Third entry' in textfield for inline", () => {
+        SystemRequirement("REQ-1080");
+        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Save record", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Approve Inline Approval", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(10000);
+      });
+    });
+
+    context("Approve and Release document", () => {
+      it("Approve and release it", () => {
+        cy.drClickRevisionsSidePanel();
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.drClickRevisionsSidePanel();
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.recApproveAndReleaseInlineRecord();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("Check only last record is shown on list and that it is in alpha state", () => {
+      it("Navigate to records", () => {
+        cy.navigToRecords();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Clear filters", () => {
+        SystemRequirement("REQ-1110");
+        cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Check if there is only one record in list", () => {
+        SystemRequirement("REQ-1110", "REQ-2790");
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+      });
+
+      it("Filter record by name and status, and select it", () => {
+        SystemRequirement("REQ-0120");
+        cy.recFilterByTitle({ revision: "Record Document Revision" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
+        cy.recFilterByStatus({ status: "Released" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("tr.k-master-row").first().arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify record is in alpha state", () => {
+        SystemRequirement("REQ-1060");
+        cy.drClickRevisionsSidePanel();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.recCheckRevisionStage({ stage: "Revision A" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Check doc status for ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+        cy.arCheckTitleInEditableAndMatches({ name: "Record Document Revision" });
+        cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
+          recDocId = $docIdElement.text();
         });
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        cy.sendToEmail();
+      });
 
-        it("Verify the emails that should be received", () => {
-          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-            {
-              sentToUser: USERS[2].email,
-              contains: [`Hello <b>${USERS[2].name},</b>`,
-                "Your documents are ready for download.",
-                "<button type=\"button\">DOWNLOAD</button>",
-                createdCompany.id,
-              ],
-            }];
+      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+      });
+    });
 
-          cy.imapVerifyEmailsInList({
-            receivedEmails: emailsFromInbox,
-            emailsToTest: emailsThatShouldBeReceived,
-            getEmailsSincedate: dateAfterEmailShouldArrive,
-            assertNumberOfEmailsFoundInList: 1,
-          });
+    context("Verify email notification", () => {
+      it("Get emails", () => {
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${recDocId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
-      context("Verify zip file downloaded", () => {
-        it("Download zip file containing inline record notification", () => {
-          expect(downloadUrl).contains("exported_file_download");
-          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[2].email,
+            contains: [`Hello <b>${USERS[2].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id,
+            ],
+          }];
 
-          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-            if (res.body !== "") {
-              downloadUrl = res.body.url;
-              downloadFile  =  `${recDocId}${fileTimeFormat}_rel.zip`;
-              cy.downloadFile({
-                url: downloadUrl,
-                directory: CONFIG.DOWNLOADS_DIR,
-                fileName: downloadFile,
-              });
-            }
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
         });
+      });
+    });
 
-        it("Verify file size of the downloaded zip file", () => {
-          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-          cy.readFile(zipfile).its("length").should("be.gt", 500);
-        });
+    context("Verify zip file downloaded", () => {
+      it("Download zip file containing inline record notification", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-        it("extract pdf file from zip file", () => {
-          cy.unzipFile(
-            {
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            downloadFile  =  `${recDocId}${fileTimeFormat}_rel.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
               fileName: downloadFile,
             });
-        });
-
-        it("Verify attached file length more than 500 bytes", () => {
-          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-            downloadFile.replace(".zip", ""), "image.jpg");
-          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+          }
         });
       });
 
-      context("Verify PDF file content for Released document", () => {
-        it("Extract texts from PDF file content for Released document", () => {
-          cy.pdfparseFile({
-            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${recDocId}-A-Record-Document-Revision.pdf`,
-          }).then((cdata) => {
-            expect(cdata.numpages).eq(1);
-            expect(cdata.text).match(/Page 1 of 1/);
-            tmpRegex = new RegExp( "\\n\\n");
-            const arr = cdata.text.split(tmpRegex);
-            arr.forEach((element) => {
-              if (element.includes("Page 1 of 1")) {
-                pages[0] = element;
-              }
-            });
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
+      });
+
+      it("extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+      });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 500);
+      });
+    });
+
+    context("Verify PDF file content for Released document", () => {
+      it("Extract texts from PDF file content for Released document", () => {
+        cy.pdfparseFile({
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${recDocId}-A-Record-Document-Revision.pdf`,
+        }).then((cdata) => {
+          expect(cdata.numpages).eq(1);
+          expect(cdata.text).match(/Page 1 of 1/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 1")) {
+              pages[0] = element;
+            }
           });
         });
+      });
 
-        it("Verify page 1 for Released document", () => {
-          const el = pages[0];
-          if (el.includes("Page 1 of 1")) {
-            tmpRegex = new
-            RegExp( `Record one\n${recDocId}, Revision A\nRECORD DOCUMENT REVISION`, "gi" );
-            expect(el).match(tmpRegex);
+      it("Verify page 1 for Released document", () => {
+        const el = pages[0];
+        if (el.includes("Page 1 of 1")) {
+          tmpRegex = new
+          RegExp( `Record one\n${recDocId}, Revision A\nRECORD DOCUMENT REVISION`, "gi" );
+          expect(el).match(tmpRegex);
 
-            expect(el).match(/Attachments/);
-            expect(el).match(/image.jpg/);
+          expect(el).match(/Attachments/);
+          expect(el).match(/image.jpg/);
 
-            expect(el).match(/Textfield for inline\nFirst entry, Second entry, Third entry/);
+          expect(el).match(/Textfield for inline\nFirst entry, Second entry, Third entry/);
 
-            tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
-            expect(el).match(tmpRegex);
+          tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
+          expect(el).match(tmpRegex);
 
-            expect(el).match(/Second textfield for inline\nFirst entry/);
+          expect(el).match(/Second textfield for inline\nFirst entry/);
 
-            tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
-            expect(el).match(tmpRegex);
+          tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`);
+          expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Release Details\\nReleased by: ${USERS[2].name}\\nReleased Date: ${pdfDocRelDate}`);
-            expect(el).match(tmpRegex);
+          tmpRegex = new RegExp(`Release Details\\nReleased by: ${USERS[2].name}\\nReleased Date: ${pdfDocRelDate}`);
+          expect(el).match(tmpRegex);
 
-            // eslint-disable-next-line max-len
-            tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`, "gi" );
-            expect(el).match(tmpRegex);
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n${USERS[2].name} \\| Approved \\| ${pdfDocRelDate}`, "gi" );
+          expect(el).match(tmpRegex);
 
-            tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
-            expect(el).not.match(tmpRegex);
+          tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
+          expect(el).not.match(tmpRegex);
 
-            expect(el).not.match(/TEXT FIELD/);
+          expect(el).not.match(/TEXT FIELD/);
 
-            expect(el).match(/Released/);
+          expect(el).match(/Released/);
 
-            tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
 
-            tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
-            expect(el).match(tmpRegex);
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
+          expect(el).match(tmpRegex);
 
-            expect(el).match(/Page 1 of 1/);
+          expect(el).match(/Page 1 of 1/);
 
-            tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-            expect(el).not.match(tmpRegex);
-          }
-        });
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+        }
       });
     });
   });

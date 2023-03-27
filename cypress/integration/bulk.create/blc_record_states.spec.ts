@@ -3,7 +3,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { AdditionalType, TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -670,11 +669,11 @@ context("Bulk create record headers", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -686,6 +685,9 @@ context("Bulk create record headers", () => {
 
     it("Click create new from form button", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     context("Fill Bulk creation document atributes", () => {
@@ -702,10 +704,10 @@ context("Bulk create record headers", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Check only last revision of form document for bulk create is available on list", () => {
@@ -764,7 +766,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -772,7 +774,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[4].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[4].email });
       });
     });
 
@@ -787,7 +789,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -817,7 +819,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.url().then((url: any) => {
           blcDocumentURL = url;
         });
@@ -834,9 +836,7 @@ context("Bulk create record headers", () => {
       });
 
       it(`Navigate to BLC document`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(blcDocumentURL);
-        });
+        cy.visit(blcDocumentURL);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -844,18 +844,18 @@ context("Bulk create record headers", () => {
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.lhrSubmitForApprovalWithoutApi();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
 
   context("Verify created records", () => {
     it("Navigate to records list and verify number of records", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.wait(30 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 8 });

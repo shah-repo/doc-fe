@@ -1,7 +1,6 @@
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTestWithSchema } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -384,9 +383,9 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Fill out PO fields", () => {
@@ -500,15 +499,15 @@ context("Receivable test with Page Details", () => {
     it("Add an Approval", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy^="fb-approvals-fb-approvals"]`).scrollIntoView().arrowClick().wait(500);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get(`[data-cy^="fb-approvals-fb-approvals"]`).autocompleteSelect(USERS[1].name).wait(500);
-      });
+      cy.get(`[data-cy^="fb-approvals-fb-approvals"]`).autocompleteSelect(USERS[1].name).wait(500);
+      cy.progressBarShouldNotExist();
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
+      cy.wait(1000);
     });
 
     it("Search for PO document and select it", () => {
@@ -519,11 +518,11 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve", () => {
-      cy.poApproveWithoutApi();
+      cy.ebApproveWithoutApi();
     });
   });
 });

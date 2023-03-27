@@ -1,14 +1,16 @@
-import { Grid } from "@material-ui/core";
+import { ButtonProps, Grid } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
+import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { SM } from "../../../../App";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
+import { authSelectors } from "../../../../state/ducks/auth";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { RouteParamsCreate } from "../../utils/types";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
+import TransitionButton from "./TransitionButton";
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
@@ -23,11 +25,11 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   asyncState,
   match,
 }) => {
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const formDocumentId = React.useContext(formIdContext) || match.params.formId;
   const documentTypeId = match.params.documentTypeId;
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
-  const isNewLayout = SM.isNewCRLayout;
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
@@ -50,6 +52,24 @@ const DocRevActions: React.FunctionComponent<Props> = ({
 
   const label = changeRequest ? "common.save" : "navigation.createChangeRequest";
 
+  const renderTransitionButton = (
+    isButtonShown: boolean,
+    transition: ChangeRequestTransition,
+    buttonProps?: ButtonProps,
+  ) => isButtonShown && changeRequest &&
+        <TransitionButton
+          changeRequestId={changeRequest.id}
+          transition={transition}
+          buttonProps={buttonProps}
+          label={`changeRequest.transition.${transition}`}
+          isSubmitButtonShown
+        />;
+
+  const isCurrentUserOwner = changeRequest?.owner.user.email === currentUserEmail;
+
+  const canSendToReview =
+    isCurrentUserOwner && changeRequest?.state === ChangeRequestStatus.Draft;
+
   return (
     <Grid
       container
@@ -59,12 +79,13 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     >
       <SubmitButton
         id="submit"
-        showNewButton={isNewLayout}
+        showNewButton={true}
         asyncState={asyncState}
         onClick={onFormClick}
         dataCy={label}
         label={label} />
-      <AssessmentFormControlsContainer changeRequest={changeRequest} />
+      {renderTransitionButton(canSendToReview, "in_review")}
+      <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown/>
     </Grid>
   );
 };

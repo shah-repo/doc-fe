@@ -77,7 +77,7 @@ context("Group Creation Flow", () => {
 
   context("Create official group", () => {
     it("Saves the group", () => {
-      cy.grpSaveGroup();
+      cy.grpSaveGroupWithoutApi();
     });
   });
 
@@ -120,7 +120,7 @@ context("Group Creation Flow", () => {
 
   context("Create unofficial group", () => {
     it("Saves the group", () => {
-      cy.grpSaveGroup();
+      cy.grpSaveGroupWithoutApi();
     });
   });
 

@@ -8,7 +8,7 @@ export default makeStyles((theme: Theme) => ({
     fontSize: 12,
     lineHeight: 1.25,
     color: Colors.white,
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(2),
   },
   icon: {
     marginRight: theme.spacing(1),

@@ -54,6 +54,7 @@ declare global {
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
       saveBarShouldNotExist(): Chainable<Subject>;
+      saveBarShouldAppear(): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldExist(): Chainable<Subject>;
       progressBarShouldAppear(): Chainable<Subject>;
@@ -134,6 +135,11 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
 
 Cypress.Commands.add("saveBarShouldNotExist", () => {
   cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("saveBarShouldAppear", () => {
+  cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("exist");
+  cy.saveBarShouldNotExist();
 });
 
 Cypress.Commands.add("progressBarShouldNotExist", () => {

@@ -12,10 +12,10 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -336,6 +336,13 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
               type: "MENU",
               label: "Training",
             },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              label: "Async Tasks",
+              path: "/async_tasks",
+              restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+              type: "LINK",
+            },
           ],
         },
       }).then(() => {
@@ -653,7 +660,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -720,7 +727,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -781,10 +788,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
   context(`Login as company admin`, () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -884,9 +887,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[2].name}, ${USERS[3].name} & ${USERS[4].name} should present in Overdue tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-1\"]").arrowClick();
       cy.get("#full-width-tabpanel-2 ul li").should("have.length", 3);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[4].name.split(" ")[0]);
       cy.get("#full-width-tabpanel-2 ul li").should("contain", USERS[3].name.split(" ")[0]);
@@ -945,6 +946,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      SystemRequirement("REQ-4530", "REQ-5060");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
@@ -953,6 +955,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      SystemRequirement("REQ-4530", "REQ-5060");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
@@ -961,6 +964,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      SystemRequirement("REQ-4530", "REQ-5060");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
   });
@@ -977,6 +981,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060", "REQ-5070");
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
@@ -1004,9 +1009,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Line item for ${USERS[2].name}, ${USERS[3].name} & ${USERS[4].name} should present in Overdue tab`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
-        cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
-      });
+      cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
       cy.get("#full-width-tabpanel-1 ul li").should("have.length", 3);
       cy.get("#full-width-tabpanel-1 ul li").should("contain", USERS[4].name.split(" ")[0]);
       cy.get("#full-width-tabpanel-1 ul li").should("contain", USERS[3].name.split(" ")[0]);
@@ -1034,9 +1037,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[2].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
     });
@@ -1062,6 +1062,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
@@ -1120,9 +1121,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[3].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
     });
@@ -1140,9 +1138,6 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`Complete training for ${USERS[4].name}`, () => {
-      cy.contains("My Feed").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTrainingWithoutApi();
     });

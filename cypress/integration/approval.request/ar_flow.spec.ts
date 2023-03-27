@@ -208,13 +208,9 @@ context("Approval request form", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Navigate to Document tab", () => {
-      cy.drSelectDocumentTab();
     });
 
     it("Add Checkbox group", () => {
@@ -244,7 +240,7 @@ context("Approval request form", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -324,6 +320,7 @@ context("Approval request form", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
+      SystemRequirement("REQ-4860");
       const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
       cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
@@ -375,6 +372,7 @@ context("Approval request form", () => {
     });
 
     it("Verify page 1 for Approval request form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
@@ -434,6 +432,7 @@ context("Approval request form", () => {
     });
 
     it("Verify page 3 for Approval request form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
@@ -460,7 +459,7 @@ context("Approval request form", () => {
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -483,20 +482,23 @@ context("Approval request form", () => {
     });
 
     it("Add created document revision", () => {
-      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Checkbox option 2 checked", () => {
+      cy.arSelectChangeDetailsTab();
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Click Create Approval Request", () => {
@@ -505,12 +507,18 @@ context("Approval request form", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].name });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add second Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove second Approver'", () => {
@@ -527,13 +535,13 @@ context("Approval request form", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
   });
 
   context("Click Send To Review", () => {
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -561,7 +569,7 @@ context("Approval request form", () => {
 
   context("Reject AR and verify email notification", () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Reject AR from dashboard", () => {
@@ -576,6 +584,7 @@ context("Approval request form", () => {
     });
 
     it(`Verify reject notification`, () => {
+      cy.dashOpenMyFeedTab();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", USERS[1].name)
         .and("contain", STATUS_TYPES_LABEL.REJECTED)
@@ -736,7 +745,7 @@ context("Approval request form", () => {
 
   context("Add approvers to approval request on approver list", () => {
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -761,16 +770,16 @@ context("Approval request form", () => {
 
   context("Approve created AR", () => {
     it("Navigate to added document in AR", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "IN_REVIEW" });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
       SystemRequirement("REQ-0920", "REQ-4150", "REQ-4140", "REQ-4170");
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
@@ -794,12 +803,12 @@ context("Approval request form", () => {
     });
 
     it("Navigate to AR list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Close AR and confirm pop-up for effective date", () => {
@@ -968,8 +977,8 @@ context("Approval request form", () => {
   context("Create AR and move it to 'Void'", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
-      cy.navigToDashboard();
-      cy.navigToApprovalRequestList();
+      cy.navigToDashboardWithoutApi();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -991,12 +1000,14 @@ context("Approval request form", () => {
 
     it("Add created document revision with description", () => {
       SystemRequirement("REQ-4290", "REQ-4280");
-      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00005" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
@@ -1006,6 +1017,8 @@ context("Approval request form", () => {
 
     it("Click 'Void'", () => {
       cy.arVoidAR();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.VOIDED}`, () => {

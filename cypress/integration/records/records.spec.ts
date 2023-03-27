@@ -8,8 +8,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trCompleteDate } from "../../utils/constants/dateHandler";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -216,6 +215,8 @@ context("Records flow", () => {
     context("Start document creation flow", () => {
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'create a document' button", () => {
@@ -249,11 +250,15 @@ context("Records flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Checkbox group", () => {
@@ -290,7 +295,7 @@ context("Records flow", () => {
 
     context("Creates document and Draft it", () => {
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -348,6 +353,7 @@ context("Records flow", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file containing record form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -412,6 +418,7 @@ context("Records flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nLOT HISTORY RECORD`, "gi" );
@@ -447,6 +454,7 @@ context("Records flow", () => {
       });
 
       it("Verify page 2 of record form", () => {
+        SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nLOT HISTORY RECORD`, "gi" );
@@ -472,7 +480,9 @@ context("Records flow", () => {
 
     context("Approve and Release document", () => {
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
@@ -663,10 +673,14 @@ context("Records flow", () => {
     context("Start document creation flow", () => {
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -693,7 +707,7 @@ context("Records flow", () => {
 
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify approvals field is automatically added", () => {
@@ -702,7 +716,9 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -711,11 +727,15 @@ context("Records flow", () => {
   context("Check if there are multiple record forms to select", () => {
     it("Navigate to Records", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new record button click", () => {
       SystemRequirement("REQ-2770");
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if multiple record forms exist", () => {
@@ -730,19 +750,27 @@ context("Records flow", () => {
   context("Create new record without inline approval form and check if they are in alpha revision", () => {
     it("Create new record button click", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Lot History Record' form", () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
         .arrowType("Record Document{downarrow}{enter}", { force: true });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"field-selectForm\"]").click().focused()
         .arrowType("Lot History Record{downarrow}{enter}", { force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if revision is in alpha revision stage", () => {
       SystemRequirement("REQ-1030");
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.recCheckRevisionStage({ stage: "Revision A" });
     });
   });
@@ -761,14 +789,20 @@ context("Records flow", () => {
     it("Checkbox option 1 checked", () => {
       cy.get("[data-cy=\"Checkbox\"]").should("be.visible");
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Add first Approver as ${USERS[1].name}`, () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Add 2nd Approver as ${USERS[3].name}`, () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Remove first Approver as ${USERS[1].name}`, () => {
@@ -783,13 +817,17 @@ context("Records flow", () => {
     });
 
     it("Save Record'", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("release button click'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Get the document Id", () => {
@@ -828,6 +866,12 @@ context("Records flow", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
 
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it(`Verify reject notification`, () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", "REJECTED")
@@ -841,10 +885,14 @@ context("Records flow", () => {
 
     it("Remove 2nd Approver'", () => {
       cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().next().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save Record'", () => {
@@ -1003,11 +1051,15 @@ context("Records flow", () => {
 
   context("Approve form and close it", () => {
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve record button click", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
@@ -1168,10 +1220,14 @@ context("Records flow", () => {
     context("Check for Landing page columns and values", () => {
       it("Navigate to Records", () => {
         cy.navigToRecords();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if most recent added item is fist on list", () => {
         cy.filterGetFirstValueFromList({ value: "RD-00004" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check for Landing page default columns", () => {
@@ -1198,6 +1254,8 @@ context("Records flow", () => {
 
       it("Navigate to Document List", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigate to Records", () => {
@@ -1209,7 +1267,7 @@ context("Records flow", () => {
       it("Check if all filter values persist after changing landing page", () => {
         cy.filterCheckIfRecordsFilterPersists({
           docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
-          releasedDate: "Last 7 days", formId: "FM-00002",
+          releasedDate: trCompleteDate, formId: "FM-00002",
         });
       });
 

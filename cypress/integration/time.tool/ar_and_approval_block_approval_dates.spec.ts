@@ -902,21 +902,23 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Ask for approvals on record, approval request, PO and TC", () => {
     context("Ask for approvals on record", () => {
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Navigate to records list", () => {
         cy.navigToRecords();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Create new record button click", () => {
         cy.poSelectPoFormFromMultiSelect({ poType: LegalRecord.documentTypeName });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter title Record title", () => {
@@ -928,29 +930,41 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Select approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: FIRST_USER.name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save Record'", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"]`)
-          .should("not.contain.text", "PENDING APPROVAL");
+      it("Verify no PENDING text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"]`).should("not.contain.text", "PENDING");
       });
 
       it("Submit for approval'", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"`)
-          .should("contain.text", "PENDING APPROVAL");
+      it("Verify 'PENDING' text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"`).should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashOpenMyFeedTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if approval request is 'In Review'", () => {
@@ -977,11 +991,15 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
 
     context("Ask for approvals on Approval Request", () => {
       it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click Create a Approval Request button", () => {
         cy.arClickCreateAnAR();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter Approval Request title", () => {
@@ -990,43 +1008,72 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
 
       it("Enter description ", () => {
         cy.arEnterApprovalRequestDescription({ description: "Approval Request description" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add sample document one", () => {
-        cy.arClickAddDocument();
-        cy.arChoseSpecificProposedDocument({ name: "API Clinical Protocol" });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
+        cy.arSelectItemsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arAddItems();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.arSelectItem({ name: "API Clinical Protocol" });
+        cy.arEnterItemDescription({ description: "Document description" });
+        cy.arEnterItemJustification({ justification: "Justification for added document" });
+        cy.arClickAddItemDone();
       });
 
-      it("Click Create Approval Request", () => {
-        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      it("Click on Save button", () => {
+        cy.arSaveApiCallWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approvers to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: FIRST_USER.email, noWait: true });
+        cy.arSelectApprovalTab();
+        cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email, noWait: true });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Click on Save", () => {
-        cy.arSaveApiCall();
+        cy.arSaveApiCallWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Click send to review", () => {
-        cy.arClickSendToReview();
+        cy.arClickSendToReviewWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
+      it("Verify PENDING text is present on approval block", () => {
+        cy.arSelectApprovalTab();
         cy.get(`[data-cy="SummaryBaseProps-values"]`)
           .should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashOpenMyFeedTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if approval request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if pop-up modal has pending with all the approvers", () => {
@@ -1049,40 +1096,63 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
     context("Ask for approvals on PO", () => {
       it("Navigate to PO'", () => {
         cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select first PO'", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select approver", () => {
-        cy.poAddApproverOnApproverList({ approver: FIRST_USER.name });
+        cy.poAddApproverOnApproverListWithoutApi({ approver: FIRST_USER.name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Save PO'", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
-      it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
+      it("Verify no PENDING text is present on approval block", () => {
+        cy.poClickOnPending();
         cy.get(`[name^="fb-po-approvals"]`)
           .should("not.contain.text", "PENDING");
       });
 
       it("Submit for approval'", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[name^="fb-po-approvals"]`)
-          .should("contain.text", "PENDING APPROVAL");
+      it("Verify PENDING text is present on approval block", () => {
+        cy.poClickOnPending();
+        cy.get(`[name^="fb-po-approvals"]`).should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashOpenMyFeedTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if approval request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if pop-up modal has pending with all the approvers", () => {
@@ -1109,38 +1179,64 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Clear filter", () => {
+        cy.trClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Select first TC'", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: FIRST_USER.name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Save TC'", () => {
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
-      it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"]`)
-          .should("not.contain.text", "PENDING APPROVAL");
+      it("Verify no PENDING text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"`)
+          .should("not.contain.text", "PENDING");
       });
 
       it("Submit for approval'", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
-      it("Verify PENDING FOR APPROVAL text is present on approval block", () => {
-        cy.get(`[data-cy^="not-approved"`)
-          .should("contain.text", "PENDING APPROVAL");
+      it("Verify PENDING text is present on approval block", () => {
+        cy.get(`[data-cy^="not-approved"`).should("contain.text", "PENDING");
       });
 
       it("Navigate to dashboard'", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Switch to myfeed tab", () => {
+        cy.dashOpenMyFeedTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if approval request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if pop-up modal has pending with all the approvers", () => {
@@ -1210,6 +1306,8 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       // this delay is required to assured that previous emails are not pulled
       cy.wait(60000);
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {

@@ -3,15 +3,10 @@
 // eslint-disable-next-line spaced-comment
 // / <reference types="Cypress" />
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { receivingReleasedDateMonth } from "../../utils/constants/dateHandler";
 import { FONT_SIZE_10, FONT_SIZE_11, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_14_16, FONT_SIZE_16, FONT_SIZE_18, FONT_SIZE_19, FONT_SIZE_22_4, FONT_SIZE_26, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_14, LINE_HT_15, LINE_HT_15_12, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_24_78, LINE_HT_25_6, LINE_HT_25_74, LINE_HT_26_208, LINE_HT_27, LINE_HT_27_17, LINE_HT_37_18, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-let multipleCompanies;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-let employeeLoginFirst;
 let createdCompanyA;
 let createdCompanyB;
 let loginResponse;
@@ -45,7 +40,6 @@ context("User Creation Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompanyA = response;
-          employeeLoginFirst = createdCompanyA.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -56,7 +50,6 @@ context("User Creation Flow", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -154,6 +147,8 @@ context("User Creation Flow", () => {
   context("Navigate to document list", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -428,6 +423,8 @@ context("User Creation Flow", () => {
   context("Create a document", () => {
     it("Doc1 with Released status", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentTitle({ name: "released doc1" });
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
@@ -557,9 +554,9 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'Approve and Release button' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Express AR button' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
       cy.checkStylePropExists({
-        content: "Approve and Release",
+        content: "Express AR",
         props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
       });
     });
@@ -619,9 +616,9 @@ context("User Creation Flow", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddNewFieldButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify added 'fb-blank-template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
@@ -863,9 +860,9 @@ context("User Creation Flow", () => {
     });
   });
 
-  context("Click on 'Approve and Release' button", () => {
-    it("Click on Approve and Release button", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  context("Click on 'Express AR' button", () => {
+    it("Click on Express AR button", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").contains("Express AR").arrowClick();
     });
 
     it("Click on Confirm without password entered", () => {
@@ -874,11 +871,11 @@ context("User Creation Flow", () => {
   });
 
   context("Verify 'Approve and Release' dialog window font", () => {
-    it(`Verify 'Approve and Release' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Approve and Release' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_600}`, () => {
       cy.get("[class=\"MuiDialogTitle-root\"]")
         .checkStylePropExists({
           content: "Approve and Release",
-          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_600 },
         });
     });
 
@@ -935,11 +932,11 @@ context("User Creation Flow", () => {
     it("Click on confirm after entering correct password", () => {
       cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
       cy.unClick();
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.poAMApproveButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1051,7 +1048,6 @@ context("User Creation Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompanyB = response;
-          employeeLoginFirst = createdCompanyB.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -1062,7 +1058,6 @@ context("User Creation Flow", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });

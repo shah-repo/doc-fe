@@ -6,7 +6,6 @@ import "moment-timezone";
 import moment from "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
 
@@ -107,7 +106,7 @@ context("Verification of Equipment Specification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Add FB Fields", () => {
@@ -144,7 +143,7 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Approve and released", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -188,7 +187,7 @@ context("Verification of Equipment Specification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -292,7 +291,7 @@ context("Verification of Equipment Specification", () => {
 
   context("Release ES", () => {
     it("Approve and release  document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -463,9 +462,9 @@ context("Verification of Equipment Specification", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
+          cy.drAddGroupFromPermissionTab("Developers");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -552,9 +551,9 @@ context("Verification of Equipment Specification", () => {
         });
 
         it("Click on confirm change", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-            cy.get("[data-cy='common.confirm.change']").arrowClick();
-          });
+          cy.get("[data-cy='common.confirm.change']").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Turn off autosave", () => {
@@ -609,13 +608,13 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release  document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

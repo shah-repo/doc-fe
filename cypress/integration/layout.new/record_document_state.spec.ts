@@ -3,7 +3,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -225,7 +224,7 @@ context(
           });
 
           it("Click create document", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.drClickCreateDocumentWithoutApiCall();
           });
 
           it("Upload attachement picture 'image.jpg'", () => {
@@ -235,7 +234,7 @@ context(
 
         context("Approve and Release Form", () => {
           it("Approve and Release document", () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
           });
         });
       });
@@ -421,7 +420,7 @@ context(
         });
 
         it("Click on Submit For Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       });
 
@@ -464,13 +463,11 @@ context(
 
           it("Click 'Withdraw Submission' button", () => {
             cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-              cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-            });
+            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
           });
 
           it("Click on Submit For Approval", () => {
-            cy.pmSubmitForApproval();
+            cy.pmSubmitForApprovalWithoutAPI();
           });
         });
       });
@@ -488,12 +485,7 @@ context(
           cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
           cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           cy.checkToastMessage({ exists: false });
           cy.listLoadingElementShouldNotExist();
         });
@@ -597,7 +589,7 @@ context(
             });
 
             it("Click on Submit For Approval", () => {
-              cy.pmSubmitForApproval();
+              cy.pmSubmitForApprovalWithoutAPI();
             });
 
             it("Approve the record", () => {
@@ -605,12 +597,7 @@ context(
               cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
               cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
               cy.unClick();
-              cy.wrapWithWaitOnApiCalls(
-                [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-                () => {
-                  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-                }
-              );
+              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
               cy.checkToastMessage({ exists: false });
               cy.listLoadingElementShouldNotExist();
             });
@@ -646,7 +633,7 @@ context(
         });
 
         it("Click on Submit For Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve the record", () => {
@@ -654,12 +641,7 @@ context(
           cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
           cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           cy.checkToastMessage({ exists: false });
           cy.listLoadingElementShouldNotExist();
         });
@@ -802,12 +784,7 @@ context(
             cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
             cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
             cy.unClick();
-            cy.wrapWithWaitOnApiCalls(
-              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-              () => {
-                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-              }
-            );
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
             cy.checkToastMessage({ exists: false });
             cy.listLoadingElementShouldNotExist();
           });

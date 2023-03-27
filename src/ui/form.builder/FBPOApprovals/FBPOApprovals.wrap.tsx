@@ -31,7 +31,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState,
     disabled,
     disabledOptions,
-    disableChipDelete,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -40,10 +39,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
-    const isAdministrativeChange = administativeRevisionTypes.includes(
-      workspaceState?.revisionChangeType as RevisionChangeType
-    );
 
     const {
       poApprovalsState,
@@ -105,8 +100,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      const disableRequestorApproval = checkServiceOrProductPartExists(poItems) && !isAdministrativeChange;
-      disabledOptions = disableRequestorApproval ? [requestor] : [];
+      const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
+      const disableRequestorApprovalDeletion = !isAdministrativeChange && checkServiceOrProductPartExists(poItems);
+      disabledOptions = disableRequestorApprovalDeletion ? [requestor] : [];
     });
 
     // This runs when you manually remove an approver from the list
@@ -206,7 +202,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState,
       disabled,
       disabledOptions,
-      disableChipDelete: !isAdministrativeChange,
     });
   };
 

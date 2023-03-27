@@ -6,7 +6,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -546,229 +545,233 @@ context("LHR Display More Details", () => {
         done();
       });
     });
+  });
 
-    context("Login user", () => {
-      it("Login user to dashboard", () => {
-        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
+  context("Create Form LHR document", () => {
+    context("Start form LHRT document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
       });
     });
 
-    context("Create Form LHR document", () => {
-      context("Start form LHRT document creation flow", () => {
-        it("Navigate to Document list", () => {
-          cy.unClick();
-          cy.navigToDocumentList();
-        });
-
-        it("Click on 'Create a document' button", () => {
-          cy.cmpClickCreateNewDocument();
-        });
+    context("Fill LHRt document attributes", () => {
+      it("Enter document title 'LHRt form document'", () => {
+        cy.drEnterDocumentTitle({ name: "LHRt form document" });
       });
 
-      context("Fill LHRt document attributes", () => {
-        it("Enter document title 'LHRt form document'", () => {
-          cy.drEnterDocumentTitle({ name: "LHRt form document" });
-        });
+      it("Fill LHRt form document description", () => {
+        cy.drEnterDocumentDescription({ description: "LHRt form document description" });
+      });
 
-        it("Fill LHRt form document description", () => {
-          cy.drEnterDocumentDescription({ description: "LHRt form document description" });
-        });
+      it("Select 'LHRt' form document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
 
-        it("Select 'LHRt' form document type", () => {
-          cy.drSelectDocumentType({ documentType: "Form" });
-        });
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
 
-        it("Select 'Numeric' revision stage", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
+      it("Select 'Lot History Record Test' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
+      });
 
-        it("Select 'Lot History Record Test' output document type", () => {
-          cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
-        });
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+  });
 
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+  context("Create LHRt document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
       });
     });
 
-    context("Create LHRt document", () => {
-      context("Start document creation flow", () => {
-        it("Navigate to Document list", () => {
-          cy.unClick();
-          cy.navigToDocumentList();
-        });
-
-        it("Click on 'Create a document' button", () => {
-          cy.cmpClickCreateNewDocument();
-        });
+    context("Fill LHRt document attributes", () => {
+      it("Enter document title 'LHRt document'", () => {
+        cy.drEnterDocumentTitle({ name: "LHRt document" });
       });
 
-      context("Fill LHRt document attributes", () => {
-        it("Enter document title 'LHRt document'", () => {
-          cy.drEnterDocumentTitle({ name: "LHRt document" });
-        });
-
-        it("Fill LHRt document description", () => {
-          cy.drEnterDocumentDescription({ description: "LHRt document description" });
-        });
-
-        it("Select 'LHRt' document type", () => {
-          cy.drSelectDocumentType({ documentType: "LHR template" });
-        });
-
-        it("Select 'Numeric' revision stage", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
-
-        it("Select 'Lot History Record Test' output document type", () => {
-          cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
-        });
-
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-
-        it("Select 'Part document' for Part to be Manufactured", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-          });
-        });
+      it("Fill LHRt document description", () => {
+        cy.drEnterDocumentDescription({ description: "LHRt document description" });
       });
 
-      context("Select created MPI in LHR template", () => {
-        it("Select Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
-
-        it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick({ force: true });
-        });
-
-        it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI");
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+      it("Select 'LHRt' document type", () => {
+        cy.drSelectDocumentType({ documentType: "LHR template" });
       });
-    });
 
-    context("Release LHRt", () => {
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Lot History Record Test' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get(`[data-cy="lhr-selected-part"]`).click().autocompleteSelect("Part document");
+      });
+
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Approve and release LHRt document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
-    context("Create LHRt document 1", () => {
-      context("Start document creation flow 1", () => {
-        it("Navigate to Document list", () => {
-          cy.unClick();
-          cy.navigToDocumentList();
-        });
-
-        it("Click on 'Create a document' button", () => {
-          cy.cmpClickCreateNewDocument();
-        });
+    context("Select created MPI in LHR template", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
-      context("Fill LHRt document attributes 1", () => {
-        it("Enter document title 'LHRt document 1'", () => {
-          cy.drEnterDocumentTitle({ name: "LHRt document 1" });
-        });
-
-        it("Fill LHRt document description 1", () => {
-          cy.drEnterDocumentDescription({ description: "LHRt document description 1" });
-        });
-
-        it("Select 'LHRt' document type 1", () => {
-          cy.drSelectDocumentType({ documentType: "LHR template" });
-        });
-
-        it("Select 'Numeric' revision stage 1", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
-
-        it("Select 'Lot History Record Test' output document type 1", () => {
-          cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
-        });
-
-        it("Click create document 1", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-
-        it("Select 'Part document' for Part to be Manufactured 1", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-          });
-        });
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy^=\"LHR Step\"]").arrowClick({ force: true });
       });
 
-      context("Select created MPI in LHR template", () => {
-        it("Select Details tab", () => {
-          cy.drSelectDetailsTab();
+      it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+          $el.trigger("click");
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI");
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+  });
 
-        it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick({ force: true });
-        });
+  context("Release LHRt", () => {
+    it("Click save document", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
 
-        it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI");
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+    it("Approve and release LHRt document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+    });
+  });
+
+  context("Create LHRt document 1", () => {
+    context("Start document creation flow 1", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
       });
     });
 
-    context("Release LHRt 1", () => {
+    context("Fill LHRt document attributes 1", () => {
+      it("Enter document title 'LHRt document 1'", () => {
+        cy.drEnterDocumentTitle({ name: "LHRt document 1" });
+      });
+
+      it("Fill LHRt document description 1", () => {
+        cy.drEnterDocumentDescription({ description: "LHRt document description 1" });
+      });
+
+      it("Select 'LHRt' document type 1", () => {
+        cy.drSelectDocumentType({ documentType: "LHR template" });
+      });
+
+      it("Select 'Numeric' revision stage 1", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Lot History Record Test' output document type 1", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
+      });
+
+      it("Click create document 1", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Select 'Part document' for Part to be Manufactured 1", () => {
+        cy.get(`[data-cy="lhr-selected-part"]`).click().autocompleteSelect("Part document");
+      });
+
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Approve and release LHRt document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
-    context("Create LHR document", () => {
-      context("Start document creation flow", () => {
-        it("Navigate to LHR list", () => {
-          cy.navigToLHR();
-        });
+    context("Select created MPI in LHR template", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
 
-        it("Click on 'Initiate New LHR' button", () => {
-          cy.recCreateRecordFromLandingPage();
-        });
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy^=\"LHR Step\"]").arrowClick({ force: true });
+      });
 
-        it("Select Lot History Record", () => {
-          cy.recSelectRecordFormFromMultiSelect({
-            recordType: LotHistoryRecordTest.documentTypeName,
-            recordForm: "document 1",
-          });
+      it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+          $el.trigger("click");
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI");
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+  });
 
-        it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]")
-            .should("have.attr", "value", `CS-00005 - rev 1 - ${CSPartDocumentTitle}`);
+  context("Release LHRt 1", () => {
+    it("Click save document", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Approve and release LHRt document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+    });
+  });
+
+  context("Create LHR document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to LHR list", () => {
+        cy.navigToLHR();
+      });
+
+      it("Click on 'Initiate New LHR' button", () => {
+        cy.recCreateRecordFromLandingPage();
+      });
+
+      it("Select Lot History Record", () => {
+        cy.recSelectRecordFormFromMultiSelect({
+          recordType: LotHistoryRecordTest.documentTypeName,
+          recordForm: "document 1",
         });
+      });
+
+      it(`Verify '${CSPartDocumentTitle}' is selected for 'Part Number'`, () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]")
+          .should("have.attr", "value", `CS-00005 - rev 1 - ${CSPartDocumentTitle}`);
       });
     });
   });

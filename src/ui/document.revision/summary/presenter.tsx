@@ -9,10 +9,12 @@ import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
+import { RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
+import RelatedPartsWrapper from "../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus } from "../../documentRevision/helpers/documentRevisionStatus";
@@ -72,7 +74,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-
+  const isDownloadAllVisible = attachments?.length > 1;
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPO = checkIsDocumentPO(document.documentType.groupOptions);
@@ -85,6 +87,15 @@ const Presenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+  const isPartForm = useSelector((state: ApplicationState) => formTemplate
+    ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
+
+  const relatedPartsViewOnly =
+        !dataProp?.relatedPartsStatus
+        || dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER
+        || isDocumentRevisionInStatus(
+          [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
+          status);
 
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
@@ -162,6 +173,14 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
+        {(isPart || isPartForm) &&
+            <Grid item xs={12}>
+              <RelatedPartsWrapper
+                viewOnly={relatedPartsViewOnly}
+                documentRevision={dataProp}
+                relatedPartsStatus= {dataProp?.relatedPartsStatus} />
+            </Grid>
+        }
         {isEB && displayChildrenParts && (
           <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
@@ -169,18 +188,20 @@ const Presenter: React.FunctionComponent<Props> = ({
         {isPO || includes(outputDocumentTypeName, "Purchase Order")
           ? attachments && !_tabsState?.isTabActive("details") && (
             <Attachment
-              isAttachmentEmpty={attachments.length < 1}
+              isAttachmentEmpty={attachments?.length < 1}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              {...{ isDownloadAllVisible }}
             />
           )
           : attachments && (
             <Attachment
-              isAttachmentEmpty={attachments.length < 1}
+              isAttachmentEmpty={attachments?.length < 1}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              {...{ isDownloadAllVisible }}
             />
           )}
         {renderTrainingControl}

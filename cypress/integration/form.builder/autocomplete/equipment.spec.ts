@@ -10,7 +10,6 @@ import { RevisionChangeType } from "../../../../src/state/ducks/documentRevision
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocDraftDay, pdfDocDraftMonth, pdfDocDraftyear, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -414,7 +413,7 @@ context("Autocomplete 'Equipment' test", () => {
       });
 
       it("Click create a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Add autocomplete of “Approvers” and set validation", () => {
@@ -543,6 +542,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -613,6 +613,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
@@ -737,6 +738,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify page 4 in document", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
@@ -1091,7 +1093,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to specification tab", () => {
@@ -1099,13 +1101,11 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
-      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").autocompleteSelect(USERS[1].name);
     });
 
     it(`Select '${USERS[2].name}' for Coordinator`, () => {
-      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").autocompleteSelect(USERS[2].name);
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1116,8 +1116,7 @@ context("Autocomplete 'Equipment' test", () => {
       cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick();
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Preventative Maintenance form").arrowClick();
+      cy.get("[data-cy*=\"preventativeForm\"]").autocompleteSelect("Preventative Maintenance form");
     });
 
     it("Select preventative maintenance frequency", () => {
@@ -1154,7 +1153,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -1399,7 +1398,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.url().then((url: any) => {
         equipmentURL = url;
       });
@@ -1658,9 +1657,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1680,10 +1677,8 @@ context("Autocomplete 'Equipment' test", () => {
           calDocId = response.documentId;
           calId = response.id;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.landingPageLoadingElementShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1705,8 +1700,7 @@ context("Autocomplete 'Equipment' test", () => {
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+      cy.get("[data-cy=\"equipment_maintainer\"]").autocompleteSelect(ADMIN_USER.name);
     });
 
     it("Fill 'Completion Date'", () => {
@@ -1729,7 +1723,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Overview tab", () => {
@@ -1742,21 +1736,18 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
-      });
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Fill new PM form", () => {
     it("Navigate to EQ document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to specification tab", () => {
@@ -1771,10 +1762,8 @@ context("Autocomplete 'Equipment' test", () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.landingPageLoadingElementShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1819,7 +1808,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Overview tab", () => {
@@ -1832,21 +1821,18 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
-      });
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Fill second new PM form", () => {
     it("Navigate to EQ document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to specification tab", () => {
@@ -1861,10 +1847,8 @@ context("Autocomplete 'Equipment' test", () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.landingPageLoadingElementShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1886,8 +1870,7 @@ context("Autocomplete 'Equipment' test", () => {
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+      cy.get("[data-cy=\"equipment_maintainer\"]").autocompleteSelect(ADMIN_USER.name);
     });
 
     it("Fill 'Completion Date'", () => {
@@ -1915,9 +1898,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2135,7 +2116,7 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(tmpRegex);
 
         // eslint-disable-next-line @typescript-eslint/camelcase
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftMonth} [\n]?${pdfDocDraftDay},[\n]?${pdfDocDraftyear}`, "gi" );
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftMonth}[ |\n]?${pdfDocDraftDay},[ |\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
@@ -2234,7 +2215,7 @@ context("Autocomplete 'Equipment' test", () => {
       });
 
       it("Click create a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       context("Add form fields", () => {

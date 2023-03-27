@@ -8,6 +8,7 @@ import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBP
 import { companySelectors } from "../../../state/ducks/company";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
+import { isMoreDigitsAfterDecimal } from "../../dashboard.new/line.items/common/Utils";
 import { checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -140,6 +141,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
+      const { quantity } = formValue;
+      const isMaterial = type === FBProcedureItemType.materials;
 
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
@@ -158,6 +161,11 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         }
         workspaceState?.saveDocRev();
         return handleCancel?.();
+      }
+      if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
+        toastError(intl.formatMessage({ id: "document.revision.quantity.decimals.error" },
+          { name: intl.formatMessage({ id: "form.builder.quantity" } ) }));
+        return;
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === "mpiprocedure");
       if (isDocumentMPI && !formValue.LHRTparameter && !FB.isUUID(formValue.title)) {

@@ -39,11 +39,10 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   }
   if (isNewLayout) {
     if (!renderAsButton) {
-      return <StyledMenuListItem button alignItems="flex-start">
+      return <StyledMenuListItem button alignItems="flex-start" onClick={handleClick}>
         <StyledMenuListIcon><RedlineIcon/></StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="redlineButton"
-          onClick={() => handleClick()}
           id="Redline"
           primary={ <Text translation="common.redline" />}
         />

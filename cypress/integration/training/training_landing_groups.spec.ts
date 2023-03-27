@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -298,14 +299,19 @@ context("Groups on Training Curriculum landing page", () => {
       cy.cmpClickCreateNewDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Enter document title 'test training form title'", () => {
       cy.drEnterDocumentTitle({ name: "test training form title" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document description 'test training description'", () => {
       cy.drEnterDocumentDescription({ description: "test training description" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Form' document type", () => {
@@ -376,7 +382,7 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -462,13 +468,13 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -485,6 +491,7 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "test training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "test training title").and("contain", "Developers");
@@ -492,10 +499,6 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Create One-Time Training form", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
       cy.progressBarShouldNotExist();
@@ -560,7 +563,7 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Select 'One-Time Training test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("One-Time Training test");
+        .autocompleteSelect("One-Time Training test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -608,10 +611,11 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Verify trainings present on Training Curriculum page with Groups", () => {
     it("'One-Time training title' should be present with 'Developers' group", () => {
-      cy.wait(30 * 1000);
+      cy.wait(3000);
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "One-Time training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
       cy.progressBarShouldNotExist();
@@ -628,13 +632,13 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -651,6 +655,7 @@ context("Groups on Training Curriculum landing page", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "One-Time training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title").and("contain", "Developers");
@@ -658,10 +663,6 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Create Training Curriculum record with train users", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
       cy.progressBarShouldNotExist();
@@ -671,7 +672,7 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -737,9 +738,10 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -748,10 +750,16 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Save training", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW }`, () => {
@@ -767,12 +775,12 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Verify trainings present on Training Curriculum page with no groups", () => {
     it("'user training title' should be present with no group", () => {
-      cy.navigToDashboard();
-      cy.wait(30 * 1000);
+      cy.navigToDashboardWithoutApi();
+      cy.wait(3000);
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.trClearFilters();
       cy.trLandingPageName({ name: "user training title" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "user training title").and("contain", "N/A");
     });
@@ -780,6 +788,7 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
+      SystemRequirement("REQ-4680");
       cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
       cy.trVerifyElementByColumnName({ name: "TITLE" });
       cy.trVerifyElementByColumnName({ name: "OWNER" });

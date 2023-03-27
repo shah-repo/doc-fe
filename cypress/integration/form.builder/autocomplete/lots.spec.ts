@@ -8,7 +8,6 @@ import { RevisionChangeType } from "../../../../src/state/ducks/documentRevision
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { Part } from "../../../utils/constants/documentTypes/part";
@@ -188,7 +187,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Click create a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -205,6 +204,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
         cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
         cy.get(`[data-cy="fb-control-form.builder.range"]`).arrowClick();
+        SystemRequirement("FB-0090");
         cy.fbSelectTextFieldRangeFromValue({ value: "0" });
         cy.fbSelectTextFieldRangeToValue({ value: "10" });
         cy.unClick();
@@ -230,7 +230,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
-        cy.fbSelectCheckboxValue("X");
+        cy.fbSelectCheckboxValueNew({ value: "X" });
         cy.fbAddNewFieldButton();
       });
 
@@ -242,7 +242,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
-        cy.fbSelectCheckboxValue("Y");
+        cy.fbSelectCheckboxValueNew({ value: "Y" });
         cy.fbAddNewFieldButton();
       });
 
@@ -251,7 +251,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -319,6 +319,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -462,9 +463,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("Approve and Release form", () => {
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -598,6 +597,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Verify page 1 in document", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
@@ -652,6 +652,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Verify page 2 in document", () => {
+        SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
@@ -691,10 +692,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Select 'Component Specification Lot' from the dropdown", () => {
         cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-          cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
-        });
+        cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
 
       it("Add lot title", () => {
@@ -753,10 +751,10 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add two approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1003,7 +1001,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("resubmit document for Approval", () => {
       it("Click on submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
     });
 
@@ -1257,7 +1255,7 @@ context("Autocomplete 'Lots' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

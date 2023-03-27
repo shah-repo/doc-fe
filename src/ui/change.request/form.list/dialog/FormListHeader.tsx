@@ -5,12 +5,16 @@ import { ReactComponent as WindowParagraph } from "../../../../assets/images/win
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import Colors from "../../../layout/theme/utils/colors";
+import { Translation } from "../../../translations/types";
 
 interface Props {
   dialog: DialogHandler;
+  subtitle1Translation?: Translation;
+  subtitle2Translation?: Translation;
 }
 
-const FormListHeader: React.FunctionComponent<Props> = ({ dialog }) => (
+const FormListHeader: React.FunctionComponent<Props> = (
+  { dialog, subtitle1Translation, subtitle2Translation }) => (
   <DialogTitle style={{ boxShadow: `0px 1px ${Colors.medium_gray}` }}>
     <Grid container>
       <Grid item xs={2} style={{ alignSelf: "center" }}>
@@ -28,10 +32,10 @@ const FormListHeader: React.FunctionComponent<Props> = ({ dialog }) => (
       </Grid>
       <Grid item xs={9}>
         <Typography variant="subtitle1" style={{ fontWeight: "bold", color: Colors.dark_gray }}>
-          <Text translation="common.choose.template" />
+          <Text translation={subtitle1Translation ?? "common.choose.template"} />
         </Typography>
         <Typography variant="subtitle2" style={{ color: Colors.gray }}>
-          <Text translation="change.request.select.template"/>
+          <Text translation={subtitle2Translation ?? "change.request.select.template"} />
         </Typography>
       </Grid>
       <Grid item xs={1}>

@@ -55,9 +55,10 @@ declare global {
       poAMEnterLimit(params: {limit: string}): Chainable<Subject>;
       poAMSelectUsers(...list: string[]): Chainable<Subject>;
       poAMCheckForApproval(): Chainable<Subject>;
+      poAMCheckForApprovalWithoutApi(): Chainable<Subject>;
       poSaveDocument(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsRed(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsPrimary(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsDisabled(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
       poAMEnterPassword(): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
@@ -70,6 +71,7 @@ declare global {
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
       poAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      poAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
@@ -77,6 +79,7 @@ declare global {
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poClickOnPending(): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
       poApproveWithoutApi(): Chainable<Subject>;
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
@@ -84,6 +87,7 @@ declare global {
       poBuildInStatus(params: {status: string}): Chainable<Subject>;
       verifyPoApprovalSignature(params: {name: string; email: string}): Chainable<Subject>;
       verifyPoApprovalDisabled(params: {name: string; email: string}): Chainable<Subject>;
+      verifyPoBackspaceClearAllNotAvailable(): Chainable<Subject>;
     }
   }
 }
@@ -115,6 +119,14 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("poAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
+  cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(params.approver).wait(500);
+  cy.unClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("poAddNewFieldItem", () => {
   cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick({ force: true });
   cy.wait(500);
@@ -133,8 +145,11 @@ Cypress.Commands.add("poCreateNew", () => {
 
 Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
   cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
+  cy.poClickOnPending();
   cy.contains("PO Approval sig");
-  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(params.name + " | DRAFT" + params.email);
+  cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(params.name);
+  cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(params.email);
+  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
 });
 
 Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
@@ -204,6 +219,7 @@ Cypress.Commands.add("poSelectGLCode", () => {
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
   cy.get("[name=\"supplierPartNumber\"]").arrowClick().arrowType(params.partNumber);
+  cy.unClick();
 });
 
 Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string}) => {
@@ -211,7 +227,8 @@ Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
-  cy.get("[name=\"unitPrice\"]").arrowClick().arrowType(params.number);
+  cy.get(`[name="unitPrice"]`).arrowClick({ force: true }).wait(500);
+  cy.get(`[name="unitPrice"]`).arrowType(params.number);
 });
 
 Cypress.Commands.add("poAddDateRequired", () => {
@@ -225,7 +242,7 @@ Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) =
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick({ force: true }).wait(1000);
   cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{leftarrow}{leftarrow}{leftarrow}" + params.number);
   cy.unClick();
 });
@@ -253,8 +270,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
+  cy.get(`[data-cy="po-status-button-OPENED"]`).parent().contains(params.status).should("exist");
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -338,11 +354,11 @@ Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string;
 });
 
 Cypress.Commands.add("poAMEnterLevelName", (params: {name: string}) => {
-  cy.get("[name=\"name\"]").arrowType(params.name);
+  cy.get("[name=\"name\"]").clear().arrowType(params.name);
 });
 
 Cypress.Commands.add("poAMEnterLimit", (params: {limit: string}) => {
-  cy.get("[name=\"limit\"]").arrowType(params.limit);
+  cy.get("[name=\"limit\"]").clear().arrowType(params.limit);
 });
 
 Cypress.Commands.add("poAMSelectUsers", (...list: string[]) => {
@@ -362,9 +378,7 @@ Cypress.Commands.add("poAMEnterPassword", () => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
-  });
+  cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -374,12 +388,16 @@ Cypress.Commands.add("poAMCheckForApproval", () => {
   });
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsRed", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorPrimary\"]").should("exist");
+Cypress.Commands.add("poAMCheckForApprovalWithoutApi", () => {
+  cy.get("#ApproveAndRelease-button").arrowClick();
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorDisabled\"]").should("exist");
+Cypress.Commands.add("poAMCheckApprovalIconIfItsPrimary", () => {
+  cy.get(`[data-cy="check-circle-primary"]`).should("exist");
+});
+
+Cypress.Commands.add("poAMCheckApprovalIconIfItsDisabled", () => {
+  cy.get(`[data-cy="check-circle-disabled"]`).should("exist");
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
@@ -452,11 +470,11 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
 });
 
 Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string }) => {
-  cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
+  cy.get(`[aria-colindex="4"] .k-filtercell>input`).arrowType(params.supplier).wait(500);
 });
 
 Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
-  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
+  cy.get(`[aria-colindex="9"] .k-filtercell > input`).arrowType(params.orderDate).wait(500);
 });
 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
@@ -466,6 +484,12 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
 
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("poClickOnPending", () => {
+  cy.get(`[data-cy="approval-block-common.pending"]`).arrowClick({ force: true });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poApprove", () => {
@@ -479,6 +503,7 @@ Cypress.Commands.add("poApprove", () => {
 });
 
 Cypress.Commands.add("poApproveWithoutApi", () => {
+  cy.poClickOnPending();
   cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
@@ -499,4 +524,9 @@ Cypress.Commands.add("poCheckOrderDate", (params: {orderDate: string }) => {
 
 Cypress.Commands.add("poBuildInStatus", (params: {status: string }) => {
   cy.get("#mui-component-select-po-status-built-in").should("have.text", params.status);
+});
+
+Cypress.Commands.add("verifyPoBackspaceClearAllNotAvailable", () => {
+  cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
+  cy.unClick();
 });

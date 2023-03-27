@@ -43,12 +43,11 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   };
   if (isNewLayout) {
     if (!renderAsButton) {
-      return (<StyledMenuListItem button alignItems="flex-start">
+      return (<StyledMenuListItem button alignItems="flex-start" onClick={handleClick}>
         <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="exportToEmail"
           primary={<Text translation="common.send.to.email" />}
-          onClick={handleClick}
         />
       </StyledMenuListItem>
       );

@@ -18,6 +18,7 @@ const TOAST_OPTIONS: ToastOptions = {
   pauseOnHover: true,
   draggable: true,
   transition: Slide,
+  closeButton: true,
 };
 
 const toast = (type: ToastType, message: string | ReactNode, options: ToastOptions = {}) =>

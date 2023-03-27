@@ -8,7 +8,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -127,7 +126,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Add preventative maintenance section", () => {
@@ -186,7 +185,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -230,7 +229,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add Checkbox group", () => {
@@ -314,6 +313,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       cy.wait(2000);
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -383,6 +383,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -434,6 +435,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 3 for PM form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -456,7 +458,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Approve and release form", () => {
     it("Approve and release form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
@@ -700,7 +702,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add Checkbox group", () => {
@@ -928,7 +930,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Approve and release form", () => {
     it("Approve and release CAL form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify form released status and click on Send To Email", () => {
@@ -1169,7 +1171,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("navigate to overview", () => {
@@ -1225,11 +1227,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.url().then((url: any) => {
         equipmentURL = url;
       });
@@ -1245,10 +1247,9 @@ context("Equipment maintenance and calibration", () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1288,11 +1289,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to overview tab", () => {
@@ -1317,7 +1318,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Extract document Id", () => {
@@ -1329,7 +1330,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Logout existing user", () => {
@@ -1368,6 +1369,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify reject notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "REJECTED")
@@ -1539,7 +1541,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Approve record and release", () => {
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Logout existing user", () => {
@@ -1562,13 +1564,10 @@ context("Equipment maintenance and calibration", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       SystemRequirement("REQ-0920");
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ChangeRequestApprove, () => {
-          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -1595,6 +1594,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify approval notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "APPROVED")
@@ -1771,9 +1771,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Create Calibration record", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
     });
 
     it("Click on New CAL", () => {
@@ -1784,10 +1782,9 @@ context("Equipment maintenance and calibration", () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1829,11 +1826,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Create 'Calibration document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to overview tab", () => {
@@ -1857,7 +1854,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Extract document Id", () => {
@@ -1869,7 +1866,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Logout existing user", () => {
@@ -1907,6 +1904,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify reject notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "REJECTED")
@@ -2078,7 +2076,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Approve record and release", () => {
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Logout existing user", () => {
@@ -2100,13 +2098,10 @@ context("Equipment maintenance and calibration", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       SystemRequirement("REQ-0920");
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ChangeRequestApprove, () => {
-          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -2132,6 +2127,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Verify approval notification`, () => {
+      cy.get("[id=\"scrollable-auto-tab-my-feed\"]").arrowClick();
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
         .should("contain", FIRST_USER.name)
         .and("contain", "APPROVED")
@@ -2308,9 +2304,9 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify Maintenance History is now only History", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
+      cy.listLoadingElementShouldAppear();
+      cy.progressBarShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -2363,9 +2359,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drClickReviseDocument();
-      });
+      cy.drClickReviseDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2414,15 +2408,15 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -2436,9 +2430,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drClickReviseDocument();
-      });
+      cy.drClickReviseDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2487,24 +2479,23 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
-      cy.wait(10000);
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Verify Due date calculation", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
+      cy.listLoadingElementShouldAppear();
+      cy.progressBarShouldNotExist();
     });
 
     it("Check preventative maintenance due date calculation is 365 days from completion date", () => {

@@ -45,7 +45,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
     schema: workspaceState?.schema ?? _documentRevisionFormState?.schema,
     mode: FBWorkspaceModeOptions.FORM,
@@ -72,6 +72,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     ?? templateOutputDocumentTypes?.id
   ) as string;
   const outputType = documentTypesById[outputTypeId];
+
+  // By default the documentType points to being a Form, but while previewing, it needs to
+  // behave as if it is the documentType that was selected as an output.
+  if (documentRevision && outputType) {
+    documentRevision.document.documentType = outputType;
+  }
   const outputTypeGroup = get(outputType, "group");
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
@@ -93,26 +99,29 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
 
-  if (isLHR) {
-    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
-      ...schemaItem,
-      index: i,
-      ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
-        stepIndex: size(
-          filter(
-            ro.slice(0, i + 1),
-            (step) =>
-              !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
-          )
-        ),
-      }),
-    }));
+  useEffect(() => {
+    if (isLHR) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+      schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+        ...schemaItem,
+        index: i,
+        ...(includes(FBEditorState.pickStepIndex, schemaItem.type) && {
+          stepIndex: size(
+            filter(
+              ro.slice(0, i + 1),
+              (step) =>
+                !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
+            )
+          ),
+        }),
+      }));
 
-    smartReferencesFrom?.forEach((ele) => {
-      const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
-      ele.stepIndex = obj?.[0]?.stepIndex;
-    });
-  }
+      smartReferencesFrom?.forEach((ele) => {
+        const obj = schema?.filter((el) => ele?.metadata?.fieldId === el.name);
+        ele.stepIndex = obj?.[0]?.stepIndex;
+      });
+    }
+  }, [isLHR]);
 
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
@@ -135,6 +144,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   useEffect(() => {
     workspaceState?.setIsPreview(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -150,17 +160,26 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
       }
+      schema?.map((item) => formState?.setFieldValue(item.name, null));
     };
-  }, [_formState, initialValues, workspaceState, mode]);
+  }, [_formState, initialValues, workspaceState, mode, formState, schema]);
+
+  useEffect(() => () => {
+    documentRevision.document.documentType = documentType;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Observer>
       {() => (
         <SMTemplate
-          templateBoxProps={{ stretchY: "100%" }}
+          templateBoxProps={{
+            stretchY: "100%",
+            mx: -3.75,
+            mt: -3,
+          }}
           contentBoxProps={{
-            height: "auto",
-            minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
+            overflow: "unset",
           }}
           header={(!isLHR && !isTypeMpiDoc) && !formPreview && (
             <DocumentRevisionFormHeader type={type} documentTypeId={formik.values.document?.documentType?.id} />
@@ -181,7 +200,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                   const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                   return (
-                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
+                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent} pr={.75}>
                       {tabType === TabTypeOptions.MIXED && <>
                         {!formPreview && <DocumentRevisionFormPresenter
                           {...formik}

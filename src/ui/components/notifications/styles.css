@@ -1,6 +1,6 @@
 .Toastify__toast {
   border-radius: 4px !important;
-
+  cursor: default !important;
 }
 
 .Toastify__toast-container {
@@ -19,6 +19,7 @@
   color: inherit !important;
   align-self: center !important;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 
@@ -26,11 +27,12 @@
 .Toastify__toast--info {
   background-color: #FFF3CD !important;
   border: 1px solid #FFEEBA !important;
-  color: #856404
+  color: #856404;
 }
 
 .Toastify__toast--info a {
   color: #856404;
+  cursor: pointer;
 }
 
 
@@ -38,9 +40,34 @@
 .Toastify__toast--success {
   background-color: #d3ead8 !important;
   border: 1px solid #C3E6CB !important;
-  color: #2E5424
+  color: #2E5424;
 }
 
 .Toastify__toast--success a {
   color: #2B7EFA;
+  cursor: pointer;
+}
+
+
+.poStatusToastrBody {
+  background: var(--zircon) !important;
+  padding: 0px !important;
+  margin-right: 15px !important;
+  margin-left: 16px !important;
+}
+
+#poStatusToast {
+  padding: 0px !important;
+  background: var(--zircon) !important;
+  border: 1px solid var(--dodger_blue);
+  border-radius: 6px !important;
+  border-left: solid 6px var(--dodger_blue);
+  border-color: var(--dodger_blue);
+  width: 503px;
+  height: 88px;
+}
+
+#poStatusCloseButton {
+  margin: auto !important;
+  margin-right: 15px !important;
 }

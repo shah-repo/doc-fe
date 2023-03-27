@@ -11,6 +11,7 @@ import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderNew } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 let createdCompany;
@@ -390,7 +391,7 @@ context("po withdraw submission ENC-12707", () => {
     });
   });
 
-  context("Create a form for PO with outputtype as 'Purchase Order', approve and release it", () => {
+  context("Create a form for PO with outputtype as 'Purchase Order New', approve and release it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
       cy.progressBarShouldNotExist();
@@ -929,8 +930,8 @@ context("po withdraw submission ENC-12707", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check history entry for 'Requestor added'", () => {
-      cy.get(`[data-cy='no-padding-margin']`).eq(4).should("contain", "Requestor added")
+    it("Check history entry for 'Requestor Added'", () => {
+      cy.get(`[data-cy='no-padding-margin']`).eq(4).should("contain", "Requestor Added")
         .and("contain", USERS[1].name);
     });
 
@@ -952,10 +953,18 @@ context("po withdraw submission ENC-12707", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(delayms1);
+    });
+  });
+
+  // The following is added to avoid bug ENC-14129
+  context(`Click on 3 dots and verify "Download HTML" button exists in UI`, () => {
+    it("Verify 'Download HTML' button is visible in released PO", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy='downloadHtml']").should("be.visible");
     });
   });
 
@@ -1108,6 +1117,7 @@ context("po withdraw submission ENC-12707", () => {
     });
 
     it("Verify Grand Total", () => {
+      SystemRequirement("REQ-1440");
       cy.get("[data-cy='poTotal']").should("have.text", level1Value);
     });
   });
@@ -1335,7 +1345,7 @@ context("po withdraw submission ENC-12707", () => {
 
   context(`Approve the PO`, () => {
     it("Approve PO", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(delayms1);

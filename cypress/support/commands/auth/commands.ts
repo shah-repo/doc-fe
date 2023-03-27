@@ -116,7 +116,7 @@ Cypress.Commands.add("authLogout", () => {
 });
 
 Cypress.Commands.add("authEnterSignUpPassword", (params: {password?: string}) => {
-  cy.get("[name=\"password\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[name=\"password\"]", { timeout: 10000 }).arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
 });
 
 Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: string}) => {
@@ -125,10 +125,8 @@ Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: stri
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostNewUserSetPassword, CyRoutes.SessionDetails], () => {
-    cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+  cy.progressBarShouldAppear();
 });
 
 Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {

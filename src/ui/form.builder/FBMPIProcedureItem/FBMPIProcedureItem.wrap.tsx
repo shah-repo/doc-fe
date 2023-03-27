@@ -8,6 +8,7 @@ import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { toFixed } from "../../dashboard.new/line.items/common/Utils";
 import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -89,6 +90,12 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+      const formValue = cloneDeep(formState?.getFieldValue("lhrs-start-quantity"));
+      formValue && setLhrsQuantity(formValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lhrsQuantity]);
 
     React.useEffect(() => {
       reaction(
@@ -186,7 +193,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     getProcedureValues = (item: FBProcedureItemConfig) => {
       const id = item.id;
-      const quantity = item.quantity ? (item.quantity * lhrsQuantity) : "form.builder.none";
+      const quantity = item.quantity ? toFixed(item.quantity * lhrsQuantity) : "form.builder.none";
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;

@@ -1,20 +1,25 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { ReactComponent as SuccessIcon } from "../../../../assets/images/success_iconn.svg";
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import {
   ChangeRequestTransition,
   ChangeRequestTransitionResponse,
 } from "../../../../state/ducks/changeRequest/types";
 import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../state/ducks/dashboard.new/my.feeds/constants";
+import { dashboardTodoActions } from "../../../../state/ducks/dashboard.new/todo";
 import {
   EffectiveDateFormValues,
   PasswordFormValues,
 } from "../../../change.request/form/types";
+import { toastSuccess } from "../../../components/notifications";
+import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import Colors from "../../../layout/theme/utils/colors";
+import { Translation } from "../../../translations/types";
 import TransitionDialog from "./transitionDialog/TransitionDialog";
 
 interface Props {
@@ -45,17 +50,27 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
-    onSuccess: () => {
+    onSuccess: (response) => {
       onSuccess && onSuccess();
-      if (transition === "closed") {
-        effectiveDateDialog.close();
-      } else {
-        transitionDialog.close();
-      }
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
-    },
-    onError: (error) => {
+      effectiveDateDialog.close();
       transitionDialog.close();
+      toastSuccess(<><div style={{ display: "flex" }}>
+        <div><SuccessIcon style={{ height: "30px" }}/></div>
+        <div style={{ color: Colors.black }}>
+          <div><span style={{ fontWeight: "bold" }}>
+            <Text translation={`approvalRequest.status.${response?.state}` as Translation}/></span></div>
+          {response?.state === "IN_REVIEW" ?
+            <div><Text translation={"approvalRequest.status.message.IN_REVIEW_PENDING" as Translation}
+            /> </div> :
+            <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
+              values={{ crId: response?.crId, title: response?.title }} />
+            </div>}
+        </div>
+      </div></>, {
+        closeButton: true,
+      });
+      dispatch(dashboardTodoActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
 

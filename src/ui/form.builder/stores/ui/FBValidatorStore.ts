@@ -4,7 +4,6 @@ import Validator from "validatorjs";
 import { SelectOption } from "../../../components/forms/fields/Select";
 import { FBEditorElementType } from "../../types/editor";
 import { FBValidatorTrigger } from "../../types/validation/validator";
-import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
 
 class FormBuilderValidatorStored {
@@ -12,7 +11,6 @@ class FormBuilderValidatorStored {
   @observable public indicatorValues: Dictionary<Dictionary<any>> = {};
   public applicableOn = false;
   public activeValidatorType?: FBEditorElementType;
-  public customValidator?: FBValidatorConfigProps;
   public formValues: Dictionary<any> = {};
   public selectedFieldIndex: number | null = null;
 

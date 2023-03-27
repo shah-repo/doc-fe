@@ -4,7 +4,6 @@
 import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -188,7 +187,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -198,11 +197,11 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -212,9 +211,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.supCreateNew();
-      });
+      cy.supCreateNew();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -226,7 +225,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -240,7 +239,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify the status", () => {
@@ -255,9 +254,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.supCreateNew();
-      });
+      cy.supCreateNew();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -269,7 +268,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -294,7 +293,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify the status", () => {
@@ -309,9 +308,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.supCreateNew();
-      });
+      cy.supCreateNew();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -323,7 +322,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -373,7 +372,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -381,19 +380,17 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-      });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -412,9 +409,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.supCreateNew();
-      });
+      cy.supCreateNew();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -426,7 +423,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -476,7 +473,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -484,19 +481,17 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-      });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -616,7 +611,6 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Navigate to Supplier list", () => {
       cy.navigToSuppliers();
-      cy.reload();
     });
 
     it("verify supplier 1", () => {
@@ -666,11 +660,11 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -689,23 +683,22 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 1", () => {
       cy.supFilterById({ docId: "SUP-00001" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-      });
+      cy.wait(1000);
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -729,7 +722,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 2", () => {
       cy.supFilterById({ docId: "SUP-00002" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click 'Click here' button to upgrade form to latest revision", () => {
@@ -771,7 +764,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -779,19 +772,17 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-approvals-]").autocompleteSelect(USERS[1].name);
-      });
+      cy.get("[data-cy^=fb-approvals-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -815,7 +806,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 3", () => {
       cy.supFilterById({ docId: "SUP-00003" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click 'Revise Document' button", () => {
@@ -823,25 +814,21 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-      });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -865,7 +852,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 4", () => {
       cy.supFilterById({ docId: "SUP-00004" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click 'Revise Document' button", () => {
@@ -873,9 +860,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click 'Click here' button to upgrade form to latest revision", () => {
@@ -905,7 +890,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -913,19 +898,17 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-approvals-]").autocompleteSelect(USERS[1].name);
-      });
+      cy.get("[data-cy^=fb-approvals-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {

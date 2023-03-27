@@ -272,10 +272,14 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
   context("Create Form PO Approval matrix", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters title 'POAM Form'", () => {
@@ -296,14 +300,18 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
     it("Selects 'PO Approval Matrix' document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -315,81 +323,114 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
     it("Enters title 'POAM Document'", () => {
       cy.drEnterDocumentTitle({ name: "POAM Document" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters description 'POAM Doc description'", () => {
       cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to MatrixDetails tab", () => {
       cy.drSelectMatrixDetailsTab();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
-    });
-
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("Enter Level Name value to be '1'", () => {
       cy.poAMEnterLevelName({ name: "1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Limit value to be '5000'", () => {
       cy.poAMEnterLimit({ limit: "5000" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select Users '${USERS[1].name}'`, () => {
       cy.poAMSelectUsers(USERS[1].name);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(1000);
       cy.poAMSelectUsers(USERS[3].name);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("Add first POAM level", () => {
       cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(3000);
     });
 
     it("Enter Level Name value to be '2'", () => {
       cy.poAMEnterLevelName({ name: "2" });
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Limit value to be '25000'", () => {
       cy.poAMEnterLimit({ limit: "25000" });
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select Users '${USERS[2].name}'`, () => {
       cy.poAMSelectUsers(USERS[2].name);
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add second POAM level", () => {
       cy.poAddPOButtonClick();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(3000);
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(2000);
     });
   });
 
@@ -1205,9 +1246,9 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
-    it(`Verify 'Approver Added' and 'Approver Removed' immediately in history tab`, () => {
-      cy.get("[data-cy='History-detail']").should("contain", "Approver Added");
-      cy.get("[data-cy='History-detail']").should("contain", "Approver Removed");
+    it(`Verify 'Approver Added' not exists and 'Approver Removed' not exist immediately in history tab`, () => {
+      cy.get("[data-cy='History-detail']").should("not.contain", "Approver Added");
+      cy.get("[data-cy='History-detail']").should("not.contain", "Approver Removed");
     });
   });
 
@@ -1264,7 +1305,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     });
 
     it("Check requestor should not be fulfilling PO level signature", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
+      cy.poAMCheckApprovalIconIfItsDisabled();
     });
   });
 
@@ -1328,7 +1369,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     });
 
     it("Check requestor should not be fulfilling PO level signature", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
+      cy.poAMCheckApprovalIconIfItsDisabled();
     });
   });
 
@@ -1385,7 +1426,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
     it("New Requestor should be added in the Approval block and it should be fulfilling PO level signature", () => {
       cy.verifyPoApprovalSignature({ name: USERS[1].name, email: USERS[1].email });
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -1467,7 +1508,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     });
 
     it("Check requestor should be fulfilling PO level signature", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
       cy.wait(delayms1);
     });
   });
@@ -1555,7 +1596,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     });
 
     it("Check requestor should be fulfilling PO level signature", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -1596,7 +1637,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     });
 
     it("Check requestos should be fulfilling PO level signature", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -1657,7 +1698,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       });
 
       it("Check requestos should be fulfilling PO level signature", () => {
-        cy.poAMCheckApprovalIconIfItsRed();
+        cy.poAMCheckApprovalIconIfItsPrimary();
       });
     });
   });
@@ -1720,7 +1761,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       });
 
       it("Check requestor should not be fulfilling PO level signature", () => {
-        cy.poAMCheckApprovalIconIfItsGray();
+        cy.poAMCheckApprovalIconIfItsDisabled();
       });
     });
 
@@ -2018,13 +2059,18 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
   context("Verify that Approvers fulfill PO level signature", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").contains(USERS[1].name + " | DRAFT" + USERS[1].email);
-      cy.get("[name*='fb-po-approvals-']>div").contains(USERS[3].name + " | DRAFT" + USERS[3].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[1].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[1].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
+      cy.get(`[data-cy="user-name-1-DRAFT"]`).contains(USERS[3].name);
+      cy.get(`[data-cy="user-email-1-DRAFT"]`).contains(USERS[3].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
     it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsPrimary();
     });
   });
 
@@ -2044,7 +2090,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
   context("Approve PO by requestor", () => {
     it("Approve PO by requestor", () => {
-      cy.ebApproveWithoutApi();
+      cy.poApproveWithoutApi();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(delayms2);
     });

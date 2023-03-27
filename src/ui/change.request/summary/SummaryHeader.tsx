@@ -29,7 +29,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   canEdit,
   displayLastSaved,
 }) => {
-  const isNewLayout = SM.isNewCRLayout;
+  const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const formik = useFormikContext();
 
   const submitButtonRenderer = canEdit && (
@@ -43,7 +43,8 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   );
   return (
     <Header status={state as unknown as DocumentRevisionStatus}>
-      <HeaderInfo status={state} id={crId} name={title}/>
+      <HeaderInfo status={state} id={crId} name={title}
+        documentTypeAcronym={dataProp?.documentType?.documentTypeAcronym}/>
       <Grid item={true} xs={6} justify="center">
         <Grid container={true} alignItems="center" justify="flex-end">
           {displayLastSaved && dataProp?.updatedAt && (

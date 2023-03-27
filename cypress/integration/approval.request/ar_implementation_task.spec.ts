@@ -185,7 +185,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
     // Removed due to ENC-12907 : after requirement changes need to change
     // it("Add 'Implementation Task' to AR", () => {
@@ -196,18 +196,20 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     // });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Choose newly AR Form template", () => {
@@ -224,20 +226,20 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it("Select document tab", () => {
-      cy.arSelectDocumentTab();
+      cy.arSelectItemsTab();
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Select change detail tab", () => {
@@ -245,7 +247,9 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.wait(1000);
+      cy.arSelectApprovalTab();
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Click on Save", () => {
@@ -266,9 +270,8 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     //   cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
     //   cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
     //   cy.poAddDateRequired();
-    //   cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-    //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
-    //   });
+    //   cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+    //   cy.progressBarShouldNotExist();
     // });
 
     // it("Add description 'Test' to trigger autosave", () => {
@@ -283,12 +286,12 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     // });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Approve AR", () => {
       SystemRequirement("REQ-0920");
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
       cy.landingPageLoadingElementShouldNotExist();
     });
     // Removed due to ENC-12907 : after requirement changes need to change
@@ -402,9 +405,8 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
   //     SystemRequirement("REQ-0710");
   //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).arrowClick();
   //     cy.get("[data-cy=\"description\"]").next().arrowType("Task is done");
-  //     cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
-  //       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
-  //     });
+  //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+  //     cy.progressBarShouldNotExist();
   //   });
 
   //   it(`Check 'Implementation task' status is DONE`, () => {
@@ -413,7 +415,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
   //   });
 
   //   it("Navigate to AR list", () => {
-  //     cy.navigToApprovalRequestList();
+  //     cy.navigToApprovalRequestListWithoutApi();
   //     cy.arClearFilters();
   //   });
 
@@ -463,7 +465,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     it("Select output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on ‘Approve & Release’", () => {
@@ -516,12 +518,12 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
   context("Verify AR Approval status as 'Approved'", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Select first document", () => {
       cy.alClearFilters();
-      cy.arSelectFirstDocument();
+      cy.arSelectFirstDocumentWithoutApi();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
@@ -622,7 +624,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
   context(`Verify the AR is still in ${STATUS_TYPES_LABEL.APPROVED} State`, () => {
     it("Navigate to AR list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Clear filters", () => {
@@ -635,10 +637,11 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
-      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.APPROVED  });
+      cy.alFilterARByStatus({ status: STATUS_TYPES_LABEL.APPROVED  });
     });
 
     it(`Verify filter by STATUS as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
@@ -740,7 +743,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
   context(`Verify the AR is in auto ${STATUS_TYPES_LABEL.CLOSED} State`, () => {
     it("Navigate to ar list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Clear filters", () => {
@@ -753,8 +756,9 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.alFilterByTitle({ title: "AR express release form" });
     });
 
-    it(`Filter list by OWNER as USERS[1].name`, () => {
+    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Clear filters", () => {
@@ -763,7 +767,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
-      cy.alFilterByStatus({ status: STATUS_TYPES_LABEL.CLOSED  });
+      cy.alFilterARByStatus({ status: STATUS_TYPES_LABEL.CLOSED  });
     });
 
     it(`Verify filter by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {

@@ -3,7 +3,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -100,7 +99,7 @@ context("Field validations test", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Add normal textfield", () => {
@@ -226,13 +225,11 @@ context("Field validations test", () => {
 
     context("Create and release FORM doucment", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify revision status is 'Revision 1  - Released'", () => {
@@ -270,8 +267,13 @@ context("Field validations test", () => {
         cy.get("[name^=normal-text-field]").arrowType("test required text field");
       });
 
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
       it("Verify field is required when Normal text field is empty", () => {
         SystemRequirement("FB-0210");
+        cy.reload();
         cy.get("[data-cy^=required-text-field]").parent().parent().find("p")
           .should("have.text", "The Required text field field is required when Normal text field is not empty.");
       });
@@ -292,8 +294,13 @@ context("Field validations test", () => {
         cy.get("[name^=normal-text-field]").arrowType("test show/hide text field");
       });
 
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
       it("Verify field is visible when Normal text field is empty", () => {
         SystemRequirement("FB-0210");
+        cy.reload();
         cy.get("[data-cy^=show-hide-text-field]").parent().parent().find("p")
           .should("have.text", "The Show/hide text field field is required when Normal text field is not empty.");
       });
@@ -315,8 +322,13 @@ context("Field validations test", () => {
         cy.get("[name^=normal-text-field]").arrowType("test enable/disable text field");
       });
 
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
       it("Verify field is not disabled when Normal text field is empty", () => {
         SystemRequirement("FB-0210");
+        cy.reload();
         cy.get("[data-cy^=enable-disable-text-field]").parent().parent().find("p")
           .should("have.text", "The Enable/disable text field field is required when Normal text field is not empty.");
       });

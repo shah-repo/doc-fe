@@ -4,7 +4,6 @@ import { Dictionary } from "lodash";
 import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBProviderProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
 type FBInputTransform = "upper" | "lower";
 export type FBVisibilityType = "visible" | "hidden";
@@ -130,7 +129,6 @@ export type FBInputProps =
     instructionsDocument?: string;
     reviseDisabled?: boolean;
     outputDisabled?: boolean;
-    customValidator?: FBValidatorConfigProps;
     approvers?: string[] | Employee[];
     approverGroups?: string[] | GroupRequestBody[];
     approvalRoles?: string[] | FBInlineApprovalRole[];
@@ -204,6 +202,7 @@ export type FBInputProps =
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
     labelProps?: BoxProps;
+    isAddAction?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [

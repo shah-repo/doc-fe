@@ -21,7 +21,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
 import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
@@ -32,8 +32,10 @@ import { CompletedDateFilterTemplate } from "../../document.revision/grid/filter
 import { DocumentTypeFilterTemplate } from "../../document.revision/grid/filter.template/DocumentTypeFilterTemplate";
 import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.template/DueOnDateFilterTemplate";
 import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
+import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
 import useDidMount from "../../hooks/useDidMount";
+import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
@@ -157,10 +159,38 @@ export function KendoGrid<T extends any>({
   };
 
   // Column Menu Filters
+  const ActiveFilter = (props: GridFilterCellProps) => (
+    <DropdownFilterTemplate
+      {...props}
+      data={[
+        { value: true, text: getTranslatedText("common.active") },
+        { value: false, text: getTranslatedText("common.inactive") },
+      ]}
+      defaultItem={{ value: "", text: getTranslatedText("common.all") }}
+    />
+  );
+
   const StatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
+      documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
+  const poStatusOptions = [
+    POStatusLabelMapping.OPENED,
+    POStatusLabelMapping.CLOSED,
+    POStatusLabelMapping.VOIDED,
+  ];
+
+  const POStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={poStatusOptions}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
       })}
@@ -230,9 +260,14 @@ export function KendoGrid<T extends any>({
       {...props}
     />
   );
+  const InputFilter = (props: GridFilterCellProps) => (
+    <InputFilterTemplate {...props} />
+  );
 
   const filterCellMapping = {
+    [KendoGridFilterCell.ACTIVE]: ActiveFilter,
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
+    [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
     [KendoGridFilterCell.EFFECTIVE_DATE]: EffectiveDate,
     [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,
@@ -261,7 +296,11 @@ export function KendoGrid<T extends any>({
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
             cell={(props) =>
-              RenderCustomCell(
+            {
+              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder &&
+                 props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released) ?
+                DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
+              return RenderCustomCell(
                 {
                   ...props,
                   cellRowClick: onRowClick,
@@ -269,12 +308,12 @@ export function KendoGrid<T extends any>({
                   tooltipField: column.tooltipField,
                 },
                 column.cell || ""
-              )
+              ); }
             }
             filterCell={
               filterCellMapping[column.filterCell as string]
                 ? filterCellMapping[column.filterCell as string]
-                : undefined
+                : InputFilter
             }
             columnMenu={
               column.showColumnMenu

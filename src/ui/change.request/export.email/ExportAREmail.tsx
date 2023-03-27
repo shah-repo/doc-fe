@@ -23,7 +23,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const exportTrainingRecordEmail = useActionCreator(changeRequestsActions.exportAR);
-  const isNewLayout = SM.isNewCRLayout;
+  const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const async = useAsync({
     onSuccess: () => {
       toastSuccess(intl.formatMessage({ id: "common.send.to.email.success" }));
@@ -39,12 +39,11 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 
   if (isNewLayout) {
     if (!renderAsButton) {
-      return (<StyledMenuListItem button alignItems="flex-start">
+      return (<StyledMenuListItem button alignItems="flex-start" onClick={handleAREmail}>
         <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="exportToEmail"
           primary={<Text translation="common.send.to.email" />}
-          onClick={() => handleAREmail()}
         />
       </StyledMenuListItem>
       );
@@ -54,7 +53,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         color="primary"
         style={{ margin: 0 }}
         data-cy="exportToEmail"
-        onClick={() => handleAREmail()}
+        onClick={handleAREmail}
       >
         <Text translation="common.send.to.email" />
       </StyledButton>

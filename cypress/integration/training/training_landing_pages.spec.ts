@@ -973,102 +973,92 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for DOC ID", () => {
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00004");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "FM-00004");
+        SystemRequirement("REQ-2820");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "FM-00004" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "FM-00004" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
       });
 
       it("Verify filter for TRN ID", () => {
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] input`).arrowType("TRN-00005");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "TRN-00005");
+        SystemRequirement("REQ-2820");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 2, input: "TRN-00005" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "TRN-00005" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for REVISION", () => {
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="3"] input`).arrowType("1");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "1");
+        SystemRequirement("REQ-2820");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "1" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "1" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for DOCUMENT TITLE", () => {
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="4"] input`).arrowType("Form2 document for training");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "Form2 document for training");
+        SystemRequirement("REQ-2820");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 4, input: "Form2 document for training" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "Form2 document for training" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for TRAINEE", () => {
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).arrowType("Athena Block");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "Athena Block");
+        SystemRequirement("REQ-2820");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 5, input: USERS[3].name });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: USERS[3].name });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for ASSIGN DATE", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="6"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "Last 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for DUE DATE", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="7"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Due in 7 days").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "Due in 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="7"] span.k-input`).arrowClick();
         cy.get("div.k-list-optionlabel").contains("All").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for COMPLETED ON", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="8"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Pending").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "Pending");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for TC ID", () => {
-        cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="9"] input`).arrowType("TCT-00002");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "TCT-00002");
+        SystemRequirement("REQ-2820");
+        cy.get(`[class="k-grid-content k-virtual-content"]`).scrollTo("right").wait(500);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 9, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 9, input: "TCT-00002" });
+        cy.wait(2000);
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 9, input: "TCT-00002" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -1077,29 +1067,30 @@ context("Test training records and training curriculum landing page", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 9, input: "" });
       });
     });
 
     context("Verify hide and freeze", () => {
       it("Verify hide on DOCUMENT TITLE", () => {
+        cy.get(`[class="k-grid-content k-virtual-content"]`).scrollTo("left").wait(500);
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
-        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick({ force: true }).wait(500);
+        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick({ force: true });
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
       });
 
       it("Verify unhide on DOCUMENT TITLE", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "DOCUMENT TITLE");
-        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
+        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick().wait(500);
         cy.get("ul>li[role=menuitem]").contains("DOCUMENT TITLE").parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "DOCUMENT TITLE");
@@ -1107,14 +1098,14 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify freeze on DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "DOCUMENT TITLE");
       });
 
       it("Verify un-freeze on DOCUMENT TITLE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "DOCUMENT TITLE");
-        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "DOCUMENT TITLE");
       });
@@ -1123,140 +1114,99 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify dropdown filters", () => {
       it("Verify TRN ID dropdown filters", () => {
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get("ul[role=menu]").should("contain.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
 
       it(`Verify TRN ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`ul>li[value="doesnotcontain"]`).eq(2).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "2" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TRN-00002");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="eq"]`).eq(2).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "TRN-00002" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TRN-00002");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="neq"]`).eq(2).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "TRN-00002" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 5 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TRN-0000");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="startswith"]`).eq(2).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "TRN-0000" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="endswith"]`).eq(2).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "2" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is null").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isnull"]`).eq(2).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is not null" dropdown filter`, () => {
+        cy.trClearFilters();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isnotnull"]`).eq(2).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
 
       it(`Verify TRN ID "Is empty" dropdown filter`, () => {
+        cy.trClearFilters();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isempty"]`).eq(2).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRN ID "Is not empty" dropdown filter`, () => {
+        cy.trClearFilters();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isnotempty"]`).eq(2).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 6 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -1444,80 +1394,73 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for Title", () => {
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="1"] input`).arrowType("BTraining Curriculum test record2");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "BTraining Curriculum test record2");
+        SystemRequirement("REQ-4690");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 1, input: "BTraining Curriculum test record2" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "BTraining Curriculum test record2" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for TRAINING CURRICULUM ID", () => {
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] input`).arrowType("TCT-00002");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "TCT-00002");
+        SystemRequirement("REQ-4690");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 2, input: "TCT-00002" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "TCT-00002" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for OWNER", () => {
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="3"] input`).arrowType("Giovanni Reynolds");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "Giovanni Reynolds");
+        SystemRequirement("REQ-4690");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: USERS[1].name });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: USERS[1].name });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for DOCUMENT STATE", () => {
+        SystemRequirement("REQ-4690");
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="4"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldAppear();
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "Released");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for GROUP", () => {
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="5"] input`).arrowType("Everyone");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "Everyone");
+        SystemRequirement("REQ-4690");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+        cy.filterLandingPageColumnFilter({ colIndex: 5, input: "Everyone" });
+        cy.landingPageLoadingElementShouldAppear();
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "Everyone" });
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "All");
-        cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
+        cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
       });
     });
 
     context("Verify hide and freeze", () => {
       it("Verify hide on STATE", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "STATE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
-        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
+        cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick({ force: true });
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "STATE");
       });
 
       it("Verify unhide on STATE", () => {
         cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "STATE");
-        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
+        cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick().wait(500);
         cy.get("ul>li[role=menuitem]").contains("STATE").parents("li").find("svg").arrowClick();
         cy.get("body").type("{esc}");
         cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "STATE");
@@ -1525,14 +1468,14 @@ context("Test training records and training curriculum landing page", () => {
 
       it("Verify freeze on STATE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "STATE");
-        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "STATE");
       });
 
       it("Verify un-freeze on STATE", () => {
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "STATE");
-        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
+        cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick().wait(500);
         cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
         cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "STATE");
       });
@@ -1541,139 +1484,98 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify dropdown filters", () => {
       it("Verify TRAINING CURRICULUM ID dropdown filters", () => {
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get("ul[role=menu]").should("contain.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
 
       it(`Verify TRAINING CURRICULUM ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`ul>li[value="doesnotcontain"]`).eq(1).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "2" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="eq"]`).eq(1).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "TCT-00002" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-00002");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="neq"]`).eq(1).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "TCT-00002" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("TCT-0000");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="startswith"]`).eq(1).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "TCT-0000" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-        cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="endswith"]`).eq(1).arrowClick().wait(500);
+        cy.filterLandingPageColumnFilter({ colIndex: 3, input: "2" });
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is null").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isnull"]`).eq(1).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is not null" dropdown filter`, () => {
+        cy.trClearFilters();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isnotnull"]`).eq(1).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is empty" dropdown filter`, () => {
+        cy.trClearFilters();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isempty"]`).eq(1).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify TRAINING CURRICULUM ID "Is not empty" dropdown filter`, () => {
+        cy.trClearFilters();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.get(`th[aria-colindex="3"] span.k-i-filter`).arrowClick();
+        cy.get(`ul>li[value="isnotempty"]`).eq(1).arrowClick();
+        cy.landingPageLoadingElementShouldAppear();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-        cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 

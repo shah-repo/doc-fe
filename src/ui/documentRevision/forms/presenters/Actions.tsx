@@ -13,9 +13,11 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import HeaderPOStatus from "../../../components/common/header/HeaderPOStatus";
 import HeaderMenu from "../../../components/common/header/Menu";
 import { default as OwnerChangerContainer } from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
+import ClonePOButton from "../../../components/forms/ClonePOButton";
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
@@ -25,8 +27,8 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
@@ -106,7 +108,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
+  const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
+  const isStatusInReview = isDocumentRevisionInReview(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
@@ -216,8 +221,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     !isRecord ||
     (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))
   ) {
-    if (!(!isVisible || !values.id || values.status !== DocumentRevisionStatus.Draft ||
-       !canApprove || revisionStage !== 1)) {
+    if (
+      isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove) {
       accessableButtons.push("approveAndReleaseButton");
     }
   }
@@ -228,8 +233,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   ) {
     accessableButtons.push("submitApprovalButton");
   }
-  if ((isStatusReleased || isStatusInDraft) && canCopy) {
+  if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
     accessableButtons.push("NewCloneEB");
+  }
+  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
+    accessableButtons.push("NewClonePO");
   }
   if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
     accessableButtons.push("exportCsvButton");
@@ -351,6 +359,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {buttons.includes("NewCloneEB") && (
         <CloneEBButton {...{ documentRevision, renderAsButton }} />
       )}
+      {buttons.includes("NewClonePO") && (
+        <ClonePOButton {...{ documentRevision, renderAsButton }} />
+      )}
       {buttons.includes("exportCsvButton") && (
         <ExportToCSVButton {...{ documentRevision, renderAsButton }} />
       )}
@@ -374,29 +385,38 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     </>);
 
   return (
-    <div>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <>
+        {isPO && documentRevision.poStatus && (
+          <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+      </>
       <Observer>
         {() => (
           <>
-            {<StyledSubmitButton
-              showNewButton={isNewLayout && !isCreateUrl}
-              asyncState={asyncState}
-              label={isDisabled ?
-                "common.save" :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-              data-cy={"DocumentRevisionForm-submit"}
-              disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
-            />}
+            {
+              <StyledSubmitButton
+                showNewButton={isNewLayout && !isCreateUrl}
+                asyncState={asyncState}
+                label={isDisabled ? "common.save" : "navigation.createDocument"}
+                onClick={onFormClick}
+                id="DocumentRevisionForm-submit"
+                data-cy={"DocumentRevisionForm-submit"}
+                disabled={
+                  isCreateDocumentDisabled ||
+                  _documentRevisionFormState?.disabledAction
+                }
+              />
+            }
           </>
         )}
       </Observer>
       {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
-          {restButtons.length > 0 && <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>}
+          {restButtons.length > 0 && (
+            <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
+          )}
         </>
       )}
     </div>

@@ -10,11 +10,12 @@ import { companySelectors } from "../../../../state/ducks/company";
 import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, RelatedParentPartDetails, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
-import { checkIsDocumentEquipment, checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { documentPreviewPath } from "../../../document.revision/utils/paths";
+import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
@@ -36,6 +37,8 @@ interface Props {
   displayStatus?: string;
   subtitle?: any;
   displayRevision?: string;
+  relatedParentPartDetails?: RelatedParentPartDetails;
+  documentTypeAcronym?: string;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -46,6 +49,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
   subtitle,
   displayRevision,
+  relatedParentPartDetails,
+  documentTypeAcronym,
 }) => {
 
   const intl = useIntl();
@@ -58,6 +63,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+  const isPO = checkIsDocumentPO(documentType?.groupOptions);
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
@@ -74,7 +80,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       title = DocTypeGroups.LHR;
     } else if (isEquipmentDocument) {
       title = intl.formatMessage({ id: "form.builder.equipment" });
-    } else if (SM.isNewLayout) {
+    } else if (documentTypeAcronym) {
+      title = documentTypeAcronym;
+    }
+    else if (SM.isNewLayout) {
       title = intl.formatMessage({ id: "navigation.document.list" });
     }
     return title;
@@ -90,9 +99,9 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
     iconLink = "/navigation_icons/microscope.svg";
   }
-  if (SM.isNewCRLayout) {
+  if (SM.isNewCRLayout || documentTypeAcronym) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
-    iconLink = "/navigation_icons/cr.svg";
+    iconLink = "/navigation_icons/change-order.svg";
   } else if (isTypeMpiOutput) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
     iconLink = "/navigation_icons/lhr_icon.svg";
@@ -160,6 +169,17 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const returnToList = () => {
     history.push(url);
   };
+
+  const viewDocument = () => {
+    if (!relatedParentPartDetails?.docRevId || !relatedParentPartDetails?.documentId) {
+      return;
+    }
+
+    const urlPath = documentPreviewPath(
+      relatedParentPartDetails?.docRevId, relatedParentPartDetails?.documentId);
+    history.push(urlPath);
+  };
+
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>
       <Grid item>
@@ -176,7 +196,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   <div data-cy="Header-listIcon" className={classes.icon} />
                 </Grid>
                 {
-                  !isTypeMpiOutput && <Link
+                  !isTypeMpiOutput && !relatedParentPartDetails && <Link
                     underline="hover"
                     onClick={returnToList}
                     className={classes.link}
@@ -184,7 +204,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
-                  </Link>
+                  </Link>   // need to remove this link for Approval Request modal
                 }
                 {
                   isTypeMpiOutput &&
@@ -198,7 +218,17 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     </Grid>
                   </Link>
                 }
-
+                {
+                  relatedParentPartDetails && relatedParentPartDetails.parentDocId && <Link
+                    underline="hover"
+                    onClick={viewDocument}
+                    className={classes.link}
+                  >
+                    <Grid item={true} className={classes.title}>
+                      {relatedParentPartDetails.parentDocId}
+                    </Grid>
+                  </Link>
+                }
               </Grid>
             </Typography>
             <Typography data-cy="HeaderInfo" className={classes.breadcrumbId} component="div">
@@ -224,14 +254,14 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   )}
                 </Grid>
                 &nbsp;
-                <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
-                <Grid item={true}>
-                  <Text
-                    translation="form.builder.header.rev"
-                    values={{ revision: displayRevision }}
-                    dataCy="HeaderInfo-Rev"
-                  />
-                </Grid>
+                {displayRevision && <> <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
+                  <Grid item={true}>
+                    <Text
+                      translation="form.builder.header.rev"
+                      values={{ revision: displayRevision }}
+                      dataCy="HeaderInfo-Rev"
+                    />
+                  </Grid> </>}
                 { isTypeMpiOutput &&
                   <>
                     <Grid item={true} className={classes.arrowPadding}>
@@ -251,7 +281,15 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                           FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={(displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase()}
+                      label={
+                        isPO && isStatusReleased
+                          ? STATUS_TYPES_LABEL.APPROVED
+                          : (
+                            displayStatus ||
+                                STATUS_TYPES_LABEL[status] ||
+                                label
+                          ).toUpperCase()
+                      }
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>

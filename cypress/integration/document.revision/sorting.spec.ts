@@ -10,6 +10,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { Supplier } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1636,6 +1637,7 @@ context("Sorting test", () => {
 
     DL_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1664,6 +1666,7 @@ context("Sorting test", () => {
 
     GROUP_MGMT_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1692,6 +1695,7 @@ context("Sorting test", () => {
 
     USER_MGMT_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1720,6 +1724,7 @@ context("Sorting test", () => {
 
     EQ_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1748,6 +1753,7 @@ context("Sorting test", () => {
 
     SUPP_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1781,6 +1787,7 @@ context("Sorting test", () => {
 
     PARTS_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1809,6 +1816,7 @@ context("Sorting test", () => {
 
     PO_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1837,6 +1845,7 @@ context("Sorting test", () => {
 
     RECEIVING_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1867,6 +1876,7 @@ context("Sorting test", () => {
 
     AR_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {
@@ -1895,6 +1905,7 @@ context("Sorting test", () => {
 
     RECORDS_COLUMN_HEADERS.forEach( (columnHeader, i) => {
       context(`Sort '${columnHeader}'`, () => {
+        SystemRequirement("REQ-4820");
         const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
         it(`${columnHeader} should be in ascending order`, () => {

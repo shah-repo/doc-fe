@@ -18,6 +18,7 @@ declare global {
       lhrApprove(): Chainable<Subject>;
       lhrApproveWithoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebClickCloneWithoutApi(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
       ebCloneClickNo(): Chainable<Subject>;
@@ -33,6 +34,9 @@ declare global {
       ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
+      ebAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
+      lhrSaveWithoutApi(): Chainable<Subject>;
+      lhrWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -76,6 +80,15 @@ Cypress.Commands.add("ebClickClone", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("ebClickCloneWithoutApi", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("[data-cy=\"CloneEBButton\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("ebClickCloneFromMenu", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([
@@ -106,46 +119,46 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.progressBarShouldNotExist();
-  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick().wait(500);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").last().arrowClick();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("tr.k-master-row").first().arrowClick();
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("tr.k-master-row").first().arrowClick();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -213,11 +226,10 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
 });
 
 Cypress.Commands.add("ebWithdrawSubmisisonWithoutApi", () => {
-  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-  cy.wait(2000);
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick().wait(500);
   cy.get("#AlertDialog-continueButton").arrowClick();
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -230,6 +242,7 @@ Cypress.Commands.add("ebAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+// eslint-disable-next-line max-len
 Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
@@ -237,5 +250,31 @@ Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { appr
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+// eslint-disable-next-line max-len
+Cypress.Commands.add("ebAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[data-cy^="fb-approvals-"]`).scrollIntoView().arrowClick();
+  cy.get(`[data-cy^="fb-approvals-"]`).autocompleteSelect(params.approver);
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSaveWithoutApi", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+  cy.wait(1000);
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrWithdrawSubmisisonWithoutApi", () => {
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick().wait(500);
+  cy.get("#AlertDialog-continueButton").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.wait(2000);
   cy.listLoadingElementShouldNotExist();
 });

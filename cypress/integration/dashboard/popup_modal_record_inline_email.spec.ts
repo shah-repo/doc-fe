@@ -10,7 +10,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -19,6 +18,7 @@ const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
+const recId = "RD-00002";
 
 let employeeLoginFirst;
 let recordDocumentType;
@@ -269,22 +269,21 @@ context("Records Inline approval email popup modal", () => {
   });
 
   context("Create a record from inline form", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select the Record inline form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Record inline form" });
-
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromFormRecord();
       cy.wait(5000);
     });
 
@@ -294,6 +293,8 @@ context("Records Inline approval email popup modal", () => {
 
     it("Open details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter text in textfield", () => {
@@ -301,7 +302,9 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add inline approver for first section", () => {
@@ -313,20 +316,32 @@ context("Records Inline approval email popup modal", () => {
 
     it("Click Request Approval button", () => {
       cy.contains("Request approval").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to dashboard and send email to all approvers", () => {
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check if Record is 'In Review'", () => {
-      cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check if Record is 'IN REVIEW'", () => {
+      cy.get("[data-cy='dashboardFeedList']>div").contains("IN REVIEW").arrowClick();
     });
 
     context("Click on Record status and check the pop-up content", () => {
@@ -342,6 +357,8 @@ context("Records Inline approval email popup modal", () => {
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
@@ -360,6 +377,8 @@ context("Records Inline approval email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -412,10 +431,16 @@ context("Records Inline approval email popup modal", () => {
 
     it("Open details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Approve Record", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -426,52 +451,74 @@ context("Records Inline approval email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginFirst.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Open record and add second approver", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Open record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.contains("Record inline form").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.contains("Record inline form").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
 
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.contains("Revision 2").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.contains("Revision 2").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add inline approver for last section", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).scrollIntoView().arrowClick();
-      cy.get("li[role=option]").contains(SECOND_USER.name).arrowClick({ force: true });
+      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).scrollIntoView();
+      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).arrowClick().autocompleteSelect(SECOND_USER.name);
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Request Approval button", () => {
       cy.contains("Request approval").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(3000);
     });
 
-    it("Check if Record is 'In Review'", () => {
-      cy.navigToDashboard();
-      cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
+    it("Navigate to Dashboard", () => {
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check if Record is 'IN REVIEW'", () => {
+      cy.get("[data-cy='dashboardFeedList']>div").contains("IN REVIEW").arrowClick();
     });
 
     context("Click on Record status and check the pop-up content", () => {
@@ -486,7 +533,9 @@ context("Records Inline approval email popup modal", () => {
       });
 
       it("Click on 'EMAIL ALL'", () => {
-        cy.get("button").contains("EMAIL ALL").arrowClick();
+        cy.get("button").contains("EMAIL ALL").arrowClick().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
@@ -505,6 +554,8 @@ context("Records Inline approval email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: SECOND_USER, employeeId: thirdEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -557,10 +608,16 @@ context("Records Inline approval email popup modal", () => {
 
     it("Open details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Approve Record", () => {
-      cy.inlineApproval();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -571,18 +628,25 @@ context("Records Inline approval email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginFirst.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Switch to MyFeed tab", () => {
+      cy.dashOpenMyFeedTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record is in approved state on dashboard", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "RD-00002")
-        .and("contain.text", SECOND_USER.name)
-        .and("contain.text", "APPROVED");
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "RD-00002")
-        .and("contain.text", FIRST_USER.name)
-        .and("contain.text", "APPROVED");
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+            `${SECOND_USER.name}APPROVED${recId}Rev 2 Record inline form`,
+      });
+      cy.dashVerifyListItemExistsOnDashboard({
+        listItem:
+        `${FIRST_USER.name}APPROVED${recId}Rev 1 Record inline form`,
+      });
     });
   });
 

@@ -387,7 +387,7 @@ context("Add/Remove users from Training Curriculum", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -439,6 +439,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -466,7 +467,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -565,6 +566,8 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Add new User to train", () => {
+      SystemRequirement("REQ-4470");
+      SystemRequirement("REQ-4550");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[7].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
@@ -572,6 +575,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Remove users ${USERS[11].name} and ${USERS[13].name}`, () => {
+      SystemRequirement("REQ-4550");
       cy.get("[data-cy=training-select-users-to-train]").parent().parent()
         .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
         .contains(USERS[11].name).parent().parent().find("svg").arrowClick();
@@ -598,7 +602,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -628,18 +632,21 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("clear filers", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Training record for ${USERS[11].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -671,23 +678,28 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[role='dialog']>button").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Training record for ${USERS[13].name} should not be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[13].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[class="k-grid-norecords"]`).should("have.text", "No results found");
     });
 
     it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[12].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -720,11 +732,13 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[14].name} should be present`, () => {
+      cy.trClearFilters();
       cy.trLandingPageUsername({ username: USERS[14].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[14].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -734,6 +748,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check if 'I completed training on' message is displayed", () => {
@@ -757,12 +772,14 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[7].name} should be present`, () => {
+      cy.trClearFilters();
       SystemRequirement("REQ-4560");
       cy.trLandingPageUsername({ username: USERS[7].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[7].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -772,6 +789,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check if 'I completed training on' message is displayed", () => {
@@ -809,6 +827,7 @@ context("Add/Remove users from Training Curriculum", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify training notification should not present", () => {

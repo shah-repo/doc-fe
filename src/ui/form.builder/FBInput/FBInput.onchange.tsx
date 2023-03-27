@@ -1,8 +1,26 @@
-import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, toNumber, union } from "lodash";
+import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, throttle, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
+import { toastError } from "../../components/notifications";
+import { isMoreDigitsAfterDecimal, toFixedDecimals } from "../../dashboard.new/line.items/common/Utils";
+import FBDataStore from "../FBStore/FBDataStore";
 import { FBFieldName } from "../helpers/FBFieldName";
+
+const QUANTITY_FIELDS = ["lhrs-start-quantity", "lhrs-accepted-quantity", "lhrs-rejected-quantity"];
+const DECIMAL_TOAST_TIMEOUT = 2000;
+const showDecimalToastError = throttle((name, intl) => {
+  toastError(
+    intl.formatMessage(
+      { id: "document.revision.quantity.decimals.error" },
+      { name }
+    ),
+    {
+      autoClose: DECIMAL_TOAST_TIMEOUT,
+    }
+  );
+}, DECIMAL_TOAST_TIMEOUT, { trailing: false });
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -25,6 +43,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     const inputValue =
     formState?.getFieldValue(name) ||
     formState?.getInputState(name || "")?.value;
+    const intl = useIntl();
 
     inputState = FB.useRef<FBInputState>(FBInputState, {
       value: cloneDeep(inputValue),
@@ -53,6 +72,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+      FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
 
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
@@ -152,18 +172,25 @@ export const withFBOnChange = <T extends FBInputProps>(
         isDefault();
       }
 
+      function getFieldName(name: string) {
+        return intl.formatMessage({ id: `form.builder.${name.split("-").slice(1).join(".")}` });
+      }
+
       function isDefault() {
-        const { type } = ev.target;
+        const { type, name } = ev.target;
         let { value } = ev.target;
         if (type === "number" && value !== "") {
-          if (["lhrs-start-quantity", "lhrs-accepted-quantity", "lhrs-rejected-quantity"].includes(ev.target.name)) {
-            value = (!Number.isInteger(toNumber(value)) && value.split(".")[1]?.length > 10)
-              ? toNumber(value).toFixed(10)
-              : toNumber(value);
+          if (QUANTITY_FIELDS.includes(name) && isMoreDigitsAfterDecimal(value, 10)) {
+            showDecimalToastError(getFieldName(name), intl);
+            value = toFixedDecimals(value);
+            /* TODO
+              Added to keep values in sync while comparing numbers with trailing decimal zeros.
+              Remove direct access to element after refactoring this whole HOC
+              to avoid updating state after each keypress
+            */
+            ev.target.value = value;
           }
-          else {
-            value = toNumber(value);
-          }
+          value = toNumber(value);
         }
         if (type === "number" && value === "") {
           value = null;

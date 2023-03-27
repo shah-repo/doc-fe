@@ -6,7 +6,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -460,6 +459,7 @@ context("Create receivable test", () => {
     context("Login user when he doesn't have privileges", () => {
       it("Login user to dashboard", () => {
         cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
+        cy.progressBarShouldNotExist();
       });
     });
   });
@@ -467,11 +467,11 @@ context("Create receivable test", () => {
   context("Create receivable", () => {
     context("Navigate to receivables list and click create", () => {
       it("Navigate to receivable list", () => {
-        cy.navigToReceivableList();
+        cy.navigToReceivableListWithoutApi();
       });
 
       it("Click create receivable", () => {
-        cy.recCreateNew();
+        cy.recCreateNewWithoutApi();
       });
     });
 
@@ -567,19 +567,23 @@ context("Create receivable test", () => {
         });
 
         it("Click 'Add new receiving'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
-            cy.recCreateNew();
-          });
+          cy.recCreateNewWithoutApi();
         });
 
         it("Add an Approval", () => {
-          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").should("exist");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist().wait(1000);
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
         });
 
         it("Click 'Approve' button", () => {

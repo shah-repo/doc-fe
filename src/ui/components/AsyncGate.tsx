@@ -9,6 +9,7 @@ export interface AsyncGateProps  {
   asyncState: AsyncState;
   asyncAction?: (...args: any[]) => any;
   startActionOnMount?: boolean;
+  passive?: boolean;
 }
 
 type Props = AsyncGateProps & WithStyles<typeof styles>;
@@ -19,6 +20,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   classes,
   asyncAction,
   startActionOnMount = false,
+  passive = false,
 }) => {
   const didMount = useDidMount();
 
@@ -34,6 +36,17 @@ const AsyncGate: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startActionOnMount]);
+
+  if (passive && didMount && [AsyncStatus.Active, AsyncStatus.Success].includes(asyncState.status)) {
+    return (
+      <div className={classes.passiveContainer}>
+        {asyncState.status === AsyncStatus.Active && (
+          <LinearProgress className={classes.passiveProgress} />
+        )}
+        {children}
+      </div>
+    );
+  }
 
   if (asyncState.status === AsyncStatus.Success && didMount) {
     return (

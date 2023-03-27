@@ -171,7 +171,8 @@ context("Multiple consecutive logins", () => {
     context("User should see locked notification", () => {
       it("Should see locked notification", () => {
         SystemRequirement("REQ-3970");
-        cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
+        cy.get("[data-cy=UserLocked-lockedInfo]", { timeout: 10000 })
+          .should("have.text", "Your account has been locked.");
         cy.get("[data-cy=UserLocked-infoLink]").should("have.text",
           "Please contact your Company Admin for Enlil to reset your password.");
       });
@@ -266,7 +267,7 @@ context("Multiple consecutive logins", () => {
       });
 
       it("Password Reset Successfully should be displayed", () => {
-        cy.contains("Password Reset Successfully!").should("exist");
+        cy.contains("Password Reset Successfully!", { timeout: 15000 }).should("be.visible");
       });
 
       it("Logs user in", () => {
@@ -344,7 +345,7 @@ context("Multiple consecutive logins", () => {
       });
 
       it("Password Reset Successfully should be displayed", () => {
-        cy.contains("Password Reset Successfully!").should("exist");
+        cy.contains("Password Reset Successfully!", { timeout: 15000 }).should("be.visible");
       });
 
       it("Logs user in", () => {

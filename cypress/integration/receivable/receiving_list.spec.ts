@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -445,21 +444,16 @@ context("Receivable list test", () => {
   context("Edit receivable", () => {
     it("Filter receivable list by id", () => {
       cy.recFilterByReceivableId({ id: "RC-00005" });
+      cy.wait(3000);
     });
 
     it("Enter first receivable on list", () => {
       SystemRequirement("REQ-1780");
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetAutocompleteOptions,
-        CyRoutes.GetFieldLocks], () => {
-        cy.recClickOnFirstReceivableOnList();
-      });
+      cy.recClickOnFirstReceivableOnList();
     });
 
     it("Click on update record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.recClickUpdateRecord();
-      });
+      cy.recClickUpdateRecord();
     });
 
     it("Add approval", () => {
@@ -505,6 +499,7 @@ context("Receivable list test", () => {
     context("Verify filter by receivable id", () => {
       it("Filter list by id 'RC-00006'", () => {
         cy.recFilterByReceivableId({ id: "RC-00006" });
+        cy.wait(3000);
       });
 
       it("Verify filter by receivable id", () => {
@@ -561,6 +556,7 @@ context("Receivable list test", () => {
     context("Verify clear filter option", () => {
       it("Clear filter", () => {
         cy.dlClearFilters();
+        cy.wait(2000);
       });
 
       it("Verify filter clear", () => {
@@ -580,12 +576,15 @@ context("Receivable list test", () => {
       });
 
       it("Navigate back to receivables list", () => {
-        cy.navigToReceivableList();
+        cy.navigToReceivableListWithoutApi();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Verify filter by owner", () => {
         SystemRequirement("REQ-1730");
         cy.recVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Verify filter by receivable id", () => {

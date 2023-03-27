@@ -294,7 +294,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("verify form preview button in Overview Tab", () => {
@@ -414,17 +414,18 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
     });
 
     context("Click on Form Preview and verify the fields", () => {
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
-        cy.listLoadingElementShouldExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Verify Step 2 Added to detail tab", () => {
@@ -497,8 +498,8 @@ context("Create new LHRT Layout Verification", () => {
 
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
-        cy.listLoadingElementShouldExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Verify Step 2 Added to detail tab", () => {

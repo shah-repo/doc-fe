@@ -104,7 +104,7 @@ Cypress.Commands.add("usrClickResetMyPasswordButton", () => {
 });
 
 Cypress.Commands.add("usrForgotPageEnterEmail", (params: { email: string}) => {
-  cy.get("input[name=email]").arrowType(params.email);
+  cy.get("input[name=email]", { timeout: 10000 }).arrowType(params.email);
 });
 
 Cypress.Commands.add("usrNavigateToLoginPage", () => {
@@ -127,7 +127,7 @@ Cypress.Commands.add("usrNavigateToUserManagement", () => {
 });
 
 Cypress.Commands.add("usrFilterByEmail", (params: {email: string }) => {
-  cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
+  cy.get(`th[aria-colindex="3"] .k-textbox`).arrowType(params.email);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -144,8 +144,9 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
-  cy.get("tr.k-master-row").contains(params.name).parents("tr").find(`td[data-grid-col-index="5"]>span>button>span>svg`).eq(0)
-    .arrowClick();
+  cy.get("tr.k-master-row").contains(params.name).parents("tr")
+    .find(`td[data-grid-col-index="5"]>span>button>span>svg`)
+    .eq(0).arrowClick();
 });
 
 Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
@@ -161,11 +162,9 @@ Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
-    cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
-  });
+  cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
   cy.checkToastMessage({ exists: false });
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 
@@ -193,7 +192,7 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.get("#clearFilter").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
+  cy.get(`th[aria-colindex="3"] .k-textbox`).arrowType(params.email);
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").should("contain.text", params.email);
 });

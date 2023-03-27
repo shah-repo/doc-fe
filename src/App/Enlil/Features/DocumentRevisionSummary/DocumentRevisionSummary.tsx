@@ -8,13 +8,14 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import ItemsAndDetailsWrapper from "../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap";
 import { FormContext } from "../../../../ui/components/forms/FormContext";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -37,6 +38,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
+  const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
   const smartReferencesFrom =
   documentRevision?.smartReferencesFrom?.filter(
       (ref) =>
@@ -67,6 +69,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   }
 
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isDownloadAllVisible = (documentRevision?.attachments?.length > 1);
   const onSubmit = () => void 0;
 
   if (isLHR) {
@@ -92,7 +95,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   return (
     <SMForm
-      templateBoxProps={{ stretchY: "100%" }}
+      templateBoxProps={{ stretchY: "100%", width: "100%" }}
       headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={documentRevision}
@@ -120,13 +123,20 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         <Observer>
           {() => (
             <SMTemplate
-              templateBoxProps={{ stretchY: "100%", overflow: "auto" }}
+              templateBoxProps={{ stretchY: "100%" }}
+              contentBoxProps={{
+                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
+              }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
               <Observer>
                 {() => (
-                  <SMTabs tabs={tabConfig} boxProps={{ px: 4.25 }}>
+                  <SMTabs
+                    tabs={tabConfig}
+                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    panelProps={{ flex: 1 }}
+                  >
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
@@ -169,6 +179,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                         containsRedline={false}
                                         label={"Supporting Documents"}
                                         docRevStatus={documentRevision.status}
+                                        {...{ isDownloadAllVisible }}
                                       />
                                     </>
                                   </Formik>
@@ -184,7 +195,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             </>
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ &&
-                          documentRevision.status !== DocumentRevisionStatus.Voided &&
+                          !isPO && documentRevision.status !== DocumentRevisionStatus.Voided &&
                           <FBMaterialEqInfoContainer
                             documentRevision={documentRevision}
                             inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
@@ -194,6 +205,13 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                               docRevStatus={documentRevision.status}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.ITEMS && (
+                            <ItemsAndDetailsWrapper
+                              currentDocRevId={documentRevision?.id}
+                              initialValues={documentRevision.formInput ?? {}}
+                              mode={FBWorkspaceModeOptions.PREVIEW}
                             />
                           )}
                         </SMBox>

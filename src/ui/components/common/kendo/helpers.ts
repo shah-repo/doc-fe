@@ -10,9 +10,9 @@ export const orderByLockedState = (
 {
   const sortedColumnDefinitions = chain([...columnDefinitions])
     .orderBy(["locked"], ["desc"])
-    .map((column) => {
+    .map((column, index) => {
       column.reorderable = !column.locked;
-      column.orderIndex = column.locked ? 0 : column.orderIndex;
+      column.orderIndex = column.locked ? 0 : column.orderIndex ?? index;
       column.disabled = false;
       return column;
     })

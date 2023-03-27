@@ -93,7 +93,6 @@ describe("change requests reducers tests", () => {
     };
 
     const expectedState = {
-      ...initialState,
       [approversList[0].user.id]: approversList[0],
       [approversList[1].user.id]: approversList[1],
     };
@@ -108,7 +107,6 @@ describe("change requests reducers tests", () => {
     const initialState = [initialApprover.id];
 
     const expectedState = [
-      ...initialState,
       approversList[0].user.id,
       approversList[1].user.id,
     ];
@@ -122,7 +120,6 @@ describe("change requests reducers tests", () => {
     const initialState = {};
 
     const expectedState = {
-      ...initialState,
       [changeRequest.id]: { 1: audit },
     };
 

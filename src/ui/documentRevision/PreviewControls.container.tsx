@@ -13,13 +13,16 @@ import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_
 import { ReactComponent as WithDrawSubmissionIcon } from "../../assets/images/withdraw_submission.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
+import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
+import HeaderPOStatus from "../components/common/header/HeaderPOStatus";
+import HeaderPOStatusOptions from "../components/common/header/HeaderPOStatusOptions";
 import HeaderMenu from "../components/common/header/Menu";
 import OwnerChangerContainer from "../components/common/owner.changer/container";
 import { RequestType } from "../components/common/owner.changer/helpers/types";
+import ClonePOButton from "../components/forms/ClonePOButton";
 import CopyEBButton from "../components/forms/CopyEBButton";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
@@ -28,15 +31,15 @@ import PDFSocket from "../document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
-import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
+import { useReviseDocument, useUpdateDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
@@ -67,6 +70,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     label: reviseLabel,
     tooltipConfig,
   } = useReviseDocument(documentRevision.document?.documentType?.id);
+
+  const {
+    isVisible: showUpdate,
+    label: updateLabel,
+    tooltipConfig: updateRecordtooltipConfig,
+  } = useUpdateDocument(documentRevision.document?.documentType?.id);
+
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
@@ -82,6 +92,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
+  const isPO = checkIsDocumentPO(groupOptions);
+  const isEB = checkIsDocumentEB(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
@@ -150,13 +162,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             >
               <Text message={reviseLabel} />
             </StyledButton> :
-              <StyledMenuListItem button alignItems="flex-start">
+              <StyledMenuListItem button alignItems="flex-start" onClick={cloneDocument}>
                 <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
                   data-cy="updateRecord"
                   primary={<Text message={reviseLabel} />}
-                  onClick={cloneDocument}
                 />
               </StyledMenuListItem>
           ) : (
@@ -167,6 +178,48 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               id="PreviewControlsContainer-revise"
               data-cy="updateRecord" >
               <Text message={reviseLabel} />
+            </Button>
+          )}
+        </CustomLabelTooltip>
+      );
+    }
+  };
+  const renderUpdateButton = (renderAsButton) => {
+    if (hasAccess && canCreate() && showUpdate) {
+      return (
+        <CustomLabelTooltip {...{ tooltipConfig: updateRecordtooltipConfig }}>
+          {isNewLayout ? (
+            renderAsButton ? (
+              <StyledButton
+                color="primary"
+                onClick={cloneDocument}
+                id="PreviewControlsContainer-revise"
+                data-cy="updateRecord"
+              >
+                <Text message={updateLabel} />
+              </StyledButton>
+            ) : (
+              <StyledMenuListItem button alignItems="flex-start" onClick={cloneDocument}>
+                <StyledMenuListIcon>
+                  <WithDrawSubmissionIcon />
+                </StyledMenuListIcon>
+                <StyledMenuListItemText
+                  id="PreviewControlsContainer-revise"
+                  data-cy="updateRecord"
+                  primary={<Text message={updateLabel} />}
+
+                />
+              </StyledMenuListItem>
+            )
+          ) : (
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord"
+            >
+              <Text message={updateLabel} />
             </Button>
           )}
         </CustomLabelTooltip>
@@ -189,12 +242,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={"common.create.new"} />
-        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={cloneOutputDocument}>
           <StyledMenuListItemText
             id="PreviewControlsContainer-createNew"
             data-cy="PreviewControlsContainer-createNew"
             primary={<Text translation="common.create.new" />}
-            onClick={cloneOutputDocument}
+
           />
         </StyledMenuListItem>
       ) : (
@@ -281,12 +334,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       data-cy="document.revision.withdraw.alert"
     >
       <Text translation="changeRequest.transition.withdrawn" />
-    </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
       <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
       <StyledMenuListItemText
         data-cy="document.revision.withdraw.alert"
         primary={<Text translation="changeRequest.transition.withdrawn" />}
-        onClick={dialog.open}
       />
     </StyledMenuListItem>}
     <AlertDialog
@@ -304,22 +356,29 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       data-cy="PreviewControlsContainer-access"
     >
       <Text translation="document.request.access" />
-    </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={onSubmit}>
       <StyledMenuListItemText
         id="PreviewControlsContainer-access"
         data-cy="PreviewControlsContainer-access"
         primary={<Text translation="document.request.access" />}
-        onClick={onSubmit}
       />
     </StyledMenuListItem>
   );
 
   const accessableButtons: string[] = [];
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
     accessableButtons.push("cloneButton");
   }
-  if ((isStatusReleased || isStatusInDraft) && canCopy) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate &&
+   POStatusType.CLOSED !== selectedDocument.poStatus) {
+    accessableButtons.push("updateButton");
+  }
+  if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
     accessableButtons.push("newcloneButton");
+  }
+
+  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
+    accessableButtons.push("newclonePOButton");
   }
 
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
@@ -334,6 +393,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const isDocumentInReview = isDocumentRevisionInReview(documentRevision.status);
+  const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
+  const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
+  const isDocumentVoided = isDocumentRevisionVoided(documentRevision.status);
+  const isDocumentObsolete = isDocumentRevisionObsolete(documentRevision.status);
 
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
@@ -352,12 +416,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   let restButtons: string[] = [];
 
   function ownerOrEmail(ele: string) {
-    if (["changeowner", "exportToEmail", "newcloneButton", "inspectionControl", "pdf" ].includes(ele)) {
+    if (["changeowner",
+      "exportToEmail",
+      "newcloneButton",
+      "newclonePOButton", "inspectionControl", "pdf" ].includes(ele))
+    {
       return ele;
     }
   }
   if (accessableButtons.length >= 1) {
-    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "inspectionControl" ];
+    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "newclonePOButton", "inspectionControl" ];
     const initialFilteredButtons = accessableButtons.filter((ele: string) => !elementsList.includes(ele));
     const restFilteredButtons = accessableButtons.filter((ownerOrEmail));
     initialButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(0, 2) : initialFilteredButtons;
@@ -369,8 +437,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
       {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
+      {buttons.includes("updateButton") && renderUpdateButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
         <CopyEBButton {...{ documentRevision, renderAsButton }} />
+      )}
+      {buttons.includes("newclonePOButton") && (
+        <ClonePOButton {...{ documentRevision, renderAsButton }} />
       )}
       {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
       {buttons.includes("requestAccess") && requestAccessSentButton(renderAsButton)}
@@ -381,7 +453,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {buttons.includes("inspectionControl") && (
         <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
-      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} />}
+      {buttons.includes("pdf") &&
+      <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} isPO={isPO} />}
       {buttons.includes("changeowner") && (
         <OwnerChangerContainer
           requestId={documentRevision.id}
@@ -398,11 +471,31 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       )}
     </>
   );
-
   return (
     <>
-      <PDFSocket {...{ documentRevision }}/>
+      <PDFSocket {...{ documentRevision }} />
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+      <>
+        {isPO &&
+          documentRevision.poStatus &&
+          (isDocumentInReview || isDocumentDraft || isDocumentVoided || isDocumentObsolete) && (
+          <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+      </>
+      <>
+        {hasAccess && canCreate() && isPO &&
+          documentRevision?.id &&
+          documentRevision?.poStatus &&
+          (isDocumentApproved || isDocumentReleased) && (
+          <HeaderPOStatusOptions
+            poStatus={documentRevision?.poStatus}
+            docId={documentRevision?.id}
+            docRevOwner= {documentRevision?.owner?.user?.name}
+            updatedAt= {documentRevision?.updatedAt || ""}
+            isOwner = {isUserDocumentOwner}
+          />
+        )}
+      </>
       {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>

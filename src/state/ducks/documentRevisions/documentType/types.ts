@@ -134,6 +134,7 @@ export enum TabTypeOptions {
   DYNAMIC = "DYNAMIC",
   TRAINING = "TRAINING",
   MIXED = "MIXED",
+  ITEMS = "ITEMS",
 }
 
 export enum CATEGORY {
@@ -231,6 +232,7 @@ export const GroupWithGroupOptions =  {
     DOC_TYPE_GROUP_OPTION.TABS_POAM,
   ],
   PO: [
+    DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED,
     DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
     DOC_TYPE_GROUP_OPTION.PO,
     DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
@@ -476,7 +478,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
 
-type TabType = "MIXED" | "DYNAMIC" | "TRAINING" | "MEQ";
+type TabType = "MIXED" | "DYNAMIC" | "TRAINING" | "MEQ" | "ITEMS";
 
 export interface TabInfo {
   labelId: string;
@@ -562,6 +564,7 @@ export enum DisplayFieldType{
   REVISE_BTN = "S",
   BOOKMARKS = "Q",
   ADD_NEW_BTN = "V",
+  UPDATE_NEW_BTN = "V1",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;

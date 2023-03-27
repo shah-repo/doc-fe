@@ -1,7 +1,8 @@
 import { get, isUndefined } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from "../../..";
-import { checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { openPOToastr } from "../../../../ui/components/notifications/POStatus";
+import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FB, FBPOApprovalsState, FBProvider } from "../../../../ui/form.builder";
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
@@ -26,6 +27,7 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     isFB = !isUndefined(formFB);
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
+    const isReceivable = checkIsDocumentReceivable(documentRevision?.document?.documentType?.groupOptions);
     const poApprovalsState = isPO ? FB.useRef(
       FBPOApprovalsState,
       {
@@ -36,6 +38,13 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     // MARK: @state
     useEffect(() => {
+      const reOpenedPOInfo = localStorage.getItem("reOpenedPOInfo");
+      if (isReceivable && reOpenedPOInfo) {
+        try {
+          openPOToastr(JSON.parse(reOpenedPOInfo));
+        } catch {}
+        localStorage.removeItem("reOpenedPOInfo");
+      }
       _formState?.setMode("preview");
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

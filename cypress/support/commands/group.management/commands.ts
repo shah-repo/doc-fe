@@ -40,8 +40,10 @@ declare global {
       grpAssignUserDialog(params: { name: string }): Chainable;
       grpRemoveUserDialog(params: { name: string }): Chainable;
       grpSaveGroup(): Chainable;
+      grpSaveGroupWithoutApi(): Chainable;
       grpCancelGroup(): Chainable;
       grpSaveGroupPatch(): Chainable;
+      grpSaveGroupPatchWithoutApi(): Chainable;
       grpSelectGroupWithoutClosingDialog(params: { name: string }): Chainable;
       grpSelectGroup(params: { name: string }): Chainable;
       grpCloseDialog(): Chainable;
@@ -307,6 +309,12 @@ Cypress.Commands.add("grpSaveGroup", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("grpSaveGroupWithoutApi", () => {
+  cy.get(`td[role="gridcell"] button`).eq(0).arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("grpCancelGroup", () => {
   cy.get(`td[role="gridcell"] button`).eq(1).arrowClick();
   cy.checkToastMessage({ exists: false });
@@ -316,6 +324,11 @@ Cypress.Commands.add("grpSaveGroupPatch", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPatch, () => {
     cy.get("#Group-createGroup").arrowClick();
   });
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("grpSaveGroupPatchWithoutApi", () => {
+  cy.get("#Group-createGroup").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 

@@ -178,7 +178,7 @@ context("Export Equipment doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -191,7 +191,7 @@ context("Export Equipment doc", () => {
   context("Equipment with Released status", () => {
     context("Add Equipment with Released", () => {
       it("Approve and release the form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify export", () => {
@@ -207,8 +207,8 @@ context("Export Equipment doc", () => {
     it("Revise document with 'Obsolete' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drClickSaveWithoutApiCall();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -225,9 +225,9 @@ context("Export Equipment doc", () => {
     });
 
     it("Select 'Superseded' record", () => {
-      cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -268,7 +268,7 @@ context("Export Equipment doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -312,7 +312,7 @@ context("Export Equipment doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         recordUrl = url;
       });
@@ -335,23 +335,27 @@ context("Export Equipment doc", () => {
     });
 
     it("Add created document", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "Equipment form" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "Equipment form" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Add Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name, noWait: true });
+      cy.arSelectApprovalTab();
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
       cy.url().then((url: any) => {
         arUrl = url;
       });
@@ -359,8 +363,8 @@ context("Export Equipment doc", () => {
 
     it("Navigate to Equipment", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -374,18 +378,18 @@ context("Export Equipment doc", () => {
   context("Equipment with In Review status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to Equipment", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -399,18 +403,18 @@ context("Export Equipment doc", () => {
   context("Equipment with Approved status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve Submission'", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it("Navigate to Equipment", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {

@@ -23,6 +23,9 @@ interface OwnProps {
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
   chosenForm?: FBDocumentRevisionProps;
+  hideSideBar?: boolean;
+  currentDocRevId? : string;
+  inDialog?: boolean;
 }
 
 export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
@@ -39,21 +42,24 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   doNotPrompt,
   chosenForm,
   _formState,
+  hideSideBar = false,
+  currentDocRevId,
+  inDialog = false,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   const calcInitialValues = useMemo(() => {
-    initialValues.formInput = FBDataStore?.refreshData?.formInput ?? initialValues.formInput;
+    const formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
 
     return {
-      ...initialValues,
+      ...initialValues, formInput,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues, FBDataStore?.refreshData]);
 
   useObserver(() => {
-    calcInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? calcInitialValues.formInput;
+    calcInitialValues.formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? calcInitialValues.formInput;
   });
 
   const formInput = useMemo(() =>
@@ -91,6 +97,9 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       autosave={autosaveEnabled}
       _formState={_formState}
       formInput={formInput}
+      hideSideBar={hideSideBar}
+      currentDocRevId={currentDocRevId}
+      inDialog={inDialog}
       {...props}
     />
   );

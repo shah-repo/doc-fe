@@ -685,7 +685,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Approve", () => {
-            cy.ebApproveWithoutApi();
+            cy.poApproveWithoutApi();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
             cy.landingPageLoadingElementShouldNotExist();

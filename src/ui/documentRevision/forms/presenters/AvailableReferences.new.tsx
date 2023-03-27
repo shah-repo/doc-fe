@@ -2,11 +2,12 @@
 import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, isArray, map, some, truncate } from "lodash";
+import { debounce, isArray, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
 import { TypographyProps } from "../../../../state/ducks/common/types";
@@ -67,7 +68,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
-  const truncateLable = (label) => truncate(label, { length: 20, omission: " ..." });
 
   const onChange = (e, val) => {
     const newValue = isArray(val) ? val : [...value, val];
@@ -113,6 +113,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     return {
       label: `${ref.docId} - ${highestRev?.displayRevision} - ${highestRev?.name}`,
       value: ref.id,
+      url: `/document_revision/${ref.docId}/version/${highestRev?.id}`,
       deleteDisabled: (isReferencePart && canDocumentCreateInspection) ||
         (canReferenceCreateInspection && isDocumentFai),
     };
@@ -261,11 +262,16 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
             key={option.value}
             className={classes.chipRoot}
             label={
-              <Typography className={classes.chip}>
+              <Link
+                className={classes.chip}
+                to={option.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FBTooltip title={option.label}>
-                  <>{truncateLable(option.label)}</>
+                  {option.label}
                 </FBTooltip>
-              </Typography>}
+              </Link>}
             disabled={option.deleteDisabled}
             deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
             onDelete={(e) => {

@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -418,7 +419,7 @@ context("Training by Groups", () => {
 
     it("Select 'Training Curriculum test' as document type", () => {
       cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-        .autocompleteSelect("Training Curriculum test");
+        .autocompleteSelect("Training Curriculum test", { force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -484,7 +485,7 @@ context("Training by Groups", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -515,6 +516,15 @@ context("Training by Groups", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Check default columns on landing page", () => {
+      SystemRequirement("REQ-4680");
+      cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
+      cy.trVerifyElementByColumnName({ name: "TITLE" });
+      cy.trVerifyElementByColumnName({ name: "OWNER" });
+      cy.trVerifyElementByColumnName({ name: "STATE" });
+      cy.trVerifyElementByColumnName({ name: "GROUP" });
     });
 
     it("Filter created training on Training Curriculums page", () => {
@@ -588,14 +598,20 @@ context("Training by Groups", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Verify updation of training data", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
-      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -615,13 +631,13 @@ context("Training by Groups", () => {
       cy.contains("Approvals").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pmAddApproverOnApproverList({ approver: USERS[12].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[12].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -639,10 +655,15 @@ context("Training by Groups", () => {
       cy.navigToTrainingCurriculums();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title update")
         .and("contain", USERS[12].name).and("contain", "Released").and("contain", "Group2, Group3");
     });

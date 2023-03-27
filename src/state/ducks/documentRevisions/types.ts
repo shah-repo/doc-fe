@@ -7,6 +7,7 @@ import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Id, Nullable, Owner, User } from "../common/types";
 import { Employee } from "../company/types";
+import { RELATED_PARTS_STATUS } from "../relatedParts/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
@@ -23,6 +24,33 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
+export enum DocumentRevisionStatusDisplay {
+  Draft = "Draft",
+  PendingChange = "PendingChange",
+  InReview = "InReview",
+  Released = "Released",
+  Approved = "Approved",
+  Deprecated = "Deprecated",
+  Obsolete = "Obsolete",
+  Canceled = "Canceled",
+  Voided = "Voided",
+}
+
+export enum POStatusType {
+  OPENED = "OPENED",
+  CLOSED = "CLOSED",
+  VOIDED = "VOIDED"
+}
+
+export enum POStatusLabelMapping {
+  OPENED = "Open",
+  CLOSED = "Closed",
+  VOIDED = "Voided"
+}
+
+export enum DocumentCategory {
+  PurchaseOrder = "Purchase Order",
+}
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
@@ -95,6 +123,12 @@ interface Part{
   docRevId: string;
   documentId: string;
   label: string;
+}
+
+export interface RelatedParentPartDetails {
+  parentDocId: string;
+  documentId: string;
+  docRevId: string;
 }
 
 interface LSHS{
@@ -178,6 +212,9 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
+  poStatus?: POStatusType;
+  relatedPartsStatus?: RELATED_PARTS_STATUS;
+  relatedParentPartDetails?: RelatedParentPartDetails;
 }
 
 export interface SmartReference {

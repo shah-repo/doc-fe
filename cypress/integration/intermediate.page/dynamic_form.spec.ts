@@ -145,7 +145,7 @@ context(
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify there is ADD A FIELD button is displayed", () => {
@@ -201,7 +201,7 @@ context(
           });
 
           it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickSaveWithoutApiCall();
           });
         });
 
@@ -324,7 +324,7 @@ context(
           });
 
           it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickSaveWithoutApiCall();
             cy.reload();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();

@@ -371,11 +371,11 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -398,19 +398,13 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00001 - rev 1 - New suplier for PO" });
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -430,7 +424,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it(`open PO and check status should be '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -441,21 +435,14 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00001" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drEnterDocumentTitle({ name: "1" });
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -463,7 +450,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select first PO", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Verify PO status", () => {
@@ -476,13 +463,6 @@ context("Purchase Supplier Update", () => {
 
       it("Click on 'Purchase Order' on sidebar", () => {
         cy.navigToPurchaseOrder();
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -500,7 +480,7 @@ context("Purchase Supplier Update", () => {
 
     context("Open existing Purchase Order document and verify supplier", () => {
       it("Open PO again - verify Supplier", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 1 - New suplier for PO1");
       });
@@ -514,24 +494,19 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00001" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "2" });
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -543,7 +518,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Open PO again - verify PO in Draft is updated to the newly released version of the Supplier", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 2 - New suplier for PO12");
       });
@@ -584,6 +559,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00001 - rev 2 - New suplier for PO12" });
       });
 
@@ -593,12 +569,11 @@ context("Purchase Supplier Update", () => {
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.get("[data-cy='po-requestor-autocomplete']").scrollIntoView().click().autocompleteSelect(USERS[1].name);
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Add an Approval", () => {
@@ -617,24 +592,17 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00001" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "3" });
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -674,24 +642,17 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00001" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "4" });
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -709,6 +670,8 @@ context("Purchase Supplier Update", () => {
         cy.dlVerifyFilterByDocId({ docId: "PO-00002" });
         cy.poListVerifyFilterBySupplier({ supplier: "New suplier for PO1234" });
         cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Open PO again - verify PO in PENDING_APPROVAL updated to the newly released version of the Supplier`, () => {
@@ -724,6 +687,8 @@ context("Purchase Supplier Update", () => {
     context("for newly PO", () => {
       it("create 'New Purchase order'", () => {
         cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.poClickCreatePO();
         cy.wait(2000);
         cy.progressBarShouldNotExist();
@@ -739,11 +704,11 @@ context("Purchase Supplier Update", () => {
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.get("[data-cy='po-requestor-autocomplete']").scrollIntoView().click().autocompleteSelect(USERS[1].name);
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00002 - rev 1 - released supplier" });
       });
 
@@ -753,7 +718,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Add an Approval", () => {
@@ -762,6 +727,9 @@ context("Purchase Supplier Update", () => {
 
       it("Click 'Submit for Approval' button", () => {
         cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Approve PO", () => {
@@ -772,7 +740,7 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00002" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"updateRecord\"]").should("exist");
@@ -780,11 +748,11 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "1" });
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -801,7 +769,7 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.progressBarShouldNotExist();
         cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
@@ -817,15 +785,10 @@ context("Purchase Supplier Update", () => {
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - released supplier1");
       });
 
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
       it("Navigates to Purchase order page", () => {
         cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -838,11 +801,14 @@ context("Purchase Supplier Update", () => {
         cy.dlVerifyFilterByDocId({ docId: "PO-00003" });
         cy.poListVerifyFilterBySupplier({ supplier: "released supplier1" });
         cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("for existing PO", () => {
       it("Open existing PO and verify Supplier", () => {
+        cy.dlClearFilters();
         cy.poClickOnSpecificPOFromList({ item: "PO-00003" });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - released supplier1");
       });
@@ -851,15 +817,15 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00002" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "2" });
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
       });
@@ -879,7 +845,7 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description2" });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.progressBarShouldNotExist();
         cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
@@ -893,13 +859,6 @@ context("Purchase Supplier Update", () => {
 
       it("Verify the system is updating Supplier to the latest revision when PO is revised", () => {
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - released supplier12");
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -916,6 +875,8 @@ context("Purchase Supplier Update", () => {
         cy.dlVerifyFilterByDocId({ docId: "PO-00003" });
         cy.poListVerifyFilterBySupplier({ supplier: "released supplier12" });
         cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -986,7 +947,7 @@ context("Purchase Supplier Update", () => {
 
       it("clicks on 'Save' button", () => {
         cy.wait(2000);
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Details' tab", () => {
@@ -994,6 +955,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00002 - rev 3 - released supplier12" });
       });
 
@@ -1003,8 +965,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.get("[data-cy='po-requestor-autocomplete']").scrollIntoView().click().autocompleteSelect(USERS[1].name);
       });
 
       it("Fill order Date", () => {
@@ -1019,22 +980,18 @@ context("Purchase Supplier Update", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click 'Submit for Approval' button", () => {
         cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Approve PO", () => {
         cy.poApproveWithoutApi();
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -1057,28 +1014,21 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00002" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "3" });
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {
@@ -1098,6 +1048,8 @@ context("Purchase Supplier Update", () => {
 
       it("Open released PO", () => {
         cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.poClickOnSpecificPOFromList({ item: "PO-00004" });
       });
 
@@ -1153,24 +1105,17 @@ context("Purchase Supplier Update", () => {
         cy.navigToSuppliers();
         cy.dlClearFilters();
         cy.supFilterById({ docId: "SUP-00002" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentTitle({ name: "4" });
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
-        cy.poApproveWithoutApi();
+        cy.supplierApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 5", status: STATUS_TYPES_LABEL.RELEASED });
-      });
-
-      it("reload page", () => {
-        cy.reload();
-        cy.wait(5000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to Purchase order page", () => {

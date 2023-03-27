@@ -20,6 +20,7 @@ declare global {
       recClickUpdateRecord(): Chainable<Subject>;
       recClickSaveBtn(): Chainable<Subject>;
       recCreateNew(): Chainable<Subject>;
+      recCreateNewWithoutApi(): Chainable<Subject>;
       recVerifyFilterByReceivableId(params: {recId: string}): Chainable<Subject>;
       recFilterByOwner(params: {owner: string}): Chainable<Subject>;
       recVerifyFilterByOwner(params: {owner: string}): Chainable<Subject>;
@@ -67,6 +68,12 @@ Cypress.Commands.add("recCreateNew", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("recCreateNewWithoutApi", () => {
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick({ force: true });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("recVerifyStartingFilter", () => {
   cy.get("td[role=gridcell]:nth-child(4)")
     .each(($el) => {
@@ -81,7 +88,7 @@ Cypress.Commands.add("recClickOnFirstReceivableOnList", () => {
 });
 
 Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
-  cy.get(`[aria-colindex="1"] input`).arrowType(params.id);
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).arrowType(params.id);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -103,7 +110,7 @@ Cypress.Commands.add("recVerifyFilterByReceivableId", (params: {recId: string })
 });
 
 Cypress.Commands.add("recFilterByOwner", (params: {owner: string}) => {
-  cy.get(`[aria-colindex="3"] input`).arrowType(params.owner).wait(500);
+  cy.get(`[aria-colindex="3"] .k-filtercell>input`).arrowType(params.owner).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -122,7 +129,7 @@ Cypress.Commands.add("recVerifyFilterByState", (params: {state: string }) => {
 });
 
 Cypress.Commands.add("recFilterByARId", (params: {arId: string}) => {
-  cy.get(`[aria-colindex="5"] input`).arrowType(params.arId).wait(500);
+  cy.get(`[aria-colindex="5"] .k-filtercell>input`).arrowType(params.arId).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -131,9 +138,9 @@ Cypress.Commands.add("recVerifyFilterByARId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("recVerifyFilterClear", () => {
-  cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="1"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] .k-filtercell > input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="5"] .k-filtercell > input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
 });
 

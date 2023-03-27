@@ -29,6 +29,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import RelatedPartsWrapper from "./presenters/related.parts/RelatedParts.wrap";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -103,6 +104,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(groupOptions);
+  const isPartForm = hasOutput ?
+    checkIsDocumentPart((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = Boolean(documentRevision?.subRevision);
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
@@ -228,7 +232,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {!isDCO && (<>{isVisible && <Grid item xs={6}>
             <DocumentTypeSelect
               outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-              isDisabled={isDisabledInputInPreview}
+              isDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
               {...{
                 type,
                 isDocRevStatusDraft,
@@ -307,15 +311,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
-          {isPart && documentRevision?.parentParts && (
-            <Grid item xs={12}>
-              <BuildsContainer
-                dataProp={flatten([documentRevision?.parentParts])}
-                label="common.part.of"
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
-          )}
           {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange
@@ -325,12 +320,30 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   isDocRevFirstDraft,
                   showAdministrativeAndVoidChange,
                   isRecord,
+                  isPORecord: isPO && FBWorkspaceModeOptions.FORM === mode,
                   releasedDocRev,
                   isAlphaReleased,
                 }}
               />
             </Grid>
           )}
+          {isPart && documentRevision?.parentParts && (
+            <Grid item xs={12}>
+              <BuildsContainer
+                dataProp={flatten([documentRevision?.parentParts])}
+                label="common.part.of"
+                isDraft={isDocRevStatusDraft || isRevised}
+              />
+            </Grid>
+          )}
+          {(isPart || isPartForm) &&
+            <Grid item xs={12}>
+              <RelatedPartsWrapper
+                viewOnly={isDisabledInputInPreview || hasOutput || !isOwner}
+                documentRevision={documentRevision}
+                relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
+            </Grid>
+          }
           {showOutputSection ? (
             <>
               {!isDCO && (isPO || outputIsPO

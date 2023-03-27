@@ -5,7 +5,6 @@ import moment from "moment";
 import "moment-timezone";
 import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -107,13 +106,11 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -133,9 +130,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Navigate to Approval Roles tab", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drSelectApprovalRolesTab();
-        });
+        cy.drSelectApprovalRolesTab();
       });
 
       it("Click on 'Add Another Role' button", () => {
@@ -147,6 +142,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click on 'Add' button", () => {
+        cy.wait(1000);
         cy.get("button[data-cy=\"common.add\"]").arrowClick();
       });
 
@@ -155,7 +151,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click 'Add Approver' & 'confirm' button", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Reload company", () => {
@@ -194,7 +190,7 @@ context("Autocomplete 'Approval Roles' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

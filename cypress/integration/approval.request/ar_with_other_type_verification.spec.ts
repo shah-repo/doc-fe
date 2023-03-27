@@ -6,7 +6,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { CyRoutes } from "./../../support/routes";
 
 let createdCompany;
 let loginResponse;
@@ -174,7 +173,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -184,19 +183,13 @@ context("Approval request implementation tasks", () => {
 
   context("Check predefined fields", () => {
     it("Verify Approvers", () => {
+      cy.drSelectApprovalsTab();
       cy.get(`[data-cy="Approvers"]`).should("exist");
     });
 
-    it("Select Documents tab", () => {
-      cy.drSelectDocumentTab();
-    });
-
-    it("Verify Approval Request Details", () => {
-      cy.get(`[data-cy="Approval Request Details"]`).should("exist");
-    });
-
-    it("Verify Add Document block", () => {
-      cy.get(`[data-cy="fb.add.document"]`).should("exist");
+    it("Verify Add Item block", () => {
+      cy.arSelectItemsTab();
+      cy.get(`[data-cy="approvalRequest.items.button.addText"]`).should("exist");
     });
 
     it("Select Change Details tab", () => {
@@ -239,7 +232,7 @@ context("Approval request implementation tasks", () => {
     it("Move component", () => {
       cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
       cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
+      cy.get(".drag-handle").eq(0)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
@@ -255,23 +248,13 @@ context("Approval request implementation tasks", () => {
       });
     });
 
-    it("Select Documents tab", () => {
-      cy.drSelectDocumentTab();
-    });
-
-    it("Verify Approval Request Details disabled", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "Approval Request Details", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
-    });
-
     it("Verify Add Document disabled", () => {
-      cy.get(`[data-cy="fb.add.document"]`).should("have.attr", "disabled");
+      cy.arSelectItemsTab();
+      cy.get(`[data-cy="approvalRequest.items.button.addText"]`).should("have.attr", "disabled");
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -306,7 +289,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -367,19 +350,18 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
-        cy.fbEnterPlaceholder({ placeholder: " changed" });
-        cy.fbAddNewFieldButton();
-        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
 
-        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      });
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -442,7 +424,7 @@ context("Approval request implementation tasks", () => {
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -464,16 +446,18 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
-      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.arSelectItemsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.arAddItems();
+      cy.arSelectItem({ name: "CP-00004" });
+      cy.arEnterItemDescription({ description: "added document description" });
+      cy.arEnterItemJustification({ justification: "justification for added document" });
+      cy.arClickAddItemDone();
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Switch to ChangeDetails tab", () => {
@@ -481,21 +465,22 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.arSelectApprovalTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Approve AR", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -531,7 +516,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {

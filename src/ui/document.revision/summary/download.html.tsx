@@ -6,6 +6,7 @@ import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/prese
 import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as DownloadHTMLIcon } from "../../../assets/images/download_html.svg";
+import { ReactComponent as ViewPDFIcon } from "../../../assets/images/view_pdf.svg";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
@@ -22,9 +23,10 @@ import useDialog from "../../hooks/useDialog";
 interface Props {
   pdf?: PDF;
   renderAsButton?: boolean;
+  isPO?: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
-  pdf, renderAsButton,
+  pdf, renderAsButton, isPO,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
@@ -59,14 +61,13 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     button = renderAsButton
       ? null
       : (
-        <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
+        <StyledMenuListItem disabled={isActive} button alignItems="flex-start" onClick={handleClick}>
           <StyledMenuListIcon>
-            <DownloadHTMLIcon/>
+            {isPO ? <ViewPDFIcon /> : <DownloadHTMLIcon/>}
           </StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="downloadHtml"
-            primary={<Text translation="common.download.html" />}
-            onClick={handleClick}
+            primary={<Text translation={ isPO ?  "common.view.pdf" : "common.download.html"} />}
           />
         </StyledMenuListItem>
       );

@@ -524,7 +524,7 @@ context("Export Bulk", () => {
 
     it("Select the Bulk Import inline form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Bulk Import inline form" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -560,7 +560,7 @@ context("Export Bulk", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -577,7 +577,7 @@ context("Export Bulk", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -609,15 +609,16 @@ context("Export Bulk", () => {
       });
 
       it("Click on revisions tab on side panel", () => {
+        cy.get(`button[data-cy="note-icon"]`, { timeout: 10000 }).should("be.visible");
         cy.drClickRevisionsSidePanel();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Last Signed", () => {
-        cy.contains("Last Signed").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Last Signed").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -638,7 +639,9 @@ context("Export Bulk", () => {
       });
 
       it("Click WIP status record", () => {
-        cy.contains("WIP").arrowClick();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select 'Details' tab", () => {
@@ -646,11 +649,11 @@ context("Export Bulk", () => {
       });
 
       it("Update section", () => {
-        cy.get("[name^=\"textfield1\"]").arrowType("1");
+        cy.get("[name^=\"textfield1\"]").arrowType("1").unClick();
       });
 
       it("Save the document", () => {
-        cy.unClick();
+        cy.drClickSaveWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -667,12 +670,6 @@ context("Export Bulk", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Select 'Details' tab", () => {
-        cy.drSelectDetailsTab();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
       it("Approve inline approval", () => {
         cy.inlineApprovalWithoutApi();
       });
@@ -684,9 +681,9 @@ context("Export Bulk", () => {
       });
 
       it("Select Archive", () => {
-        cy.contains("Archive").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(2).contains("Archive").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -705,9 +702,9 @@ context("Export Bulk", () => {
       });
 
       it("Click WIP status record", () => {
-        cy.contains("WIP").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Finalize and release button click'", () => {
@@ -733,12 +730,6 @@ context("Export Bulk", () => {
     context("Add Bulk Import Canceled", () => {
       it("Click Update record", () => {
         cy.drClickReviseDocument();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -773,7 +764,7 @@ context("Export Bulk", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.dlFilterByDocTitle({ docTitle: "Bulk Import form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Click on Create New button", () => {
@@ -808,14 +799,14 @@ context("Export Bulk", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
+      it("Upload csv file", () => {
+        cy.atchUploadTemplateForBLC({ fileName: "test_template1.xlsx" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Upload csv file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "test_template1.xlsx" });
+      it("Save the document", () => {
+        cy.drClickSaveWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -829,14 +820,8 @@ context("Export Bulk", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Save and submit for Approval", () => {
-        cy.pmSubmitForApproval();
+      it("Submit for Approval", () => {
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

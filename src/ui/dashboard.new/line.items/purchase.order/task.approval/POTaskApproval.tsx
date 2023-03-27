@@ -31,6 +31,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { formatCurrency } from "../../common/Utils";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
 import useStyles from "./taskApproval.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -60,9 +61,10 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   dialogPDF: DialogHandler;
+  dismissLineItem?: (id: string) => void;
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -90,6 +92,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   dialogPDF,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -134,11 +137,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const handleApproveClick = () => {
     openApproveDialog();
@@ -212,6 +218,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const downloadAttachment = (attachment: Attachment) => () => {
     downloadAsync.start(downloadAction, attachment, downloadAsync);
   };
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
+
   return (
     <>
       <StyledListItem
@@ -332,7 +342,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 placement="top"
                 arrow
               >
-                <span onMouseLeave={onMouseLeaveActionIcons}>
+                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"
@@ -389,29 +399,35 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
+              {!pinHover && isPinShown && (
+                <PinIcon
+                  data-cy="pin-icon"
+                  onMouseEnter={onMouseHoverPinIcon}
+                  className={classes.cursorPointer}
+                />
               )}
-              {pinHover && !pinned && (
+              {pinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
                   arrow
                 >
                   <PinSolidIcon
+                    data-cy="pin-solid-icon"
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                     className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
+              {isUnpinShown && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
                   <PinSolidIcon
+                    data-cy="pin-solid-icon"
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                     className={classes.cursorPointer}
@@ -419,6 +435,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
         {pinned && (
@@ -428,9 +447,16 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                data-cy="pin-solid-icon"
+                onClick={handleUnPinClick}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

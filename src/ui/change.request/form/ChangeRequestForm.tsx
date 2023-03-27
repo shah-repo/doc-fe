@@ -2,7 +2,7 @@ import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { cloneDeep, map } from "lodash";
 import { Observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from "../../../App";
 import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -14,6 +14,7 @@ import { AsyncState } from "../../../state/types";
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
 import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
+import ItemsAndDetailsWrapper from "../items.and.details/ItemsAndDetails.wrap";
 import FormHeader from "./assessmentForm/FormHeader";
 import ChangeRequestSidebar from "./ChangeRequest.sidebar";
 import ChangeRequestFormHeader from "./ChangeRequestFormHeader";
@@ -34,6 +35,9 @@ type ChangeRequestFormProps =
   withoutBottomBar: boolean;
   autosave: boolean;
   formInput?: Record<string, any>;
+  hideSideBar: boolean;
+  currentDocRevId?: string;
+  inDialog: boolean;
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -49,6 +53,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _formState,
   formInput,
   _documentRevisionFormState,
+  hideSideBar = false,
+  currentDocRevId,
+  inDialog = false,
 }) => {
   const { _tabsState } = SM.useStores();
 
@@ -66,6 +73,22 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
+
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
+    tabConfig.splice(1, 0, {
+      labelId: "tabId.items",
+      tabId: TabTypeOptions.ITEMS.toLowerCase(),
+      type: TabTypeOptions.ITEMS,
+    });
+  }
+
+  useEffect(() => {
+    if (inDialog) {
+      _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -80,7 +103,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && {
+        {...changeRequest && changeRequest.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
@@ -93,8 +116,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: _documentRevisionFormState?.expanded ? "100%" : "0px", height: "auto" }}
-              boxProps={{ overflow: "auto" }}
+              contentBoxProps={{
+                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
+              }}
               header={<ChangeRequestFormHeader
                 title={changeRequest?.title}
                 description = {changeRequest?.description}
@@ -105,7 +129,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                 {() => (
                   <SMTabs
                     tabs={tabConfig}
-                    boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
@@ -113,7 +137,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index} {...{ py: 2 }}>
+                        <SMBox key={index} pt={.25}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
                               <FBWorkspace
                                 isPortal={false}
@@ -125,6 +149,18 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
+                          {tabType === TabTypeOptions.ITEMS &&
+                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
+                            changeRequest && (
+                            <ItemsAndDetailsWrapper
+                              currentDocRevId={currentDocRevId}
+                              changeRequest={cloneDeep(changeRequest)}
+                              initialValues={formInput ?? {}}
+                              autosave={autosave}
+                              mode={mode}
+                              asyncState={asyncState}
+                            />
+                          )}
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace

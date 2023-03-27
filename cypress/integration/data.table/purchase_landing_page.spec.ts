@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
@@ -474,7 +473,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Navigate to PO", () => {
-      cy.navigToPurchaseOrder();
+      cy.navigToPurchaseOrderWithoutApi();
     });
 
     it("Verify that landing pages for use the new data table", () => {
@@ -536,9 +535,9 @@ context("Purchase Order Landing Page", () => {
 
   context("Create first 'Purchase Order' document", () => {
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Check for PO ID uniqueness - ID should be POT-00001", () => {
@@ -546,7 +545,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
-      cy.navigToPurchaseOrder();
+      cy.navigToPurchaseOrderWithoutApi();
     });
 
     it("Click on existing PO that was created before", () => {
@@ -558,7 +557,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
-      cy.navigToPurchaseOrder();
+      cy.navigToPurchaseOrderWithoutApi();
     });
   });
 
@@ -710,17 +709,17 @@ context("Purchase Order Landing Page", () => {
 
   context("Verify that each filter for each column in the landing page is functional ", () => {
     it("Verify filter for  PO #", () => {
-      cy.get(`[aria-colindex="1"] input`).arrowType("POT-00001").wait(500);
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "POT-00001");
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "POT-00001" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "POT-00001" });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for Revision", () => {
-      cy.get(`[aria-colindex="2"] input`).arrowType("1");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "1");
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 2, input: "1" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "1" });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for 'PO Status'", () => {
@@ -731,57 +730,61 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Verify filter for 'Supplier'", () => {
-      cy.get(`[aria-colindex="4"] input`).arrowType("N/A");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`[aria-colindex="4"] input`).should("have.attr", "value", "N/A");
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 4, input: "N/A" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "N/A" });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for 'Part Number'", () => {
-      cy.get(`[aria-colindex="5"] input`).arrowType("N/A");
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 5, input: "N/A" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for 'Amount'", () => {
-      cy.get(`[aria-colindex="6"] input`).arrowType("N/A");
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 6, input: "N/A" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for 'Requestor'", () => {
-      cy.get(`[aria-colindex="7"] input`).arrowType("Giovanni Reynolds");
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 7, input: USERS[1].name });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Verify filter for 'Issue Date'", () => {
-      cy.get(`[aria-colindex="8"] input`).arrowType("N/A");
-      cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      cy.filterLandingPageColumnFilter({ colIndex: 8, input: "N/A" });
+      cy.landingPageLoadingElementShouldAppear();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("system maintain PO filter when navigating away from and back to the landing page", () => {
       cy.navigToDocumentList();
-      cy.navigToPurchaseOrder();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "POT-00001");
-      cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "1");
-      cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
-      cy.get(`[aria-colindex="4"] input`).should("have.attr", "value", "N/A");
-      cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "N/A");
-      cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "N/A");
-      cy.get(`[aria-colindex="7"] input`).should("have.attr", "value", "Giovanni Reynolds");
-      cy.get(`[aria-colindex="8"] input`).should("have.attr", "value", "N/A");
+      cy.navigToPurchaseOrderWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "POT-00001" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "1" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "N/A" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "N/A" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "N/A" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 6, input: "N/A" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: USERS[1].name });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "N/A" });
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
       cy.grpClearFilter();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
-      cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 1, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 2, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 3, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 4, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 5, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 6, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 7, input: "" });
+      cy.filterVerifyLandingPageColumnFilterAttr({ colIndex: 8, input: "" });
     });
   });
 
@@ -865,107 +868,115 @@ context("Purchase Order Landing Page", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.navigToPurchaseOrder();
+      cy.navigToPurchaseOrderWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Verify dropdown filters", () => {
     it("Verify dropdown filters", () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.grpClearFilter();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
-      cy.grpClearFilter();
     });
 
     it(`Verify "Does not contain" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PO-00001" });
+      cy.landingPageLoadingElementShouldAppear();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PO-00001" });
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is not equal to" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PO-00001" });
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Starts with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PO-00001" });
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Ends with" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001");
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PO-00001" });
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is not null" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
-
 
     it(`Verify "Is not empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify "Is empty" dropdown filter`, () => {
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Insert filter", () => {
-      cy.get(`th[aria-colindex="1"] input`).arrowType("PO-00001").wait(500);
+      cy.filterLandingPageColumnFilter({ colIndex: 1, input: "PO-00001" });
     });
 
     it(`Crossed filter icon should appear `, () => {
@@ -973,13 +984,14 @@ context("Purchase Order Landing Page", () => {
     });
 
     it(`Select option Contains and verify that the filter is functional`, () => {
-      cy.get(`th[aria-colindex="1"] span.k-select`).arrowClick();
+      cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
       cy.get("ul>li[role=option]").contains("Contains").arrowClick();
       cy.get(`th[aria-colindex="1"] span.k-i-filter-clear`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select option from dropdown list", () => {
-      cy.get(`th[aria-colindex="2"] span.k-select`).arrowClick().wait(500);
+      cy.get(`th[aria-colindex="2"] span.k-i-filter`).arrowClick().wait(500);
       cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocumentCount({ numberOfDoc: 2 });

@@ -3,9 +3,9 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -134,7 +134,7 @@ context("Document force required fields", () => {
 
   context("Creates document", () => {
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -168,7 +168,39 @@ context("Document force required fields", () => {
   });
 
   context("Verify user is forced to fill required fields", () => {
+
+    it(`Click on 'Approve and release' without password Verify It should not allow you to proceed 
+    and shows required field validation error`, () => {
+      SystemRequirement("REQ-4820,REQ-4890");
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick().wait(1000);
+      cy.get("[data-cy='field-password'] p").contains("Required")
+        .should("have.css", "color", "rgb(244, 67, 54)");
+      cy.get("#ApproveAndRelease-cancelButton").click();
+    });
+
+    it("Click on 'Approve and release' button with wrong password and validate Error message", () => {
+      SystemRequirement("REQ-4820");
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      SystemRequirement("REQ-4150");
+      cy.get("input[name=password]").should("have.attr", "type", "password");
+      cy.get("input[name=password]").arrowType("wrong password").wait(500);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick().wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessageContains({ message: "Incorrect username or password." });
+      cy.get("#ApproveAndRelease-cancelButton").click();
+    });
+
     it("Click on 'Approve and release' button", () => {
+      SystemRequirement("REQ-4020, REQ-4890");
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
@@ -180,7 +212,6 @@ context("Document force required fields", () => {
     it("Close dialog box", () => {
       cy.drCloseApproveAndReleaseDialog();
     });
-
   });
 
   context("Verify filled fields of created document", () => {
@@ -209,20 +240,18 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Revise the document and modify fields", () => {
     it("Click 'Revise Document' button", () => {
       cy.drClickReviseDocument();
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("remove description", () => {
@@ -237,13 +266,13 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
     });
 
     it("Verify title and description required message should be displayed", () => {
@@ -277,11 +306,11 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click on 'Approve and release' button", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Click 'Create New' button", () => {
@@ -315,7 +344,7 @@ context("Document force required fields", () => {
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
     });
 
     it("Verify title and description required message should be displayed", () => {
