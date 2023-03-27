@@ -1,4 +1,4 @@
-import { find, map, sortBy } from "lodash";
+import { find, has, map, sortBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -47,6 +47,9 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     const handleEdit = (index, item: POApprovalMatrixLevel) => () => {
       if (props.disabled && !isDocumentReleased) {
         return;
+      }
+      if (!has(item, "threshold")) {
+        item.threshold = 0;
       }
       setIndex(index);
       const stages = map(signatureStages, (signatureStage) =>
