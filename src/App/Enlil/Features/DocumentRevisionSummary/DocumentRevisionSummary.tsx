@@ -32,6 +32,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   canChangeOwnerShip,
   schema,
   isFB,
+  hideSideBar = false,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
@@ -111,7 +112,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {..._documentRevisionFormState?.documentRevision && {
+        {..._documentRevisionFormState?.documentRevision && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <DocumentRevisionSidebar edit={false} />}

@@ -1,11 +1,16 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DialogHandler } from "../../../../hooks/useDialog";
 
 import CloseIcon from "@material-ui/icons/Close";
 import { ReactComponent as NewTabIcon } from "../../../../../assets/images/new_tab.svg";
 
+import { DocumentRevisionSummary } from "../../../../../App";
+import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
+import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import Text from "../../../../components/Text";
+import useActionCreator from "../../../../hooks/useActionCreator";
+import useAsync from "../../../../hooks/useAsync";
 import useStyles from "./RelatedPart.styles";
 
 interface Props {
@@ -16,6 +21,19 @@ interface Props {
   documentRevisionId: string;
 }
 
+const Loader = () => {
+  const classes = useStyles();
+
+  return (
+    <div
+      data-cy="ar.items.loader"
+      className={classes.loader}
+    >
+      <Text translation="common.loading" />
+    </div>
+  );
+};
+
 const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
   documentId,
   relatedSubPartDialog,
@@ -25,6 +43,31 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
 }) => {
 
   const classes = useStyles();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [documentRevision, setDocumentRevision] = useState<DocumentRevision>();
+
+  const loadRelatedSubPartDocRevAction = useActionCreator(relatedPartsActions.getRelatedSubPartDocRev);
+  const loadRelatedSubPartDocRevAsync = useAsync({
+    onSuccess: ({ documentRevision }: any) => {
+      if (documentRevision) {
+        setIsLoading(false);
+        setDocumentRevision(documentRevision);
+      }
+    },
+  });
+
+  const loadRelatedSubPartDocRev = () => {
+    setIsLoading(true);
+    loadRelatedSubPartDocRevAsync.start(
+      loadRelatedSubPartDocRevAction, documentRevisionId, loadRelatedSubPartDocRevAsync);
+  };
+
+  useEffect(() => {
+    loadRelatedSubPartDocRev();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Dialog
       disableBackdropClick={true}
@@ -34,15 +77,15 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
         paper: classes.paper,
       }}
       scroll="paper"
-      disableEscapeKeyDown={true}
+      disableEscapeKeyDown={false}
       maxWidth={false}
       open={relatedSubPartDialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-      id="ApprovalRequest-dialog"
+      id="related-subpart-dialog"
     >
       <DialogTitle style={{ display: "flex", justifyContent: "space-between" }} disableTypography>
         <Typography style={{ display: "flex" }}>
-          <Text translation="approvalRequest.dialog.title" />
+          <Text translation="relatedSubPart.dialog.title" />
         </Typography>
         <div style={{ display: "flex" }}>
           <IconButton
@@ -60,9 +103,10 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
             <CloseIcon />
           </IconButton></div>
       </DialogTitle>
-      <DialogContent dividers
-      >
-        <div>nITIN </div>
+      <DialogContent dividers>
+        {isLoading && <Loader />}
+        {!isLoading && documentRevision &&
+            <DocumentRevisionSummary {...{ documentRevision, hideSideBar: true, canChangeOwnerShip: false }}/> }
       </DialogContent>
     </Dialog>
   );

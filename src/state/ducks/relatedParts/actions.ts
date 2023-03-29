@@ -1,4 +1,5 @@
 import { apiAction } from "../../factories";
+import { documentRevisionsActions } from "../documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
 import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "./constants";
@@ -51,6 +52,16 @@ const voidRelatedPart =
     },
   });
 
+const getRelatedSubPartDocRev =
+  (documentRevisionId: string, async) => apiAction({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${documentRevisionId}`,
+    method: "get",
+    onSuccess: (documentRevision: DocumentRevision, dispatch) => {
+      dispatch(documentRevisionsActions.documentRevisionSet(documentRevision));
+      async.successHandler?.callback({ documentRevision });
+    },
+  });
+
 const removeRelatedPart = (docRevId: string, async) => apiAction({
   url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
   method: "delete",
@@ -86,4 +97,5 @@ export default {
   voidRelatedPart,
   removeRelatedPart,
   updateRelatedPart,
+  getRelatedSubPartDocRev,
 };

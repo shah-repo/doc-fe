@@ -291,6 +291,20 @@ export default makeStyles((theme) =>
       flex: 1,
       color: Colors.almost_black,
     },
+    loader: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: Colors.background_white,
+      opacity: 0.7,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: 600,
+      zIndex: 1,
+    },
   })
 );
 
