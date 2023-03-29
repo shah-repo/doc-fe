@@ -38,6 +38,7 @@ import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import ExportToEmail from "./export.to.email/ExportToEmail";
+import GenerateHtmlPreview from "./GenerateHtmlPreview";
 import RedlineButton from "./redline/Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
@@ -216,6 +217,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
+  const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
   if (
     !isRecord ||
@@ -238,6 +240,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
     accessableButtons.push("NewClonePO");
+  }
+  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+    accessableButtons.push("generatePDF");
   }
   if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
     accessableButtons.push("exportCsvButton");
@@ -350,6 +355,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {buttons.includes("inspectionControl") && (
         <InspectionControlsContainer {...{ documentRevision, renderAsButton }} />
+      )}
+      {buttons.includes("generatePDF") && (
+        <GenerateHtmlPreview
+          id={documentRevision.id}
+          renderHTMLDefined={isRenderHTMLDefined}
+          showDownloadButton={false}
+        />
       )}
       {buttons.includes("redlineButton") && (
         <RedlineButton

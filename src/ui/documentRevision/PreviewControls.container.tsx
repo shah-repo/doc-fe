@@ -37,6 +37,7 @@ import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
+import GenerateHtmlPreview from "./forms/presenters/GenerateHtmlPreview";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
@@ -70,7 +71,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     label: reviseLabel,
     tooltipConfig,
   } = useReviseDocument(documentRevision.document?.documentType?.id);
-
   const {
     isVisible: showUpdate,
     label: updateLabel,
@@ -380,7 +380,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
     accessableButtons.push("newclonePOButton");
   }
-
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
     accessableButtons.push("outputButton");
   }
@@ -390,6 +389,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
     accessableButtons.push("withdrawSubmission");
   }
+
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
@@ -398,7 +398,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
   const isDocumentVoided = isDocumentRevisionVoided(documentRevision.status);
   const isDocumentObsolete = isDocumentRevisionObsolete(documentRevision.status);
+  const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
+  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+    accessableButtons.push("generatePDF");
+  }
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
   }
@@ -419,20 +423,20 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (["changeowner",
       "exportToEmail",
       "newcloneButton",
-      "newclonePOButton", "inspectionControl", "pdf" ].includes(ele))
+      "newclonePOButton", "inspectionControl", "pdf", "generatePDF" ].includes(ele))
     {
       return ele;
     }
   }
   if (accessableButtons.length >= 1) {
-    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "newclonePOButton", "inspectionControl" ];
+    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "newclonePOButton",
+      "inspectionControl", "generatePDF" ];
     const initialFilteredButtons = accessableButtons.filter((ele: string) => !elementsList.includes(ele));
     const restFilteredButtons = accessableButtons.filter((ownerOrEmail));
     initialButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(0, 2) : initialFilteredButtons;
     restButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(2) : [];
     restButtons = [...restButtons, ...restFilteredButtons];
   }
-
 
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
@@ -455,6 +459,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       )}
       {buttons.includes("pdf") &&
       <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} isPO={isPO} />}
+      {buttons.includes("generatePDF") && (
+        <GenerateHtmlPreview
+          id={documentRevision.id}
+          renderHTMLDefined={documentRevision.formDocument?.renderHTMLDefined}
+          showDownloadButton={false}
+        />
+      )}
       {buttons.includes("changeowner") && (
         <OwnerChangerContainer
           requestId={documentRevision.id}
