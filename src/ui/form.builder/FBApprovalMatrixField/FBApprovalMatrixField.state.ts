@@ -5,6 +5,13 @@ import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatri
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
+type DataKey = "roles" | "matrix";
+
+type DataType<T extends DataKey> =
+    T extends "roles" ? FBApprovalRole :
+      T extends "matrix" ? FBApprovalMatrixItem :
+        never;
+
 class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, null> {
   @observable public mode: FBApprovalMatrixFieldMode = "none";
   public url = FBEndpoint.ApprovalMatrix;
@@ -22,19 +29,27 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     this.data = formValue;
   }
 
-  public getCurrentData = (type) => {
-    let updatedData = [];
+  public getCurrentData = <T extends DataKey>(type: T): DataType<T>[] => {
+    if (!this.data) {
+      return [];
+    }
     switch (type) {
       case "roles":
-        updatedData = isEmpty(this.data?.approvalRoles) ? this.data?.[FBDAMFields.DAR] : this.data?.approvalRoles;
-        break;
+        return (
+          this.data.approvalRoles
+          ?? this.data[FBDAMFields.DAR]
+          ?? []
+        ) as DataType<T>[];
       case "matrix":
-        updatedData = isEmpty(this.data?.approvalMatrix) ? this.data?.[FBDAMFields.DAM] : this.data?.approvalMatrix;
-        break;
+        return (
+          this.data.approvalMatrix
+          ?? this.data[FBDAMFields.DAM].approvalMatrix
+          ?? this.data[FBDAMFields.DAM]
+          ?? []
+        ) as DataType<T>[];
       default:
-        break;
+        return [];
     }
-    return updatedData || [];
   };
 
   @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
