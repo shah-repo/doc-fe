@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -25,6 +25,7 @@ import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
@@ -115,6 +116,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
+  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
@@ -203,7 +205,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   React.useEffect(() => {
     // Autosave when record is updated
-    if (isNewVersion && isRecord) {
+    if (isNewVersion && (isRecord || (isPO && !hasPOAdminTag)))  {
       onFormClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
