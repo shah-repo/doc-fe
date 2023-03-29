@@ -112,6 +112,7 @@ class FBEditorState {
     "select",
     "radiogroup",
     "checkboxgroup",
+    "texteditor",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure", "lhrstep"];
