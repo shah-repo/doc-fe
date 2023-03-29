@@ -1,20 +1,15 @@
 import {
   Box,
   Button,
-  Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
+  Checkbox, Divider,
   FormControl,
   FormControlLabel,
-  Grid, IconButton, Radio,
+  Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { ReactComponent as NewTabIcon } from "../../../../../assets/images/new_tab.svg";
+
 
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -37,11 +32,12 @@ import { Link } from "react-router-dom";
 import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import Text from "../../../../components/Text";
-import { documentPreviewPath, documentVersionPath } from "../../../../document.revision/utils/paths";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useDialog from "../../../../hooks/useDialog";
 import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
 import useStyles from "./RelatedPart.styles";
 import RelatedPartsState from "./RelatedParts.state";
+import RelatedPartsQuickViewDialog from "./relatedPartsQuickViewDialog";
 import RelatedPartsTableHeader from "./RelatedPartsTableHeader";
 
 
@@ -411,11 +407,9 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const titleCellRef = useRef<HTMLSpanElement>(null);
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLSpanElement;
 
-  // Open Modal on-eye-icon click
-
   const relatedSubPartDialog = useDialog();
-  // const dispatch = useDispatch();
 
+  // Open Modal on-eye-icon click
   const openDialog = () => {
     relatedSubPartDialog.open();
   };
@@ -425,19 +419,13 @@ const RelatedPartViewRow: React.FunctionComponent<{
     relatedSubPartDialog.close();
   };
 
-  //  const handleOpenNewTab = () => {
-  //   window.open(changeRequestPreviewPath(changeRequestId));
-  // };
-
   const handleOpenNewTab = () => {
-    // viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-    window.open(documentPreviewPath(listItem.documentRevisionId, listItem.documentId));
-
+    viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
   };
 
-
-  // const changeRequestDetails = useSelector((state: ApplicationState) =>
-  //   changeRequestsSelectors.getChangeRequest(state, listItem.documentRevisionId));
+  const docIdTitle = () =>
+    <span>{listItem.rootDocId.slice(0, lastIndexOfDash)} -
+      <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b></span>;
 
   return (
     <div key={listItem.documentRevisionId}
@@ -456,7 +444,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             event.stopPropagation();
           }}
         >
-          <span>  {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b> </span>
+          {docIdTitle()}
         </Link>
       </div>
       <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
@@ -540,45 +528,17 @@ const RelatedPartViewRow: React.FunctionComponent<{
         </FBTooltip>
         {
           relatedSubPartDialog.isOpen &&
-                <Dialog
-                  disableBackdropClick={true}
-                  disableEnforceFocus
-                  classes={{
-                    root: classes.root,
-                    paper: classes.paper,
-                  }}
-                  scroll="paper"
-                  disableEscapeKeyDown={true}
-                  maxWidth={false}
-                  open={relatedSubPartDialog.isOpen}
-                  onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-                  id="ApprovalRequest-dialog"
-                >
-                  <DialogTitle style={{ display: "flex", justifyContent: "space-between" }} disableTypography>
-                    <Typography style={{ display: "flex" }}>
-                      <Text translation="approvalRequest.dialog.title" />
-                    </Typography>
-                    <div style={{ display: "flex" }}>
-                      <IconButton
-                        className={classes.close}
-                        size="small"
-                        onClick={handleOpenNewTab}
-                      >
-                        <NewTabIcon />
-                      </IconButton>
-                      <IconButton
-                        className={classes.close}
-                        size="small"
-                        onClick={closeDialog}
-                      >
-                        <CloseIcon />
-                      </IconButton></div>
-                  </DialogTitle>
-                  <DialogContent dividers
-                  >
-                    <div>nITIN </div>
-                  </DialogContent>
-                </Dialog>
+              <RelatedPartsQuickViewDialog
+                documentId = {listItem.documentId}
+                documentRevisionId = {listItem.documentRevisionId}
+                {
+                  ... {
+                    relatedSubPartDialog,
+                    closeDialog,
+                    handleOpenNewTab,
+                  }
+                }
+              />
         }
       </Box>
     </div>

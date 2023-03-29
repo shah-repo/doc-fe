@@ -260,7 +260,6 @@ export default makeStyles((theme) =>
       "color": "inherit",
       "&:hover": {
         textDecoration: "underline",
-        fontWeight: 600,
       },
     },
     root: {
