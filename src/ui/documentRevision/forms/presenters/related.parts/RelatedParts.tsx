@@ -12,7 +12,7 @@ import {
 
 
 import cx from "classnames";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton, FBTooltip } from "../../../../form.builder";
@@ -428,69 +428,70 @@ const RelatedPartViewRow: React.FunctionComponent<{
       <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b></span>;
 
   return (
-    <div key={listItem.documentRevisionId}
-      onClick={() => editRelatedPart(listItem)}
-      className={cx(classes.itemRow, {
-        [classes.voidedBackground]: isVoided,
-      })}
-      data-cy="related-parts-view-row"
-    >
-      <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
-        <Link
-          to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
-          target="_blank"
-          className={classes.link}
-          onClick={(event) => {
-            event.stopPropagation();
-          }}
-        >
-          {docIdTitle()}
-        </Link>
-      </div>
-      <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
-        <Tooltip title={
-          <span>
-            {isVoided ? listItem.name :
-              <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
-          </span>
-        }
-        disableHoverListener={!(scrollHeight > clientHeight)}
-        placement="bottom"
-        classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
-        arrow >
-          <span ref={titleCellRef} className={classes.relatedPartViewRowTitleCell}>
-            {isVoided ? listItem.name :
-              <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
-          </span>
-        </Tooltip>
-      </div>
-      <div className={classes.tableCellThree} data-cy="obsolete-checkbox">
-        { (listItem.version && listItem.version > 1) ?
-          <>
-            {
-              isStatusObsolete ?
-                <span className={classes.OBS}>OBS</span>
-                :
-                <Checkbox
-                  checked = {isVoided || isRevChangeTypeObs}
-                  disabled={relatedPartsState.viewOnlyMode || isReleased}
-                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    e.stopPropagation();
-                    openConfirmDialog();
-                  }}
+    <Fragment key={listItem.documentRevisionId}>
+      <div
+        onClick={() => editRelatedPart(listItem)}
+        className={cx(classes.itemRow, {
+          [classes.voidedBackground]: isVoided,
+        })}
+        data-cy="related-parts-view-row"
+      >
+        <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
+          <Link
+            to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
+            target="_blank"
+            className={classes.link}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            {docIdTitle()}
+          </Link>
+        </div>
+        <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
+          <Tooltip title={
+            <span>
+              {isVoided ? listItem.name :
+                <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
+            </span>
+          }
+          disableHoverListener={!(scrollHeight > clientHeight)}
+          placement="bottom"
+          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          arrow >
+            <span ref={titleCellRef} className={classes.relatedPartViewRowTitleCell}>
+              {isVoided ? listItem.name :
+                <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
+            </span>
+          </Tooltip>
+        </div>
+        <div className={classes.tableCellThree} data-cy="obsolete-checkbox">
+          { (listItem.version && listItem.version > 1) ?
+            <>
+              {
+                isStatusObsolete ?
+                  <span className={classes.OBS}>OBS</span>
+                  :
+                  <Checkbox
+                    checked = {isVoided || isRevChangeTypeObs}
+                    disabled={relatedPartsState.viewOnlyMode || isReleased}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => {
+                      e.stopPropagation();
+                      openConfirmDialog();
+                    }}
+                  />
+              }
+              {confirmationDialog.isOpen && (
+                <AlertDialog
+                  dialog={confirmationDialog}
+                  confirmAction={confirmAction}
+                  cancelAction={cancelAction}
+                  message={isRevChangeTypeObs ? "relatedParts.void.bringBack" : "relatedParts.void.alert"}
                 />
-            }
-            {confirmationDialog.isOpen && (
-              <AlertDialog
-                dialog={confirmationDialog}
-                confirmAction={confirmAction}
-                cancelAction={cancelAction}
-                message={isRevChangeTypeObs ? "relatedParts.void.bringBack" : "relatedParts.void.alert"}
-              />
-            )}
-          </>
-          :
-          !isVoided &&
+              )}
+            </>
+            :
+            !isVoided &&
           <FBTooltip title="relatedParts.checkbox.hover.msg"
             placement="top" arrow
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
@@ -504,44 +505,41 @@ const RelatedPartViewRow: React.FunctionComponent<{
               />
             </Box>
           </FBTooltip>
-        }
-      </div>
-      <Box
-        className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon"
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
-      >
-        <FBTooltip title="relatedParts.created.modal.quick.view" placement="top" arrow
-          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          }
+        </div>
+        <Box
+          className={cx(classes.tableCellFour, classes.relatedPartEyeRowCell)} data-cy="view-icon"
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
         >
-          <FontAwesomeIcon
-            icon={isHover ? solid("eye") : regular("eye") }
-            className={cx(classes.viewIcon, {
-              [classes.viewIconHover]: isHover,
-            })}
-            onClick={(e: React.MouseEvent<SVGElement>) => {
-              e.stopPropagation();
-              openDialog();
-              // viewRelatedPart(listItem.documentRevisionId, listItem.documentId);
-            } }
-          />
-        </FBTooltip>
-        {
-          relatedSubPartDialog.isOpen &&
-              <RelatedPartsQuickViewDialog
-                documentId = {listItem.documentId}
-                documentRevisionId = {listItem.documentRevisionId}
-                {
-                  ... {
-                    relatedSubPartDialog,
-                    closeDialog,
-                    handleOpenNewTab,
-                  }
-                }
-              />
-        }
-      </Box>
-    </div>
+          <FBTooltip title="relatedParts.created.modal.quick.view" placement="top" arrow
+            classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          >
+            <FontAwesomeIcon
+              icon={isHover ? solid("eye") : regular("eye") }
+              className={cx(classes.viewIcon, {
+                [classes.viewIconHover]: isHover,
+              })}
+              onClick={(e: React.MouseEvent<SVGElement>) => {
+                e.stopPropagation();
+                openDialog();
+              }}
+            />
+          </FBTooltip>
+        </Box>
+      </div>
+      {relatedSubPartDialog.isOpen && (
+        <RelatedPartsQuickViewDialog
+          documentId={listItem.documentId}
+          documentRevisionId={listItem.documentRevisionId}
+          {...{
+            relatedSubPartDialog,
+            closeDialog,
+            handleOpenNewTab,
+          }}
+        />
+      )}
+    </Fragment>
   );
 };
 
