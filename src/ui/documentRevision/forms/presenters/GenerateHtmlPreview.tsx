@@ -1,3 +1,5 @@
+import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, IconButton } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import * as React from "react";
@@ -6,7 +8,6 @@ import { useSelector } from "react-redux";
 import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import { ReactComponent as ViewPDFIcon } from "../../../../assets/images/view_pdf.svg";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -113,7 +114,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
       </Dialog>}
       <StyledMenuListItem button alignItems="flex-start" onClick={handleClick}>
         <StyledMenuListIcon>
-          <ViewPDFIcon />
+          <FontAwesomeIcon icon={regular("file-lines")} className={classes.icon}/>
         </StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="downloadHtml"
