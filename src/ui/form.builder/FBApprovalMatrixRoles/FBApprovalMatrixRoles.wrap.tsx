@@ -19,7 +19,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     onClick = () => {
       dialogState?.config({
         open: true,
-        title: "Add Role",
+        title: "form.build.approvalMatrix.addRole",
         content: <FBForm schema={FBData.approvalMatrixRoleSchema} />,
         actions: <FBApprovalMatrixRolesActions />,
       });
