@@ -508,6 +508,7 @@
   "documentRevision.clone.eb.title": "Link to Previous Build?",
   "documentRevision.revise.PO": "Revise PO",
   "documentRevision.update.PO": "Update PO",
+  "documentRevision.update.undo.changes": "Undo Changes",
   "documentRevision.po.reopen": "has been reopened",
   "documentRevision.revise.RC": "Update Record",
   "documentRevision.revise.SUP": "Update Record",

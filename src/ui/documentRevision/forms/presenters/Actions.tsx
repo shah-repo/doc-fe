@@ -4,6 +4,7 @@ import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from "lodash"
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
@@ -21,10 +22,11 @@ import ClonePOButton from "../../../components/forms/ClonePOButton";
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { documentVersionPath } from "../../../document.revision/utils/paths";
 import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
-import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
+import { useApproveAndRelease, useUndoPOChanges } from "../../../hooks/docCustomization/useCustomization";
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
@@ -62,6 +64,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     mode,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
@@ -116,7 +119,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
-  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);
+  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);  // Remove at last ASYNC_TASKS_UI
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
@@ -186,6 +189,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", undefined);
     }
   }
+  const {
+    label: undoChangesLabel,
+  } = useUndoPOChanges(documentRevision.document?.documentType?.id);
+
+  const onUndoChangesClick = () => {
+    history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+  };
   const onFormClick = () => {
     if (redlineActive) {
       formik.setFieldValue("redline", true);
@@ -413,6 +423,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           </>
         )}
       </Observer>
+      <>
+        {isPO && hasPOAdminTag && undoChangesLabel && values.status === DocumentRevisionStatus.Released
+         && <StyledSubmitButton
+           showNewButton={true}
+           asyncState={asyncState}
+           label={undoChangesLabel ?? ""}
+           onClick={onUndoChangesClick}
+           data-cy={"undo-changes"}
+         />}
+      </>
       {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
