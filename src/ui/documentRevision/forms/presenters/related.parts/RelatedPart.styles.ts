@@ -305,6 +305,15 @@ export default makeStyles((theme) =>
       fontWeight: 600,
       zIndex: 1,
     },
+    dialogTitleText: {
+      display: "flex",
+      justifyContent: "space-between",
+      color: Colors.almost_black,
+    },
+    dialogDiv: {
+      display: "flex",
+      fontWeight: 600,
+    },
   })
 );
 

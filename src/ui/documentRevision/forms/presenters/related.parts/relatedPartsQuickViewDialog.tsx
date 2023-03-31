@@ -83,11 +83,11 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
       id="related-subpart-dialog"
     >
-      <DialogTitle style={{ display: "flex", justifyContent: "space-between" }} disableTypography>
-        <Typography style={{ display: "flex" }}>
+      <DialogTitle className={classes.dialogTitleText} disableTypography>
+        <Typography className={classes.dialogDiv}>
           <Text translation="relatedSubPart.dialog.title" />
         </Typography>
-        <div style={{ display: "flex" }}>
+        <div className={classes.dialogDiv}>
           <IconButton
             className={classes.close}
             size="small"
