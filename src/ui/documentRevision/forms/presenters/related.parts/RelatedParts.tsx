@@ -409,7 +409,6 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
   const relatedSubPartDialog = useDialog();
 
-  // Open Modal on-eye-icon click
   const openDialog = () => {
     relatedSubPartDialog.open();
   };
@@ -427,7 +426,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
     <span>{listItem.rootDocId.slice(0, lastIndexOfDash)} -
       <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b></span>;
 
-  return ( 
+  return (
     <>
       <div
         onClick={() => editRelatedPart(listItem)}
