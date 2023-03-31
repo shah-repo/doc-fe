@@ -7,12 +7,12 @@ import {
   Grid, Radio,
   RadioGroup, TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 
 import cx from "classnames";
-import React, { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton, FBTooltip } from "../../../../form.builder";
@@ -427,8 +427,8 @@ const RelatedPartViewRow: React.FunctionComponent<{
     <span>{listItem.rootDocId.slice(0, lastIndexOfDash)} -
       <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b></span>;
 
-  return (
-    <Fragment key={listItem.documentRevisionId}>
+  return ( 
+    <>
       <div
         onClick={() => editRelatedPart(listItem)}
         className={cx(classes.itemRow, {
@@ -539,7 +539,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           }}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 

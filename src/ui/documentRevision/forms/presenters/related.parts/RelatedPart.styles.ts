@@ -272,8 +272,8 @@ export default makeStyles((theme) =>
       minHeight: "80vh",
     },
     close: {
-      height: "24px",
-      width: "24px",
+      height: 24,
+      width: 24,
       backgroundColor: Colors.athens_gray,
       borderRadius: "6px",
       margin: theme.spacing(0, 1.25),
