@@ -129,7 +129,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     }
     if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
       const approvalRoles = get(formInput, FBDAMFields.DAR);
-      const approvalMatrix = map(get(formInput, FBDAMFields.DAM), (am) => {
+      const rawApprovalMatrix = get(formInput, FBDAMFields.DAM);
+      const approvalMatrix = map(rawApprovalMatrix.approvalMatrix ?? rawApprovalMatrix, (am) => {
         map(new Array(approvalRoles.length), (_, i) => {
           if (isEmpty(am.approvalRoles.stage1)) {
             am.approvalRoles.stage1 = [am.approvalRoles.stage1?.[i] || false];
