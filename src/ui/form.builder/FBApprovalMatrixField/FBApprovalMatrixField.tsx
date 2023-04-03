@@ -1,5 +1,5 @@
 import React from "react";
-import { FBApprovalMatrix, FBApprovalMatrixFieldProps, FBInput, FBProvider } from "..";
+import { FBApprovalMatrixNew, FBApprovalMatrixFieldProps, FBInput, FBProvider } from "..";
 import { withFBApprovalMatrixField } from "./FBApprovalMatrixField.wrap";
 
 const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps> = ({
@@ -13,7 +13,7 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps>
 }) =>  (
   <FBProvider {...{ approvalMatrixFieldState }}>
     <FBInput {...{ name, disabled, autosave }} type="approvalMatrix">
-      <FBApprovalMatrix {...{ disabled, handleAdd, name, mode, workspaceMode }} />
+      <FBApprovalMatrixNew {...{ disabled, handleAdd, name, mode, workspaceMode }} />
     </FBInput>
   </FBProvider>
 );
