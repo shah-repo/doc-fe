@@ -4,6 +4,7 @@ import { FBApprovalMatrixTable, FBButton, FBSubmitButton } from "..";
 import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBApprovalMatrix } from "./FBApprovalMatrix.wrap";
 import { FBApprovalMatrixProps } from "./FBApprovalMatrix.types";
+import FBApprovalMatrixGrid from "./components/Grid";
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = ({
   handleAdd,
@@ -14,6 +15,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = ({
   mode,
 }) => (
   <>
+    <FBApprovalMatrixGrid />
     <FBApprovalMatrixTable {...{ name, mode }} />
     <Box mt={2}>
       {mode === "add" && (
