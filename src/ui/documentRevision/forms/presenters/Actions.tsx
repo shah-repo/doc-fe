@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -25,6 +25,7 @@ import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
@@ -216,6 +217,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
+  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
 
   if (
     !isRecord ||
@@ -283,9 +285,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     accessableButtons.push("exportButton");
   }
   const initialButtons =
-    accessableButtons.length >= 1
-      ? accessableButtons.slice(0, 1)
-      : accessableButtons;
+  accessableButtons.length >= 1
+    ? accessableButtons.slice(0, 1)
+    : accessableButtons;
   const restButtons =
     accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
 
@@ -389,6 +391,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <>
         {isPO && documentRevision.poStatus && (
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+        {isPO && isStatusReleased && isUserAdminEnforce && (
+          <StyledSubmitButton
+            showNewButton
+            asyncState={asyncState}
+            label="Undo Changes"
+            // onClick={onFormClick}
+            id="DocumentRevisionForm-undoChanges"
+            data-cy={"DocumentRevisionForm-undoChanges"}
+          />
         )}
       </>
       <Observer>

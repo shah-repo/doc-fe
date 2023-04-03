@@ -454,6 +454,7 @@
   "common.collapse.all": "Collapse All",
   "common.jump.to": "Jump To",
   "common.created.on": "Created on",
+  "common.yes.proceed": "Yes, Proceed",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1426,5 +1427,6 @@
   "approvalRequest.status.CLOSED": "You successfully closed an AR!",
   "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed.",
   "approvalRequest.status.IN_REVIEW": "You successfully approved a document",
-  "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers"
+  "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers",
+  "documentRevision.po.notification.alert": "Adding a line item will create a new revision and new approvals will be required.\nWould you like to proceed?"
 }
