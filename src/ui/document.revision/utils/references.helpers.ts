@@ -72,11 +72,10 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
   {
     const { status } = docRev;
     const { id } = docRev.document;
+    const revisionIsObsolete: boolean = isDocumentRevisionObsolete(status) || isDocumentRevisionDeprecated(status);
 
-    if (!isDocumentRevisionObsolete(status) && !isDocumentRevisionDeprecated(status)) {
-      if (!acc[id] || isDocumentRevisionReleased(status)) {
-        acc[id] = docRev;
-      }
+    if ((!acc[id] || isDocumentRevisionReleased(status)) && !revisionIsObsolete) {
+      acc[id] = docRev;
     }
 
     return acc;
