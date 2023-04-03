@@ -1,22 +1,9 @@
-import {
-  Box,
-  Button,
-  Checkbox, Divider,
-  FormControl,
-  FormControlLabel,
-  Grid, Radio,
-  RadioGroup, TextField,
-  Tooltip,
-  Typography
-} from "@material-ui/core";
-
-
+import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Tooltip, Typography } from "@material-ui/core";
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton, FBTooltip } from "../../../../form.builder";
-
 
 import { regular, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -413,9 +400,17 @@ const RelatedPartViewRow: React.FunctionComponent<{
     relatedSubPartDialog.open();
   };
 
-  const closeDialog = (e) => {
-    e.stopPropagation();
+  const closeDialog = () => {
     relatedSubPartDialog.close();
+  };
+
+  const openDialogHandler = (e: React.MouseEvent<HTMLElement> ) => {
+    e.stopPropagation();
+    openConfirmDialog();
+  };
+
+  const linkHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
   };
 
   const handleOpenNewTab = () => {
@@ -440,9 +435,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
             target="_blank"
             className={classes.link}
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
+            onClick={linkHandler}
           >
             {docIdTitle()}
           </Link>
@@ -454,7 +447,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                 <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
             </span>
           }
-          disableHoverListener={!(scrollHeight > clientHeight)}
+          disableHoverListener={scrollHeight <= clientHeight}
           placement="bottom"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           arrow >
@@ -474,10 +467,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                   <Checkbox
                     checked = {isVoided || isRevChangeTypeObs}
                     disabled={relatedPartsState.viewOnlyMode || isReleased}
-                    onClick={(e: React.MouseEvent<HTMLElement>) => {
-                      e.stopPropagation();
-                      openConfirmDialog();
-                    }}
+                    onClick={openDialogHandler}
                   />
               }
               {confirmationDialog.isOpen && (

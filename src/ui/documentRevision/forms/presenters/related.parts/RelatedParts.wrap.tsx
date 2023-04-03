@@ -227,10 +227,16 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     }
   };
 
+  const openNewTab = (urlPath) => {
+    const link = document.createElement("a");
+    link.href = urlPath;
+    link.target = "_blank";
+    link.click();
+  };
 
   const viewRelatedPart = (docRevId: string, documentId: string) => {
     const urlPath = documentPreviewPath(docRevId, documentId);
-    window.open(urlPath);
+    openNewTab(urlPath);
   };
 
 

@@ -16,7 +16,7 @@ import useStyles from "./RelatedPart.styles";
 interface Props {
   documentId: string;
   relatedSubPartDialog: DialogHandler;
-  closeDialog: (e) => void;
+  closeDialog: () => void;
   handleOpenNewTab: () => void;
   documentRevisionId: string;
 }
@@ -106,7 +106,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
       <DialogContent dividers>
         {isLoading && <Loader />}
         {!isLoading && documentRevision &&
-            <DocumentRevisionSummary {...{ documentRevision, hideSideBar: true, canChangeOwnerShip: false }}/> }
+            <DocumentRevisionSummary {...{ documentRevision, isSideBarHidden: true, canChangeOwnerShip: false }}/> }
       </DialogContent>
     </Dialog>
   );
