@@ -7,6 +7,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -18,6 +19,7 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType, DocumentCloneTypeOptions } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -128,6 +130,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
   const isDCO = (documentRevision?.document?.documentType?.documentTypeName === "Document Change Order");
+  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -311,7 +314,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
-          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
+          {!isDCO && !isPO && !hasPOAdminTag
+            && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange
                 isDisabled={isDisabledInput}
@@ -326,7 +330,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 }}
               />
             </Grid>
-          )}
+            )}
           {isPart && documentRevision?.parentParts && (
             <Grid item xs={12}>
               <BuildsContainer

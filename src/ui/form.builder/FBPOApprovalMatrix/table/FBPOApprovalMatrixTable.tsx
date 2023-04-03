@@ -86,7 +86,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
             >
               <StyledTableCell>{row.name}</StyledTableCell>
               <StyledTableCell>{row.limit}</StyledTableCell>
-              <StyledTableCell>{row.threshold}</StyledTableCell>
+              <StyledTableCell>{row.threshold ?? 0}</StyledTableCell>
               <FBMapWrapper<number[]> collection={FBPOApprovalMatrixState.stages}>
                 {(signatureStage: number, index) => (
                   <StyledTableCell key={`fb-poam-signature-${row.id}-${index}`}>
