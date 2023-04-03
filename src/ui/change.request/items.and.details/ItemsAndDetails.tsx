@@ -19,7 +19,7 @@ const Loader = () => {
 
   return (
     <div
-      data-cy="ar.items.loader"
+      data-cy="ar-items-loader"
       className={classes.loader}
     >
       <Text translation="common.loading" />
