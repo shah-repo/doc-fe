@@ -26,7 +26,7 @@ const Loader = () => {
 
   return (
     <div
-      data-cy="ar.items.loader"
+      data-cy="ar-itemsloader"
       className={classes.loader}
     >
       <Text translation="common.loading" />
@@ -49,10 +49,10 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
 
   const loadRelatedSubPartDocRevAction = useActionCreator(relatedPartsActions.getRelatedSubPartDocRev);
   const loadRelatedSubPartDocRevAsync = useAsync({
-    onSuccess: ({ documentRevision }: any) => {
-      if (documentRevision) {
+    onSuccess: (data?: { documentRevision: DocumentRevision }) => {
+      if (data?.documentRevision) {
         setIsLoading(false);
-        setDocumentRevision(documentRevision);
+        setDocumentRevision(data?.documentRevision);
       }
     },
   });

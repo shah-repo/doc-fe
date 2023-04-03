@@ -53,7 +53,8 @@ const voidRelatedPart =
   });
 
 const getRelatedSubPartDocRev =
-  (documentRevisionId: string, async) => apiAction({
+  (documentRevisionId: string, async: { successHandler:
+  { callback: (arg0: { documentRevision: DocumentRevision }) => void }; }) => apiAction({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${documentRevisionId}`,
     method: "get",
     onSuccess: (documentRevision: DocumentRevision, dispatch) => {

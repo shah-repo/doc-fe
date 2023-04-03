@@ -404,9 +404,14 @@ const RelatedPartViewRow: React.FunctionComponent<{
     relatedSubPartDialog.close();
   };
 
-  const openDialogHandler = (e: React.MouseEvent<HTMLElement> ) => {
+  const openConfirmDialogHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     openConfirmDialog();
+  };
+
+  const openDialogHandler = (e: React.MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    openDialog();
   };
 
   const linkHandler = (e: React.MouseEvent<HTMLElement>) => {
@@ -467,7 +472,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                   <Checkbox
                     checked = {isVoided || isRevChangeTypeObs}
                     disabled={relatedPartsState.viewOnlyMode || isReleased}
-                    onClick={openDialogHandler}
+                    onClick={openConfirmDialogHandler}
                   />
               }
               {confirmationDialog.isOpen && (
@@ -509,10 +514,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
               className={cx(classes.viewIcon, {
                 [classes.viewIconHover]: isHover,
               })}
-              onClick={(e: React.MouseEvent<SVGElement>) => {
-                e.stopPropagation();
-                openDialog();
-              }}
+              onClick={openDialogHandler}
             />
           </FBTooltip>
         </Box>
