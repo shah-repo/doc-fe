@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { DialogHandler } from "../../../../hooks/useDialog";
 
 import CloseIcon from "@material-ui/icons/Close";
 import { ReactComponent as NewTabIcon } from "../../../../../assets/images/new_tab.svg";
@@ -15,9 +14,9 @@ import useStyles from "./RelatedPart.styles";
 
 interface Props {
   documentId: string;
-  relatedSubPartDialog: DialogHandler;
-  closeDialog: () => void;
-  handleOpenNewTab: () => void;
+  isOpen: boolean;
+  onDialogClose: () => void;
+  onNewTabOpen: () => void;
   documentRevisionId: string;
 }
 
@@ -36,9 +35,9 @@ const Loader = () => {
 
 const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
   documentId,
-  relatedSubPartDialog,
-  closeDialog,
-  handleOpenNewTab,
+  isOpen,
+  onDialogClose,
+  onNewTabOpen,
   documentRevisionId,
 }) => {
 
@@ -79,7 +78,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
       scroll="paper"
       disableEscapeKeyDown={false}
       maxWidth={false}
-      open={relatedSubPartDialog.isOpen}
+      open={isOpen}
       id="related-subpart-dialog"
     >
       <DialogTitle className={classes.dialogTitleText} disableTypography>
@@ -90,14 +89,14 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
           <IconButton
             className={classes.close}
             size="small"
-            onClick={handleOpenNewTab}
+            onClick={onNewTabOpen}
           >
             <NewTabIcon />
           </IconButton>
           <IconButton
             className={classes.close}
             size="small"
-            onClick={closeDialog}
+            onClick={onDialogClose}
           >
             <CloseIcon />
           </IconButton></div>

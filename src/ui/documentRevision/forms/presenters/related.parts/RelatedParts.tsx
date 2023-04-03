@@ -392,10 +392,6 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
   const relatedSubPartDialog = useDialog();
 
-  const closeDialog = () => {
-    relatedSubPartDialog.close();
-  };
-
   const openConfirmDialogHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     confirmationDialog.open();
@@ -516,11 +512,9 @@ const RelatedPartViewRow: React.FunctionComponent<{
         <RelatedPartsQuickViewDialog
           documentId={listItem.documentId}
           documentRevisionId={listItem.documentRevisionId}
-          {...{
-            relatedSubPartDialog,
-            closeDialog,
-            handleOpenNewTab,
-          }}
+          onDialogClose={relatedSubPartDialog.close}
+          onNewTabOpen={handleOpenNewTab}
+          isOpen ={relatedSubPartDialog.isOpen}
         />
       )}
     </>
