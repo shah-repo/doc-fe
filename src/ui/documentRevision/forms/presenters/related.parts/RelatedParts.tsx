@@ -376,10 +376,6 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
   const confirmationDialog = useDialog();
 
-  const openConfirmDialog = () => {
-    confirmationDialog.open();
-  };
-
   const confirmAction = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     voidRelatedPart(listItem, isRevChangeTypeObs ? rootRevisionChangeType : RevisionChangeType.Obsolete);
@@ -396,22 +392,19 @@ const RelatedPartViewRow: React.FunctionComponent<{
 
   const relatedSubPartDialog = useDialog();
 
-  const openDialog = () => {
-    relatedSubPartDialog.open();
-  };
-
   const closeDialog = () => {
     relatedSubPartDialog.close();
   };
 
   const openConfirmDialogHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    openConfirmDialog();
+    confirmationDialog.open();
   };
 
   const openDialogHandler = (e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    openDialog();
+    relatedSubPartDialog.open();
+
   };
 
   const linkHandler = (e: React.MouseEvent<HTMLElement>) => {

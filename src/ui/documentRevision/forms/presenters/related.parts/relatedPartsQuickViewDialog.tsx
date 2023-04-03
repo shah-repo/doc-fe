@@ -26,7 +26,7 @@ const Loader = () => {
 
   return (
     <div
-      data-cy="ar-itemsloader"
+      data-cy="ar-items-loader"
       className={classes.loader}
     >
       <Text translation="common.loading" />
@@ -80,7 +80,6 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
       disableEscapeKeyDown={false}
       maxWidth={false}
       open={relatedSubPartDialog.isOpen}
-      onSubmit={(event: React.FormEvent) => event.stopPropagation()}
       id="related-subpart-dialog"
     >
       <DialogTitle className={classes.dialogTitleText} disableTypography>
