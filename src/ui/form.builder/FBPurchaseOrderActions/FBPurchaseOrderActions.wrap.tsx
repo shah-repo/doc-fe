@@ -1,15 +1,12 @@
 import { useFormikContext } from "formik";
-import { get, omit } from "lodash";
+import { get } from "lodash";
 import React from "react";
-import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
+import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBWorkspaceModeOptions } from "..";
 import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
-import { FBFormStateContext } from "../FBForm/FBForm.wrap";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
-// import useDialog from "../../hooks/useDialog";
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
@@ -23,7 +20,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     ...props
   }: T) => {
 
-    const { purchaseOrderState, dialogState, formState } = FB.useStores();
+    const { purchaseOrderState, dialogState, formState, workspaceState } = FB.useStores();
     const { _formState } = SM.useStores();
 
     const formik = useFormikContext();
@@ -37,7 +34,8 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
 
       // replace 10000 with upper threshold value of the approver level
-      if (isUserAdminEnforce && Number(allItems?.totalAmount) > 10000) {
+      if (isUserAdminEnforce && Number(allItems?.totalAmount) > 10000
+      && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
         return dialog?.open();
       }
       dialogState?.closeDialog();
@@ -57,32 +55,20 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       dialog?.close();
     };
 
-    function setFBValue() {
+    function setFormDocumentValue() {
       const values = get(formik, "values") as DocumentRevision;
       const updatedMode = _formState?.mode;
-      switch (updatedMode) {
-        case "form":
-        case "formDesign": {
-          formik.setFieldValue("formDocument", {
-            id: values?.formDocument?.id,
-          });
-          const formStateContext = FBFormStateContext as any;
-          formik.setFieldValue("formInput",
-            omit(formStateContext?._currentValue,
-              [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-                "partType", "childForRevise"]));
-          break;
-        }
-        default:
-          formik.setFieldValue("formTemplate", undefined);
-          formik.setFieldValue("formDocument", undefined);
+      if (updatedMode === FBWorkspaceModeOptions.FORM) {
+        formik.setFieldValue("formDocument", {
+          id: values?.formDocument?.id,
+        });
       }
     }
 
     onAlertNotificationConfirm = () => {
       dialog?.close();
       dialogState?.closeDialog();
-      setFBValue();
+      setFormDocumentValue();
       formik.submitForm();
     };
 
