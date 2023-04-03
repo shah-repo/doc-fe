@@ -12,5 +12,6 @@ export type DocumentRevisionSummaryProps =
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
   isFB?: boolean;
+  isSideBarHidden?: boolean;
 };
 
