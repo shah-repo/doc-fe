@@ -1,9 +1,11 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import { isEmpty } from "lodash";
 import moment from "moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FB } from "..";
+import { SM } from "../../../App";
 import { TIME_ZONE } from "../../../common/utils/date";
-import { PO_ORDER_DATE } from "../../../state/ducks/documentRevisions/constants";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { useFormContext } from "../../components/forms/FormContext";
 import FBDatePickerState from "./FBDatePicker.state";
 import { FBDatePickerProps } from "./FBDatePicker.types";
@@ -28,6 +30,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
     const disablePastDates = editorProperties?.includes("disablePastDates") || false;
     const { id, isOutput } = workspaceState || {};
+    const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
 
     function save(date?: string) {
       if (!date) { return; }
@@ -44,17 +47,32 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       workspaceState?.saveDocRev(formState?.getValues());
     }
 
+
+    SM.reaction(
+      () => workspaceState?.changeRequest,
+      (value?: ChangeRequest) => {
+        if (value) {
+          setApprovalRequest(value);
+        }
+      }
+    );
+
     useEffect(() => {
       // Populate with a default value if there is no default value, no initialValue, the editorProperties has
       //  defaultCurrentDate & the documentRevision is an output
-      const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate && isOutput;
-      if (isUnderDefault && name !== PO_ORDER_DATE) {
+      const isUnderDefault =
+        !defaultValue &&
+        !initialValue &&
+        defaultCurrentDate &&
+        (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
+
+      if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();
         datePickerState?.setValue(nowDate);
         save(nowDate);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [approvalRequest]);
 
     onDatePickerClick = () => {
       if (formState?.isBackdropOpen) { return; }
