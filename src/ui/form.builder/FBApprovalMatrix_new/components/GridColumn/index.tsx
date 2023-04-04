@@ -1,5 +1,5 @@
 import React from "react";
-import { useIntl } from "react-intl";
+import { useTranslate } from "../../../../../common/intl";
 import {
   GridColumn as KendoColumnOrigin,
   GridColumnProps as KendoColumnProps,
@@ -9,12 +9,11 @@ import ColumnHeader from "../../../../components/common/kendo/ColumnHeader";
 const GridColumn: React.FC<KendoColumnProps> = (props) => {
   const { title, ...restProps } = props;
 
-  const intl = useIntl();
-  const translate = (key: string) => intl.formatMessage({ id: key });
+  const translate = useTranslate();
 
   return (
     <KendoColumnOrigin
-      title={title ? translate(title) : undefined}
+      title={translate(title)}
       headerCell={ColumnHeader}
       {...restProps}
     />
