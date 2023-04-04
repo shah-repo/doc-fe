@@ -1,3 +1,5 @@
-export interface GridPresenterProps {
-  data: any[];
+import { FBApprovalMatrixFieldData } from "../../../FBApprovalMatrixField/FBApprovalMatrixField.types";
+
+export interface GridProps {
+  data?: FBApprovalMatrixFieldData;
 }

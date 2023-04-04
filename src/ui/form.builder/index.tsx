@@ -29,7 +29,7 @@ export { default as FBApprovalMatrixTableStatus } from "./FBApprovalMatrixTable/
 export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.styles";
 export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 export { default as FBApprovalMatrix } from "./FBApprovalMatrix_/FBApprovalMatrix";
-export { default as FBApprovalMatrixNew } from "./FBApprovalMatrix_new/FBApprovalMatrix";
+export { default as FBApprovalMatrixNew } from "./FBApprovalMatrix_new";
 // @todo: remove section and old matrix components
 export { default as FBApprovalMatrixSection } from "./FBApprovalMatrix_/FBApprovalMatrix.section";
 export * from "./FBApprovalMatrix_/FBApprovalMatrix.types";

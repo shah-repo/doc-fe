@@ -1,7 +1,8 @@
 import React from "react";
-import { isEmpty } from "lodash";
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem } from "..";
-import { FBApprovalMatrixProps } from "./FBApprovalMatrix.types";
+import { useObserver } from "mobx-react";
+import { isEmpty, get, has } from "lodash";
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from "..";
+import { FBApprovalMatrixProps } from "./types";
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>
@@ -13,6 +14,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     name = "",
     mode = "none",
     isInputOwner,
+    data,
     ...props
   }: T) => {
     const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
@@ -53,6 +55,18 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       approvalMatrixFieldState?.setMode("none");
     };
 
+    const { formInput } = workspaceState || {};
+    const approvalRoles = get(formInput, FBDAMFields.DAR, []);
+    const formInputDAM = get(formInput, FBDAMFields.DAM, []);
+    const isDAMInNewFormat = has(formInputDAM, "approvalMatrix");
+    const approvalMatrix = isDAMInNewFormat ? formInputDAM.approvalMatrix : formInputDAM;
+
+    data = useObserver(() => ({
+      ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
+      approvalMatrix,
+      approvalRoles,
+    }));
+
     return Component({
       ...(props as T),
       handleSave,
@@ -60,6 +74,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       disabled,
       name,
       mode,
+      data,
     });
   };
 
