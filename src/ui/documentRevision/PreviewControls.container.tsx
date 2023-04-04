@@ -136,6 +136,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
 
+  const clonePODocument = () => {
+    console.log("documentRevision ::", documentRevision );
+    localStorage.setItem("prevPODoc", JSON.stringify(documentRevision?.formInput));
+    cloneDocument();
+  };
+
   const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
   const cloneOutputDocument = () => {
@@ -192,14 +198,14 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             renderAsButton ? (
               <StyledButton
                 color="primary"
-                onClick={cloneDocument}
+                onClick={clonePODocument}
                 id="PreviewControlsContainer-revise"
                 data-cy="updateRecord"
               >
                 <Text message={updateLabel} />
               </StyledButton>
             ) : (
-              <StyledMenuListItem button alignItems="flex-start" onClick={cloneDocument}>
+              <StyledMenuListItem button alignItems="flex-start" onClick={clonePODocument}>
                 <StyledMenuListIcon>
                   <WithDrawSubmissionIcon />
                 </StyledMenuListIcon>

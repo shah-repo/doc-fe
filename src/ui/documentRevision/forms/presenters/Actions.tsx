@@ -119,7 +119,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
-  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);  // Remove at last ASYNC_TASKS_UI
+  const isUserAdminEnforce = useGetHasTag(GroupTag.ASYNC_TASKS_UI);  // Remove at last PO_ADMIN
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
@@ -195,6 +195,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const onUndoChangesClick = () => {
     history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+    workspaceState?.saveDocRev({}, false, true, documentRevision);
   };
   const onFormClick = () => {
     if (redlineActive) {
@@ -215,7 +216,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   React.useEffect(() => {
     // Autosave when record is updated
-    if (isNewVersion && (isRecord || (isPO && !hasPOAdminTag)))  {
+    if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce)))  {
       onFormClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,7 +229,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
-  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
 
   if (
     !isRecord ||
@@ -403,16 +403,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         {isPO && documentRevision.poStatus && (
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
-        {isPO && isStatusReleased && isUserAdminEnforce && (
-          <StyledSubmitButton
-            showNewButton
-            asyncState={asyncState}
-            label="Undo Changes"
-            // onClick={onFormClick}
-            id="DocumentRevisionForm-undoChanges"
-            data-cy={"DocumentRevisionForm-undoChanges"}
-          />
-        )}
       </>
       <Observer>
         {() => (
@@ -435,7 +425,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         )}
       </Observer>
       <>
-        {isPO && hasPOAdminTag && undoChangesLabel && values.status === DocumentRevisionStatus.Released
+        {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased
          && <StyledSubmitButton
            showNewButton={true}
            asyncState={asyncState}

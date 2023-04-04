@@ -130,7 +130,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
   const isDCO = (documentRevision?.document?.documentType?.documentTypeName === "Document Change Order");
-  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -314,7 +314,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
-          {!isDCO && !isPO && !hasPOAdminTag
+          {!isDCO && !isPO && !isUserAdminEnforce
             && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange

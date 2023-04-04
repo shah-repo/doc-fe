@@ -43,7 +43,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
   const isVoidedAction = POStatusType.VOIDED === action;
   const isOpenedAction = POStatusType.OPENED === action;
-  const hasPOAdminTag = useGetHasTag(GroupTag.PO_ADMIN);
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -147,7 +147,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         disableRipple
         aria-label="split button"
         className={classes.buttonGroup}
-        disabled={!isOwner || !hasPOAdminTag}
+        disabled={!isOwner || !isUserAdminEnforce}
       >
         <Button
           type="submit"
