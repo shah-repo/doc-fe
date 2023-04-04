@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, get, isEmpty } from "lodash";
+import { cloneDeep, get } from "lodash";
 import React, { useCallback, useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -8,7 +8,6 @@ import { checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/check
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
-import FBStore from "../../../../ui/form.builder/FBStore/FBStore";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
   Component: React.FunctionComponent<T>,
@@ -43,10 +42,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       [FBDAMFields.DAR]: damData?.["approvalRoles"],
     }), []);
 
-    if (props.isDAM && !isEmpty(FBStore.damData?.approvalMatrix)) {
-      props.formInput = { ...props?.formInput, ...getDAMPayload(FBStore.damData) };
-    }
-
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
     const poApprovalsState = isPO ? FB.useRef(
       FBPOApprovalsState,
@@ -64,13 +59,13 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       })) : undefined;
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
+
     SM.reaction(
       () => approvalMatrixState?.data,
       (data) => {
         if (_documentRevisionFormState?.documentType?.group === FBDocTypeGroup.DAM) {
           formik.setFieldValue("formInput", getDAMPayload(data));
           _formState?.setValue("formInput", getDAMPayload(data));
-          FBStore.damData = cloneDeep(data);
           formik.submitForm();
         }
       }
