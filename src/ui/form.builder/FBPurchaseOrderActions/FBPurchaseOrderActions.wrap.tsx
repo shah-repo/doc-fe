@@ -17,6 +17,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     onAlertNotificationCancel,
     onAlertNotificationConfirm,
     dialog,
+    isEdit = false,
     ...props
   }: T) => {
 
@@ -34,7 +35,8 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
 
       // replace 10000 with upper threshold value of the approver level
-      if (isUserAdminEnforce && Number(allItems?.totalAmount) > 10000
+      if (isUserAdminEnforce &&
+        ((isEdit && Number(allItems?.totalAmount) > 10000) || !isEdit)
       && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
         return dialog?.open();
       }
@@ -50,9 +52,10 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       const values = formState?.getValues() as FBPurchaseOrderItem;
       purchaseOrderState?.removeItem(values);
       if (purchaseOrderState?.value?.items?.length && purchaseOrderState?.value?.items?.length > 0 ) {
-      purchaseOrderState?.deleteItem(purchaseOrderState?.value.items.length - 1);
+        purchaseOrderState?.deleteItem(purchaseOrderState?.value.items.length - 1);
       }
       dialog?.close();
+      dialogState?.closeDialog();
     };
 
     function setFormDocumentValue() {

@@ -50,7 +50,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
         confirmAction={onAlertNotificationConfirm}
         cancelAction={onAlertNotificationCancel}
         confirmLabel="common.yes.proceed"
-        message="documentRevision.po.notification.alert"
+        message="documentRevision.po.notification.alert.add"
         {...{ dialog }}
       />}
     </>

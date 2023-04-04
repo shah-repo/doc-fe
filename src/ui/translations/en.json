@@ -1429,5 +1429,6 @@
   "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed.",
   "approvalRequest.status.IN_REVIEW": "You successfully approved a document",
   "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers",
-  "documentRevision.po.notification.alert": "Adding a line item will create a new revision and new approvals will be required.\nWould you like to proceed?"
+  "documentRevision.po.notification.alert.add": "Adding a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?",
+  "documentRevision.po.notification.alert.remove": "Removing a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?"
 }

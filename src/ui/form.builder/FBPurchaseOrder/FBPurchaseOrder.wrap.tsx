@@ -57,7 +57,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         content: (
           <FBPurchaseOrderForm initialValues={item} />
         ),
-        actions: <FBPurchaseOrderActions />,
+        actions: <FBPurchaseOrderActions isEdit={Boolean(item)}/>,
       });
     });
 

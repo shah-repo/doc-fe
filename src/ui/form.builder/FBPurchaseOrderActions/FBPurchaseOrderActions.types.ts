@@ -10,4 +10,5 @@ export type FBPurchaseOrderActionsProps =
   dialog?: DialogHandler;
   onAlertNotificationCancel?: (e: React.MouseEvent<HTMLElement>) => void;
   onAlertNotificationConfirm?: (values?) => void;
+  isEdit?: boolean;
 };
