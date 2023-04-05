@@ -1,5 +1,6 @@
 import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import classNames from "classnames";
+import { includes } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -18,7 +19,6 @@ import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
-import { FB } from "../../../form.builder";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import useGetHasTag from "../../../hooks/useGetHasTag";
@@ -56,7 +56,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   documentTypeAcronym,
 }) => {
 
-  const { workspaceState } = FB.useStores();
   const intl = useIntl();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
@@ -184,7 +183,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     history.push(urlPath);
   };
 
-  const isUpdating = Boolean(workspaceState?.formInput);
+  const isUpdating = includes(window.location.href, "new-version");
   const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
 
   const newHeaderRenderer = () => (
