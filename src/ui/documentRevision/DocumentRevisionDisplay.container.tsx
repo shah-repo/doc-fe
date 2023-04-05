@@ -124,7 +124,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
 
   const subscribeToSocket = documentRevision &&
     <DocumentRevisionUpdatedSubscriptions documentRevision={documentRevision} />;
-
+  // Add conditions to navigate to Update container on EDIT state cases
   return (
     <AsyncGate
       asyncState={loadDocumentRevisionAsyncState}

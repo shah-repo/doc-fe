@@ -35,12 +35,14 @@ import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisi
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
+import { PreviewControlButtons } from "../../PreviewControls.container.types";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.container";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import ExportToEmail from "./export.to.email/ExportToEmail";
+import GenerateHtmlPreview from "./GenerateHtmlPreview";
 import RedlineButton from "./redline/Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
@@ -222,13 +224,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   const accessableButtons: string[] = [];
   const { status = "", version = 0 } = documentRevision || [];
   const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
+  const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
   if (
     !isRecord ||
@@ -236,7 +238,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   ) {
     if (
       isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove) {
-      accessableButtons.push("approveAndReleaseButton");
+      accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }
   if (
@@ -244,45 +246,48 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     (!isInlineApproval || revisionStage !== 1) &&
     showToOwnerOrOperator
   ) {
-    accessableButtons.push("submitApprovalButton");
+    accessableButtons.push(PreviewControlButtons.SubmitApprovalButton);
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
-    accessableButtons.push("NewCloneEB");
+    accessableButtons.push(PreviewControlButtons.NewCloneEB);
   }
   if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
-    accessableButtons.push("NewClonePO");
+    accessableButtons.push(PreviewControlButtons.NewClonePO);
+  }
+  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+    accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
   if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
-    accessableButtons.push("exportCsvButton");
+    accessableButtons.push(PreviewControlButtons.ExportCsvButton);
   }
   if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
-    accessableButtons.push("redlineButton");
+    accessableButtons.push(PreviewControlButtons.RedlineButton);
   }
   if (
     !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
     canShowCancelButton
   ) {
-    accessableButtons.push("cancelButton");
+    accessableButtons.push(PreviewControlButtons.CancelButton);
   }
   if (shouldShowUpgrade) {
-    accessableButtons.push("upgradeContainerButton");
+    accessableButtons.push(PreviewControlButtons.UpgradeContainerButton);
   }
   const docRevGroupOptions =
     documentRevision?.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision?.status);
   if (isDocumentDraft || canCreateInspection) {
-    accessableButtons.push("inspectionControl");
+    accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
   if (canChangeOwnerShip && values.id) {
-    accessableButtons.push("changeOwner");
+    accessableButtons.push(PreviewControlButtons.ChangeOwner);
   }
   if (
     !(isRecord && isInlineApproval) &&
     isUserDocumentOwner &&
     showVoidButton
   ) {
-    accessableButtons.push("voidButton");
+    accessableButtons.push(PreviewControlButtons.VoidButton);
   }
   if (
     isRecord &&
@@ -290,10 +295,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     isUserDocumentOwner &&
     showVoidButtonOnInlineRecords
   ) {
-    accessableButtons.push("voidButton");
+    accessableButtons.push(PreviewControlButtons.VoidButton);
   }
   if (isExportable) {
-    accessableButtons.push("exportButton");
+    accessableButtons.push(PreviewControlButtons.ExportButton);
   }
   const initialButtons =
   accessableButtons.length >= 1
@@ -304,14 +309,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
-      {buttons.includes("cancelButton") && (
+      {buttons.includes(PreviewControlButtons.CancelButton) && (
         <CancelButton
           {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("upgradeContainerButton") && (
+      {buttons.includes(PreviewControlButtons.UpgradeContainerButton) && (
         <UpgradeToLatestContainer
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
@@ -323,7 +328,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("approveAndReleaseButton") && (
+      {buttons.includes(PreviewControlButtons.ApproveAndReleaseButton) && (
         <Observer>
           {() => (
             <ApproveAndRelease
@@ -347,7 +352,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           )}
         </Observer>
       )}
-      {buttons.includes("submitApprovalButton") && (
+      {buttons.includes(PreviewControlButtons.SubmitApprovalButton) && (
         <SubmitForApproval
           docRevId={values.id as string}
           status={values.status}
@@ -361,34 +366,41 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           }}
         />
       )}
-      {buttons.includes("inspectionControl") && (
+      {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("redlineButton") && (
+      {buttons.includes(PreviewControlButtons.GeneratePDF) && (
+        <GenerateHtmlPreview
+          id={documentRevision.id}
+          renderHTMLDefined={isRenderHTMLDefined}
+          showDownloadButton={false}
+        />
+      )}
+      {buttons.includes(PreviewControlButtons.RedlineButton) && (
         <RedlineButton
           {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild, renderAsButton }}
         />
       )}
-      {buttons.includes("NewCloneEB") && (
+      {buttons.includes(PreviewControlButtons.NewCloneEB) && (
         <CloneEBButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("NewClonePO") && (
+      {buttons.includes(PreviewControlButtons.NewClonePO) && (
         <ClonePOButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("exportCsvButton") && (
+      {buttons.includes(PreviewControlButtons.ExportCsvButton) && (
         <ExportToCSVButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("changeOwner") && values.id && (
+      {buttons.includes(PreviewControlButtons.ChangeOwner) && values.id && (
         <OwnerChangerContainer
           requestId={values.id}
           requestType={RequestType.Document}
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("voidButton") && (
+      {buttons.includes(PreviewControlButtons.VoidButton) && (
         <VoidButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("exportButton") && (
+      {buttons.includes(PreviewControlButtons.ExportButton) && (
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
