@@ -30,7 +30,6 @@ import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
-import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import RelatedPartsWrapper from "./presenters/related.parts/RelatedParts.wrap";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
@@ -407,16 +406,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 isDisabled={isDisabledInputInPreview}
                 outputDocs={values.outputDocumentTypes as OptionType[]}
               />
-            </Grid>
-          )}
-          {values.formDocument?.renderHTMLDefined && _formState?.active && documentRevision && values.id && (
-            <Grid item xs={12}>
-              <Box textAlign="right">
-                <GenerateHtmlPreview
-                  id={values.id}
-                  renderHTMLDefined={values.formDocument?.renderHTMLDefined}
-                />
-              </Box>
             </Grid>
           )}
         </Grid>
