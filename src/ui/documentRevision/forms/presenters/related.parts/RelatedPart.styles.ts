@@ -255,6 +255,65 @@ export default makeStyles((theme) =>
     voidedBackground: {
       backgroundColor: Colors.light_red,
     },
+    link: {
+      "textDecoration": "none",
+      "color": "inherit",
+      "&:hover": {
+        textDecoration: "underline",
+      },
+    },
+    root: {
+      pointerEvents: "none",
+    },
+    paper: {
+      pointerEvents: "auto",
+      width: "80%",
+      maxWidth: "80%",
+      minHeight: "80vh",
+    },
+    close: {
+      height: 24,
+      width: 24,
+      backgroundColor: Colors.athens_gray,
+      borderRadius: "6px",
+      margin: theme.spacing(0, 1.25),
+    },
+    content: {
+      padding: 0,
+    },
+    actions: {
+      padding: 0,
+      backgroundColor: Colors.white,
+    },
+    heading: {
+      fontWeight: 600,
+      fontSize: "14px",
+      flex: 1,
+      color: Colors.almost_black,
+    },
+    loader: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: Colors.background_white,
+      opacity: 0.7,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: 600,
+      zIndex: 1,
+    },
+    dialogTitleText: {
+      display: "flex",
+      justifyContent: "space-between",
+      color: Colors.almost_black,
+    },
+    dialogDiv: {
+      display: "flex",
+      fontWeight: 600,
+    },
   })
 );
 

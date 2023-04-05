@@ -182,13 +182,14 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
+  public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean,
+    undoPO?: boolean, prevDocumentRevision?: DocumentRevision) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
-    if (this.isPreview) { return; }
-    if ((mode === "form") && !values) { return; }
-    if (!autosave && !excludeAutoSave) { return; }
-    if (!id) { return; }
+    if (this.isPreview && !undoPO) { return; }
+    if ((mode === "form") && !values && !undoPO) { return; }
+    if (!autosave && !excludeAutoSave && !undoPO) { return; }
+    if (!id && !undoPO) { return; }
     this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     let body = {};
@@ -216,6 +217,9 @@ class FBWorkspaceState extends FBSchemaState {
         return;
     }
     this.omitAutosave = true;
+    if (undoPO) {
+      body = { formInput: prevDocumentRevision?.formInput }; // Present API is failing needs to check later time
+    }
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
     return this.documentRevApi.set({

@@ -7,9 +7,11 @@ import { useIntl } from "react-intl";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
 import { ReactComponent as EmailSuccessIcon } from "../../../assets/images/email_success.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../../ui/components/Text";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import Colors from "../../layout/theme/utils/colors";
 import ApprovalsBlock from "./ApprovalsBlock";
 import useStyles from "./FBPOApprovals.styles";
@@ -52,6 +54,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
 
   const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
   const intl = useIntl();
+  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN); // change  DASHBOARD_ADMIN to Enforce_admin
+  disabled = isUserAdminEnforce && documentStatus === DocumentRevisionStatus.Released ? isUserAdminEnforce : disabled;
 
   return  (
     <FBProvider {...{ dialogState }}>

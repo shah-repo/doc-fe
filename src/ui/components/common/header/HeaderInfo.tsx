@@ -1,11 +1,13 @@
 import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import classNames from "classnames";
+import { includes } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as ArrowIcon } from "../../../../assets/images/breadcrumb_arrow.svg";
+import { GroupTag } from "../../../../state/ducks/auth/types";
 import { companySelectors } from "../../../../state/ducks/company";
 import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -19,6 +21,7 @@ import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO }
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
 import { FormHeaderStatusClassMapping } from "./Helpers";
@@ -180,6 +183,9 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     history.push(urlPath);
   };
 
+  const isUpdating = includes(window.location.href, "new-version");
+  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>
       <Grid item>
@@ -283,7 +289,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       }`}
                       label={
                         isPO && isStatusReleased
-                          ? STATUS_TYPES_LABEL.APPROVED
+                          ? isUserAdminEnforce && isUpdating ? STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED
                           : (
                             displayStatus ||
                                 STATUS_TYPES_LABEL[status] ||

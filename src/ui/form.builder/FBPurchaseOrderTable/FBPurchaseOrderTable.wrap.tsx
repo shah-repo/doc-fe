@@ -1,11 +1,16 @@
-import { cloneDeep, first, omit } from "lodash";
+import { useFormikContext } from "formik";
+import { cloneDeep, first, get, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBPurchaseOrderValue } from "..";
+import { FB, FBPurchaseOrderValue, FBWorkspaceModeOptions } from "..";
+import { SM } from "../../../App";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import useDialog from "../../hooks/useDialog";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import { usePoApprovals } from "../FBPOApprovals/hooks";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBStore from "../FBStore/FBStore";
@@ -23,21 +28,28 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleCurrencyChange,
     handleDelete,
     reCalculateValueOnBlur,
+    onAlertNotificationConfirm,
+    onAlertNotificationCancel,
     classes,
     calculation,
     loading,
     disabled,
     items,
     name,
+    dialog,
     ...props
   }: T) => {
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
+    const { _formState } = SM.useStores();
     const { document, id, isOutput } = workspaceState || {};
+    const formik = useFormikContext();
     const outputId = isOutput ? id : undefined;
     const isReceivable = checkIsDocumentReceivable(document?.document.documentType.groupOptions);
     const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
+    const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+    dialog = useDialog();
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev, 6));
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
@@ -57,8 +69,31 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
 
+    function setFormDocumentValue() {
+      const values = get(formik, "values")  as DocumentRevision;
+      const updatedMode = _formState?.mode;
+      if (updatedMode === FBWorkspaceModeOptions.FORM) {
+        formik.setFieldValue("formDocument", {
+          id: values?.formDocument?.id,
+        });
+      }
+    }
+
+    onAlertNotificationConfirm = () => {
+      dialog?.close();
+      setFormDocumentValue();
+      formik.submitForm();
+    };
+
+    onAlertNotificationCancel = () => {
+      dialog?.close();
+    };
+
     handleDelete = (index: number) => (e: any) => {
       e.stopPropagation();
+      if (isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
+        return dialog?.open();
+      }
       !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);
     };
 
@@ -146,6 +181,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleCurrencyChange,
       handleDelete,
       reCalculateValueOnBlur,
+      onAlertNotificationConfirm,
+      onAlertNotificationCancel,
       classes,
       calculation,
       loading,
@@ -153,6 +190,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       items,
       name,
       isReceivable,
+      dialog,
     });
   };
 

@@ -4,7 +4,6 @@ import { get } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
@@ -67,7 +66,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 }) => {
 
   const dispatch = useDispatch();
-  const history = useHistory();
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
 
@@ -229,12 +227,10 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     }
   };
 
-
   const viewRelatedPart = (docRevId: string, documentId: string) => {
     const urlPath = documentPreviewPath(docRevId, documentId);
-    history.push(urlPath);
+    window.open(urlPath, "_blank");
   };
-
 
   return useObserver(() => (
     <RelatedParts

@@ -3,6 +3,7 @@ import { Observer } from "mobx-react";
 import React from "react";
 import { FormattedNumber } from "react-intl";
 import { FBPurchaseOrderActionsProps, FBSubmitButton } from "..";
+import AlertDialog from "../../app/alert.dialog/AlertDialog";
 import Text from "../../components/Text";
 import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBPurchaseOrderActions } from "./FBPurchaseOrderActions.wrap";
@@ -11,7 +12,10 @@ import { withFBPurchaseOrderActions } from "./FBPurchaseOrderActions.wrap";
 const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProps> = ({
   onAddClick,
   onCancelClick,
+  onAlertNotificationCancel,
+  onAlertNotificationConfirm,
   purchaseOrderState,
+  dialog,
 }) =>
   (
     <>
@@ -41,6 +45,14 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
           onClick={onCancelClick}
         />
       </Box>
+      {dialog && onAlertNotificationConfirm &&
+      <AlertDialog
+        confirmAction={onAlertNotificationConfirm}
+        cancelAction={onAlertNotificationCancel}
+        confirmLabel="common.yes.proceed"
+        message="documentRevision.po.notification.alert.add"
+        {...{ dialog }}
+      />}
     </>
   );
 

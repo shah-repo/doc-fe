@@ -4,10 +4,11 @@ import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from "lodash"
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -21,10 +22,12 @@ import ClonePOButton from "../../../components/forms/ClonePOButton";
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { documentVersionPath } from "../../../document.revision/utils/paths";
 import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
-import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
+import { useApproveAndRelease, useUndoPOChanges } from "../../../hooks/docCustomization/useCustomization";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
@@ -63,6 +66,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     mode,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
@@ -117,6 +121,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
+  const isUserAdminEnforce = useGetHasTag(GroupTag.ASYNC_TASKS_UI);  // Remove at last PO_ADMIN
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
@@ -186,6 +191,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", undefined);
     }
   }
+  const {
+    label: undoChangesLabel,
+  } = useUndoPOChanges(documentRevision.document?.documentType?.id);
+
+  const onUndoChangesClick = () => {
+    history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+    workspaceState?.saveDocRev({}, false, true, documentRevision);
+  };
   const onFormClick = () => {
     if (redlineActive) {
       formik.setFieldValue("redline", true);
@@ -205,7 +218,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   React.useEffect(() => {
     // Autosave when record is updated
-    if (isNewVersion && isRecord) {
+    if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce)))  {
       onFormClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -288,9 +301,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     accessableButtons.push(PreviewControlButtons.ExportButton);
   }
   const initialButtons =
-    accessableButtons.length >= 1
-      ? accessableButtons.slice(0, 1)
-      : accessableButtons;
+  accessableButtons.length >= 1
+    ? accessableButtons.slice(0, 1)
+    : accessableButtons;
   const restButtons =
     accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
 
@@ -423,6 +436,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           </>
         )}
       </Observer>
+      <>
+        {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased
+         && <StyledSubmitButton
+           showNewButton={true}
+           asyncState={asyncState}
+           label={undoChangesLabel ?? ""}
+           onClick={onUndoChangesClick}
+           data-cy={"undo-changes"}
+         />}
+      </>
       {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}

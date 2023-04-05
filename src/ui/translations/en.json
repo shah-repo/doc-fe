@@ -454,6 +454,7 @@
   "common.collapse.all": "Collapse All",
   "common.jump.to": "Jump To",
   "common.created.on": "Created on",
+  "common.yes.proceed": "Yes, Proceed",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -508,6 +509,7 @@
   "documentRevision.clone.eb.title": "Link to Previous Build?",
   "documentRevision.revise.PO": "Revise PO",
   "documentRevision.update.PO": "Update PO",
+  "documentRevision.update.undo.changes": "Undo Changes",
   "documentRevision.po.reopen": "has been reopened",
   "documentRevision.revise.RC": "Update Record",
   "documentRevision.revise.SUP": "Update Record",
@@ -755,6 +757,7 @@
   "form.builder.approvalMatrix": "Approval Matrix",
   "form.builder.documentRevisions": "Document Revisions",
   "form.builder.poApprovalMatrix": "PO Approval Matrix",
+  "form.build.approvalMatrix.addRole": "Add Role",
   "form.builder.inspection.section": "Inspection Section",
   "form.builder.am.prefix": "Prefix",
   "form.builder.exit.edit.mode": "Exit edit mode",
@@ -1410,6 +1413,7 @@
   "relatedParts.created.modal.msg.part.after": "has been created",
   "relatedParts.void.alert": "Are you sure you want to void this document?",
   "relatedParts.void.bringBack": "Are you sure you want to un-void this document?",
+  "relatedSubPart.dialog.title": "Quick View",
   "releaseButton.option.expressAR": "Express AR",
   "releaseButton.option.newAR": "New AR",
   "releaseButton.option.existingAR": "Existing AR",
@@ -1426,5 +1430,7 @@
   "approvalRequest.status.CLOSED": "You successfully closed an AR!",
   "approvalRequest.status.message.CLOSED": "{crId} {title} has been closed.",
   "approvalRequest.status.IN_REVIEW": "You successfully approved a document",
-  "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers"
+  "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers",
+  "documentRevision.po.notification.alert.add": "Adding a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?",
+  "documentRevision.po.notification.alert.remove": "Removing a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?"
 }

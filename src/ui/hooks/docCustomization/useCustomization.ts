@@ -29,6 +29,8 @@ export const useReviseDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.REVISE_BTN, "documentRevision.revise");
 export const useUpdateDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.UPDATE_NEW_BTN, "documentRevision.update.PO");
+export const useUndoPOChanges = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.UNDO_BTN, "documentRevision.update.undo.changes");
 export const useRevisionSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.REVISION_CHANGE_SELECTION, "document.revision.stage");
 export const useTraining = (documentTypeId = ""): UIConfig =>

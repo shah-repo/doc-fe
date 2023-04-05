@@ -1,9 +1,11 @@
 import { Typography } from "@material-ui/core";
 import classNames from "classnames";
+import { includes } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import DocumentRevisionSidebarState from "../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
+import { GroupTag } from "../../state/ducks/auth/types";
 import { Nullable } from "../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
@@ -16,6 +18,7 @@ import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
+import useGetHasTag from "../hooks/useGetHasTag";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles.new";
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
@@ -112,6 +115,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
   }
 
+  const isUpdating = includes(window.location.href, "new-version");
+  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+
   return (
     <div
       key={documentRevision.id}
@@ -139,7 +145,8 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
             <Typography data-cy="revision-status" variant="h6" component="span" className={classes.displayStatus}>
               <CustomLabelTooltip {...{ tooltipConfig }}>
                 <>
-                  &nbsp; - <Text message={isPO && isReleased ? STATUS_TYPES_LABEL.APPROVED : displayStatus} />
+                  &nbsp; - <Text message={isPO && isReleased ? isUpdating && isUserAdminEnforce ?
+                    STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED : displayStatus} />
                 </>
               </CustomLabelTooltip>
             </Typography>
