@@ -39,6 +39,7 @@ import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import ExportToEmail from "./export.to.email/ExportToEmail";
+import GenerateHtmlPreview from "./GenerateHtmlPreview";
 import RedlineButton from "./redline/Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
@@ -210,13 +211,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   const accessableButtons: string[] = [];
   const { status = "", version = 0 } = documentRevision || [];
   const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
+  const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
   if (
     !isRecord ||
@@ -239,6 +240,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
     accessableButtons.push(PreviewControlButtons.NewClonePO);
+  }
+  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+    accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
   if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
     accessableButtons.push(PreviewControlButtons.ExportCsvButton);
@@ -351,6 +355,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision, renderAsButton }} />
+      )}
+      {buttons.includes(PreviewControlButtons.GeneratePDF) && (
+        <GenerateHtmlPreview
+          id={documentRevision.id}
+          renderHTMLDefined={isRenderHTMLDefined}
+          showDownloadButton={false}
+        />
       )}
       {buttons.includes(PreviewControlButtons.RedlineButton) && (
         <RedlineButton
