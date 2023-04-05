@@ -49,10 +49,12 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     };
 
     onAlertNotificationCancel = () => {
-      const values = formState?.getValues() as FBPurchaseOrderItem;
-      purchaseOrderState?.removeItem(values);
-      if (purchaseOrderState?.value?.items?.length && purchaseOrderState?.value?.items?.length > 0 ) {
-        purchaseOrderState?.deleteItem(purchaseOrderState?.value.items.length - 1);
+      if (!isEdit) {
+        const values = formState?.getValues() as FBPurchaseOrderItem;
+        purchaseOrderState?.removeItem(values);
+        if (purchaseOrderState?.value?.items?.length && purchaseOrderState?.value?.items?.length > 0 ) {
+          purchaseOrderState?.deleteItem(purchaseOrderState?.value.items.length - 1);
+        }
       }
       dialog?.close();
       dialogState?.closeDialog();
