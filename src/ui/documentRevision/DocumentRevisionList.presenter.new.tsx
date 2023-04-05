@@ -1,6 +1,5 @@
 import { Typography } from "@material-ui/core";
 import classNames from "classnames";
-import { includes } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -16,6 +15,7 @@ import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FB } from "../form.builder";
 import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import useGetHasTag from "../hooks/useGetHasTag";
@@ -62,7 +62,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     isRecord,
   );
   const isRecordOrPO = isRecord || isDocumentPO;
-
+  const { workspaceState } = FB.useStores();
   const { status, displayStatus } = documentRevision;
 
   const { isVisible: isStatusVisible, tooltipConfig } = useDocumentStatus(documentTypeId, status);
@@ -115,7 +115,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
   }
 
-  const isUpdating = includes(window.location.href, "new-version");
+  const isUpdating = Boolean(workspaceState?.formInput);
   const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
 
   return (
