@@ -42,6 +42,7 @@ import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectAp
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
+import { PreviewControlButtons } from "./PreviewControls.container.types";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -365,29 +366,29 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </StyledMenuListItem>
   );
 
-  const accessableButtons: string[] = [];
+  const accessableButtons: PreviewControlButtons[] = [];
   if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
-    accessableButtons.push("cloneButton");
+    accessableButtons.push(PreviewControlButtons.CloneButton);
   }
   if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate &&
    POStatusType.CLOSED !== selectedDocument.poStatus) {
-    accessableButtons.push("updateButton");
+    accessableButtons.push(PreviewControlButtons.UpdateButton);
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
-    accessableButtons.push("newcloneButton");
+    accessableButtons.push(PreviewControlButtons.NewCloneEB);
   }
 
   if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
-    accessableButtons.push("newclonePOButton");
+    accessableButtons.push(PreviewControlButtons.NewClonePO);
   }
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
-    accessableButtons.push("outputButton");
+    accessableButtons.push(PreviewControlButtons.OutputButton);
   }
   if (!isEmailSent && !hasAccess) {
-    accessableButtons.push("requestAccess");
+    accessableButtons.push(PreviewControlButtons.RequestAccess);
   }
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
-    accessableButtons.push("withdrawSubmission");
+    accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
 
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
@@ -401,37 +402,44 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
   if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
-    accessableButtons.push("generatePDF");
+    accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
   if (!(!isDocumentDraft || !canCreateInspection)) {
-    accessableButtons.push("inspectionControl");
+    accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
   if (documentRevision.pdf) {
-    accessableButtons.push("pdf");
+    accessableButtons.push(PreviewControlButtons.Pdf);
   }
   if (canChangeOwnerShip) {
-    accessableButtons.push("changeowner");
+    accessableButtons.push(PreviewControlButtons.ChangeOwner);
   }
   if (isExportable) {
-    accessableButtons.push("exportToEmail");
+    accessableButtons.push(PreviewControlButtons.ExportToEmail);
   }
 
   let initialButtons: string[] = [];
   let restButtons: string[] = [];
 
-  function ownerOrEmail(ele: string) {
-    if (["changeowner",
-      "exportToEmail",
-      "newcloneButton",
-      "newclonePOButton", "inspectionControl", "pdf", "generatePDF" ].includes(ele))
+  function ownerOrEmail(ele: PreviewControlButtons) {
+    if ([PreviewControlButtons.ChangeOwner,
+      PreviewControlButtons.ExportToEmail,
+      PreviewControlButtons.NewCloneEB,
+      PreviewControlButtons.NewClonePO,
+      PreviewControlButtons.InspectionControl,
+      PreviewControlButtons.Pdf,
+      PreviewControlButtons.GeneratePDF ].includes(ele))
     {
       return ele;
     }
   }
   if (accessableButtons.length >= 1) {
-    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "newclonePOButton",
-      "inspectionControl", "generatePDF" ];
-    const initialFilteredButtons = accessableButtons.filter((ele: string) => !elementsList.includes(ele));
+    const elementsList = [PreviewControlButtons.ChangeOwner,
+      PreviewControlButtons.ExportToEmail,
+      PreviewControlButtons.NewCloneEB,
+      PreviewControlButtons.NewClonePO,
+      PreviewControlButtons.InspectionControl,
+      PreviewControlButtons.GeneratePDF ];
+    const initialFilteredButtons = accessableButtons.filter((ele) => !elementsList.includes(ele));
     const restFilteredButtons = accessableButtons.filter((ownerOrEmail));
     initialButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(0, 2) : initialFilteredButtons;
     restButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(2) : [];
@@ -440,40 +448,40 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
-      {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
-      {buttons.includes("updateButton") && renderUpdateButton(renderAsButton)}
-      {buttons.includes("newcloneButton") && (
+      {buttons.includes(PreviewControlButtons.CloneButton) && renderCloneButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.UpdateButton) && renderUpdateButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.NewCloneEB) && (
         <CopyEBButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("newclonePOButton") && (
+      {buttons.includes(PreviewControlButtons.NewClonePO) && (
         <ClonePOButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
-      {buttons.includes("requestAccess") && requestAccessSentButton(renderAsButton)}
-      {buttons.includes("withdrawSubmission") && !isNewLayout &&
+      {buttons.includes(PreviewControlButtons.OutputButton) && renderOutputButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.RequestAccess) && requestAccessSentButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.WithdrawSubmission) && !isNewLayout &&
         renderWithdrawSubmissionButton()}
-      {buttons.includes("withdrawSubmission") && isNewLayout &&
+      {buttons.includes(PreviewControlButtons.WithdrawSubmission) && isNewLayout &&
         newRenderWithdrawSubmissionButton(renderAsButton)}
-      {buttons.includes("inspectionControl") && (
+      {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
-      {buttons.includes("pdf") &&
+      {buttons.includes(PreviewControlButtons.Pdf) &&
       <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} isPO={isPO} />}
-      {buttons.includes("generatePDF") && (
+      {buttons.includes(PreviewControlButtons.GeneratePDF) && (
         <GenerateHtmlPreview
           id={documentRevision.id}
           renderHTMLDefined={documentRevision.formDocument?.renderHTMLDefined}
           showDownloadButton={false}
         />
       )}
-      {buttons.includes("changeowner") && (
+      {buttons.includes(PreviewControlButtons.ChangeOwner) && (
         <OwnerChangerContainer
           requestId={documentRevision.id}
           requestType={RequestType.Document}
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("exportToEmail") && (
+      {buttons.includes(PreviewControlButtons.ExportToEmail) && (
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
