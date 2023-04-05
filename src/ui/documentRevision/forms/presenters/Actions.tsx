@@ -254,7 +254,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
     accessableButtons.push(PreviewControlButtons.NewCloneEB);
   }
-  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
+  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO && !isPOEditState) {
     accessableButtons.push(PreviewControlButtons.NewClonePO);
   }
   if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
