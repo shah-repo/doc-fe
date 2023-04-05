@@ -75,6 +75,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
 
+  // Add condition here to display update container on EDIT state cases
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) )) {
     return (
       <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
