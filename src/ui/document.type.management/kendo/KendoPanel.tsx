@@ -1,8 +1,8 @@
 import { Button, Grid } from "@material-ui/core";
-import { FilterDescriptor, process, State } from "@progress/kendo-data-query";
+import { FilterDescriptor, State, process } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoGrid, GridColumn,
+  GridColumn,
   GridColumnMenuGroup,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
@@ -20,22 +20,22 @@ import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType, DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DOC_TYPE_GROUP_OPTION, DocumentType, GroupWithGroupOptions } from "../../../state/ducks/documentRevisions/documentType/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import KendoDataGrid from "../../components/KendoDataGrid/KendoDataGrid";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
+import Text from "../../components/Text";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ExportListIcon from "../../components/common/kendo/ExportListIcon";
-import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
+import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorTooltip } from "../../components/common/kendo/helpers";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
-import KendoGlobalization from "../../components/KendoGlobalization";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { toastError } from "../../components/notifications";
 import { TablePanelStateProps } from "../../components/table/types";
-import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -540,43 +540,41 @@ export function KendoPanel<T extends { id?: string }>({
 
   const tableRenderer = ({ width }: Size) => (
     <>
-      <KendoGlobalization>
-        <KendoGrid
-          className={`${gridClasses.grid} no-row-pointer`}
-          style={{ width: `${width}px` }}
-          data={result}
-          sortable={true}
-          filterable={true}
-          reorderable={false}
-          pageable={gridConfiguration.pagerSettings}
-          resizable={true}
-          groupable={true}
-          total={resultState.total}
-          cellRender={CellRender}
-          onDataStateChange={onDataStateChange}
-          {...dataState}
-          onExpandChange={onExpandChange}
-          expandField="expanded"
-          editField={gridEditID}
-          onItemChange={itemChange}
-          onColumnReorder={columnReorder}
-          onColumnResize={columnResize}
-        >
-          <GridToolbar>
-            <Grid item>
-              <Button
-                variant="outlined"
-                className={classes.clearButton}
-                onClick={async () => { await clearFilter(false); }}
-              >
-                <Text translation={"common.clear.filters"} />
-              </Button>
-            </Grid>
-          </GridToolbar>
-          {renderColumns()}
-          <GridNoRecords>{noDataMessage}</GridNoRecords>
-        </KendoGrid>
-      </KendoGlobalization>
+      <KendoDataGrid
+        className={`${gridClasses.grid} no-row-pointer`}
+        style={{ width: `${width}px` }}
+        data={result}
+        sortable={true}
+        filterable={true}
+        reorderable={false}
+        pageable={gridConfiguration.pagerSettings}
+        resizable={true}
+        groupable={true}
+        total={resultState.total}
+        cellRender={CellRender}
+        onDataStateChange={onDataStateChange}
+        {...dataState}
+        onExpandChange={onExpandChange}
+        expandField="expanded"
+        editField={gridEditID}
+        onItemChange={itemChange}
+        onColumnReorder={columnReorder}
+        onColumnResize={columnResize}
+      >
+        <GridToolbar>
+          <Grid item>
+            <Button
+              variant="outlined"
+              className={classes.clearButton}
+              onClick={async () => { await clearFilter(false); }}
+            >
+              <Text translation={"common.clear.filters"} />
+            </Button>
+          </Grid>
+        </GridToolbar>
+        {renderColumns()}
+        <GridNoRecords>{noDataMessage}</GridNoRecords>
+      </KendoDataGrid>
       {isLoading && <Loader />}
     </>
   );

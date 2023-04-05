@@ -5,8 +5,6 @@ import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoTable,
-  GridColumn as KendoColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -14,6 +12,7 @@ import {
   GridFilterCellProps,
   GridNoRecords,
   GridToolbar,
+  GridColumn as KendoColumn,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, find, findIndex, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -50,7 +49,7 @@ import {
 } from "../common/kendo/helpers";
 import NoDataFound from "../common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../common/kendo/types";
-import KendoGlobalization from "../KendoGlobalization";
+import KendoDataGrid from "../KendoDataGrid/KendoDataGrid";
 import { toastError } from "../notifications";
 import ClearFilters from "../table/ClearFilters";
 import { DataLoader } from "./DataLoader";
@@ -421,55 +420,53 @@ export function KendoGrid<T extends any>({
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
-      <KendoGlobalization>
-        <KendoTable
-          style={{ width: `${width}px` }}
-          className={classes.grid}
-          filterable={true}
-          sortable={true}
-          pageable={pagerSettings}
-          groupable={true}
-          reorderable={true}
-          resizable={true}
-          {...dataState}
-          data={result}
-          total={records.total}
-          onDataStateChange={dataStateChange}
-          onExpandChange={onExpandChange}
-          expandField="expanded"
-          onColumnResize={onColumnResize}
-          onColumnReorder={onColumnReorder}
-        >
-          <GridToolbar>
-            <Grid container>
-              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
-                <ClearFilters {...{ clearFilter }} />
-              </Grid>
-              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-                <ColumnShowHideMenu
-                  columnDefinition={columns}
-                  onChange={onColumnShowHide}
-                />
-              </Grid>
+      <KendoDataGrid
+        style={{ width: `${width}px` }}
+        className={classes.grid}
+        filterable={true}
+        sortable={true}
+        pageable={pagerSettings}
+        groupable={true}
+        reorderable={true}
+        resizable={true}
+        {...dataState}
+        data={result}
+        total={records.total}
+        onDataStateChange={dataStateChange}
+        onExpandChange={onExpandChange}
+        expandField="expanded"
+        onColumnResize={onColumnResize}
+        onColumnReorder={onColumnReorder}
+      >
+        <GridToolbar>
+          <Grid container>
+            <Grid item={true} xs={6} style={{ textAlign: "left" }}>
+              <ClearFilters {...{ clearFilter }} />
             </Grid>
-          </GridToolbar>
-          {renderKendoColumns(width)}
-          <GridNoRecords>{noDataMessage}</GridNoRecords>
-        </KendoTable>
+            <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+              <ColumnShowHideMenu
+                columnDefinition={columns}
+                onChange={onColumnShowHide}
+              />
+            </Grid>
+          </Grid>
+        </GridToolbar>
+        {renderKendoColumns(width)}
+        <GridNoRecords>{noDataMessage}</GridNoRecords>
+      </KendoDataGrid>
 
-        {dataState && (
-          <DataLoader
-            dataState={dataState}
-            onDataReceived={dataReceived}
-            schema={schema}
-            tableName={tableName}
-            queryUrl={queryUrl}
-            defaultPayloadData={defaultPayloadData}
-            documentTypeCategory={documentTypeCategory}
-            tableCriteria={tableCriteria}
-          />
-        )}
-      </KendoGlobalization>
+      {dataState && (
+        <DataLoader
+          dataState={dataState}
+          onDataReceived={dataReceived}
+          schema={schema}
+          tableName={tableName}
+          queryUrl={queryUrl}
+          defaultPayloadData={defaultPayloadData}
+          documentTypeCategory={documentTypeCategory}
+          tableCriteria={tableCriteria}
+        />
+      )}
     </>
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
