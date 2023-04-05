@@ -13,6 +13,14 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
   };
 
   return {
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          backgroundColor: Colors.white,
+          overflow: "hidden",
+        },
+      },
+    },
     MuiAppBar: {
       colorDefault: {
         background: appTheme.palette.common.white,
