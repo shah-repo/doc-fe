@@ -1,6 +1,5 @@
 import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import classNames from "classnames";
-import { includes } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -183,7 +182,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     history.push(urlPath);
   };
 
-  const isUpdating = includes(window.location.href, "new-version");
   const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
 
   const newHeaderRenderer = () => (
@@ -289,7 +287,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       }`}
                       label={
                         isPO && isStatusReleased
-                          ? isUserAdminEnforce && isUpdating ? STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED
+                          ? isUserAdminEnforce && SM.isNewVersion ? STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED
                           : (
                             displayStatus ||
                                 STATUS_TYPES_LABEL[status] ||

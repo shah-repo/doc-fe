@@ -120,7 +120,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
   const isUserAdminEnforce = useGetHasTag(GroupTag.ASYNC_TASKS_UI);  // Remove at last PO_ADMIN
-
+  const isPOEditState = useGetHasTag(GroupTag.DASHBOARD_ADMIN) && SM.isNewVersion && isPO;
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;
@@ -212,6 +212,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       formik.setFieldValue("parentEquipment", null);
     }
     formik.submitForm();
+    if (isPOEditState) {
+      history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+    }
   };
 
   React.useEffect(() => {

@@ -1,9 +1,9 @@
 import { Typography } from "@material-ui/core";
 import classNames from "classnames";
-import { includes } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { SM } from "../../App";
 import DocumentRevisionSidebarState from "../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { Nullable } from "../../state/ducks/common/types";
@@ -115,7 +115,6 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
   }
 
-  const isUpdating = includes(window.location.href, "new-version");
   const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
 
   return (
@@ -145,7 +144,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
             <Typography data-cy="revision-status" variant="h6" component="span" className={classes.displayStatus}>
               <CustomLabelTooltip {...{ tooltipConfig }}>
                 <>
-                  &nbsp; - <Text message={isPO && isReleased ? isUpdating && isUserAdminEnforce ?
+                  &nbsp; - <Text message={isPO && isReleased ? SM.isNewVersion && isUserAdminEnforce ?
                     STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED : displayStatus} />
                 </>
               </CustomLabelTooltip>

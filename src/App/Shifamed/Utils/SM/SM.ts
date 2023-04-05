@@ -54,6 +54,11 @@ export default class SM {
     return SM.pathname.includes("document_revision/");
   }
 
+  // For the Update PO cases
+  public static get isNewVersion(): boolean {
+    return SM.pathname.includes("new-version");
+  }
+
   public static get isNewCRLayout(): boolean {
     return SM.pathname.includes("change_request/");
   }
