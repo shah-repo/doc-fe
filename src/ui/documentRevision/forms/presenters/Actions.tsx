@@ -419,6 +419,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
+      <>
+        {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased
+         && <StyledSubmitButton
+           showNewButton={true}
+           asyncState={asyncState}
+           label={undoChangesLabel ?? ""}
+           onClick={onUndoChangesClick}
+           data-cy={"undo-changes"}
+         />}
+      </>
       <Observer>
         {() => (
           <>
@@ -439,16 +449,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           </>
         )}
       </Observer>
-      <>
-        {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased
-         && <StyledSubmitButton
-           showNewButton={true}
-           asyncState={asyncState}
-           label={undoChangesLabel ?? ""}
-           onClick={onUndoChangesClick}
-           data-cy={"undo-changes"}
-         />}
-      </>
       {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
