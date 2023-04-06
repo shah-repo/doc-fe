@@ -287,11 +287,12 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       }`}
                       label={
                         isPO && isStatusReleased
-                          ? isUserAdminEnforce && SM.isNewVersion ? STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED
-                          : (
-                            displayStatus ||
-                                STATUS_TYPES_LABEL[status] ||
-                                label
+                          ? isUserAdminEnforce && SM.isNewVersion
+                            ? STATUS_TYPES_LABEL.EDIT
+                            : STATUS_TYPES_LABEL.APPROVED
+                          : ( displayStatus ||
+                              STATUS_TYPES_LABEL[status] ||
+                              label
                           ).toUpperCase()
                       }
                       data-cy="HeaderInfo-status"
