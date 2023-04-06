@@ -22,7 +22,6 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import useMqttSubscription from "../../../hooks/useMqttSubscription";
 
-
 interface Props {
   id?: string;
   renderHTMLDefined?: Nullable<boolean>;

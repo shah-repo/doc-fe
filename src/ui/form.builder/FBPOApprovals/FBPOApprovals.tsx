@@ -11,6 +11,7 @@ import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../../ui/components/Text";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import Colors from "../../layout/theme/utils/colors";
 import ApprovalsBlock from "./ApprovalsBlock";
@@ -55,7 +56,10 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
   const intl = useIntl();
   const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN); // change  DASHBOARD_ADMIN to Enforce_admin
-  disabled = isUserAdminEnforce && documentStatus === DocumentRevisionStatus.Released ? isUserAdminEnforce : disabled;
+  disabled =
+    isDocumentRevisionReleased(documentStatus) && isUserAdminEnforce
+      ? isUserAdminEnforce
+      : disabled;
 
   return  (
     <FBProvider {...{ dialogState }}>

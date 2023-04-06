@@ -122,7 +122,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
   const isUserAdminEnforce = useGetHasTag(GroupTag.ASYNC_TASKS_UI);  // Remove at last PO_ADMIN
-  const isPOEditState = useGetHasTag(GroupTag.DASHBOARD_ADMIN) && SM.isNewVersion && isPO;
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO;
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;
@@ -304,9 +304,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     accessableButtons.push(PreviewControlButtons.ExportButton);
   }
   const initialButtons =
-  accessableButtons.length >= 1
-    ? accessableButtons.slice(0, 1)
-    : accessableButtons;
+    accessableButtons.length >= 1
+      ? accessableButtons.slice(0, 1)
+      : accessableButtons;
   const restButtons =
     accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
 

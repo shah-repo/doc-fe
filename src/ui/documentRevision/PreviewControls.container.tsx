@@ -138,8 +138,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
 
   const clonePODocument = () => {
-    // check admin tag permission here and move to update container or
-    // clone container on click of update PO
     localStorage.setItem("prevPODoc", JSON.stringify(documentRevision?.formInput));
     cloneDocument();
   };

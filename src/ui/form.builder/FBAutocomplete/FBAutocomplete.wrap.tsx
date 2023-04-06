@@ -5,9 +5,9 @@ import { useIntl } from "react-intl";
 import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import { isTranslation } from "../../translations/types";
 
@@ -47,10 +47,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
     const multiple = editorProperties?.includes("multiple") || props.multiple;
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
-    const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
-    disabled = PO_REQUESTOR_COMPONENT_NAME === name &&
-              workspaceState?.documentStatus === DocumentRevisionStatus.Released
-                && isUserAdminEnforce ? isUserAdminEnforce : disabled;
+    const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN); // change  DASHBOARD_ADMIN to Enforce_admin
+    disabled =
+      PO_REQUESTOR_COMPONENT_NAME === name &&
+      isDocumentRevisionReleased(workspaceState?.documentStatus) &&
+      isUserAdminEnforce
+        ? isUserAdminEnforce
+        : disabled;
 
     const intl = useIntl();
 
