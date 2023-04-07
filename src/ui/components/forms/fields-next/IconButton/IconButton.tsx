@@ -18,15 +18,15 @@ const IconButton: React.FC<IconButtonProps> = ({
   const [muiVariant, muiColor] = useButtonType<IconButtonProps["kind"]>(
     kind,
     {
-      square: ["text", "default"],
+      form: ["text", "default"],
       simple: ["text", "default"],
-      boxed: ["contained", "default"],
+      action: ["contained", "default"],
       destructive: ["text", "default"],
     },
   );
   const classes = useStyles({ size });
-  const isSquare = kind && ["square", "boxed", "destructive"].includes(kind);
-  const isBoxed = kind === "boxed";
+  const isSquare = kind && ["form", "action", "destructive"].includes(kind);
+  const isBoxed = kind === "action";
   const isSimple = kind === "simple";
   const isDesctructive = kind === "destructive";
 
