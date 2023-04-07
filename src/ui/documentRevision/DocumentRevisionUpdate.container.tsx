@@ -56,7 +56,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
   const saveAction = useActionCreator(documentRevisionsActions.save);
-  const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
+  const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isPOEditState = useGetHasTag(GroupTag.DASHBOARD_ADMIN) && isPO && SM.isNewVersion
         && isDocumentRevisionHasOutput(documentRevision);
   // Disabled because of ENC-7826
@@ -80,7 +80,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
-
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState) {
     return (
       <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>

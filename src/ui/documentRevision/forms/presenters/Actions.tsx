@@ -193,10 +193,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const {
     label: undoChangesLabel,
-  } = useUndoPOChanges(documentRevision.document?.documentType?.id);
+  } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = () => {
-    history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+    history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
     workspaceState?.saveDocRev({}, false, true, documentRevision);
   };
   const onFormClick = () => {
@@ -233,7 +233,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
-  const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
+  const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
 
   if (
     !isRecord ||

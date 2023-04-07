@@ -102,7 +102,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
   const isPOEditState =
     useGetHasTag(GroupTag.DASHBOARD_ADMIN) &&
-    checkIsDocumentPO(documentRevision?.document.documentType.groupOptions) &&
+    checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions) &&
     SM.isNewVersion && isDocumentRevisionHasOutput(documentRevision);
   // change  DASHBOARD_ADMIN to Enforce_admin
   isOperator = React.createContext(isCurrentUserOperator);
