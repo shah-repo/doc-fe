@@ -1,5 +1,5 @@
 import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions/types";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInStatus, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";
 
@@ -72,9 +72,8 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
   {
     const { status } = docRev;
     const { id } = docRev.document;
-    const isRevisionObsolete = isDocumentRevisionObsolete(status) || isDocumentRevisionDeprecated(status);
 
-    if ((!acc[id] || isDocumentRevisionReleased(status)) && !isRevisionObsolete) {
+    if (!acc[id] || isDocumentRevisionReleased(status)) {
       acc[id] = docRev;
     }
 
