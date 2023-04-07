@@ -1,13 +1,18 @@
 import React from "react";
+import { useTranslate } from "../../../../../common/intl";
 import { AutoSizer } from "react-virtualized";
 import KendoGlobalization from "../../../../components/KendoGlobalization";
-import { Grid as KendoGrid } from "@progress/kendo-react-grid";
-import KendoColumn from "../GridColumn";
+import {
+  Grid as KendoGrid,
+  GridColumn as KendoColumn,
+} from "@progress/kendo-react-grid";
 import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
+
+  const translate = useTranslate();
 
   return (
     <AutoSizer>
@@ -59,7 +64,7 @@ const Grid: React.FC<GridProps> = (props) => {
             {approvalRoles && Object.entries(RoleStageTitles).map(([headKey, headTitle]) => (
               <KendoColumn
                 key={headKey}
-                title={headTitle}
+                title={translate(headTitle)}
               >
                 {approvalRoles.map((role) => (
                   <KendoColumn
