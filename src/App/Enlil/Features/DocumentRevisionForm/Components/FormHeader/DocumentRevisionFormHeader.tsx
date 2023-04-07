@@ -3,7 +3,7 @@ import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionFormHeaderProps, SM } from "../../../../..";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../../../ui/constants/urls";
-import Title from "../../../../../../ui/document.revision/form/title";
+import Title from "../../../../../../ui/document.revision/form/Title";
 import ChangeRequestLink from "../../../../../../ui/document.revision/summary/changeRequestLink";
 import Description from "../../../../../../ui/documentRevision/forms/presenters/Description";
 import { withDocumentRevisionFormHeader } from "./DocumentRevisionFormHeader.wrap";
