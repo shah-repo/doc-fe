@@ -7,16 +7,17 @@ import {
   GridColumn as KendoColumn,
 } from "@progress/kendo-react-grid";
 import CheckboxCell from "../CheckboxCell";
+import EmptyDashCell from "../EmptyDashCell";
 import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 
-// @todo: styles
-// @todo: filters
 // @todo: active BE
-// @todo: translations
-// @todo: fullscreen
+// @todo: filters
 // @todo: add new
 // @todo: change and save
+// @todo: translations
+// @todo: styles
+// @todo: fullscreen
 
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
@@ -68,6 +69,7 @@ const Grid: React.FC<GridProps> = (props) => {
               width={100}
             />
             <KendoColumn
+              cell={EmptyDashCell}
               title="Category"
               field="docType.category"
               width={100}
