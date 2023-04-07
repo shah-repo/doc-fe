@@ -6,8 +6,17 @@ import {
   Grid as KendoGrid,
   GridColumn as KendoColumn,
 } from "@progress/kendo-react-grid";
+import CheckboxCell from "../CheckboxCell";
 import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
+
+// @todo: styles
+// @todo: filters
+// @todo: active BE
+// @todo: translations
+// @todo: fullscreen
+// @todo: add new
+// @todo: change and save
 
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
@@ -47,11 +56,13 @@ const Grid: React.FC<GridProps> = (props) => {
               locked
             />
             <KendoColumn
+              cell={CheckboxCell}
               title="Training"
               field="docType.defaultTraining"
               width={100}
             />
             <KendoColumn
+              cell={CheckboxCell}
               title="Signature"
               field="docType.needsSignature"
               width={100}
@@ -69,6 +80,7 @@ const Grid: React.FC<GridProps> = (props) => {
                 {approvalRoles.map((role) => (
                   <KendoColumn
                     key={headKey + role.name}
+                    cell={CheckboxCell}
                     title={role.name}
                     field={`approvalRoles.${headKey}.${role.index}`}
                     width={50}
