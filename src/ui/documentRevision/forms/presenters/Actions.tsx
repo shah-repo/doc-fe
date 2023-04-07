@@ -31,7 +31,7 @@ import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
+import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
@@ -122,7 +122,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
   const isUserAdminEnforce = useGetHasTag(GroupTag.ASYNC_TASKS_UI);  // Remove at last PO_ADMIN
-  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO;
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;

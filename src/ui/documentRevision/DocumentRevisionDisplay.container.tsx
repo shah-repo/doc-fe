@@ -16,6 +16,7 @@ import useGetHasTag from "../hooks/useGetHasTag";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
+import { isDocumentRevisionHasOutput } from "./helpers/documentRevisionStatus";
 
 interface StateProps {
   currentUserEmail: string;
@@ -102,7 +103,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   const isPOEditState =
     useGetHasTag(GroupTag.DASHBOARD_ADMIN) &&
     checkIsDocumentPO(documentRevision?.document.documentType.groupOptions) &&
-    SM.isNewVersion;
+    SM.isNewVersion && isDocumentRevisionHasOutput(documentRevision);
   // change  DASHBOARD_ADMIN to Enforce_admin
   isOperator = React.createContext(isCurrentUserOperator);
 
