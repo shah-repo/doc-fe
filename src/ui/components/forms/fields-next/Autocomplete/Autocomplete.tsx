@@ -36,7 +36,6 @@ const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }>
       disabled={disabled}
       error={error}
       name={name}
-      type="search"
       value={value}
       id={id}
       inputRef={inputRef}
