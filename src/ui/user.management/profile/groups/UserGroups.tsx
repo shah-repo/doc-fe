@@ -7,7 +7,7 @@ import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import SummaryField from "../../../common/summary/base";
-import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import { MultiValueRemove, selectStyles, selectTheme } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
@@ -101,6 +101,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
         isMulti={true}
         components={{ MultiValueRemove }}
         styles={selectStyles}
+        theme={selectTheme}
         options={groupOptions}
         placeholder="Start typing to see the list of groups…"
         onChange={onChange}

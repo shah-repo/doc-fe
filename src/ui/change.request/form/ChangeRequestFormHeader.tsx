@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import Title from "../../document.revision/form/title";
+import Title from "../../document.revision/form/Title";
 import Description from "../../documentRevision/forms/presenters/Description";
 
 interface ChangeRequestFormHeaderProps {
