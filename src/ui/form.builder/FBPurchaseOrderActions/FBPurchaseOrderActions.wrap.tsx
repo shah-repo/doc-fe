@@ -1,12 +1,16 @@
 import { useFormikContext } from "formik";
-import { get } from "lodash";
 import React from "react";
-import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBWorkspaceModeOptions } from "..";
-import { SM } from "../../../App";
+import { useHistory } from "react-router-dom";
+import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { documentVersionPath } from "../../document.revision/utils/paths";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
+import { createNewDocRev } from "../FBPurchaseOrderForm/helpers";
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
@@ -22,7 +26,8 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
   }: T) => {
 
     const { purchaseOrderState, dialogState, formState, workspaceState } = FB.useStores();
-    const { _formState } = SM.useStores();
+    const history = useHistory();
+    const createDocAction = useActionCreator(documentRevisionsActions.create);
 
     const formik = useFormikContext();
 
@@ -31,15 +36,16 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
     onAddClick = () => {
       const values = formState?.getValues() as FBPurchaseOrderItem;
-      purchaseOrderState?.setItem(values);
-      const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
 
       // replace 10000 with upper threshold value of the approver level
-      if (isUserAdminEnforce &&
-        ((isEdit && Number(allItems?.totalAmount) > 10000) || !isEdit)
-      && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
-        return dialog?.open();
+      if (isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
+        const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
+        const totalAmount = Number(allItems.totalAmount) + (Number(values.order) * Number(values.unitPrice));
+        if ((isEdit && Number(totalAmount) > 10000) || !isEdit) {
+          return dialog?.open();
+        }
       }
+      purchaseOrderState?.setItem(values);
       dialogState?.closeDialog();
     };
 
@@ -49,32 +55,23 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     };
 
     onAlertNotificationCancel = () => {
-      if (!isEdit) {
-        const values = formState?.getValues() as FBPurchaseOrderItem;
-        purchaseOrderState?.removeItem(values);
-        if (purchaseOrderState?.value?.items?.length && purchaseOrderState?.value?.items?.length > 0 ) {
-          purchaseOrderState?.deleteItem(purchaseOrderState?.value.items.length - 1);
-        }
-      }
       dialog?.close();
       dialogState?.closeDialog();
     };
 
-    function setFormDocumentValue() {
-      const values = get(formik, "values") as DocumentRevision;
-      const updatedMode = _formState?.mode;
-      if (updatedMode === FBWorkspaceModeOptions.FORM) {
-        formik.setFieldValue("formDocument", {
-          id: values?.formDocument?.id,
-        });
-      }
-    }
+    const async = useAsync<DocumentRevision>({
+      onSuccess: (createdDocumentRevision?) => {
+        if (createdDocumentRevision) {
+          documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
+          history.push(
+            documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+          );
+        }
+      },
+    });
 
     onAlertNotificationConfirm = () => {
-      dialog?.close();
-      dialogState?.closeDialog();
-      setFormDocumentValue();
-      formik.submitForm();
+      createNewDocRev(formik, workspaceState, async, createDocAction);
     };
 
     return Component({

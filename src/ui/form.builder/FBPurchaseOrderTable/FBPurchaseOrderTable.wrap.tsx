@@ -1,18 +1,23 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, first, get, omit } from "lodash";
+import { cloneDeep, first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBPurchaseOrderValue, FBWorkspaceModeOptions } from "..";
-import { SM } from "../../../App";
+import { useHistory } from "react-router-dom";
+import { FB, FBPurchaseOrderValue } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import { usePoApprovals } from "../FBPOApprovals/hooks";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
+import { createNewDocRev } from "../FBPurchaseOrderForm/helpers";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
@@ -40,9 +45,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
-    const { _formState } = SM.useStores();
     const { document, id, isOutput } = workspaceState || {};
     const formik = useFormikContext();
+    const history = useHistory();
+    const createDocAction = useActionCreator(documentRevisionsActions.create);
+
     const outputId = isOutput ? id : undefined;
     const isReceivable = checkIsDocumentReceivable(document?.document.documentType.groupOptions);
     const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
@@ -69,20 +76,19 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
 
-    function setFormDocumentValue() {
-      const values = get(formik, "values")  as DocumentRevision;
-      const updatedMode = _formState?.mode;
-      if (updatedMode === FBWorkspaceModeOptions.FORM) {
-        formik.setFieldValue("formDocument", {
-          id: values?.formDocument?.id,
-        });
-      }
-    }
+    const async = useAsync<DocumentRevision>({
+      onSuccess: (createdDocumentRevision?) => {
+        if (createdDocumentRevision) {
+          documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
+          history.push(
+            documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+          );
+        }
+      },
+    });
 
     onAlertNotificationConfirm = () => {
-      dialog?.close();
-      setFormDocumentValue();
-      formik.submitForm();
+      createNewDocRev(formik, workspaceState, async, createDocAction);
     };
 
     onAlertNotificationCancel = () => {
