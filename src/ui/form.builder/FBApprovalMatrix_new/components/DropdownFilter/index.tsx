@@ -1,8 +1,9 @@
 import React from "react";
 import { DropDownList, DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
+import Filter from "../Filter";
 import { DropdownFilterCellProps } from "./types";
 
-export const DropdownFilterTemplate: React.FC<DropdownFilterCellProps> = (props) => {
+export const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   const {
     defaultItem, data, field, customOperator, value,
     onStateChange, onChange,
@@ -29,7 +30,7 @@ export const DropdownFilterTemplate: React.FC<DropdownFilterCellProps> = (props)
   };
 
   return (
-    <div className="k-filtercell">
+    <Filter>
       <DropDownList
         data={data}
         textField="text"
@@ -39,8 +40,8 @@ export const DropdownFilterTemplate: React.FC<DropdownFilterCellProps> = (props)
         defaultValue={state.value}
         value={data.find((dd) => dd.value === value) || defaultItem}
       />
-    </div>
+    </Filter>
   );
 };
 
-export default DropdownFilterTemplate;
+export default DropdownFilter;

@@ -8,8 +8,10 @@ import {
 } from "@progress/kendo-react-grid";
 import CheckboxCell from "../CheckboxCell";
 import EmptyDashCell from "../EmptyDashCell";
-import DropdownFilterTemplate from "../DropdownFilterTemplate";
-import InputFilterTemplate from "../InputFilterTemplate";
+import DropdownFilter from "../DropdownFilter";
+import BooleanFilter from "../BooleanFilter";
+import StatusFilter from "../BooleanFilter";
+import InputFilter from "../InputFilter";
 import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 
@@ -26,42 +28,16 @@ const Grid: React.FC<GridProps> = (props) => {
 
   const translate = useTranslate();
 
-  const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilterTemplate
-      {...props}
-      data={[
-        { value: true, text: translate("common.active") },
-        { value: false, text: translate("common.inactive") },
-      ]}
-      defaultItem={{ value: "", text: translate("common.all") }}
-    />
-  );
-
-  const BooleanFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilterTemplate
-      {...props}
-      data={[
-        { value: true, text: translate("common.true") },
-        { value: false, text: translate("common.false") },
-      ]}
-      defaultItem={{ value: "", text: translate("common.all") }}
-    />
-  );
-
   const uniqueCategories = Array.from(new Set(approvalMatrix.map((item) => item?.docType?.category).filter(Boolean)));
 
   const CategoryFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilterTemplate
+    <DropdownFilter
       {...props}
       data={
         uniqueCategories.map((category) => ({ value: category, text: category }))
       }
       defaultItem={{ value: "", text: translate("common.all") }}
     />
-  );
-
-  const InputFilter: React.FC<GridFilterCellProps> = (props) => (
-    <InputFilterTemplate {...props} />
   );
 
   return (
