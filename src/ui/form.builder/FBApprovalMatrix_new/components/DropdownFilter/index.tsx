@@ -1,45 +1,51 @@
-import React from "react";
-import { DropDownList, DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
+import React, { FC, ChangeEvent } from "react";
+import { Select, MenuItem } from "@material-ui/core";
 import Filter from "../Filter";
 import { DropdownFilterCellProps } from "./types";
 
-export const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
+export const DropdownFilter: FC<DropdownFilterCellProps> = (props) => {
   const {
-    defaultItem, data, field, customOperator, value,
-    onStateChange, onChange,
+    data,
+    value = "",
+    operator = "eq",
+    defaultItem,
+    onChange,
   } = props;
 
-  const [state, setState] = React.useState({
-    value: defaultItem,
-  });
+  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const newValue = event.currentTarget.value;
 
-  const hasValue = (value: { text: string; value: string }) => value && value !== defaultItem;
+    if (newValue === value) {
+      return;
+    }
 
-  const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
-    const selectedItem = data.find((dd) => dd.text === target.value.text);
-    const isValueExists = hasValue(target.value);
-    setState({
-      value: target.value,
-    });
     onChange({
-      value: isValueExists ? selectedItem?.value : "",
-      operator: isValueExists ? customOperator || "eq" : "",
-      syntheticEvent,
+      value: newValue,
+      operator,
+      syntheticEvent: event,
     });
-    onStateChange && onStateChange({ selectedItem, parentField: field });
   };
 
   return (
     <Filter>
-      <DropDownList
-        data={data}
-        textField="text"
-        dataItemKey="value"
-        onChange={onDropdownChange}
-        defaultItem={defaultItem}
-        defaultValue={state.value}
-        value={data.find((dd) => dd.value === value) || defaultItem}
-      />
+      <Select
+        value={value}
+        onChange={handleChange}
+      >
+        {defaultItem && (
+          <MenuItem value={defaultItem.value}>
+            {defaultItem.text}
+          </MenuItem>
+        )}
+        {data.map(({ value, text }) => (
+          <MenuItem
+            key={String(value)}
+            value={String(value)}
+          >
+            {text}
+          </MenuItem>
+        ))}
+      </Select>
     </Filter>
   );
 };
