@@ -5,6 +5,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FB, FBPurchaseOrderValue } from "..";
+import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -57,6 +58,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     classes = FBPurchaseOrderClasses();
     const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
     dialog = useDialog();
+    const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
+    && SM.isNewVersion;
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev, 6));
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
@@ -97,7 +100,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     handleDelete = (index: number) => (e: any) => {
       e.stopPropagation();
-      if (isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
+      if (isPOEditState) {
         return dialog?.open();
       }
       !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);

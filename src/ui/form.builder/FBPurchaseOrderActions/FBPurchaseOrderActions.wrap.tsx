@@ -2,6 +2,7 @@ import { useFormikContext } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
+import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -33,12 +34,13 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
     dialog = useDialog();
     const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
-
+    const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
+                          && SM.isNewVersion;
     onAddClick = () => {
       const values = formState?.getValues() as FBPurchaseOrderItem;
 
       // replace 10000 with upper threshold value of the approver level
-      if (isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released) {
+      if (isPOEditState) {
         const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
         const totalAmount = Number(allItems.totalAmount) + (Number(values.order) * Number(values.unitPrice));
         if ((isEdit && Number(totalAmount) > 10000) || !isEdit) {
