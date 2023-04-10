@@ -1,4 +1,5 @@
 import { chain } from "lodash";
+import { pagerSettings } from "../../../components/common/kendo/helpers";
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../../components/common/kendo/types";
 
 const columns: KendoColumn[] = [
@@ -35,7 +36,6 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     orderIndex: 3,
     showTooltip: true,
-    tooltipField: "description",
   },
   {
     field: "signatures.signatureStage2",
@@ -48,7 +48,6 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     orderIndex: 4,
     showTooltip: true,
-    tooltipField: "document.documentType.documentTypeName",
   },
   {
     field: "signatures.signatureStage3",
@@ -60,7 +59,6 @@ const columns: KendoColumn[] = [
     cell: KendoCellTemplates.SIGNATURE_CELL,
     showColumnMenu: true,
     orderIndex: 5,
-    showActionButtons: true,
   },
 ];
 
@@ -70,7 +68,7 @@ const gridConfiguration: KendoGridConfiguration = {
     .map("field")
     .value(),
   columns,
-  pagerSettings: false,
+  pagerSettings,
 };
 
 export default gridConfiguration;

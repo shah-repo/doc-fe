@@ -44,9 +44,6 @@ export interface KendoColumn {
   showTooltip?: boolean;
   tooltipField?: string;
   extraFields?: string[];
-  showActionButtons?: boolean;
-  minWidth?: number;
-  maxWidth?: number;
 }
 export interface PageState {
   skip: number;
@@ -56,7 +53,7 @@ export interface PageState {
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
-  pagerSettings: GridPagerSettings | boolean;
+  pagerSettings: GridPagerSettings;
   initialDataState? : PageState;
 }
 
