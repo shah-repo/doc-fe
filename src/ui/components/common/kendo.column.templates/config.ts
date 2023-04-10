@@ -5,6 +5,7 @@ import { Active } from "./Active";
 import { CommonCell } from "./CommonCell";
 import { DateCompleted } from "./DateCompleted";
 import { DateInfo } from "./DateInfo";
+import { SignatureCellTemplate } from "./SignatureCellTemplate";
 import { Status } from "./Status";
 import { UserAvatar } from "./UserAvatar";
 
@@ -17,6 +18,7 @@ interface CellTemplateProps {
   CommonCell: (props: CustomGridCellProps) => JSX.Element | null;
   DocumentTypeCellTemplate: (props: CustomGridCellProps) => JSX.Element | null;
   DurationCell: (props: CustomGridCellProps) => JSX.Element | null;
+  SignatureCellTemplate: (props: CustomGridCellProps) => JSX.Element | null;
 }
 
 export const cellTemplateMapping: CellTemplateProps = {
@@ -28,4 +30,5 @@ export const cellTemplateMapping: CellTemplateProps = {
   CommonCell,
   DocumentTypeCellTemplate,
   DurationCell,
+  SignatureCellTemplate,
 };
