@@ -1,37 +1,21 @@
-import { Box, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
-import classNames from "classnames";
-import { find } from "lodash";
-import React from "react";
-import { FBMapWrapper, FBPOApprovalMatrixState } from "../..";
-import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
-import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
+import { Box, makeStyles } from "@material-ui/core";
+import { find, findIndex, isEmpty } from "lodash";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getTableCriteria } from "../../../../common/utils/selectors";
+import { tableSearchActions } from "../../../../state/ducks/tableSearch";
+import { getSchemaFromColumns } from "../../../common/utils/helpers";
+import { KendoColumn } from "../../../components/common/kendo/types";
+import { DataStateProps } from "../../../components/KendoGrid/interfaces";
+import { KendoGrid } from "../../../components/KendoGrid/KendoGrid";
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel, Signature } from "../FBPOApprovalMatrix.types";
 import FBPOApprovalMatrixDialog from "../form/FBPOApprovalMatrixDialog";
+import gridConfiguration from "../grid/column.definition";
 import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: Colors.light_gray,
-    color: Colors.almost_black,
-    textTransform: "uppercase",
-    fontSize: "12px",
-    lineHeight: "15px",
-  },
-  body: {
-    fontSize: 14,
-  },
-  root: {
-    padding: "8px",
-    maxWidth: "100%",
-  },
-}))(TableCell);
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: "100%",
-  },
-  editable: {
-    cursor: "pointer",
+    height: "calc(100vh - 400px)",
   },
 });
 
@@ -51,77 +35,79 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   groupOptions,
 }) => {
   const classes = useStyles();
+  const TABLE_NAME = "FBPOApprovalMatrix";
+  const schema = getSchemaFromColumns(gridConfiguration.columns);
+  const dispatch = useDispatch();
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+
+  const getApprovalLevelsData = () => approvalLevels?.map((ele) => ({
+    ...ele, signatures: (ele.signatures as Signature[]).reduce((prevVal, currentVal) => {
+
+      const groupNames = currentVal?.groups?.map((group) => groups?.get(group.id)?.name);
+      const employeeNames = currentVal?.employees?.map((employee) => employees?.get(employee.id)?.user?.name);
+      return { ...prevVal, [`signatureStage${currentVal?.signatureStage}`]: [...groupNames, ...employeeNames] };
+    }, {}),
+  }));
+  const setSearchStatus = (
+    dataState: DataStateProps,
+    columns: KendoColumn[]
+  ) => {
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          apiError: "",
+          queryDict: {
+            dataState,
+          },
+          columnConfig: JSON.stringify(columns),
+        },
+        TABLE_NAME
+      )
+    );
+  };
+
+  useEffect(() => {
+    if (isEmpty(tableCriteria.queryDict)) {
+      const dataState: DataStateProps = {
+        filter: {
+          logic: "and",
+          filters: [
+
+          ],
+        },
+        sort: [],
+        skip: 0,
+        take: 25,
+        group: [],
+      };
+      setSearchStatus(
+        dataState,
+        gridConfiguration.columns,
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableCriteria.queryDict]);
+
 
   return (
     <Box className={classes.root}>
-      <Table aria-label="purchase order approval matrix table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell style={{ width: 95 }}>
-              <Text message="Level Name" />
-            </StyledTableCell>
-            <StyledTableCell>
-              <Text message="Limit" />
-            </StyledTableCell>
-            <StyledTableCell>
-              <Text message="Signature 1" />
-            </StyledTableCell>
-            <StyledTableCell>
-              <Text message="Signature 2" />
-            </StyledTableCell>
-            <StyledTableCell>
-              <Text message="Signature 3" />
-            </StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {approvalLevels?.map((row: POApprovalMatrixLevel, index) => (
-            <TableRow
-              key={`${row.name}-${index}`}
-              {...!disabled && { onClick: handleEdit(index, row) }}
-              className={classNames({ [classes.editable]: !disabled })}
-            >
-              <StyledTableCell>{row.name}</StyledTableCell>
-              <StyledTableCell>{row.limit}</StyledTableCell>
-              <FBMapWrapper<number[]> collection={FBPOApprovalMatrixState.stages}>
-                {(signatureStage: number, index) => (
-                  <StyledTableCell key={`fb-poam-signature-${row.id}-${index}`}>
-                    {find(row.signatures, { signatureStage })?.groups?.map((group) =>
-                      <>
-                        { groups?.get(group.id) && (
-                          <Box
-                            key={`fb-poam-signature-group-${group.id}-${index}`}
-                            width="max-content"
-                            bgcolor="lightgray"
-                            borderRadius="3px"
-                            p={0.3} m={0.3}>
-                            {groups?.get(group.id)?.name}
-                          </Box>
-                        )}
-                      </>
-                    )}
-                    {find(row.signatures, { signatureStage })?.employees?.map((employee) =>
-                      <>
-                        {employees?.get(employee.id) && (
-                          <Box
-                            key={`fb-poam-signature-employee-${employee.id}-${index}`}
-                            width="max-content"
-                            bgcolor="lightgray"
-                            borderRadius="3px"
-                            p={0.3} m={0.3}>
-                            {employees?.get(employee.id)?.user?.name}
-                          </Box>
-                        )}
-                      </>
-                    )}
-                  </StyledTableCell>
-                )}
-              </FBMapWrapper>
-
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <KendoGrid
+        {...{ approvalLevels: getApprovalLevelsData() }}
+        tableName={TABLE_NAME}
+        className={classes.root}
+        defaultPayloadData={{}}
+        schema={schema}
+        tableCriteria={tableCriteria}
+        queryUrl={""}
+        onRowClick={({ dataItem }) => {
+          const { id } = dataItem;
+          const index = findIndex(approvalLevels, { id });
+          const item = find(approvalLevels, { id } );
+          handleEdit(index, item as POApprovalMatrixLevel);
+        }}
+        exportDataChanges={() => ({})}
+      />
       {
         !isDocumentReleased && isDialogOpen &&
         <FBPOApprovalMatrixDialog

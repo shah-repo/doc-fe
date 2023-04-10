@@ -15,7 +15,7 @@ import {
   GridNoRecords,
   GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, find, findIndex, map, set } from "lodash";
+import { cloneDeep, find, findIndex, isEmpty, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -34,6 +34,7 @@ import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.tem
 import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
 import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
+import { POApprovalMatrixLevel } from "../../form.builder/FBPOApprovalMatrix/FBPOApprovalMatrix.types";
 import useDidMount from "../../hooks/useDidMount";
 import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
@@ -67,6 +68,8 @@ export function KendoGrid<T extends any>({
   defaultPayloadData,
   documentTypeCategory,
   exportDataChanges,
+  approvalLevels,
+  className,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const classes = KendoGridStyles();
@@ -82,7 +85,7 @@ export function KendoGrid<T extends any>({
 
   useEffect(() => {
     if (didMount) {
-      setDataState(tableCriteria.queryDict.dataState);
+      setDataState(tableCriteria?.queryDict?.dataState);
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
       }
@@ -157,6 +160,16 @@ export function KendoGrid<T extends any>({
       setNoDataMessage(<NoDataFound />);
     }
   };
+
+  useEffect(() => {
+    if (!isEmpty(approvalLevels)) {
+      dataReceived({
+        data: cloneDeep(approvalLevels) as POApprovalMatrixLevel[],
+        total: approvalLevels?.length as number,
+      }, {}
+      );
+    }
+  }, [approvalLevels]);
 
   // Column Menu Filters
   const ActiveFilter = (props: GridFilterCellProps) => (
@@ -424,10 +437,10 @@ export function KendoGrid<T extends any>({
       <KendoGlobalization>
         <KendoTable
           style={{ width: `${width}px` }}
-          className={classes.grid}
+          className={className || classes.grid}
           filterable={true}
           sortable={true}
-          pageable={pagerSettings}
+          pageable={!approvalLevels ? pagerSettings : false}
           groupable={true}
           reorderable={true}
           resizable={true}
@@ -440,7 +453,7 @@ export function KendoGrid<T extends any>({
           onColumnResize={onColumnResize}
           onColumnReorder={onColumnReorder}
         >
-          <GridToolbar>
+          {!approvalLevels && <GridToolbar>
             <Grid container>
               <Grid item={true} xs={6} style={{ textAlign: "left" }}>
                 <ClearFilters {...{ clearFilter }} />
@@ -452,12 +465,12 @@ export function KendoGrid<T extends any>({
                 />
               </Grid>
             </Grid>
-          </GridToolbar>
+          </GridToolbar>}
           {renderKendoColumns(width)}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoTable>
 
-        {dataState && (
+        {dataState && !approvalLevels && (
           <DataLoader
             dataState={dataState}
             onDataReceived={dataReceived}

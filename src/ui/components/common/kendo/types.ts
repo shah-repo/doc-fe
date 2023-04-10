@@ -19,7 +19,8 @@ export enum KendoCellTemplates {
   DATE_INFO="DateInfo",
   COMMON_CELL="CommonCell",
   DOCUMENT_TYPE="DocumentTypeCellTemplate",
-  DURATION="DurationCell"
+  DURATION="DurationCell",
+  SIGNATURE_CELL="SignatureCellTemplate",
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings;
@@ -43,6 +44,9 @@ export interface KendoColumn {
   showTooltip?: boolean;
   tooltipField?: string;
   extraFields?: string[];
+  showActionButtons?: boolean;
+  minWidth?: number;
+  maxWidth?: number;
 }
 export interface PageState {
   skip: number;
@@ -52,7 +56,7 @@ export interface PageState {
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
-  pagerSettings: GridPagerSettings;
+  pagerSettings: GridPagerSettings | boolean;
   initialDataState? : PageState;
 }
 

@@ -53,7 +53,11 @@ export interface POApprovalMatrixLevel {
   id: string;
   name: string;
   limit: number;
-  signatures: Signature[];
+  signatures: Signature[] | {
+    signatureStage1?: string[];
+    signatureStage2?: string[];
+    signatureStage3?: string[];
+  };
 }
 
 export interface Signature {
