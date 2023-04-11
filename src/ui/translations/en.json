@@ -454,6 +454,7 @@
   "common.collapse.all": "Collapse All",
   "common.jump.to": "Jump To",
   "common.created.on": "Created on",
+  "common.search": "Search",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
