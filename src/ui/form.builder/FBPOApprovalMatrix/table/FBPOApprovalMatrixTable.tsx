@@ -8,7 +8,7 @@ import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
 
 const useStyles = makeStyles({
   root: {
-    height: "calc(100vh - 496px)",
+    height: "35vh",
   },
 });
 

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "height": "calc(100vh - 496px)",
+    "height": "36vh",
     "& .k-grouping-header.k-grouping-header-flex": {
       display: "none",
     },

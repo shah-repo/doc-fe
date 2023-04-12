@@ -2,7 +2,7 @@ import { DataResult, process, State } from "@progress/kendo-data-query";
 import { setGroupIds } from "@progress/kendo-react-data-tools";
 import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
 import { cloneDeep, find, findIndex, map, sortBy, startCase } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { AutoSizer, Size } from "react-virtualized";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -53,13 +53,13 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
 
   useEffect(() => {
 
-    setResultState(processWithGroups(getData(), initialDataState));
+    setResultState(processWithGroups(getData(), initialDataState.current));
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groups, employees, approvalLevels]);
 
 
-  const initialDataState: State  = {
+  const initialDataState  = useRef<State>({
     filter:
       {
         logic: "and",
@@ -67,7 +67,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
       },
     group: [],
     sort: [],
-  };
+  });
 
   const fieldToCellMapping = {
     signatures: SignatureCellTemplate,
@@ -79,21 +79,13 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     return newDataState;
   };
 
-  const [noDataMessage, setNoDataMessage] = useState(<span />);
-  const [dataState, setDataState] = useState<State>(initialDataState);
-  const [resultState, setResultState] = useState<DataResult>(processWithGroups(getData(), initialDataState));
+  const [resultState, setResultState] = useState<DataResult>(processWithGroups(getData(), initialDataState.current));
 
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
       const newDataState = processWithGroups(getData(), dataState);
-      setDataState(dataState);
+      initialDataState.current = dataState;
       setResultState(newDataState);
-      if (!newDataState.total) {
-        setNoDataMessage(<NoDataFound />);
-      }
-      else {
-        setNoDataMessage(<span/>);
-      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [approvalLevels]
@@ -165,12 +157,12 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
           reorderable={true}
           groupable={true}
           onDataStateChange={onDataStateChange}
-          {...dataState}
+          {...initialDataState.current}
           expandField="expanded"
           onColumnReorder={columnReorder}
         >
           {columnRenderer(width)}
-          <GridNoRecords>{noDataMessage}</GridNoRecords>
+          <GridNoRecords>{ !resultState.total && <NoDataFound />}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
     </>
