@@ -1,14 +1,14 @@
 import { Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import Select, { components, createFilter, StylesConfig } from "react-select";
+import Select, { components, createFilter, StylesConfig, Theme } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
 import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import { styles as FBAutoCompleteStyles } from "../../../../form.builder/styles/FBAutocomplete.styles";
-import Colors from "../../../../layout/theme/utils/colors";
+import { Colors } from "../../../../layout/theme-next";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField } from "../Input.styles";
@@ -26,7 +26,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
 export const selectStyles: StylesConfig = {
   multiValue: (base) => ({
     ...base,
-    background: Colors.light_blue,
+    background: Colors.primaryBg,
   }),
   multiValueRemove: (base) => ({
     ...base,
@@ -40,28 +40,29 @@ export const selectStyles: StylesConfig = {
     "minHeight": "40px",
     "boxShadow": "none",
     "&:hover": {
-      background: !state.isFocused ? Colors.background_white : Colors.white,
-    },
-  }),
-  option: (base) => ({
-    ...base,
-    "&:hover": {
-      background: Colors.sky_blue,
-    },
-    "&:active": {
-      background: Colors.sky_blue,
+      background: !state.isFocused ? Colors.primaryHighlight : Colors.white,
     },
   }),
   placeholder: (base) => ({
     ...base,
     letterSpacing: "normal",
-    color: Colors.lightest_grey2,
+    color: Colors.textDisabled,
   }),
   menu: (provided) => ({
     ...provided,
     zIndex: 2,
   }),
 };
+
+export const selectTheme = (theme: Theme): Theme => ({
+  ...theme,
+  colors: {
+    ...theme.colors,
+    primary: Colors.primaryLight,
+    primary25: Colors.primaryHighlight,
+    primary50: Colors.primaryHighlight,
+  },
+});
 
 export const MultiValueRemove = (props) => (
   <components.MultiValueRemove {...props}>
@@ -116,6 +117,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         options={options}
         onChange={onChange}
         styles={selectStyles}
+        theme={selectTheme}
         filterOption={filterOption}
         data-cy={`select_${fieldProps.field.name}`}
         input={<InputField name={fieldProps.field.name} />}

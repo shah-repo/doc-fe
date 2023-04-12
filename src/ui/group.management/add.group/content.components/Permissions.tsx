@@ -5,7 +5,7 @@ import Select from "react-select";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { Permission } from "../../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
-import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import { MultiValueRemove, selectStyles, selectTheme } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { toArray, toOptions } from "../../utils/transform";
 
@@ -54,6 +54,7 @@ const Permissions: React.FunctionComponent<Props> = ({
         onChange={(state: any) => setGroup({ ...group, tags: toArray(state) })}
         value={toOptions(group.tags)}
         styles={selectStyles}
+        theme={selectTheme}
       />
     </Box>
   );

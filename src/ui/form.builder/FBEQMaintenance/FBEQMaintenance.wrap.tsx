@@ -3,24 +3,24 @@ import { lowerCase } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import {
   DocumentRevision,
   DocumentRevisionStatus, FBOutputDocumentType,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions/types";
-import useAsync from "../../hooks/useAsync";
-import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import useActionCreator from "../../hooks/useActionCreator";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { toastError } from "../../components/notifications";
 import { documentVersionPath } from "../../document.revision/utils/paths";
-import { useSelector } from "react-redux";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
@@ -201,6 +201,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       isNewPMDisabled,
       isNewPMLoading,
       name,
+      docRevId,
+      eqMaintenanceState,
       editorConfig,
       isTypePM,
       preventativeFormOptions,
