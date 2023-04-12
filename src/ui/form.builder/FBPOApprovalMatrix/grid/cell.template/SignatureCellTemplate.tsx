@@ -1,6 +1,6 @@
-import * as React from "react";
 import { Chip, Grid } from "@material-ui/core";
 import { get } from "lodash";
+import * as React from "react";
 import Tooltip from "../../../../components/common/kendo/Tooltip";
 import { CustomGridCellProps } from "../../../../components/common/kendo/types";
 import { styles } from "./SignatureCellTemplate.styles";
@@ -37,19 +37,34 @@ export const SignatureCellTemplate = ({
         justify="flex-start"
         className={classes.container}
       >
-        {values?.map((val) => (<Tooltip
-          className={classes.chipContainer}
-          data={val}
-          showTooltip={true}
-          childrenElement={
-            <Chip
-              size="small"
-              className={classes.chip}
-              label={val}
-            />
-          }
-        />))}
+        {values?.map((value) => (<CustomChip {...{ value, classes }} />))}
       </Grid>
     </td>
   );
+};
+
+const CustomChip = ({ value, classes }) => {
+  const [dimensions, setDimensions] = React.useState({ scrollWidth: 0, clientWidth: 0 });
+  const chipRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (chipRef?.current?.firstChild) {
+      const { scrollWidth, clientWidth } = chipRef?.current?.firstChild as HTMLSpanElement;
+      setDimensions({ scrollWidth, clientWidth });
+    }
+  }, [chipRef]);
+
+  return (<Tooltip
+    className={classes.chipContainer}
+    data={value}
+    showTooltip={dimensions.scrollWidth > dimensions.clientWidth}
+    childrenElement={
+      <Chip
+        size="small"
+        className={classes.chip}
+        label={value}
+        ref={chipRef}
+      />
+    }
+  />);
 };

@@ -1,4 +1,4 @@
-import { Box, Grid, makeStyles } from "@material-ui/core";
+import { Box, makeStyles } from "@material-ui/core";
 import React from "react";
 import { FBInput } from "../..";
 import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
@@ -30,14 +30,12 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   const classes = useStyles();
   return (
     <Box className={classes.root}>
-      <Grid item xs={12}>
-        <FBPOAMKendoTable {...{
-          approvalLevels: approvalLevels as POApprovalMatrixLevel[],
-          employees,
-          groups,
-          handleEdit,
-        }}/>
-      </Grid>
+      <FBPOAMKendoTable {...{
+        approvalLevels: approvalLevels as POApprovalMatrixLevel[],
+        employees,
+        groups,
+        handleEdit,
+      }}/>
       {
         !isDocumentReleased && isDialogOpen &&
         <FBInput>

@@ -17,8 +17,8 @@ export const styles = makeStyles((theme: Theme) =>
       "color": Colors.textBlack,
       "cursor": "pointer",
       "fontWeight": 400,
-      "fontSize": "12px",
-      "lineHeight": "15px",
+      "fontSize": 12,
+      "lineHeight": 1.25,
       "margin": theme.spacing(.5),
       "& .MuiChip-label.MuiChip-labelSmall": {
         padding: theme.spacing(0, .75),
