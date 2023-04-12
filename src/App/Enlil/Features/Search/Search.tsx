@@ -1,6 +1,6 @@
 import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputAdornment, Popper, makeStyles } from "@material-ui/core";
+import { InputAdornment, makeStyles, Popper } from "@material-ui/core";
 import cx from "classnames";
 import { omit } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
 import { Autocomplete } from "../../../../ui/components/forms/fields-next";
 import { Colors, withThemeNext } from "../../../../ui/layout/theme-next";
+
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
@@ -141,17 +142,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getOptions = (searchString: string) => {
-  if (!searchString) {
-    return top100Films.slice(0, 3).map((el) => ({
-      ...el,
-      group: "Recent Searches",
-    }));
-  }
-  return top100Films.map((el) => ({
-    ...el,
-  }));
-};
 
 const Search: React.FC = () => {
   const intl = useIntl();
@@ -181,8 +171,20 @@ const Search: React.FC = () => {
     }
   };
 
+  const getOptions = (searchString: string) => {
+    if (!searchString) {
+      return top100Films.slice(0, 3).map((el) => ({
+        ...el,
+        group: intl.formatMessage({ id: "recent.search" }),
+      }));
+    }
+    return top100Films.map((el) => ({
+      ...el,
+    }));
+  };
+
   const handleFocusChange = (nextState: boolean) => () => setIsFocused(nextState);
-  const placeholder = intl.formatMessage({ id: "common.search" });
+  const placeholder = intl.formatMessage({ id: isFocused ? "keyword.to.search" : "common.search" });
 
   const options = getOptions(searchTerm);
 
@@ -209,7 +211,7 @@ const Search: React.FC = () => {
         onChange: doSearch,
         onKeyDown: gotoSearchPage,
       }}
-      noOptionsText="Nothing found"
+      noOptionsText="nothing.found"
       classes={{
         paper: classes.paper,
       }}

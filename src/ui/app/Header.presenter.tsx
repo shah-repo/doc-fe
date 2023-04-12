@@ -1,13 +1,13 @@
 import { FormControlLabel, Grid, Switch, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import HelpCenter from "../../App/Enlil/Features/HelpCenter/HelpCenter";
 import Search from "../../App/Enlil/Features/Search/Search";
 import Text from "../components/Text";
-import styles from "./Header.styles";
 import AutosaveToggle from "./autosave/autosave";
+import styles from "./Header.styles";
 
 export interface HeaderPresenterProps {
   name: string;
