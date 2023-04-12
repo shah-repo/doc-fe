@@ -1,8 +1,8 @@
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { process, State } from "@progress/kendo-data-query";
 import { setGroupIds } from "@progress/kendo-react-data-tools";
 import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
 import { find, findIndex, map, sortBy, startCase } from "lodash";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { AutoSizer, Size } from "react-virtualized";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -51,24 +51,6 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     }, {}),
   })), [approvalLevels, groups, employees ]);
 
-  useEffect(() => {
-
-    setResultState(processWithGroups(data, initialDataState.current));
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
-
-  const initialDataState  = useRef<State>({
-    filter:
-      {
-        logic: "and",
-        filters: [],
-      },
-    group: [],
-    sort: [],
-  });
-
   const fieldToCellMapping = {
     signatures: SignatureCellTemplate,
   };
@@ -79,17 +61,25 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     return newDataState;
   };
 
-  const [resultState, setResultState] = useState<DataResult>(processWithGroups(data, initialDataState.current));
+  const [dataState, setDataState] = useState<State>({
+    filter:
+      {
+        logic: "and",
+        filters: [],
+      },
+    group: [],
+    sort: [],
+  });
 
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(data, dataState);
-      initialDataState.current = dataState;
-      setResultState(newDataState);
+      setDataState(dataState);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [approvalLevels]
   );
+
+  const resultState = useMemo(() => processWithGroups(data, dataState), [data, dataState]);
 
   const InputFilter = (props: GridFilterCellProps) => (
     <InputFilterCellTemplate {...props}/>
@@ -157,7 +147,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
           reorderable={true}
           groupable={true}
           onDataStateChange={onDataStateChange}
-          {...initialDataState.current}
+          {...dataState}
           expandField="expanded"
           onColumnReorder={columnReorder}
         >
