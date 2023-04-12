@@ -1,4 +1,3 @@
-import { makeStyles } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import { setGroupIds } from "@progress/kendo-react-data-tools";
 import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
@@ -18,19 +17,7 @@ import { POApprovalMatrixLevel, Signature } from "../FBPOApprovalMatrix.types";
 import { InputFilterCellTemplate } from "./cell.template/InputFilterCellTemplate";
 import { SignatureCellTemplate } from "./cell.template/SignatureCellTemplate";
 import gridConfiguration from "./column.definition";
-
-
-const useStyles = makeStyles({
-  root: {
-    "height": "calc(100vh - 496px)",
-    "& .k-grouping-header.k-grouping-header-flex": {
-      display: "none",
-    },
-    "& .k-grid-header.k-grid-draggable-header": {
-      padding: 0,
-    },
-  },
-});
+import useStyles from "./FBPOAMKendoTable.styles";
 
 interface KendoTableProps {
   approvalLevels: POApprovalMatrixLevel[];

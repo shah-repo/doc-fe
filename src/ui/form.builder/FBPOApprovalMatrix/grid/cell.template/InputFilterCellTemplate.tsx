@@ -1,3 +1,4 @@
+import { makeStyles } from "@material-ui/core";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { debounce, isEmpty } from "lodash";
@@ -6,13 +7,19 @@ import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../../components/common/kendo/helpers";
 import { KendoGridFilterCellOperators } from "../../../../components/KendoGrid/interfaces";
 
+const useStyles = makeStyles((theme) => ({
+  clearButton: {
+    marginLeft: theme.spacing(.625),
+  },
+}));
+
 export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
   value = "",
   operator = "contains",
   onChange,
 }) => {
   const intl = useIntl();
-
+  const classes = useStyles();
   const updateFilter = ({
     event,
     newValue,
@@ -33,7 +40,6 @@ export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
     updateFilter({ event, newValue: "", newOperator: "" });
   };
 
-
   const updateValue = debounce((e: InputChangeEvent) => {
     const newValue = e.target.value;
     if (newValue !== value) {
@@ -50,13 +56,12 @@ export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
         style={{ width: "100%" }}
       />
       <button
-        className="k-button k-button-icon k-clear-button-visible"
+        className={`k-button k-button-icon k-clear-button-visible ${classes.clearButton}`}
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={clearFilter}
         hidden={
           operator === KendoGridFilterCellOperators.CONTAINS && isEmpty(value)
         }
-        style={{ marginLeft: "5px" }}
       >
         <span className="k-icon k-i-filter-clear" />
       </button>
