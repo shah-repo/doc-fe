@@ -1,8 +1,8 @@
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import { setGroupIds } from "@progress/kendo-react-data-tools";
 import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
-import { cloneDeep, find, findIndex, map, sortBy, startCase } from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { find, findIndex, map, sortBy, startCase } from "lodash";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { AutoSizer, Size } from "react-virtualized";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -39,7 +39,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     gridConfiguration.columns
   );
 
-  const getData = () => cloneDeep(approvalLevels)?.map((ele) => ({
+  const data = useMemo(() => approvalLevels?.map((ele) => ({
     ...ele, signatures: (ele.signatures as Signature[]).reduce((prevVal, currentVal) => {
 
       const groupNames = currentVal?.groups?.map((group) => groups?.get(group.id)?.name);
@@ -49,14 +49,14 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
         [`signatureStage${currentVal?.signatureStage}`]: JSON.stringify([...groupNames, ...employeeNames]),
       };
     }, {}),
-  }));
+  })), [approvalLevels, groups, employees ]);
 
   useEffect(() => {
 
-    setResultState(processWithGroups(getData(), initialDataState.current));
+    setResultState(processWithGroups(data, initialDataState.current));
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [groups, employees, approvalLevels]);
+  }, [data]);
 
 
   const initialDataState  = useRef<State>({
@@ -79,11 +79,11 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     return newDataState;
   };
 
-  const [resultState, setResultState] = useState<DataResult>(processWithGroups(getData(), initialDataState.current));
+  const [resultState, setResultState] = useState<DataResult>(processWithGroups(data, initialDataState.current));
 
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(getData(), dataState);
+      const newDataState = processWithGroups(data, dataState);
       initialDataState.current = dataState;
       setResultState(newDataState);
     },
@@ -147,7 +147,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={`${classes.root}`}
+          className={classes.root}
           style={{ width: `${width}px` }}
           data={resultState.data}
           total={resultState.total}
