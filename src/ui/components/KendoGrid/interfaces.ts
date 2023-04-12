@@ -2,7 +2,6 @@ import { DataResult, State } from "@progress/kendo-data-query";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { KendoColumn } from "../../components/common/kendo/types";
 import { TablePanelStateProps } from "../../components/table/types";
-import { POApprovalMatrixLevel } from "../../form.builder/FBPOApprovalMatrix/FBPOApprovalMatrix.types";
 
 interface FilterList {
   field: string;
@@ -51,8 +50,6 @@ export interface KendoGridProps<T> {
   queryUrl: string;
   defaultPayloadData: object;
   documentTypeCategory?: string;
-  approvalLevels?: POApprovalMatrixLevel[];
-  className?: string;
 }
 
 export interface DataLoaderProps {

@@ -1,8 +1,8 @@
-import React from "react";
+import * as React from "react";
 import { Chip, Grid } from "@material-ui/core";
 import { get } from "lodash";
-import Tooltip from "../kendo/Tooltip";
-import { CustomGridCellProps } from "../kendo/types";
+import Tooltip from "../../../../components/common/kendo/Tooltip";
+import { CustomGridCellProps } from "../../../../components/common/kendo/types";
 import { styles } from "./SignatureCellTemplate.styles";
 
 export const SignatureCellTemplate = ({
@@ -15,7 +15,7 @@ export const SignatureCellTemplate = ({
   cellRowClick,
 }: CustomGridCellProps) => {
   const classes = styles();
-  const values = get(dataItem, field || "");
+  const values = JSON.parse( get(dataItem, field || "") || "[]");
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });

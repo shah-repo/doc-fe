@@ -1,11 +1,10 @@
 import { chain } from "lodash";
-import { pagerSettings } from "../../../components/common/kendo/helpers";
-import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../../components/common/kendo/types";
+import { KendoColumn, KendoGridConfiguration } from "../../../components/common/kendo/types";
 
 const columns: KendoColumn[] = [
   {
     field: "name",
-    title: "Level Name",
+    title: "form.builder.poam.level.name",
     show: true,
     filter: "text",
     locked: false,
@@ -16,7 +15,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "limit",
-    title: "Limit",
+    title: "form.builder.poam.limit",
     show: true,
     filter: "text",
     locked: false,
@@ -27,11 +26,11 @@ const columns: KendoColumn[] = [
   },
   {
     field: "signatures.signatureStage1",
-    title: "Signature 1",
+    title: "form.builder.poam.signature1",
     show: true,
     filter: "text",
     locked: false,
-    cell: KendoCellTemplates.SIGNATURE_CELL,
+    width: 20,
     groupable: false,
     showColumnMenu: true,
     orderIndex: 3,
@@ -39,24 +38,24 @@ const columns: KendoColumn[] = [
   },
   {
     field: "signatures.signatureStage2",
-    title: "Signature 2",
+    title: "form.builder.poam.signature2",
     show: true,
     filter: "text",
     locked: false,
     groupable: true,
-    cell: KendoCellTemplates.SIGNATURE_CELL,
+    width: 20,
     showColumnMenu: true,
     orderIndex: 4,
     showTooltip: true,
   },
   {
     field: "signatures.signatureStage3",
-    title: "Signature 3",
+    title: "form.builder.poam.signature3",
     show: true,
     filter: "text",
     locked: false,
     groupable: true,
-    cell: KendoCellTemplates.SIGNATURE_CELL,
+    width: 20,
     showColumnMenu: true,
     orderIndex: 5,
   },
@@ -68,7 +67,7 @@ const gridConfiguration: KendoGridConfiguration = {
     .map("field")
     .value(),
   columns,
-  pagerSettings,
+  pagerSettings: {},
 };
 
 export default gridConfiguration;
