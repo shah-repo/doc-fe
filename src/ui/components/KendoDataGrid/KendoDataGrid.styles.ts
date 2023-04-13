@@ -1,251 +1,410 @@
 import { makeStyles } from "@material-ui/core";
 import { Colors } from "../../layout/theme-next";
 
+const BASE_COLOR = Colors.primaryBg;
+
 export default makeStyles((theme) => ({
   "@global": {
-    ".k-pager-numbers-wrap .k-pager-numbers .k-link": {
-      backgroundColor: Colors.white,
-      borderRadius: 15,
-      marginLeft: 4,
-      fontSize: 14,
-      fontWeight: 400,
-      color: Colors.primary,
-    },
-    ".k-pager-wrap .k-link.k-pager-nav:not(.k-state-disabled)": {
-      color: Colors.primary,
-    },
-    ".k-pager-wrap .k-link.k-pager-nav.k-state-disabled": {
-      color: Colors.statusClosed,
-    },
-    ".k-grid-pager .k-link.k-state-selected": {
-      backgroundColor: Colors.primaryHighlight,
-      color: Colors.primary,
-      fontWeight: "600",
-      fontSize: 14,
-      borderRadius: 15,
-      borderColor: Colors.primary,
-      borderWidth: 1,
-    },
-    ".k-pager-numbers-wrap": {
-      fontSize: 14,
-      color: Colors.textBlack,
-    },
-    ".k-grid-pager": {
-      fontSize: 12,
-    },
-    ".k-pager-numbers .k-link": {
-      color: Colors.textBlack,
-    },
-    ".k-grid-header .k-link .k-icon": {
-      color: Colors.primary,
-    },
-    ".k-grid-header .k-i-sort-asc-sm:before": {
-      content: "\\e017",
-    },
-    ".k-grid-header .k-i-sort-desc-sm:before": {
-      content: "\\e019",
-    },
-    "td[role=\"gridcell\"]": {
-      whiteSpace: "nowrap",
-    },
-    "td#kendo-expandable-column[role=\"gridcell\"]": {
-      whiteSpace: "normal",
-    },
-    ".k-pager-numbers .k-link:hover": {
-      color: Colors.primary,
-      backgroundColor: Colors.fieldDisabled,
-      borderRadius: 15,
-    },
-    ".k-column-title": {
-      minWidth: 0,
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-      flexShrink: 1,
-      overflow: "hidden",
-      fontWeight: 600,
-      fontSize: 14,
-      color: Colors.textBlack,
-      textTransform: "uppercase",
-    },
-    ".k-toolbar, .k-grid-header, .k-grouping-header, .k-grid-add-row, .k-grid-footer": {
-      background: Colors.primaryBg,
-      color: Colors.textBlack,
-      borderStyle: "none",
-    },
-    ".k-grid tr.k-alt .k-grid-content-sticky, .k-grid tr.k-alt": {
-      background: Colors.white,
-    },
-    ".k-grouping-header .k-indicator-container": {
-      fontSize: 12,
-      color: Colors.textBlack,
-    },
-    ".k-grid tbody tr:hover td.k-grid-content-sticky, .k-grid tbody tr:hover td": {
-      backgroundColor: Colors.fieldDisabled,
-    },
-    ".k-grid .k-grid-container .k-grid-content table tbody tr td": {
-      paddingTop: 0,
-      paddingBottom: 0,
-    },
-    ".k-indicator-container": {
-      display: "flex",
-    },
-    ".k-button, .k-button-secondary, .k-dropdown .k-dropdown-wrap, .k-dropdowntree .k-dropdown-wrap": {
-      backgroundColor: Colors.white,
-    },
-    ".k-pager-wrap": {
-      backgroundColor: Colors.primaryBg,
-    },
-    ".k-dropdown .k-dropdown-wrap:hover": {
-      backgroundColor: Colors.fieldDisabled,
-    },
-    ".k-list .k-item.k-state-selected, .k-list-optionlabel.k-state-selected": {
-      backgroundColor: Colors.primary,
-    },
-    ".k-list .k-item:hover, .k-list .k-item.k-state-hover": {
-      backgroundColor: Colors.fieldDisabled,
-    },
-    ".k-list-optionlabel:hover, .k-list-optionlabel.k-state-hover": {
-      backgroundColor: Colors.fieldDisabled,
-    },
-    ".k-list .k-item:hover.k-state-selected, .k-list .k-item.k-state-hover.k-state-selected": {
-      backgroundColor: Colors.primary,
-    },
-    ".k-list-optionlabel:hover.k-state-selected, .k-list-optionlabel.k-state-hover.k-state-selected": {
-      backgroundColor: Colors.primary,
-    },
-    ".k-popup": {
-      fontSize: 14,
-    },
-    ".k-master-row": {
-      height: 50,
-    },
-    ".k-grid-header .k-header": {
-      paddingBottom: 0,
-    },
-    ".k-grid-header-wrap table, .k-grid-content .k-grid-table": {
-      minWidth: "100%",
-    },
     ".k-grid": {
-      color: Colors.textBlack,
-      borderRadius: 4,
+      borderRadius: theme.shape.borderRadius,
       border: `1px solid ${Colors.tableStroke}`,
       backgroundColor: Colors.tableStroke,
+      color: Colors.textBlack,
+      overflow: "hidden",
     },
-    ".k-grid .k-grid-table tbody tr": {
-      cursor: "pointer",
-      height: 40,
+    ".k-grid-toolbar": {
+      padding: theme.spacing(1.25, 2, 0),
+      backgroundColor: BASE_COLOR,
+      border: "none",
     },
-    ".k-grid.no-row-pointer .k-grid-table tbody tr": {
-      cursor: "default",
+    ".k-grouping-header": {
+      "padding": theme.spacing(1.25, 1),
+      "backgroundColor": BASE_COLOR,
+      "border": "none",
+      "fontSize": 12,
+
+      "&.k-grouping-header-flex": {
+        gap: `${theme.spacing(2)}px`,
+      },
+      "& .k-indicator-container": {
+        padding: 0,
+        margin: 0,
+      },
+      "& .k-group-indicator": {
+        "borderRadius": 30,
+        "backgroundColor": Colors.white,
+        "height": 30,
+        "padding": theme.spacing(.5, 1.25),
+        "border": "none",
+
+        "& .k-link .k-icon": {
+          margin: theme.spacing(0, 1.25, 0, 0),
+          color: Colors.textGray,
+          fontSize: 12,
+          fontWeight: 600,
+        },
+        "& .k-button-icon": {
+          "margin": theme.spacing(0, 0, 0, 1.25),
+          "color": Colors.primaryLight,
+          "minWidth": 0,
+          "opacity": 1,
+
+          "&:hover": {
+            color: Colors.primary,
+          },
+        },
+      },
     },
-    ".k-grid .k-grid-table tbody th, .k-grid .k-grid-table tbody td": {
-      borderWidth: 0,
-      borderBottomWidth: 1,
+    ".k-grid-header": {
+      "backgroundColor": BASE_COLOR,
+      "border": "none",
+
+      "& table": {
+        minWidth: "100%",
+      },
+      "& tr": {
+        "&:first-child th": {
+          paddingTop: theme.spacing(1.25),
+        },
+        "&:last-child th": {
+          paddingBottom: theme.spacing(1.25),
+        },
+      },
+      "& th": {
+        "padding": theme.spacing(.5, 2),
+        "border": "none",
+        "borderRight": `1px solid ${Colors.white}`,
+
+        "&:not(.k-grid-header-sticky) + .k-grid-header-sticky": {
+          boxShadow: "-10px 5px 10px rgba(0, 0, 0, .1)",
+        },
+        "&.k-grid-header-sticky": {
+          "backgroundColor": BASE_COLOR,
+          "border": "none",
+          "borderRight": `1px solid ${Colors.white}`,
+
+          "&:has(+ :not(.k-grid-header-sticky))": {
+            borderRightColor: "transparent",
+            boxShadow: "10px 5px 10px rgba(0, 0, 0, .1)",
+          },
+        },
+        "&.k-sorted": {
+          // "backgroundColor": BASE_COLOR, // TODO check with UX team
+        },
+        "&:last-child": {
+          borderRight: "none",
+        },
+        "&[role=presentation]": {
+          borderRight: "none",
+        },
+      },
+      "& .k-filter-row": {
+        "& th:not([aria-label])": {
+          borderRight: "none",
+        },
+        "& .k-textbox": {
+          width: "100%",
+        },
+        "& .k-button": {
+          marginLeft: theme.spacing(.5),
+        },
+      },
+      "& .k-link .k-icon": {
+        color: Colors.textGray,
+        fontWeight: 600,
+        fontSize: 12,
+        verticalAlign: "0.1em",
+        marginLeft: theme.spacing(.5),
+      },
+      "& .k-header": {
+        verticalAlign: "middle",
+      },
+      "& .k-column-title": {
+        minWidth: 0,
+        flexShrink: 1,
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        fontWeight: 600,
+      },
+      "& .k-grid-column-menu": {
+        "top": theme.spacing(.5),
+
+        "&:hover": {
+          backgroundColor: "transparent",
+        },
+      },
     },
-    ".k-grid .k-grid-header table thead th": {
-      borderWidth: 0,
-      borderRightWidth: 1,
-      borderColor: Colors.white,
-      borderStyle: "solid",
-      paddingLeft: 15,
-      paddingRight: 15,
+    ".k-grid-content": {
+      "& table": {
+        minWidth: "100%",
+      },
+      "& tr": {
+        "cursor": "pointer", // TODO move to concrete component
+        "height": 40,
+
+        "&.k-grouping-row": {
+          backgroundColor: Colors.gray,
+        },
+        "& td": {
+          "border": "none",
+          "padding": theme.spacing(.75, 2),
+          "borderBottom": `1px solid ${Colors.tableStroke}`,
+          "backgroundColor": "transparent",
+          "whiteSpace": "nowrap", // TODO move to concrete component
+
+          "&.k-group-cell": {
+            backgroundColor: Colors.gray,
+          },
+          "&:not(.k-grid-content-sticky) + .k-grid-content-sticky": {
+            boxShadow: "-10px 5px 10px rgba(0, 0, 0, .1)",
+          },
+          "&.k-grid-content-sticky": {
+            "borderColor": Colors.tableStroke,
+
+            "&:has(+ :not(.k-grid-content-sticky))": {
+              boxShadow: "10px 5px 10px rgba(0, 0, 0, .1)",
+            },
+          },
+          "&.k-sorted": {
+            // backgroundColor: "transparent", // TODO check with UX team
+          },
+          "&#kendo-expandable-column": {
+            whiteSpace: "normal", // TODO remove this rule in favor of custom cell template
+          },
+        },
+        "&:hover td": {
+          "backgroundColor": Colors.hover,
+
+          "&.k-grid-content-sticky": {
+            backgroundColor: Colors.hover,
+          },
+          "&.k-group-cell": {
+            backgroundColor: Colors.hover,
+          },
+        },
+        "&:last-child td": {
+          borderBottom: "none",
+        },
+      },
     },
-    ".k-grouping-header .k-group-indicator": {
-      borderRadius: 15,
-      backgroundColor: Colors.white,
-      height: 30,
+    ".k-grid-footer": {
+      background: BASE_COLOR,
+      color: Colors.textBlack,
+      border: "none",
     },
-    ".k-grouping-header .k-group-indicator .k-link": {
-      fontStyle: "normal",
-      fontWeight: "normal",
-      lineHeight: 20,
+    ".k-pager": {
+      "backgroundColor": BASE_COLOR,
+      "fontSize": 14,
+      "color": Colors.textBlack,
+      "padding": theme.spacing(1.25, 2.5),
+      "gap": `${theme.spacing(.25)}px`,
+
+      "& .k-pager-info": {
+        margin: 0,
+      },
+      "& .k-pager-numbers": {
+        gap: `${theme.spacing(.25)}px`,
+      },
+      "& .k-link": {
+        "color": Colors.textBlack,
+        "borderRadius": 50,
+        "width": 30,
+        "height": 30,
+
+        "&:focus": {
+          boxShadow: "none",
+          color: Colors.primary,
+          backgroundColor: Colors.white,
+        },
+        "&:hover": {
+          color: Colors.primary,
+          backgroundColor: Colors.white,
+        },
+        "&.k-pager-nav": {
+          color: Colors.primary,
+        },
+        "&.k-pager-nav .k-icon": {
+          fontSize: 14,
+        },
+        "&.k-pager-first .k-icon": {
+          fontSize: 12,
+        },
+        "&.k-pager-last .k-icon": {
+          fontSize: 12,
+        },
+        "&.k-state-selected": {
+          backgroundColor: Colors.primary,
+          color: Colors.white,
+          fontWeight: 600,
+        },
+        "&.k-state-disabled": {
+          color: Colors.statusClosed,
+        },
+      },
     },
-    ".k-grouping-header .k-group-indicator .k-link .k-icon": {
-      marginRight: 10,
-      marginLeft: 6,
-      color: Colors.textGray,
-      fontWeight: 900,
+    // TODO switch to MUI components and remove theese styles
+    ".k-button": {
+      "height": 30,
+      "minWidth": 30,
+      "color": Colors.textGray,
+      "background": "none",
+      "backgroundColor": Colors.white,
+      "borderRadius": theme.shape.borderRadius / 2,
+      "border": `1px solid ${Colors.tableStroke}`,
+
+      "&:hover": {
+        backgroundColor: Colors.hover,
+        borderColor: Colors.tableStroke,
+      },
+      "&:focus": {
+        boxShadow: "none",
+        backgroundColor: Colors.hover,
+        borderColor: Colors.tableStroke,
+      },
+      "&:disabled": {
+        color: Colors.buttonDisabled,
+        background: Colors.gray,
+        opacity: .6,
+      },
     },
-    ".k-grouping-header .k-group-indicator .k-flat": {
-      marginLeft: 10,
-      marginRight: 6,
+    ".k-textbox": {
+      "height": 30,
+      "backgroundColor": Colors.white,
+      "borderRadius": theme.shape.borderRadius / 2,
+      "border": `1px solid ${Colors.tableStroke}`,
+
+      "&:hover": {
+        backgroundColor: Colors.gray,
+        borderColor: Colors.tableStroke,
+      },
+      "&:focus": {
+        boxShadow: "none",
+        backgroundColor: Colors.white,
+        borderColor: Colors.primaryLight,
+      },
     },
-    ".k-grid-header th.k-grid-header-sticky, .k-grid-header .k-header.k-grid-header-sticky": {
-      backgroundColor: Colors.primaryBg,
+    ".k-dropdown": {
+      "& .k-dropdown-wrap": {
+        "height": 30,
+        "background": "none",
+        "backgroundColor": Colors.white,
+        "borderRadius": theme.shape.borderRadius / 2,
+        "border": `1px solid ${Colors.tableStroke}`,
+
+        "&:hover": {
+          backgroundColor: Colors.gray,
+          borderColor: Colors.tableStroke,
+        },
+        "&:focus": {
+          boxShadow: "none",
+          backgroundColor: Colors.white,
+          borderColor: Colors.primaryLight,
+        },
+        "&.k-state-focused": {
+          boxShadow: "none",
+          backgroundColor: Colors.white,
+          borderColor: Colors.primaryLight,
+        },
+      },
     },
-    ".k-master-row .k-grid-content-sticky": {
-      borderColor: "rgba(0, 0, 0, 0.08)",
+    ".k-select": {
+      "& .k-icon": {
+        color: Colors.textGray,
+        fontSize: 12,
+      },
     },
-    ".k-grid-header .k-grid-filter:hover, .k-grid-header th.k-grid-header-sticky": {
-      backgroundColor: Colors.primaryBg,
+    ".k-popup": {
+      border: `1px solid ${Colors.stroke}`,
+      margin: theme.spacing(.5, 0),
+      borderRadius: theme.shape.borderRadius / 2,
+      overflow: "hidden",
     },
-    ".k-grid-header td.k-grid-header-sticky, .k-grid-header .k-grid-header-sticky.k-sorted": {
-      backgroundColor: Colors.primaryBg,
-    },
-    ".k-checkbox:checked, .k-checkbox.k-checked": {
-      backgroundColor: Colors.primary,
-      borderColor: Colors.primary,
-    },
-    ".k-textbox::selection, .k-textbox .k-input::selection": {
-      backgroundColor: Colors.primary,
-    },
-    ".k-toolbar.k-grid-toolbar": {
-      paddingBottom: 0,
-    },
-    ".k-grid .k-grid-toolbar": {
-      borderRadius: "4px 4px 0px 0px",
-      borderColor: Colors.tableStroke,
-    },
-    ".k-grid .k-grid-pager": {
-      borderRadius: "0px 0px 4px 4px",
-      borderColor: Colors.tableStroke,
-    },
-    ".k-grid-header.k-grid-draggable-header": {
-      marginRight: 1,
-    },
-    ".k-grid-header .k-grid-filter": {
-      bottom: -4,
-    },
-    ".k-toolbar.k-grid-toolbar, .k-grouping-header.k-grouping-header-flex": {
-      paddingLeft: 15,
-    },
-    ".k-columnmenu-item": {
-      height: 38,
-      alignItems: "center",
-      display: "flex",
+    ".k-list-container": {
+      "fontSize": ".875rem",
+
+      "& > .k-popup": {
+        "& .k-state-selected": {
+          "color": Colors.textBlack,
+          "backgroundColor": Colors.primaryHighlight,
+
+          "&:hover": {
+            color: Colors.textBlack,
+            backgroundColor: Colors.primaryHighlight,
+          },
+        },
+      },
+      "& .k-list-optionlabel": {
+        "padding": theme.spacing(.5, 1.5),
+
+        "&:hover": {
+          backgroundColor: Colors.hover,
+        },
+      },
+      "& .k-item": {
+        "padding": theme.spacing(.5, 1.5),
+
+        "&:hover": {
+          backgroundColor: Colors.hover,
+        },
+      },
     },
     ".k-grid-columnmenu-popup": {
-      border: Colors.stroke,
-      borderRadius: 4,
-      boxShadow: theme.shadows[2],
+      "& .k-columnmenu-item": {
+        "padding": theme.spacing(1, 1.5),
+        "minHeight": 48,
+        "display": "flex",
+        "alignItems": "center",
+
+        "&:hover": {
+          backgroundColor: Colors.hover,
+        },
+      },
+      "& .k-icon": {
+        minWidth: 20,
+        fontSize: 16,
+        color: Colors.textGray,
+        marginRight: theme.spacing(1.75),
+      },
     },
-    ".k-popup.k-child-animation-container": {
-      borderRadius: 4,
+    ".k-animation-container": {
+      "boxShadow": "none",
+
+      "& > .k-popup": {
+        boxShadow: "none",
+      },
+      "&.k-animation-container-shown": {
+        "& > .k-popup": {
+          boxShadow: theme.shadows[2],
+        },
+      },
     },
-    ".k-columnmenu-item > .k-icon.k-grid-menu-icon": {
-      color: "transparent",
-      height: 16,
-      width: 18,
-      fontSize: 14,
-      marginRight: 10,
-    },
-    ".k-columnmenu-item > .k-icon.k-i-lock.k-grid-menu-icon": {
-      background: "url(../../assets/images/freeze.svg)",
-      backgroundRepeat: "no-repeat",
-    },
-    ".k-columnmenu-item > .k-icon.k-i-unlock.k-grid-menu-icon": {
-      background: "url(../../assets/images/unfreeze.svg)",
-      backgroundRepeat: "no-repeat",
-    },
-    ".k-columnmenu-item > .k-icon.k-i-preview.k-grid-menu-icon": {
-      background: "url(../../assets/images/hide.svg)",
-      backgroundRepeat: "no-repeat",
-    },
-    ".k-grid-header thead tr th .k-icon.k-i-arrow-n, .k-grid-header thead tr th .k-icon.k-i-arrow-s": {
-      color: Colors.textBlack,
-    },
-    ".k-list-container .k-popup .k-list .k-item": {
-      whiteSpace: "nowrap",
+    ".k-checkbox": {
+      "border": `2px solid ${Colors.textBlack}`,
+      "background": Colors.white,
+      "borderRadius": theme.shape.borderRadius / 2,
+
+      "&:disabled": {
+        opacity: 1,
+        backgroundColor: Colors.hover,
+        borderColor: Colors.buttonDisabled,
+      },
+      "&:checked": {
+        "backgroundColor": Colors.primary,
+        "borderColor": Colors.primary,
+        "color": Colors.white,
+
+        "&:disabled": {
+          opacity: 1,
+          backgroundColor: Colors.buttonDisabled,
+          borderColor: Colors.buttonDisabled,
+        },
+      },
+      "&.k-checked": {
+        backgroundColor: Colors.primary,
+        borderColor: Colors.primary,
+        color: Colors.white,
+      },
     },
   },
 }));
