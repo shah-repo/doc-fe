@@ -4,6 +4,7 @@ import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
+import { Document } from "../../../state/ducks/documents/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -17,6 +18,9 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
   public updateApi = new FBRequest<FBInlineApprovalBody, FBPOInlineApprovalUpdateBody>(FBEndpoint.ApprovalsUpdate);
+
+  // need to create the type structure after testing API and replace with Document
+  public approvalsThresholdApi = new FBRequest<Document, null>();
 
   public constructor({ id, approvals }: FBPOApprovalsConstructor) {
     super();
@@ -155,6 +159,15 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     this.updateApi.data = data;
     this.updateApi.onSuccess();
   });
+
+  public fetchApprovalsThreshold = (id: string) => {
+    if (!id) { return; }
+    this.approvalsThresholdApi.set({
+      url: FBEndpoint.ApprovalsThreshold,
+      urlValues: { id },
+      method: "get",
+    });
+  };
 }
 
 export default FBPOApprovalsState;
