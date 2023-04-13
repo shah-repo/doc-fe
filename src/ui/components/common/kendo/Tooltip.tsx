@@ -12,6 +12,7 @@ interface Props {
   placement?: "bottom" | "left" | "right" | "top" | "top-start";
   showTooltip?: boolean;
   tooltipContent?: Nullable<string>;
+  className?: string;
 }
 
 const Tooltip: React.FunctionComponent<Props> = ({
@@ -21,9 +22,10 @@ const Tooltip: React.FunctionComponent<Props> = ({
   placement = "top-start",
   showTooltip = false,
   tooltipContent,
+  className,
 }) => {
   const classes = styles();
-  const renderContent = <span>
+  const renderContent = <span className={className}>
     {!childrenElement && <span  className={customClass}>{data}</span>}
     {childrenElement && childrenElement}
   </span>;

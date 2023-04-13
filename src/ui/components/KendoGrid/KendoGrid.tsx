@@ -82,7 +82,7 @@ export function KendoGrid<T extends any>({
 
   useEffect(() => {
     if (didMount) {
-      setDataState(tableCriteria.queryDict.dataState);
+      setDataState(tableCriteria?.queryDict?.dataState);
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
       }
