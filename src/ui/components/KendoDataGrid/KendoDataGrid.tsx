@@ -1,7 +1,8 @@
 import { Grid, GridProps } from "@progress/kendo-react-grid";
 import { LocalizationProvider, loadMessages } from "@progress/kendo-react-intl";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { intl } from "../../../common/intl";
+import { withThemeNext } from "../../layout/theme-next";
 import { Translation } from "../../translations/types";
 import useStyles from "./KendoDataGrid.styles";
 
@@ -16,14 +17,16 @@ loadMessages({
   },
 }, intl.locale);
 
-const KendoDataGrid: React.FC<GridProps> = (props) => {
+const KendoDataGrid: React.FC<PropsWithChildren<GridProps>> = ({ children, ...props }, ref) => {
   useStyles();
 
   return (
     <LocalizationProvider language={intl.locale}>
-      <Grid {...props} />
+      <Grid {...props} ref={ref}>
+        {children}
+      </Grid>
     </LocalizationProvider>
   );
 };
 
-export default KendoDataGrid;
+export default withThemeNext(React.forwardRef(KendoDataGrid));
