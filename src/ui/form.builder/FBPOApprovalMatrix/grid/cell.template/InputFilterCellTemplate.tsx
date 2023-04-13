@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
   value = "",
-  operator = "contains",
+  operator = KendoGridFilterCellOperators.CONTAINS,
   onChange,
 }) => {
   const intl = useIntl();
