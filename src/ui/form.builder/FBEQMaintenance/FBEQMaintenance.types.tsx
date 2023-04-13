@@ -16,6 +16,7 @@ export type FBEQMaintenanceProps =
   preventativeFormOptions?: FBAutocompleteProps["filterOptions"];
   getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
   maintenanceHistory?: DocumentRevision[];
+  docRevId: string;
 };
 
 export interface AvailableMaintenanceForm {

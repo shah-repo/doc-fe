@@ -3,6 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
+import DocumentRevisionSockets from "../../app/sockets/DocumentRevisionSockets";
 import styles from "./FBEQMaintenance.styles";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
@@ -22,11 +23,14 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   rules,
   autosave,
   maintenanceHistory,
+  docRevId,
+  eqMaintenanceState,
   ...props
 }) => {
   const classes = styles();
   return (
     <FBInput showErrorMsg={false} {...{ name, rules, autosave }} {...props} type="eqmaintenance">
+      <DocumentRevisionSockets eqMaintenanceState ={eqMaintenanceState} docRevId={docRevId}/>
       <FBSection
         {...{ label }}
         name={`${name}-section`}

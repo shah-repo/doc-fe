@@ -218,7 +218,10 @@ class FBWorkspaceState extends FBSchemaState {
     }
     this.omitAutosave = true;
     if (undoPO) {
-      body = { formInput: prevDocumentRevision?.formInput }; // Present API is failing needs to check later time
+      body = {
+        formInput: prevDocumentRevision?.formInput,
+        description: prevDocumentRevision?.description,
+      };
     }
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;

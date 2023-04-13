@@ -10,6 +10,7 @@ import { getFormattedDateString, MomentFormats } from "../../../../common/utils/
 import { getHasPermission } from "../../../../common/utils/selectors";
 import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -27,6 +28,7 @@ import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import { useApproveAndRelease, useUndoPOChanges } from "../../../hooks/docCustomization/useCustomization";
+import useActionCreator from "../../../hooks/useActionCreator";
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
@@ -104,6 +106,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
 
+  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
@@ -196,8 +199,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = () => {
-    history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
-    workspaceState?.saveDocRev({}, false, true, documentRevision);
+    Promise.resolve(workspaceState?.saveDocRev({}, false, true,
+      JSON.parse(localStorage.getItem("prevPODoc") ?? "") as DocumentRevision))
+      .then((data) => {
+        history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
+        localStorage.setItem("prevPODoc", "");
+        setDocumentRevision(data);
+      });
   };
   const onFormClick = () => {
     if (redlineActive) {

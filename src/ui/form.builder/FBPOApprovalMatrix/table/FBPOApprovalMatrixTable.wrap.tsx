@@ -44,7 +44,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     const signatureStages = [1, 2, 3];
 
 
-    const handleEdit = (index, item: POApprovalMatrixLevel) => () => {
+    const handleEdit = (index, item: POApprovalMatrixLevel) => {
       if (props.disabled && !isDocumentReleased) {
         return;
       }
@@ -53,7 +53,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       }
       setIndex(index);
       const stages = map(signatureStages, (signatureStage) =>
-        find(item.signatures, { signatureStage }) || { signatureStage });
+        find(item.signatures as Signature[], { signatureStage }) || { signatureStage });
       item = {
         ...item,
         signatures: sortBy(stages, "signatureStage") as Signature[],

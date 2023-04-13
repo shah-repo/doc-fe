@@ -138,7 +138,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
 
   const clonePODocument = () => {
-    localStorage.setItem("prevPODoc", JSON.stringify(documentRevision?.formInput));
+    localStorage.setItem("prevPODoc", JSON.stringify(documentRevision));
     cloneDocument();
   };
 

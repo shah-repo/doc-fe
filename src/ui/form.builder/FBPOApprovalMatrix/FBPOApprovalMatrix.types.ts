@@ -39,7 +39,7 @@ export type FBPOApprovalMatrixTableProps =
 "closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages">
 & {
   approvalLevels?: POApprovalMatrixLevel[];
-  handleEdit: (index: number, item: POApprovalMatrixLevel) => () => void;
+  handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
   isDocumentReleased: boolean;
   groups?: Map<string, Group>;
   employees?: Map<string, Employee>;
@@ -54,7 +54,11 @@ export interface POApprovalMatrixLevel {
   name: string;
   limit: number;
   threshold: number;
-  signatures: Signature[];
+  signatures: Signature[] | {
+    signatureStage1?: string[];
+    signatureStage2?: string[];
+    signatureStage3?: string[];
+  };
 }
 
 export interface Signature {

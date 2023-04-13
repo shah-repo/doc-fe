@@ -1,5 +1,5 @@
 import { flatten, isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
@@ -48,17 +48,14 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
               docTypeId: template.documentType.id,
             }
           ))));
-      setTemplateOptions(options);
+      if (options.length === 1) {
+        processCreatingRevision(options[0]);
+      } else {
+        setTemplateOptions(options);
+        dialog.open();
+      }
     },
   });
-
-  useEffect(() => {
-    asyncGetDocTypeByGroup.start(
-      getDocTypeByGroupAction,
-      { docTypeGroupOption: "CHANGE_REQUEST" },
-      asyncGetDocTypeByGroup);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const dialog = useDialog();
   const exportDialog = useDialog();
@@ -79,11 +76,10 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
   const data = exportDialog.isOpen ? renderTableData() : [];
 
   const handleCreateButton = () => {
-    if (templateOptions.length === 1) {
-      processCreatingRevision(templateOptions[0]);
-    } else {
-      dialog.open();
-    }
+    asyncGetDocTypeByGroup.start(
+      getDocTypeByGroupAction,
+      { docTypeGroupOption: "CHANGE_REQUEST" },
+      asyncGetDocTypeByGroup);
   };
 
   const processCreatingRevision = (templateChosen) => {
