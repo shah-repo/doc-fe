@@ -25,6 +25,17 @@ const columns: KendoColumn[] = [
     orderIndex: 2,
   },
   {
+    field: "threshold",
+    title: "form.builder.field.threshold",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: 10,
+    groupable: true,
+    showColumnMenu: true,
+    orderIndex: 3,
+  },
+  {
     field: "signatures.signatureStage1",
     title: "form.builder.poam.signature1",
     show: true,
@@ -33,7 +44,7 @@ const columns: KendoColumn[] = [
     width: 20,
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 3,
+    orderIndex: 4,
     showTooltip: true,
   },
   {
@@ -45,7 +56,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     width: 20,
     showColumnMenu: true,
-    orderIndex: 4,
+    orderIndex: 5,
     showTooltip: true,
   },
   {
@@ -57,7 +68,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     width: 20,
     showColumnMenu: true,
-    orderIndex: 5,
+    orderIndex: 6,
   },
 ];
 
