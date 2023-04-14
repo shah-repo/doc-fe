@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { isEmpty } from "lodash";
+import { cloneDeep, get, isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FB, FBInlineApprovalBody, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
@@ -51,14 +51,30 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       // replace 10000 with upper threshold value of the approver level
       if (isPOEditState) {
         const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
-        const totalAmount = Number(allItems.totalAmount) + (Number(values.order) * Number(values.unitPrice));
+        // const totalAmount = Number(allItems.totalAmount);
+        const previousItems = cloneDeep(get(allItems, "items"));
+        previousItems[values?.index] = values;
 
-        // approvalLevels need to replace with poApprovalsState?.approvalsThresholdApi.data after testing API
-        const topApprovals = approvalLevels.filter((o1) => approvals.some((o2) => o1.id === o2.id))?.
-        sort((a, b) => Number(b?.name.replace("Level ", "")) - Number(a?.name.replace("Level ", "")));
+        const UpdatedLineItemsTotalObj = previousItems?.reduce(
+          (agg, item: FBPurchaseOrderItem) => {
+            const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
+            agg.subTotal += orderCost;
+            agg.forTax += item.tax ? orderCost : 0;
+            return agg;
+          }, { subTotal: 0, forTax: 0 });
+        let tax = 0;
+        if (previousItems?.length && UpdatedLineItemsTotalObj.forTax) {
+          tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
+        }
 
+        const UpdatedAmount =  Number(tax) +  Number(allItems.shippingCost) + Number(UpdatedLineItemsTotalObj.subTotal);
+        // console.log("Previous Total Amount :", totalAmount);
+        // console.log("Updated Total Amount :", UpdatedAmount);
+        // approvalLevels need to replace with poApprovalsState?.ApprovalsThreshold.data after testing API
+        const topApprovals = approvalLevels.filter((o1) => approvals.some((o2) => o1.id === o2.id));
+        // console.log("topApprovals:::", topApprovals);
         if ((isEdit && !isEmpty(topApprovals) &&
-        Number(totalAmount) > (topApprovals[0]?.limit + topApprovals[0]?.threshold)) || !isEdit) {
+        Number(UpdatedAmount) > (topApprovals[0]?.limit + topApprovals[0]?.threshold)) || !isEdit) {
           return dialog?.open();
         }
       }
@@ -110,7 +126,7 @@ const approvalLevels = [
   {
     createdAt: "2021-03-15T02:18:22.742Z",
     updatedAt: "2021-03-15T02:18:22.742Z",
-    id: "de04f0ec-f725-4c2a-a13d-ab94c0e08a11",
+    id: "31a68a83-b880-4f83-a037-d2118fc37b5a",
     docTypeId: "46150f2a-8807-45c2-ba78-50d7439326df",
     groupId: "65d950c5-3277-4af6-9283-3e361d5b50f0",
     documentStage: 1,
@@ -122,7 +138,7 @@ const approvalLevels = [
   {
     createdAt: "2021-03-15T02:18:22.742Z",
     updatedAt: "2021-03-15T02:18:22.742Z",
-    id: "e5e57f8d-c8fa-4482-b758-2c56982bd664",
+    id: "748b4cf6-3502-4cd3-9d8c-bf0b10b4cea3",
     docTypeId: "46150f2a-8807-45c2-ba78-50d7439326df",
     groupId: "6ac7289b-2e52-4ac7-84ce-10e48e7c4c1f",
     documentStage: 1,
@@ -134,14 +150,14 @@ const approvalLevels = [
   {
     createdAt: "2021-03-15T02:18:22.742Z",
     updatedAt: "2021-03-15T02:18:22.742Z",
-    id: "90856827-7aaa-4d5e-8707-f3cb4852ed5b",
+    id: "b33a0774-b4b7-43d2-8dc9-d1fa232c8ed1",
     docTypeId: "46150f2a-8807-45c2-ba78-50d7439326df",
     groupId: "6d4bc767-78b6-485d-9871-b3890349af80",
     documentStage: 2,
     approvalType: "PO_APPROVAL",
-    limit: 10000000,
+    limit: 50000,
     name: "Level 3",
-    threshold: 20000,
+    threshold: 200,
 
   },
   {
@@ -152,8 +168,8 @@ const approvalLevels = [
     groupId: "8c0a267d-cd47-4b85-ab66-d621bd06376c",
     documentStage: 1,
     approvalType: "PO_APPROVAL",
-    limit: 10000000,
+    limit: 100000,
     name: "Level 3",
-    threshold: 20000,
+    threshold: 300,
 
   }];
