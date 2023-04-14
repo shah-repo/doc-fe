@@ -1,5 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap");
 
+/* 
+  Narrowed fa icon-font needed to replace icons of kendo-ui
+  To include additional icons please refer to scripts/font-awesome
+*/
+@font-face {
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../../assets/fonts/fa-regular-400-set.woff2") format("woff2");
+}
+@font-face {
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("../../assets/fonts/fa-solid-900-set.woff2") format("woff2");
+}
+
 * {
   scroll-behavior: inherit !important;
 }

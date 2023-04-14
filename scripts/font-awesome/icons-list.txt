@@ -5,6 +5,7 @@ fa-solid fa-chevrons-right
 fa-solid fa-chevrons-left
 fa-solid fa-circle-xmark
 
+fa-regular fa-angle-down
 fa-regular fa-snowflake
 fa-regular fa-object-group
 fa-regular fa-object-ungroup

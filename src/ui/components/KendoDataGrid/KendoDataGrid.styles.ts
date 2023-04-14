@@ -243,7 +243,7 @@ export default makeStyles((theme) => ({
         },
       },
     },
-    // TODO switch to MUI components and remove theese styles
+    // TODO switch to MUI components and remove these styles
     ".k-button": {
       "height": 30,
       "minWidth": 30,
@@ -404,6 +404,77 @@ export default makeStyles((theme) => ({
         backgroundColor: Colors.primary,
         borderColor: Colors.primary,
         color: Colors.white,
+      },
+    },
+    ".k-icon": {
+      "&.k-i-arrow-s::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f107'",
+      },
+      "&.k-i-filter::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f0b0'",
+      },
+      "&.k-i-filter-clear::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\e17d'",
+      },
+      "&.k-i-more-vertical::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f142'",
+      },
+      "&.k-i-sort-asc-sm::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f062'",
+      },
+      "&.k-i-sort-desc-sm::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f063'",
+      },
+      "&.k-i-eye::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f06e'",
+      },
+      "&.k-i-unlock::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f2dc'",
+      },
+      "&.k-i-lock::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f2dc'",
+      },
+      "&.k-i-group::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f247'",
+      },
+      "&.k-i-ungroup::before": {
+        fontFamily: "FontAwesome",
+        content: "'\\f248'",
+      },
+      "&.k-i-group-delete::before": {
+        fontFamily: "FontAwesome",
+        fontWeight: "600",
+        content: "'\\f057'",
+      },
+      "&.k-i-arrow-end-left::before": {
+        fontFamily: "FontAwesome",
+        fontWeight: "600",
+        content: "'\\f323'",
+      },
+      "&.k-i-arrow-end-right::before": {
+        fontFamily: "FontAwesome",
+        fontWeight: "600",
+        content: "'\\f324'",
+      },
+      "&.k-i-arrow-60-left::before": {
+        fontFamily: "FontAwesome",
+        fontWeight: "600",
+        content: "'\\f104'",
+      },
+      "&.k-i-arrow-60-right::before": {
+        fontFamily: "FontAwesome",
+        fontWeight: "600",
+        content: "'\\f105'",
       },
     },
   },
