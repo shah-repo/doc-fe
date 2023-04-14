@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
     height: 42,
   },
   focused: {
-    width: "100%",
+    width: "90%",
   },
   popper: {
     width: "100%",
@@ -139,6 +139,11 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     borderTop: `1px solid ${Colors.stroke}`,
+  },
+  groupLabel: {
+    borderTop: `1px solid #E2E8F0`,
+    marginRight: 11,
+    marginLeft: 11,
   },
 }));
 
@@ -166,7 +171,8 @@ const Search: React.FC = () => {
 
   const gotoSearchPage = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
-      window.location.href = `https://www.google.com/search?q=${searchTerm}`;
+      const searchURL = `https://www.google.com/search?q=${searchTerm}`;
+      window.open(searchURL, "_blank");
       resetField();
     }
   };
@@ -188,42 +194,44 @@ const Search: React.FC = () => {
 
   const options = getOptions(searchTerm);
 
-  return (
-    <Autocomplete
-      blurOnSelect
-      placeholder={placeholder}
-      className={cx(classes.root, { [classes.focused]: isFocused })}
-      onFocus={handleFocusChange(true)}
-      onBlur={handleFocusChange(false)}
-      options={options}
-      groupBy={(option) => option.group}
-      getOptionLabel={(option) => option.title}
-      PopperComponent={(props) => <Popper {...props} className={popperClass} />}
-      inputProps={{
-        endAdornment: null,
-        value: searchTerm,
-        className: cx({ [classes.input]: isFocused }),
-        startAdornment: (
-          <InputAdornment position="start">
-            <FontAwesomeIcon icon={regular("search")} />
-          </InputAdornment>
-        ),
-        onChange: doSearch,
-        onKeyDown: gotoSearchPage,
-      }}
-      noOptionsText="nothing.found"
-      classes={{
-        paper: classes.paper,
-      }}
-      onChange={
-        () => {
-          history.push(
-            "/document_revision/4d90114d-bae9-4c36-b35b-1e4712f876af/version/bb6dacf0-d6b2-48c5-a3f0-d8967d2e5ce2"
-          );
-          resetField();
-        }
+  return (          <Autocomplete
+    debug
+    blurOnSelect
+    placeholder={placeholder}
+    className={cx(classes.root, { [classes.focused]: isFocused })}
+    onFocus={handleFocusChange(true)}
+    onBlur={handleFocusChange(false)}
+    options={options}
+    noOptionsText={intl.formatMessage({ id: "nothing.found" })}
+    groupBy={(option) => option.group}
+    getOptionLabel={(option) => option.title}
+    PopperComponent={(props) => <Popper {...props} className={popperClass} />}
+    inputProps={{
+      endAdornment: null,
+      value: searchTerm,
+      className: cx({ [classes.input]: isFocused }),
+      startAdornment: (
+        <InputAdornment position="start">
+          <FontAwesomeIcon icon={regular("search")} />
+        </InputAdornment>
+      ),
+      onChange: doSearch,
+      onKeyDown: gotoSearchPage,
+    }}
+    classes={{
+      paper: classes.paper,
+      groupLabel: classes.groupLabel,
+    }}
+    onChange={
+      () => {
+        // It will open within same tab / page
+        history.push(
+          "/document_revision/4d90114d-bae9-4c36-b35b-1e4712f876af/version/bb6dacf0-d6b2-48c5-a3f0-d8967d2e5ce2"
+        );
+        resetField();
       }
-    />
+    }
+  />
   );
 };
 

@@ -457,6 +457,7 @@
   "common.search": "Search",
   "recent.search": "Recent Searches",
   "keyword.to.search": "Type a keyword to search",
+  "nothing.found": "Nothing found",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
