@@ -40,8 +40,10 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
             <Box fontWeight="fontWeightRegular">
             | {item.owner.user.name}
             | {item.status}
-            {dueDate && item.status === DocumentRevisionStatus.Released && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
-            {item.createdAt && item.status === DocumentRevisionStatus.Draft && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
+              {dueDate && item.status === DocumentRevisionStatus.Released
+              && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
+              {item.createdAt && item.status === DocumentRevisionStatus.Draft
+              && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
             </Box>
           </Box>
         ); }
