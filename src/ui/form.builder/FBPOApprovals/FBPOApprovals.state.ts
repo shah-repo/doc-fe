@@ -4,9 +4,9 @@ import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
-import { Document } from "../../../state/ducks/documents/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
+import { POApprovalMatrixLevel } from "../FBPOApprovalMatrix/FBPOApprovalMatrix.types";
 
 class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
@@ -19,8 +19,8 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
   public updateApi = new FBRequest<FBInlineApprovalBody, FBPOInlineApprovalUpdateBody>(FBEndpoint.ApprovalsUpdate);
 
-  // need to create the type structure after testing API and replace with Document
-  public approvalsThresholdApi = new FBRequest<Document, null>();
+  public approvalLevelsAPI = new FBRequest<POApprovalMatrixLevel[], null>();
+  public approvalLevels?: POApprovalMatrixLevel[];
 
   public constructor({ id, approvals }: FBPOApprovalsConstructor) {
     super();
@@ -92,6 +92,9 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
 
+  @action public setApprovalLevels = (approvalLevels?: POApprovalMatrixLevel[]) =>
+    set(this, "approvalLevels", approvalLevels);
+
   @action public setMounted = (mount: boolean) =>
     set(this, "isMounted", mount);
 
@@ -160,14 +163,19 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     this.updateApi.onSuccess();
   });
 
-  public fetchApprovalsThreshold = (id: string) => {
-    if (!id) { return; }
-    this.approvalsThresholdApi.set({
-      url: FBEndpoint.ApprovalsThreshold,
-      urlValues: { id },
-      method: "get",
-    });
-  };
+  public fetchApprovalsThreshold = () => this.approvalLevelsAPI.set({
+    url: FBEndpoint.ApprovalLevels,
+    method: "get",
+  }, (data, error) => {
+    if (error) {
+      return this.updateApi.onError(error);
+    }
+    if (data) {
+      this.setApprovalLevels(data);
+    }
+    this.approvalLevelsAPI.data = data;
+    this.approvalLevelsAPI.onSuccess();
+  });
 }
 
 export default FBPOApprovalsState;
