@@ -42,7 +42,7 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
             | {item.status}
               {dueDate && item.status === DocumentRevisionStatus.Released
               && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
-              {item.createdAt && item.status === DocumentRevisionStatus.Draft
+              {item.createdAt && item.status !== DocumentRevisionStatus.Released
               && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
             </Box>
           </Box>
