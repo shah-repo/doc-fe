@@ -6,7 +6,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Link } from "react-router-dom";
 import { FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 
@@ -40,7 +40,10 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
             <Box fontWeight="fontWeightRegular">
             | {item.owner.user.name}
             | {item.status}
-              {dueDate && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
+              {dueDate && item.status === DocumentRevisionStatus.Released
+              && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
+              {item.createdAt && item.status !== DocumentRevisionStatus.Released
+              && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
             </Box>
           </Box>
         ); }
