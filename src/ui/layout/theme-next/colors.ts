@@ -9,6 +9,8 @@ enum Colors {
   hover="#EBEFF7",
   background="#F9FBFF",
   fieldDisabled="#EBEDF2",
+  aliceBlue="#E2E8F0",
+
 
   // Primary
   primary="#011FBB",

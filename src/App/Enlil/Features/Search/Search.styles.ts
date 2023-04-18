@@ -1,74 +1,51 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { omit } from "lodash";
+import { Colors } from "../../../../ui/layout/theme-next";
 
 export default makeStyles((theme) => ({
   root: {
-    background: "red",
+    width: 350,
+    height: 42,
   },
-  searchContainer: {
-    boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: "10px",
-    gap: "10px",
-    width: "393px",
-    height: "34px",
-    left: "250px",
-    top: "7px",
-    background: "#FFFFFF",
-    border: " 1px solid #9A9FAB",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  expanded: {
-    width: "867px",
-  },
-
-  iconContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    // "borderRadius": "50%",
-    // "backgroundColor": theme.palette.background.paper,
-    marginLeft: "10px",
-    width: "22px",
-    height: "24px",
-    cursor: "pointer",
-    color: "#767B87",
-  },
-  autoComplete: {
+  focused: {
     width: "100%",
-    display: "flex",
-    flexDirection: "column",
+    background: "yellow",
   },
-  inputBox: {
-    "borderRadius": "6px",
-    "border": "1px solid gray",
-    "fontSize": "16px",
-    "padding": "8px",
-    "&:focus": {
-      outline: "0",
-      border: "1px solid rgb(8, 8, 8)",
-    },
+  popper: {
+    width: "100%",
   },
-  dropdown: {
-    display: "flex",
-    flexDirection: "column",
-    borderRadius: "6px",
-    borderTopLeftRadius: "0",
-    borderTopRightRadius: "0",
-    border: "1px solid gray",
-    borderTop: "0",
-    overflow: "auto",
+  paper: {
+    ...omit(theme.overrides?.MuiMenu?.paper, "marginTop", "paddingTop"),
+    boxShadow: theme.shadows[2],
+    marginTop: -40,
+    paddingTop: 40,
+    border: `1px solid ${Colors.textBlack}`,
   },
-  dropdownItem: {
-    "textAlign": "left",
-    "height": "18px",
-    "padding": "8px",
-    "color": "rgb(43, 43, 43)",
-    "borderTop": "1px solid gray",
-    "&:first-child": {
-      borderTop: "0",
-    },
+  searchIcon: {
+    color: Colors.textBlack,
+  }
+  ,
+  input: {
+    borderBottom: "none",
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    height: 46,
+  },
+  list: {
+    borderTop: `1px solid ${Colors.stroke}`,
+  },
+  groupLabel: {
+    borderTop: `1px solid ${Colors.aliceBlue}`,
+    marginRight: 11,
+    marginLeft: 11,
+  },
+  inputBaseRoot: {
+    cursor: "pointer",
+  },
+  inputRoot: {
+    cursor: "pointer",
+    zIndex: 1400,
   },
 }));

@@ -1,16 +1,16 @@
 import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputAdornment, makeStyles, Popper } from "@material-ui/core";
+import { InputAdornment, Popper } from "@material-ui/core";
 import cx from "classnames";
-import { omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
 import { Autocomplete } from "../../../../ui/components/forms/fields-next";
-import { Colors, withThemeNext } from "../../../../ui/layout/theme-next";
+import { withThemeNext } from "../../../../ui/layout/theme-next";
+import styles from "./Search.styles";
 
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
+// DUMMY DATA
 const top100Films = [
   { title: "The Shawshank Redemption", year: 1994 },
   { title: "The Godfather", year: 1972 },
@@ -114,44 +114,11 @@ const top100Films = [
   { title: "Monty Python and the Holy Grail", year: 1975 },
 ];
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 350,
-    height: 42,
-  },
-  focused: {
-    width: "90%",
-  },
-  popper: {
-    width: "100%",
-  },
-  paper: {
-    ...omit(theme.overrides?.MuiMenu?.paper, "marginTop", "paddingTop"),
-    boxShadow: theme.shadows[2],
-    marginTop: -40,
-    paddingTop: 40,
-  },
-  input: {
-    borderBottom: "none",
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    height: 46,
-  },
-  list: {
-    borderTop: `1px solid ${Colors.stroke}`,
-  },
-  groupLabel: {
-    borderTop: `1px solid #E2E8F0`,
-    marginRight: 11,
-    marginLeft: 11,
-  },
-}));
-
 
 const Search: React.FC = () => {
   const intl = useIntl();
   const history = useHistory();
-  const classes = useStyles();
+  const classes = styles();
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [popperClass, setPopperClass] = useState<string>();
@@ -169,6 +136,7 @@ const Search: React.FC = () => {
     setIsFocused(false);
   };
 
+  // logic for Enter to search on page.
   const gotoSearchPage = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       const searchURL = `https://www.google.com/search?q=${searchTerm}`;
@@ -194,44 +162,47 @@ const Search: React.FC = () => {
 
   const options = getOptions(searchTerm);
 
-  return (          <Autocomplete
-    debug
-    blurOnSelect
-    placeholder={placeholder}
-    className={cx(classes.root, { [classes.focused]: isFocused })}
-    onFocus={handleFocusChange(true)}
-    onBlur={handleFocusChange(false)}
-    options={options}
-    noOptionsText={intl.formatMessage({ id: "nothing.found" })}
-    groupBy={(option) => option.group}
-    getOptionLabel={(option) => option.title}
-    PopperComponent={(props) => <Popper {...props} className={popperClass} />}
-    inputProps={{
-      endAdornment: null,
-      value: searchTerm,
-      className: cx({ [classes.input]: isFocused }),
-      startAdornment: (
-        <InputAdornment position="start">
-          <FontAwesomeIcon icon={regular("search")} />
-        </InputAdornment>
-      ),
-      onChange: doSearch,
-      onKeyDown: gotoSearchPage,
-    }}
-    classes={{
-      paper: classes.paper,
-      groupLabel: classes.groupLabel,
-    }}
-    onChange={
-      () => {
-        // It will open within same tab / page
-        history.push(
-          "/document_revision/4d90114d-bae9-4c36-b35b-1e4712f876af/version/bb6dacf0-d6b2-48c5-a3f0-d8967d2e5ce2"
-        );
-        resetField();
+  return (
+    <Autocomplete
+      debug
+      disablePortal
+      blurOnSelect
+      placeholder={placeholder}
+      className={cx(classes.root, { [classes.focused]: isFocused })}
+      onFocus={handleFocusChange(true)}
+      onBlur={handleFocusChange(false)}
+      options={options}
+      noOptionsText={intl.formatMessage({ id: "nothing.found" })}
+      groupBy={(option) => option.group}
+      getOptionLabel={(option) => option.title}
+      PopperComponent={(props) => <Popper {...props} className={popperClass} />}
+      inputProps={{
+        endAdornment: null,
+        value: searchTerm,
+        className: cx(classes.inputRoot, { [classes.input ]: isFocused }),
+        startAdornment: (
+          <InputAdornment position="start">
+            <FontAwesomeIcon icon={regular("search")} className={cx({ [classes.searchIcon]: isFocused })} />
+          </InputAdornment>
+        ),
+        onChange: doSearch,
+        onKeyDown: gotoSearchPage,
+      }}
+      classes={{
+        paper: classes.paper,
+        groupLabel: classes.groupLabel,
+        input: classes.inputBaseRoot,
+      }}
+      onChange={
+        () => {
+        // logic for onClick option selection
+          history.push(
+            "/document_revision/4d90114d-bae9-4c36-b35b-1e4712f876af/version/bb6dacf0-d6b2-48c5-a3f0-d8967d2e5ce2"
+          );
+          resetField();
+        }
       }
-    }
-  />
+    />
   );
 };
 
