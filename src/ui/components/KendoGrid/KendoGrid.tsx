@@ -81,7 +81,7 @@ export function KendoGrid<T extends any>({
 
   useEffect(() => {
     if (didMount) {
-      setDataState(tableCriteria.queryDict.dataState);
+      setDataState(tableCriteria?.queryDict?.dataState);
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
       }
@@ -471,9 +471,9 @@ export function KendoGrid<T extends any>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <>
+    <div className={classes.kendoGridContainer}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </>
+    </div>
   );
 }

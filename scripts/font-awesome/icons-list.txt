@@ -1,3 +1,6 @@
+fa-solid fa-arrow-up
+fa-solid fa-arrow-down
+fa-solid fa-angle-up
 fa-solid fa-angle-down
 fa-solid fa-angle-right
 fa-solid fa-angle-left
@@ -5,14 +8,15 @@ fa-solid fa-chevrons-right
 fa-solid fa-chevrons-left
 fa-solid fa-circle-xmark
 
-fa-regular fa-angle-down
-fa-regular fa-snowflake
-fa-regular fa-object-group
-fa-regular fa-object-ungroup
-fa-regular fa-filter
-fa-regular fa-filter-slash
 fa-regular fa-arrow-up
 fa-regular fa-arrow-down
+fa-regular fa-angle-up
+fa-regular fa-angle-down
+fa-regular fa-filter
+fa-regular fa-filter-slash
 fa-regular fa-ellipsis-vertical
 fa-regular fa-eye
 fa-regular fa-eye-slash
+fa-regular fa-object-group
+fa-regular fa-object-ungroup
+fa-regular fa-snowflake
