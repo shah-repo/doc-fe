@@ -57,7 +57,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   documentRevisionStatusContextFromCR = React.createContext(status);
   const saveAction = useActionCreator(documentRevisionsActions.save);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
-  const isPOEditState = useGetHasTag(GroupTag.DASHBOARD_ADMIN) && isPO && SM.isNewVersion
+  const isPOEditState = useGetHasTag(GroupTag.PO_ADMIN) && isPO && SM.isNewVersion
         && isDocumentRevisionHasOutput(documentRevision);
   // Disabled because of ENC-7826
   // const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);

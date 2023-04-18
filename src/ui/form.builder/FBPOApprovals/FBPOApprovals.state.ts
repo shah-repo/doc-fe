@@ -168,7 +168,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     method: "get",
   }, (data, error) => {
     if (error) {
-      return this.updateApi.onError(error);
+      return this.approvalLevelsAPI.onError(error);
     }
     if (data) {
       this.setApprovalLevels(data);

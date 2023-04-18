@@ -19,7 +19,5 @@ export enum PreviewControlButtons {
   RequestAccess="requestAccess",
   WithdrawSubmission="withdrawSubmission",
   Pdf="pdf",
-  ExportToEmail="exportToEmail,"
-
-
+  ExportToEmail="exportToEmail",
 }

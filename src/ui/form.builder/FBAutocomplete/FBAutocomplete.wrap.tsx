@@ -47,7 +47,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
     const multiple = editorProperties?.includes("multiple") || props.multiple;
     const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
-    const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN); // change  DASHBOARD_ADMIN to Enforce_admin
+    const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     disabled =
       PO_REQUESTOR_COMPONENT_NAME === name &&
       isDocumentRevisionReleased(workspaceState?.documentStatus) &&

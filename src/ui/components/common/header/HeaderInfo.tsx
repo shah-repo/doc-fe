@@ -182,7 +182,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     history.push(urlPath);
   };
 
-  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
 
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>

@@ -101,10 +101,10 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
   const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
   const isPOEditState =
-    useGetHasTag(GroupTag.DASHBOARD_ADMIN) &&
+    useGetHasTag(GroupTag.PO_ADMIN) &&
     checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions) &&
     SM.isNewVersion && isDocumentRevisionHasOutput(documentRevision);
-  // change  DASHBOARD_ADMIN to Enforce_admin
+
   isOperator = React.createContext(isCurrentUserOperator);
 
   const canChangeOwnerShip = useMemo(() => {

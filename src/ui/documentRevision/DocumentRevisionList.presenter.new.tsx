@@ -114,7 +114,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
   }
 
-  const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
 
   return (
     <div

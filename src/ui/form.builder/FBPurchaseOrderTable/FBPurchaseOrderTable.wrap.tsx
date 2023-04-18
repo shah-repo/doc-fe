@@ -56,7 +56,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
-    const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+    const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
     && SM.isNewVersion;

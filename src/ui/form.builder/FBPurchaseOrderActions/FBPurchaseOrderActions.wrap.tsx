@@ -32,10 +32,9 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     const createDocAction = useActionCreator(documentRevisionsActions.create);
 
     const formik = useFormikContext();
-    // const [approvalMatrixLevels, setApprovalMatrixLevels] = useState<POApprovalMatrixLevel[]>([]);
 
     dialog = useDialog();
-    const isUserAdminEnforce = useGetHasTag(GroupTag.DASHBOARD_ADMIN);    // change  DASHBOARD_ADMIN to Enforce_admin
+    const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
                           && SM.isNewVersion;
 
