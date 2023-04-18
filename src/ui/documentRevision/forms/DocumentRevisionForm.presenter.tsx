@@ -24,7 +24,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType, DocumentCloneTypeOptions } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
@@ -313,7 +313,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
-          {!isDCO && !isPO && !isUserAdminEnforce
+          {!isDCO && !(isPO && isDocumentRevisionHasOutput(documentRevision)) && !isUserAdminEnforce
             && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange

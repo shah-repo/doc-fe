@@ -183,6 +183,13 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   };
 
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+  const headerInfoStatus =
+    isPO && isStatusReleased
+      ? isUserAdminEnforce && SM.isNewVersion
+        ? STATUS_TYPES_LABEL.EDIT
+        : STATUS_TYPES_LABEL.APPROVED
+      : (displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase();
+
 
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>
@@ -285,16 +292,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                           FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={
-                        isPO && isStatusReleased
-                          ? isUserAdminEnforce && SM.isNewVersion
-                            ? STATUS_TYPES_LABEL.EDIT
-                            : STATUS_TYPES_LABEL.APPROVED
-                          : ( displayStatus ||
-                              STATUS_TYPES_LABEL[status] ||
-                              label
-                          ).toUpperCase()
-                      }
+                      label={headerInfoStatus}
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>
