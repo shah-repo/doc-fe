@@ -1,8 +1,8 @@
 import { process, State } from "@progress/kendo-data-query";
 import { setGroupIds } from "@progress/kendo-react-data-tools";
-import { Grid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
+import { GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
 import { find, findIndex, map, sortBy, startCase } from "lodash";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { AutoSizer, Size } from "react-virtualized";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -21,14 +21,14 @@ import gridConfiguration from "./column.definition";
 import useStyles from "./FBPOAMKendoTable.styles";
 
 interface KendoTableProps {
-  approvalLevels: POApprovalMatrixLevel[];
+  approvalLevels?: POApprovalMatrixLevel[];
   handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
   groups?: Map<string, Group>;
   employees?: Map<string, Employee>;
 }
 
 const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
-  approvalLevels,
+  approvalLevels = [],
   employees,
   groups,
   handleEdit,
@@ -134,11 +134,6 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     setColumnDefinitions(dataColumns);
   };
 
-  const kendo = useRef<Grid>();
-
-  // eslint-disable-next-line no-console
-  console.log(kendo);
-
   const tableRenderer = ({ width }: Size) => (
     <KendoDataGrid
       className={classes.root}
@@ -154,7 +149,6 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
       {...dataState}
       expandField="expanded"
       onColumnReorder={columnReorder}
-      ref={kendo}
     >
       {columnRenderer(width)}
       <GridNoRecords>{ !resultState.total && <NoDataFound />}</GridNoRecords>
