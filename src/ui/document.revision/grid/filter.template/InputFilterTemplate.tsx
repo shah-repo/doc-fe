@@ -4,8 +4,8 @@ import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { debounce, isEmpty } from "lodash";
 import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import { KendoGridFilterCellOperators } from "../../../components/KendoGrid/interfaces";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
 const valueOperators = [
   "contains",
@@ -70,7 +70,6 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
       <Input
         defaultValue={value}
         onChange={updateValue}
-        style={{ width: "100%", marginRight: "5px" }}
         data-cy="filter.value"
       />
       <button
@@ -101,6 +100,7 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
             value={newOperator}
             onClick={(event) => updateFilter({ event, newOperator })}
             selected={newOperator === operator}
+            dense
           >
             {intl.formatMessage({ id: `dropdown.filter.${newOperator}` })}
           </MenuItem>

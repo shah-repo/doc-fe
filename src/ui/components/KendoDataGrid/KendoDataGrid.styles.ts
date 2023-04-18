@@ -108,6 +108,9 @@ export default makeStyles((theme) => ({
         "& .k-button": {
           marginLeft: theme.spacing(.5),
         },
+        "& .k-button:not(.k-clear-button-visible)": {
+          display: "none",
+        },
       },
       "& .k-link .k-icon": {
         color: Colors.textGray,
@@ -409,7 +412,13 @@ export default makeStyles((theme) => ({
     ".k-icon": {
       "&.k-i-arrow-s::before": {
         fontFamily: "FontAwesome",
+        fontWeight: "600",
         content: "'\\f107'",
+      },
+      "&.k-i-arrow-n::before": {
+        fontFamily: "FontAwesome",
+        fontWeight: "600",
+        content: "'\\f106'",
       },
       "&.k-i-filter::before": {
         fontFamily: "FontAwesome",
@@ -425,11 +434,13 @@ export default makeStyles((theme) => ({
       },
       "&.k-i-sort-asc-sm::before": {
         fontFamily: "FontAwesome",
-        content: "'\\f062'",
+        fontWeight: "600",
+        content: "'\\2191'",
       },
       "&.k-i-sort-desc-sm::before": {
         fontFamily: "FontAwesome",
-        content: "'\\f063'",
+        fontWeight: "600",
+        content: "'\\2193'",
       },
       "&.k-i-eye::before": {
         fontFamily: "FontAwesome",

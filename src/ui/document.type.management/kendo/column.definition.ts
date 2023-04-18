@@ -184,7 +184,7 @@ const columns: KendoColumn[] = [{
   groupable: false,
   filterable: false,
   locked: true,
-  width: "90px",
+  width: "95px",
   reorderable: false,
   resizable: false,
   showColumnMenu: false,
