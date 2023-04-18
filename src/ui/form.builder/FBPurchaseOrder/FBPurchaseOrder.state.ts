@@ -241,7 +241,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.fetch();
   };
 
-  private formatCost = (value: any, fixedDecimal?: number) => {
+  public formatCost = (value: any, fixedDecimal?: number) => {
     const val = Number(value || 0);
     if (val === 0) {
       return val.toFixed(2);

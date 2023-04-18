@@ -1,16 +1,18 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, first, omit } from "lodash";
+import { cloneDeep, compact, each, first, get, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { FB, FBPurchaseOrderValue } from "..";
+import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue } from "..";
 import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
+import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -18,7 +20,7 @@ import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import { usePoApprovals } from "../FBPOApprovals/hooks";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
-import { createNewDocRev } from "../FBPurchaseOrderForm/helpers";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
@@ -49,6 +51,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const { document, id, isOutput } = workspaceState || {};
     const formik = useFormikContext();
     const history = useHistory();
+    const [selectedItemIndex, setSelectedItemIndex] = useState<number>(0);
     const createDocAction = useActionCreator(documentRevisionsActions.create);
 
     const outputId = isOutput ? id : undefined;
@@ -91,7 +94,54 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     });
 
     onAlertNotificationConfirm = () => {
-      createNewDocRev(formik, workspaceState, async, createDocAction);
+      const values = cloneDeep(get(formik, "values")) as DocumentRevisionFormValues;
+      if (values?.formInput) {
+        const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME];
+        const previousItems = allItems?.items;
+        delete previousItems[selectedItemIndex];
+        const previousLineItemsLength = previousItems?.length;
+
+        const UpdatedLineItemsTotalObj = previousItems?.reduce(
+        (agg, item: FBPurchaseOrderItem) => {
+          const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
+          agg.subTotal += orderCost;
+          agg.forTax += item.tax ? orderCost : 0;
+          return agg;
+        }, { subTotal: 0, forTax: 0 });
+
+        let tax = 0;
+        if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
+          tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
+        }
+        const shippingCost = previousLineItemsLength ? allItems.shippingCost || 0 : 0;
+        const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + Number(shippingCost);
+        const totalInUSD = totalAmount * allItems.exchangeRate;
+
+        values.formInput[PO_ITEMS_COMPONENT_NAME] = {
+          ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
+          subTotal: purchaseOrderState?.formatCost(UpdatedLineItemsTotalObj.subTotal),
+          tax: purchaseOrderState?.formatCost(tax, 6),
+          shippingCost: purchaseOrderState?.formatCost(shippingCost),
+          totalAmount: purchaseOrderState?.formatCost(totalAmount),
+          totalInUSD: purchaseOrderState?.formatCost(totalInUSD),
+        };
+
+        values.formInput[PO_ITEMS_COMPONENT_NAME].items = compact(previousItems);
+        values.formDocument = { id: workspaceState?.document?.formDocument?.id };
+
+        each(values.formInput[PO_ITEMS_COMPONENT_NAME], (value, key) => {
+          if (values?.formInput && key.includes(PO_APPROVAL_KEY)) {
+            values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
+          }
+        });
+
+        const promise = async.start(createDocAction, toNewVersionRequestBody(values), async);
+        promise?.then(() => {
+          FBDataStore?.setRefreshData({
+            ...values,
+          });
+        });
+      }
     };
 
     onAlertNotificationCancel = () => {
@@ -100,6 +150,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     handleDelete = (index: number) => (e: any) => {
       e.stopPropagation();
+      setSelectedItemIndex(index);
       if (isPOEditState) {
         return dialog?.open();
       }

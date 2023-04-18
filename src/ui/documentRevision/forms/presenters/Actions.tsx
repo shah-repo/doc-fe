@@ -199,8 +199,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = () => {
+    const prevPODoc = localStorage.getItem("prevPODoc") ?? "";
+    if (!prevPODoc) {
+      history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
+      return;
+    }
     Promise.resolve(workspaceState?.saveDocRev({}, false, true,
-      JSON.parse(localStorage.getItem("prevPODoc") ?? "") as DocumentRevision))
+      JSON.parse(prevPODoc) as DocumentRevision))
       .then((data) => {
         history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
         localStorage.setItem("prevPODoc", "");
