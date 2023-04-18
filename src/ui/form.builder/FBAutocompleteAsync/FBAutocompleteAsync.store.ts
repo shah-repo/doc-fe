@@ -30,6 +30,14 @@ class FBAutocompleteAsyncStore {
     if (!optionId || !key || isEmpty(key)) { return; }
     const list = this.data.get(optionId);
     list?.set(key, value);
+    const optionsList = this.data.get(optionId);
+    if (!optionsList) {
+      this.data.set(optionId, new Map([
+        [key, value],
+      ]));
+      return;
+    }
+    optionsList.set(key, value);
   };
 
   public reset = <T>(optionId: string) => {
