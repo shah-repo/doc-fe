@@ -28,8 +28,6 @@ class FBAutocompleteAsyncStore {
 
   public add = <T>(optionId: string, key?: string, value?: T | undefined) => {
     if (!optionId || !key || isEmpty(key)) { return; }
-    const list = this.data.get(optionId);
-    list?.set(key, value);
     const optionsList = this.data.get(optionId);
     if (!optionsList) {
       this.data.set(optionId, new Map([
