@@ -15,37 +15,27 @@ export default makeStyles((theme) => ({
     width: "100%",
   },
   paper: {
-    ...omit(theme.overrides?.MuiMenu?.paper, "marginTop", "paddingTop"),
+    ...omit(theme.overrides?.MuiMenu?.paper, "boxShadow"),
     boxShadow: theme.shadows[2],
-    marginTop: -40,
-    paddingTop: 40,
-    border: `1px solid ${Colors.textBlack}`,
+    marginTop: theme.spacing(-5),
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(1),
   },
-  searchIcon: {
-    color: Colors.textBlack,
-  }
-  ,
-  input: {
-    borderBottom: "none",
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
-    height: 46,
-  },
-  list: {
-    borderTop: `1px solid ${Colors.stroke}`,
+  inputFocused: {
+    border: "none",
+    background: "none",
+    zIndex: 1301,
   },
   groupLabel: {
-    borderTop: `1px solid ${Colors.aliceBlue}`,
-    marginRight: 11,
-    marginLeft: 11,
+    ...theme.typography.h6,
+    padding: theme.spacing(1.25, 0),
+    margin: theme.spacing(0, 2),
+    borderTop: `1px solid ${Colors.stroke}`,
   },
-  inputBaseRoot: {
-    cursor: "pointer",
+  icon: {
+    color: Colors.textBlack,
   },
-  inputRoot: {
-    cursor: "pointer",
-    zIndex: 1400,
+  option: {
+    minHeight: 30,
   },
 }));
