@@ -5,11 +5,9 @@ import { Colors } from "../../../../ui/layout/theme-next";
 export default makeStyles((theme) => ({
   root: {
     width: 350,
-    height: 42,
   },
   focused: {
     width: "100%",
-    background: "yellow",
   },
   popper: {
     width: "100%",
