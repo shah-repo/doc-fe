@@ -253,7 +253,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))
   ) {
     if (
-      isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove) {
+      isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove &&
+      !(isPO && isDocumentRevisionHasOutput(documentRevision))) {
       accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }

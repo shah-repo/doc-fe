@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, each, get, isEmpty, size } from "lodash";
+import { cloneDeep, each, findIndex, get, isEmpty, size } from "lodash";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
@@ -108,15 +108,26 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       if (values?.formInput) {
         const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
         const previousItems = cloneDeep(get(allItems, "items"));
-        previousItems.push(
-          {
+        if (newLineItemvalues?.id) {
+          // Edit PO Line Item case
+          const index = findIndex(previousItems, (data: FBPurchaseOrderItem) => data.id === newLineItemvalues?.id);
+          previousItems[index] = {
             ...newLineItemvalues,
-            id: FB.uniqid,
-            received: 0,
             totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
             formattedDate: purchaseOrderState?.formatDate(newLineItemvalues.date),
-            index: size(previousItems.items),
-          });
+          };
+        } else {
+          // Edit PO Line Item case
+          previousItems.push(
+            {
+              ...newLineItemvalues,
+              id: FB.uniqid,
+              received: 0,
+              totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
+              formattedDate: purchaseOrderState?.formatDate(newLineItemvalues.date),
+              index: size(previousItems.items),
+            });
+        }
 
         const previousLineItemsLength = previousItems?.length;
 
