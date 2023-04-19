@@ -15,7 +15,6 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
-import { createNewDocRev } from "../FBPurchaseOrderForm/helpers";
 import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
@@ -90,7 +89,6 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     onAlertNotificationCancel = () => {
       dialog?.close();
       dialogState?.closeDialog();
-      createNewDocRev(formik, workspaceState, async, createDocAction);
     };
 
     const async = useAsync<DocumentRevision>({
