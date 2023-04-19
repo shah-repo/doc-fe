@@ -1,6 +1,6 @@
-import React, { ChangeEventHandler } from "react";
+import React from "react";
 import { debounce } from "lodash";
-import { Input } from "@material-ui/core";
+import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import Filter from "../Filter";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 
@@ -11,9 +11,9 @@ const InputFilter: React.FC<GridFilterCellProps> = (props) => {
     onChange,
   } = props;
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = debounce(
-    (event) => {
-      const newValue = event.currentTarget.value;
+  const handleChange = debounce(
+    (event: InputChangeEvent) => {
+      const newValue = event.target.value;
 
       if (newValue === value) {
         return;
@@ -22,7 +22,7 @@ const InputFilter: React.FC<GridFilterCellProps> = (props) => {
       onChange({
         value: newValue,
         operator,
-        syntheticEvent: event,
+        syntheticEvent: event.syntheticEvent,
       });
     },
     500

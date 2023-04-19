@@ -1,19 +1,23 @@
-import React, { FC, ChangeEvent } from "react";
-import { Select, MenuItem } from "@material-ui/core";
+import React from "react";
+import { DropDownList, DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
 import Filter from "../Filter";
 import { DropdownFilterCellProps } from "./types";
 
-export const DropdownFilter: FC<DropdownFilterCellProps> = (props) => {
+const TEXT_FIELD = "text";
+const DATA_ITEM_KEY = "value";
+
+export const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   const {
     data,
     value = "",
     operator = "eq",
     defaultItem,
+    defaultValue,
     onChange,
   } = props;
 
-  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
-    const newValue = event.currentTarget.value;
+  const handleChange = (event: DropDownListChangeEvent) => {
+    const newValue = event.target.value[DATA_ITEM_KEY];
 
     if (newValue === value) {
       return;
@@ -22,30 +26,21 @@ export const DropdownFilter: FC<DropdownFilterCellProps> = (props) => {
     onChange({
       value: newValue,
       operator,
-      syntheticEvent: event,
+      syntheticEvent: event.syntheticEvent,
     });
   };
 
   return (
     <Filter>
-      <Select
-        value={value}
+      <DropDownList
+        data={data}
+        textField={TEXT_FIELD}
+        dataItemKey={DATA_ITEM_KEY}
         onChange={handleChange}
-      >
-        {defaultItem && (
-          <MenuItem value={defaultItem.value}>
-            {defaultItem.text}
-          </MenuItem>
-        )}
-        {data.map(({ value, text }) => (
-          <MenuItem
-            key={String(value)}
-            value={String(value)}
-          >
-            {text}
-          </MenuItem>
-        ))}
-      </Select>
+        defaultItem={defaultItem}
+        defaultValue={defaultValue}
+        value={data.find((item) => item.value === value) || defaultItem}
+      />
     </Filter>
   );
 };

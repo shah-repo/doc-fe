@@ -39,6 +39,7 @@ export interface FBApprovalMatrixItem {
   id: string;
   docType: FBApprovalMatrixDocType;
   approvalRoles: FBApprovalRolesStages;
+  inEdit?: boolean;
 }
 
 export interface FBApprovalMatrixFieldData {
