@@ -249,7 +249,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return val.toFixed(fixedDecimal || 2);
   };
 
-  private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
+  public formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 
   private addItem = (item: FBPurchaseOrderItem) => {
     this.value.items = union(this.value.items, [{

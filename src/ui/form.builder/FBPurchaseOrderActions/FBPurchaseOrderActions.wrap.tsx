@@ -1,18 +1,22 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, get, isEmpty } from "lodash";
+import { cloneDeep, each, get, isEmpty, size } from "lodash";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
 import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
+import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import { createNewDocRev } from "../FBPurchaseOrderForm/helpers";
+import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
@@ -86,6 +90,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     onAlertNotificationCancel = () => {
       dialog?.close();
       dialogState?.closeDialog();
+      createNewDocRev(formik, workspaceState, async, createDocAction);
     };
 
     const async = useAsync<DocumentRevision>({
@@ -100,8 +105,63 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     });
 
     onAlertNotificationConfirm = () => {
-      // here modify Add PO Line item
-      createNewDocRev(formik, workspaceState, async, createDocAction);
+      const newLineItemvalues = formState?.getValues() as FBPurchaseOrderItem;
+      const values = cloneDeep(get(formik, "values")) as DocumentRevisionFormValues;
+      if (values?.formInput) {
+        const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
+        const previousItems = cloneDeep(get(allItems, "items"));
+        previousItems.push(
+          {
+            ...newLineItemvalues,
+            id: FB.uniqid,
+            received: 0,
+            totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
+            formattedDate: purchaseOrderState?.formatDate(newLineItemvalues.date),
+            index: size(previousItems.items),
+          });
+
+        const previousLineItemsLength = previousItems?.length;
+
+        const UpdatedLineItemsTotalObj = previousItems?.reduce(
+        (agg, item: FBPurchaseOrderItem) => {
+          const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
+          agg.subTotal += orderCost;
+          agg.forTax += item.tax ? orderCost : 0;
+          return agg;
+        }, { subTotal: 0, forTax: 0 });
+
+        let tax = 0;
+        if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
+          tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
+        }
+        const shippingCost = previousLineItemsLength ? allItems.shippingCost || 0 : 0;
+        const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + Number(shippingCost);
+        const totalInUSD = totalAmount * allItems.exchangeRate;
+
+        values.formInput[PO_ITEMS_COMPONENT_NAME] = {
+          ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
+          subTotal: purchaseOrderState?.formatCost(UpdatedLineItemsTotalObj.subTotal),
+          tax: purchaseOrderState?.formatCost(tax, 6),
+          shippingCost: purchaseOrderState?.formatCost(shippingCost),
+          totalAmount: purchaseOrderState?.formatCost(totalAmount),
+          totalInUSD: purchaseOrderState?.formatCost(totalInUSD),
+        };
+
+        values.formInput[PO_ITEMS_COMPONENT_NAME].items = previousItems;
+        values.formDocument = { id: workspaceState?.document?.formDocument?.id };
+
+        each(values.formInput[PO_ITEMS_COMPONENT_NAME], (value, key) => {
+          if (values?.formInput && key.includes(PO_APPROVAL_KEY)) {
+            values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
+          }
+        });
+        const promise = async.start(createDocAction, toNewVersionRequestBody(values), async);
+        promise?.then(() => {
+          FBDataStore?.setRefreshData({
+            ...values,
+          });
+        });
+      }
     };
 
     return Component({
