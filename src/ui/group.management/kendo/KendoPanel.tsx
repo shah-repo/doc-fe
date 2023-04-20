@@ -312,7 +312,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         resp.data = resp.data.map((el) => ({
           ...el,
           memberNames:
-            el.employees
+            el.employees.filter((e) => e.active)
               .map((e) => e.user.name.trimLeft().trimEnd())
               .sort()
               .join(", ") || "",

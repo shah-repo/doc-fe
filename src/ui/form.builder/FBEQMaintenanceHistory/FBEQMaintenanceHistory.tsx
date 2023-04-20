@@ -6,7 +6,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Link } from "react-router-dom";
 import { FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 
@@ -26,7 +26,7 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
     </Box>
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
       {(item: DocumentRevision, index) => {
-        const dueDate = get(item.formInput, "fb-equipment_due_date");
+        const showDate = get(item.formInput, "fb-equipment_due_date") || item.releasedAt;
         return (
           <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
             <Box color={Colors.medium_blue} mr={0.5}>
@@ -40,7 +40,10 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
             <Box fontWeight="fontWeightRegular">
             | {item.owner.user.name}
             | {item.status}
-              {dueDate && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
+              {showDate && item.status === DocumentRevisionStatus.Released
+              && `| ${getFormattedDateString(showDate, MomentFormats.MonthDateYearAlt)}`}
+              {item.createdAt && item.status !== DocumentRevisionStatus.Released
+              && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
             </Box>
           </Box>
         ); }
