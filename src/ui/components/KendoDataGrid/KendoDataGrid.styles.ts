@@ -176,6 +176,13 @@ export default makeStyles((theme) => ({
             whiteSpace: "normal", // TODO remove this rule in favor of custom cell template
           },
         },
+        "&.k-alt": {
+          "backgroundColor": "transparent",
+
+          "&:hover td": {
+            backgroundColor: Colors.hover,
+          },
+        },
         "&:hover td": {
           "backgroundColor": Colors.hover,
 
