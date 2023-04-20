@@ -7,10 +7,11 @@ import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -38,7 +39,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
     dialog = useDialog();
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-    const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
+    const isPOEditState = isUserAdminEnforce && isDocumentRevisionReleased(workspaceState?.documentStatus)
                           && SM.isNewVersion;
 
     useEffect(() => {
