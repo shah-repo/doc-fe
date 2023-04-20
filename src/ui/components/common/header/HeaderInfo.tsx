@@ -183,12 +183,14 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   };
 
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  const headerInfoStatus =
-    isPO && isStatusReleased
-      ? isUserAdminEnforce && SM.isNewVersion
-        ? STATUS_TYPES_LABEL.EDIT
-        : STATUS_TYPES_LABEL.APPROVED
-      : (displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase();
+  let headerInfoStatus = (displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase();
+  if (isPO && isStatusReleased) {
+    if (isUserAdminEnforce && SM.isNewVersion) {
+      headerInfoStatus = STATUS_TYPES_LABEL.EDIT;
+    } else {
+      headerInfoStatus = STATUS_TYPES_LABEL.APPROVED;
+    }
+  }
 
 
   const newHeaderRenderer = () => (
