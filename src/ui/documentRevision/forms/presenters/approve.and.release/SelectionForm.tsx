@@ -53,8 +53,6 @@ const SelectionForm: React.FC<Props> = ({
         <Autocomplete
           value={selectedOption}
           options={options}
-          blurOnSelect
-          disableClearable
           getOptionLabel={(option: Option) => option.label}
           onChange={(e, value: Option) => setSelectedOption(value)}
         />
