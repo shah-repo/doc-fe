@@ -20,8 +20,16 @@ export default makeStyles((theme) => createStyles({
       background: Colors.hover,
     },
   },
+  destructive: {
+    "color": Colors.error,
+    "&:hover": {
+      color: Colors.error,
+      background: Colors.errorHighlight,
+    },
+  },
   boxed: {
-    background: Colors.primaryHighlight,
+    background: Colors.lightGray,
+    borderRadius: theme.shape.borderRadius,
   },
   simple: ({ size }) => ({
     "width": "auto",
