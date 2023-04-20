@@ -27,27 +27,24 @@ const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }>
   value,
   error,
 }) => (
-  <>
-    <TextField
-      autoComplete="search-term"
-      autoFocus={autoFocus}
-      defaultValue={defaultValue}
-      multiline={multiline}
-      disabled={disabled}
-      error={error}
-      name={name}
-      type="search"
-      value={value}
-      id={id}
-      inputRef={inputRef}
-      onBlur={onBlur}
-      onChange={onChange}
-      onFocus={onFocus}
-      placeholder={placeholder}
-      inputProps={inputProps}
-      {...InputProps}
-    />
-  </>
+  <TextField
+    autoComplete="search-term"
+    autoFocus={autoFocus}
+    defaultValue={defaultValue}
+    multiline={multiline}
+    disabled={disabled}
+    error={error}
+    name={name}
+    value={value}
+    id={id}
+    inputRef={inputRef}
+    onBlur={onBlur}
+    onChange={onChange}
+    onFocus={onFocus}
+    placeholder={placeholder}
+    inputProps={inputProps}
+    {...InputProps}
+  />
 );
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
