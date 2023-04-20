@@ -86,9 +86,9 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       purchaseOrderState?.setItemTotalAmount();
     };
 
-    onAlertNotificationCancel = () => {
+    onAlertNotificationCancel = (event) => {
       dialog?.close();
-      dialogState?.closeDialog();
+      event.preventDefault();
     };
 
     const async = useAsync<DocumentRevision>({
