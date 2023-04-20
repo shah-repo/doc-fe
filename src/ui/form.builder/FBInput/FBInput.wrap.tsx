@@ -8,6 +8,7 @@ import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption,
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -168,7 +169,21 @@ export const withFBInput = <T extends FBInputProps>(
           convertedFieldValue = fieldValue;
         }
         const formStateFieldValue = formState?.getFieldValue(fieldName);
+        const optionId = find(formState?.workspaceState?.schema, { name: fieldName })?.optionId?.toString();
+        if (FBAutocompleteAsyncStore.data.get(optionId as string)) {
+          const arr = Array.from(FBAutocompleteAsyncStore.data.get(optionId as string).values());
+          const orignalVal: any = find(arr, { id: formStateFieldValue });
+          if (orignalVal?.name) {
+              formState?.setValidationAttributeName(formStateFieldValue, `${orignalVal?.document?.docId}
+              - rev ${orignalVal?.displayRevision} - ${orignalVal?.name ? orignalVal?.name : ""} `);
+          }
+          else {
+              formState?.setValidationAttributeName(formStateFieldValue, `${orignalVal?.document?.docId}
+              - rev ${orignalVal?.displayRevision} - ${orignalVal?.description ?
+                 orignalVal?.description.replaceAll(/<\/?p>/gi, "") : ""} `);
+          }
 
+        }
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
           if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue) && !isNull(formStateFieldValue)) {
             showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
