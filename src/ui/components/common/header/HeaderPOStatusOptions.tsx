@@ -147,7 +147,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         disableRipple
         aria-label="split button"
         className={classes.buttonGroup}
-        disabled={!isOwner || !isUserAdminEnforce}
+        disabled={isUserAdminEnforce ? !isUserAdminEnforce : !isOwner}
       >
         <Button
           type="submit"
