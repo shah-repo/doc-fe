@@ -180,6 +180,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       onAlertNotificationCancel,
       onAlertNotificationConfirm,
       purchaseOrderState,
+      isEdit,
       dialog,
     });
   };

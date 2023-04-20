@@ -15,6 +15,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
   onAlertNotificationCancel,
   onAlertNotificationConfirm,
   purchaseOrderState,
+  isEdit,
   dialog,
 }) =>
   (
@@ -50,7 +51,8 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
         confirmAction={onAlertNotificationConfirm}
         cancelAction={onAlertNotificationCancel}
         confirmLabel="common.yes.proceed"
-        message="documentRevision.po.notification.alert.add"
+        message={isEdit ? "documentRevision.po.notification.alert.update"
+          : "documentRevision.po.notification.alert.add"}
         {...{ dialog }}
       />}
     </>
