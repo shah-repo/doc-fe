@@ -1,13 +1,13 @@
 import { FormControlLabel, Grid, Switch, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
+import { WithStyles, withStyles } from "@material-ui/core/styles";
 import React from "react";
 import HelpCenter from "../../App/Enlil/Features/HelpCenter/HelpCenter";
 import Search from "../../App/Enlil/Features/Search/Search";
 import Text from "../components/Text";
-import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
+import AutosaveToggle from "./autosave/autosave";
 
 export interface HeaderPresenterProps {
   name: string;
@@ -34,9 +34,11 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         wrap="nowrap"
         spacing={2}
       >
-        <Grid item xs={true}>
-          <Search />
-        </Grid>
+        {!fullHeight && (
+          <Grid item xs>
+            <Search />
+          </Grid>
+        )}
         <Grid item>
           {fullHeight && (
             <Typography variant="caption" className={classes.welcomeText}>
