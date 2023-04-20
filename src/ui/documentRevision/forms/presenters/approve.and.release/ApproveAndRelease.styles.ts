@@ -5,6 +5,11 @@ export default makeStyles((theme) => ({
   form: {
     minWidth: 400,
   },
+  formLoading: {
+    height: 20,
+    overflow: "hidden",
+    margin: theme.spacing(-2.5, -2.5, 2, -3),
+  },
   submitButton: {
     float: "right",
     clear: "right",
@@ -52,8 +57,25 @@ export default makeStyles((theme) => ({
   dialogPaper: {
     overflowY: "unset",
   },
+  dialogTitle: {
+    paddingBottom: theme.spacing(1.75),
+    fontSize: 14,
+    fontWeight: 600,
+  },
   dialogContent: {
     overflowY: "unset",
+    paddingTop: theme.spacing(1.5),
+    borderTop: `1px solid ${Colors.light_gray}`,
+  },
+  dialogActions: {
+    backgroundColor: Colors.white_smoke,
+    display: "flex",
+    justifyContent: "flex-end",
+    columnGap: theme.spacing(1),
+    margin: theme.spacing(1, -2.5, -2.5, -3),
+    padding: theme.spacing(2.5, 2.5, 2.5, 3),
+    borderBottomLeftRadius: theme.shape.borderRadius,
+    borderBottomRightRadius: theme.shape.borderRadius,
   },
   releaseButton: {
     "border": `1px solid ${Colors.white}`,
