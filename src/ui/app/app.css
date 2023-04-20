@@ -4,19 +4,6 @@
   scroll-behavior: inherit !important;
 }
 
-/* Reset style for search field */
-input[type="search"] {
-  -webkit-appearance: textfield;
-  appearance: textfield;
-}
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-  display: none;
-  -webkit-appearance: none;
-}
-
 /* use "hide-scroll" class to hide scrollbars but keep functionality */
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hide-scroll::-webkit-scrollbar,

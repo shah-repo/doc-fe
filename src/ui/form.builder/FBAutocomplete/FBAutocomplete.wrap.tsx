@@ -5,8 +5,9 @@ import { useIntl } from "react-intl";
 import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentLHRT, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import { isTranslation } from "../../translations/types";
@@ -64,6 +65,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       formState?.setApprovalMap({ [defaultValue?.id]: defaultValue?.approvals });
     }
     const schemaItem = find(workspaceState?.schema, (schemaItm) => schemaItm.name?.includes(name)) as FBSchemaProps;
+
+    const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
+    const isDocumentFM = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions);
+    isDocumentLHRT = checkIsDocumentLHRT(workspaceState?.document?.document.documentType.groupOptions);
+
+    if ((isDocumentMPI || isDocumentFM || isDocumentLHRT)
+    && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
+      disabled = true;
+    }
 
     useEffect(() => {
       setModifiedOptions(options);

@@ -206,20 +206,27 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
     },
     gutters: {
       paddingLeft: theme.spacing(1.5),
-      paddingRight: theme.spacing(3),
+      paddingRight: theme.spacing(1.5),
     },
     dense: {
-      paddingTop: theme.spacing(.25),
-      paddingBottom: theme.spacing(.25),
+      fontSize: ".875rem",
+      paddingTop: theme.spacing(.5),
+      paddingBottom: theme.spacing(.5),
       minHeight: 0,
     },
   },
   MuiListItemIcon: {
     root: {
-      minWidth: 20,
-      fontSize: 16,
-      marginRight: theme.spacing(1.75),
-      justifyContent: "center",
+      "minWidth": 20,
+      "fontSize": 16,
+      "justifyContent": "center",
+
+      "&:first-child": {
+        marginRight: theme.spacing(1.75),
+      },
+      "&:last-child": {
+        marginLeft: theme.spacing(1.75),
+      },
     },
   },
   MuiDialogTitle: {

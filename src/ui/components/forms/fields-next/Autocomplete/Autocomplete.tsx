@@ -27,37 +27,36 @@ const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }>
   value,
   error,
 }) => (
-  <>
-    <TextField
-      autoComplete="search-term"
-      autoFocus={autoFocus}
-      defaultValue={defaultValue}
-      multiline={multiline}
-      disabled={disabled}
-      error={error}
-      name={name}
-      type="search"
-      value={value}
-      id={id}
-      inputRef={inputRef}
-      onBlur={onBlur}
-      onChange={onChange}
-      onFocus={onFocus}
-      placeholder={placeholder}
-      inputProps={inputProps}
-      {...InputProps}
-    />
-  </>
+  <TextField
+    autoComplete="search-term"
+    autoFocus={autoFocus}
+    defaultValue={defaultValue}
+    multiline={multiline}
+    disabled={disabled}
+    error={error}
+    name={name}
+    value={value}
+    id={id}
+    inputRef={inputRef}
+    onBlur={onBlur}
+    onChange={onChange}
+    onFocus={onFocus}
+    placeholder={placeholder}
+    inputProps={inputProps}
+    {...InputProps}
+  />
 );
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
   name,
+  classes,
   onBlur,
   placeholder,
+  inputProps,
   ChipProps = { size: "small" },
   ...props
 }) => {
-  const classes = useStyles();
+  const baseClasses = useStyles();
   const muiFormControl = useFormControl();
   const controlState = formControlState({
     props,
@@ -79,7 +78,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     <MuiAutocomplete
       {...props}
       disabled={controlState.disabled}
-      classes={omit(classes, "disabled")}
+      classes={{
+        ...omit(baseClasses, "disabled"),
+        ...classes,
+      }}
       popupIcon={<FontAwesomeIcon icon={solid("angle-down")} />}
       onBlur={(event) => {
         event.persist();
@@ -88,6 +90,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       renderInput={(params) => (
         <AutocompleteControl
           {...params}
+          InputProps={{
+            ...params.InputProps,
+            ...inputProps,
+          }}
           name={name}
           error={controlState.error}
           disabled={controlState.disabled}
