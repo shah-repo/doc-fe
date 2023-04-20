@@ -11,20 +11,24 @@ import {
 import KendoDataGrid from "../../../../components/KendoDataGrid/KendoDataGrid";
 import CheckboxCell from "../CheckboxCell";
 import EmptyDashCell from "../EmptyDashCell";
+import ActiveCell from "../ActiveCell";
 import DropdownFilter from "../DropdownFilter";
 import BooleanFilter from "../BooleanFilter";
-import StatusFilter from "../BooleanFilter";
+import StatusFilter from "../StatusFilter";
 import InputFilter from "../InputFilter";
 import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { process, State } from "@progress/kendo-data-query";
 
 // @todo: active BE
-// @todo: filters
 // @todo: add new
 // @todo: change and save
+// @todo: connect BE side
 // @todo: translations
 // @todo: styles
+// @todo: sticky header
+// @todo: refactoring
+// @todo: generic component
 // @todo: fullscreen
 
 export const EDIT_FIELD = "inEdit";
@@ -32,6 +36,7 @@ export const EDIT_FIELD = "inEdit";
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
 
+  // @todo: remove mapping
   const [data, setData] = useState(approvalMatrix.map((item) => ({ ...item, active: true })));
 
   const translate = useTranslate();
@@ -99,6 +104,7 @@ const Grid: React.FC<GridProps> = (props) => {
             field="active"
             filterable={true}
             filterCell={StatusFilter}
+            cell={ActiveCell}
             locked={true}
             width={100}
           />
