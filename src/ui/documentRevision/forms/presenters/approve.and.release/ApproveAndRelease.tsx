@@ -467,10 +467,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           maxWidth="xs"
           open={expressApprovalDialog.isOpen}
           onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-          classes={{ paper: classes.dialogContent }}
+          classes={{ paper: classes.dialogPaper }}
           id="ApproveAndRelease-dialog"
         >
-          <DialogTitle>
+          <DialogTitle className={classes.dialogTitle} disableTypography>
             {isQms &&
               <Text translation={isRecord ? "record.finalize.and.release" : "common.approve.and.release"} />
             }
