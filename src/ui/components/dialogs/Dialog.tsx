@@ -1,12 +1,12 @@
 import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog as MuiDialog, DialogActions, DialogContent, DialogTitle, LinearProgress, Typography, useMediaQuery } from "@material-ui/core";
+import { DialogActions, DialogContent, DialogTitle, LinearProgress, Dialog as MuiDialog, Typography, useMediaQuery } from "@material-ui/core";
 import cx from "classnames";
 import React from "react";
 import { themeNext, withThemeNext } from "../../layout/theme-next";
+import Text from "../Text";
 import { Button, IconButton } from "../forms/fields-next";
 import { renderNode } from "../forms/fields-next/utils";
-import Text from "../Text";
 import useStyles from "./Dialog.styles";
 import { DialogActionsProps, DialogCloseReason, DialogProps } from "./Dialog.types";
 
@@ -76,7 +76,7 @@ const Dialog: React.FC<DialogProps> = ({
       }}
     >
       {!hideCloseButton && (
-        <IconButton kind="boxed" className={classes.close} onClick={handleClose(DialogCloseReason.CLOSE_CLICK)}>
+        <IconButton kind="action" className={classes.close} onClick={handleClose(DialogCloseReason.CLOSE_CLICK)}>
           <FontAwesomeIcon icon={regular("xmark")} />
         </IconButton>
       )}

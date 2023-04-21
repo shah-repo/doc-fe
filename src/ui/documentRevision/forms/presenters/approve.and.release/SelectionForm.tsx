@@ -49,7 +49,6 @@ const SelectionForm: React.FC<Props> = ({
       <FormField
         label="common.choose.template"
         disabled={loading}
-        margin="normal"
       >
         <Autocomplete
           value={selectedOption}

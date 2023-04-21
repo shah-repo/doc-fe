@@ -2,24 +2,23 @@ import { Box } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import { Dictionary, isEmpty, isObject } from "lodash";
 import moment from "moment";
-import * as React from "react";
-import * as generateUuid from "uuid/v4";
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
 import { Group } from "../../../../../state/ducks/auth/types";
 import { Owner } from "../../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../../state/types";
 import Approvers from "../../../../change.request/form/approvers";
 import { TemplateOption } from "../../../../change.request/form/types";
+import { Button } from "../../../../components/forms/fields-next";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
 import DatePickerField from "../../../../components/forms/fields/DatePickerField";
 import InputField from "../../../../components/forms/fields/Input";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import FormMessage from "../../../../components/forms/FormMessage";
 import FormProgress from "../../../../components/forms/FormProgress";
-import StyledSubmitButton from "../../../../components/forms/StyledSubmitButton";
 import Text from "../../../../components/Text";
 import { FBFormState, FBSchemaProps } from "../../../../form.builder";
-import { StyledCancelFBButton } from "../../../../form.builder/FBButton/StyledCancelFBButton";
 import Colors from "../../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../../types";
 import useStyles from "./ApproveAndRelease.styles";
@@ -116,17 +115,17 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
             return {
               ...acc,
               [item.name]: [{
-                id: generateUuid(),
+                id: uuidv4(),
                 justificationOfChange: `string`,
                 descriptionOfChange: `string`,
-                proposedDocumentRevision: { id: generateUuid() },
+                proposedDocumentRevision: { id: uuidv4() },
               }],
             };
           }
           case "approvers": {
             return {
               ...acc,
-              [item.name]: [{ id: generateUuid() }],
+              [item.name]: [{ id: uuidv4() }],
             };
           }
           default: {
@@ -156,7 +155,10 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      <FormProgress asyncState={asyncGetDocTypeState} />
+      <Box className={classes.formLoading}>
+        <FormProgress asyncState={asyncGetDocTypeState} />
+        <FormProgress asyncState={asyncState} />
+      </Box>
       {showApprovers && (
         <Approvers
           withoutCurrentUser
@@ -184,7 +186,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           validate={validator(required)}
         />
       )}
-      {!(isRecord && isInlineApproval) && templateOptions.length > 1 && (
+      {(!isRecord || !isInlineApproval) && (
         <AutocompleteField
           name="formDocument"
           size="sm"
@@ -198,7 +200,12 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }}
         />
       )}
-      {isQms && (
+      {selectedInvalid && (
+        <Box mb={3} color={Colors.medium_blue}>
+          <Text translation="document.revision.tpl.invalid" />
+        </Box>
+      )}
+      {isQms && !selectedInvalid && (
         <InputField
           label="transition.action.password"
           name="password"
@@ -213,30 +220,24 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           validate={validator(required)}
         />
       )}
-      {selectedInvalid && (
-        <Box mt={-3} mb={3} color={Colors.medium_blue}>
-          <Text translation="document.revision.tpl.invalid" />
-        </Box>
-      )}
-      <FormProgress asyncState={asyncState} />
-      <StyledSubmitButton
-        asyncState={asyncState}
-        label="transition.action.confirm"
-        fullWidth={false}
-        className={classes.submitButton}
-        id="ApproveAndRelease-submit"
-        data-cy="ApproveAndRelease-submit"
-      />
-      <StyledCancelFBButton
-        variant="text"
-        color="secondary"
-        label="transition.action.cancel"
-        className={classes.cancelButton}
-        disabled={asyncState.status === AsyncStatus.Active}
-        onClick={cancel}
-        id="ApproveAndRelease-cancelButton"
-        data-cy="ApproveAndRelease-cancelButton"
-      />
+      <Box className={classes.dialogActions}>
+        <Button
+          kind="ghost"
+          id="ApproveAndRelease-cancelButton"
+          data-cy="ApproveAndRelease-cancelButton"
+          onClick={cancel}
+        >
+          <Text translation="transition.action.cancel" />
+        </Button>
+        <Button
+          id="ApproveAndRelease-submit"
+          data-cy="ApproveAndRelease-submit"
+          type="submit"
+          disabled={asyncState.status === AsyncStatus.Active}
+        >
+          <Text translation="transition.action.confirm" />
+        </Button>
+      </Box>
     </Form>
   );
 };
