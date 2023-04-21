@@ -15,22 +15,26 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
         label="form.builder.field.part.number.or.service"
         defaultValue={item?.partNumberDocId || item?.serviceId}
         disabled={true}
+        name={"partNumberService"}
         hidden={!(item?.partNumberDocId || item?.serviceId)}
       />
       <FBTextField
         label="form.builder.field.supplier.part.number"
         defaultValue={item?.supplierPartNumber}
         disabled={true}
+        name={"supplierPartNumber"}
         hidden={!item?.supplierPartNumber}
       />
       <FBTextField
         label="form.builder.description"
         defaultValue={item?.partNumberTitle || item?.description}
+        name={"description"}
         disabled={true}
       />
       <FBTextField
         label="form.builder.field.ordered"
         defaultValue={item?.order}
+        name={"ordered"}
         disabled={true}
       />
       <Box display="flex" justifyContent="space-between">
@@ -47,6 +51,7 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
           <FBTextField
             label="form.builder.field.units"
             defaultValue={item?.units}
+            name="units"
             disabled={true}
           />
         </Box>
