@@ -2,10 +2,10 @@ import React from "react";
 import { get } from "lodash";
 import cx from "classnames";
 import Cell from "../Cell";
-import { GridCellProps } from "@progress/kendo-react-grid";
 import useStyles from "./styles";
+import { CellProps } from "../../types";
 
-const ActiveCell: React.FC<GridCellProps> = (props) => {
+const ActiveCell: React.FC<CellProps> = (props) => {
   const { dataItem, field } = props;
 
   const classes = useStyles();

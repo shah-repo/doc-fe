@@ -1,9 +1,9 @@
 import React from "react";
 import { get } from "lodash";
 import Cell from "../Cell";
-import { GridCellProps } from "@progress/kendo-react-grid";
+import { CellProps } from "../../types";
 
-const EmptyDashCell: React.FC<GridCellProps> = (props) => {
+const EmptyDashCell: React.FC<CellProps> = (props) => {
   const { dataItem, field } = props;
 
   const value = get(dataItem, field || "");

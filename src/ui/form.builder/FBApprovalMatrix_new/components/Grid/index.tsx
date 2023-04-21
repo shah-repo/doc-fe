@@ -30,6 +30,7 @@ import { process, State } from "@progress/kendo-data-query";
 // @todo: refactoring
 // @todo: generic component
 // @todo: fullscreen
+// @todo: context for schema
 
 export const EDIT_FIELD = "inEdit";
 
@@ -97,6 +98,7 @@ const Grid: React.FC<GridProps> = (props) => {
           onItemChange={handleItemChange}
           onDataStateChange={handleDataStateChange}
           filterable={true}
+          editField={EDIT_FIELD}
           {...dataState}
         >
           <KendoColumn
@@ -104,7 +106,7 @@ const Grid: React.FC<GridProps> = (props) => {
             field="active"
             filterable={true}
             filterCell={StatusFilter}
-            cell={ActiveCell}
+            cell={(props) => <ActiveCell {...props} editable={false} />}
             locked={true}
             width={100}
           />
@@ -137,7 +139,7 @@ const Grid: React.FC<GridProps> = (props) => {
             field="docType.defaultTraining"
             filterable={true}
             filterCell={BooleanFilter}
-            cell={CheckboxCell}
+            cell={(props) => <CheckboxCell {...props} editable={true} />}
             width={100}
           />
           <KendoColumn
@@ -145,7 +147,7 @@ const Grid: React.FC<GridProps> = (props) => {
             field="docType.needsSignature"
             filterable={true}
             filterCell={BooleanFilter}
-            cell={CheckboxCell}
+            cell={(props) => <CheckboxCell {...props} editable={true} />}
             width={100}
           />
           <KendoColumn
@@ -153,7 +155,7 @@ const Grid: React.FC<GridProps> = (props) => {
             field="docType.category"
             filterable={true}
             filterCell={CategoryFilter}
-            cell={EmptyDashCell}
+            cell={(props) => <EmptyDashCell {...props} editable={false} />}
             width={100}
           />
           {approvalRoles && Object.entries(RoleStageTitles).map(([headKey, headTitle]) => (
@@ -168,6 +170,7 @@ const Grid: React.FC<GridProps> = (props) => {
                   field={`approvalRoles.${headKey}.${role.index}`}
                   filterable={false}
                   cell={CheckboxCell}
+                  editable={true}
                   width={50}
                 />
               ))}

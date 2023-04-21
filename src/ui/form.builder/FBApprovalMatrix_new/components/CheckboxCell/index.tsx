@@ -5,9 +5,9 @@ import {
   Checkbox, CheckboxChangeEvent,
 } from "@progress/kendo-react-inputs";
 import { EDIT_FIELD } from "../Grid";
-import { GridCellProps } from "@progress/kendo-react-grid";
+import { CellProps } from "../../types";
 
-const CheckboxCell: React.FC<GridCellProps> = (props) => {
+const CheckboxCell: React.FC<CellProps> = (props) => {
   const { dataItem, field, dataIndex, onChange } = props;
 
   const path = field || "";

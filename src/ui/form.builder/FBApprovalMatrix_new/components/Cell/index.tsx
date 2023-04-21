@@ -1,7 +1,7 @@
 import React from "react";
-import { GridCellProps } from "@progress/kendo-react-grid";
+import { CellProps } from "../../types";
 
-const Cell: React.FC<GridCellProps> = (props) => {
+const Cell: React.FC<CellProps> = (props) => {
   const { colSpan, style, className, columnIndex, children } = props;
 
   return (

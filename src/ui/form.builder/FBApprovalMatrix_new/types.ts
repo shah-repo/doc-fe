@@ -1,4 +1,5 @@
 import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldProps, FBInputProps } from "..";
+import { GridCellProps } from "@progress/kendo-react-grid";
 
 export type FBApprovalMatrixProps =
 & Pick<FBInputProps, "disabled" | "name" | "isInputOwner">
@@ -8,3 +9,7 @@ export type FBApprovalMatrixProps =
   handleCancel?: () => any;
   data?: FBApprovalMatrixFieldData;
 };
+
+export interface CellProps extends GridCellProps {
+  editable?: boolean;
+}
