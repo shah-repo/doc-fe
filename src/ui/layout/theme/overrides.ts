@@ -156,7 +156,8 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
     MuiPopover: {
       paper: popoverPaper,
     },
-    // @ts-expect-error @todo: remove after upgrading MUI/lab https://v4.mui.com/components/about-the-lab/#typescript
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore @todo: remove after upgrading MUI/lab https://v4.mui.com/components/about-the-lab/#typescript
     MuiAutocomplete: {
       paper: popoverPaper,
     },

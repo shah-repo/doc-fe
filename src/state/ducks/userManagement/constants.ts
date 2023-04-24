@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 export const COMPANY_GROUPS_LIST = "userManagement/COMPANY_GROUPS_LIST";
 export const COMPANY_GROUPS_GET_ASYNC = "userManagement/COMPANY_GROUPS_GET_ASYNC";
 export const GROUPS_ME_GET_ASYNC = "userManagement/GROUPS_ME_GET_ASYNC";

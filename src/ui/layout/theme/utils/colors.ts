@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 enum Colors {
   // white
   white = "#FFF",
