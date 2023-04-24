@@ -8,7 +8,7 @@ import { EDIT_FIELD } from "../Grid";
 import { CellProps } from "../../types";
 
 const CheckboxCell: React.FC<CellProps> = (props) => {
-  const { dataItem, field, dataIndex, onChange } = props;
+  const { dataItem, field, dataIndex, editable, onChange } = props;
 
   const path = field || "";
   const value = Boolean(get(dataItem, path));
@@ -27,7 +27,7 @@ const CheckboxCell: React.FC<CellProps> = (props) => {
     <Cell {...props}>
       <Checkbox
         value={value}
-        disabled={!dataItem[EDIT_FIELD]}
+        disabled={!editable && !dataItem[EDIT_FIELD]}
         onChange={handleChange}
       />
     </Cell>

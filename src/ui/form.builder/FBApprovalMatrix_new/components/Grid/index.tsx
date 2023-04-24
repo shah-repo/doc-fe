@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, MouseEventHandler } from "react";
 import { useTranslate } from "../../../../../common/intl";
 import { AutoSizer } from "react-virtualized";
 import {
@@ -32,13 +32,19 @@ import { process, State } from "@progress/kendo-data-query";
 // @todo: fullscreen
 // @todo: context for schema
 
-export const EDIT_FIELD = "inEdit";
+export const EDIT_FIELD = "_mode";
+export enum Mode {
+  show = "show",
+  add = "add",
+  edit = "edit",
+}
 
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
 
   // @todo: remove mapping
   const [data, setData] = useState(approvalMatrix.map((item) => ({ ...item, active: true })));
+  const [mode, setMode] = useState<Mode>(Mode.show);
 
   const translate = useTranslate();
 
@@ -52,11 +58,17 @@ const Grid: React.FC<GridProps> = (props) => {
     />
   );
 
+  const handleAdd: MouseEventHandler = () => {
+    setData((data) => [...data, {}])
+    setMode(Mode.add);
+  };
+
   const handleRowClick = ({ dataItem }: GridRowClickEvent) => {
     const dataWithEditFlag = data.map((item) => {
       item[EDIT_FIELD] = item.id === dataItem.id;
       return item;
     });
+    setMode(Mode.edit);
     setData(dataWithEditFlag);
   };
 
@@ -89,96 +101,99 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   return (
-    <AutoSizer>
-      {({ width }) => (
-        <KendoDataGrid
-          style={{ width: `${width}px` }}
-          {...process(data, dataState)}
-          onRowClick={handleRowClick}
-          onItemChange={handleItemChange}
-          onDataStateChange={handleDataStateChange}
-          filterable={true}
-          editField={EDIT_FIELD}
-          {...dataState}
-        >
-          <KendoColumn
-            title="Status"
-            field="active"
+    <>
+      <AutoSizer>
+        {({ width }) => (
+          <KendoDataGrid
+            style={{ width: `${width}px` }}
+            {...process(data, dataState)}
+            onRowClick={handleRowClick}
+            onItemChange={handleItemChange}
+            onDataStateChange={handleDataStateChange}
             filterable={true}
-            filterCell={StatusFilter}
-            cell={(props) => <ActiveCell {...props} editable={false} />}
-            locked={true}
-            width={100}
-          />
-          <KendoColumn
-            title="Prefix"
-            field="docType.acronym"
-            filterable={true}
-            filterCell={InputFilter}
-            locked={true}
-            width={100}
-          />
-          <KendoColumn
-            title="Internal type"
-            field="docType.group"
-            filterable={true}
-            filterCell={InputFilter}
-            locked={true}
-            width={100}
-          />
-          <KendoColumn
-            title="Document type"
-            field="docType.name"
-            filterable={true}
-            filterCell={InputFilter}
-            locked={true}
-            width={100}
-          />
-          <KendoColumn
-            title="Training"
-            field="docType.defaultTraining"
-            filterable={true}
-            filterCell={BooleanFilter}
-            cell={(props) => <CheckboxCell {...props} editable={true} />}
-            width={100}
-          />
-          <KendoColumn
-            title="Signature"
-            field="docType.needsSignature"
-            filterable={true}
-            filterCell={BooleanFilter}
-            cell={(props) => <CheckboxCell {...props} editable={true} />}
-            width={100}
-          />
-          <KendoColumn
-            title="Category"
-            field="docType.category"
-            filterable={true}
-            filterCell={CategoryFilter}
-            cell={(props) => <EmptyDashCell {...props} editable={false} />}
-            width={100}
-          />
-          {approvalRoles && Object.entries(RoleStageTitles).map(([headKey, headTitle]) => (
+            editField={EDIT_FIELD}
+            {...dataState}
+          >
             <KendoColumn
-              key={headKey}
-              title={translate(headTitle)}
-            >
-              {approvalRoles.map((role) => (
-                <KendoColumn
-                  key={headKey + role.name}
-                  title={role.name}
-                  field={`approvalRoles.${headKey}.${role.index}`}
-                  filterable={false}
-                  cell={CheckboxCell}
-                  editable={true}
-                  width={50}
-                />
-              ))}
-            </KendoColumn>
-          ))}
-        </KendoDataGrid>
-      )}
-    </AutoSizer>
+              title="Status"
+              field="active"
+              filterable={true}
+              filterCell={StatusFilter}
+              cell={(props) => <ActiveCell {...props} editable={false} />}
+              locked={true}
+              width={100}
+            />
+            <KendoColumn
+              title="Prefix"
+              field="docType.acronym"
+              filterable={true}
+              filterCell={InputFilter}
+              locked={true}
+              width={100}
+            />
+            <KendoColumn
+              title="Internal type"
+              field="docType.group"
+              filterable={true}
+              filterCell={InputFilter}
+              locked={true}
+              width={100}
+            />
+            <KendoColumn
+              title="Document type"
+              field="docType.name"
+              filterable={true}
+              filterCell={InputFilter}
+              locked={true}
+              width={100}
+            />
+            <KendoColumn
+              title="Training"
+              field="docType.defaultTraining"
+              filterable={true}
+              filterCell={BooleanFilter}
+              cell={(props) => <CheckboxCell {...props} editable={true} />}
+              width={100}
+            />
+            <KendoColumn
+              title="Signature"
+              field="docType.needsSignature"
+              filterable={true}
+              filterCell={BooleanFilter}
+              cell={(props) => <CheckboxCell {...props} editable={true} />}
+              width={100}
+            />
+            <KendoColumn
+              title="Category"
+              field="docType.category"
+              filterable={true}
+              filterCell={CategoryFilter}
+              cell={(props) => <EmptyDashCell {...props} editable={false} />}
+              width={100}
+            />
+            {approvalRoles && Object.entries(RoleStageTitles).map(([headKey, headTitle]) => (
+              <KendoColumn
+                key={headKey}
+                title={translate(headTitle)}
+              >
+                {approvalRoles.map((role) => (
+                  <KendoColumn
+                    key={headKey + role.name}
+                    title={role.name}
+                    field={`approvalRoles.${headKey}.${role.index}`}
+                    filterable={false}
+                    cell={CheckboxCell}
+                    editable={true}
+                    width={50}
+                  />
+                ))}
+              </KendoColumn>
+            ))}
+          </KendoDataGrid>
+        )}
+      </AutoSizer>
+      <div onClick={handleAdd}>Button</div>
+    </>
   );
 };
 
