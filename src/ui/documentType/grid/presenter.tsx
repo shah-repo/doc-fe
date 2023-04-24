@@ -71,6 +71,7 @@ export function DocumentTypePresenter({
     copyDate = map(copyDate, (record: any) => {
       if (has(record, "precalc.lhr_end_accepted_quantity")) {
         if (record.precalc.lhr_end_accepted_quantity === -1) {
+          // eslint-disable-next-line @typescript-eslint/camelcase
           record.precalc.lhr_end_accepted_quantity = "N/A";
         }
       }
