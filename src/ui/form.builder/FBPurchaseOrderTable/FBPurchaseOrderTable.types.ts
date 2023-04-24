@@ -12,7 +12,7 @@ export type FBPurchaseOrderTableProps =
   handleDelete?: (index: number) => (e: any) => void;
   reCalculateValueOnBlur?: () => void;
   onAlertNotificationCancel?: (e: React.MouseEvent<HTMLElement>) => void;
-  onAlertNotificationConfirm?: (values?) => void;
+  onAlertNotificationConfirm?: () => void;
   classes?: Record<"root" | "table" | "button" | "list" | "sum", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;

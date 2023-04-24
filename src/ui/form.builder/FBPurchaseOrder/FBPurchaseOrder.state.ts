@@ -241,7 +241,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.fetch();
   };
 
-  public formatCost = (value: any, fixedDecimal?: number) => {
+  private formatCost = (value: any, fixedDecimal?: number) => {
     const val = Number(value || 0);
     if (val === 0) {
       return val.toFixed(2);
@@ -249,7 +249,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return val.toFixed(fixedDecimal || 2);
   };
 
-  public formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
+  private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 
   private addItem = (item: FBPurchaseOrderItem) => {
     this.value.items = union(this.value.items, [{

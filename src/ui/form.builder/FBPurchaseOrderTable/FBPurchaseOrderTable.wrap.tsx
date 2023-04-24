@@ -4,7 +4,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue } from "..";
+import { FB, FBPurchaseOrderValue } from "..";
 import { SM } from "../../../App";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -24,7 +24,7 @@ import FBDataStore from "../FBStore/FBDataStore";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
-import { checkServiceOrProductPartExists } from "./helpers";
+import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from "./helpers";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -100,15 +100,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         const previousItems = allItems?.items;
         delete previousItems[selectedItemIndex];
         const previousLineItemsLength = previousItems?.length;
-
-        const UpdatedLineItemsTotalObj = previousItems?.reduce(
-        (agg, item: FBPurchaseOrderItem) => {
-          const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
-          agg.subTotal += orderCost;
-          agg.forTax += item.tax ? orderCost : 0;
-          return agg;
-        }, { subTotal: 0, forTax: 0 });
-
+        const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
         let tax = 0;
         if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
@@ -119,11 +111,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
         values.formInput[PO_ITEMS_COMPONENT_NAME] = {
           ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
-          subTotal: purchaseOrderState?.formatCost(UpdatedLineItemsTotalObj.subTotal),
-          tax: purchaseOrderState?.formatCost(tax, 6),
-          shippingCost: purchaseOrderState?.formatCost(shippingCost),
-          totalAmount: purchaseOrderState?.formatCost(totalAmount),
-          totalInUSD: purchaseOrderState?.formatCost(totalInUSD),
+          subTotal: formatCost(UpdatedLineItemsTotalObj.subTotal),
+          tax: formatCost(tax, 6),
+          shippingCost: formatCost(shippingCost),
+          totalAmount: formatCost(totalAmount),
+          totalInUSD: formatCost(totalInUSD),
         };
 
         values.formInput[PO_ITEMS_COMPONENT_NAME].items = compact(previousItems);
@@ -148,7 +140,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       dialog?.close();
     };
 
-    handleDelete = (index: number) => (e: any) => {
+    handleDelete = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       setSelectedItemIndex(index);
       if (isPOEditState) {

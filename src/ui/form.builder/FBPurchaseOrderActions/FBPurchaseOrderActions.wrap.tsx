@@ -1,9 +1,11 @@
 import { useFormikContext } from "formik";
 import { cloneDeep, each, findIndex, get, isEmpty, size } from "lodash";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
 import { SM } from "../../../App";
+import { MomentFormats } from "../../../common/utils/date";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -16,6 +18,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
+import { formatCost, getPOLineItemsTotalAndForTaxAmount } from "../FBPurchaseOrderTable/helpers";
 import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
@@ -50,20 +53,17 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
     onAddClick = () => {
       const values = formState?.getValues() as FBPurchaseOrderItem;
+      if (!purchaseOrderState) {
+        return;
+      }
 
       if (isPOEditState) {
-        const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
-        const totalAmount = Number(allItems.totalAmount);
+        const allItems = purchaseOrderState.calculateCost() as FBPurchaseOrderCalculation;
+        const totalAmount = parseFloat(allItems.totalAmount);
         const previousItems = cloneDeep(get(allItems, "items"));
         previousItems[values?.index] = values;
 
-        const UpdatedLineItemsTotalObj = previousItems?.reduce(
-          (agg, item: FBPurchaseOrderItem) => {
-            const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
-            agg.subTotal += orderCost;
-            agg.forTax += item.tax ? orderCost : 0;
-            return agg;
-          }, { subTotal: 0, forTax: 0 });
+        const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
         let tax = 0;
         if (previousItems?.length && UpdatedLineItemsTotalObj.forTax) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
@@ -78,7 +78,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           return dialog?.open();
         }
       }
-      purchaseOrderState?.setItem(values);
+      purchaseOrderState.setItem(values);
       dialogState?.closeDialog();
     };
 
@@ -93,7 +93,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     };
 
     const async = useAsync<DocumentRevision>({
-      onSuccess: (createdDocumentRevision?) => {
+      onSuccess: (createdDocumentRevision?: DocumentRevision) => {
         if (createdDocumentRevision) {
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
@@ -115,30 +115,26 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           previousItems[index] = {
             ...newLineItemvalues,
             totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
-            formattedDate: purchaseOrderState?.formatDate(newLineItemvalues.date),
+            formattedDate: newLineItemvalues.date ?
+              moment(newLineItemvalues.date).format(MomentFormats.MonthDateYearTwoDigit) : "",
           };
         } else {
-          // Edit PO Line Item case
+          // Add PO Line Item case
           previousItems.push(
             {
               ...newLineItemvalues,
               id: FB.uniqid,
               received: 0,
               totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
-              formattedDate: purchaseOrderState?.formatDate(newLineItemvalues.date),
+              formattedDate: newLineItemvalues.date ?
+                moment(newLineItemvalues.date).format(MomentFormats.MonthDateYearTwoDigit) : "",
               index: size(previousItems.items),
             });
         }
 
         const previousLineItemsLength = previousItems?.length;
 
-        const UpdatedLineItemsTotalObj = previousItems?.reduce(
-        (agg, item: FBPurchaseOrderItem) => {
-          const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
-          agg.subTotal += orderCost;
-          agg.forTax += item.tax ? orderCost : 0;
-          return agg;
-        }, { subTotal: 0, forTax: 0 });
+        const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
 
         let tax = 0;
         if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
@@ -150,11 +146,11 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
         values.formInput[PO_ITEMS_COMPONENT_NAME] = {
           ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
-          subTotal: purchaseOrderState?.formatCost(UpdatedLineItemsTotalObj.subTotal),
-          tax: purchaseOrderState?.formatCost(tax, 6),
-          shippingCost: purchaseOrderState?.formatCost(shippingCost),
-          totalAmount: purchaseOrderState?.formatCost(totalAmount),
-          totalInUSD: purchaseOrderState?.formatCost(totalInUSD),
+          subTotal: formatCost(UpdatedLineItemsTotalObj.subTotal),
+          tax: formatCost(tax, 6),
+          shippingCost: formatCost(shippingCost),
+          totalAmount: formatCost(totalAmount),
+          totalInUSD: formatCost(totalInUSD),
         };
 
         values.formInput[PO_ITEMS_COMPONENT_NAME].items = previousItems;
