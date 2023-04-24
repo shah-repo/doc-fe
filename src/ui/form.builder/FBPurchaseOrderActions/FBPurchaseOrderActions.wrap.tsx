@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, each, findIndex, get, isEmpty, size } from "lodash";
+import { cloneDeep, each, findIndex, get, size } from "lodash";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
@@ -72,8 +72,8 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const UpdatedAmount =  Number(tax) +  Number(allItems.shippingCost) + Number(UpdatedLineItemsTotalObj.subTotal);
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (Number(o1.limit) + Number(o1.threshold)) > totalAmount);
-        if ((isEdit && !isEmpty(topApprovals) &&
-        topApprovals?.length && Number(UpdatedAmount) > (topApprovals[0]?.limit + topApprovals[0]?.threshold))
+        if ((isEdit && topApprovals?.length &&
+           Number(UpdatedAmount) > (topApprovals[0]?.limit + topApprovals[0]?.threshold))
         || !isEdit) {
           return dialog?.open();
         }

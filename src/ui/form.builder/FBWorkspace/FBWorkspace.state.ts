@@ -182,14 +182,13 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean,
-    undoPO?: boolean, prevDocumentRevision?: DocumentRevision) => {
+  public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
-    if (this.isPreview && !undoPO) { return; }
-    if ((mode === "form") && !values && !undoPO) { return; }
-    if (!autosave && !excludeAutoSave && !undoPO) { return; }
-    if (!id && !undoPO) { return; }
+    if (this.isPreview) { return; }
+    if ((mode === "form") && !values) { return; }
+    if (!autosave && !excludeAutoSave) { return; }
+    if (!id) { return; }
     this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     let body = {};
@@ -217,16 +216,50 @@ class FBWorkspaceState extends FBSchemaState {
         return;
     }
     this.omitAutosave = true;
-    if (undoPO) {
-      body = {
-        formInput: prevDocumentRevision?.formInput,
-        description: prevDocumentRevision?.description,
-      };
-    }
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
     return this.documentRevApi.set({
       url,
+      urlValues: { id },
+      body,
+      method: "patch",
+    }, (data, error) => {
+      this.omitAutosave = false;
+      if (error) {
+        this.documentRevApi.onError(error);
+        this.loading = false;
+      } else {
+        this.setDirty(false);
+        this.setFormInputData(data);
+        if (!isEmpty(this.getItemsByType("inlineapproval"))) {
+          FBStore.audit.set({
+            url: FBEndpoint.DocumentRevisionAudit,
+            urlValues: { documentId: id },
+            method: "get",
+          });
+        }
+        if (FBStore?.isHistoryTabSelected) {
+          this.loadAudit = true;
+        }
+        this.documentRevApi.onSuccess();
+        FBDataStore.setRefreshData(data);
+        this.loading = false;
+      }
+    });
+  };
+
+  public undoPO = (prevDocumentRevision?: DocumentRevision) => {
+    this.loadAudit = false;
+    const { id } = this;
+    this.loading = true;
+    this.omitAutosave = true;
+    const body = {
+      formInput: prevDocumentRevision?.formInput,
+      description: prevDocumentRevision?.description,
+    };
+    appGlobals.omitReloadNotification = true;
+    return this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
       body,
       method: "patch",

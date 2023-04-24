@@ -9,6 +9,6 @@ export type FBPurchaseOrderActionsProps =
   onCancelClick?: ButtonProps["onClick"];
   dialog?: DialogHandler;
   onAlertNotificationCancel?: (e: React.MouseEvent<HTMLElement>) => void;
-  onAlertNotificationConfirm?: (values?) => void;
+  onAlertNotificationConfirm?: () => void;
   isEdit?: boolean;
 };

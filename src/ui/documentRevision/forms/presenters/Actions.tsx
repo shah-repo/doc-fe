@@ -198,19 +198,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     label: undoChangesLabel,
   } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
-  const onUndoChangesClick = () => {
+  const onUndoChangesClick = async () => {
     const prevPODoc = localStorage.getItem("prevPODoc") ?? "";
     if (!prevPODoc) {
       history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
       return;
     }
-    Promise.resolve(workspaceState?.saveDocRev({}, false, true,
-      JSON.parse(prevPODoc) as DocumentRevision))
-      .then((data) => {
-        history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
-        localStorage.setItem("prevPODoc", "");
-        setDocumentRevision(data);
-      });
+    const data = await workspaceState?.undoPO(
+      JSON.parse(prevPODoc) as DocumentRevision);
+
+    history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
+    localStorage.setItem("prevPODoc", "");
+    setDocumentRevision(data);
   };
   const onFormClick = () => {
     if (redlineActive) {
@@ -428,21 +427,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <>
-        {isPO && documentRevision.poStatus && (
-          <HeaderPOStatus poStatus={documentRevision.poStatus} />
-        )}
-      </>
-      <>
-        {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased
-         && <StyledSubmitButton
-           showNewButton={true}
-           asyncState={asyncState}
-           label={undoChangesLabel ?? ""}
-           onClick={onUndoChangesClick}
-           data-cy={"undo-changes"}
-         />}
-      </>
+      {isPO && documentRevision.poStatus && (
+        <HeaderPOStatus poStatus={documentRevision.poStatus} />
+      )}
+      {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased && (
+        <StyledSubmitButton
+          showNewButton={true}
+          asyncState={asyncState}
+          label={undoChangesLabel ?? ""}
+          onClick={onUndoChangesClick}
+          data-cy={"undo-changes"}
+        />
+      )}
       <Observer>
         {() => (
           <>
