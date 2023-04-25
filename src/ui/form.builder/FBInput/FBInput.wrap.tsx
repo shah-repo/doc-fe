@@ -169,20 +169,20 @@ export const withFBInput = <T extends FBInputProps>(
           convertedFieldValue = fieldValue;
         }
         const formStateFieldValue = formState?.getFieldValue(fieldName);
-        const optionId = find(formState?.workspaceState?.schema, { name: fieldName })?.optionId?.toString();
-        if (FBAutocompleteAsyncStore.data.get(optionId as string)) {
-          const arr = Array.from(FBAutocompleteAsyncStore.data.get(optionId as string).values());
-          const orignalVal: any = find(arr, { id: formStateFieldValue });
-          if (orignalVal?.name) {
-              formState?.setValidationAttributeName(formStateFieldValue, `${orignalVal?.document?.docId}
-              - rev ${orignalVal?.displayRevision} - ${orignalVal?.name ? orignalVal?.name : ""} `);
+        const optionId = find(formState?.workspaceState?.schema, { name: fieldName })?.optionId;
+        if (optionId) {
+          const optionIdString = optionId.toString();
+          if (FBAutocompleteAsyncStore.data.get(optionIdString)) {
+            const arr = Array.from(FBAutocompleteAsyncStore.data.get(optionIdString).values());
+            const originalVal: any = find(arr, { id: formStateFieldValue });
+            let validationString = `${originalVal?.document?.docId} - rev ${originalVal?.displayRevision}`;
+            if (originalVal?.name) {
+              validationString += ` - ${originalVal.name}`;
+            } else if (originalVal?.description) {
+              validationString += ` - ${originalVal.description.replaceAll(/<\/?p>/gi, "")}`;
+            }
+          formState?.setValidationAttributeName(formStateFieldValue, validationString);
           }
-          else {
-              formState?.setValidationAttributeName(formStateFieldValue, `${orignalVal?.document?.docId}
-              - rev ${orignalVal?.displayRevision} - ${orignalVal?.description ?
-                 orignalVal?.description.replaceAll(/<\/?p>/gi, "") : ""} `);
-          }
-
         }
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
           if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue) && !isNull(formStateFieldValue)) {
