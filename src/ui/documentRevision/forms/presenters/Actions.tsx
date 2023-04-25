@@ -123,12 +123,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
 
-  function isOutputSchema(): boolean {
+  function isOutputSchema() {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
+    const { EDITABLE_SCHEMA, REDLINE } = DOC_TYPE_GROUP_OPTION;
+
     return (
-      (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
+      (groupOptions?.includes(EDITABLE_SCHEMA) || groupOptions?.includes(REDLINE)) &&
       !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
