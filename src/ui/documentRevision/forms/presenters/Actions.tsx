@@ -128,9 +128,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
     const { EDITABLE_SCHEMA, REDLINE } = DOC_TYPE_GROUP_OPTION;
+
     return (
-      typeof groupOptions !== "undefined"
-      && (groupOptions.includes(EDITABLE_SCHEMA) || groupOptions.includes(REDLINE))
+      (Boolean(groupOptions?.includes(EDITABLE_SCHEMA) || groupOptions?.includes(REDLINE)))
       && !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
