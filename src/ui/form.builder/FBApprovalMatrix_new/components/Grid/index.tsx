@@ -1,9 +1,10 @@
-import React, { useState, MouseEventHandler } from "react";
+import React, { useState } from "react";
 import { useTranslate } from "../../../../../common/intl";
 import { AutoSizer } from "react-virtualized";
 import {
   GridColumn as KendoColumn,
   GridFilterCellProps,
+  GridRowProps,
   GridRowClickEvent,
   GridItemChangeEvent,
   GridDataStateChangeEvent,
@@ -19,6 +20,8 @@ import InputFilter from "../InputFilter";
 import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { process, State } from "@progress/kendo-data-query";
+import cx from "classnames";
+import useStyles from "./styles";
 
 // @todo: add new
 // @todo: change and save
@@ -40,6 +43,7 @@ export enum Mode {
 
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
+  const classes = useStyles();
 
   const [data, setData] = useState(approvalMatrix);
 
@@ -55,7 +59,7 @@ const Grid: React.FC<GridProps> = (props) => {
     />
   );
 
-  const handleAdd: MouseEventHandler = () => {
+  const handleAdd: React.MouseEventHandler = () => {
     setData((data) => [...data, { [MODE_FIELD]: Mode.add } as any]);
   };
 
@@ -105,6 +109,33 @@ const Grid: React.FC<GridProps> = (props) => {
     setDataState(dataState);
   };
 
+  const rowRender = (row: React.ReactElement<HTMLTableRowElement>, props: GridRowProps) => {
+    const { dataItem } = props;
+
+    const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+
+    if (!isUpdating) {
+      return row;
+    }
+
+    const styledRow = React.cloneElement(
+      row,
+      {
+        ...row.props,
+        className: cx(row.props.className, classes.updating),
+      },
+      row.props.children,
+    );
+
+    return (
+      <>
+        {styledRow}
+        <div className={classes.save}>Save</div>
+        <div className={classes.discard}>Discard</div>
+      </>
+    );
+  };
+
   return (
     <>
       <div onClick={handleAdd}>Button</div>
@@ -113,6 +144,7 @@ const Grid: React.FC<GridProps> = (props) => {
           <KendoDataGrid
             style={{ width: `${width}px` }}
             {...process(data, dataState)}
+            rowRender={rowRender}
             onRowClick={handleRowClick}
             onItemChange={handleItemChange}
             onDataStateChange={handleDataStateChange}

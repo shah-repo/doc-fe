@@ -1,8 +1,15 @@
 import { makeStyles } from "@material-ui/core";
 
 export default makeStyles(() => ({
-  status: {
-    display: "flex",
-    alignItems: "center",
+  updating: {
+    "position": "relative",
+    "z-index": 3,
+    "box-shadow": "0 0 0 1px red !important",
+  },
+  save: {
+    position: "relative",
+  },
+  discard: {
+    position: "relative",
   },
 }));
