@@ -5,7 +5,7 @@ import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SM } from "../../../../App";
-import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { MomentFormats, getFormattedDateString } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
 import { Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
@@ -27,21 +27,21 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
+import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
-import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.container";
 import { withActionButton } from "./ActionButton.wrap";
-import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
+import { SubmitForApproval } from "./SubmitForApproval";
+import VoidButton from "./VoidButton";
+import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import ExportToEmail from "./export.to.email/ExportToEmail";
 import RedlineButton from "./redline/Redline.button";
-import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
-import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isNewLayout = SM.isNewLayout;
@@ -123,15 +123,15 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
 
-  function isOutputSchema() {
+  function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
     const { EDITABLE_SCHEMA, REDLINE } = DOC_TYPE_GROUP_OPTION;
-
     return (
-      (groupOptions?.includes(EDITABLE_SCHEMA) || groupOptions?.includes(REDLINE)) &&
-      !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
+      typeof groupOptions !== "undefined"
+      && (groupOptions.includes(EDITABLE_SCHEMA) || groupOptions.includes(REDLINE))
+      && !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
 
