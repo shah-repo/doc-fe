@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
+import { db, PO_TABLE_NAME } from "../../../../db";
 import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
@@ -199,13 +200,17 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = async () => {
-    const prevPODoc = localStorage.getItem("prevPODoc") ?? "";
-    if (!prevPODoc) {
+    let prevPODoc;
+    try {
+      prevPODoc = await db.table(PO_TABLE_NAME).toArray();
+    } catch (e) {}
+
+    if (!prevPODoc.length) {
       history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
       return;
     }
     const data = await workspaceState?.undoPO(
-      JSON.parse(prevPODoc) as DocumentRevision);
+      prevPODoc[0] as DocumentRevision);
 
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
     localStorage.setItem("prevPODoc", "");

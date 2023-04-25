@@ -11,6 +11,7 @@ import SM from "../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_white.svg";
 import { ReactComponent as WithDrawSubmissionIcon } from "../../assets/images/withdraw_submission.svg";
+import { db, PO_TABLE_NAME } from "../../db";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from "../../state/ducks/documentRevisions/types";
@@ -138,10 +139,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
 
   const clonePODocument = () => {
-    localStorage.setItem("prevPODoc", JSON.stringify({
-      description: documentRevision.description,
-      formInput: documentRevision.formInput,
-    }));
+    try {
+      db.table(PO_TABLE_NAME).put({
+        description: documentRevision.description,
+        formInput: documentRevision.formInput,
+      });
+    } catch (e) {}
     cloneDocument();
   };
 
