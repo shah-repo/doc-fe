@@ -199,6 +199,6 @@
     "redux-mock-store": "1.5.4",
     "serve": "^11.3.2",
     "ts-node": "^8.10.2",
-    "ts-unused-exports": "^9.0.4"
+    "ts-unused-exports": "^7.0.0"
   }
 }
