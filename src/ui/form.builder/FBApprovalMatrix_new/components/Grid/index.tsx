@@ -20,7 +20,6 @@ import { GridProps } from "./types";
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from "../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { process, State } from "@progress/kendo-data-query";
 
-// @todo: active BE
 // @todo: add new
 // @todo: change and save
 // @todo: connect BE side
@@ -32,7 +31,7 @@ import { process, State } from "@progress/kendo-data-query";
 // @todo: fullscreen
 // @todo: context for schema
 
-export const EDIT_FIELD = "_mode";
+export const MODE_FIELD = "_mode";
 export enum Mode {
   show = "show",
   add = "add",
@@ -42,9 +41,7 @@ export enum Mode {
 const Grid: React.FC<GridProps> = (props) => {
   const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
 
-  // @todo: remove mapping
-  const [data, setData] = useState(approvalMatrix.map((item) => ({ ...item, active: true })));
-  const [mode, setMode] = useState<Mode>(Mode.show);
+  const [data, setData] = useState(approvalMatrix);
 
   const translate = useTranslate();
 
@@ -59,27 +56,35 @@ const Grid: React.FC<GridProps> = (props) => {
   );
 
   const handleAdd: MouseEventHandler = () => {
-    setData((data) => [...data, {}])
-    setMode(Mode.add);
+    setData((data) => [...data, { [MODE_FIELD]: Mode.add } as any]);
   };
 
   const handleRowClick = ({ dataItem }: GridRowClickEvent) => {
-    const dataWithEditFlag = data.map((item) => {
-      item[EDIT_FIELD] = item.id === dataItem.id;
-      return item;
-    });
-    setMode(Mode.edit);
-    setData(dataWithEditFlag);
+    setData((data) => data.map((item) => {
+      const isAdd = item[MODE_FIELD] === Mode.add;
+
+      if (item.id !== dataItem.id) {
+        return {
+          ...item,
+          [MODE_FIELD]: !isAdd ? Mode.show : item[MODE_FIELD],
+        };
+      }
+
+      return ({
+        ...item,
+        [MODE_FIELD]: !isAdd ? Mode.edit : item[MODE_FIELD],
+      });
+    }));
   };
 
   const handleItemChange = ({ dataItem }: GridItemChangeEvent) => {
-    const dataWithChangedItem = data.map((item) => {
-      if (item.id === dataItem.id) {
-        return dataItem;
+    setData((data) => data.map((item) => {
+      if (item.id !== dataItem.id) {
+        return item;
       }
-      return item;
-    });
-    setData(dataWithChangedItem);
+
+      return dataItem;
+    }));
   };
 
   const [dataState, setDataState] = useState<State>({});
@@ -102,6 +107,7 @@ const Grid: React.FC<GridProps> = (props) => {
 
   return (
     <>
+      <div onClick={handleAdd}>Button</div>
       <AutoSizer>
         {({ width }) => (
           <KendoDataGrid
@@ -111,12 +117,11 @@ const Grid: React.FC<GridProps> = (props) => {
             onItemChange={handleItemChange}
             onDataStateChange={handleDataStateChange}
             filterable={true}
-            editField={EDIT_FIELD}
             {...dataState}
           >
             <KendoColumn
               title="Status"
-              field="active"
+              field="docType.active"
               filterable={true}
               filterCell={StatusFilter}
               cell={(props) => <ActiveCell {...props} editable={false} />}
@@ -182,8 +187,7 @@ const Grid: React.FC<GridProps> = (props) => {
                     title={role.name}
                     field={`approvalRoles.${headKey}.${role.index}`}
                     filterable={false}
-                    cell={CheckboxCell}
-                    editable={true}
+                    cell={(props) => <CheckboxCell {...props} editable={true} />}
                     width={50}
                   />
                 ))}
@@ -192,7 +196,6 @@ const Grid: React.FC<GridProps> = (props) => {
           </KendoDataGrid>
         )}
       </AutoSizer>
-      <div onClick={handleAdd}>Button</div>
     </>
   );
 };

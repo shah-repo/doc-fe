@@ -4,7 +4,7 @@ import Cell from "../Cell";
 import {
   Checkbox, CheckboxChangeEvent,
 } from "@progress/kendo-react-inputs";
-import { EDIT_FIELD } from "../Grid";
+import { MODE_FIELD, Mode } from "../Grid";
 import { CellProps } from "../../types";
 
 const CheckboxCell: React.FC<CellProps> = (props) => {
@@ -23,11 +23,13 @@ const CheckboxCell: React.FC<CellProps> = (props) => {
     });
   };
 
+  const canBeUpdated = editable && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+
   return (
     <Cell {...props}>
       <Checkbox
         value={value}
-        disabled={!editable && !dataItem[EDIT_FIELD]}
+        disabled={!canBeUpdated}
         onChange={handleChange}
       />
     </Cell>
