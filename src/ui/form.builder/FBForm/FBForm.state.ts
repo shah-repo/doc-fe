@@ -318,6 +318,24 @@ class FBFormState extends FBSchemaState {
         }
         return passes();
       });
+    this.Validator.registerAsyncImplicit(
+      "required_if",
+      function(val: string[], req: string[], attribute: string, passes) {
+        const reqs = req?.[1];
+        const reqName = req?.[0] || "";
+        const inputValue = lodashGet(validator.input, reqName);
+        const { messages: { attributeNames } } = validator;
+        if (!inputValue) {  return passes(); }
+        if (!val)
+        { return passes(
+          false,
+          `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} is 
+          ${attributeNames[reqs]}`); }
+
+        return passes();
+
+      });
+
   };
 
   public setFieldAutosave = (name?: string) => {

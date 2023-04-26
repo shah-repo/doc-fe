@@ -138,9 +138,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
+    const { EDITABLE_SCHEMA, REDLINE } = DOC_TYPE_GROUP_OPTION;
+
     return (
-      (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
-      !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
+      (Boolean(groupOptions?.includes(EDITABLE_SCHEMA) || groupOptions?.includes(REDLINE)))
+      && !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
 
@@ -213,7 +215,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       prevPODoc[0] as DocumentRevision);
 
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
-    localStorage.setItem("prevPODoc", "");
+    getPOIndexDbInstance().clear();
     setDocumentRevision(data);
   };
   const onFormClick = () => {
