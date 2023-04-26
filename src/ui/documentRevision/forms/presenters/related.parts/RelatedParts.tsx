@@ -424,7 +424,9 @@ const RelatedPartViewRow: React.FunctionComponent<{
         })}
         data-cy="related-parts-view-row"
       >
-        <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}>
+        <div className={cx(classes.tableCellOne, classes.relatedPartViewRowCell)}
+          data-cy="view-row-docid-cell"
+        >
           <Link
             to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
             target="_blank"
@@ -445,7 +447,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           placement="bottom"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           arrow >
-            <span ref={titleCellRef} className={classes.relatedPartViewRowTitleCell}>
+            <span ref={titleCellRef} className={classes.relatedPartViewRowTitleCell} data-cy="view-row-title-cell">
               {isVoided ? listItem.name :
                 <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
             </span>
@@ -599,8 +601,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             name="relatedPartDocId"
           />
         </div>
-        <div
-          className={classes.editRowChildDivTwo}>
+        <div className={classes.editRowChildDivTwo} data-cy="edit-row-title-cell">
           <label>{documentRevision?.name} - </label>
           <TextField
             className={classes.textField}
