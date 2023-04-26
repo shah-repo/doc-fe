@@ -5,7 +5,7 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
+    "project": "./tsconfig.json",
     "ecmaVersion": 2020
   },
   "extends": [
@@ -49,11 +49,12 @@
 //        }
 //      }
 //    ],
+    "@typescript-eslint/prefer-ts-expect-error": ["off"], // @todo: remove with Typescript 3.9
     // These are temporary rules ovverides to slowly fix our codebase
+    // @todo: after all fixes, remove "size: 2x" from bitbucket-pipelines.yml &COMMON steps, which was increased because of big amount of warnings.
     // @todo: remove each warning rule override below. Don't forget to uncomment correct rule above.
-    // @todo: after all fixes, remove "size: 2x" from bitbucket-pipelines.yml &COMMON step, which was increased because of big amount of warnings.
+    // @todo: remove .eslintignore creation in build.sh
     "@typescript-eslint/array-type": ["warn"],
-    "@typescript-eslint/ban-ts-comment": ["warn"],
     "@typescript-eslint/ban-types": ["warn"],
     "@typescript-eslint/brace-style": ["warn"],
     "@typescript-eslint/comma-dangle": ["warn", "always-multiline"],
@@ -95,7 +96,6 @@
     "@typescript-eslint/prefer-optional-chain": ["warn"],
     "@typescript-eslint/prefer-readonly": ["warn"],
     "@typescript-eslint/prefer-reduce-type-parameter": ["warn"],
-    "@typescript-eslint/prefer-ts-expect-error": ["warn"],
     "@typescript-eslint/promise-function-async": ["warn"],
     "@typescript-eslint/quotes": ["warn"],
     "@typescript-eslint/require-array-sort-compare": ["warn"],
