@@ -142,10 +142,10 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
           data={resultState.data}
           total={resultState.total}
           pageable={false}
-          sortable={true}
+          sortable={false}
           filterable={true}
-          reorderable={true}
-          groupable={true}
+          reorderable={false}
+          groupable={false}
           onDataStateChange={onDataStateChange}
           {...dataState}
           expandField="expanded"

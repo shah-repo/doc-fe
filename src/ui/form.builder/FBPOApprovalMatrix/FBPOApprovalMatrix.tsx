@@ -44,7 +44,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
           </FBSection>
         </FBInput>
         <FBPOApprovalMatrixTable {...{ name }} {...props as FBPOApprovalMatrixTableProps} />
-        <FBButton
+        {!props.disabled && <FBButton
           fullWidth={true}
           disabled={props.disabled}
           label="form.builder.add.line.item"
@@ -53,7 +53,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
           newVariant={true}
           className={classes?.button}
           startIcon={<PlusIcon />}
-        />
+        />}
       </Box>
     </Provider>
   );

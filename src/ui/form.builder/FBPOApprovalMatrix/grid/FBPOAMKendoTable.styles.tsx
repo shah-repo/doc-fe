@@ -3,6 +3,9 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
     "height": "36vh",
+    "& .k-grid-header": {
+      "pointer-events": "none",
+    },
     "& .k-grouping-header.k-grouping-header-flex": {
       display: "none",
     },
