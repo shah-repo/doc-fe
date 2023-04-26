@@ -54,6 +54,7 @@
     // @todo: after all fixes, remove "size: 2x" from bitbucket-pipelines.yml &COMMON steps, which was increased because of big amount of warnings.
     // @todo: remove each warning rule override below. Don't forget to uncomment correct rule above.
     // @todo: remove .eslintignore creation in build.sh
+    // @todo: remove @typescript-eslint resolutions in package.json after react-scripts update
     "@typescript-eslint/array-type": ["warn"],
     "@typescript-eslint/ban-types": ["warn"],
     "@typescript-eslint/brace-style": ["warn"],
