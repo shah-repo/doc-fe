@@ -30,6 +30,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
+import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -53,7 +54,6 @@ import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import { enterUserInfo } from "./column.definition";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
-import KendoDataGrid from "../../components/KendoDataGrid/KendoDataGrid";
 
 let call: CancelTokenSource;
 
@@ -495,7 +495,7 @@ export function KendoPanel<T>({
 
   const tableRenderer = ({ width }: Size) => (
     <>
-      <KendoDataGrid
+      <StyledKendoGrid
         className={`${classes.grid} no-row-pointer`}
         style={{ width: `${width}px` }}
         data={result}
@@ -528,7 +528,7 @@ export function KendoPanel<T>({
         </GridToolbar>
         {columnRenderer(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
-      </KendoDataGrid>
+      </StyledKendoGrid>
       {isLoading && <Loader/>}
     </>
   );

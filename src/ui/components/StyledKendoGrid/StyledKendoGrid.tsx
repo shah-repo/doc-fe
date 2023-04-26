@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from "react";
 import { intl } from "../../../common/intl";
 import { withThemeNext } from "../../layout/theme-next";
 import { Translation } from "../../translations/types";
-import useStyles from "./KendoDataGrid.styles";
+import useStyles from "./StyledKendoGrid.styles";
 
 const formatMessage = (id: Translation) => intl.formatMessage({ id });
 
@@ -17,7 +17,7 @@ loadMessages({
   },
 }, intl.locale);
 
-const KendoDataGrid: React.FC<PropsWithChildren<GridProps>> = ({ children, ...props }, ref) => {
+const StyledKendoGrid: React.FC<PropsWithChildren<GridProps>> = ({ children, ...props }, ref) => {
   useStyles();
 
   return (
@@ -29,4 +29,4 @@ const KendoDataGrid: React.FC<PropsWithChildren<GridProps>> = ({ children, ...pr
   );
 };
 
-export default withThemeNext(React.forwardRef(KendoDataGrid));
+export default withThemeNext(React.forwardRef(StyledKendoGrid));

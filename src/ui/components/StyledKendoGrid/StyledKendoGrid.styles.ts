@@ -76,7 +76,8 @@ export default makeStyles((theme) => ({
         "borderRight": `1px solid ${Colors.white}`,
 
         "&:not(.k-grid-header-sticky) + .k-grid-header-sticky": {
-          boxShadow: "-10px 5px 10px rgba(0, 0, 0, .1)",
+          boxShadow: "-5px 12px 10px 2px rgba(0, 0, 0, .1)",
+          clipPath: "inset(0 0 0 -20px)",
         },
         "&.k-grid-header-sticky": {
           "backgroundColor": BASE_COLOR,
@@ -85,7 +86,8 @@ export default makeStyles((theme) => ({
 
           "&:has(+ :not(.k-grid-header-sticky))": {
             borderRightColor: "transparent",
-            boxShadow: "10px 5px 10px rgba(0, 0, 0, .1)",
+            boxShadow: "5px 12px 10px 2px rgba(0, 0, 0, .1)",
+            clipPath: "inset(0 -20px 0 0)",
           },
         },
         "&.k-sorted": {
@@ -101,6 +103,16 @@ export default makeStyles((theme) => ({
       "& .k-filter-row": {
         "& th:not([aria-label])": {
           borderRight: "none",
+        },
+        "& th": {
+          "&:not(.k-grid-header-sticky) + .k-grid-header-sticky": {
+            boxShadow: "-5px 0 10px 2px rgba(0, 0, 0, .1)",
+          },
+          "&.k-grid-header-sticky": {
+            "&:has(+ :not(.k-grid-header-sticky))": {
+              boxShadow: "5px 0 10px 2px rgba(0, 0, 0, .1)",
+            },
+          },
         },
         "& .k-textbox": {
           width: "100%",
@@ -160,13 +172,15 @@ export default makeStyles((theme) => ({
             backgroundColor: Colors.gray,
           },
           "&:not(.k-grid-content-sticky) + .k-grid-content-sticky": {
-            boxShadow: "-10px 5px 10px rgba(0, 0, 0, .1)",
+            boxShadow: "-5px 0 10px 2px rgba(0, 0, 0, .1)",
+            clipPath: "inset(0 0 0 -20px)",
           },
           "&.k-grid-content-sticky": {
             "borderColor": Colors.tableStroke,
 
             "&:has(+ :not(.k-grid-content-sticky))": {
-              boxShadow: "10px 5px 10px rgba(0, 0, 0, .1)",
+              boxShadow: "5px 0 10px 2px rgba(0, 0, 0, .1)",
+              clipPath: "inset(0 -20px 0 0)",
             },
           },
           "&.k-sorted": {
@@ -194,7 +208,16 @@ export default makeStyles((theme) => ({
           },
         },
         "&:last-child td": {
-          borderBottom: "none",
+          "borderBottom": "none",
+
+          "&:not(.k-grid-content-sticky) + .k-grid-content-sticky": {
+            boxShadow: "-5px -12px 10px 2px rgba(0, 0, 0, .1)",
+          },
+          "&.k-grid-content-sticky": {
+            "&:has(+ :not(.k-grid-content-sticky))": {
+              boxShadow: "5px -12px 10px 2px rgba(0, 0, 0, .1)",
+            },
+          },
         },
       },
     },

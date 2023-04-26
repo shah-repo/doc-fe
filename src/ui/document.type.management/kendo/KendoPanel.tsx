@@ -22,9 +22,9 @@ import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION, DocumentType, GroupWithGroupOptions } from "../../../state/ducks/documentRevisions/documentType/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import KendoDataGrid from "../../components/KendoDataGrid/KendoDataGrid";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
+import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
 import Text from "../../components/Text";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
@@ -540,7 +540,7 @@ export function KendoPanel<T extends { id?: string }>({
 
   const tableRenderer = ({ width }: Size) => (
     <>
-      <KendoDataGrid
+      <StyledKendoGrid
         className={`${gridClasses.grid} no-row-pointer`}
         style={{ width: `${width}px` }}
         data={result}
@@ -574,7 +574,7 @@ export function KendoPanel<T extends { id?: string }>({
         </GridToolbar>
         {renderColumns()}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
-      </KendoDataGrid>
+      </StyledKendoGrid>
       {isLoading && <Loader />}
     </>
   );

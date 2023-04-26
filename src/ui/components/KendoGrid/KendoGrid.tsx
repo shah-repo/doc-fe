@@ -49,8 +49,8 @@ import {
 } from "../common/kendo/helpers";
 import NoDataFound from "../common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../common/kendo/types";
-import KendoDataGrid from "../KendoDataGrid/KendoDataGrid";
 import { toastError } from "../notifications";
+import StyledKendoGrid from "../StyledKendoGrid/StyledKendoGrid";
 import ClearFilters from "../table/ClearFilters";
 import { DataLoader } from "./DataLoader";
 import { KendoGridFilterCell, KendoGridProps } from "./interfaces";
@@ -420,7 +420,7 @@ export function KendoGrid<T extends any>({
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
-      <KendoDataGrid
+      <StyledKendoGrid
         style={{ width: `${width}px` }}
         className={classes.grid}
         filterable={true}
@@ -453,7 +453,7 @@ export function KendoGrid<T extends any>({
         </GridToolbar>
         {renderKendoColumns(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
-      </KendoDataGrid>
+      </StyledKendoGrid>
 
       {dataState && (
         <DataLoader

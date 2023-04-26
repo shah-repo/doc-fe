@@ -37,9 +37,9 @@ import {
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import KendoDataGrid from "../../components/KendoDataGrid/KendoDataGrid";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
+import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -540,7 +540,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
 
   const tableRenderer = ({ width }: Size) => (
     <>
-      <KendoDataGrid
+      <StyledKendoGrid
         className={`${classes.grid} no-row-pointer`}
         style={{ width: `${width}px` }}
         data={result}
@@ -574,7 +574,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         </GridToolbar>
         {columnRenderer(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
-      </KendoDataGrid>
+      </StyledKendoGrid>
       {isLoading && <Loader/>}
     </>
   );
