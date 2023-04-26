@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { IotService } from "../../../common/utils/iot/iotService";
-import { db, PO_TABLE_NAME } from "../../../db";
+import { getPOIndexDbInstance } from "../../../db";
 import { ResetPasswordValues } from "../../../ui/users/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
@@ -227,7 +227,7 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
       dispatch(logoutUser());
       const iotService = IotService.getInstance();
       iotService.unsubscribeAll();
-      db.table(PO_TABLE_NAME).clear();
+      getPOIndexDbInstance().clear();
     },
   });
 

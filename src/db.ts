@@ -1,9 +1,12 @@
 import Dexie from "dexie";
 
-const DATABASE_NAME = "Enlil";
-export const PO_TABLE_NAME = "po";
-export const db = new Dexie(DATABASE_NAME);
+const databaseName = "Enlil";
+const poTableName = "po";
+
+export const db = new Dexie(databaseName);
 
 db.version(1).stores({
   po: "description, formInput",
 });
+
+export const getPOIndexDbInstance = () => db.table(poTableName);

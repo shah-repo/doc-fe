@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { db, PO_TABLE_NAME } from "../../../../db";
+import { getPOIndexDbInstance } from "../../../../db";
 import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
@@ -202,7 +202,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const onUndoChangesClick = async () => {
     let prevPODoc;
     try {
-      prevPODoc = await db.table(PO_TABLE_NAME).toArray();
+      prevPODoc = await getPOIndexDbInstance().toArray();
     } catch (e) {}
 
     if (!prevPODoc.length) {

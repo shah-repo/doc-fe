@@ -22,4 +22,5 @@ export const DOCUMENT_REVISION_PARTS_URL = `${DOCUMENT_REVISION_ROOT_URL}/availa
 export const PO_REQUESTOR_COMPONENT_NAME = "po-requestor-autocomplete";
 export const PO_ITEMS_COMPONENT_NAME = "po-items-built-in";
 export const PO_APPROVAL_KEY = "fb-po-approvals-";
+export const THRESHOLD_KEY = "threshold";
 export const PO_ROOT_URL = "/purchase_order";
