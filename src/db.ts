@@ -3,7 +3,7 @@ import Dexie from "dexie";
 const databaseName = "Enlil";
 const poTableName = "po";
 
-export const db = new Dexie(databaseName);
+const db = new Dexie(databaseName);
 
 db.version(1).stores({
   po: "description, formInput",
