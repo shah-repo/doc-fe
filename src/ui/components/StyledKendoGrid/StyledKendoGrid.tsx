@@ -1,4 +1,4 @@
-import { Grid, GridRowProps } from "@progress/kendo-react-grid";
+import { Grid } from "@progress/kendo-react-grid";
 import { LocalizationProvider, loadMessages } from "@progress/kendo-react-intl";
 import cx from "classnames";
 import React, { PropsWithChildren, useLayoutEffect, useMemo, useRef } from "react";
@@ -6,7 +6,7 @@ import { intl } from "../../../common/intl";
 import { withThemeNext } from "../../layout/theme-next";
 import { Translation } from "../../translations/types";
 import useStyles from "./StyledKendoGrid.styles";
-import { StyledKendoGridProps } from "./StyledKendoGrid.types";
+import { RowComponent, StyledKendoGridProps } from "./StyledKendoGrid.types";
 
 const formatMessage = (id: Translation) => intl.formatMessage({ id });
 
@@ -22,6 +22,7 @@ loadMessages({
 const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
   children,
   hasBoxScrollbars,
+  onRowClick,
   ...props
 }, ref) => {
   useStyles();
@@ -53,9 +54,9 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
     }
   }, [hasBoxScrollbars, gridContent]);
 
-  const renderRow = (row: React.ReactElement<HTMLTableRowElement>, props: GridRowProps) =>
+  const renderRow: RowComponent = (row) =>
     React.cloneElement(row, {
-      className: cx(row.props.className, { "k-clickable-row": props.onClick }),
+      className: cx(row.props.className, { "k-clickable-row": onRowClick }),
     });
 
   return (

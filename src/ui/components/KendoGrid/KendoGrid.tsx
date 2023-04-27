@@ -302,7 +302,6 @@ export function KendoGrid<T extends any>({
               return RenderCustomCell(
                 {
                   ...props,
-                  cellRowClick: onRowClick,
                   showTooltip: column.showTooltip,
                   tooltipField: column.tooltipField,
                 },
@@ -437,6 +436,7 @@ export function KendoGrid<T extends any>({
         expandField="expanded"
         onColumnResize={onColumnResize}
         onColumnReorder={onColumnReorder}
+        onRowClick={onRowClick}
       >
         <GridToolbar>
           <Grid container>
