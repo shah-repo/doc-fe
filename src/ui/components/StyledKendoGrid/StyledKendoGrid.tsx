@@ -1,10 +1,11 @@
-import { Grid, GridProps } from "@progress/kendo-react-grid";
+import { Grid } from "@progress/kendo-react-grid";
 import { LocalizationProvider, loadMessages } from "@progress/kendo-react-intl";
 import React, { PropsWithChildren, useLayoutEffect, useMemo, useRef } from "react";
 import { intl } from "../../../common/intl";
 import { withThemeNext } from "../../layout/theme-next";
 import { Translation } from "../../translations/types";
 import useStyles from "./StyledKendoGrid.styles";
+import { StyledKendoGridProps } from "./StyledKendoGrid.types";
 
 const formatMessage = (id: Translation) => intl.formatMessage({ id });
 
@@ -17,7 +18,11 @@ loadMessages({
   },
 }, intl.locale);
 
-const StyledKendoGrid: React.FC<PropsWithChildren<GridProps>> = ({ children, ...props }, ref) => {
+const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
+  children,
+  hasBoxScrollbars,
+  ...props
+}, ref) => {
   useStyles();
 
   const gridRef = ref ?? useRef<Grid>();
@@ -38,6 +43,14 @@ const StyledKendoGrid: React.FC<PropsWithChildren<GridProps>> = ({ children, ...
       gridHeaderWrap.style.paddingRight = verticalScrollWidth + "px";
     }
   });
+
+  useLayoutEffect(() => {
+    if (gridContent) {
+      hasBoxScrollbars 
+        ? gridContent.classList.add("containing-box-scrollbar")
+        : gridContent.classList.remove("containing-box-scrollbar");
+    }
+  }, [hasBoxScrollbars, gridContent]);
 
   return (
     <LocalizationProvider language={intl.locale}>

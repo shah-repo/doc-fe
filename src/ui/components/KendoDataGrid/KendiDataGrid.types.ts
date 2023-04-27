@@ -30,6 +30,7 @@ export interface DataGridProps<T> extends GridProps {
   schema: ColumnDefinition<T>[];
   fullWidth?: boolean;
   fullHeight?: boolean;
+  hasBoxScrollbars?: boolean;
   fallback?: React.ReactNode;
   onDataStateChange?: (event: GridDataStateChangeEvent) => State;
   onColumnReorder?: (event: GridColumnReorderEvent) => ColumnDefinition<T>[];

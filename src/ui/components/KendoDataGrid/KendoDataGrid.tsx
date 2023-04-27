@@ -2,11 +2,9 @@ import { State, process } from "@progress/kendo-data-query";
 import { Grid, GridCell, GridColumn, GridColumnReorderEvent, GridDataStateChangeEvent, GridNoRecords } from "@progress/kendo-react-grid";
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AutoSizer } from "react-virtualized";
-import { intl } from "../../../common/intl";
+import { translate } from "../../../common/intl";
 import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
 import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from "./KendiDataGrid.types";
-
-const translate = (id = "") => intl.formatMessage({ id });
 
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
   column.cell
