@@ -2,7 +2,6 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "height": "36vh",
     "& .k-grid-header": {
       "pointer-events": "none",
     },
@@ -11,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .k-grid-header.k-grid-draggable-header": {
       padding: theme.spacing(0),
+    },
+    "& .k-grid-norecords": {
+      display: "none",
     },
   },
 }));

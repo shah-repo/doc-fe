@@ -158,7 +158,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     </>
   );
 
-  return (<AutoSizer>{tableRenderer}</AutoSizer>);
+  return (<AutoSizer style={{ height: "auto" }}>{tableRenderer}</AutoSizer>);
 
 };
 
