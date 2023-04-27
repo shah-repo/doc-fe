@@ -302,6 +302,7 @@ export function KendoGrid<T extends any>({
               return RenderCustomCell(
                 {
                   ...props,
+                  cellRowClick: onRowClick,
                   showTooltip: column.showTooltip,
                   tooltipField: column.tooltipField,
                 },

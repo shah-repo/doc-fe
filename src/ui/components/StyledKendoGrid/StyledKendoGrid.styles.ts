@@ -91,6 +91,9 @@ export default makeStyles((theme) => ({
           "border": "none",
           "borderRight": `1px solid ${Colors.white}`,
 
+          "&.k-sorted": {
+            backgroundColor: Colors.primaryHighlight,
+          },
           "&:has(+ :not(.k-grid-header-sticky))": {
             borderRightColor: "transparent",
             boxShadow: "5px 12px 10px 2px rgba(0, 0, 0, .1)",
@@ -101,7 +104,7 @@ export default makeStyles((theme) => ({
           borderRightColor: "transparent",
         },
         "&.k-sorted": {
-          // "backgroundColor": BASE_COLOR, // TODO check with UX team
+          backgroundColor: Colors.primaryHighlight, // TODO check with UX team
         },
         "&:last-child": {
           borderRight: "none",
@@ -139,6 +142,9 @@ export default makeStyles((theme) => ({
         fontWeight: 600,
         fontSize: 12,
         verticalAlign: "0.1em",
+        marginLeft: theme.spacing(.5),
+      },
+      "& .k-cell-inner .k-link .k-icon": {
         marginLeft: theme.spacing(.5),
       },
       "& .k-header": {
@@ -179,9 +185,9 @@ export default makeStyles((theme) => ({
         },
         "& td": {
           "border": "none",
+          "backgroundColor": Colors.white,
           "padding": theme.spacing(.75, 2),
           "borderBottom": `1px solid ${Colors.tableStroke}`,
-          "backgroundColor": Colors.white,
           "whiteSpace": "nowrap", // TODO move to concrete component
 
           "&.k-group-cell": {
@@ -198,9 +204,6 @@ export default makeStyles((theme) => ({
               boxShadow: "5px 0 10px 2px rgba(0, 0, 0, .1)",
               clipPath: "inset(0 -20px 0 0)",
             },
-          },
-          "&.k-sorted": {
-            // backgroundColor: "transparent", // TODO check with UX team
           },
           "&#kendo-expandable-column": {
             whiteSpace: "normal", // TODO remove this rule in favor of custom cell template
