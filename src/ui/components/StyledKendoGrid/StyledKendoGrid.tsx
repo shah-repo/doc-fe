@@ -1,5 +1,6 @@
-import { Grid } from "@progress/kendo-react-grid";
+import { Grid, GridRowProps } from "@progress/kendo-react-grid";
 import { LocalizationProvider, loadMessages } from "@progress/kendo-react-intl";
+import cx from "classnames";
 import React, { PropsWithChildren, useLayoutEffect, useMemo, useRef } from "react";
 import { intl } from "../../../common/intl";
 import { withThemeNext } from "../../layout/theme-next";
@@ -46,15 +47,24 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
 
   useLayoutEffect(() => {
     if (gridContent) {
-      hasBoxScrollbars 
+      hasBoxScrollbars
         ? gridContent.classList.add("containing-box-scrollbar")
         : gridContent.classList.remove("containing-box-scrollbar");
     }
   }, [hasBoxScrollbars, gridContent]);
 
+  const renderRow = (row: React.ReactElement<HTMLTableRowElement>, props: GridRowProps) =>
+    React.cloneElement(row, {
+      className: cx(row.props.className, { "k-clickable-row": props.onClick }),
+    });
+
   return (
     <LocalizationProvider language={intl.locale}>
-      <Grid {...props} ref={gridRef}>
+      <Grid
+        {...props}
+        ref={gridRef}
+        rowRender={props.rowRender ?? renderRow}
+      >
         {children}
       </Grid>
     </LocalizationProvider>

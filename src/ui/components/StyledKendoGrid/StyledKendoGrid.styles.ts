@@ -169,11 +169,13 @@ export default makeStyles((theme) => ({
         minWidth: "100%",
       },
       "& tr": {
-        "cursor": "pointer", // TODO move to concrete component
         "height": 40,
 
         "&.k-grouping-row": {
           backgroundColor: Colors.gray,
+        },
+        "&.k-clickable-row": {
+          cursor: "pointer",
         },
         "& td": {
           "border": "none",
