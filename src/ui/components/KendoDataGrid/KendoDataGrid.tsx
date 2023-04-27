@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "re
 import { AutoSizer } from "react-virtualized";
 import { translate } from "../../../common/intl";
 import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
-import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from "./KendiDataGrid.types";
+import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from "./KendoDataGrid.types";
 
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
   column.cell
