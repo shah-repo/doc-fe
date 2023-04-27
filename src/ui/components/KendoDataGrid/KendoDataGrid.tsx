@@ -1,10 +1,10 @@
-import { State, process } from "@progress/kendo-data-query";
-import { Grid, GridCell, GridColumn, GridColumnReorderEvent, GridDataStateChangeEvent, GridNoRecords } from "@progress/kendo-react-grid";
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { AutoSizer } from "react-virtualized";
-import { translate } from "../../../common/intl";
-import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
-import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from "./KendoDataGrid.types";
+import { State, process } from '@progress/kendo-data-query';
+import { Grid, GridCell, GridColumn, GridColumnReorderEvent, GridDataStateChangeEvent, GridNoRecords } from '@progress/kendo-react-grid';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { AutoSizer } from 'react-virtualized';
+import { translate } from '../../../common/intl';
+import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
+import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from './KendoDataGrid.types';
 
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
   column.cell
@@ -33,7 +33,7 @@ const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateCol
         cell={(props) => <CustomGridCell { ...props} column={column} />}
         resizable={column.resizable && !column.fitContent}
         width={
-          calculateColumWidth && typeof column.width === "number"
+          calculateColumWidth && typeof column.width === 'number'
             ? calculateColumWidth(column.width, gridWidth)
             : column.width
         }
@@ -43,14 +43,14 @@ const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateCol
 
 const defaultDataState: State = {
   filter: {
-    logic: "and",
+    logic: 'and',
     filters: [],
   },
   group: [],
   sort: [],
 };
 
-export function KendoDataGrid<T>({
+export function KendoDataGrid<T> ({
   data,
   schema,
   fullWidth,
@@ -63,7 +63,7 @@ export function KendoDataGrid<T>({
   ...props
 }: DataGridProps<T>): React.ReactElement | null {
   const gridRef = ref ?? useRef<Grid>();
-  const [columnsSchema, setColumnsSchema] = useState<ColumnDefinition<T>[]>(schema);
+  const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
   const [dataState, setDataState] = useState<State>(defaultDataState);
 
   useEffect(() => {
@@ -72,12 +72,12 @@ export function KendoDataGrid<T>({
 
   const resultData = useMemo(
     () => process(data, dataState),
-    [data, dataState]
+    [data, dataState],
   );
 
   const autosizedColumns = useMemo(
     () => columnsSchema.filter((column) => column.fitContent).map((column) => column.id),
-    [columnsSchema]
+    [columnsSchema],
   );
 
   useLayoutEffect(() => {

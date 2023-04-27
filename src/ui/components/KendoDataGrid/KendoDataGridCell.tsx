@@ -1,5 +1,5 @@
-import { GridCell, GridCellProps } from "@progress/kendo-react-grid";
-import React from "react";
+import { GridCell, GridCellProps } from '@progress/kendo-react-grid';
+import React from 'react';
 
 const KendoDataGridCell: React.FC<GridCellProps> = ({ children, ...props }) => (
   <GridCell
