@@ -10,19 +10,19 @@ import { useSelector } from 'react-redux';
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from '..';
 import { ReactComponent as CollapseMoreIcon } from '../../../assets/images/CollapseMoreIcon.svg';
 import { ReactComponent as ExpandMoreIcon } from '../../../assets/images/ExpandMoreIcon.svg';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import Text from '../../components/Text';
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
+import { checkIsDocumentLHR } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import Colors from '../../layout/theme/utils/colors';
 import FBLHRStepProcedureItem from '../FBLHRStepProcedureItem/FBLHRStepProcedureItem';
 import { FBProcedureItemType } from '../FBProcedureItem/FBProcedureItem.types';
-import OperatorsList from './components/OperatorsList';
 import { FBLHRStepStyles } from './FBLHRStep.styles';
 import { withFBLHRStep } from './FBLHRStep.wrap';
-import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
+import OperatorsList from './components/OperatorsList';
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -63,12 +63,12 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     user: getUserDetails(id)?.user,
   }));
 
-  const stepOperatorList = stepLHRs?.document?..operators?.map((operator) => ({
+  const stepOperatorList = stepLHRs?.document?.operators?.map((operator) => ({
     stepId: operator.id,
     user: getUserDetails(operator.id)?.user,
   }));
 
-  let operators: Array<{stepId: string; user: User}> = [];
+  let operators: Array<{stepId: string, user: User}> = [];
   if (stepLHRs) {
     const status = stepLHRs.status;
     if (isDocumentRevisionReleased(status) || isDocumentRevisionInReview(status)) {
@@ -117,7 +117,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         fontSize: 17,
       }}
       className="fontSizeSmall"
-     />
+    />
   );
   const { documentType } = workspaceState?.document?.document || {};
   const isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
@@ -315,7 +315,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>
             <Box display="flex" alignItems="flex-start" fontSize={12}>
 
-              {!isDocumentLHRT && ( <Box mr={1} display="flex" alignItems="center">
+              {!isDocumentLHRT && (<Box mr={1} display="flex" alignItems="center">
                 {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
                   <CheckCircle
                     style={{
