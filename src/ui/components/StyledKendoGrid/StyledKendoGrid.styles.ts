@@ -58,7 +58,13 @@ export default makeStyles((theme) => ({
     ".k-grid-header": {
       "backgroundColor": BASE_COLOR,
       "border": "none",
+      "paddingInlineEnd": 0,
 
+      "& .k-grid-header-wrap": {
+        borderColor: "transparent",
+        borderWidth: "0 0 0 0",
+        marginRight: 0,
+      },
       "& table": {
         minWidth: "100%",
       },
@@ -76,6 +82,7 @@ export default makeStyles((theme) => ({
         "borderRight": `1px solid ${Colors.white}`,
 
         "&:not(.k-grid-header-sticky) + .k-grid-header-sticky": {
+          borderRight: `1px solid ${Colors.white}`,
           boxShadow: "-5px 12px 10px 2px rgba(0, 0, 0, .1)",
           clipPath: "inset(0 0 0 -20px)",
         },
@@ -89,6 +96,9 @@ export default makeStyles((theme) => ({
             boxShadow: "5px 12px 10px 2px rgba(0, 0, 0, .1)",
             clipPath: "inset(0 -20px 0 0)",
           },
+        },
+        "&:has(+ .k-grid-header-sticky)": {
+          borderRightColor: "transparent",
         },
         "&.k-sorted": {
           // "backgroundColor": BASE_COLOR, // TODO check with UX team
@@ -151,6 +161,10 @@ export default makeStyles((theme) => ({
       },
     },
     ".k-grid-content": {
+      "overflow": "auto",
+      "overflowX": "auto",
+      "overflowY": "auto",
+
       "& table": {
         minWidth: "100%",
       },
@@ -165,7 +179,7 @@ export default makeStyles((theme) => ({
           "border": "none",
           "padding": theme.spacing(.75, 2),
           "borderBottom": `1px solid ${Colors.tableStroke}`,
-          "backgroundColor": "transparent",
+          "backgroundColor": Colors.white,
           "whiteSpace": "nowrap", // TODO move to concrete component
 
           "&.k-group-cell": {
@@ -191,7 +205,11 @@ export default makeStyles((theme) => ({
           },
         },
         "&.k-alt": {
-          "backgroundColor": "transparent",
+          "backgroundColor": Colors.white,
+
+          "& .k-grid-content-sticky": {
+            backgroundColor: Colors.white,
+          },
 
           "&:hover td": {
             backgroundColor: Colors.hover,
