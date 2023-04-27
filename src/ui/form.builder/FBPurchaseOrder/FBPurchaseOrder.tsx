@@ -18,6 +18,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   loading,
   disabled,
   isReceivable,
+  isReleased,
   name,
   isPO,
 }) => {
@@ -27,7 +28,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <FBInput {...{ name, disabled }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
-        {isReceivable && (
+        {isReceivable && !isReleased && (
           <FBButton
             color="primary"
             label="form.builder.receive"

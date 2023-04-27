@@ -36,7 +36,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
       <Box display="flex" flexDirection="row-reverse" mx={2}>
         <FBSubmitButton
           variant="outlined"
-          label="common.add"
+          label={isEdit ? "common.update" : "common.add"}
           onClick={onAddClick}
           autoFocus
         />

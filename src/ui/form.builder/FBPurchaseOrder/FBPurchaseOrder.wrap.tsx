@@ -10,6 +10,7 @@ import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types
 import { AsyncStatus } from "../../../state/types";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
 import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
@@ -34,6 +35,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
+    const isReleased = isDocumentRevisionReleased(workspaceState?.document?.status);
     const isPO = checkIsDocumentPO(workspaceState?.document?.document.documentType.groupOptions);
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
@@ -53,7 +55,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       dialogState?.config({
         open: true,
         maxWidth: "sm",
-        title: "form.builder.add.item",
+        title: item?.id ? "form.builder.edit.item" : "form.builder.add.item",
         content: (
           <FBPurchaseOrderForm initialValues={item} />
         ),
@@ -115,6 +117,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      isReleased,
       loading,
       isPO,
     });
