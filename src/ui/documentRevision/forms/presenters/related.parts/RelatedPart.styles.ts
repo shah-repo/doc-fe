@@ -227,11 +227,12 @@ export default makeStyles((theme) =>
     smallText: {
       fontSize: "12px",
     },
-    relatedPartViewRowTitleCell: {
+    relatedPartRowTitleCell: {
       "display": "-webkit-box",
       "-webkit-line-clamp": 1,
       "-webkit-box-orient": "vertical",
       "overflow": "hidden",
+      "word-break": "break-word",
     },
     itemRow: {
       "display": "flex",

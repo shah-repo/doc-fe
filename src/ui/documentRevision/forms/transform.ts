@@ -171,7 +171,6 @@ export const toNewVersionRequestBody = (
       newValues.document.documentType = { id: get(values, "document.documentType.id") };
       const equipmentId = get(values, "parentEquipment.id");
       if (!isEmpty(equipmentId)) {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         newValues.formInput = { ...newValues.formInput, equipment_id: equipmentId };
       }
     }
