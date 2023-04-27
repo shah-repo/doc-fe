@@ -447,7 +447,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           placement="bottom"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           arrow >
-            <span ref={titleCellRef} className={classes.relatedPartViewRowTitleCell} data-cy="view-row-title-cell">
+            <span ref={titleCellRef} className={classes.relatedPartRowTitleCell} data-cy="view-row-title-cell">
               {isVoided ? listItem.name :
                 <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
             </span>
@@ -574,6 +574,9 @@ const RelatedPartEditRow: React.FunctionComponent<{
     }
   };
 
+  const titleCellRef = useRef<HTMLLabelElement>(null);
+  const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLLabelElement;
+
   const validateDocId = () => (
     relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId, skipId)
   );
@@ -602,7 +605,15 @@ const RelatedPartEditRow: React.FunctionComponent<{
           />
         </div>
         <div className={classes.editRowChildDivTwo} data-cy="edit-row-title-cell">
-          <label>{documentRevision?.name} - </label>
+          <Tooltip title={
+            <label>{documentRevision?.name} - </label>
+          }
+          disableHoverListener={scrollHeight <= clientHeight}
+          placement="bottom"
+          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          arrow >
+            <label ref={titleCellRef} className={classes.relatedPartRowTitleCell}>{documentRevision?.name} - </label>
+          </Tooltip>
           <TextField
             className={classes.textField}
             variant="outlined"
