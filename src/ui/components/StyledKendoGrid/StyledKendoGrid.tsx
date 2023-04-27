@@ -30,12 +30,12 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const gridContainer = gridContainerRef.current;
 
-  const [gridContent, gridHeaderWrap] = useMemo<Array<HTMLDivElement | null>>(
+  const [gridContent, gridHeader] = useMemo<Array<HTMLDivElement | null>>(
     () => (
       gridContainer
         ? [
           gridContainer.querySelector('.k-grid-content'),
-          gridContainer.querySelector('.k-grid-header-wrap'),
+          gridContainer.querySelector('.k-grid-header'),
         ]
         : [null, null]
     ),
@@ -43,9 +43,9 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
   );
 
   useLayoutEffect(() => {
-    if (gridContent && gridHeaderWrap) {
+    if (gridContent && gridHeader) {
       const verticalScrollWidth = gridContent.offsetWidth - gridContent.clientWidth;
-      gridHeaderWrap.style.paddingRight = `${verticalScrollWidth}px`;
+      gridHeader.style.paddingInlineEnd = `${verticalScrollWidth}px`;
     }
   });
 
