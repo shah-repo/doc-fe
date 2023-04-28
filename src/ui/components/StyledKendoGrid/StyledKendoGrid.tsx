@@ -72,6 +72,7 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
         <Grid
           {...props}
           ref={ref}
+          onRowClick={onRowClick}
           rowRender={props.rowRender ?? renderRow}
         >
           {children}
