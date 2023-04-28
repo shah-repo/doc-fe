@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { IotService } from "../../../common/utils/iot/iotService";
-import { getPOIndexDbInstance } from "../../../db";
+import { getPOIndexDbInstance } from "../../../indexDb";
 import { ResetPasswordValues } from "../../../ui/users/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";

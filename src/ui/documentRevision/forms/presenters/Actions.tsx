@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { getPOIndexDbInstance } from "../../../../db";
+import { getPOIndexDbInstance } from "../../../../indexDb";
 import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";

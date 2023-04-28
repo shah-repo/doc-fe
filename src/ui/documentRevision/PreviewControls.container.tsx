@@ -11,7 +11,7 @@ import SM from "../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_white.svg";
 import { ReactComponent as WithDrawSubmissionIcon } from "../../assets/images/withdraw_submission.svg";
-import { getPOIndexDbInstance } from "../../db";
+import { getPOIndexDbInstance } from "../../indexDb";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from "../../state/ducks/documentRevisions/types";
