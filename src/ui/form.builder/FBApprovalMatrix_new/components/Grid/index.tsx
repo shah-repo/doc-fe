@@ -93,14 +93,10 @@ const Grid: React.FC<GridProps> = (props) => {
       return row;
     }
 
-    const styledRow = React.cloneElement(
-      row,
-      {
-        ...row.props,
-        className: cx(row.props.className, classes.updating),
-      },
-      row.props.children,
-    );
+    const styledRow = React.cloneElement(row, {
+      ...row.props,
+      className: cx(row.props.className, classes.updating),
+    });
 
     return (
       <>
