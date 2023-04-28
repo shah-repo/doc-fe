@@ -1,26 +1,34 @@
 import { State } from '@progress/kendo-data-query';
-import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridProps } from '@progress/kendo-react-grid';
+import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import React, { ComponentType } from 'react';
+
+export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
+  dataItem: T
+}
 
 export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
-  column: GenericColumnDefinition<T>
+  column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
 }
 
 export type CellComponent<T> = ComponentType<CellTemplateProps<T>>;
+export type GenericCellComponent = CellComponent<unknown>;
 
 export type CellTemplate<T> = (props: CellTemplateProps<T>) => React.ReactNode;
+export type GenericCellTemplate = CellTemplate<unknown>;
 
-export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' | 'cell'> {
+export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
   id: string
   hidden?: boolean
   fitContent?: boolean
+  children?: Array<GenericColumnDefinition<T>> // | Array<ReactElement<GenericColumnDefinition<T>>>
   cell?: CellComponent<T>
   template?: CellTemplate<T>
 }
-export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'field'> {
+export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'field' | 'children'> {
   // TODO after upgrading typescript switch to object-deep-keys generic type
   field?: keyof T | string
+  children?: Array<ColumnDefinition<T>> // | Array<ReactElement<ColumnDefinition<T>>>
 }
 
 export interface DataGridProps<T> extends GridProps {
@@ -42,4 +50,4 @@ export interface CustomGridCellProps extends GridCellProps {
 
 export type WidthCalculator = (width: number, gridWidth: number) => number;
 
-export type GenericColumn = GenericColumnDefinition<Record<string, unknown>>;
+export type GenericColumn = GenericColumnDefinition<unknown>;
