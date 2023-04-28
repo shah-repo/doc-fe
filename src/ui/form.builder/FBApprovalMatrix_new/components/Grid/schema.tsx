@@ -30,7 +30,7 @@ export default function createSchema (
   );
 
   const schema: Array<ColumnDefinition<FBApprovalMatrixItem>> = [
-    // @todo: template, editable
+    // @todo: editable, filterTemplate
     {
       id: 'active',
       title: 'Status',

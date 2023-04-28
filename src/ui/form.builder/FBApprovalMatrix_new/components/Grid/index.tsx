@@ -19,7 +19,6 @@ import createSchema from './schema';
 // @todo: styles
 // @todo: sticky header
 // @todo: refactoring
-// @todo: generic component
 // @todo: fullscreen
 // @todo: context for schema
 
