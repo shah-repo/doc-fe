@@ -74,9 +74,7 @@ class FBPOReceiveFormState {
     };
     reqBody.formTemplate = undefined;
     reqBody.formInput = {
-      // eslint-disable-next-line @typescript-eslint/camelcase
       lot_quantity: values.received,
-      // eslint-disable-next-line @typescript-eslint/camelcase
       lot_part_number: this.item?.partNumber,
     };
 
