@@ -1,7 +1,7 @@
 import { Box, makeStyles } from "@material-ui/core";
 import React from "react";
 import { FBInput } from "../..";
-import { FBPOApprovalMatrixTableProps } from "../FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
 import FBPOApprovalMatrixDialog from "../form/FBPOApprovalMatrixDialog";
 import FBPOAMKendoTable from "../grid/FBPOAMKendoTable";
 import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
@@ -30,15 +30,14 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   const classes = useStyles();
   return (
     <Box className={classes.root}>
-      <FBPOAMKendoTable
-        {...{
-          approvalLevels,
-          employees,
-          groups,
-          handleEdit,
-        }}
-      />
-      {!isDocumentReleased && isDialogOpen && (
+      <FBPOAMKendoTable {...{
+        approvalLevels: approvalLevels as POApprovalMatrixLevel[],
+        employees,
+        groups,
+        handleEdit,
+      }}/>
+      {
+        !isDocumentReleased && isDialogOpen &&
         <FBInput>
           <FBPOApprovalMatrixDialog
             {...{
@@ -53,7 +52,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
             }}
           />
         </FBInput>
-      )}
+      }
     </Box>
   );
 };
