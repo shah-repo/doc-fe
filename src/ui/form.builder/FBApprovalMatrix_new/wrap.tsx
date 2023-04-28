@@ -1,18 +1,18 @@
-import React from "react";
-import { useObserver } from "mobx-react";
-import { isEmpty, get, has } from "lodash";
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from "..";
-import { FBApprovalMatrixProps } from "./types";
+import React from 'react';
+import { useObserver } from 'mobx-react';
+import { isEmpty, get, has } from 'lodash';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
+import { FBApprovalMatrixProps } from './types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleSave,
     handleCancel,
     disabled,
-    name = "",
-    mode = "none",
+    name = '',
+    mode = 'none',
     isInputOwner,
     data,
     ...props
@@ -33,7 +33,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
           docType: {
             ...e?.docType,
             acronym: e?.docType.acronym?.toUpperCase(),
-            category: categoryTrim ?? "",
+            category: categoryTrim ?? '',
           },
         };
       });
@@ -41,7 +41,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       if (isEmpty(approvalMatrix)) { return; }
 
       approvalMatrixFieldState?.setApprovalMatrix(approvalMatrix);
-      approvalMatrixFieldState?.setMode("none");
+      approvalMatrixFieldState?.setMode('none');
     };
 
     handleCancel = () => {
@@ -52,13 +52,13 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
           approvalMatrix: formValue?.approvalMatrix.slice(0, -1),
         });
       }
-      approvalMatrixFieldState?.setMode("none");
+      approvalMatrixFieldState?.setMode('none');
     };
 
     const { formInput } = workspaceState || {};
     const approvalRoles = get(formInput, FBDAMFields.DAR, []);
     const formInputDAM = get(formInput, FBDAMFields.DAM, []);
-    const isDAMInNewFormat = has(formInputDAM, "approvalMatrix");
+    const isDAMInNewFormat = has(formInputDAM, 'approvalMatrix');
     const approvalMatrix = isDAMInNewFormat ? formInputDAM.approvalMatrix : formInputDAM;
 
     data = useObserver(() => ({

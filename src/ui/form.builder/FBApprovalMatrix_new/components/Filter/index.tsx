@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Filter: React.FC = (props) => {
   const { children } = props;

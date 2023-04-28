@@ -1,13 +1,13 @@
-import React from "react";
-import { debounce } from "lodash";
-import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
-import Filter from "../Filter";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import React from 'react';
+import { debounce } from 'lodash';
+import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
+import Filter from '../Filter';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
 
 const InputFilter: React.FC<GridFilterCellProps> = (props) => {
   const {
-    value = "",
-    operator = "contains",
+    value = '',
+    operator = 'contains',
     onChange,
   } = props;
 
@@ -25,7 +25,7 @@ const InputFilter: React.FC<GridFilterCellProps> = (props) => {
         syntheticEvent: event.syntheticEvent,
       });
     },
-    500
+    500,
   );
 
   return (

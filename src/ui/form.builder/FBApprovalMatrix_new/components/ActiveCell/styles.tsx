@@ -1,10 +1,10 @@
-import { makeStyles } from "@material-ui/core";
-import { Colors } from "../../../../layout/theme-next";
+import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(() => ({
   status: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   circle: {
     width: 6,

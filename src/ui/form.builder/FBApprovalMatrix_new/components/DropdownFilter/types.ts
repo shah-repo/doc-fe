@@ -1,28 +1,28 @@
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
 
 interface SelectedItemProps {
-  text: string;
-  value: string | boolean;
+  text: string
+  value: string | boolean
 }
 
 interface StateChangeProps {
-  selectedItem?: SelectedItemProps ;
-  parentField: string | undefined;
+  selectedItem?: SelectedItemProps
+  parentField: string | undefined
 }
 
 export interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: {
-    text: string;
-    value: string;
-  };
+    text: string
+    value: string
+  }
   defaultValue?: {
-    text: string;
-    value: string;
-  };
-  data: {
-    text: string;
-    value: string | boolean;
-  }[];
-  customOperator?: string;
-  onStateChange?: (data: StateChangeProps) => void;
+    text: string
+    value: string
+  }
+  data: Array<{
+    text: string
+    value: string | boolean
+  }>
+  customOperator?: string
+  onStateChange?: (data: StateChangeProps) => void
 }

@@ -1,19 +1,17 @@
-import React from "react";
-import { useTranslate } from "../../../../../common/intl";
-import DropdownFilter from "../DropdownFilter";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import React from 'react';
+import { translate } from '../../../../../common/intl';
+import DropdownFilter from '../DropdownFilter';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
 
 const StatusFilter: React.FC<GridFilterCellProps> = (props) => {
-  const translate = useTranslate();
-
   return (
     <DropdownFilter
       {...props}
       data={[
-        { value: true, text: translate("common.active") },
-        { value: false, text: translate("common.inactive") },
+        { value: true, text: translate('common.active') },
+        { value: false, text: translate('common.inactive') },
       ]}
-      defaultItem={{ value: "", text: translate("common.all") }}
+      defaultItem={{ value: '', text: translate('common.all') }}
     />
   );
 };
