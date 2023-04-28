@@ -23,21 +23,23 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
 );
 
 const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
-  columns.map(({ hidden, ...column }) => (
+  columns.map(({ hidden, children, ...column }) => (
     !hidden && (
       <GridColumn
         {...column}
         key={column.id}
         field={column.field ?? `custom-${column.id}`}
         title={column.title ? translate(column.title) : undefined}
-        cell={(props) => <CustomGridCell { ...props} column={column} />}
+        cell={(props) => <CustomGridCell {...props} column={column} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'
             ? calculateColumWidth(column.width, gridWidth)
             : column.width
         }
-      />
+      >
+        {children && renderColumns(children, gridWidth, calculateColumWidth)}
+      </GridColumn>
     )
   ));
 
