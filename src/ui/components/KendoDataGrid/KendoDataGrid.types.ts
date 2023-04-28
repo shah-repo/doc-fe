@@ -19,7 +19,8 @@ export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' |
   template?: CellTemplate<T>
 }
 export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'field'> {
-  field?: keyof T
+  // TODO after upgrading typescript switch to object-deep-keys generic type
+  field?: keyof T | string
 }
 
 export interface DataGridProps<T> extends GridProps {
