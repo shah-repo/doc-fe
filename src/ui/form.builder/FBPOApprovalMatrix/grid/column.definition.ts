@@ -10,7 +10,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 10,
     groupable: false,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 1,
   },
   {
@@ -21,7 +21,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 10,
     groupable: false,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 2,
   },
   {
@@ -32,7 +32,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 10,
     groupable: false,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 3,
   },
   {
@@ -43,7 +43,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 20,
     groupable: false,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 4,
     showTooltip: true,
   },
@@ -55,7 +55,7 @@ const columns: KendoColumn[] = [
     locked: false,
     groupable: false,
     width: 20,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 5,
     showTooltip: true,
   },
@@ -67,7 +67,7 @@ const columns: KendoColumn[] = [
     locked: false,
     groupable: false,
     width: 20,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 6,
   },
 ];
