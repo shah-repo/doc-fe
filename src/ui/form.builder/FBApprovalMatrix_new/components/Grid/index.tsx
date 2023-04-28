@@ -124,6 +124,7 @@ const Grid: React.FC<GridProps> = (props) => {
         onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
         filterable={true}
+        fullWidth={true}
       />
     </>
   );
