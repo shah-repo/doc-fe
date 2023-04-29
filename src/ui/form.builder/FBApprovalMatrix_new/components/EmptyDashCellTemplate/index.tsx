@@ -1,8 +1,8 @@
 import React from 'react';
 import { get } from 'lodash';
-import { CellProps } from '../../types';
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-const EmptyDashCell: React.FC<CellProps> = (props) => {
+export default function EmptyDashCellTemplate<T> (props: CellTemplateProps<T>): React.ReactNode {
   const { dataItem, field } = props;
 
   const value = String(get(dataItem, field ?? ''));
@@ -12,6 +12,4 @@ const EmptyDashCell: React.FC<CellProps> = (props) => {
       {value || '-'}
     </div>
   );
-};
-
-export default EmptyDashCell;
+}

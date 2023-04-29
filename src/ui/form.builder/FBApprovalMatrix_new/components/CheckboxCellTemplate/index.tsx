@@ -4,10 +4,11 @@ import {
   Checkbox, CheckboxChangeEvent,
 } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
-import { CellProps } from '../../types';
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-const CheckboxCell: React.FC<CellProps> = (props) => {
-  const { dataItem, field, dataIndex, editable, onChange } = props;
+export default function CheckboxCellTemplate<T> (props: CellTemplateProps<T>): React.ReactNode {
+  const { dataItem, field, dataIndex, column, onChange } = props;
+  const { editable } = column;
 
   const path = field ?? '';
   const value = Boolean(get(dataItem, path));
@@ -15,7 +16,7 @@ const CheckboxCell: React.FC<CellProps> = (props) => {
   const handleChange = (e: CheckboxChangeEvent) => {
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem, path, e.value),
+      dataItem: set(dataItem as Record<string, unknown>, path, e.value),
       syntheticEvent: e.syntheticEvent,
       field,
       value: e.target.value,
@@ -31,6 +32,4 @@ const CheckboxCell: React.FC<CellProps> = (props) => {
       onChange={handleChange}
     />
   );
-};
-
-export default CheckboxCell;
+}

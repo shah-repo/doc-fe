@@ -75,7 +75,7 @@ function KendoDataGrid<T> ({
   calculateColumWidth,
   ref,
   ...props
-}: DataGridProps<T>): React.ReactElement | null {
+}: DataGridProps<T>): React.ReactElement {
   const gridRef = ref ?? useRef<Grid>();
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
   const [dataState, setDataState] = useState<State>({

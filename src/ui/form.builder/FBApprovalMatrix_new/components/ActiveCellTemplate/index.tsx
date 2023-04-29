@@ -2,9 +2,9 @@ import React from 'react';
 import { get } from 'lodash';
 import cx from 'classnames';
 import useStyles from './styles';
-import { CellProps } from '../../types';
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-const ActiveCell: React.FC<CellProps> = (props) => {
+export default function ActiveCellTemplate<T> (props: CellTemplateProps<T>): React.ReactNode {
   const { dataItem, field } = props;
 
   const classes = useStyles();
@@ -17,6 +17,4 @@ const ActiveCell: React.FC<CellProps> = (props) => {
       {value ? 'Active' : 'Inactive'}
     </div>
   );
-};
-
-export default ActiveCell;
+}

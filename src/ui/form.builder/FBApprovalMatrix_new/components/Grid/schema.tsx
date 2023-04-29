@@ -1,7 +1,7 @@
 import React from 'react';
-import CheckboxCell from '../CheckboxCell';
-import EmptyDashCell from '../EmptyDashCell';
-import ActiveCell from '../ActiveCell';
+import CheckboxCellTemplate from '../CheckboxCellTemplate';
+import EmptyDashCellTemplate from '../EmptyDashCellTemplate';
+import ActiveCellTemplate from '../ActiveCellTemplate';
 import BooleanFilter from '../BooleanFilter';
 import StatusFilter from '../StatusFilter';
 import InputFilter from '../InputFilter';
@@ -38,7 +38,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      template: ActiveCell,
+      template: ActiveCellTemplate,
       locked: true,
       width: 100,
     },
@@ -52,6 +52,7 @@ export default function createSchema (
       locked: true,
       width: 100,
     },
+
     {
       id: 'internal-type',
       title: 'Internal type',
@@ -79,7 +80,7 @@ export default function createSchema (
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
-      template: CheckboxCell,
+      template: CheckboxCellTemplate,
       width: 100,
     },
     {
@@ -89,7 +90,7 @@ export default function createSchema (
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
-      template: CheckboxCell,
+      template: CheckboxCellTemplate,
       width: 100,
     },
     {
@@ -99,7 +100,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: CategoryFilter,
-      template: EmptyDashCell,
+      template: EmptyDashCellTemplate,
       width: 100,
     },
   ];
@@ -115,7 +116,7 @@ export default function createSchema (
           field: `approvalRoles.${headKey}.${role.index}`,
           filterable: false,
           editable: true,
-          template: CheckboxCell,
+          template: CheckboxCellTemplate,
           width: 50,
         })),
       });
