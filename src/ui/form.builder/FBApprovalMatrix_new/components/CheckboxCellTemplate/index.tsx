@@ -1,8 +1,6 @@
 import React from 'react';
 import { get, set } from 'lodash';
-import {
-  Checkbox, CheckboxChangeEvent,
-} from '@progress/kendo-react-inputs';
+import { Checkbox, CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
