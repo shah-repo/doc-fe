@@ -1,6 +1,6 @@
 import React from 'react';
 import { get, set } from 'lodash';
-import { Checkbox, CheckboxChangeEvent } from '@progress/kendo-react-inputs';
+import { Checkbox, CheckboxProps } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
@@ -8,25 +8,26 @@ export default function CheckboxCellTemplate<T> (props: CellTemplateProps<T>): R
   const { dataItem, field, dataIndex, column, onChange } = props;
   const { editable } = column;
 
+  const mode = dataItem[MODE_FIELD];
   const path = field ?? '';
   const value = Boolean(get(dataItem, path));
 
-  const handleChange = (e: CheckboxChangeEvent) => {
+  const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
+
+  const handleChange: CheckboxProps['onChange'] = (event) => {
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem as Record<string, unknown>, path, e.value),
-      syntheticEvent: e.syntheticEvent,
+      dataItem: set(dataItem as Record<string, unknown>, path, event.value),
+      syntheticEvent: event.syntheticEvent,
       field,
-      value: e.target.value,
+      value: event.target.value,
     });
   };
-
-  const canBeUpdated = editable && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   return (
     <Checkbox
       value={value}
-      disabled={!canBeUpdated}
+      disabled={!canBeModified}
       onChange={handleChange}
     />
   );
