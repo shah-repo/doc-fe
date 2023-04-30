@@ -5,6 +5,7 @@ export default makeStyles(() => ({
   status: {
     display: 'flex',
     alignItems: 'center',
+    paddingLeft: 5,
   },
   circle: {
     width: 6,

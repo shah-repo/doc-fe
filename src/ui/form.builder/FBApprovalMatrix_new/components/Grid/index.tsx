@@ -20,6 +20,8 @@ import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalM
 // @todo: styles
 // @todo: sticky header
 // @todo: refactoring
+// @todo: optimisations
+// @todo: filterTemplate
 // @todo: fullscreen
 
 export const MODE_FIELD = '_mode';
@@ -97,19 +99,18 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   const handleItemDiscard: React.MouseEventHandler = () => {
-    if (!prevDataItem) {
-      return;
-    }
+    setData((data) => data
+      .filter((dataItem) => dataItem[MODE_FIELD] !== Mode.add)
+      .map((dataItem) => {
+        if (!prevDataItem || dataItem.id !== prevDataItem.id) {
+          return dataItem;
+        }
 
-    setData((data) => data.map((dataItem) => {
-      if (dataItem.id !== prevDataItem.id) {
-        return dataItem;
-      }
+        prevDataItem[MODE_FIELD] = Mode.show;
 
-      prevDataItem[MODE_FIELD] = Mode.show;
-
-      return prevDataItem;
-    }));
+        return prevDataItem;
+      }),
+    );
 
     setPrevDataItem(undefined);
   };
@@ -154,7 +155,7 @@ const Grid: React.FC<GridProps> = (props) => {
 
   return (
     <>
-      <div onClick={handleAdd}>Button</div>
+      <div onClick={!isModifying ? handleAdd : undefined}>Button</div>
       <KendoDataGrid
         data={data}
         schema={schema}

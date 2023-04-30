@@ -1,12 +1,13 @@
 import React from 'react';
 import CheckboxCellTemplate from '../CheckboxCellTemplate';
-import EmptyDashCellTemplate from '../EmptyDashCellTemplate';
+import DropdownCellTemplate from '../DropdownCellTemplate';
 import ActiveCellTemplate from '../ActiveCellTemplate';
+import InputCellTemplate from '../InputCellTemplate';
 import BooleanFilter from '../BooleanFilter';
 import StatusFilter from '../StatusFilter';
 import InputFilter from '../InputFilter';
 import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
-import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { CellTemplate, ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import {
   FBApprovalMatrixItem,
   FBApprovalRole,
@@ -19,18 +20,30 @@ export default function createSchema (
   approvalMatrix: FBApprovalMatrixItem[],
   approvalRoles: FBApprovalRole[],
 ): Array<ColumnDefinition<FBApprovalMatrixItem>> {
-  const uniqueCategories = Array.from(new Set(approvalMatrix.map((item) => item?.docType?.category).filter(Boolean)));
+  const uniqueCategories = Array.from(new Set(
+    approvalMatrix
+      .map((item) => item?.docType?.category)
+      .filter(Boolean),
+  ));
+  const uniqueCategoriesOptions = uniqueCategories.map((category) => ({ value: category, text: category }));
 
   const CategoryFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
-      data={uniqueCategories.map((category) => ({ value: category, text: category }))}
+      data={uniqueCategoriesOptions}
       defaultItem={{ value: '', text: translate('common.all') }}
     />
   );
 
+  const CategoryCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <DropdownCellTemplate
+      {...props}
+      data={uniqueCategoriesOptions}
+      defaultItem={{ value: '', text: '-' }}
+    />
+  );
+
   const schema: Array<ColumnDefinition<FBApprovalMatrixItem>> = [
-    // @todo: editable, filterTemplate
     {
       id: 'active',
       title: 'Status',
@@ -40,7 +53,7 @@ export default function createSchema (
       filterCell: StatusFilter,
       template: ActiveCellTemplate,
       locked: true,
-      width: 100,
+      width: 140,
     },
     {
       id: 'prefix',
@@ -49,6 +62,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      template: InputCellTemplate,
       locked: true,
       width: 100,
     },
@@ -60,6 +74,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      template: InputCellTemplate,
       locked: true,
       width: 100,
     },
@@ -70,6 +85,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      template: InputCellTemplate,
       locked: true,
       width: 100,
     },
@@ -100,7 +116,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: CategoryFilter,
-      template: EmptyDashCellTemplate,
+      template: CategoryCellTemplate,
       width: 100,
     },
   ];
