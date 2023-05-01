@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import {
   GridRowProps,
@@ -13,12 +14,14 @@ import cx from 'classnames';
 import useStyles from './styles';
 import createSchema from './schema';
 import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { withThemeNext } from '../../../../layout/theme-next';
 
-// @todo: add new
-// @todo: connect BE side
-// @todo: translations
 // @todo: styles
+// @todo: connect BE side
+// @todo: approval roles
+
 // @todo: sticky header
+// @todo: translations
 // @todo: refactoring
 // @todo: optimisations
 // @todo: filterTemplate
@@ -55,7 +58,14 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   const handleAdd: React.MouseEventHandler = () => {
-    setData((data) => [...data, { [MODE_FIELD]: Mode.add } as any]);
+    const newItem = {
+      docType: {
+        active: true,
+      },
+      [MODE_FIELD]: Mode.add,
+    };
+
+    setData((data) => [...data, newItem as any]);
   };
 
   const handleRowClick = ({ dataItem: clickedDataItem }: GridRowClickEvent) => {
@@ -155,8 +165,8 @@ const Grid: React.FC<GridProps> = (props) => {
 
   return (
     <>
-      <div onClick={!isModifying ? handleAdd : undefined}>Button</div>
       <KendoDataGrid
+        className={classes.grid}
         data={data}
         schema={schema}
         rowRender={rowRender}
@@ -166,8 +176,15 @@ const Grid: React.FC<GridProps> = (props) => {
         filterable={true}
         fullWidth={true}
       />
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={!isModifying ? handleAdd : undefined}
+      >
+        Add item
+      </Button>
     </>
   );
 };
 
-export default Grid;
+export default withThemeNext(Grid);

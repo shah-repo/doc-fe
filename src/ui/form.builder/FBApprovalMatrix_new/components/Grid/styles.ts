@@ -12,4 +12,9 @@ export default makeStyles(() => ({
   discard: {
     position: 'relative',
   },
+  grid: {
+    '& .k-grid-container': {
+      maxHeight: 300,
+    },
+  },
 }));
