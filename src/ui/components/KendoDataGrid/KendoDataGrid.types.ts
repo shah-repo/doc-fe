@@ -1,6 +1,6 @@
 import { State } from '@progress/kendo-data-query';
 import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
-import React, { ComponentType } from 'react';
+import React, { ComponentType, ReactElement } from 'react';
 
 export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
   dataItem: T
@@ -11,11 +11,9 @@ export interface CellTemplateProps<T> extends GridCellProps {
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
 }
 
-export type CellComponent<T> = ComponentType<CellTemplateProps<T>>;
-export type GenericCellComponent = CellComponent<unknown>;
+export type CellComponent<T = unknown> = ComponentType<CellTemplateProps<T>>;
 
-export type CellTemplate<T> = (props: CellTemplateProps<T>) => React.ReactNode;
-export type GenericCellTemplate = CellTemplate<unknown>;
+export type CellTemplate<T = unknown> = (props: CellTemplateProps<T>) => React.ReactNode;
 
 export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
   id: string
@@ -28,7 +26,7 @@ export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' |
 export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'field' | 'children'> {
   // TODO after upgrading typescript switch to object-deep-keys generic type
   field?: keyof T | string
-  children?: Array<ColumnDefinition<T>> // | Array<ReactElement<ColumnDefinition<T>>>
+  children?: Array<ColumnDefinition<T>> | Array<ReactElement<ColumnDefinition<T>>>
 }
 
 export interface DataGridProps<T> extends GridProps {
