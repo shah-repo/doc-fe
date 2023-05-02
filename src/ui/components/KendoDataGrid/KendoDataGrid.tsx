@@ -60,7 +60,7 @@ const defaultDataState: State = {
   sort: [],
 };
 
-export function KendoDataGrid<T> ({
+function KendoDataGrid<T> ({
   data,
   filter = defaultDataState.filter,
   group = defaultDataState.group,
