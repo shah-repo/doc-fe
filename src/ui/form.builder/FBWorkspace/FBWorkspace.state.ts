@@ -251,36 +251,38 @@ class FBWorkspaceState extends FBSchemaState {
   public undoPO = (prevDocumentRevision?: DocumentRevision) => {
 
     this.loadAudit = false;
-    const { id } = this;
     this.loading = true;
     this.omitAutosave = true;
+
     const body = {
       formInput: prevDocumentRevision?.formInput,
       description: prevDocumentRevision?.description,
     };
+    const { id } = this;
+
     appGlobals.omitReloadNotification = true;
 
     return this.documentRevApi.set({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
       body,
-      method: "patch",
+      method: 'patch',
     }, (data?: DocumentRevision, error?) => {
       this.omitAutosave = false;
 
       if (error) {
         this.documentRevApi.onError(error);
-      } else {
-        this.setDirty(false);
-        this.setFormInputData(data);
-
-        if (FBStore?.isHistoryTabSelected) {
-          this.loadAudit = true;
-        }
-
-        this.documentRevApi.onSuccess();
-        FBDataStore.setRefreshData(data);
+        this.loading = false;
+        return;
       }
+      this.setDirty(false);
+      this.setFormInputData(data);
+      if (FBStore?.isHistoryTabSelected) {
+        this.loadAudit = true;
+      }
+
+      this.documentRevApi.onSuccess();
+      FBDataStore.setRefreshData(data);
       this.loading = false;
     });
   };
