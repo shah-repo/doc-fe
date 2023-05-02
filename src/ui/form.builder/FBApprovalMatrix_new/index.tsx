@@ -4,11 +4,13 @@ import { withFBApprovalMatrix } from './wrap';
 import { FBApprovalMatrixProps } from './types';
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  const { data } = props;
+  const { data, handleSave, disabled } = props;
 
   return (
     <Grid
       data={data}
+      disabled={disabled}
+      onSave={handleSave}
     />
   );
 };

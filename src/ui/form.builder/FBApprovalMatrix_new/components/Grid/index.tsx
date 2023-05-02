@@ -36,7 +36,10 @@ export enum Mode {
 }
 
 const Grid: React.FC<GridProps> = (props) => {
-  const { data: { approvalMatrix = [], approvalRoles = [] } = {} } = props;
+  const {
+    data: { approvalMatrix = [], approvalRoles = [] } = {},
+    disabled, onSave,
+  } = props;
   const classes = useStyles();
 
   const [data, setData] = useState(approvalMatrix);
@@ -114,15 +117,21 @@ const Grid: React.FC<GridProps> = (props) => {
   const handleItemSave: React.MouseEventHandler = () => {
     // @todo: save request.
 
-    setData((data) => data.map((dataItem) => {
-      if (dataItem.id !== prevDataItem?.id) {
+    setData((data) => {
+      const newData = data.map((dataItem) => {
+        if (dataItem.id !== prevDataItem?.id) {
+          return dataItem;
+        }
+
+        dataItem[MODE_FIELD] = Mode.show;
+
         return dataItem;
-      }
+      });
 
-      dataItem[MODE_FIELD] = Mode.show;
+      onSave?.(newData);
 
-      return dataItem;
-    }));
+      return newData;
+    });
 
     setPrevDataItem(undefined);
   };
@@ -205,21 +214,23 @@ const Grid: React.FC<GridProps> = (props) => {
         data={data}
         schema={schema}
         rowRender={rowRender}
-        onRowClick={!isModifying ? handleRowClick : undefined}
+        onRowClick={!disabled && !isModifying ? handleRowClick : undefined}
         onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
         filterable={true}
         fullWidth={true}
         hasBoxScrollbars={true}
       />
-      <Button
-        className={classes.buttonAdd}
-        kind="add"
-        disabled={isModifying}
-        onClick={handleAdd}
-      >
-        Add item
-      </Button>
+      {!disabled && (
+        <Button
+          className={classes.buttonAdd}
+          kind="add"
+          disabled={isModifying}
+          onClick={handleAdd}
+        >
+          Add item
+        </Button>
+      )}
     </>
   );
 };
