@@ -54,6 +54,10 @@ const defaultDataState: State = {
 
 export function KendoDataGrid<T> ({
   data,
+  filter = defaultDataState.filter,
+  group = defaultDataState.group,
+  sort = defaultDataState.sort,
+  skipDataProcessing,
   schema,
   fullWidth,
   fullHeight,
@@ -66,15 +70,41 @@ export function KendoDataGrid<T> ({
 }: DataGridProps<T>): React.ReactElement | null {
   const gridRef = ref ?? useRef<Grid>();
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
-  const [dataState, setDataState] = useState<State>(defaultDataState);
+  const [dataState, setDataState] = useState<State>({
+    ...defaultDataState,
+    ...{ filter },
+    ...{ group },
+    ...{ sort },
+  });
 
   useEffect(() => {
     setColumnsSchema(schema);
   }, [schema]);
 
+  useEffect(() => {
+    setDataState((prev) => ({
+      ...prev,
+      ...{ filter },
+    }));
+  }, [filter]);
+
+  useEffect(() => {
+    setDataState((prev) => ({
+      ...prev,
+      ...{ group },
+    }));
+  }, [group]);
+
+  useEffect(() => {
+    setDataState((prev) => ({
+      ...prev,
+      ...{ sort },
+    }));
+  }, [sort]);
+
   const resultData = useMemo(
-    () => process(data, dataState),
-    [data, dataState],
+    () => skipDataProcessing ? data : process(data, dataState),
+    [data, skipDataProcessing, dataState],
   );
 
   const autosizedColumns = useMemo(

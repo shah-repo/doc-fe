@@ -34,6 +34,7 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
 export interface DataGridProps<T> extends GridProps {
   data: T[]
   schema: Array<ColumnDefinition<T>>
+  skipDataProcessing?: boolean
   fullWidth?: boolean
   fullHeight?: boolean
   hasBoxScrollbars?: boolean
