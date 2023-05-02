@@ -1,7 +1,30 @@
-import { makeStyles } from '@material-ui/core';
+import { Theme, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
 const BASE_COLOR = Colors.primaryBg;
+
+const baseInputStyles = (theme: Theme) => ({
+  height: 30,
+  background: 'none',
+  backgroundColor: Colors.white,
+  borderRadius: theme.shape.borderRadius / 2,
+  border: `1px solid ${Colors.tableStroke}`,
+
+  '&:hover': {
+    backgroundColor: Colors.gray,
+    borderColor: Colors.tableStroke,
+  },
+  '&:focus': {
+    boxShadow: 'none',
+    backgroundColor: Colors.white,
+    borderColor: Colors.primaryLight,
+  },
+  '&.k-state-focused': {
+    boxShadow: 'none',
+    backgroundColor: Colors.white,
+    borderColor: Colors.primaryLight,
+  },
+});
 
 export default makeStyles((theme) => ({
   '@global': {
@@ -99,9 +122,6 @@ export default makeStyles((theme) => ({
             boxShadow: '5px 12px 10px 2px rgba(0, 0, 0, .1)',
             clipPath: 'inset(0 -20px 0 0)',
           },
-        },
-        '&:has(+ .k-grid-header-sticky)': {
-          borderRightColor: 'transparent',
         },
         '&.k-sorted': {
           backgroundColor: Colors.primaryHighlight, // TODO check with UX team
@@ -325,48 +345,40 @@ export default makeStyles((theme) => ({
       },
     },
     '.k-textbox': {
-      height: 30,
-      backgroundColor: Colors.white,
-      borderRadius: theme.shape.borderRadius / 2,
-      border: `1px solid ${Colors.tableStroke}`,
-
-      '&:hover': {
-        backgroundColor: Colors.gray,
-        borderColor: Colors.tableStroke,
+      ...baseInputStyles(theme),
+    },
+    '.k-numerictextbox': {
+      '& .k-numeric-wrap': {
+        ...baseInputStyles(theme),
       },
-      '&:focus': {
-        boxShadow: 'none',
+      '& .k-select': {
+        backgroundImage: 'none',
+        border: 'none',
         backgroundColor: Colors.white,
-        borderColor: Colors.primaryLight,
+        borderLeft: `1px solid ${Colors.tableStroke}`,
+
+        '& .k-link': {
+          '&:hover': {
+            backgroundColor: Colors.hover,
+          },
+        },
       },
     },
     '.k-dropdown': {
       '& .k-dropdown-wrap': {
-        height: 30,
-        background: 'none',
-        backgroundColor: Colors.white,
-        borderRadius: theme.shape.borderRadius / 2,
-        border: `1px solid ${Colors.tableStroke}`,
+        ...baseInputStyles(theme),
 
         '&:hover': {
-          backgroundColor: Colors.gray,
+          backgroundColor: Colors.hover,
           borderColor: Colors.tableStroke,
-        },
-        '&:focus': {
-          boxShadow: 'none',
-          backgroundColor: Colors.white,
-          borderColor: Colors.primaryLight,
-        },
-        '&.k-state-focused': {
-          boxShadow: 'none',
-          backgroundColor: Colors.white,
-          borderColor: Colors.primaryLight,
         },
       },
     },
     '.k-select': {
       '& .k-icon': {
         color: Colors.textGray,
+      },
+      '& .k-i-arrow-s': {
         fontSize: 12,
       },
     },
