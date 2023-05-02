@@ -1,10 +1,11 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable } from "..";
-import { FBButtonStyles } from "../styles/FBButton.styles";
-import { FBPurchaseOrderStyles } from "./FBPurchaseOrder.styles";
-import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable } from '..';
+import FBPurchaseOrderDataTable from '../FBPurchaseOrderTable/FBPurchaseOrderDataTable';
+import { FBButtonStyles } from '../styles/FBButton.styles';
+import { FBPurchaseOrderStyles } from './FBPurchaseOrder.styles';
+import { withFBPurchaseOrder } from './FBPurchaseOrder.wrap';
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
@@ -13,7 +14,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   purchaseOrderState,
   dialogState,
   gutter = true,
-  mode = "form",
+  mode = 'form',
   label,
   loading,
   disabled,
@@ -22,11 +23,16 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   isPO,
 }) => {
   const classes = { ...FBButtonStyles(), ...FBPurchaseOrderStyles() };
+  const isNewTable = false;
   return (<FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
     <FBInput {...{ name, disabled }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
-        <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
+        {isNewTable ? (
+          <FBPurchaseOrderDataTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
+        ) : (
+          <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
+        )}
         {isReceivable && (
           <FBButton
             color="primary"
@@ -39,6 +45,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
       </Box>
     </FBInput>
   </FBProvider>
-  ); };
+  );
+};
 
 export default withFBPurchaseOrder(FBPurchaseOrder);
