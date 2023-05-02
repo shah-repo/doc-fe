@@ -15,7 +15,7 @@ export type CellComponent<T = unknown> = ComponentType<CellTemplateProps<T>>;
 
 export type CellTemplate<T = unknown> = (props: CellTemplateProps<T>) => React.ReactNode;
 
-export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
+interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
   id: string
   hidden?: boolean
   fitContent?: boolean
@@ -23,6 +23,7 @@ export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' |
   cell?: CellComponent<T>
   template?: CellTemplate<T>
 }
+
 export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'field' | 'children'> {
   // TODO after upgrading typescript switch to object-deep-keys generic type
   field?: keyof T | string
