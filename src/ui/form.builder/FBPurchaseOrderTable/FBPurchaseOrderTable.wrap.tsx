@@ -1,30 +1,30 @@
-import { useFormikContext } from "formik";
-import { cloneDeep, compact, each, first, get, omit } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { FB, FBPurchaseOrderValue } from "..";
-import { SM } from "../../../App";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { documentVersionPath } from "../../document.revision/utils/paths";
-import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
-import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import { usePoApprovals } from "../FBPOApprovals/hooks";
-import { getReceivedQuantity } from "../FBPOReceive/utils";
-import FBDataStore from "../FBStore/FBDataStore";
-import FBStore from "../FBStore/FBStore";
-import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
-import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
-import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from "./helpers";
+import { useFormikContext } from 'formik';
+import { cloneDeep, compact, each, first, get, omit } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { FB, FBPurchaseOrderValue } from '..';
+import { SM } from '../../../App';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
+import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import { usePoApprovals } from '../FBPOApprovals/hooks';
+import { getReceivedQuantity } from '../FBPOReceive/utils';
+import FBDataStore from '../FBStore/FBDataStore';
+import FBStore from '../FBStore/FBStore';
+import FBPurchaseOrderClasses from './FBPurchaseOrderTable.styles';
+import { FBPurchaseOrderTableProps } from './FBPurchaseOrderTable.types';
+import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -94,9 +94,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     });
 
     onAlertNotificationConfirm = () => {
-      const values = cloneDeep(get(formik, "values")) as DocumentRevisionFormValues;
+      const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
       if (values?.formInput) {
-        const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME];
+        const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME] as FBPurchaseOrderValue;
         const previousItems = allItems?.items;
         delete previousItems[selectedItemIndex];
         const previousLineItemsLength = previousItems?.length;
@@ -105,7 +105,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
         }
-        const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || "0") : 0;
+        const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || '0') : 0;
         const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
         const totalInUSD = totalAmount * allItems.exchangeRate;
 
@@ -151,12 +151,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     useObserver(() => {
       const value = cloneDeep(purchaseOrderState?.value);
-      calculation = omit(value, "items");
+      calculation = omit(value, 'items');
       items = cloneDeep(value?.items);
-      if (props.mode === "preview") {
+      if (props.mode === 'preview') {
         items?.map((item) => {
           const lots = smartReferencesFrom?.filter((ref) => item.id === ref.metadata?.fieldId);
-          item.lots = lots?.map((lot) => lot.fromDocument?.docId).join(", ");
+          item.lots = lots?.map((lot) => lot.fromDocument?.docId).join(', ');
         });
       }
       formState?.setFieldValue(name, { ...purchaseOrderState?.value }, true);
@@ -164,7 +164,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       FBStore?.setPurchaseOrderValue(value);
     });
 
-    const approvalsFieldName = workspaceState?.schema?.find((item) => item.type === "poapprovals")?.name ?? "";
+    const approvalsFieldName = workspaceState?.schema?.find((item) => item.type === 'poapprovals')?.name ?? '';
 
     const {
       addApprover,
@@ -203,7 +203,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         } else {
           updateWorkspace(value);
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -213,9 +213,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     }, []);
 
     if (isReceivable) {
-      const receivedName = first(workspaceState?.getItemsByType("poreceive"))?.name || "";
+      const receivedName = first(workspaceState?.getItemsByType('poreceive'))?.name || '';
       const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
-      items = items?.map( (item) => {
+      items = items?.map((item) => {
         const id = item.partNumber || item.id;
         const received = getReceivedQuantity(receivedItems, id) || 0;
         return {

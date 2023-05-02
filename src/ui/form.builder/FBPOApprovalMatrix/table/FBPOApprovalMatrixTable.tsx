@@ -1,11 +1,10 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBInput } from "../..";
-import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
-import FBPOApprovalMatrixDialog from "../form/FBPOApprovalMatrixDialog";
-import FBPOAMKendoTable from "../grid/FBPOAMKendoTable";
-import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
-
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBInput } from '../..';
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from '../FBPOApprovalMatrix.types';
+import FBPOApprovalMatrixDialog from '../form/FBPOApprovalMatrixDialog';
+import FBPOAMKendoTable from '../grid/FBPOAMKendoTable';
+import { withFBPOApprovalMatrixTable } from './FBPOApprovalMatrixTable.wrap';
 
 const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTableProps> = ({
   disabled,
@@ -14,6 +13,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   groups,
   handleEdit,
   isDocumentReleased,
+  disableFilter = false,
   isDialogOpen,
   closeDialog,
   initialValues,
@@ -28,11 +28,11 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
       employees,
       groups,
       handleEdit,
-      isDocumentReleased,
-    }}/>
+      disableFilter,
+    }} />
     {
-      !isDocumentReleased && isDialogOpen &&
-        <FBInput>
+      !isDocumentReleased && isDialogOpen
+        && <FBInput>
           <FBPOApprovalMatrixDialog
             {...{
               isDialogOpen,

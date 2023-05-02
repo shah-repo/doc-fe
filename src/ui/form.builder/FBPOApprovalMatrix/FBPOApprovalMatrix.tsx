@@ -1,19 +1,19 @@
-import { Box, IconButton, makeStyles } from "@material-ui/core";
-import ReplayIcon from "@material-ui/icons/Replay";
-import { Provider } from "mobx-react";
-import React from "react";
-import { FBButton, FBDialog, FBInput, FBSection, FBTooltip } from "..";
-import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
-import { Colors } from "../../layout/theme-next";
-import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from "./FBPOApprovalMatrix.types";
-import { withFBPOApprovalMatrix } from "./FBPOApprovalMatrix.wrap";
-import FBPOApprovalMatrixTable from "./table/FBPOApprovalMatrixTable";
+import { Box, IconButton, makeStyles } from '@material-ui/core';
+import ReplayIcon from '@material-ui/icons/Replay';
+import { Provider } from 'mobx-react';
+import React from 'react';
+import { FBButton, FBDialog, FBInput, FBSection, FBTooltip } from '..';
+import { ReactComponent as PlusIcon } from '../../../assets/images/plus_icon_add_btn.svg';
+import { Colors } from '../../layout/theme-next';
+import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from './FBPOApprovalMatrix.types';
+import { withFBPOApprovalMatrix } from './FBPOApprovalMatrix.wrap';
+import FBPOApprovalMatrixTable from './table/FBPOApprovalMatrixTable';
 
 const useStyles = makeStyles({
   button: {
     height: 40,
     borderColor: Colors.primaryLight,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     borderRadius: 0,
   },
 });

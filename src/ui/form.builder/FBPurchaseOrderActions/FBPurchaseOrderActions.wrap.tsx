@@ -1,25 +1,25 @@
-import { useFormikContext } from "formik";
-import { cloneDeep, each, findIndex, get, size } from "lodash";
-import moment from "moment";
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
-import { SM } from "../../../App";
-import { MomentFormats } from "../../../common/utils/date";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { documentVersionPath } from "../../document.revision/utils/paths";
-import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
-import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import { formatCost, getPOLineItemsTotalAndForTaxAmount } from "../FBPurchaseOrderTable/helpers";
-import FBDataStore from "../FBStore/FBDataStore";
+import { useFormikContext } from 'formik';
+import { cloneDeep, each, findIndex, get, size } from 'lodash';
+import moment from 'moment';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from '..';
+import { SM } from '../../../App';
+import { MomentFormats } from '../../../common/utils/date';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
+import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import { formatCost, getPOLineItemsTotalAndForTaxAmount } from '../FBPurchaseOrderTable/helpers';
+import FBDataStore from '../FBStore/FBDataStore';
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
@@ -33,7 +33,6 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     isEdit = false,
     ...props
   }: T) => {
-
     const { purchaseOrderState, dialogState, formState, workspaceState, poApprovalsState } = FB.useStores();
     const history = useHistory();
     const createDocAction = useActionCreator(documentRevisionsActions.create);
@@ -60,7 +59,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       if (isPOEditState) {
         const allItems = purchaseOrderState.calculateCost() as FBPurchaseOrderCalculation;
         const totalAmount = parseFloat(allItems.totalAmount);
-        const previousItems = cloneDeep(get(allItems, "items"));
+        const previousItems = cloneDeep(get(allItems, 'items')) as FBPurchaseOrderItem[];
         previousItems[values?.index] = values;
 
         const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
@@ -69,11 +68,11 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
         }
 
-        const UpdatedAmount =  Number(tax) +  Number(allItems.shippingCost) + Number(UpdatedLineItemsTotalObj.subTotal);
+        const UpdatedAmount = tax + parseFloat(allItems.shippingCost) + UpdatedLineItemsTotalObj.subTotal;
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
-          (Number(o1.limit) + Number(o1.threshold)) > totalAmount);
-        if ((isEdit && topApprovals?.length &&
-           Number(UpdatedAmount) > (topApprovals[0]?.limit + topApprovals[0]?.threshold))
+          (o1.limit + o1.threshold) >= totalAmount);
+        if ((isEdit && topApprovals?.length
+           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold))
         || !isEdit) {
           return dialog?.open();
         }
@@ -105,18 +104,18 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
     onAlertNotificationConfirm = () => {
       const newLineItemvalues = formState?.getValues() as FBPurchaseOrderItem;
-      const values = cloneDeep(get(formik, "values")) as DocumentRevisionFormValues;
+      const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
       if (values?.formInput) {
         const allItems = purchaseOrderState?.calculateCost() as FBPurchaseOrderCalculation;
-        const previousItems = cloneDeep(get(allItems, "items"));
+        const previousItems = cloneDeep(get(allItems, 'items')) as FBPurchaseOrderItem[];
         if (newLineItemvalues?.id) {
           // Edit PO Line Item case
           const index = findIndex(previousItems, (data: FBPurchaseOrderItem) => data.id === newLineItemvalues?.id);
           previousItems[index] = {
             ...newLineItemvalues,
-            totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
-            formattedDate: newLineItemvalues.date ?
-              moment(newLineItemvalues.date).format(MomentFormats.MonthDateYearTwoDigit) : "",
+            totalAmount: purchaseOrderState?.itemTotalAmount?.toFixed(2) ?? '0',
+            formattedDate: newLineItemvalues.date
+              ? moment(newLineItemvalues.date).format(MomentFormats.MonthDateYearTwoDigit) : '',
           };
         } else {
           // Add PO Line Item case
@@ -125,10 +124,10 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
               ...newLineItemvalues,
               id: FB.uniqid,
               received: 0,
-              totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2),
-              formattedDate: newLineItemvalues.date ?
-                moment(newLineItemvalues.date).format(MomentFormats.MonthDateYearTwoDigit) : "",
-              index: size(previousItems.items),
+              totalAmount: purchaseOrderState?.itemTotalAmount.toFixed(2) ?? '0',
+              formattedDate: newLineItemvalues.date
+                ? moment(newLineItemvalues.date).format(MomentFormats.MonthDateYearTwoDigit) : '',
+              index: size(previousItems),
             });
         }
 
@@ -140,7 +139,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
         }
-        const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || "0") : 0;
+        const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || '0') : 0;
         const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
         const totalInUSD = totalAmount * allItems.exchangeRate;
 

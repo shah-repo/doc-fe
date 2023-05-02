@@ -40,6 +40,7 @@ export type FBPOApprovalMatrixTableProps =
 & {
   approvalLevels?: POApprovalMatrixLevel[];
   handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
+  disableFilter: boolean;
   isDocumentReleased: boolean;
   groups?: Map<string, Group>;
   employees?: Map<string, Employee>;
