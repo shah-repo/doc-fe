@@ -19,7 +19,7 @@ export interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' |
   id: string
   hidden?: boolean
   fitContent?: boolean
-  children?: Array<GenericColumnDefinition<T>> // | Array<ReactElement<GenericColumnDefinition<T>>>
+  children?: Array<GenericColumnDefinition<T>>
   cell?: CellComponent<T>
   template?: CellTemplate<T>
 }
