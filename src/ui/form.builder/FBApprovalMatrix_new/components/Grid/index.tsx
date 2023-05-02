@@ -18,10 +18,10 @@ import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 
-// @todo: styles
 // @todo: connect BE side
 // @todo: approval roles
 
+// @todo: inactive style
 // @todo: translations
 // @todo: refactoring
 // @todo: optimisations
@@ -68,6 +68,24 @@ const Grid: React.FC<GridProps> = (props) => {
 
     setData((data) => [...data, newItem as any]);
   };
+
+  // Scroll down.
+  useEffect(
+    () => {
+      const isAdding = data.some(
+        (dataItem) => dataItem[MODE_FIELD] === Mode.add,
+      );
+
+      if (!isAdding) {
+        return;
+      }
+
+      // @todo: use Grid API
+      const element = document.querySelector('.k-virtual-content');
+      element && (element.scrollTop = element.scrollHeight);
+    },
+    [data],
+  );
 
   const handleRowClick = ({ dataItem: clickedDataItem }: GridRowClickEvent) => {
     setPrevDataItem(cloneDeep(clickedDataItem));

@@ -7,10 +7,12 @@ export default makeStyles((theme) => ({
     zIndex: 3,
     '& td:first-child': {
       borderLeft: `1px solid ${Colors.primaryLight} !important`,
+      paddingLeft: '19px !important',
     },
     '& td': {
       borderTop: `1px solid ${Colors.primaryLight} !important`,
       borderBottom: `1px solid ${Colors.primaryLight} !important`,
+      paddingTop: '19px !important',
     },
   },
   save: {
