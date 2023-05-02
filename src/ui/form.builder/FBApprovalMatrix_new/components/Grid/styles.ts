@@ -5,9 +5,12 @@ export default makeStyles((theme) => ({
   updating: {
     position: 'relative',
     zIndex: 3,
-    outline: `1px solid ${Colors.primaryLight}`,
+    '& td:first-child': {
+      borderLeft: `1px solid ${Colors.primaryLight} !important`,
+    },
     '& td': {
-      borderBottom: 'none !important',
+      borderTop: `1px solid ${Colors.primaryLight} !important`,
+      borderBottom: `1px solid ${Colors.primaryLight} !important`,
     },
   },
   save: {
@@ -43,13 +46,16 @@ export default makeStyles((theme) => ({
     '& .k-checkbox': {
       borderWidth: 1,
     },
-    '& .k-grid-table': {
-      padding: 1,
-    },
   },
   buttonAdd: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
+  },
+  actionsTd: {
+    width: 0,
+    overflow: 'visible !important',
+    position: 'sticky',
+    right: 0,
   },
   actions: {
     width: 60,
@@ -61,7 +67,8 @@ export default makeStyles((theme) => ({
     borderBottomRightRadius: 4,
     position: 'absolute',
     zIndex: 3,
-    left: -1,
+    right: 0,
+    top: '100%',
   },
   actionButton: {
     minWidth: 25,
@@ -77,5 +84,15 @@ export default makeStyles((theme) => ({
     '&:hover': {
       color: Colors.primary,
     },
+  },
+  // @todo: make via borderRight.
+  line: {
+    width: 1,
+    backgroundColor: Colors.primaryLight,
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    zIndex: 3,
   },
 }));

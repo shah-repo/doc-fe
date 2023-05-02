@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import {
   GridRowProps,
@@ -17,6 +16,7 @@ import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalM
 import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
+import { Button } from '../../../../components/forms/fields-next';
 
 // @todo: styles
 // @todo: connect BE side
@@ -135,15 +135,9 @@ const Grid: React.FC<GridProps> = (props) => {
       return row;
     }
 
-    const styledRow = React.cloneElement(row, {
-      ...row.props,
-      className: cx(row.props.className, classes.updating),
-    });
-
-    // @todo: fix actions position
-    return (
-      <>
-        {styledRow}
+    const actions = (
+      <td className={classes.actionsTd}>
+        <div className={classes.line} />
         <div className={classes.actions}>
           <Button
             className={classes.actionButton}
@@ -160,7 +154,17 @@ const Grid: React.FC<GridProps> = (props) => {
             <DoneIcon className={classes.iconButton} />
           </Button>
         </div>
-      </>
+      </td>
+    );
+
+    return React.cloneElement(
+      row,
+      {
+        ...row.props,
+        className: cx(row.props.className, classes.updating),
+      },
+      row.props.children,
+      actions,
     );
   };
 
@@ -192,9 +196,9 @@ const Grid: React.FC<GridProps> = (props) => {
       />
       <Button
         className={classes.buttonAdd}
-        variant="outlined"
-        color="secondary"
-        onClick={!isModifying ? handleAdd : undefined}
+        kind="add"
+        disabled={isModifying}
+        onClick={handleAdd}
       >
         Add item
       </Button>
