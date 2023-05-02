@@ -28,6 +28,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
       employees,
       groups,
       handleEdit,
+      isDocumentReleased,
     }}/>
     {
       !isDocumentReleased && isDialogOpen &&
