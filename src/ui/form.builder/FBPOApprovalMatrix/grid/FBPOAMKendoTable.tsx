@@ -24,6 +24,7 @@ interface KendoTableProps {
   handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
   groups?: Map<string, Group>;
   employees?: Map<string, Employee>;
+  isDocumentReleased: boolean;
 }
 
 const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
@@ -31,10 +32,11 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
   employees,
   groups,
   handleEdit,
+  isDocumentReleased,
 }) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
-  const classes = useStyles();
+  const classes = useStyles({ isDocumentReleased });
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
     gridConfiguration.columns
   );

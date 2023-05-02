@@ -1,8 +1,11 @@
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  root: (props) =>  ({
     "& .k-grid-header": {
+      "pointer-events": props?.isDocumentReleased ? "none" : "auto",
+    },
+    "& .k-grid-column-menu.k-grid-filter": {
       "pointer-events": "none",
     },
     "& .k-grouping-header.k-grouping-header-flex": {
@@ -14,6 +17,6 @@ const useStyles = makeStyles((theme) => ({
     "& .k-grid-norecords": {
       display: "none",
     },
-  },
+  }),
 }));
 export default useStyles;
