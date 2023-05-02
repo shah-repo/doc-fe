@@ -90,6 +90,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
             className={classes.close}
             size="small"
             onClick={onNewTabOpen}
+            data-cy="related-subpart-dialog-newtab"
           >
             <NewTabIcon />
           </IconButton>
@@ -97,6 +98,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
             className={classes.close}
             size="small"
             onClick={onDialogClose}
+            data-cy="related-subpart-dialog-close"
           >
             <CloseIcon />
           </IconButton></div>

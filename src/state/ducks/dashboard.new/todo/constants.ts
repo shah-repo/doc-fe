@@ -9,7 +9,6 @@ export const  MY_FEEDS_INITIAL_PAYLOAD = {
 };
 export const MY_FEEDS_LIST_INITIAL_STATE = {
   results: [],
-  // eslint-disable-next-line @typescript-eslint/camelcase
   page_total: 0,
   total: 0,
 };

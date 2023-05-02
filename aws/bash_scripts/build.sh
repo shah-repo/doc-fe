@@ -28,6 +28,10 @@ echo "-------- Building Application --------"
 # we need dependencies and devDependencies so NODE_ENV should NOT be production
 NODE_ENV=development yarn install --frozen-lockfile
 
+# Exclude all files from ESlint on build phase to avoid lack of memory.
+# @todo: remove it after reducing amount of warnings.
+echo "*" > .eslintignore
+
 yarn build
 
 rm -rf compiled compiled.tar.gz
