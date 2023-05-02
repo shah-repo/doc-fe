@@ -22,15 +22,19 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
     )
 );
 
+function isGenericColumns (columns: GenericColumn['children']): columns is GenericColumn[] {
+  return Array.isArray(columns) && columns.every((item) => 'id' in item);
+}
+
 const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
-  columns.map(({ hidden, children, ...column }) => (
-    !hidden && (
+  columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
+    return (
       <GridColumn
         {...column}
         key={column.id}
         field={column.field ?? `custom-${column.id}`}
         title={column.title ? translate(column.title) : undefined}
-        cell={(props) => <CustomGridCell {...props} column={column} />}
+        cell={(props) => <CustomGridCell { ...props} column={column} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'
@@ -38,10 +42,14 @@ const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateCol
             : column.width
         }
       >
-        {children && renderColumns(children, gridWidth, calculateColumWidth)}
+        {
+          isGenericColumns(children)
+            ? renderColumns(children, gridWidth, calculateColumWidth)
+            : children
+        }
       </GridColumn>
-    )
-  ));
+    );
+  });
 
 const defaultDataState: State = {
   filter: {
