@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import {
@@ -15,12 +15,13 @@ import useStyles from './styles';
 import createSchema from './schema';
 import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import { withThemeNext } from '../../../../layout/theme-next';
+import ClearIcon from '@material-ui/icons/ClearRounded';
+import DoneIcon from '@material-ui/icons/DoneRounded';
 
 // @todo: styles
 // @todo: connect BE side
 // @todo: approval roles
 
-// @todo: sticky header
 // @todo: translations
 // @todo: refactoring
 // @todo: optimisations
@@ -139,20 +140,25 @@ const Grid: React.FC<GridProps> = (props) => {
       className: cx(row.props.className, classes.updating),
     });
 
+    // @todo: fix actions position
     return (
       <>
         {styledRow}
-        <div
-          className={classes.save}
-          onClick={handleItemSave}
-        >
-          Save
-        </div>
-        <div
-          className={classes.discard}
-          onClick={handleItemDiscard}
-        >
-          Discard
+        <div className={classes.actions}>
+          <Button
+            className={classes.actionButton}
+            variant="outlined"
+            onClick={handleItemDiscard}
+          >
+            <ClearIcon className={classes.iconButton} />
+          </Button>
+          <Button
+            className={classes.actionButton}
+            variant="outlined"
+            onClick={handleItemSave}
+          >
+            <DoneIcon className={classes.iconButton} />
+          </Button>
         </div>
       </>
     );
@@ -162,6 +168,13 @@ const Grid: React.FC<GridProps> = (props) => {
   const isModifying = data.some(
     (dataItem) => [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]),
   );
+
+  // @todo: Update rowspan without hack.
+  useEffect(() => {
+    document.querySelectorAll('.k-grid-header-wrap tr[aria-rowindex="2"] th').forEach((element) => {
+      element.setAttribute('rowspan', '2');
+    });
+  }, []);
 
   return (
     <>
@@ -175,8 +188,10 @@ const Grid: React.FC<GridProps> = (props) => {
         onDataStateChange={handleDataStateChange}
         filterable={true}
         fullWidth={true}
+        hasBoxScrollbars={true}
       />
       <Button
+        className={classes.buttonAdd}
         variant="outlined"
         color="secondary"
         onClick={!isModifying ? handleAdd : undefined}

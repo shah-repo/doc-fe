@@ -76,7 +76,7 @@ export default function createSchema (
       filterCell: InputFilter,
       template: InputCellTemplate,
       locked: true,
-      width: 100,
+      width: 130,
     },
     {
       id: 'document-type',
@@ -87,7 +87,7 @@ export default function createSchema (
       filterCell: InputFilter,
       template: InputCellTemplate,
       locked: true,
-      width: 100,
+      width: 140,
     },
     {
       id: 'training',
@@ -117,7 +117,7 @@ export default function createSchema (
       editable: false,
       filterCell: CategoryFilter,
       template: CategoryCellTemplate,
-      width: 100,
+      width: 140,
     },
   ];
 
@@ -133,7 +133,7 @@ export default function createSchema (
           filterable: false,
           editable: true,
           template: CheckboxCellTemplate,
-          width: 50,
+          width: 90,
         })),
       });
     }
