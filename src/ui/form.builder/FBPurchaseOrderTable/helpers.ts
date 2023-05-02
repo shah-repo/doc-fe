@@ -11,8 +11,7 @@ export const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) =
   || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
 );
 
-export const formatCost = (value: any, fixedDecimal?: number) => {
-  const val = parseFloat(value || 0);
+export const formatCost = (val: number, fixedDecimal?: number): string => {
   if (val === 0) {
     return val.toFixed(2);
   }
@@ -21,7 +20,7 @@ export const formatCost = (value: any, fixedDecimal?: number) => {
 
 export const getPOLineItemsTotalAndForTaxAmount = (poLineItems: FBPurchaseOrderItem[]) => poLineItems?.reduce(
   (agg, item: FBPurchaseOrderItem) => {
-    const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
+    const orderCost = parseFloat(item.unitPrice || "0") * parseFloat(item.order || "0");
     agg.subTotal += orderCost;
     agg.forTax += item.tax ? orderCost : 0;
     return agg;

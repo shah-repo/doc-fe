@@ -140,8 +140,8 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
         }
-        const shippingCost = previousLineItemsLength ? allItems.shippingCost || 0 : 0;
-        const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + Number(shippingCost);
+        const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || "0") : 0;
+        const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
         const totalInUSD = totalAmount * allItems.exchangeRate;
 
         values.formInput[PO_ITEMS_COMPONENT_NAME] = {

@@ -249,6 +249,7 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   public undoPO = (prevDocumentRevision?: DocumentRevision) => {
+
     this.loadAudit = false;
     const { id } = this;
     this.loading = true;
@@ -258,33 +259,29 @@ class FBWorkspaceState extends FBSchemaState {
       description: prevDocumentRevision?.description,
     };
     appGlobals.omitReloadNotification = true;
+
     return this.documentRevApi.set({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
       body,
       method: "patch",
-    }, (data, error) => {
+    }, (data?: DocumentRevision, error?) => {
       this.omitAutosave = false;
+
       if (error) {
         this.documentRevApi.onError(error);
-        this.loading = false;
       } else {
         this.setDirty(false);
         this.setFormInputData(data);
-        if (!isEmpty(this.getItemsByType("inlineapproval"))) {
-          FBStore.audit.set({
-            url: FBEndpoint.DocumentRevisionAudit,
-            urlValues: { documentId: id },
-            method: "get",
-          });
-        }
+
         if (FBStore?.isHistoryTabSelected) {
           this.loadAudit = true;
         }
+
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
-        this.loading = false;
       }
+      this.loading = false;
     });
   };
 

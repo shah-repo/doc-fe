@@ -235,6 +235,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formik.submitForm();
     if (isPOEditState) {
       history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+      dispatch(documentRevisionsActions.load(documentRevision.id));
       getPOIndexDbInstance().clear();
     }
   };
