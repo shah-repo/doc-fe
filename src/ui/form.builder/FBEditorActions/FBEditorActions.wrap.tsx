@@ -82,6 +82,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         rules,
         defaultValue,
         editorConfig,
+        tabId: selectedTab,
       } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
@@ -135,7 +136,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId,
+        tabId: selectedTab || tabId,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 

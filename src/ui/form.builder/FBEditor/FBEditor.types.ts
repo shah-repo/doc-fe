@@ -1,4 +1,5 @@
 import { FBEditorState, FBFormProps, FBInputProps, FBProviderProps } from "..";
+import { TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 
 export type FBEditorMode = "config" | "validation";
 
@@ -18,6 +19,9 @@ export type FBEditorProps =
   inputProps?: FBInputProps;
   standalone?: boolean;
   isFormOutput?: boolean;
+  tabConfig?: TabInfo[];
+  handleTabSelection?: (event: React.ChangeEvent<HTMLSelectElement>, value: any) => void;
+  activeTabId?: string;
 };
 
 export interface FBEditorHelperProps {
