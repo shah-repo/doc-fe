@@ -215,14 +215,19 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     if (isReceivable) {
       const receivedName = first(workspaceState?.getItemsByType('poreceive'))?.name || '';
       const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
+      let isReceivedAll = true;
       items = items?.map((item) => {
         const id = item.partNumber || item.id;
         const received = getReceivedQuantity(receivedItems, id) || 0;
+        if (received < item.order && isReceivedAll) {
+          isReceivedAll = false;
+        }
         return {
           ...item,
           received,
         };
       });
+      purchaseOrderState?.setIsAllItemsReceived(isReceivedAll);
     }
 
     return Component({

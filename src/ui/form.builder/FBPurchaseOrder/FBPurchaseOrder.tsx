@@ -33,7 +33,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
             color="primary"
             label="form.builder.receive"
             onClick={handleReceiveAll}
-            disabled={loading}
+            disabled={loading || purchaseOrderState?.isAllItemsReceived}
             className={cx(classes.button, classes.receiveAllBtn)}
           />
         )}
