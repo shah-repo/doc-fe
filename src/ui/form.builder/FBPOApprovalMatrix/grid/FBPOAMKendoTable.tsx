@@ -26,7 +26,6 @@ interface KendoTableProps {
   employees?: Map<string, Employee>
   disableFilter: boolean
   isDocumentReleased: boolean
-
 }
 
 const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
