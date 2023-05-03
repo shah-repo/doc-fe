@@ -22,7 +22,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled
       || (workspaceState && !['design', 'form'].includes(workspaceState.mode));
-    console.log(workspaceState?.mode);
+
     handleSave = (data: FBApprovalMatrixItem[]) => {
       const approvalMatrix = data.map((e) => {
         const categoryTrim = e?.docType.category?.trim();

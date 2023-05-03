@@ -18,7 +18,6 @@ import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 
-// @todo: connect BE side
 // @todo: approval roles
 
 // @todo: inactive style
@@ -62,9 +61,22 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   const handleAdd: React.MouseEventHandler = () => {
+    // @todo: fix default values.
     const newItem = {
       docType: {
+        name: '',
+        group: '',
         active: true,
+        acronym: '',
+        category: '',
+        needsSignature: false,
+        defaultTraining: false,
+      },
+      approvalRoles: {
+        stage1: [false, false, false, false, false, false],
+        stage2: [false, false, false, false, false, false],
+        stage3: [false, false, false, false, false, false],
+        admStage: [false, false, false, false, false, false],
       },
       [MODE_FIELD]: Mode.add,
     };
@@ -115,8 +127,6 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   const handleItemSave: React.MouseEventHandler = () => {
-    // @todo: save request.
-
     setData((data) => {
       const newData = data.map((dataItem) => {
         if (dataItem.id !== prevDataItem?.id) {
@@ -128,7 +138,8 @@ const Grid: React.FC<GridProps> = (props) => {
         return dataItem;
       });
 
-      onSave?.(newData);
+      // @todo: Fix BE. Now it doesn't save new items.
+      onSave?.(newData.filter((dataItem) => 'id' in dataItem));
 
       return newData;
     });
