@@ -25,6 +25,8 @@ interface KendoTableProps {
   groups?: Map<string, Group>
   employees?: Map<string, Employee>
   disableFilter: boolean
+  isDocumentReleased: boolean
+
 }
 
 const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
@@ -33,6 +35,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
   groups,
   handleEdit,
   disableFilter,
+  isDocumentReleased,
 }) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
@@ -109,7 +112,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
         {...column}
         title={startCase(getTranslatedText(column.title))}
         minResizableWidth={200}
-        cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.field)}
+        cell={(props) => RenderCustomCell({ ...props, cellRowClick: isDocumentReleased ? null : onRowClick }, column.field)}
         filterCell={InputFilter}
         headerCell={
           column.title ? (props) => <ColumnHeader {...props} /> : undefined
