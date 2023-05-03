@@ -3,7 +3,7 @@ import {
   Button,
   FormControlLabel, Grid, IconButton, Radio,
   RadioGroup,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import React from 'react';
 import { ReactComponent as ModelCloseIcon } from '../../../../../assets/images/modelClose.svg';
@@ -13,12 +13,12 @@ import Text from '../../../../components/Text';
 import { styles } from './ExportToEmailModal.styles';
 
 interface ExportToEmailModalProps {
-  handleCloneModelClose: () => void
+  handleEmailModelClose: () => void
   action: (payload) => void
 }
 
 const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps> = ({
-  handleCloneModelClose,
+  handleEmailModelClose,
   action,
 }) => {
   const classes = styles();
@@ -56,7 +56,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps> = ({
         <Grid item>
           <IconButton
             className={classes.closemodel}
-            onClick={handleCloneModelClose}
+            onClick={handleEmailModelClose}
           >
             <ModelCloseIcon />
           </IconButton>
@@ -108,7 +108,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps> = ({
       <Box className={classes.footer}>
         <Button
           variant="contained"
-          onClick={handleCloneModelClose}
+          onClick={handleEmailModelClose}
           className={`${classes.buttonCancel} ${classes.buttonLabel}`}
           disableFocusRipple
           disableRipple

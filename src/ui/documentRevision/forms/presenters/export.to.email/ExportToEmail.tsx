@@ -25,18 +25,18 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const classes = styles();
-  const [cloneModelopen, setCloneModelopen] = React.useState(false);
-  const openCloneModel = (e) => {
+  const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const openEmailModel = (e) => {
     e.stopPropagation();
-    setCloneModelopen(true);
+    setEmailModelopen(true);
   };
 
-  const handleCloneModelClose = () => {
-    setCloneModelopen(false);
+  const handleEmailModelClose = () => {
+    setEmailModelopen(false);
   };
 
   const onClose = () => {
-    handleCloneModelClose();
+    handleEmailModelClose();
   };
   const async = useAsync({
     onSuccess: () => {
@@ -54,7 +54,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   const exportToEmail = useActionCreator(documentRevisionsActions.exportToEmail);
 
   const handleClick = (payload) => {
-    handleCloneModelClose();
+    handleEmailModelClose();
     async.start(exportToEmail, revisionId, { ...payload }, async);
   };
 
@@ -62,7 +62,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
     if (isNewLayout) {
       if (!renderAsButton) {
         return (
-          <StyledMenuListItem button alignItems="flex-start" onClick={openCloneModel}>
+          <StyledMenuListItem button alignItems="flex-start" onClick={openEmailModel}>
             <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
             <StyledMenuListItemText
               data-cy="exportToEmail"
@@ -75,7 +75,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
         <StyledButton
           color="primary"
           data-cy="exportToEmail"
-          onClick={openCloneModel}
+          onClick={openEmailModel}
         >
           <Text translation="common.send.to.email" />
         </StyledButton>
@@ -84,7 +84,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
 
     return (
       <>
-        <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={openCloneModel}>
+        <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={openEmailModel}>
           <Text translation="common.send.to.email" />
         </Button>
       </>
@@ -94,9 +94,9 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   return (
     <>
       {getUpdatedButton()}
-      <Modal open={cloneModelopen} onClose={onClose} className={classes.modal}>
+      <Modal open={emailModelopen} onClose={onClose} className={classes.modal}>
         <ExportToEmailModal
-          handleCloneModelClose={onClose}
+          handleEmailModelClose={onClose}
           action={handleClick}
         />
       </Modal>
