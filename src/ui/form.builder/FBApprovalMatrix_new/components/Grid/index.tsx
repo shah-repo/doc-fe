@@ -19,7 +19,6 @@ import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 
-// @todo: click and discard
 // @todo: approval roles
 
 // @todo: inactive style
@@ -67,6 +66,8 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   const handleAdd: React.MouseEventHandler = () => {
+    handleItemDiscard(undefined as any);
+
     // @todo: fix default values.
     const newItem = {
       id: random(0, 1000),
@@ -110,10 +111,12 @@ const Grid: React.FC<GridProps> = (props) => {
   );
 
   const handleRowClick = ({ dataItem: clickedDataItem }: GridRowClickEvent) => {
+    handleItemDiscard(undefined as any);
     setPrevDataItem(cloneDeep(clickedDataItem));
 
     setData((data) => data.map((dataItem) => {
       if (dataItem.id !== clickedDataItem.id) {
+        dataItem[MODE_FIELD] = Mode.show;
         return dataItem;
       }
 
@@ -231,9 +234,6 @@ const Grid: React.FC<GridProps> = (props) => {
   };
 
   const schema = createSchema(approvalMatrix, approvalRoles);
-  const isModifying = data.some(
-    (dataItem) => [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]),
-  );
 
   // @todo: Update rowspan without hack.
   useEffect(() => {
@@ -249,7 +249,7 @@ const Grid: React.FC<GridProps> = (props) => {
         data={data}
         schema={schema}
         rowRender={rowRender}
-        onRowClick={!disabled && !isModifying ? handleRowClick : undefined}
+        onRowClick={!disabled ? handleRowClick : undefined}
         onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
         filterable={true}
@@ -260,7 +260,6 @@ const Grid: React.FC<GridProps> = (props) => {
         <Button
           className={classes.buttonAdd}
           kind="add"
-          disabled={isModifying}
           onClick={handleAdd}
         >
           Add item
