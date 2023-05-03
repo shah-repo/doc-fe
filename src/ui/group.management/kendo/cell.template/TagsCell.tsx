@@ -1,8 +1,9 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { isEmpty, uniq } from "lodash";
+import { cloneDeep, isEmpty, uniq } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
+import { GroupTag } from "../../../../state/ducks/auth/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 
@@ -30,9 +31,13 @@ export const TagsCell = ({
   const [result, setResult] = React.useState([]);
   const tags = dataItem[field || ""];
 
-  const allGroups = uniq(useSelector(userManagementSelectors.getOfficialGroups).filter(
+  const allGroups = cloneDeep(uniq(useSelector(userManagementSelectors.getOfficialGroups).filter(
     (group) => group.tags && group.tags.length
-  ).map((e) => e.tags).flat().sort());
+  ).map((e) => e.tags).flat().sort()));
+
+  if (!allGroups.includes(GroupTag.PO_ADMIN)) {
+      allGroups.push(GroupTag.PO_ADMIN);
+    }
 
   const [data, setData] = React.useState(allGroups);
 

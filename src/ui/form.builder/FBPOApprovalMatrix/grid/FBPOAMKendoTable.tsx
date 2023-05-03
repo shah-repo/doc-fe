@@ -1,29 +1,30 @@
-import { process, State } from "@progress/kendo-data-query";
-import { setGroupIds } from "@progress/kendo-react-data-tools";
-import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from "@progress/kendo-react-grid";
-import { find, findIndex, map, sortBy, startCase } from "lodash";
-import React, { useCallback, useMemo, useState } from "react";
-import { useIntl } from "react-intl";
-import { AutoSizer, Size } from "react-virtualized";
-import { Group } from "../../../../state/ducks/auth/types";
-import { Employee } from "../../../../state/ducks/company/types";
-import { Default } from "../../../components/common/kendo.column.templates/Default";
-import ColumnHeader from "../../../components/common/kendo/ColumnHeader";
-import { setColumnWidth } from "../../../components/common/kendo/helpers";
-import NoDataFound from "../../../components/common/kendo/NoDataFound";
-import { CustomGridCellProps, KendoColumn } from "../../../components/common/kendo/types";
-import KendoGlobalization from "../../../components/KendoGlobalization";
-import { POApprovalMatrixLevel, Signature } from "../FBPOApprovalMatrix.types";
-import { InputFilterCellTemplate } from "./cell.template/InputFilterCellTemplate";
-import { SignatureCellTemplate } from "./cell.template/SignatureCellTemplate";
-import gridConfiguration from "./column.definition";
-import useStyles from "./FBPOAMKendoTable.styles";
+import { process, State } from '@progress/kendo-data-query';
+import { setGroupIds } from '@progress/kendo-react-data-tools';
+import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from '@progress/kendo-react-grid';
+import { find, findIndex, map, sortBy, startCase } from 'lodash';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { AutoSizer, Size } from 'react-virtualized';
+import { Group } from '../../../../state/ducks/auth/types';
+import { Employee } from '../../../../state/ducks/company/types';
+import { Default } from '../../../components/common/kendo.column.templates/Default';
+import ColumnHeader from '../../../components/common/kendo/ColumnHeader';
+import { setColumnWidth } from '../../../components/common/kendo/helpers';
+import NoDataFound from '../../../components/common/kendo/NoDataFound';
+import { CustomGridCellProps, KendoColumn } from '../../../components/common/kendo/types';
+import KendoGlobalization from '../../../components/KendoGlobalization';
+import { POApprovalMatrixLevel, Signature } from '../FBPOApprovalMatrix.types';
+import { InputFilterCellTemplate } from './cell.template/InputFilterCellTemplate';
+import { SignatureCellTemplate } from './cell.template/SignatureCellTemplate';
+import gridConfiguration from './column.definition';
+import useStyles from './FBPOAMKendoTable.styles';
 
 interface KendoTableProps {
-  approvalLevels: POApprovalMatrixLevel[];
-  handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
-  groups?: Map<string, Group>;
-  employees?: Map<string, Employee>;
+  approvalLevels: POApprovalMatrixLevel[]
+  handleEdit: (index: number, item: POApprovalMatrixLevel) => void
+  groups?: Map<string, Group>
+  employees?: Map<string, Employee>
+  disableFilter: boolean
 }
 
 const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
@@ -31,17 +32,18 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
   employees,
   groups,
   handleEdit,
+  disableFilter,
 }) => {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
-  const classes = useStyles();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
+  const classes = useStyles({ disableFilter });
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
-    gridConfiguration.columns
+    gridConfiguration.columns,
   );
 
   const data = useMemo(() => approvalLevels?.map((ele) => ({
-    ...ele, signatures: (ele.signatures as Signature[]).reduce((prevVal, currentVal) => {
-
+    ...ele,
+    signatures: (ele.signatures as Signature[]).reduce((prevVal, currentVal) => {
       const groupNames = currentVal?.groups?.map((group) => groups?.get(group.id)?.name);
       const employeeNames = currentVal?.employees?.map((employee) => employees?.get(employee.id)?.user?.name);
       return {
@@ -49,7 +51,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
         [`signatureStage${currentVal?.signatureStage}`]: JSON.stringify([...groupNames, ...employeeNames]),
       };
     }, {}),
-  })), [approvalLevels, groups, employees ]);
+  })), [approvalLevels, groups, employees]);
 
   const fieldToCellMapping = {
     signatures: SignatureCellTemplate,
@@ -64,7 +66,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
   const [dataState, setDataState] = useState<State>({
     filter:
       {
-        logic: "and",
+        logic: 'and',
         filters: [],
       },
     group: [],
@@ -76,17 +78,17 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
       setDataState(dataState);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [approvalLevels]
+    [approvalLevels],
   );
 
   const resultState = useMemo(() => processWithGroups(data, dataState), [data, dataState]);
 
   const InputFilter = (props: GridFilterCellProps) => (
-    <InputFilterCellTemplate {...props}/>
+    <InputFilterCellTemplate {...props} />
   );
 
   const RenderCustomCell = (props: CustomGridCellProps, field: string) => {
-    const template = fieldToCellMapping[field?.split(".")[0]];
+    const template = fieldToCellMapping[field?.split('.')[0]];
     if (template) {
       return template(props);
     }
@@ -96,12 +98,12 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
   const onRowClick = ({ dataItem }) => {
     const { id } = dataItem;
     const index = findIndex(approvalLevels, { id });
-    const item = find(approvalLevels, { id } );
+    const item = find(approvalLevels, { id });
     handleEdit(index, item as POApprovalMatrixLevel);
   };
 
   const columnRenderer = (gridWidth: number) => (
-    sortBy(columnDefinitions, ["orderIndex"]).map((column, idx) => (
+    sortBy(columnDefinitions, ['orderIndex']).map((column, idx) => (
       <GridColumn
         key={idx}
         {...column}
@@ -142,10 +144,10 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
           data={resultState.data}
           total={resultState.total}
           pageable={false}
-          sortable={true}
+          sortable={false}
           filterable={true}
-          reorderable={true}
-          groupable={true}
+          reorderable={false}
+          groupable={false}
           onDataStateChange={onDataStateChange}
           {...dataState}
           expandField="expanded"
@@ -158,8 +160,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     </>
   );
 
-  return (<AutoSizer>{tableRenderer}</AutoSizer>);
-
+  return (<AutoSizer style={{ height: 'auto' }}>{tableRenderer}</AutoSizer>);
 };
 
 export default FBPOAMKendoTable;

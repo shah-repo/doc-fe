@@ -1,16 +1,10 @@
-import { Box, makeStyles } from "@material-ui/core";
-import React from "react";
-import { FBInput } from "../..";
-import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
-import FBPOApprovalMatrixDialog from "../form/FBPOApprovalMatrixDialog";
-import FBPOAMKendoTable from "../grid/FBPOAMKendoTable";
-import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
-
-const useStyles = makeStyles({
-  root: {
-    height: "35vh",
-  },
-});
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBInput } from '../..';
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from '../FBPOApprovalMatrix.types';
+import FBPOApprovalMatrixDialog from '../form/FBPOApprovalMatrixDialog';
+import FBPOAMKendoTable from '../grid/FBPOAMKendoTable';
+import { withFBPOApprovalMatrixTable } from './FBPOApprovalMatrixTable.wrap';
 
 const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTableProps> = ({
   disabled,
@@ -19,6 +13,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   groups,
   handleEdit,
   isDocumentReleased,
+  disableFilter = false,
   isDialogOpen,
   closeDialog,
   initialValues,
@@ -26,19 +21,18 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   name,
   signatureStages,
   groupOptions,
-}) => {
-  const classes = useStyles();
-  return (
-    <Box className={classes.root}>
-      <FBPOAMKendoTable {...{
-        approvalLevels: approvalLevels as POApprovalMatrixLevel[],
-        employees,
-        groups,
-        handleEdit,
-      }}/>
-      {
-        !isDocumentReleased && isDialogOpen &&
-        <FBInput>
+}) => (
+  <Box>
+    <FBPOAMKendoTable {...{
+      approvalLevels: approvalLevels as POApprovalMatrixLevel[],
+      employees,
+      groups,
+      handleEdit,
+      disableFilter,
+    }} />
+    {
+      !isDocumentReleased && isDialogOpen
+        && <FBInput>
           <FBPOApprovalMatrixDialog
             {...{
               isDialogOpen,
@@ -52,9 +46,8 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
             }}
           />
         </FBInput>
-      }
-    </Box>
-  );
-};
+    }
+  </Box>
+);
 
 export default withFBPOApprovalMatrixTable(FBPOApprovalMatrixTable);

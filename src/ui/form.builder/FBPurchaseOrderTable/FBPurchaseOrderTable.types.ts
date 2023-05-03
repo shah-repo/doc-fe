@@ -1,4 +1,5 @@
 import { FBCurrency, FBInputProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBPurchaseOrderProps } from "..";
+import { DialogHandler } from "../../hooks/useDialog";
 
 export type FBPurchaseOrderTableProps =
 & Pick<FBInputProps, "name" | "disabled">
@@ -10,11 +11,14 @@ export type FBPurchaseOrderTableProps =
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
   reCalculateValueOnBlur?: () => void;
+  onAlertNotificationCancel?: (e: React.MouseEvent<HTMLElement>) => void;
+  onAlertNotificationConfirm?: () => void;
   classes?: Record<"root" | "table" | "button" | "list" | "sum", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
   loading?: boolean;
   isReceivable?: boolean;
+  dialog?: DialogHandler;
 };
 
 export type FBPurchaseOrderTableDetailsProps =

@@ -68,7 +68,8 @@ export enum STATUS_TYPES_LABEL {
   LAST_SIGNED = "LAST SIGNED",
   SUPERSEDED = "SUPERSEDED",
   ACCEPTED = "ACCEPTED",
-  VOID = "VOID"
+  VOID = "VOID",
+  EDIT = "EDIT",
 }
 
 interface MyFeedsItems {
