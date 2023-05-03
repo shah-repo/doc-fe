@@ -1,4 +1,4 @@
-import { Button, Modal } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
@@ -8,13 +8,12 @@ import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/f
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as SendToEmail } from '../../../../../assets/images/send_to_email.svg';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { Dialog } from '../../../../components/dialogs';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import ExportToEmailModal from './ExportToEmailModal';
-import { styles } from './ExportToEmailModal.styles';
-
 interface Props {
   revisionId: string
   canAccess: boolean
@@ -24,8 +23,12 @@ interface Props {
 const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, renderAsButton }) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
-  const classes = styles();
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [value, setValue] = React.useState('false');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
   const openEmailModel = (e) => {
     e.stopPropagation();
     setEmailModelopen(true);
@@ -53,9 +56,9 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
 
   const exportToEmail = useActionCreator(documentRevisionsActions.exportToEmail);
 
-  const handleClick = (payload) => {
+  const handleClick = () => {
     handleEmailModelClose();
-    async.start(exportToEmail, revisionId, { ...payload }, async);
+    async.start(exportToEmail, revisionId, { includeAuditLogs: value }, async);
   };
 
   const getUpdatedButton = () => {
@@ -94,12 +97,18 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   return (
     <>
       {getUpdatedButton()}
-      <Modal open={emailModelopen} onClose={onClose} className={classes.modal}>
+      <Dialog
+        title="common.send.to.email"
+        open={emailModelopen}
+        confirmLabel="common.confirm"
+        cancelLabel="common.cancel"
+        onClose={onClose}
+        onConfirm={handleClick}
+      >
         <ExportToEmailModal
-          handleEmailModelClose={onClose}
-          action={handleClick}
+          {...{ value, handleChange }}
         />
-      </Modal>
+      </Dialog>
     </>
   );
 };
