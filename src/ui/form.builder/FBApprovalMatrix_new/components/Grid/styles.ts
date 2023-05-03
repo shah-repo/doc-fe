@@ -15,6 +15,12 @@ export default makeStyles((theme) => ({
       paddingTop: '19px !important',
     },
   },
+  inactive: {
+    '&:not(:hover) td': {
+      color: `${Colors.textDisabled} !important`,
+      backgroundColor: `${Colors.gray} !important`,
+    },
+  },
   save: {
     position: 'relative',
   },
@@ -58,6 +64,7 @@ export default makeStyles((theme) => ({
     overflow: 'visible !important',
     position: 'sticky',
     right: 0,
+    padding: '0 !important',
   },
   actions: {
     width: 60,

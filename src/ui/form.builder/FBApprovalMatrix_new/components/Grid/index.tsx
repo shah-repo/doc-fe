@@ -17,7 +17,9 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
+import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 
+// @todo: click and discard
 // @todo: approval roles
 
 // @todo: inactive style
@@ -26,6 +28,10 @@ import { Button } from '../../../../components/forms/fields-next';
 // @todo: optimisations
 // @todo: filterTemplate
 // @todo: fullscreen
+
+function random (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 export const MODE_FIELD = '_mode';
 export enum Mode {
@@ -63,9 +69,10 @@ const Grid: React.FC<GridProps> = (props) => {
   const handleAdd: React.MouseEventHandler = () => {
     // @todo: fix default values.
     const newItem = {
+      id: random(0, 1000),
       docType: {
         name: '',
-        group: '',
+        group: FBDocTypeGroup.OTHER,
         active: true,
         acronym: '',
         category: '',
@@ -129,6 +136,12 @@ const Grid: React.FC<GridProps> = (props) => {
   const handleItemSave: React.MouseEventHandler = () => {
     setData((data) => {
       const newData = data.map((dataItem) => {
+        // @todo: fix new items adding
+        if (typeof dataItem.id === 'number') {
+          dataItem[MODE_FIELD] = Mode.show;
+          return dataItem;
+        }
+
         if (dataItem.id !== prevDataItem?.id) {
           return dataItem;
         }
@@ -139,7 +152,7 @@ const Grid: React.FC<GridProps> = (props) => {
       });
 
       // @todo: Fix BE. Now it doesn't save new items.
-      onSave?.(newData.filter((dataItem) => 'id' in dataItem));
+      onSave?.(newData.filter((dataItem) => typeof dataItem.id === 'string'));
 
       return newData;
     });
@@ -168,9 +181,20 @@ const Grid: React.FC<GridProps> = (props) => {
     const { dataItem } = props;
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+    const isActive = Boolean(dataItem?.docType?.active);
 
     if (!isUpdating) {
-      return row;
+      if (isActive) {
+        return row;
+      }
+
+      return React.cloneElement(
+        row,
+        {
+          ...row.props,
+          className: cx(row.props.className, classes.inactive),
+        },
+      );
     }
 
     const actions = (

@@ -6,7 +6,10 @@ import InputCellTemplate from '../InputCellTemplate';
 import BooleanFilter from '../BooleanFilter';
 import StatusFilter from '../StatusFilter';
 import InputFilter from '../InputFilter';
-import { FBApprovalMatrixTableRoleHead as RoleStageTitles } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
+import {
+  FBApprovalMatrixTableRoleHead as RoleStageTitles,
+  FBDocTypeGroup,
+} from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 import { CellTemplate, ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import {
   FBApprovalMatrixItem,
@@ -20,12 +23,30 @@ export default function createSchema (
   approvalMatrix: FBApprovalMatrixItem[],
   approvalRoles: FBApprovalRole[],
 ): Array<ColumnDefinition<FBApprovalMatrixItem>> {
+  const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
+
+  // @todo: get categories from other source.
   const uniqueCategories = Array.from(new Set(
     approvalMatrix
       .map((item) => item?.docType?.category)
       .filter(Boolean),
   ));
   const uniqueCategoriesOptions = uniqueCategories.map((category) => ({ value: category, text: category }));
+
+  const InternalTypeFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      data={internalTypeOptions}
+      defaultItem={{ value: '', text: translate('common.all') }}
+    />
+  );
+
+  const InternalTypeCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <DropdownCellTemplate
+      {...props}
+      data={internalTypeOptions}
+    />
+  );
 
   const CategoryFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
@@ -66,15 +87,14 @@ export default function createSchema (
       locked: true,
       width: 100,
     },
-
     {
       id: 'internal-type',
       title: 'Internal type',
       field: 'docType.group',
       filterable: true,
       editable: false,
-      filterCell: InputFilter,
-      template: InputCellTemplate,
+      filterCell: InternalTypeFilter,
+      template: InternalTypeCellTemplate,
       locked: true,
       width: 130,
     },

@@ -9,7 +9,7 @@ const DATA_ITEM_KEY = 'value';
 
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   data: any[]
-  defaultItem: any
+  defaultItem?: any
 }
 
 const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) => {
