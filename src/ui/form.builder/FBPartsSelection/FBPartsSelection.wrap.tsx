@@ -1,7 +1,7 @@
 import { find } from 'lodash';
 import { reaction } from 'mobx';
 import React, { useEffect } from 'react';
-import { FB, FBAutocompleteAsyncOption, FBPartsSelectionProps } from '..';
+import { FB, FBAutocompleteAsyncOption, FBPartsSelectionProps, FBWorkspaceModeOptions } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
@@ -27,10 +27,11 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     const { documentType } = workspaceState?.document?.document || {};
     isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
     const isDocumentLHRT = checkIsDocumentLHRT(documentType?.groupOptions);
+    const { PREVIEW, FORMPREVIEW } = FBWorkspaceModeOptions;
 
     const mode = workspaceState?.mode;
     const isPreviewForLHR = Boolean(isDocumentLHR || (workspaceState?.isPreview && isDocumentLHRT));
-    const isPreviewMode = mode === 'preview' || mode === 'formPreview';
+    const isPreviewMode = mode === PREVIEW || mode === FORMPREVIEW;
     disabled = isPreviewMode || isPreviewForLHR;
 
     if (!isOutput) {
