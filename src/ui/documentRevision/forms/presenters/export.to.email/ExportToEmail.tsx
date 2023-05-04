@@ -13,6 +13,7 @@ import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
 import ExportToEmailModal from './ExportToEmailModal';
 interface Props {
   revisionId: string
@@ -23,7 +24,7 @@ interface Props {
 const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, renderAsButton }) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
-  const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const emailDialog = useDialog();
   const [value, setValue] = React.useState('false');
 
   const handleChange = (event) => {
@@ -31,11 +32,11 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   };
   const openEmailModel = (e) => {
     e.stopPropagation();
-    setEmailModelopen(true);
+    emailDialog.open();
   };
 
   const handleEmailModelClose = () => {
-    setEmailModelopen(false);
+    emailDialog.close();
   };
 
   const onClose = () => {
@@ -99,7 +100,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
       {getUpdatedButton()}
       <Dialog
         title="common.send.to.email"
-        open={emailModelopen}
+        open={emailDialog.isOpen}
         confirmLabel="common.confirm"
         cancelLabel="common.cancel"
         onClose={onClose}
