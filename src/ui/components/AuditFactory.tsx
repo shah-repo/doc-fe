@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
-import { Audit } from '../../state/ducks/audit/types';
+import { Audit, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
@@ -238,6 +238,22 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'subParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
+      case 'formInput.lineItems':
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const value: POLineItem = JSON.parse(auditValue);
+          const { partNumberDocId, order, unitPrice } = value;
+
+          const text
+            = `Part Number ${partNumberDocId} - Ordered ${order} - Unit Price ${unitPrice}`;
+
+          returnValue = (
+            <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
+          );
+        } catch (err) {
+          // do nothing
+        }
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
