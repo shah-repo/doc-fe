@@ -30,18 +30,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
-  const openEmailModel = (e) => {
-    e.stopPropagation();
-    emailDialog.open();
-  };
 
-  const handleEmailModelClose = () => {
-    emailDialog.close();
-  };
-
-  const onClose = () => {
-    handleEmailModelClose();
-  };
   const async = useAsync({
     onSuccess: () => {
       toastSuccess(intl.formatMessage({ id: 'common.send.to.email.success' }));
@@ -58,7 +47,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   const exportToEmail = useActionCreator(documentRevisionsActions.exportToEmail);
 
   const handleClick = () => {
-    handleEmailModelClose();
+    emailDialog.close();
     async.start(exportToEmail, revisionId, { includeAuditLogs: value }, async);
   };
 
@@ -66,7 +55,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
     if (isNewLayout) {
       if (!renderAsButton) {
         return (
-          <StyledMenuListItem button alignItems="flex-start" onClick={openEmailModel}>
+          <StyledMenuListItem button alignItems="flex-start" onClick={emailDialog.open}>
             <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
             <StyledMenuListItemText
               data-cy="exportToEmail"
@@ -79,7 +68,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
         <StyledButton
           color="primary"
           data-cy="exportToEmail"
-          onClick={openEmailModel}
+          onClick={emailDialog.open}
         >
           <Text translation="common.send.to.email" />
         </StyledButton>
@@ -88,7 +77,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
 
     return (
       <>
-        <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={openEmailModel}>
+        <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={emailDialog.open}>
           <Text translation="common.send.to.email" />
         </Button>
       </>
@@ -103,7 +92,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
         open={emailDialog.isOpen}
         confirmLabel="common.confirm"
         cancelLabel="common.cancel"
-        onClose={onClose}
+        onClose={emailDialog.close}
         onConfirm={handleClick}
       >
         <ExportToEmailModal
