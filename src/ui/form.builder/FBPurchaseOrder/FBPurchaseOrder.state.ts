@@ -12,6 +12,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
   @observable public hasPartNumber = false;
+  @observable public isAllItemsReceived = false;
   @observable value: FBPurchaseOrderValue = {
     tax: "0.00",
     taxRate: TAX_RATE,
@@ -75,6 +76,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   @action public setPartNumber = (partNumber?: string) => {
     set(this, "hasPartNumber", (!isUndefined(partNumber) && !isEmpty(partNumber)));
+  };
+
+  @action public setIsAllItemsReceived = (isAllReceived: boolean): void => {
+    set(this, 'isAllItemsReceived', isAllReceived);
   };
 
   @action public setCurrency = async (currency: FBCurrency) => {

@@ -248,6 +248,45 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
+  public undoPO = (prevDocumentRevision?: DocumentRevision) => {
+
+    this.loadAudit = false;
+    this.loading = true;
+    this.omitAutosave = true;
+
+    const body = {
+      formInput: prevDocumentRevision?.formInput,
+      description: prevDocumentRevision?.description,
+    };
+    const { id } = this;
+
+    appGlobals.omitReloadNotification = true;
+
+    return this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      body,
+      method: 'patch',
+    }, (data?: DocumentRevision, error?) => {
+      this.omitAutosave = false;
+
+      if (error) {
+        this.documentRevApi.onError(error);
+        this.loading = false;
+        return;
+      }
+      this.setDirty(false);
+      this.setFormInputData(data);
+      if (FBStore?.isHistoryTabSelected) {
+        this.loadAudit = true;
+      }
+
+      this.documentRevApi.onSuccess();
+      FBDataStore.setRefreshData(data);
+      this.loading = false;
+    });
+  };
+
   public setFormInputData = (data?: DocumentRevision) => {
     const { formInput = {} } = data ?? {};
     this.formInput = formInput;
