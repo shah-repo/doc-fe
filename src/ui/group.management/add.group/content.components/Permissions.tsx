@@ -1,9 +1,10 @@
 import { Box, Grid, Typography } from "@material-ui/core";
+import { cloneDeep } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
 import { MultiValueRemove, selectStyles, selectTheme } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
@@ -20,7 +21,10 @@ const Permissions: React.FunctionComponent<Props> = ({
   setGroup,
   currentEmployeePermissions,
 }) => {
-  const currentEmployeeTags = useSelector(authSelectors.currentEmployeeTags);
+  const currentEmployeeTags = cloneDeep(useSelector(authSelectors.currentEmployeeTags));
+  if (!currentEmployeeTags.includes(GroupTag.PO_ADMIN)) {
+    currentEmployeeTags.push(GroupTag.PO_ADMIN);
+  }
 
   const permissionsRenderer = () => (
     <Box width={700} mt={5}>

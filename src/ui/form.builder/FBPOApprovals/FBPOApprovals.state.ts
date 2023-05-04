@@ -6,6 +6,7 @@ import { GroupType } from "../../../state/ducks/auth/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
+import { POApprovalMatrixLevel } from "../FBPOApprovalMatrix/FBPOApprovalMatrix.types";
 
 class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
@@ -17,6 +18,9 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
   public updateApi = new FBRequest<FBInlineApprovalBody, FBPOInlineApprovalUpdateBody>(FBEndpoint.ApprovalsUpdate);
+
+  public approvalLevelsAPI = new FBRequest<POApprovalMatrixLevel[], null>();
+  public approvalLevels?: POApprovalMatrixLevel[];
 
   public constructor({ id, approvals }: FBPOApprovalsConstructor) {
     super();
@@ -88,6 +92,9 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
 
+  @action public setApprovalLevels = (approvalLevels?: POApprovalMatrixLevel[]) =>
+    set(this, "approvalLevels", approvalLevels);
+
   @action public setMounted = (mount: boolean) =>
     set(this, "isMounted", mount);
 
@@ -154,6 +161,20 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     }
     this.updateApi.data = data;
     this.updateApi.onSuccess();
+  });
+
+  public fetchApprovalsThreshold = () => this.approvalLevelsAPI.set({
+    url: FBEndpoint.ApprovalLevels,
+    method: "get",
+  }, (data, error) => {
+    if (error) {
+      return this.approvalLevelsAPI.onError(error);
+    }
+    if (data) {
+      this.setApprovalLevels(data);
+    }
+    this.approvalLevelsAPI.data = data;
+    this.approvalLevelsAPI.onSuccess();
   });
 }
 

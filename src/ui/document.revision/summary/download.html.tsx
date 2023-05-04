@@ -1,3 +1,5 @@
+import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -6,7 +8,6 @@ import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/prese
 import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 import { ReactComponent as DownloadHTMLIcon } from "../../../assets/images/download_html.svg";
-import { ReactComponent as ViewPDFIcon } from "../../../assets/images/view_pdf.svg";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
@@ -63,7 +64,9 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
       : (
         <StyledMenuListItem disabled={isActive} button alignItems="flex-start" onClick={handleClick}>
           <StyledMenuListIcon>
-            {isPO ? <ViewPDFIcon /> : <DownloadHTMLIcon/>}
+            {isPO ?
+              <FontAwesomeIcon icon={regular("file-lines")} className={classes.icon}/>
+              : <DownloadHTMLIcon/>}
           </StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="downloadHtml"

@@ -11,14 +11,14 @@ const DEFAULT_POAM: POApprovalMatrix = {
   approvalLevels: [] as POApprovalMatrixLevel[],
 };
 
-class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
+class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
   public static stages = [1, 2, 3];
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;
   @observable public approvalLevels: POApprovalMatrixLevel[] = [];
   public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.officialGroups });
   public employeesApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.employees });
-  public url = FBEndpoint.POApprovalMatrix;
+  public url = FBEndpoint.ApprovalLevels;
   private formState?: FBFormState;
 
   public constructor({ formState, approvalLevels, isOutput, outputRevision }: FBPOApprovalMatrixConstructor) {
@@ -119,7 +119,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
 
   public onSuccess() {
     if (!this.data) { return; }
-    this.setItems(this.data.approvalLevels);
+    this.setItems(this.data);
   }
 
   private updateFBStore = () => {

@@ -24,6 +24,8 @@ interface KendoTableProps {
   handleEdit: (index: number, item: POApprovalMatrixLevel) => void
   groups?: Map<string, Group>
   employees?: Map<string, Employee>
+  disableFilter: boolean
+  isDocumentReleased: boolean
 }
 
 const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
@@ -31,10 +33,12 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
   employees,
   groups,
   handleEdit,
+  disableFilter,
+  isDocumentReleased,
 }) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
-  const classes = useStyles();
+  const classes = useStyles({ disableFilter });
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
     gridConfiguration.columns,
   );
@@ -107,7 +111,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
         {...column}
         title={startCase(getTranslatedText(column.title))}
         minResizableWidth={200}
-        cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.field)}
+        cell={(props) => RenderCustomCell({ ...props }, column.field)}
         filterCell={InputFilter}
         headerCell={
           column.title ? (props) => <ColumnHeader {...props} /> : undefined
@@ -140,15 +144,12 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
         style={{ width: `${width}px` }}
         data={resultState.data}
         total={resultState.total}
-        pageable={false}
-        sortable={true}
-        filterable={true}
-        reorderable={true}
-        groupable={true}
+        filterable
         onDataStateChange={onDataStateChange}
         {...dataState}
         expandField="expanded"
         onColumnReorder={columnReorder}
+        onRowClick={isDocumentReleased ? undefined : onRowClick}
       >
         {columnRenderer(width)}
         <GridNoRecords>{ !resultState.total && <NoDataFound />}</GridNoRecords>
@@ -156,7 +157,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
     </>
   );
 
-  return (<AutoSizer>{tableRenderer}</AutoSizer>);
+  return (<AutoSizer disableHeight>{tableRenderer}</AutoSizer>);
 };
 
 export default FBPOAMKendoTable;

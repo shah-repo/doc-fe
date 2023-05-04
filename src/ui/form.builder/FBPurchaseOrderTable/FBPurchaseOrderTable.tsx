@@ -4,6 +4,7 @@ import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
 import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from '..';
 import { ReactComponent as PlusIcon } from '../../../assets/images/plus_icon_add_btn.svg';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { FBPurchaseOrderTableProps } from './FBPurchaseOrderTable.types';
 import { withFBPurchaseOrderTable } from './FBPurchaseOrderTable.wrap';
 
@@ -16,6 +17,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   handleItem,
   handleLot,
   reCalculateValueOnBlur,
+  onAlertNotificationConfirm,
+  onAlertNotificationCancel,
   classes,
   calculation,
   disabled,
@@ -24,6 +27,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   mode,
   name,
   isReceivable,
+  dialog,
 }) => (
   <>
     <Table className={classes?.root}>
@@ -74,6 +78,14 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         )}
       </TableBody>
     </Table>
+    {dialog && onAlertNotificationConfirm
+    && <AlertDialog
+      confirmAction={onAlertNotificationConfirm}
+      cancelAction={onAlertNotificationCancel}
+      confirmLabel="common.yes.proceed"
+      message="documentRevision.po.notification.alert.remove"
+      {...{ dialog }}
+    />}
   </>
 );
 

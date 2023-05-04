@@ -2,7 +2,6 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable } from '..';
-import FBPurchaseOrderDataTable from '../FBPurchaseOrderTable/FBPurchaseOrderDataTable';
 import { FBButtonStyles } from '../styles/FBButton.styles';
 import { FBPurchaseOrderStyles } from './FBPurchaseOrder.styles';
 import { withFBPurchaseOrder } from './FBPurchaseOrder.wrap';
@@ -19,26 +18,22 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   loading,
   disabled,
   isReceivable,
+  isReleased,
   name,
   isPO,
 }) => {
   const classes = { ...FBButtonStyles(), ...FBPurchaseOrderStyles() };
-  const isNewTable = false;
   return (<FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
     <FBInput {...{ name, disabled }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
-        {isNewTable ? (
-          <FBPurchaseOrderDataTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
-        ) : (
-          <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
-        )}
-        {isReceivable && (
+        <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
+        {isReceivable && !isReleased && (
           <FBButton
             color="primary"
             label="form.builder.receive"
             onClick={handleReceiveAll}
-            disabled={loading}
+            disabled={loading ?? purchaseOrderState?.isAllItemsReceived}
             className={cx(classes.button, classes.receiveAllBtn)}
           />
         )}

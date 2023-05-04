@@ -22,4 +22,5 @@ const FBPurchaseOrderDataTable: React.FC<FBPurchaseOrderTableProps> = ({
   );
 };
 
+// ts-unused-exports:disable-next-line
 export default FBPurchaseOrderDataTable;
