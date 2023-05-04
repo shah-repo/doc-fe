@@ -216,6 +216,7 @@
   "documentRevision.audit.formInput.po-items-built-in.totalAmount.STRING_NEW": "Total amount with tax updated to",
   "documentRevision.audit.formInput.lineItems.ARRAY_NEW": "Line Item Added",
   "documentRevision.audit.formInput.lineItems.ARRAY_DELETED": "Line Item deleted",
+  "documentRevision.audit.formInput.lineItems.MESSAGE": "Part Number {partNumber} - Ordered {order} - Unit Price {unitPrice}",
   "documentRevision.audit.description.STRING_DELETED": "Description Updated",
   "cr.assessment.reasoning.design.not_affect_changes": "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   "cr.assessment.reasoning.design.equivalent_changes": "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",

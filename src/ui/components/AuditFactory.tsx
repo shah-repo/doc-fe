@@ -246,13 +246,35 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const { partNumberDocId, order, unitPrice } = value;
 
           const text
-            = `Part Number ${partNumberDocId} - Ordered ${order} - Unit Price ${unitPrice}`;
+            = intl.formatMessage(
+              { id: 'documentRevision.audit.formInput.lineItems.MESSAGE' },
+              { partNumber: partNumberDocId, order, unitPrice });
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
           );
         } catch (err) {
           // do nothing
+        }
+        break;
+      case 'formInput.po-items-built-in.items.order':
+      case 'formInput.po-items-built-in.items.totalAmount':
+      case 'formInput.po-items-built-in.items.supplierPartNumber':
+      case 'formInput.po-items-built-in.items.glCode':
+      case 'formInput.po-items-built-in.items.unitPrice':
+      case 'formInput.po-items-built-in.items.units':
+      case 'formInput.po-items-built-in.items.received':
+      case 'formInput.po-items-built-in.items.serviceId':
+        try {
+          const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
+          if (value) {
+            returnValue = (<div data-cy={dataCy}>{`${docId} - updated to ${value}`}</div>);
+          } else {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
         }
         break;
       default:
