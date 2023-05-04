@@ -33,6 +33,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
 
   const async = useAsync({
     onSuccess: () => {
+      emailDialog.close();
       toastSuccess(intl.formatMessage({ id: 'common.send.to.email.success' }));
     },
     onError: () => {
@@ -46,8 +47,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
 
   const exportToEmail = useActionCreator(documentRevisionsActions.exportToEmail);
 
-  const handleClick = () => {
-    emailDialog.close();
+  const runExport = () => {
     async.start(exportToEmail, revisionId, { includeAuditLogs: value }, async);
   };
 
@@ -90,10 +90,11 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
       <Dialog
         title="common.send.to.email"
         open={emailDialog.isOpen}
+        loading={async.isLoading}
         confirmLabel="common.confirm"
         cancelLabel="common.cancel"
         onClose={emailDialog.close}
-        onConfirm={handleClick}
+        onConfirm={runExport}
       >
         <ExportToEmailModal
           {...{ value, handleChange }}
