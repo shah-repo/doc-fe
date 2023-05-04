@@ -1,26 +1,28 @@
-import { FormControlLabel, Grid, Switch, Typography } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import { WithStyles, withStyles } from "@material-ui/core/styles";
-import React from "react";
-import HelpCenter from "../../App/Enlil/Features/HelpCenter/HelpCenter";
-import Search from "../../App/Enlil/Features/Search/Search";
-import Text from "../components/Text";
-import styles from "./Header.styles";
-import AutosaveToggle from "./autosave/autosave";
+import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import React from 'react';
+import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
+import Search from '../../App/Enlil/Features/Search/Search';
+import Text from '../components/Text';
+import styles from './Header.styles';
+import AutosaveToggle from './autosave/autosave';
 
 export interface HeaderPresenterProps {
-  name: string;
-  fullHeight?: boolean;
-  toggleCustomLabels: () => void;
-  customLabelsValue: boolean;
-  canToggleCustomLabels: boolean;
+  name: string
+  fullHeight?: boolean
+  isSearchEnabled?: boolean
+  toggleCustomLabels: () => void
+  customLabelsValue: boolean
+  canToggleCustomLabels: boolean
 }
 
 const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
   classes,
   name,
   fullHeight,
+  isSearchEnabled,
   toggleCustomLabels,
   customLabelsValue,
   canToggleCustomLabels,
@@ -34,7 +36,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         wrap="nowrap"
         spacing={2}
       >
-        {!fullHeight && (
+        {!fullHeight && isSearchEnabled && (
           <Grid item xs>
             <Search />
           </Grid>
@@ -43,7 +45,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
           {fullHeight && (
             <Typography variant="caption" className={classes.welcomeText}>
               <Text translation="header.welcome.back" />,
-              {" "}
+              {' '}
               <b className={classes.welcomeTextName}>{name}!</b>
             </Typography>
           )}
