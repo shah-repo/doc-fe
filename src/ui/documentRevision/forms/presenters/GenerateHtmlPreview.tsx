@@ -1,8 +1,13 @@
-import { Button, Dialog, IconButton } from "@material-ui/core";
+import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dialog, IconButton } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -10,7 +15,7 @@ import { Nullable } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import ViewFileContent from "../../../components/common/view.file/components/dialog.content";
 import { styles } from "../../../components/common/view.file/utils/styles";
-import { toastError, toastInfo } from "../../../components/notifications";
+import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -37,9 +42,6 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
 
   const templateAction = useActionCreator(documentRevisionsActions.getRenderTemplatePreview);
   const templateAsync = useAsync({
-    onSuccess: () => {
-      toastInfo(intl.formatMessage({ id: "document.revision.download.html.request" }));
-    },
     onError: () => {
       toastError(intl.formatMessage({ id: "document.revision.download.pdf.error" }));
     },
@@ -109,16 +111,16 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
           handleClose={dialog.close}
         />
       </Dialog>}
-      <Button
-        onClick={handleClick}
-        variant="contained"
-        disabled={htmlRequested}
-        color="secondary"
-      >
-        <Text translation="common.generate.pdf" />
-      </Button>
+      <StyledMenuListItem button alignItems="flex-start" onClick={handleClick}>
+        <StyledMenuListIcon>
+          <FontAwesomeIcon icon={regular("file-lines")} className={classes.icon}/>
+        </StyledMenuListIcon>
+        <StyledMenuListItemText
+          data-cy="downloadHtml"
+          primary={<Text translation="common.view.pdf" />}
+        />
+      </StyledMenuListItem>
     </>
-
   );
 };
 

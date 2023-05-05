@@ -278,6 +278,10 @@ export interface DocumentRevisionDocumentRequest {
   securityList: SecurityListRequest;
 }
 
+export interface ExportToEmailRequest {
+  includeAuditLogs: boolean
+}
+
 export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps {
   name: string;
   docId?: string;

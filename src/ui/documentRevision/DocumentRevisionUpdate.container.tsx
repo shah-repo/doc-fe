@@ -1,8 +1,9 @@
 import { debounce, get, has, isEmpty, map, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DocumentRevisionSummary } from "../../App";
+import { DocumentRevisionSummary, SM } from "../../App";
 import { authSelectors } from "../../state/ducks/auth";
+import { GroupTag } from "../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
@@ -16,12 +17,14 @@ import FBStore from "../form.builder/FBStore/FBStore";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import useGetHasTag from "../hooks/useGetHasTag";
 import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { checkIsDocumentDAM, checkIsDocumentReceivable } from "./helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentPO, checkIsDocumentReceivable } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
+import { isDocumentRevisionHasOutput } from "./helpers/documentRevisionStatus";
 
 interface Props {
   documentId?: string;
@@ -53,6 +56,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
   const saveAction = useActionCreator(documentRevisionsActions.save);
+  const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isPOEditState = useGetHasTag(GroupTag.PO_ADMIN) && isPO && SM.isNewVersion
+        && isDocumentRevisionHasOutput(documentRevision);
   // Disabled because of ENC-7826
   // const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
@@ -74,8 +80,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
-
-  if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) )) {
+  if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState) {
     return (
       <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
     );

@@ -15,6 +15,7 @@ import { OptionType } from "../../../components/forms/fields/Autocomplete/types"
 import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
+import { Translation } from "../../../translations/types";
 import styles from "../../profile/UserProfile.styles";
 import { toEmployeeActiveStatusEditRequestBody } from "../../utils/transform";
 import AcctCodes from "../AddressesAndCodes/AcctCodes";
@@ -25,7 +26,6 @@ import UserGroups from "../groups/UserGroups";
 import HelloSignAccess from "../HelloSignAccess";
 import NavigationManagementContainer from "../navigation.management/NavigationManagement.container";
 import WhiteLabelingManagementContainer from "../whiteLabeling.management/WhiteLabelingManagement.container";
-import { Translation } from "../../../translations/types";
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -226,7 +226,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
           {email}
         </Typography>
       </Box>
-      <Box display="flex" justifyContent="center">
+      {isCurrentUser && <Box display="flex" justifyContent="center">
         <Button
           variant="text"
           color="primary"
@@ -237,6 +237,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
           <Text translation="common.edit" />
         </Button>
       </Box>
+      }
       <Box alignSelf="center" mt={7} width="700px">
         <UserGroups
           canManageUsers={canManageUsers}

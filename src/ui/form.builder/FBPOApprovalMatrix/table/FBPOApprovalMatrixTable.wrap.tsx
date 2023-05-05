@@ -1,20 +1,19 @@
-import { find, map, sortBy } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { FB, FBAutocompleteAsyncOption } from "../..";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import useDialog from "../../../hooks/useDialog";
-import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel, Signature } from "../FBPOApprovalMatrix.types";
-import FBPOApprovalMatrixForm from "../form/FBPOApprovalMatrixForm";
-import FBPOApprovalMatrixFormActions from "../form/FBPOApprovalMatrixForm.actions";
+import { find, map, sortBy } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { FB, FBAutocompleteAsyncOption, FBWorkspaceModeOptions } from '../..';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import useDialog from '../../../hooks/useDialog';
+import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel, Signature } from '../FBPOApprovalMatrix.types';
+import FBPOApprovalMatrixForm from '../form/FBPOApprovalMatrixForm';
+import FBPOApprovalMatrixFormActions from '../form/FBPOApprovalMatrixForm.actions';
 
 export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTableProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     approvalLevels,
     name,
@@ -43,7 +42,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
 
     const signatureStages = [1, 2, 3];
 
-
     const handleEdit = (index, item: POApprovalMatrixLevel) => {
       if (props.disabled && !isDocumentReleased) {
         return;
@@ -53,11 +51,11 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
         find(item.signatures as Signature[], { signatureStage }) || { signatureStage });
       item = {
         ...item,
-        signatures: sortBy(stages, "signatureStage") as Signature[],
+        signatures: sortBy(stages, 'signatureStage') as Signature[],
       };
       dialogState?.config({
         open: true,
-        title: "form.builder.add.item",
+        title: 'form.builder.add.item',
         content: <FBPOApprovalMatrixForm initialValues={item} signatureStages={[1, 2, 3]} />,
         actions: <FBPOApprovalMatrixFormActions />,
       });
@@ -71,8 +69,8 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     };
 
     useObserver(() => {
-      approvalLevels = sortBy(poamState?.approvalLevels, ["limit"]);
-      formState?.setFieldValue(name + ".approvalLevels", approvalLevels);
+      approvalLevels = sortBy(poamState?.approvalLevels, ['limit']);
+      formState?.setFieldValue(name + '.approvalLevels', approvalLevels);
       groups = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.officialGroups);
       employees = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.employees);
     });
@@ -90,6 +88,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       handleEdit,
       signatureStages,
       isDocumentReleased,
+      disableFilter: workspaceState?.mode === FBWorkspaceModeOptions.DESIGN || isDocumentReleased,
     });
   };
 
