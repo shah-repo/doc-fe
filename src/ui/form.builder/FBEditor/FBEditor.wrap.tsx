@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { FB, FBEditorProps, FBEditorState } from "..";
 import { SM } from "../../../App";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
@@ -27,8 +27,8 @@ export const withFBEditor = <T extends FBEditorProps>(
     editorState = editorState || FB.useRef<FBEditorState>(FBEditorState);
     isFormOutput = workspaceState?.mode === "formDesign";
     const documentRevision =
-    workspaceState?.externalState?.documentRevisions?.byId[workspaceState?.document?.id || ""] as DocumentRevision;
-    const docTypeGroup = get(documentRevision?.document.documentType, "group", "OTHER");
+    workspaceState?.externalState?.documentRevisions?.byId[workspaceState?.document?.id ?? ""] as DocumentRevision;
+    const docTypeGroup = get(documentRevision?.document.documentType, "group", DOC_TYPE_GROUP.OTHER);
     const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], "group");
     const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
     const activeTabId = _tabsState?.activeTabId;
