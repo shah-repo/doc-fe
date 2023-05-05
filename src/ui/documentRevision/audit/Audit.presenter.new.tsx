@@ -268,20 +268,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
-          singleFields.push(
-            <Box mb={1} key={`${change.groupId}-${index}`}>
-              <>
-                <Text
-                  dataCy={`change-key-${groupKey}-${key}`}
-                  message={`documentRevision.audit.s3link.${change.type}`}
-                />
-              </>
-              <div className={classes.auditValue}>
-                {/* Set field property to "s3link" so audit factory knows to generate downloadable link for s3links */}
-                <AuditFactory audit={{ ...change, field: 's3link' }} dataCy={`change-value-${groupKey}-${key}`} />
-              </div>
-            </Box>,
-          );
           return;
         }
         attachments.push(change);
