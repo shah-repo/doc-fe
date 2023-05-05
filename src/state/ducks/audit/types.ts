@@ -1,31 +1,32 @@
-import { FBSchemaProps } from "../../../ui/form.builder";
-import { Attachment } from "../attachments/types";
-import { Group, User } from "../auth/types";
-import { ChangeRequest } from "../changeRequest/types";
-import { Approval, Owner } from "../common/types";
-import { DocumentType } from "../documentRevisions/documentType/types";
-import { DocumentRevision, Reference, SmartReference } from "../documentRevisions/types";
+import { FBSchemaProps } from '../../../ui/form.builder';
+import { Attachment } from '../attachments/types';
+import { Group, User } from '../auth/types';
+import { ChangeRequest } from '../changeRequest/types';
+import { Approval, Owner } from '../common/types';
+import { DocumentType } from '../documentRevisions/documentType/types';
+import { DocumentRevision, Reference, SmartReference } from '../documentRevisions/types';
 
 type AuditTypes =
-    "ARRAY_NEW"
-    |"ARRAY_DELETED"
-    | "STRING_NEW"
-    | "STRING_EDITED"
-    | "NUMBER_EDITED"
-    | "NUMBER_NEW"
-    | "OBJECT_DELETED"
-    | "STRING_DELETED"
-    | "NUMBER_DELETED"
-    | "OBJECT_NEW"
-    | "BOOLEAN_NEW"
-    | "BOOLEAN_EDITED";
+    'ARRAY_NEW'
+    |'ARRAY_DELETED'
+    | 'STRING_NEW'
+    | 'STRING_EDITED'
+    | 'NUMBER_EDITED'
+    | 'NUMBER_NEW'
+    | 'OBJECT_DELETED'
+    | 'STRING_DELETED'
+    | 'NUMBER_DELETED'
+    | 'OBJECT_NEW'
+    | 'BOOLEAN_NEW'
+    | 'EMAIL_SENT'
+    | 'BOOLEAN_EDITED';
 export interface Audit {
-  groupKey?: number | undefined;
-  index?: number | undefined;
-  id: string;
-  field: string;
-  type: AuditTypes;
-  approvalStatus?: string;
+  groupKey?: number | undefined
+  index?: number | undefined
+  id: string
+  field: string
+  type: AuditTypes
+  approvalStatus?: string
   nextValue:
   | string
   | User
@@ -36,29 +37,31 @@ export interface Audit {
   | DocumentRevision
   | ChangeRequest
   | DocumentType
-  | Group;
-  previousValue?: Audit["nextValue"];
-  reference?: SmartReference;
-  timestamp: string;
-  groupId: string;
-  owner: Owner;
-  ownerUser?: Owner;
-  ownerThirdParty?: Owner;
-  ownerName?: string;
-  fbSchemaItem?: FBSchemaProps;
-  relatedEntity?: DocumentRevision | Approval;
-  hasPoReceivedQtyFlag?: boolean;
+  | Group
+  previousValue?: Audit['nextValue']
+  reference?: SmartReference
+  timestamp: string
+  documentRevisionId: string
+  groupId: string
+  docId: string
+  owner: Owner
+  ownerUser?: Owner
+  ownerThirdParty?: Owner
+  ownerName?: string
+  fbSchemaItem?: FBSchemaProps
+  relatedEntity?: DocumentRevision | Approval
+  hasPoReceivedQtyFlag?: boolean
 }
 
 export interface AuditActionPayload {
-  id: string;
-  audit: Audit[];
+  id: string
+  audit: Audit[]
 }
 
 export interface AuditGroupType {
-  [key: string]: Audit[];
+  [key: string]: Audit[]
 }
 
 export interface AuditByCRIdState {
-  [key: string]: AuditGroupType;
+  [key: string]: AuditGroupType
 }
