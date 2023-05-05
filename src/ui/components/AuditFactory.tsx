@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
-import { Audit } from '../../state/ducks/audit/types';
+import { Audit, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
@@ -238,6 +238,44 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'subParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
+      case 'formInput.lineItems':
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const value: POLineItem = JSON.parse(auditValue);
+          const { partNumberDocId, order, unitPrice } = value;
+
+          const text
+            = intl.formatMessage(
+              { id: 'documentRevision.audit.formInput.lineItems.MESSAGE' },
+              { partNumber: partNumberDocId, order, unitPrice });
+
+          returnValue = (
+            <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
+          );
+        } catch (err) {
+          // do nothing
+        }
+        break;
+      case 'formInput.po-items-built-in.items.order':
+      case 'formInput.po-items-built-in.items.totalAmount':
+      case 'formInput.po-items-built-in.items.supplierPartNumber':
+      case 'formInput.po-items-built-in.items.glCode':
+      case 'formInput.po-items-built-in.items.unitPrice':
+      case 'formInput.po-items-built-in.items.units':
+      case 'formInput.po-items-built-in.items.received':
+      case 'formInput.po-items-built-in.items.serviceId':
+        try {
+          const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
+          if (value) {
+            returnValue = (<div data-cy={dataCy}>{`${docId} - updated to ${value}`}</div>);
+          } else {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
