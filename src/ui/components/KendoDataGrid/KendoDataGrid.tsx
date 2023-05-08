@@ -127,9 +127,11 @@ function KendoDataGrid<T> ({
   });
 
   const updateDataState = (event: GridDataStateChangeEvent) => {
-    onDataStateChange
-      ? setDataState(onDataStateChange(event))
-      : setDataState(event.dataState);
+    setDataState(
+      onDataStateChange
+        ? onDataStateChange(event)
+        : event.dataState,
+    );
   };
 
   const reorderColumns = (event: GridColumnReorderEvent) => {
