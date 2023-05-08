@@ -15,7 +15,7 @@ export type CellComponent<T = unknown> = ComponentType<CellTemplateProps<T>>;
 
 export type CellTemplate<T = unknown> = (props: CellTemplateProps<T>) => React.ReactNode;
 
-interface GenericColumnDefinition<T> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
+export interface GenericColumnDefinition<T = unknown> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
   id: string
   hidden?: boolean
   fitContent?: boolean
@@ -45,9 +45,7 @@ export interface DataGridProps<T> extends GridProps {
 }
 
 export interface CustomGridCellProps extends GridCellProps {
-  column: GenericColumn
+  column: GenericColumnDefinition
 }
 
 export type WidthCalculator = (width: number, gridWidth: number) => number;
-
-export type GenericColumn = GenericColumnDefinition<unknown>;

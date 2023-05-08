@@ -1,10 +1,10 @@
 import { State, process } from '@progress/kendo-data-query';
-import { Grid, GridCell, GridColumn, GridColumnReorderEvent, GridDataStateChangeEvent, GridNoRecords } from '@progress/kendo-react-grid';
+import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridNoRecords, GridProps } from '@progress/kendo-react-grid';
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
-import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from './KendoDataGrid.types';
+import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
 
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
   column.cell
@@ -22,11 +22,11 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
     )
 );
 
-function isGenericColumns (columns: GenericColumn['children']): columns is GenericColumn[] {
+function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
-const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
+const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
   columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
     return (
       <GridColumn
@@ -134,7 +134,7 @@ function KendoDataGrid<T> ({
     );
   };
 
-  const reorderColumns = (event: GridColumnReorderEvent) => {
+  const reorderColumns: GridProps['onColumnReorder'] = (event) => {
     if (onColumnReorder) {
       return setColumnsSchema(onColumnReorder(event));
     }
@@ -168,7 +168,7 @@ function KendoDataGrid<T> ({
           ref={gridRef}
           {...dataState}
         >
-          {renderColumns(columnsSchema as GenericColumn[], width, calculateColumWidth)}
+          {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth)}
           {fallback && (
             <GridNoRecords>{fallback}</GridNoRecords>
           )}
