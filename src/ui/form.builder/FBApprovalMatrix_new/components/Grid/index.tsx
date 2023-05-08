@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import {
-  GridRowProps,
   GridRowClickEvent,
   GridItemChangeEvent,
   GridDataStateChangeEvent,
 } from '@progress/kendo-react-grid';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { GridProps } from './types';
+import { GridItem, GridProps } from './types';
 import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
-import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
+import { Mode, MODE_FIELD } from './constants';
 
+// @todo: be
+// @todo: data-cy
 // @todo: translations
 // @todo: refactoring
 // @todo: optimisations
@@ -28,14 +29,7 @@ function random (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export const MODE_FIELD = '_mode';
-export enum Mode {
-  show = 'show',
-  add = 'add',
-  edit = 'edit',
-}
-
-const Grid: React.FC<GridProps<FBApprovalMatrixItem>> = (props) => {
+function Grid<T extends GridItem> (props: GridProps<T>): React.ReactElement {
   const {
     data: originData,
     schema,
@@ -45,7 +39,7 @@ const Grid: React.FC<GridProps<FBApprovalMatrixItem>> = (props) => {
   const classes = useStyles();
 
   const [data, setData] = useState(originData);
-  const [prevDataItem, setPrevDataItem] = useState<FBApprovalMatrixItem>();
+  const [prevDataItem, setPrevDataItem] = useState<T>();
 
   const handleDataStateChange = ({ dataState }: GridDataStateChangeEvent): State => {
     // Remove empty filters.
@@ -178,7 +172,7 @@ const Grid: React.FC<GridProps<FBApprovalMatrixItem>> = (props) => {
     setPrevDataItem(undefined);
   };
 
-  const rowRender = (row: React.ReactElement<HTMLTableRowElement>, props: GridRowProps) => {
+  const rowRender: GridProps<T>['rowRender'] = (row, props) => {
     const { dataItem } = props;
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -264,6 +258,9 @@ const Grid: React.FC<GridProps<FBApprovalMatrixItem>> = (props) => {
       )}
     </>
   );
-};
+}
 
 export default withThemeNext(Grid);
+
+export * from './constants';
+export * from './types';
