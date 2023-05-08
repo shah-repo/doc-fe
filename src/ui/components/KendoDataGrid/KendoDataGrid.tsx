@@ -150,10 +150,8 @@ function KendoDataGrid<T> ({
 
   return (
     <AutoSizer
-      {...{
-        disableWidth: !fullWidth,
-        disableHeight: !fullHeight,
-      }}
+      disableWidth={!fullWidth}
+      disableHeight={!fullHeight}
     >
       {({ width, height }) => (
         <StyledKendoGrid
