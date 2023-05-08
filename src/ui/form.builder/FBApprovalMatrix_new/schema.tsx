@@ -1,28 +1,27 @@
 import React from 'react';
-import CheckboxCellTemplate from '../CheckboxCellTemplate';
-import DropdownCellTemplate from '../DropdownCellTemplate';
-import ActiveCellTemplate from '../ActiveCellTemplate';
-import InputCellTemplate from '../InputCellTemplate';
-import BooleanFilter from '../BooleanFilter';
-import StatusFilter from '../StatusFilter';
-import InputFilter from '../InputFilter';
+import CheckboxCellTemplate from './components/CheckboxCellTemplate';
+import DropdownCellTemplate from './components/DropdownCellTemplate';
+import ActiveCellTemplate from './components/ActiveCellTemplate';
+import InputCellTemplate from './components/InputCellTemplate';
+import BooleanFilter from './components/BooleanFilter';
+import StatusFilter from './components/StatusFilter';
+import InputFilter from './components/InputFilter';
 import {
   FBApprovalMatrixTableRoleHead as RoleStageTitles,
   FBDocTypeGroup,
-} from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
-import { CellTemplate, ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+} from '../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
+import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import {
+  FBApprovalMatrixFieldData,
   FBApprovalMatrixItem,
-  FBApprovalRole,
-} from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
+} from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
-import DropdownFilter from '../DropdownFilter';
-import { translate } from '../../../../../common/intl';
+import DropdownFilter from './components/DropdownFilter';
+import { translate } from '../../../common/intl';
 
-export default function createSchema (
-  approvalMatrix: FBApprovalMatrixItem[],
-  approvalRoles: FBApprovalRole[],
-): Array<ColumnDefinition<FBApprovalMatrixItem>> {
+export default function createSchema (data?: FBApprovalMatrixFieldData): Array<ColumnDefinition<FBApprovalMatrixItem>> {
+  const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
+
   const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
 
   // @todo: get categories from other source.

@@ -11,15 +11,12 @@ import { GridProps } from './types';
 import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
-import createSchema from './schema';
 import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
-
-// @todo: approval roles
 
 // @todo: inactive style
 // @todo: translations
@@ -39,14 +36,16 @@ export enum Mode {
   edit = 'edit',
 }
 
-const Grid: React.FC<GridProps> = (props) => {
+const Grid: React.FC<GridProps<FBApprovalMatrixItem>> = (props) => {
   const {
-    data: { approvalMatrix = [], approvalRoles = [] } = {},
+    data: originData,
+    schema,
     disabled, onSave,
+    ...restProps
   } = props;
   const classes = useStyles();
 
-  const [data, setData] = useState(approvalMatrix);
+  const [data, setData] = useState(originData);
   const [prevDataItem, setPrevDataItem] = useState<FBApprovalMatrixItem>();
 
   const handleDataStateChange = ({ dataState }: GridDataStateChangeEvent): State => {
@@ -233,8 +232,6 @@ const Grid: React.FC<GridProps> = (props) => {
     );
   };
 
-  const schema = createSchema(approvalMatrix, approvalRoles);
-
   // @todo: Update rowspan without hack.
   useEffect(() => {
     document.querySelectorAll('.k-grid-header-wrap tr[aria-rowindex="2"] th').forEach((element) => {
@@ -252,9 +249,10 @@ const Grid: React.FC<GridProps> = (props) => {
         onRowClick={!disabled ? handleRowClick : undefined}
         onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
-        filterable={true}
-        fullWidth={true}
-        hasBoxScrollbars={true}
+        filterable
+        fullWidth
+        hasBoxScrollbars
+        {...restProps}
       />
       {!disabled && (
         <Button

@@ -9,7 +9,6 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 ) => {
   const Comp = ({
     handleSave,
-    handleCancel,
     disabled,
     name = '',
     mode = 'none',
@@ -17,7 +16,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     data,
     ...props
   }: T) => {
-    const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
+    const { approvalMatrixFieldState, workspaceState } = FB.useStores();
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled
@@ -42,17 +41,6 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       approvalMatrixFieldState?.setMode('none');
     };
 
-    handleCancel = () => {
-      const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
-      if (formValue?.approvalMatrix) {
-        formState?.setFieldValue(name, {
-          ...formValue,
-          approvalMatrix: formValue?.approvalMatrix.slice(0, -1),
-        });
-      }
-      approvalMatrixFieldState?.setMode('none');
-    };
-
     const { formInput } = workspaceState || {};
     const approvalRoles = get(formInput, FBDAMFields.DAR, []);
     const formInputDAM = get(formInput, FBDAMFields.DAM, []);
@@ -68,7 +56,6 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     return Component({
       ...(props as T),
       handleSave,
-      handleCancel,
       disabled,
       name,
       mode,

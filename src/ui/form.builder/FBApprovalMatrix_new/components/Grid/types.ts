@@ -1,10 +1,6 @@
-import {
-  FBApprovalMatrixFieldData,
-  FBApprovalMatrixItem,
-} from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-export interface GridProps {
-  data?: FBApprovalMatrixFieldData
-  onSave?: (data: FBApprovalMatrixItem[]) => void
+export interface GridProps<T> extends DataGridProps<T> {
+  onSave?: (data: DataGridProps<T>['data']) => void
   disabled?: boolean
 }
