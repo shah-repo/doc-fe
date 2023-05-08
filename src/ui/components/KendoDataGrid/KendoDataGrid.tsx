@@ -80,9 +80,9 @@ function KendoDataGrid<T> ({
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
   const [dataState, setDataState] = useState<State>({
     ...defaultDataState,
-    ...{ filter },
-    ...{ group },
-    ...{ sort },
+    filter,
+    group,
+    sort,
   });
 
   useEffect(() => {
@@ -92,21 +92,21 @@ function KendoDataGrid<T> ({
   useEffect(() => {
     setDataState((prev) => ({
       ...prev,
-      ...{ filter },
+      filter,
     }));
   }, [filter]);
 
   useEffect(() => {
     setDataState((prev) => ({
       ...prev,
-      ...{ group },
+      group,
     }));
   }, [group]);
 
   useEffect(() => {
     setDataState((prev) => ({
       ...prev,
-      ...{ sort },
+      sort,
     }));
   }, [sort]);
 
