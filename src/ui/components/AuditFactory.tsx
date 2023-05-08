@@ -239,6 +239,19 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'subParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
         break;
+      case 'subPartObsolete':
+        try {
+          const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
+          if (value) {
+            returnValue = (<div data-cy={dataCy}>{`${docId} - revisionChangeType updated to ${value}`}</div>);
+          } else {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+        break;
       case 'formInput.lineItems':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
