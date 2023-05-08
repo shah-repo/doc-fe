@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import useStyles from './styles';
+import { translate } from '../../../../../../../common/intl';
 
 const Status: React.FC<{ value: boolean }> = (props) => {
   const { value } = props;
@@ -10,7 +11,7 @@ const Status: React.FC<{ value: boolean }> = (props) => {
   return (
     <div className={classes.status}>
       <div className={cx(classes.circle, { [classes.circleActive]: value })} />
-      {value ? 'Active' : 'Inactive'}
+      {translate(value ? 'common.active' : 'common.inactive')}
     </div>
   );
 };

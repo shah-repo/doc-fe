@@ -16,20 +16,21 @@ import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 import { Mode, MODE_FIELD } from './constants';
+import { translate } from '../../../../../common/intl';
 
 // @todo: be
 // @todo: data-cy
-// @todo: translations
 // @todo: refactoring
 // @todo: optimisations
 // @todo: filterTemplate
 // @todo: fullscreen
+// @todo: borders, center, padding
 
 function random (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function Grid<T extends GridItem> (props: GridProps<T>): React.ReactElement {
+function Grid<T> (props: GridProps<T>): React.ReactElement {
   const {
     data: originData,
     schema,
@@ -38,8 +39,8 @@ function Grid<T extends GridItem> (props: GridProps<T>): React.ReactElement {
   } = props;
   const classes = useStyles();
 
-  const [data, setData] = useState(originData);
-  const [prevDataItem, setPrevDataItem] = useState<T>();
+  const [data, setData] = useState<Array<GridItem<T>>>(originData);
+  const [prevDataItem, setPrevDataItem] = useState<GridItem<T>>();
 
   const handleDataStateChange = ({ dataState }: GridDataStateChangeEvent): State => {
     // Remove empty filters.
@@ -253,7 +254,7 @@ function Grid<T extends GridItem> (props: GridProps<T>): React.ReactElement {
           kind="add"
           onClick={handleAdd}
         >
-          Add item
+          {translate('form.builder.am.add')}
         </Button>
       )}
     </>

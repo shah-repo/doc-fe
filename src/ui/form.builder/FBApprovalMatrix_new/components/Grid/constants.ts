@@ -5,3 +5,6 @@ export enum Mode {
   add = 'add',
   edit = 'edit',
 }
+
+export const TEXT_FIELD = 'text';
+export const DATA_ITEM_KEY = 'value';

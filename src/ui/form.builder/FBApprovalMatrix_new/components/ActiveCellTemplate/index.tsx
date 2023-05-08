@@ -2,11 +2,10 @@ import React from 'react';
 import { get, set } from 'lodash';
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../Grid';
+import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY } from '../Grid';
 import Status from './components/Status';
+import { translate } from '../../../../../common/intl';
 
-const TEXT_FIELD = 'text';
-const DATA_ITEM_KEY = 'value';
 const DEFAULT_VALUE = true;
 
 export default function ActiveCellTemplate<T> (props: CellTemplateProps<T>): React.ReactNode {
@@ -42,8 +41,8 @@ export default function ActiveCellTemplate<T> (props: CellTemplateProps<T>): Rea
   return (
     <DropDownList
       data={[
-        { [TEXT_FIELD]: 'Active', value: true },
-        { [TEXT_FIELD]: 'Inactive', value: false },
+        { [TEXT_FIELD]: translate('common.active'), [DATA_ITEM_KEY]: true },
+        { [TEXT_FIELD]: translate('common.inactive'), [DATA_ITEM_KEY]: false },
       ]}
       textField={TEXT_FIELD}
       dataItemKey={DATA_ITEM_KEY}

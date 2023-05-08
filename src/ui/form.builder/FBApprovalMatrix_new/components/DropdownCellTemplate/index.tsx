@@ -1,11 +1,8 @@
 import React from 'react';
 import { get, set } from 'lodash';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../Grid';
+import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY } from '../Grid';
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
-
-const TEXT_FIELD = 'text';
-const DATA_ITEM_KEY = 'value';
 
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   data: any[]
@@ -20,7 +17,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
   const path = field ?? '';
   const value = get(dataItem, path);
 
-  const valueItem = data.find((item) => item.value === value);
+  const valueItem = data.find((item) => item[DATA_ITEM_KEY] === value);
 
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 

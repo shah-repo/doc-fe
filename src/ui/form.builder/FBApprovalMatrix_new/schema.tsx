@@ -66,7 +66,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
   const schema: Array<ColumnDefinition<FBApprovalMatrixItem>> = [
     {
       id: 'active',
-      title: 'Status',
+      title: translate('form.builder.am.status'),
       field: 'docType.active',
       filterable: true,
       editable: false,
@@ -77,7 +77,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
     },
     {
       id: 'prefix',
-      title: 'Prefix',
+      title: translate('form.builder.am.prefix'),
       field: 'docType.acronym',
       filterable: true,
       editable: false,
@@ -88,7 +88,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
     },
     {
       id: 'internal-type',
-      title: 'Internal type',
+      title: translate('form.builder.am.internal-type'),
       field: 'docType.group',
       filterable: true,
       editable: false,
@@ -99,7 +99,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
     },
     {
       id: 'document-type',
-      title: 'Document type',
+      title: translate('form.builder.am.document-type'),
       field: 'docType.name',
       filterable: true,
       editable: false,
@@ -110,7 +110,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
     },
     {
       id: 'training',
-      title: 'Training',
+      title: translate('form.builder.am.training'),
       field: 'docType.defaultTraining',
       filterable: true,
       editable: true,
@@ -120,7 +120,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
     },
     {
       id: 'signature',
-      title: 'Signature',
+      title: translate('form.builder.am.signature'),
       field: 'docType.needsSignature',
       filterable: true,
       editable: true,
@@ -130,7 +130,7 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
     },
     {
       id: 'category',
-      title: 'Category',
+      title: translate('form.builder.am.category'),
       field: 'docType.category',
       filterable: true,
       editable: false,
