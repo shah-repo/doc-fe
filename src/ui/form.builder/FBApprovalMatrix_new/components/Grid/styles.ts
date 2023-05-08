@@ -16,9 +16,12 @@ export default makeStyles((theme) => ({
     },
   },
   inactive: {
-    '&:not(:hover) td': {
+    '& td': {
       color: `${Colors.textDisabled} !important`,
       backgroundColor: `${Colors.gray} !important`,
+    },
+    '&:hover td': {
+      backgroundColor: `${Colors.darkGray} !important`,
     },
   },
   save: {

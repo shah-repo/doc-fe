@@ -18,7 +18,6 @@ import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 
-// @todo: inactive style
 // @todo: translations
 // @todo: refactoring
 // @todo: optimisations
