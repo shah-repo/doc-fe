@@ -20,11 +20,14 @@ import { translate } from '../../../../../common/intl';
 
 // @todo: be
 // @todo: data-cy
+// @todo: fullscreen
+// @todo: rebase
+
 // @todo: refactoring
 // @todo: optimisations
+
 // @todo: filterTemplate
-// @todo: fullscreen
-// @todo: borders, center, padding
+// @todo: correct row borders style
 
 function random (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);

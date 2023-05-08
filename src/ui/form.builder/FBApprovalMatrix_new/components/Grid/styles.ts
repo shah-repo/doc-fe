@@ -1,18 +1,21 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 
+const CELL_VERTICAL_PADDING = 10;
+const CELL_HORIZONTAL_PADDING = 15;
+
 export default makeStyles((theme) => ({
   updating: {
     position: 'relative',
     zIndex: 3,
     '& td:first-child': {
       borderLeft: `1px solid ${Colors.primaryLight} !important`,
-      paddingLeft: '19px !important',
+      paddingLeft: `${CELL_HORIZONTAL_PADDING - 1}px !important`,
     },
     '& td': {
       borderTop: `1px solid ${Colors.primaryLight} !important`,
       borderBottom: `1px solid ${Colors.primaryLight} !important`,
-      paddingTop: '19px !important',
+      paddingTop: `${CELL_VERTICAL_PADDING - 1}px !important`,
     },
   },
   inactive: {
@@ -46,7 +49,7 @@ export default makeStyles((theme) => ({
     },
     '& .k-master-row': {
       '& td': {
-        padding: 20,
+        padding: `${CELL_VERTICAL_PADDING}px ${CELL_HORIZONTAL_PADDING}px`,
       },
     },
     '& .k-filtercell': {
@@ -57,6 +60,17 @@ export default makeStyles((theme) => ({
     '& .k-checkbox': {
       borderWidth: 1,
     },
+  },
+  cellARHeader: {
+    '& .k-link': {
+      justifyContent: 'center',
+    },
+  },
+  cellAR: {
+    textAlign: 'center !important' as 'center',
+  },
+  cellBorderLeft: {
+    borderLeft: `1px solid ${Colors.tableStroke} !important`,
   },
   buttonAdd: {
     borderTopLeftRadius: 0,

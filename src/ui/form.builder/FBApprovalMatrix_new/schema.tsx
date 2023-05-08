@@ -18,8 +18,18 @@ import {
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import DropdownFilter from './components/DropdownFilter';
 import { translate } from '../../../common/intl';
+import cx from 'classnames';
 
-export default function createSchema (data?: FBApprovalMatrixFieldData): Array<ColumnDefinition<FBApprovalMatrixItem>> {
+interface Options {
+  data?: FBApprovalMatrixFieldData
+  cellARHeaderClassName: string
+  cellARClassName: string
+  cellBorderLeftClassName: string
+}
+
+export default function createSchema (
+  { data, cellARHeaderClassName, cellARClassName, cellBorderLeftClassName }: Options,
+): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
   const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
@@ -145,7 +155,8 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
       schema.push({
         id: headTitle,
         title: translate(headTitle),
-        children: approvalRoles.map((role) => ({
+        headerClassName: cx(cellARHeaderClassName, cellBorderLeftClassName),
+        children: approvalRoles.map((role, index) => ({
           id: role.name,
           title: role.name,
           field: `approvalRoles.${headKey}.${role.index}`,
@@ -153,6 +164,8 @@ export default function createSchema (data?: FBApprovalMatrixFieldData): Array<C
           editable: true,
           template: CheckboxCellTemplate,
           width: 90,
+          headerClassName: cx(cellARHeaderClassName, { [cellBorderLeftClassName]: !index }),
+          className: cx(cellARClassName, { [cellBorderLeftClassName]: !index }),
         })),
       });
     }
