@@ -6,8 +6,8 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import { enumToOptions, translatedOptions } from "../../transform";
 
 

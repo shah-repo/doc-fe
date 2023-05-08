@@ -6,6 +6,14 @@ import Colors from "./colors";
 import { GRADIENT, TRANSITON_BOUNCE } from "./consts";
 
 const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
+  MuiCssBaseline: {
+    "@global": {
+      body: {
+        backgroundColor: Colors.white,
+        overflow: "hidden",
+      },
+    },
+  },
   MuiIconButton: {
     root: {
       "padding": theme.spacing(.5),

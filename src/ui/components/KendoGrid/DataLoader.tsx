@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from "@material-ui/core";
 import { toODataString } from "@progress/kendo-data-query";
 import axios, { AxiosRequestConfig } from "axios";
 import { cloneDeep } from "lodash";
@@ -9,6 +10,7 @@ import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import Text from "../../components/Text";
 import { getDynamicPayloadItems, updateDataState } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
@@ -126,11 +128,11 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
 
 const LoadingPanel = () => {
   const loadingPanel = (
-    <div className="k-loading-mask">
-      <span className="k-loading-text">Loading</span>
-      <div className="k-loading-image" />
+    <Box className="k-loading-mask" display="flex" alignItems="center" justifyContent="center">
+      <span className="k-loading-text"><Text translation="common.loading" /></span>
+      <CircularProgress size={20} />
       <div className="k-loading-color" />
-    </div>
+    </Box>
   );
 
   const gridContent = document && document.querySelector(".k-grid-content");
