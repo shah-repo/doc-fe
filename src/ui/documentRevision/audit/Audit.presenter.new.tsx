@@ -54,7 +54,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   || change.type.includes('BOOLEAN_EDITED')
   || change.field.includes('items.date')
   || change.field.includes('items.capitalEquipment')
-  || change.field.includes('totalInUSD')));
+  || change.field.includes('totalInUSD'))
+  // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
+  && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
+    || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
+  );
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
@@ -64,10 +68,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         = change.field === 'poStatus' && ownerName === 'Server Automation';
       const changeOwner = find([owner, ownerUser, ownerThirdParty], 'user.name');
       const finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
-
-      if (excludeFewPOAuditRecords(change)) {
-        return null;
-      }
 
       if (!renderChanges(audit[groupId], key)) {
         return null;

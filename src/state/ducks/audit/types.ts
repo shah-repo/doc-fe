@@ -18,7 +18,6 @@ type AuditTypes =
     | 'NUMBER_DELETED'
     | 'OBJECT_NEW'
     | 'BOOLEAN_NEW'
-    | 'EMAIL_SENT'
     | 'BOOLEAN_EDITED';
 export interface Audit {
   groupKey?: number | undefined
@@ -38,12 +37,13 @@ export interface Audit {
   | ChangeRequest
   | DocumentType
   | Group
+  | POLineItem
   previousValue?: Audit['nextValue']
   reference?: SmartReference
   timestamp: string
   documentRevisionId: string
-  groupId: string
   docId: string
+  groupId: string
   owner: Owner
   ownerUser?: Owner
   ownerThirdParty?: Owner
@@ -64,4 +64,18 @@ export interface AuditGroupType {
 
 export interface AuditByCRIdState {
   [key: string]: AuditGroupType
+}
+
+export interface POLineItem {
+  type: string
+  partNumberTitle: string
+  partNumber: string
+  partNumberDocId: string
+  order?: number
+  unitPrice?: number
+  id: string
+  received: number
+  totalAmount: number
+  formattedDate: string
+  index: number
 }
