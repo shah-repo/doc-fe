@@ -15,6 +15,9 @@ const useStyles = makeStyles({
     borderColor: Colors.primaryLight,
     borderStyle: 'dashed',
     borderRadius: 0,
+    '&:hover': {
+      background: Colors.primaryHighlight,
+    },
   },
 });
 

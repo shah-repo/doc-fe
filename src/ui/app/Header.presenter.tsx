@@ -36,11 +36,11 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         wrap="nowrap"
         spacing={2}
       >
-        {!fullHeight && isSearchEnabled && (
-          <Grid item xs>
+        <Grid item xs>
+          {!fullHeight && isSearchEnabled && (
             <Search />
-          </Grid>
-        )}
+          )}
+        </Grid>
         <Grid item>
           {fullHeight && (
             <Typography variant="caption" className={classes.welcomeText}>

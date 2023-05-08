@@ -1,16 +1,15 @@
-import { apiAction } from "../../factories";
-import { documentRevisionsActions } from "../documentRevisions";
-import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
-import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../documentRevisions/types";
-import { RELATED_PARTS_ROOT_URL } from "./constants";
-import { RelatedPartsChoiceRequestBody, RelatedPartsListItem } from "./types";
+import { apiAction } from '../../factories';
+import { documentRevisionsActions } from '../documentRevisions';
+import { DOCUMENT_REVISION_ROOT_URL } from '../documentRevisions/constants';
+import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from '../documentRevisions/types';
+import { RELATED_PARTS_ROOT_URL } from './constants';
+import { RelatedPartsChoiceRequestBody, RelatedPartsListItem } from './types';
 
-
-const createRelatedPart =
-  (parentDocumentId: string, parentDocumentRevisionId: string, body: DocumentRevisionEditRequestBody,
+const createRelatedPart
+  = (parentDocumentId: string, parentDocumentRevisionId: string, body: DocumentRevisionEditRequestBody,
     suffixName, async) => apiAction({
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}/${parentDocumentRevisionId}/child`,
-    method: "post",
+    method: 'post',
     data: body,
     onSuccess: (createdRelatedPart: RelatedPartsListItem) => {
       async.successHandler?.callback({ createdRelatedPart });
@@ -19,28 +18,28 @@ const createRelatedPart =
 
 const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody, async) => apiAction({
   url: `${RELATED_PARTS_ROOT_URL}/parent`,
-  method: "post",
+  method: 'post',
   data: body,
-  onSuccess(data) {
+  onSuccess (data) {
     async.successHandler?.callback(data);
   },
 });
 
-const fetchAllRelatedParts =
-  (parentDocumentId: string, async) => apiAction({
+const fetchAllRelatedParts
+  = (parentDocumentId: string, async) => apiAction({
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}`,
-    method: "get",
-    onSuccess(data) {
+    method: 'get',
+    onSuccess (data) {
       if (async.successHandler?.callback) {
         async.successHandler?.callback(data);
       }
     },
   });
 
-const voidRelatedPart =
-  (documentRevisionId: string, revisionChangeType: RevisionChangeType, async) => apiAction({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/${documentRevisionId}`,
-    method: "patch",
+const voidRelatedPart
+  = (documentRevisionId: string, revisionChangeType: RevisionChangeType, async) => apiAction({
+    url: `${RELATED_PARTS_ROOT_URL}/revisionChangeType/${documentRevisionId}`,
+    method: 'patch',
     data: { revisionChangeType },
     onSuccess: (documentRevision: DocumentRevision) => {
       async.successHandler?.callback(
@@ -52,11 +51,11 @@ const voidRelatedPart =
     },
   });
 
-const getRelatedSubPartDocRev =
-  (documentRevisionId: string, async: { successHandler:
+const getRelatedSubPartDocRev
+  = (documentRevisionId: string, async: { successHandler:
   { callback: (arg0: { documentRevision: DocumentRevision }) => void }; }) => apiAction({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${documentRevisionId}`,
-    method: "get",
+    method: 'get',
     onSuccess: (documentRevision: DocumentRevision, dispatch) => {
       dispatch(documentRevisionsActions.documentRevisionSet(documentRevision));
       async.successHandler?.callback({ documentRevision });
@@ -65,8 +64,8 @@ const getRelatedSubPartDocRev =
 
 const removeRelatedPart = (docRevId: string, async) => apiAction({
   url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
-  method: "delete",
-  onSuccess() {
+  method: 'delete',
+  onSuccess () {
     if (async.successHandler?.callback) {
       async.successHandler?.callback({ docRevId });
     }
@@ -75,9 +74,9 @@ const removeRelatedPart = (docRevId: string, async) => apiAction({
 
 const updateRelatedPart = (docRevId: string, data, async) => apiAction({
   url: `${RELATED_PARTS_ROOT_URL}/${docRevId}`,
-  method: "patch",
+  method: 'patch',
   data,
-  onSuccess( relatedPart: RelatedPartsListItem) {
+  onSuccess (relatedPart: RelatedPartsListItem) {
     if (async.successHandler?.callback) {
       async.successHandler?.callback(
         {
@@ -89,7 +88,6 @@ const updateRelatedPart = (docRevId: string, data, async) => apiAction({
     }
   },
 });
-
 
 export default {
   createRelatedPart,

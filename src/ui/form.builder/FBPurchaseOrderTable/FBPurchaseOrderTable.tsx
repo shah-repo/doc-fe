@@ -1,12 +1,12 @@
-import { TableBody } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import TableRow from "@material-ui/core/TableRow";
-import React from "react";
-import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
-import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
-import AlertDialog from "../../app/alert.dialog/AlertDialog";
-import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
-import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
+import { TableBody } from '@material-ui/core';
+import Table from '@material-ui/core/Table';
+import TableRow from '@material-ui/core/TableRow';
+import React from 'react';
+import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from '..';
+import { ReactComponent as PlusIcon } from '../../../assets/images/plus_icon_add_btn.svg';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { FBPurchaseOrderTableProps } from './FBPurchaseOrderTable.types';
+import { withFBPurchaseOrderTable } from './FBPurchaseOrderTable.wrap';
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
   handleShippingCostChange,
@@ -35,8 +35,14 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         <TableRow>
           <FBTableCell colSpan={8} className={classes?.list}>
             <FBPurchaseOrderTableDetails {...{
-              handleDelete, handleItem, classes, items, mode,
-              loading, calculation, isReceivable,
+              handleDelete,
+              handleItem,
+              classes,
+              items,
+              mode,
+              loading,
+              calculation,
+              isReceivable,
             }} />
           </FBTableCell>
           <FBTableCell colSpan={2} className={classes?.sum}>
@@ -58,7 +64,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             </FBTableCell>
           </TableRow>
         )}
-        {mode === "form" && (
+        {mode === 'form' && (
           <FBPurchaseOrderTableTotal {...{
             handleShippingCostChange,
             handleTaxChange,
@@ -72,8 +78,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         )}
       </TableBody>
     </Table>
-    {dialog && onAlertNotificationConfirm &&
-    <AlertDialog
+    {dialog && onAlertNotificationConfirm
+    && <AlertDialog
       confirmAction={onAlertNotificationConfirm}
       cancelAction={onAlertNotificationCancel}
       confirmLabel="common.yes.proceed"

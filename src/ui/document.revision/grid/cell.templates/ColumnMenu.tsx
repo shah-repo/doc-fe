@@ -92,7 +92,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
       {!columnDef?.disabled && (
         <GridColumnMenuItem
           {...props}
-          iconClass="k-i-preview .k-i-eye k-grid-menu-icon"
+          iconClass="k-i-preview k-i-eye k-grid-menu-icon"
           onClick={() => onChange(props.column.field)}
           title={getTranslatedText(TranslatedText[DisplayText.HIDE_COLUMN])}
         />
