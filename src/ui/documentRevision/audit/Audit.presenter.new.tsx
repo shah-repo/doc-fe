@@ -353,6 +353,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         }
 
+        // For inputs where the selected value is - Other, it shows an additional input field with a label of Note.
+        // However there is no entry for this in the schema, & the incoming audit log still maps it to the original input,
+        if (change.field.includes('input-context') && change.fbSchemaItem) {
+          fbLabel = 'Note';
+        }
+
         singleFields.push(
           <Box
             mb={1}
