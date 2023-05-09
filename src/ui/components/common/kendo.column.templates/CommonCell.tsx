@@ -1,10 +1,9 @@
 import { get } from "lodash";
-import React from "react";
 import { getFormattedDateString, MomentFormats, toValidateIfDate } from "../../../../common/utils/date";
 import { formatNumberToCurrency } from "../../../dashboard.new/line.items/common/Utils";
 import Tooltip from "../kendo/Tooltip";
 import { CustomGridCellProps } from "../kendo/types";
-
+import React from "react";
 
 export const CommonCell = ({
   dataItem,
@@ -25,8 +24,12 @@ export const CommonCell = ({
     formattedValue = "N/A";
   }
   if (field === "precalc.po_amount") {
-    if (/N\/A/g.test(formattedValue)) {
+   const currency = get(dataItem, "precalc.po_currency");
+     if (formattedValue == "NULL") {
       formattedValue = formatNumberToCurrency(0);
+    }
+     else {
+     formattedValue = currency + formattedValue;
     }
     style = { ...style, textAlign: "right" };
   }
