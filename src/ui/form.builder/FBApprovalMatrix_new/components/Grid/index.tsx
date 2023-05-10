@@ -18,7 +18,6 @@ import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixT
 import { Mode, MODE_FIELD } from './constants';
 import { translate } from '../../../../../common/intl';
 
-// @todo: be
 // @todo: types
 // @todo: fullscreen
 
@@ -27,10 +26,6 @@ import { translate } from '../../../../../common/intl';
 
 // @todo: filterTemplate
 // @todo: correct row borders style
-
-function random (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
 
 function Grid<T> (props: GridProps<T>): React.ReactElement {
   const {
@@ -65,7 +60,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     // @todo: fix default values.
     const newItem = {
-      id: random(0, 1000),
       docType: {
         name: '',
         group: FBDocTypeGroup.OTHER,
@@ -134,13 +128,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const handleItemSave: React.MouseEventHandler = () => {
     setData((data) => {
       const newData = data.map((dataItem) => {
-        // @todo: fix new items adding
-        if (typeof dataItem.id === 'number') {
-          dataItem[MODE_FIELD] = Mode.show;
-          return dataItem;
-        }
-
-        if (dataItem.id !== prevDataItem?.id) {
+        if (dataItem.id && dataItem.id !== prevDataItem?.id) {
           return dataItem;
         }
 
@@ -149,8 +137,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         return dataItem;
       });
 
-      // @todo: Fix BE. Now it doesn't save new items.
-      onSave?.(newData.filter((dataItem) => typeof dataItem.id === 'string'));
+      onSave?.(newData);
 
       return newData;
     });
