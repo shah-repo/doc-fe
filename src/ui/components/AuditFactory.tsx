@@ -289,7 +289,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           if (type === 'product') {
             partNumberText = partNumberDocId ?? supplierPartNumber;
           } else if (type === 'service') {
-            partNumberText = serviceId !== '' ? serviceId : `with "${description}"`;
+            partNumberText = serviceId !== ''
+              ? serviceId
+              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
           }
 
           const text
