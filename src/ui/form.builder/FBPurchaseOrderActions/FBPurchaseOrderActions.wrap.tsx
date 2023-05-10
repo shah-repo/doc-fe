@@ -103,6 +103,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
             const prevPODoc = await getPOIndexDbInstance().toArray();
             if (prevPODoc.length) {
               await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+              await getPOIndexDbInstance().clear();
             }
           } catch (e) {}
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
