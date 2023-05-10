@@ -22,12 +22,13 @@ loadMessages({
 const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
   children,
   hasBoxScrollbars,
+  containerRef,
   onRowClick,
   ...props
 }, ref: MutableRefObject<Grid>) => {
   useStyles();
 
-  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const gridContainerRef = containerRef ?? useRef<HTMLDivElement>(null);
   const gridContainer = gridContainerRef.current;
 
   const [gridContent, gridHeader] = useMemo<Array<HTMLDivElement | null>>(

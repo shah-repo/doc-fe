@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
-import React, { MutableRefObject } from 'react';
+import React, { RefObject } from 'react';
 import ReactDOM from 'react-dom';
 import useStyles from './Loader.styles';
 
@@ -26,7 +26,7 @@ const LoaderBox: React.FC<LoaderBoxProps> = ({
 };
 
 interface LoaderProps extends LoaderBoxProps {
-  gridRef?: MutableRefObject<HTMLElement>
+  gridRef?: RefObject<HTMLElement>
 }
 
 const Loader: React.FC<LoaderProps> = ({ gridRef, className, size }) => {
