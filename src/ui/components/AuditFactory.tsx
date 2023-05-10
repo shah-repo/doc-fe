@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -283,12 +283,21 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { partNumberDocId, order, unitPrice } = value;
+          const { partNumberDocId, order, unitPrice, type, serviceId, description, supplierPartNumber } = value;
+
+          let partNumberText = '';
+          if (type === 'product') {
+            partNumberText = partNumberDocId ?? supplierPartNumber;
+          } else if (type === 'service') {
+            partNumberText = serviceId !== ''
+              ? serviceId
+              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+          }
 
           const text
             = intl.formatMessage(
               { id: 'documentRevision.audit.formInput.lineItems.MESSAGE' },
-              { partNumber: partNumberDocId, order, unitPrice });
+              { partNumber: partNumberText, order, unitPrice });
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
