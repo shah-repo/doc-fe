@@ -159,7 +159,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         row,
         {
           ...row.props,
-          'data-cy': dataCy,
+          ['data-cy' as string]: dataCy,
           className: cx(row.props.className, { [classes.inactive]: !isActive }),
         },
       );
@@ -193,7 +193,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       row,
       {
         ...row.props,
-        'data-cy': dataCy,
+        ['data-cy' as string]: dataCy,
         className: cx(row.props.className, classes.updating),
       },
       row.props.children,

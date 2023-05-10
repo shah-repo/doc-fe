@@ -18,7 +18,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
               element,
               {
                 ...element.props,
-                'data-cy': `cell.${column.id}`,
+                ['data-cy' as string]: `cell.${column.id}`,
               },
               column.template({ ...props, column }),
             );
