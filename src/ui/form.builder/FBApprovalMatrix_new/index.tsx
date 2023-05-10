@@ -1,5 +1,5 @@
 import React from 'react';
-import Grid, { Mode, MODE_FIELD } from './components/Grid';
+import Grid, { GridProps, Mode, MODE_FIELD } from './components/Grid';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
@@ -7,6 +7,7 @@ import { FBApprovalMatrixProps } from './types';
 import { FBApprovalMatrixTableRoleHead, FBDocTypeGroup } from '../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 import { useSelector } from 'react-redux';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { FBApprovalMatrixItem, FBApprovalRolesStages } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled } = props;
@@ -23,7 +24,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     cellARHeaderClassName: classes.cellARHeader,
   });
 
-  const defaultNewValue = {
+  const defaultNewValue: GridProps<FBApprovalMatrixItem>['defaultNewValue'] = {
     docType: {
       name: '',
       group: FBDocTypeGroup.OTHER,
@@ -33,12 +34,15 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       needsSignature: false,
       defaultTraining: false,
     },
-    approvalRoles: {},
+    approvalRoles: Object.keys(FBApprovalMatrixTableRoleHead).reduce(
+      (acc, key) => {
+        acc[key] = new Array(approvalRoles.length).fill(false);
+        return acc;
+      },
+      {},
+    ) as FBApprovalRolesStages,
     [MODE_FIELD]: Mode.add,
   };
-  Object.keys(FBApprovalMatrixTableRoleHead).forEach((key) => {
-    defaultNewValue.approvalRoles[key] = new Array(approvalRoles.length).fill(false);
-  });
 
   return (
     <Grid

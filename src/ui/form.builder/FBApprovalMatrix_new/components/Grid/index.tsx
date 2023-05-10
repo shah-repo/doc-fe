@@ -10,7 +10,7 @@ import { GridItem, GridProps } from './types';
 import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
-import { withThemeNext } from '../../../../layout/theme-next';
+import { ThemeNext } from '../../../../layout/theme-next';
 import { Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
@@ -18,7 +18,6 @@ import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from './constants';
 import { translate } from '../../../../../common/intl';
 
-// @todo: types
 // @todo: fullscreen
 
 // @todo: refactoring
@@ -27,7 +26,7 @@ import { translate } from '../../../../../common/intl';
 // @todo: filterTemplate
 // @todo: correct row borders style
 
-function Grid<T> (props: GridProps<T>): React.ReactElement {
+export default function Grid<T> (props: GridProps<T>): React.ReactElement {
   const {
     data: originData,
     schema,
@@ -59,10 +58,10 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const handleAdd: React.MouseEventHandler = () => {
     handleItemDiscard(undefined as any);
 
-    const newItem: GridItem<T> = {
+    const newItem = {
       ...defaultNewValue,
       [MODE_FIELD]: Mode.add,
-    };
+    } as GridItem<T>;
 
     setData((data) => [...data, newItem]);
   };
@@ -214,7 +213,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   }, []);
 
   return (
-    <>
+    <ThemeNext>
       <KendoDataGrid
         className={classes.grid}
         data={data}
@@ -238,11 +237,9 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
           {translate('form.builder.am.add')}
         </Button>
       )}
-    </>
+    </ThemeNext>
   );
 }
-
-export default withThemeNext(Grid);
 
 export * from './constants';
 export * from './types';
