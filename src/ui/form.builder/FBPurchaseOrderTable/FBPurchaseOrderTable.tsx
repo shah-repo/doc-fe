@@ -19,6 +19,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   reCalculateValueOnBlur,
   onAlertNotificationConfirm,
   onAlertNotificationCancel,
+  onAddLineItemClick,
   classes,
   calculation,
   disabled,
@@ -27,6 +28,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   mode,
   name,
   isReceivable,
+  isPOAddAction,
   dialog,
 }) => (
   <>
@@ -54,7 +56,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             <FBTableCell colSpan={10}>
               <FBButton
                 label="form.builder.add.line.item"
-                onClick={() => handleItem && handleItem()}
+                onClick={() => onAddLineItemClick && onAddLineItemClick()}
                 fullWidth
                 showNewButton
                 startIcon={<PlusIcon />}
@@ -83,7 +85,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
       confirmAction={onAlertNotificationConfirm}
       cancelAction={onAlertNotificationCancel}
       confirmLabel="common.yes.proceed"
-      message="documentRevision.po.notification.alert.remove"
+      message={isPOAddAction ? 'documentRevision.po.notification.alert.add'
+        : 'documentRevision.po.notification.alert.remove'}
       {...{ dialog }}
     />}
   </>

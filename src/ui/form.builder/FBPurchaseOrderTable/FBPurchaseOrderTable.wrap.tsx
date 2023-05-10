@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderValue } from '..';
 import { SM } from '../../../App';
+import { getPOIndexDbInstance } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
@@ -20,7 +21,6 @@ import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
-import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import FBPurchaseOrderClasses from './FBPurchaseOrderTable.styles';
 import { FBPurchaseOrderTableProps } from './FBPurchaseOrderTable.types';
@@ -38,6 +38,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     reCalculateValueOnBlur,
     onAlertNotificationConfirm,
     onAlertNotificationCancel,
+    handleItem,
     classes,
     calculation,
     loading,
@@ -52,6 +53,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const formik = useFormikContext();
     const history = useHistory();
     const [selectedItemIndex, setSelectedItemIndex] = useState<number>(0);
+    const [isPOAddAction, setIsPOAddAction] = useState<boolean>(false);
     const createDocAction = useActionCreator(documentRevisionsActions.create);
 
     const outputId = isOutput ? id : undefined;
@@ -83,8 +85,15 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
 
     const async = useAsync<DocumentRevision>({
-      onSuccess: (createdDocumentRevision?) => {
+      onSuccess: async (createdDocumentRevision?) => {
         if (createdDocumentRevision) {
+          dialog?.close();
+          try {
+            const prevPODoc = await getPOIndexDbInstance().toArray();
+            if (prevPODoc.length) {
+              await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+            }
+          } catch (e) {}
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -94,6 +103,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     });
 
     onAlertNotificationConfirm = () => {
+      if (isPOEditState && isPOAddAction && handleItem) {
+        handleItem();
+        setIsPOAddAction(false);
+        dialog?.close();
+        return;
+      }
       const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
       if (values?.formInput) {
         const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME] as FBPurchaseOrderValue;
@@ -127,17 +142,22 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           }
         });
 
-        const promise = async.start(createDocAction, toNewVersionRequestBody(values), async);
-        promise?.then(() => {
-          FBDataStore?.setRefreshData({
-            ...values,
-          });
-        });
+        async.start(createDocAction, toNewVersionRequestBody(values), async);
       }
     };
 
     onAlertNotificationCancel = () => {
+      setIsPOAddAction(false);
       dialog?.close();
+    };
+
+    const onAddLineItemClick = () => {
+      if (isPOEditState) {
+        setIsPOAddAction(true);
+        return dialog?.open();
+      } else {
+        handleItem && handleItem();
+      }
     };
 
     handleDelete = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -178,8 +198,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     const updateWorkspace = (value?: FBPurchaseOrderValue) => {
       Promise.resolve(workspaceState?.saveDocRev(formState?.getValues()))
-        .then(() => Promise.resolve(fetchRequiredGroups()))
-        .then(() => updateApprovals({ poItems: value }));
+        .then(async () => await Promise.resolve(fetchRequiredGroups()))
+        .then(async () => await updateApprovals({ poItems: value }));
     };
 
     useEffect(() => reaction(
@@ -240,6 +260,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       reCalculateValueOnBlur,
       onAlertNotificationConfirm,
       onAlertNotificationCancel,
+      onAddLineItemClick,
       classes,
       calculation,
       loading,
@@ -247,6 +268,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       items,
       name,
       isReceivable,
+      isPOAddAction,
+      handleItem,
       dialog,
     });
   };

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from '..';
 import { SM } from '../../../App';
 import { MomentFormats } from '../../../common/utils/date';
+import { getPOIndexDbInstance } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
@@ -19,7 +20,6 @@ import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { formatCost, getPOLineItemsTotalAndForTaxAmount } from '../FBPurchaseOrderTable/helpers';
-import FBDataStore from '../FBStore/FBDataStore';
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
@@ -71,10 +71,14 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const UpdatedAmount = tax + parseFloat(allItems.shippingCost) + UpdatedLineItemsTotalObj.subTotal;
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (o1.limit + o1.threshold) >= totalAmount);
-        if ((isEdit && topApprovals?.length
-           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold))
-        || !isEdit) {
+        if (isEdit && topApprovals?.length
+           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
+        ) {
           return dialog?.open();
+        }
+        if (!isEdit && onAlertNotificationConfirm) {
+          onAlertNotificationConfirm();
+          return;
         }
       }
       purchaseOrderState.setItem(values);
@@ -92,8 +96,15 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     };
 
     const async = useAsync<DocumentRevision>({
-      onSuccess: (createdDocumentRevision?: DocumentRevision) => {
+      onSuccess: async (createdDocumentRevision?: DocumentRevision) => {
         if (createdDocumentRevision) {
+          dialog?.close();
+          try {
+            const prevPODoc = await getPOIndexDbInstance().toArray();
+            if (prevPODoc.length) {
+              await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+            }
+          } catch (e) {}
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -160,12 +171,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
             values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
           }
         });
-        const promise = async.start(createDocAction, toNewVersionRequestBody(values), async);
-        promise?.then(() => {
-          FBDataStore?.setRefreshData({
-            ...values,
-          });
-        });
+        async.start(createDocAction, toNewVersionRequestBody(values), async);
       }
     };
 

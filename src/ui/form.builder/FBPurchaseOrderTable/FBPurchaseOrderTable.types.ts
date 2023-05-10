@@ -13,11 +13,13 @@ export type FBPurchaseOrderTableProps =
   reCalculateValueOnBlur?: () => void;
   onAlertNotificationCancel?: (e: React.MouseEvent<HTMLElement>) => void;
   onAlertNotificationConfirm?: () => void;
+  onAddLineItemClick?: () => void;
   classes?: Record<"root" | "table" | "button" | "list" | "sum", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
   loading?: boolean;
   isReceivable?: boolean;
+  isPOAddAction?: boolean;
   dialog?: DialogHandler;
 };
 
