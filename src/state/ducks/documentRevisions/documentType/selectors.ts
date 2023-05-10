@@ -108,6 +108,14 @@ const makeGetDocTypeByAcronym = () => createSelector(
   (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
 );
 
+const getDocumentTypeCategoryList = createSelector(
+  allIds, byId,
+  (ids, documentTypes) => (
+    Array.from(new Set(
+      ids.map(id => documentTypes[id].category).filter(Boolean) as string[],
+    ))
+  ),
+);
 
 export default {
   byId,
@@ -125,4 +133,5 @@ export default {
   makeGetDocTypeByAcronym,
   getDocumentTypesByCategory,
   getTabConfiguration,
+  getDocumentTypeCategoryList,
 };

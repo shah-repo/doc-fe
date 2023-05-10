@@ -22,25 +22,19 @@ import cx from 'classnames';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
+  documentTypeCategories?: string[]
   cellARHeaderClassName: string
   cellARClassName: string
   cellBorderLeftClassName: string
 }
 
 export default function createSchema (
-  { data, cellARHeaderClassName, cellARClassName, cellBorderLeftClassName }: Options,
+  { data, documentTypeCategories = [], cellARHeaderClassName, cellARClassName, cellBorderLeftClassName }: Options,
 ): Array<ColumnDefinition<FBApprovalMatrixItem>> {
-  const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
+  const { approvalRoles = [] } = data ?? {};
 
   const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
-
-  // @todo: get categories from other source.
-  const uniqueCategories = Array.from(new Set(
-    approvalMatrix
-      .map((item) => item?.docType?.category)
-      .filter(Boolean),
-  ));
-  const uniqueCategoriesOptions = uniqueCategories.map((category) => ({ value: category, text: category }));
+  const categoryOptions = documentTypeCategories.map((category) => ({ value: category, text: category }));
 
   const InternalTypeFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
@@ -60,7 +54,7 @@ export default function createSchema (
   const CategoryFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
-      data={uniqueCategoriesOptions}
+      data={categoryOptions}
       defaultItem={{ value: '', text: translate('common.all') }}
     />
   );
@@ -68,7 +62,7 @@ export default function createSchema (
   const CategoryCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
     <DropdownCellTemplate
       {...props}
-      data={uniqueCategoriesOptions}
+      data={categoryOptions}
       defaultItem={{ value: '', text: '-' }}
     />
   );

@@ -5,14 +5,19 @@ import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
 import { FBApprovalMatrixProps } from './types';
 import { FBApprovalMatrixTableRoleHead, FBDocTypeGroup } from '../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
+import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
+  const documentTypeCategories = useSelector(documentTypeSelectors.getDocumentTypeCategoryList);
+
   const schema = createSchema({
     data,
+    documentTypeCategories,
     cellBorderLeftClassName: classes.cellBorderLeft,
     cellARClassName: classes.cellAR,
     cellARHeaderClassName: classes.cellARHeader,
