@@ -21,7 +21,6 @@ import { translate } from '../../../../../common/intl';
 // @todo: be
 // @todo: data-cy
 // @todo: fullscreen
-// @todo: rebase
 
 // @todo: refactoring
 // @todo: optimisations

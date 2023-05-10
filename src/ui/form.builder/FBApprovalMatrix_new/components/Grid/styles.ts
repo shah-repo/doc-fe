@@ -41,7 +41,7 @@ export default makeStyles((theme) => ({
       maxHeight: 300,
     },
     '& th': {
-      border: 'none',
+      borderRight: 'none !important',
     },
     '& .k-column-title': {
       fontSize: 12,
