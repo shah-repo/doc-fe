@@ -197,10 +197,10 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       outputId,
     );
 
-    const updateWorkspace = (value?: FBPurchaseOrderValue) => {
-      Promise.resolve(workspaceState?.saveDocRev(formState?.getValues()))
-        .then(async () => await Promise.resolve(fetchRequiredGroups()))
-        .then(async () => await updateApprovals({ poItems: value }));
+    const updateWorkspace = async (value?: FBPurchaseOrderValue) => {
+      await workspaceState?.saveDocRev(formState?.getValues());
+      await Promise.resolve(fetchRequiredGroups());
+      await updateApprovals({ poItems: value });
     };
 
     useEffect(() => reaction(
