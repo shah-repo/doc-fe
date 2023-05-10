@@ -4,7 +4,7 @@ import { Colors } from '../../../layout/theme-next';
 export default makeStyles({
   root: {
     position: 'absolute',
-    inset: '0 0 0 0',
+    inset: 0,
     backgroundColor: Colors.whiteDimmed,
     display: 'flex',
     justifyContent: 'center',
