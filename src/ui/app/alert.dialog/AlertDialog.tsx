@@ -49,10 +49,10 @@ const AlertDialog: React.FunctionComponent<Props> = ({
                   <AlertIcon />
                 </Grid>
                 <Grid item >
-                  <Typography className={classes.alertTitle}>
+                  <Typography data-cy="dialog-header" className={classes.alertTitle}>
                     <Text translation="common.alert" />!
                   </Typography>
-                  <Typography className={classes.contentText}>
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text translation={message} />
                   </Typography>
                 </Grid>

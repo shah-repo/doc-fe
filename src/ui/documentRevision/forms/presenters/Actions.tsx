@@ -215,10 +215,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       prevPODoc[0] as DocumentRevision);
 
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
-    getPOIndexDbInstance().clear();
-    setDocumentRevision(data);
+    await getPOIndexDbInstance().clear();
+    dispatch(documentRevisionsActions.load(documentRevision.id));
   };
-  const onFormClick = () => {
+  const onFormClick = async () => {
     if (redlineActive) {
       formik.setFieldValue("redline", true);
       _formState?.setMode("form");
@@ -235,8 +235,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formik.submitForm();
     if (isPOEditState) {
       history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+      await getPOIndexDbInstance().clear();
       dispatch(documentRevisionsActions.load(documentRevision.id));
-      getPOIndexDbInstance().clear();
     }
   };
 

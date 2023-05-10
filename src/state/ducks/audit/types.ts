@@ -78,4 +78,7 @@ export interface POLineItem {
   totalAmount: number
   formattedDate: string
   index: number
+  serviceId: string
+  description: string
+  supplierPartNumber: string
 }
