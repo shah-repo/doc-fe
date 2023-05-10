@@ -14,7 +14,6 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
-import { FBDocTypeGroup } from '../../../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
 import { Mode, MODE_FIELD } from './constants';
 import { translate } from '../../../../../common/intl';
 
@@ -23,7 +22,7 @@ import { translate } from '../../../../../common/intl';
 
 // @todo: refactoring
 // @todo: optimisations
-
+// @todo: remove unused components
 // @todo: filterTemplate
 // @todo: correct row borders style
 
@@ -32,6 +31,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     data: originData,
     schema,
     disabled, onSave,
+    defaultNewValue,
     ...restProps
   } = props;
   const classes = useStyles();
@@ -58,27 +58,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const handleAdd: React.MouseEventHandler = () => {
     handleItemDiscard(undefined as any);
 
-    // @todo: fix default values.
-    const newItem = {
-      docType: {
-        name: '',
-        group: FBDocTypeGroup.OTHER,
-        active: true,
-        acronym: '',
-        category: '',
-        needsSignature: false,
-        defaultTraining: false,
-      },
-      approvalRoles: {
-        stage1: [false, false, false, false, false, false],
-        stage2: [false, false, false, false, false, false],
-        stage3: [false, false, false, false, false, false],
-        admStage: [false, false, false, false, false, false],
-      },
+    const newItem: GridItem<T> = {
+      ...defaultNewValue,
       [MODE_FIELD]: Mode.add,
     };
 
-    setData((data) => [...data, newItem as any]);
+    setData((data) => [...data, newItem]);
   };
 
   // Scroll down.
