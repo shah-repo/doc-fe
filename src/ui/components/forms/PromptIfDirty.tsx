@@ -1,15 +1,41 @@
-import React, { useEffect } from "react";
-import { Prompt } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { Prompt, useHistory } from 'react-router-dom';
+import { SM } from '../../../App';
+import { getPOIndexDbInstance } from '../../../indexDb';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
+import { checkIsDocumentPO } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionHasOutput } from '../../documentRevision/helpers/documentRevisionStatus';
+import { FB } from '../../form.builder';
+import useActionCreator from '../../hooks/useActionCreator';
+import useDialog from '../../hooks/useDialog';
+import useGetHasTag from '../../hooks/useGetHasTag';
 
 export interface Props {
-  dirty: boolean;
-  doNotPrompt?: boolean;
-  onDirtyFlagChange?: (dirty: boolean) => void;
+  dirty: boolean
+  doNotPrompt?: boolean
+  onDirtyFlagChange?: (dirty: boolean) => void
+  setDoNotPrompt?: (value: boolean) => void
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt, onDirtyFlagChange,
+  dirty, doNotPrompt, onDirtyFlagChange, setDoNotPrompt,
 }) => {
+  const intl = useIntl();
+  const history = useHistory();
+  const dialog = useDialog();
+  const { workspaceState } = FB.useStores();
+  const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
+  const { documentRevision } = React.useContext(FormHeaderContext)!;
+  const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
+
   useEffect(() => {
     const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -35,11 +61,50 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     };
   }, [dirty, doNotPrompt, onDirtyFlagChange]);
 
+  const handleBlockedNavigation = (nextLocation) => {
+    if (isPOEditState) {
+      dialog.open();
+      setLastLocation(nextLocation);
+      return false;
+    }
+    return intl.formatMessage({ id: 'common.navigate.away.prompt' });
+  };
+
+  const handleConfirmNavigationClick = async () => {
+    dialog.close();
+    setDoNotPrompt?.(true);
+    let prevPODoc;
+    try {
+      prevPODoc = await getPOIndexDbInstance().toArray();
+    } catch (e) {}
+
+    if (!prevPODoc.length) {
+      history.push(lastLocation?.pathname);
+      return;
+    }
+    const data = await workspaceState?.undoPO(
+      prevPODoc[0] as DocumentRevision);
+
+    history.push(lastLocation?.pathname);
+    getPOIndexDbInstance().clear();
+    setDocumentRevision(data);
+  };
+
   return (
-    <Prompt
-      when={dirty && !doNotPrompt}
-      message="Are you sure you want to leave? You have unsaved changes."
-    />
+    <>
+      <Prompt
+        when={dirty && !doNotPrompt}
+        message={handleBlockedNavigation}
+      />
+      <AlertDialog
+        confirmAction={handleConfirmNavigationClick}
+        cancelAction={dialog.close}
+        confirmLabel="common.yes.proceed"
+        cancelLabel="common.no.stay"
+        message="common.navigate.away.po.prompt"
+        {...{ dialog }}
+      />
+    </>
   );
 };
 

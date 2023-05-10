@@ -1,8 +1,9 @@
-import { DocumentRevisionFormProps, SMProviderProps } from "../../../../..";
+import { DocumentRevisionFormProps, SMProviderProps } from '../../../../..';
 
 export type DocumentRevisionHeaderProps =
-& Pick<DocumentRevisionFormProps, "bannerPortal" | "shouldShowUpgrade">
-& Pick<SMProviderProps, "_documentRevisionFormState">
+& Pick<DocumentRevisionFormProps, 'bannerPortal' | 'shouldShowUpgrade'>
+& Pick<SMProviderProps, '_documentRevisionFormState'>
 & {
-  documentRevisionId?: string;
+  documentRevisionId?: string
+  setDoNotPrompt?: (value: boolean) => void
 };

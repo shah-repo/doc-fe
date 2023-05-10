@@ -49,6 +49,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   mode: FBWorkspaceMode;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  setDoNotPrompt?: (value: boolean) => void;
   isPreview?: boolean;
 }
 
@@ -72,6 +73,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   redlineActive,
   mode,
   doNotPrompt,
+  setDoNotPrompt,
   onDirtyFlagChange,
   isPreview,
 }) => {
@@ -229,6 +231,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <PromptIfDirty
           dirty={dirty}
           doNotPrompt={doNotPrompt}
+          setDoNotPrompt={setDoNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
         <Grid container spacing={3}>
