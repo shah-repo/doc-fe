@@ -1,7 +1,7 @@
 import { GridProps } from '@progress/kendo-react-grid';
-import { MutableRefObject } from 'react';
+import { RefObject } from 'react';
 
 export interface StyledKendoGridProps extends GridProps {
   hasBoxScrollbars?: boolean
-  containerRef?: MutableRefObject<HTMLDivElement>
+  containerRef?: RefObject<HTMLDivElement>
 }
