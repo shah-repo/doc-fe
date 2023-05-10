@@ -29,7 +29,7 @@ export const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   };
 
   return (
-    <Filter>
+    <Filter {...props}>
       <DropDownList
         data={data}
         textField={TEXT_FIELD}

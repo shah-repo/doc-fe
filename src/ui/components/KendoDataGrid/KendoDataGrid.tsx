@@ -14,7 +14,14 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
         {...props}
         render={(element, props) => {
           if (React.isValidElement(element) && column.template) {
-            return React.cloneElement(element, {}, column.template({ ...props, column }));
+            return React.cloneElement(
+              element,
+              {
+                ...element.props,
+                'data-cy': `cell.${column.id}`,
+              },
+              column.template({ ...props, column }),
+            );
           }
           return element;
         }}

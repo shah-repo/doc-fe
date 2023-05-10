@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, kebabCase } from 'lodash';
 import {
   GridRowClickEvent,
   GridItemChangeEvent,
@@ -19,7 +19,8 @@ import { Mode, MODE_FIELD } from './constants';
 import { translate } from '../../../../../common/intl';
 
 // @todo: be
-// @todo: data-cy
+// @todo: style height
+// @todo: types
 // @todo: fullscreen
 
 // @todo: refactoring
@@ -180,17 +181,15 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
     const isActive = Boolean(dataItem?.docType?.active);
+    const dataCy = `row.${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
 
     if (!isUpdating) {
-      if (isActive) {
-        return row;
-      }
-
       return React.cloneElement(
         row,
         {
           ...row.props,
-          className: cx(row.props.className, classes.inactive),
+          'data-cy': dataCy,
+          className: cx(row.props.className, { [classes.inactive]: !isActive }),
         },
       );
     }
@@ -200,6 +199,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         <div className={classes.line} />
         <div className={classes.actions}>
           <Button
+            data-cy="action.discard"
             className={classes.actionButton}
             variant="outlined"
             onClick={handleItemDiscard}
@@ -207,6 +207,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
             <ClearIcon className={classes.iconButton} />
           </Button>
           <Button
+            data-cy="action.save"
             className={classes.actionButton}
             variant="outlined"
             onClick={handleItemSave}
@@ -221,6 +222,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       row,
       {
         ...row.props,
+        'data-cy': dataCy,
         className: cx(row.props.className, classes.updating),
       },
       row.props.children,
@@ -252,6 +254,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       />
       {!disabled && (
         <Button
+          data-cy="button.add"
           className={classes.buttonAdd}
           kind="add"
           onClick={handleAdd}

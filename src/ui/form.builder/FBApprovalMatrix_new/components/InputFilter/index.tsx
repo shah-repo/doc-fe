@@ -29,7 +29,7 @@ const InputFilter: React.FC<GridFilterCellProps> = (props) => {
   );
 
   return (
-    <Filter>
+    <Filter {...props}>
       <Input
         defaultValue={value}
         onChange={handleChange}

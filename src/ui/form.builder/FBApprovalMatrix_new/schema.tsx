@@ -75,7 +75,7 @@ export default function createSchema (
 
   const schema: Array<ColumnDefinition<FBApprovalMatrixItem>> = [
     {
-      id: 'active',
+      id: 'status',
       title: translate('form.builder.am.status'),
       field: 'docType.active',
       filterable: true,
