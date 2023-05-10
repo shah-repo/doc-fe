@@ -38,7 +38,7 @@ export default makeStyles((theme) => ({
     borderBottomRightRadius: 0,
     borderBottom: 'none',
     '& .k-grid-container': {
-      maxHeight: 300,
+      maxHeight: 300, // @todo
     },
     '& th': {
       borderRight: 'none !important',

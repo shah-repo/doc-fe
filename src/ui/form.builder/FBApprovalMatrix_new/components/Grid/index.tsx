@@ -19,7 +19,6 @@ import { Mode, MODE_FIELD } from './constants';
 import { translate } from '../../../../../common/intl';
 
 // @todo: be
-// @todo: style height
 // @todo: types
 // @todo: fullscreen
 
