@@ -74,6 +74,7 @@ function KendoDataGrid<T> ({
   onDataStateChange,
   calculateColumWidth,
   ref,
+  style,
   ...props
 }: DataGridProps<T>): React.ReactElement | null {
   const gridRef = ref ?? useRef<Grid>();
@@ -159,6 +160,7 @@ function KendoDataGrid<T> ({
           style={{
             width: fullWidth ? `${width}px` : undefined,
             height: fullHeight ? `${height}px` : undefined,
+            ...style,
           }}
           data={resultData}
           onDataStateChange={updateDataState}
