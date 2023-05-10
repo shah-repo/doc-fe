@@ -11,6 +11,7 @@ import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
@@ -169,22 +170,26 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       <td className={classes.actionsTd}>
         <div className={classes.line} />
         <div className={classes.actions}>
-          <Button
-            data-cy="action.discard"
-            className={classes.actionButton}
-            variant="outlined"
-            onClick={handleItemDiscard}
-          >
-            <ClearIcon className={classes.iconButton} />
-          </Button>
-          <Button
-            data-cy="action.save"
-            className={classes.actionButton}
-            variant="outlined"
-            onClick={handleItemSave}
-          >
-            <DoneIcon className={classes.iconButton} />
-          </Button>
+          <Tooltip title={translate('common.discard')}>
+            <Button
+              data-cy="action.discard"
+              className={classes.actionButton}
+              variant="outlined"
+              onClick={handleItemDiscard}
+            >
+              <ClearIcon className={classes.iconButton} />
+            </Button>
+          </Tooltip>
+          <Tooltip title={translate('common.save')}>
+            <Button
+              data-cy="action.save"
+              className={classes.actionButton}
+              variant="outlined"
+              onClick={handleItemSave}
+            >
+              <DoneIcon className={classes.iconButton} />
+            </Button>
+          </Tooltip>
         </div>
       </td>
     );
