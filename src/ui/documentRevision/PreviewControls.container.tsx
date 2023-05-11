@@ -140,7 +140,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
 
   const clonePODocument = () => {
-    console.log("Initial data ::", cloneDeep(documentRevision.formInput));
     try {
       getPOIndexDbInstance().put(cloneDeep({
         description: documentRevision.description,

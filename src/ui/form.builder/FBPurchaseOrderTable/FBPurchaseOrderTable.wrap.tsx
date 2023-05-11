@@ -94,9 +94,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
               await workspaceState?.updateDocRevById(getLatestDocRevData(true) as DocumentRevision, createdDocumentRevision.id);
               await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
             }
-          } catch (e) {
-            await getPOIndexDbInstance().clear();
-          }
+          } catch (e) {}
+          await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -143,7 +142,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         return;
       }
       const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME] as FBPurchaseOrderValue;
-      console.log('All Items ::', allItems);
       const previousItems = cloneDeep(allItems?.items);
       if (deleteLineItem) {
         delete previousItems[selectedItemIndex];
@@ -175,7 +173,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
         }
       });
-      console.log('FB PUrchase order Table wrap:', toNewVersionRequestBody(values));
       return cloneDeep(toNewVersionRequestBody(cloneDeep(values)));
     };
 

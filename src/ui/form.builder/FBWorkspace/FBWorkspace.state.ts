@@ -313,11 +313,10 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
-  public updateDocRevById = (prevDocumentRevision?: DocumentRevision, id?: string) => {
-    // this.loading = true;
+  public updateDocRevById = (documentRevision?: DocumentRevision, id?: string) => {
     const body = {
-      formInput: prevDocumentRevision?.formInput,
-      description: prevDocumentRevision?.description,
+      formInput: documentRevision?.formInput,
+      description: documentRevision?.description,
     };
 
     return this.documentRevApi.set({
@@ -325,8 +324,7 @@ class FBWorkspaceState extends FBSchemaState {
       urlValues: { id },
       body,
       method: 'patch',
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    }, (data?: DocumentRevision, error?) => {});
+    });
   };
 
   @action public addHiddenFieldByRules = (name: string): void => {

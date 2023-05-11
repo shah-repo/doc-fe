@@ -102,10 +102,11 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           try {
             const prevPODoc = await getPOIndexDbInstance().toArray();
             if (prevPODoc.length) {
+              await workspaceState?.updateDocRevById(getLatestDocRevData() as DocumentRevision, createdDocumentRevision.id);
               await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
-              await getPOIndexDbInstance().clear();
             }
           } catch (e) {}
+          await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -113,8 +114,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         }
       },
     });
-
-    onAlertNotificationConfirm = () => {
+    const getLatestDocRevData = () => {
       const newLineItemvalues = formState?.getValues() as FBPurchaseOrderItem;
       const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
       if (values?.formInput) {
@@ -172,10 +172,19 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
             values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
           }
         });
-        console.log('toNewVersionRequestBody(values) FB PUrchase order actions wrap:', toNewVersionRequestBody(values));
-        // create payload with previous data then update same rev with latest data
-        async.start(createDocAction, toNewVersionRequestBody(values), async);
       }
+      return cloneDeep(toNewVersionRequestBody(values));
+    };
+    onAlertNotificationConfirm = async () => {
+      const latestDocRevData = getLatestDocRevData();
+      try {
+        const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];
+        if (latestDocRevData && prevPODoc.length) {
+          latestDocRevData.formInput = prevPODoc[0]?.formInput;
+          latestDocRevData.description = prevPODoc[0]?.description;
+        }
+      } catch (e) {}
+      async.start(createDocAction, latestDocRevData, async);
     };
 
     return Component({
