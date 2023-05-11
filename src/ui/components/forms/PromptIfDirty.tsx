@@ -50,12 +50,9 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   }, [dirty, doNotPrompt, onDirtyFlagChange]);
 
   const handleBlockedNavigation = (nextLocation) => {
-    if (isPOEditState) {
-      dialog.open();
-      setLastLocation(nextLocation);
-      return false;
-    }
-    return translate('common.navigate.away.prompt');
+    dialog.open();
+    setLastLocation(nextLocation);
+    return false;
   };
 
   const handleConfirmNavigationClick = async () => {
@@ -82,7 +79,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     <>
       <Prompt
         when={dirty && !doNotPrompt}
-        message={handleBlockedNavigation}
+        message={isPOEditState ? handleBlockedNavigation : translate('common.navigate.away.prompt') }
       />
       <AlertDialog
         confirmAction={handleConfirmNavigationClick}
