@@ -1,5 +1,6 @@
 import React from 'react';
-import Grid, { GridProps, Mode, MODE_FIELD } from './components/Grid';
+import Grid, { Mode, MODE_FIELD } from './components/Grid';
+import { GridProps } from './components/Grid/types';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';

@@ -151,7 +151,7 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
     const isActive = Boolean(dataItem?.docType?.active);
-    const dataCy = `row.${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
+    const dataCy = `row-${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
 
     if (!isUpdating) {
       return React.cloneElement(
@@ -170,7 +170,7 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
         <div className={classes.actions}>
           <Tooltip title={translate('common.discard')}>
             <Button
-              data-cy="action.discard"
+              data-cy="action-discard"
               className={classes.actionButton}
               variant="outlined"
               onClick={handleItemDiscard}
@@ -180,7 +180,7 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
           </Tooltip>
           <Tooltip title={translate('common.save')}>
             <Button
-              data-cy="action.save"
+              data-cy="action-save"
               className={classes.actionButton}
               variant="outlined"
               onClick={handleItemSave}
@@ -228,7 +228,7 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
       />
       {!disabled && (
         <Button
-          data-cy="button.add"
+          data-cy="button-add"
           className={classes.buttonAdd}
           kind="add"
           onClick={handleAdd}

@@ -70,7 +70,7 @@ export default function createSchema (
   const schema: Array<ColumnDefinition<FBApprovalMatrixItem>> = [
     {
       id: 'status',
-      title: translate('form.builder.am.status'),
+      title: 'form.builder.am.status',
       field: 'docType.active',
       filterable: true,
       editable: false,
@@ -81,7 +81,7 @@ export default function createSchema (
     },
     {
       id: 'prefix',
-      title: translate('form.builder.am.prefix'),
+      title: 'form.builder.am.prefix',
       field: 'docType.acronym',
       filterable: true,
       editable: false,
@@ -92,7 +92,7 @@ export default function createSchema (
     },
     {
       id: 'internal-type',
-      title: translate('form.builder.am.internal-type'),
+      title: 'form.builder.am.internal-type',
       field: 'docType.group',
       filterable: true,
       editable: false,
@@ -103,7 +103,7 @@ export default function createSchema (
     },
     {
       id: 'document-type',
-      title: translate('form.builder.am.document-type'),
+      title: 'form.builder.am.document-type',
       field: 'docType.name',
       filterable: true,
       editable: false,
@@ -114,7 +114,7 @@ export default function createSchema (
     },
     {
       id: 'training',
-      title: translate('form.builder.am.training'),
+      title: 'form.builder.am.training',
       field: 'docType.defaultTraining',
       filterable: true,
       editable: true,
@@ -124,7 +124,7 @@ export default function createSchema (
     },
     {
       id: 'signature',
-      title: translate('form.builder.am.signature'),
+      title: 'form.builder.am.signature',
       field: 'docType.needsSignature',
       filterable: true,
       editable: true,
@@ -134,7 +134,7 @@ export default function createSchema (
     },
     {
       id: 'category',
-      title: translate('form.builder.am.category'),
+      title: 'form.builder.am.category',
       field: 'docType.category',
       filterable: true,
       editable: false,
@@ -148,7 +148,7 @@ export default function createSchema (
     for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoleTitles)) {
       schema.push({
         id: headTitle,
-        title: translate(headTitle),
+        title: headTitle,
         headerClassName: cx(cellARHeaderClassName, cellBorderLeftClassName),
         children: approvalRoles.map((role, index) => ({
           id: role.name,
