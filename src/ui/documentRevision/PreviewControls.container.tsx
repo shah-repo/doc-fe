@@ -1,4 +1,5 @@
 import { Box, Button, Grid } from '@material-ui/core';
+import { cloneDeep } from "lodash";
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -139,11 +140,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
 
   const clonePODocument = () => {
+    console.log("Initial data ::", cloneDeep(documentRevision.formInput));
     try {
-      getPOIndexDbInstance().put({
+      getPOIndexDbInstance().put(cloneDeep({
         description: documentRevision.description,
         formInput: documentRevision.formInput,
-      });
+      }));
     } catch (e) {}
     cloneDocument();
   };

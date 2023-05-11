@@ -172,6 +172,8 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
             values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
           }
         });
+        console.log('toNewVersionRequestBody(values) FB PUrchase order actions wrap:', toNewVersionRequestBody(values));
+        // create payload with previous data then update same rev with latest data
         async.start(createDocAction, toNewVersionRequestBody(values), async);
       }
     };
