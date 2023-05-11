@@ -1,5 +1,5 @@
 import React from 'react';
-import { FBApprovalMatrix, FBApprovalMatrixFieldProps, FBInput, FBProvider } from '..';
+import { FBApprovalMatrix, FBApprovalMatrixFieldProps, FBDAMFields, FBInput, FBProvider } from '..';
 import { withFBApprovalMatrixField } from './FBApprovalMatrixField.wrap';
 
 const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps> = ({
@@ -7,7 +7,7 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps>
   approvalMatrixFieldState,
   disabled,
   autosave,
-  name = 'dam-built-in',
+  name = FBDAMFields.DAM,
   mode,
   workspaceMode,
 }) => (

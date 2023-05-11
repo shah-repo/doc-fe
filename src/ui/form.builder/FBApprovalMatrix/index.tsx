@@ -3,7 +3,7 @@ import Grid, { GridProps, Mode, MODE_FIELD } from './components/Grid';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
-import { FBApprovalMatrixProps, FBApprovalMatrixTableRoleHead, FBDocTypeGroup } from './types';
+import { FBApprovalMatrixProps, FBApprovalMatrixRoles, FBDocTypeGroup } from './types';
 import { useSelector } from 'react-redux';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { FBApprovalMatrixItem, FBApprovalRolesStages } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
@@ -33,7 +33,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       needsSignature: false,
       defaultTraining: false,
     },
-    approvalRoles: Object.keys(FBApprovalMatrixTableRoleHead).reduce(
+    approvalRoles: Object.keys(FBApprovalMatrixRoles).reduce(
       (acc, key) => {
         acc[key] = new Array(approvalRoles.length).fill(false);
         return acc;
