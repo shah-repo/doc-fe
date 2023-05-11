@@ -1,5 +1,5 @@
 import { Box, Button, Grid } from '@material-ui/core';
-import { cloneDeep } from "lodash";
+import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';

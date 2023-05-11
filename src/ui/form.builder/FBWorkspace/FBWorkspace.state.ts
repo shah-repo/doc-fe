@@ -314,15 +314,13 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   public updateDocRevById = (documentRevision?: DocumentRevision, id?: string) => {
-    const body = {
-      formInput: documentRevision?.formInput,
-      description: documentRevision?.description,
-    };
-
     return this.documentRevApi.set({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
-      body,
+      body: {
+        formInput: documentRevision?.formInput,
+        description: documentRevision?.description,
+      },
       method: 'patch',
     });
   };

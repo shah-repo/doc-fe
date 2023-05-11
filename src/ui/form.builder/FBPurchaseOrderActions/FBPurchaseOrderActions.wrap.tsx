@@ -105,7 +105,9 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
               await workspaceState?.updateDocRevById(getLatestDocRevData() as DocumentRevision, createdDocumentRevision.id);
               await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
             }
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
           await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
@@ -183,7 +185,9 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           latestDocRevData.formInput = prevPODoc[0]?.formInput;
           latestDocRevData.description = prevPODoc[0]?.description;
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
       async.start(createDocAction, latestDocRevData, async);
     };
 

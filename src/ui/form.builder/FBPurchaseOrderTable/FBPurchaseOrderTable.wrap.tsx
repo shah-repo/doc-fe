@@ -94,7 +94,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
               await workspaceState?.updateDocRevById(getLatestDocRevData(true) as DocumentRevision, createdDocumentRevision.id);
               await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
             }
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
           await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
