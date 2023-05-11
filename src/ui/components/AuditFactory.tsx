@@ -12,7 +12,7 @@ import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types'
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, Reference } from '../../state/ducks/documentRevisions/types';
+import { DocumentRevision, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
@@ -270,7 +270,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
           if (value) {
-            returnValue = (<div data-cy={dataCy}>{`${docId} - revisionChangeType updated to ${value}`}</div>);
+            const text = value === RevisionChangeType.Obsolete
+              ? intl.formatMessage({ id: 'documentRevision.audit.relatedParts.subPart.obsolete.checked' }, { docId })
+              : intl.formatMessage({ id: 'documentRevision.audit.relatedParts.subPart.obsolete.unchecked' }, { docId });
+            returnValue = (<div data-cy={dataCy}>{text}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
           }
