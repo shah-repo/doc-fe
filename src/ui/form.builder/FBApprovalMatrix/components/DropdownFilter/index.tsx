@@ -4,7 +4,7 @@ import Filter from '../Filter';
 import { DropdownFilterCellProps } from './types';
 import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
 
-export const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
+const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   const {
     data,
     value = '',

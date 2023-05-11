@@ -8,7 +8,7 @@ export type FBApprovalMatrixProps =
   data?: FBApprovalMatrixFieldData
 };
 
-export enum FBApprovalMatrixRoles {
+export enum FBApprovalMatrixRoleTitles {
   stage1 = 'form.builder.approvals.numeric',
   stage2 = 'form.builder.approvals.numeric.alpha',
   stage3 = 'form.builder.approvals.alpha',

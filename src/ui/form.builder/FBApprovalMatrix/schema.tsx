@@ -7,7 +7,7 @@ import BooleanFilter from './components/BooleanFilter';
 import StatusFilter from './components/StatusFilter';
 import InputFilter from './components/InputFilter';
 import {
-  FBApprovalMatrixRoles,
+  FBApprovalMatrixRoleTitles,
   FBDocTypeGroup,
 } from './types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
@@ -145,7 +145,7 @@ export default function createSchema (
   ];
 
   if (approvalRoles) {
-    for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoles)) {
+    for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoleTitles)) {
       schema.push({
         id: headTitle,
         title: translate(headTitle),

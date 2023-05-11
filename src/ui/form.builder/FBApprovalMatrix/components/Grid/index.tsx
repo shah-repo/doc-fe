@@ -241,4 +241,3 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
 }
 
 export * from './constants';
-export * from './types';
