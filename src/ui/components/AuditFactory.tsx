@@ -128,7 +128,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (audit.nextValue as Approval).approver.user.name;
         break;
       case 'approvals.approver':
-        returnValue = (audit.nextValue as Employee).user?.name;
+        returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name} - {(audit.nextValue as Employee).user?.email}</div>);
         break;
       case 'tasks.assigned':
       case 'owner':
