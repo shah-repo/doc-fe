@@ -10,7 +10,7 @@ import { GridItem, GridProps } from './types';
 import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
-import { ThemeNext } from '../../../../layout/theme-next';
+import { withThemeNext } from '../../../../layout/theme-next';
 import { Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
@@ -25,7 +25,7 @@ import { translate } from '../../../../../common/intl';
 // @todo: filterTemplate
 // @todo: correct row borders style
 
-export default function Grid<T> (props: GridProps<T>): React.ReactElement {
+function Grid<T> (props: GridProps<T>): React.ReactElement {
   const {
     data: originData,
     schema,
@@ -212,7 +212,7 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
   }, []);
 
   return (
-    <ThemeNext>
+    <>
       <KendoDataGrid
         className={classes.grid}
         data={data}
@@ -236,8 +236,10 @@ export default function Grid<T> (props: GridProps<T>): React.ReactElement {
           {translate('form.builder.am.add')}
         </Button>
       )}
-    </ThemeNext>
+    </>
   );
 }
+
+export default withThemeNext(Grid);
 
 export * from './constants';

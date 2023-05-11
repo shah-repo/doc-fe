@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
 
+const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
+
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
@@ -44,7 +46,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   };
 
   return (
-    <Grid
+    <GridTable
       data={approvalMatrix}
       schema={schema}
       disabled={disabled}
