@@ -2,11 +2,9 @@ import React, { useEffect } from 'react';
 import { Prompt, useHistory } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { getPOIndexDbInstance } from '../../../indexDb';
-import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { FB } from '../../form.builder';
-import useActionCreator from '../../hooks/useActionCreator';
 import useDialog from '../../hooks/useDialog';
 
 export interface Props {
@@ -15,16 +13,16 @@ export interface Props {
   isPOEditState?: boolean
   onDirtyFlagChange?: (dirty: boolean) => void
   setDoNotPrompt?: (value: boolean) => void
+  setDocumentRevision?: (documentRevision?: DocumentRevision) => void
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt, isPOEditState, onDirtyFlagChange, setDoNotPrompt,
+  dirty, doNotPrompt, isPOEditState, onDirtyFlagChange, setDoNotPrompt, setDocumentRevision,
 }) => {
   const history = useHistory();
   const dialog = useDialog();
   const { workspaceState } = FB.useStores();
   const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
-  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
 
   useEffect(() => {
     const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
@@ -77,7 +75,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
 
     history.push(lastLocation?.pathname);
     getPOIndexDbInstance().clear();
-    setDocumentRevision(data);
+    setDocumentRevision?.(data);
   };
 
   return (

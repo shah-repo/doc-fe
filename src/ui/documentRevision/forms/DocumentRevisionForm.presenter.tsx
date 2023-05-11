@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { authSelectors } from '../../../state/ducks/auth';
 import { GroupTag } from '../../../state/ducks/auth/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
@@ -19,6 +20,7 @@ import AttachmentsField from '../../document.revision/form/attachments';
 import BuildsContainer from '../../document.revision/summary/builds.container';
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from '../../form.builder';
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../hooks/docCustomization/useCustomization';
+import useActionCreator from '../../hooks/useActionCreator';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
@@ -133,6 +135,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDCO = (documentRevision?.document?.documentType?.documentTypeName === 'Document Change Order');
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -236,7 +239,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           setDoNotPrompt={setDoNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
-          isPOEditState={isPOEditState}
+          {...{ isPOEditState, setDocumentRevision }}
         />
         <Grid container spacing={3}>
           {!isDCO && (<>{isVisible && <Grid item xs={6}>
