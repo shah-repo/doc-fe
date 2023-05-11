@@ -1,38 +1,29 @@
 import React, { useEffect } from 'react';
 import { Prompt, useHistory } from 'react-router-dom';
-import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { getPOIndexDbInstance } from '../../../indexDb';
-import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
-import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
-import { checkIsDocumentPO } from '../../documentRevision/helpers/checkDocumentGroup';
-import { isDocumentRevisionHasOutput } from '../../documentRevision/helpers/documentRevisionStatus';
 import { FB } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useDialog from '../../hooks/useDialog';
-import useGetHasTag from '../../hooks/useGetHasTag';
 
 export interface Props {
   dirty: boolean
   doNotPrompt?: boolean
+  isPOEditState?: boolean
   onDirtyFlagChange?: (dirty: boolean) => void
   setDoNotPrompt?: (value: boolean) => void
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt, onDirtyFlagChange, setDoNotPrompt,
+  dirty, doNotPrompt, isPOEditState, onDirtyFlagChange, setDoNotPrompt,
 }) => {
   const history = useHistory();
   const dialog = useDialog();
   const { workspaceState } = FB.useStores();
   const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
-  const { documentRevision } = React.useContext(FormHeaderContext) || {};
-  const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
-  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
   const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
 
   useEffect(() => {
