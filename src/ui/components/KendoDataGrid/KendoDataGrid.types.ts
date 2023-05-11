@@ -6,7 +6,7 @@ export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
   dataItem: T
 }
 
-interface CellTemplateProps<T> extends GridCellProps {
+export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
 }

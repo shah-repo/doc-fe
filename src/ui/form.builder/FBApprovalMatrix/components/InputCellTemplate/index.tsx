@@ -2,13 +2,13 @@ import React from 'react';
 import { get, set, debounce } from 'lodash';
 import { Input, InputProps } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
-import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-export default function InputCellTemplate<T> (props: CellTemplateProps<T>): React.ReactNode {
+const InputCellTemplate: CellTemplate = (props) => {
   const { dataItem, field, dataIndex, column, onChange } = props;
   const { title, editable } = column;
 
-  const mode = dataItem[MODE_FIELD];
+  const mode = get(dataItem, MODE_FIELD);
   const path = field ?? '';
   const value = String(get(dataItem, path) ?? '');
 
@@ -38,4 +38,6 @@ export default function InputCellTemplate<T> (props: CellTemplateProps<T>): Reac
       onChange={handleChange}
     />
   );
-}
+};
+
+export default InputCellTemplate;
