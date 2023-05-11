@@ -16,6 +16,7 @@ import { DocumentRevision, Reference, RevisionChangeType } from '../../state/duc
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
+import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
@@ -60,9 +61,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const poDefinePartNumberText = (data: POLineItem) => {
     const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
     let partNumberText = '';
-    if (type === 'product') {
+    if (type === FBPurchaseOrderItemType.PRODUCT) {
       partNumberText = partNumberDocId ?? supplierPartNumber;
-    } else if (type === 'service') {
+    } else if (type === FBPurchaseOrderItemType.SERVICE) {
       partNumberText = serviceId !== ''
         ? serviceId
         : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
