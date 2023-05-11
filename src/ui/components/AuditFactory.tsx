@@ -57,6 +57,20 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     return <Fragment>N/A</Fragment>;
   }
 
+  const poDefinePartNumberText = (data: POLineItem) => {
+    const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
+    let partNumberText = '';
+    if (type === 'product') {
+      partNumberText = partNumberDocId ?? supplierPartNumber;
+    } else if (type === 'service') {
+      partNumberText = serviceId !== ''
+        ? serviceId
+        : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+    }
+
+    return partNumberText;
+  };
+
   if (isFBField) {
     const fbValue = {
       texteditor () {
@@ -286,16 +300,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { partNumberDocId, order, unitPrice, type, serviceId, description, supplierPartNumber } = value;
-
-          let partNumberText = '';
-          if (type === 'product') {
-            partNumberText = partNumberDocId ?? supplierPartNumber;
-          } else if (type === 'service') {
-            partNumberText = serviceId !== ''
-              ? serviceId
-              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
-          }
+          const { order, unitPrice } = value;
+          const partNumberText = poDefinePartNumberText(value);
 
           const text
             = intl.formatMessage(
@@ -317,10 +323,14 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.po-items-built-in.items.units':
       case 'formInput.po-items-built-in.items.received':
       case 'formInput.po-items-built-in.items.serviceId':
+      case 'formInput.po-items-built-in.items.formattedDate':
+      case 'formInput.po-items-built-in.items.description':
         try {
-          const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
-          if (value) {
-            returnValue = (<div data-cy={dataCy}>{`${docId} - updated to ${value}`}</div>);
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const entry: POLineItem & { value: string } = JSON.parse(auditValue);
+          const partNumberText = poDefinePartNumberText(entry);
+          if (entry.value) {
+            returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
           }
