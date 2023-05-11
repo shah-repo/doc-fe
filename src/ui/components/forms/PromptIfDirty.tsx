@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useIntl } from 'react-intl';
 import { Prompt, useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
+import { translate } from '../../../common/intl';
 import { getPOIndexDbInstance } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -25,7 +25,6 @@ export interface Props {
 const PromptIfDirty: React.FunctionComponent<Props> = ({
   dirty, doNotPrompt, onDirtyFlagChange, setDoNotPrompt,
 }) => {
-  const intl = useIntl();
   const history = useHistory();
   const dialog = useDialog();
   const { workspaceState } = FB.useStores();
@@ -67,7 +66,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       setLastLocation(nextLocation);
       return false;
     }
-    return intl.formatMessage({ id: 'common.navigate.away.prompt' });
+    return translate('common.navigate.away.prompt');
   };
 
   const handleConfirmNavigationClick = async () => {
