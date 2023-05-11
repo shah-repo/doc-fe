@@ -22,7 +22,6 @@ import { translate } from '../../../../../common/intl';
 
 // @todo: refactoring
 // @todo: optimisations
-// @todo: remove unused components
 // @todo: filterTemplate
 // @todo: correct row borders style
 

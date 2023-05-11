@@ -9,7 +9,7 @@ import InputFilter from './components/InputFilter';
 import {
   FBApprovalMatrixTableRoleHead as RoleStageTitles,
   FBDocTypeGroup,
-} from '../FBApprovalMatrixTable/FBApprovalMatrixTable.types';
+} from './types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import {
   FBApprovalMatrixFieldData,
