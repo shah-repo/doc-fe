@@ -1,7 +1,5 @@
 import {
   FBApprovalMatrixFieldState,
-  FBApprovalMatrixState,
-  FBApprovalMatrixTableState,
   FBApprovalsState,
   FBApproversState,
   FBBookmarkState,
@@ -57,7 +55,6 @@ export interface FBProviderProps {
   fieldWrapperState?: FBFieldWrapperState;
   editorState?: FBEditorState;
   fileUploadState?: FBFileUploadState;
-  amState?: FBApprovalMatrixState;
   docRevState?: FBDocumentRevisionsState;
   poamState?: FBPOApprovalMatrixState;
   snackbarState?: FBSnackbarState;
@@ -65,7 +62,6 @@ export interface FBProviderProps {
   poReceiveState?: FBPOReceiveState;
   purchaseOrderState?: FBPurchaseOrderState;
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
-  approvalMatrixTableState?: FBApprovalMatrixTableState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
   approvalsState?: FBApprovalsState;

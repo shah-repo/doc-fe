@@ -1,12 +1,13 @@
 import { State } from '@progress/kendo-data-query';
-import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
+import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridRowClickEvent } from '@progress/kendo-react-grid';
 import React, { ComponentType, ReactElement } from 'react';
+import { StyledKendoGridProps } from '../StyledKendoGrid/StyledKendoGrid.types';
 
 export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
   dataItem: T
 }
 
-interface CellTemplateProps<T> extends GridCellProps {
+export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
 }
@@ -30,13 +31,13 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
   children?: Array<ColumnDefinition<T>> | Array<ReactElement<ColumnDefinition<T>>>
 }
 
-export interface DataGridProps<T> extends GridProps {
+export interface DataGridProps<T> extends StyledKendoGridProps {
   data: T[]
   schema: Array<ColumnDefinition<T>>
+  loading?: boolean
   skipDataProcessing?: boolean
   fullWidth?: boolean
   fullHeight?: boolean
-  hasBoxScrollbars?: boolean
   fallback?: React.ReactNode
   onDataStateChange?: (event: GridDataStateChangeEvent) => State
   onColumnReorder?: (event: GridColumnReorderEvent) => Array<ColumnDefinition<T>>

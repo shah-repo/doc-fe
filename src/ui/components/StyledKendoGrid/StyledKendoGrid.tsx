@@ -22,12 +22,13 @@ loadMessages({
 const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
   children,
   hasBoxScrollbars,
+  containerRef,
   onRowClick,
   ...props
 }, ref: MutableRefObject<Grid>) => {
   useStyles();
 
-  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const gridContainerRef = containerRef ?? useRef<HTMLDivElement>(null);
   const gridContainer = gridContainerRef.current;
 
   const [gridContent, gridHeader] = useMemo<Array<HTMLDivElement | null>>(
@@ -57,10 +58,16 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
     }
   }, [hasBoxScrollbars, gridContent]);
 
-  const renderRow: GridProps['rowRender'] = (row) =>
-    React.cloneElement(row, {
-      className: cx(row.props.className, { 'k-clickable-row': onRowClick }),
-    });
+  const renderRow: GridProps['rowRender'] = (row, rowProps) => {
+    const rowElement = onRowClick
+      ? React.cloneElement(row, {
+        ...row.props,
+        className: cx(row.props.className, 'k-clickable-row'),
+      })
+      : row;
+
+    return props.rowRender?.(rowElement, rowProps) ?? rowElement;
+  };
 
   return (
     <LocalizationProvider language={intl.locale}>
@@ -72,8 +79,8 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
         <Grid
           {...props}
           ref={ref}
+          rowRender={renderRow}
           onRowClick={onRowClick}
-          rowRender={props.rowRender ?? renderRow}
         >
           {children}
         </Grid>

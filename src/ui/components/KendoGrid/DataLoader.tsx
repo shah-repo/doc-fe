@@ -1,20 +1,27 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import { toODataString } from "@progress/kendo-data-query";
-import axios, { AxiosRequestConfig } from "axios";
-import { cloneDeep } from "lodash";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { useDispatch } from "react-redux";
-import apiClient from "../../../state/apiClient";
-import { authActions } from "../../../state/ducks/auth";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
-import { store } from "../../../state/store";
-import Text from "../../components/Text";
-import { getDynamicPayloadItems, updateDataState } from "./DataLoader.util";
-import { DataLoaderProps } from "./interfaces";
+import { toODataString } from '@progress/kendo-data-query';
+import axios, { AxiosRequestConfig } from 'axios';
+import { cloneDeep } from 'lodash';
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import apiClient from '../../../state/apiClient';
+import { authActions } from '../../../state/ducks/auth';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
+import { store } from '../../../state/store';
+import Loader from '../common/kendo/Loader';
+import { getDynamicPayloadItems, updateDataState } from './DataLoader.util';
+import { DataLoaderProps } from './interfaces';
 
-export const DataLoader = ({ dataState, onDataReceived, schema, tableName, queryUrl, defaultPayloadData, documentTypeCategory, tableCriteria }: DataLoaderProps) => {
+export const DataLoader: React.FC<DataLoaderProps> = ({
+  dataState,
+  onDataReceived,
+  schema,
+  tableName,
+  queryUrl,
+  defaultPayloadData,
+  documentTypeCategory,
+  tableCriteria,
+}) => {
   const updatedDataState = updateDataState(cloneDeep(dataState));
   const dispatch = useDispatch();
   let data = {
@@ -25,12 +32,13 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
     sort: updatedDataState.sort,
     schema,
   } as object;
+
   if (documentTypeCategory) {
     data = { ...data, documentTypeCategory };
   }
   data = getDynamicPayloadItems(queryUrl, data);
   const requestConfig: AxiosRequestConfig = {
-    method: "post",
+    method: 'post',
     url: queryUrl,
     data,
     headers: {},
@@ -39,8 +47,8 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
     store.getState().auth.user.employeeId
   }:${store.getState().auth.user.sessionId}`;
 
-  const lastSuccess = React.useRef<string>("");
-  const pending = React.useRef<string>("");
+  const lastSuccess = React.useRef<string>('');
+  const pending = React.useRef<string>('');
   const odString = `${toODataString(updatedDataState)}&$table="${tableName}"`;
 
   React.useEffect(() => {
@@ -60,16 +68,16 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
         {
           ...tableCriteria,
           forceUpdate: false,
-          apiError: "",
+          apiError: '',
         },
-        tableName
-      )
+        tableName,
+      ),
     );
     apiClient
       .request(requestConfig)
       .then(({ data }) => {
         lastSuccess.current = pending.current;
-        pending.current = "";
+        pending.current = '';
         if (odString === lastSuccess.current) {
           onDataReceived.call(
             undefined,
@@ -83,7 +91,7 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
               skip: data.offset,
               take: data.limit,
               group: dataState.group,
-            }
+            },
           );
         } else {
           requestDataIfNeeded();
@@ -92,9 +100,9 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
         if (axios.isCancel(exception)) {
           return;
         }
-        let responseMessage = "";
+        let responseMessage = '';
         lastSuccess.current = pending.current;
-        pending.current = "";
+        pending.current = '';
         const isUnauthorizedRequest = exception.response?.status === 401;
 
         if (isUnauthorizedRequest) {
@@ -107,7 +115,7 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
             data: { message },
           } = exception.response as AsyncActionErrorResponse;
           responseMessage = Array.isArray(message)
-            ? message.join("; ")
+            ? message.join('; ')
             : message;
         }
 
@@ -115,28 +123,13 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
           tableSearchActions.setSearchCriteria(
             {
               ...tableCriteria,
-              apiError: "Error: " + responseMessage || exception.message,
+              apiError: 'Error: ' + (responseMessage ?? exception.message),
             },
-            tableName
-          )
+            tableName,
+          ),
         );
       });
   };
   requestDataIfNeeded();
-  return pending.current ? <LoadingPanel /> : null;
-};
-
-const LoadingPanel = () => {
-  const loadingPanel = (
-    <Box className="k-loading-mask" display="flex" alignItems="center" justifyContent="center">
-      <span className="k-loading-text"><Text translation="common.loading" /></span>
-      <CircularProgress size={20} />
-      <div className="k-loading-color" />
-    </Box>
-  );
-
-  const gridContent = document && document.querySelector(".k-grid-content");
-  return gridContent
-    ? ReactDOM.createPortal(loadingPanel, gridContent)
-    : loadingPanel;
+  return pending.current ? <Loader /> : null;
 };
