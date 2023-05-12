@@ -63,6 +63,10 @@ export default makeStyles((theme) => {
       '& .k-link': {
         justifyContent: 'center',
       },
+      '& .k-column-title': {
+        whiteSpace: 'normal',
+        textAlign: 'center',
+      },
     },
     cellAR: {
       textAlign: 'center !important' as 'center',
