@@ -19,6 +19,7 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import DropdownFilter from './components/DropdownFilter';
 import { translate } from '../../../common/intl';
 import cx from 'classnames';
+import { kebabCase } from 'lodash';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
@@ -147,11 +148,11 @@ export default function createSchema (
   if (approvalRoles) {
     for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoleTitles)) {
       schema.push({
-        id: headTitle,
+        id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
         children: approvalRoles.map((role, index, arr) => ({
-          id: role.name,
+          id: kebabCase(role.name),
           title: role.name,
           field: `approvalRoles.${headKey}.${role.index}`,
           filterable: false,

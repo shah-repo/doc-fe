@@ -6,6 +6,7 @@ import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
 import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
+import { kebabCase } from 'lodash';
 
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
   column.cell
@@ -19,7 +20,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
               element,
               {
                 ...element.props,
-                ['data-cy' as string]: `cell-${column.id}`,
+                ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
               },
               column.template({ ...props, column }),
             );
