@@ -6,7 +6,11 @@ import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
 import { useSelector } from 'react-redux';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
+import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
+import { translate } from '../../../common/intl';
+import { IconButton } from '../../components/forms/fields-next';
+import FullscreenIcon from '@material-ui/icons/FullscreenRounded';
+import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
@@ -45,7 +49,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     [MODE_FIELD]: Mode.add,
   };
 
-  return (
+  const renderTable = () => (
     <GridTable
       data={approvalMatrix}
       schema={schema}
@@ -53,6 +57,36 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       defaultNewValue={defaultNewValue}
       onSave={handleSave}
     />
+  );
+
+  const dialogState = FB.useRef(FBDialogState);
+  const handleFullscreenClick = () => {
+    dialogState.config({
+      title: 'tabId.matrixdetails',
+      content: renderTable(),
+      open: true,
+    });
+  };
+
+  return (
+    <FBProvider dialogState={dialogState}>
+      <FBDialog fullscreen />
+      <StyleTooltip
+        title={translate('form.builder.fullscreen.mode')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          className={classes.buttonFullscreen}
+          kind="ghost"
+          data-cy="button-fullscreen"
+          onClick={handleFullscreenClick}
+        >
+          <FullscreenIcon />
+        </IconButton>
+      </StyleTooltip>
+      {renderTable()}
+    </FBProvider>
   );
 };
 

@@ -75,6 +75,7 @@ export default makeStyles((theme) => {
       borderRight: 'none !important',
     },
     buttonAdd: {
+      width: '100%',
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
     },
@@ -122,6 +123,9 @@ export default makeStyles((theme) => {
       top: 0,
       right: 0,
       zIndex: 3,
+    },
+    buttonFullscreen: {
+      marginLeft: 'auto',
     },
   };
 });

@@ -16,4 +16,5 @@ export type FBDialogProps =
   portalAction?: Element;
   portalTitle?: Element;
   showLeftPanelEditor?: boolean;
+  fullscreen?: boolean
 };
