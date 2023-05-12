@@ -25,11 +25,11 @@ interface Options {
   documentTypeCategories?: string[]
   cellARHeaderClassName: string
   cellARClassName: string
-  cellBorderLeftClassName: string
+  clearRightBorderClassName: string
 }
 
 export default function createSchema (
-  { data, documentTypeCategories = [], cellARHeaderClassName, cellARClassName, cellBorderLeftClassName }: Options,
+  { data, documentTypeCategories = [], cellARHeaderClassName, cellARClassName, clearRightBorderClassName }: Options,
 ): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const { approvalRoles = [] } = data ?? {};
 
@@ -149,8 +149,8 @@ export default function createSchema (
       schema.push({
         id: headTitle,
         title: headTitle,
-        headerClassName: cx(cellARHeaderClassName, cellBorderLeftClassName),
-        children: approvalRoles.map((role, index) => ({
+        headerClassName: cellARHeaderClassName,
+        children: approvalRoles.map((role, index, arr) => ({
           id: role.name,
           title: role.name,
           field: `approvalRoles.${headKey}.${role.index}`,
@@ -158,8 +158,8 @@ export default function createSchema (
           editable: true,
           template: CheckboxCellTemplate,
           width: 90,
-          headerClassName: cx(cellARHeaderClassName, { [cellBorderLeftClassName]: !index }),
-          className: cx(cellARClassName, { [cellBorderLeftClassName]: !index }),
+          headerClassName: cx(cellARHeaderClassName, { [clearRightBorderClassName]: index !== arr.length - 1 }),
+          className: cellARClassName,
         })),
       });
     }

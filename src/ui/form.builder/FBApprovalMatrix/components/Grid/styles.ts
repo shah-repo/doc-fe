@@ -41,9 +41,6 @@ export default makeStyles((theme) => {
       '& .k-grid-container': {
         maxHeight: 300, // @todo
       },
-      '& th': {
-        borderRight: 'none !important',
-      },
       '& .k-column-title': {
         fontSize: 12,
         textTransform: 'uppercase',
@@ -70,8 +67,8 @@ export default makeStyles((theme) => {
     cellAR: {
       textAlign: 'center !important' as 'center',
     },
-    cellBorderLeft: {
-      borderLeft: `1px solid ${Colors.tableStroke} !important`,
+    clearRightBorder: {
+      borderRight: 'none !important',
     },
     buttonAdd: {
       borderTopLeftRadius: 0,
