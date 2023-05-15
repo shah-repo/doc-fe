@@ -1,8 +1,8 @@
-import React from "react";
-import Text from "../../components/Text";
-import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
+import React from 'react';
+import Text from '../../components/Text';
+import { FBPurchaseOrderTableProps } from './FBPurchaseOrderTable.types';
 
-type Props = Pick<FBPurchaseOrderTableProps, "calculation">;
+type Props = Pick<FBPurchaseOrderTableProps, 'calculation'>;
 
 const FBPurchaseOrderExchange: React.FunctionComponent<Props> = ({
   calculation,
@@ -13,7 +13,7 @@ const FBPurchaseOrderExchange: React.FunctionComponent<Props> = ({
         translation="form.builder.date.of.exchange"
         values={{
           fixerLink: (
-            <a href="https://fixer.io" target="_blank" rel="noopener noreferrer">{"fixer.io"}</a>
+            <a href="https://fixer.io" target="_blank" rel="noopener noreferrer">fixer.io</a>
           ),
           dateOfExchangeRate: calculation?.dateOfExchangeRate,
         }}

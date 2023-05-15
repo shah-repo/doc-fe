@@ -1,12 +1,12 @@
-import { Grid } from "@material-ui/core";
-import TableRow from "@material-ui/core/TableRow";
-import React from "react";
-import { FormattedNumber } from "react-intl";
-import { FBData, FBSelect, FBTableCell, FBTextField } from "..";
-import { FormContext } from "../../components/forms/FormContext";
-import { FBTableCellStyles } from "../styles/FBTableCell.styles";
-import FBPurchaseOrderExchange from "./FBPurchaseOrder.exchange";
-import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
+import { Grid } from '@material-ui/core';
+import TableRow from '@material-ui/core/TableRow';
+import React from 'react';
+import { FormattedNumber } from 'react-intl';
+import { FBData, FBSelect, FBTableCell, FBTextField } from '..';
+import { FormContext } from '../../components/forms/FormContext';
+import { FBTableCellStyles } from '../styles/FBTableCell.styles';
+import FBPurchaseOrderExchange from './FBPurchaseOrder.exchange';
+import { FBPurchaseOrderTableTotalProps } from './FBPurchaseOrderTable.types';
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCostChange,
@@ -34,10 +34,10 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
               onChange={handleCurrencyChange}
               options={FBData.currencyOptions}
               gutter={false}
-              SelectDisplayProps={{ style: { padding: "5px 30px 5px 2px" } }}
+              SelectDisplayProps={{ style: { padding: '5px 30px 5px 2px' } }}
               {...{ disabled }}
             />
-          </ FormContext.Provider>
+          </FormContext.Provider>
         </FBTableCell>
       </TableRow>
       <TableRow className={cellStyle.cell}>
@@ -71,11 +71,11 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
                 value={calculation?.taxRate}
                 inputProps={{
                   style: {
-                    padding: "5px",
-                    textAlign: "right",
+                    padding: '5px',
+                    textAlign: 'right',
                   },
-                  step: ".01",
-                  min: "0",
+                  step: '.01',
+                  min: '0',
                   onChange: handleTaxRateChange,
                   onBlur: reCalculateValueOnBlur,
                 }}
@@ -83,7 +83,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
                 {...{ disabled }}
               />
             </Grid>
-            <Grid item xs={1} style={{ paddingLeft: "8px", margin: "auto" }}>
+            <Grid item xs={1} style={{ paddingLeft: '8px', margin: 'auto' }}>
               %
             </Grid>
           </Grid>
@@ -109,11 +109,11 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             value={calculation?.tax}
             inputProps={{
               style: {
-                padding: "5px",
-                textAlign: "right",
+                padding: '5px',
+                textAlign: 'right',
               },
-              step: ".01",
-              min: "0",
+              step: '.01',
+              min: '0',
               onChange: handleTaxChange,
               onBlur: reCalculateValueOnBlur,
             }}
@@ -123,7 +123,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
         </FBTableCell>
       </TableRow>
       <TableRow className={cellStyle.cell}>
-        <FBTableCell label="form.builder.shipping.cost"  align="left"
+        <FBTableCell label="form.builder.shipping.cost" align="left"
           colSpan={2}
           className={`FBTotal-root ${cellStyle.cellHeader}`}
         />
@@ -137,11 +137,11 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             value={calculation?.shippingCost}
             inputProps={{
               style: {
-                padding: "5px",
-                textAlign: "right",
+                padding: '5px',
+                textAlign: 'right',
               },
-              step: ".01",
-              min: "0",
+              step: '.01',
+              min: '0',
               onChange: handleShippingCostChange,
               onBlur: reCalculateValueOnBlur,
             }}
@@ -170,8 +170,8 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
         </FBTableCell>
       </TableRow>
       {
-        calculation?.currency !== "USD" &&
-        <TableRow className={cellStyle.cell}>
+        calculation?.currency !== 'USD'
+        && <TableRow className={cellStyle.cell}>
           <FBTableCell colSpan={5}
             align="right"
             className={`FBTotal-root ${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}

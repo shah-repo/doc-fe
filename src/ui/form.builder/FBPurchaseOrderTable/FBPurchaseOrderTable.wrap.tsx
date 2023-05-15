@@ -64,7 +64,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
-    && SM.isNewVersion;
+      && SM.isNewVersion;
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev, 6));
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
@@ -120,7 +120,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           latestDocRevData.formInput = prevPODoc[0]?.formInput;
           latestDocRevData.description = prevPODoc[0]?.description;
         }
-      } catch (e) {}
+      } catch (e) { }
       async.start(createDocAction, latestDocRevData, async);
     };
 
@@ -132,10 +132,10 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const onAddLineItemClick = () => {
       if (isPOEditState) {
         setIsPOAddAction(true);
-        return dialog?.open();
-      } else {
-        handleItem && handleItem();
+        dialog?.open();
+        return;
       }
+      handleItem?.();
     };
 
     const getLatestDocRevData = (deleteLineItem) => {
@@ -182,7 +182,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       e.stopPropagation();
       setSelectedItemIndex(index);
       if (isPOEditState) {
-        return dialog?.open();
+        dialog?.open();
+        return;
       }
       !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);
     };
@@ -242,12 +243,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           updateWorkspace(value);
         }
       },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => {
       if (isReceivable) { purchaseOrderState?.getPartsVersion(); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (isReceivable) {
