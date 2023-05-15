@@ -21,10 +21,11 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   actions,
   maxWidth,
   classes,
+  fullscreen,
 }) => (
   <Dialog
     fullWidth={true}
-    fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
+    fullScreen={fullscreen ?? useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
     {...{ open, maxWidth, classes }}
   >
     <DialogTitle>

@@ -11,14 +11,12 @@ import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from './constants';
 import { translate } from '../../../../../common/intl';
-
-// @todo: fullscreen
+import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 
 // @todo: refactoring
 // @todo: optimisations
@@ -168,7 +166,11 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       <td className={classes.actionsTd}>
         <div className={classes.line} />
         <div className={classes.actions}>
-          <Tooltip title={translate('common.discard')}>
+          <StyleTooltip
+            title={translate('common.discard')}
+            placement="top"
+            arrow
+          >
             <Button
               data-cy="action-discard"
               className={classes.actionButton}
@@ -177,8 +179,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
             >
               <ClearIcon className={classes.iconButton} />
             </Button>
-          </Tooltip>
-          <Tooltip title={translate('common.save')}>
+          </StyleTooltip>
+          <StyleTooltip
+            title={translate('common.save')}
+            placement="top"
+            arrow
+          >
             <Button
               data-cy="action-save"
               className={classes.actionButton}
@@ -187,7 +193,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
             >
               <DoneIcon className={classes.iconButton} />
             </Button>
-          </Tooltip>
+          </StyleTooltip>
         </div>
       </td>
     );
