@@ -1,15 +1,16 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from 'react';
 
-type UseOverfowHook = () => [MutableRefObject<HTMLUnknownElement | null>, boolean, { x: boolean, y: boolean }];
+type UseOverfowType<T> = [RefObject<T>, boolean, { x: boolean, y: boolean }];
 
-const useOverflow: UseOverfowHook = () => {
-  const elementRef = useRef<HTMLUnknownElement>(null);
+const useOverflow = <T extends HTMLElement>(): UseOverfowType<T> => {
+  const elementRef = useRef<T>(null);
   const [isOverflowing, setIsOverflowing] = useState({ x: false, y: false });
 
   useEffect(() => {
     if (!elementRef.current) {
       return;
     }
+    // TODO check typing
     const resizeObserver = new ResizeObserver((elements) => {
       const element = elements.at(0);
       if (!element) {
@@ -22,7 +23,7 @@ const useOverflow: UseOverfowHook = () => {
     });
     resizeObserver.observe(elementRef.current);
     return () => resizeObserver.disconnect();
-  }, [elementRef.current]);
+  }, []);
 
   return [elementRef, isOverflowing.x || isOverflowing.y, isOverflowing];
 };

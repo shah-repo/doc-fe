@@ -1,16 +1,16 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
-type UseHoverHook = () => [MutableRefObject<HTMLUnknownElement | null>, boolean];
+type UseHoverType<T> = [RefObject<T>, boolean];
 
-const useHover: UseHoverHook = () => {
+const useHover = <T extends HTMLElement>(): UseHoverType<T> => {
   const [value, setValue] = useState(false);
-  const ref = useRef<HTMLUnknownElement>(null);
+  const elementRef = useRef<T>(null);
   const handleMouseOver = () => setValue(true);
   const handleMouseOut = () => setValue(false);
 
   useEffect(
     () => {
-      const element = ref.current;
+      const element = elementRef.current;
       if (!element) {
         return;
       }
@@ -22,9 +22,10 @@ const useHover: UseHoverHook = () => {
         element.removeEventListener('mouseout', handleMouseOut);
       };
     },
-    [ref.current]
+    [],
   );
-  return [ref, value];
+
+  return [elementRef, value];
 };
 
 export default useHover;
