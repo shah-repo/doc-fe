@@ -209,6 +209,7 @@ export { default as FBPurchaseOrderActions } from './FBPurchaseOrderActions/FBPu
 export * from './FBPurchaseOrderActions/FBPurchaseOrderActions.types';
 export { default as FBPurchaseOrderForm } from './FBPurchaseOrderForm/FBPurchaseOrderForm';
 export * from './FBPurchaseOrderForm/FBPurchaseOrderForm.types';
+export { default as FBPurchaseOrderTable } from './FBPurchaseOrderTable';
 export { default as FBQuantityField } from './FBQuantityField/FBQuantityField';
 export { default as FBQuantityUnitField } from './FBQuantityUnitField/FBQuantityUnitField';
 export * from './FBQuantityUnitField/FBQuantityUnitField.types';
