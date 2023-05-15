@@ -14,4 +14,4 @@ const cache = createIntlCache();
 
 export const intl = createIntl({ locale, messages: currentLocaleMessages }, cache);
 
-export const translate = (id?: string, values?: Record<string, PrimitiveType>) => intl.formatMessage({ id }, values);
+export const translate = (id?: string, values?: Record<string, PrimitiveType>) => id ? intl.formatMessage({ id }, values) : '';
