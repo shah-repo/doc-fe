@@ -89,6 +89,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       autocomplete () {
         return <AuditAutocomplete audit={audit} />;
       },
+      supplier () {
+        if (audit.fbSchemaItem) {
+          audit.fbSchemaItem.optionId = '5';
+        }
+        return <AuditAutocomplete audit={audit} />;
+      },
       fileupload () { return (<AuditAttachment audit={audit} />); },
       checkboxgroup () {
         const arrayValue: string[] = [];
