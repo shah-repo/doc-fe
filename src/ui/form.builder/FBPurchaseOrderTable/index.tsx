@@ -1,6 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
+import { GridProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import React from 'react';
 import { FBPurchaseOrderItem } from '..';
@@ -46,6 +47,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   const editItem = ({ dataItem }: DataGridRowClickEvent<FBPurchaseOrderItem>) => {
     handleItem?.(dataItem);
   };
+
+  const rowRender: GridProps['rowRender'] = (row) => React.cloneElement(row, {
+    ['data-cy' as string]: 'po-items',
+  });
 
   const schema = baseShema.map((column) => {
     if (['price', 'sum'].includes(column.id)) {
@@ -112,6 +117,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           data={items}
           schema={schema}
           className={cx(classes.grid, { [classes.activeGrid]: !disabled })}
+          rowRender={rowRender}
           onRowClick={editItem}
           fullWidth
           hasBoxScrollbars

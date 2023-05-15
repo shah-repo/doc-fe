@@ -3,6 +3,7 @@ import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGri
 import KendoDataGridCell from '../../../../components/KendoDataGrid/KendoDataGridCell';
 import OveflowTooltip from '../../../../components/OverflowTooltip';
 import { FBPurchaseOrderItem } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
+import { kebabCase } from 'lodash';
 
 const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
   dataItem,
@@ -16,7 +17,7 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
     <KendoDataGridCell
       {...props}
       field={field}
-      data-cy={field}
+      data-cy={kebabCase(field)}
       dataItem={dataItem}
     >
       <OveflowTooltip
