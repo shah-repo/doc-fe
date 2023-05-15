@@ -1,5 +1,6 @@
 import { State, process } from '@progress/kendo-data-query';
 import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps } from '@progress/kendo-react-grid';
+import { kebabCase } from 'lodash';
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
@@ -20,7 +21,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, ...props
               element,
               {
                 ...element.props,
-                ['data-cy' as string]: `cell-${column.id}`,
+                ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
               },
               column.template({ ...props, column, field }),
             );
@@ -38,7 +39,7 @@ const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...prop
   return column.title ? <GridHeaderCell {...props} /> : null;
 };
 
-function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
+function isGenericColumns(columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
@@ -52,8 +53,8 @@ const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, ca
         key={column.id}
         field={field}
         title={translate(column.title)}
-        cell={(props) => <CustomGridCell { ...props} column={column} field={field} />}
-        headerCell={(props) => <CustomHeaderCell { ...props} column={column} field={field} />}
+        cell={(props) => <CustomGridCell {...props} column={column} field={field} />}
+        headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'
@@ -79,7 +80,7 @@ const defaultDataState: State = {
   sort: [],
 };
 
-function KendoDataGrid<T> ({
+function KendoDataGrid<T>({
   data,
   filter = defaultDataState.filter,
   group = defaultDataState.group,
