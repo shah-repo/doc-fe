@@ -22,6 +22,7 @@ export type DocumentRevisionFormProps =
 & {
   setDocId?: typeof documentsActions.setDocumentProposedId;
   onDirtyFlagChange?: ((dirty: boolean) => void);
+  setDoNotPrompt?: (value: boolean) => void;
   documentRevision: DocumentRevision;
   bannerPortal: React.MutableRefObject<null>;
   shouldShowUpgrade: boolean;

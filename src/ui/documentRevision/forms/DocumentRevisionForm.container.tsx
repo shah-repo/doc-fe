@@ -56,6 +56,7 @@ interface OwnProps {
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
+  setDoNotPrompt?: (value: boolean) => void;
   onDirtyFlagChange?: (dirty: boolean) => void;
   documentRevision: DocumentRevision;
   proposedDocId?: string;
@@ -79,6 +80,7 @@ DocumentRevisionFormContainerProps
   proposedDocId,
   setDocId,
   doNotPrompt,
+  setDoNotPrompt,
   onDirtyFlagChange,
   documentRevision,
   canChangeOwnerShip = false,
@@ -264,6 +266,7 @@ DocumentRevisionFormContainerProps
         proposedDocId,
         setDocId,
         doNotPrompt,
+        setDoNotPrompt,
         onDirtyFlagChange,
         documentTypesById,
         canChangeOwnerShip,

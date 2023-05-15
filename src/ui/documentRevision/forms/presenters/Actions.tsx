@@ -57,7 +57,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
-  const { isCreateDocumentDisabled } = props;
+  const { isCreateDocumentDisabled, setDoNotPrompt } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
 
@@ -202,6 +202,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = async () => {
+    setDoNotPrompt(true);
     let prevPODoc;
     try {
       prevPODoc = await getPOIndexDbInstance().toArray();
@@ -234,8 +235,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
     formik.submitForm();
     if (isPOEditState) {
-      history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+      setDoNotPrompt(true);
       await getPOIndexDbInstance().clear();
+      history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
       dispatch(documentRevisionsActions.load(documentRevision.id));
     }
   };

@@ -68,7 +68,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       if (redlineActive) {
         dispatch(companyActions.redlineConfig(false));
       }
-      setDoNotPrompt(true);
+      if (!isPOEditState) {
+        setDoNotPrompt(true);
+      }
     },
   });
 
@@ -216,6 +218,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
+        setDoNotPrompt={setDoNotPrompt}
         asyncState={async.asyncState}
         onSubmit={debouncedSubmit}
         initialValues={initialValues}

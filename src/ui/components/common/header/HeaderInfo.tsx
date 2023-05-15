@@ -56,6 +56,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
 
   const intl = useIntl();
+  const { _documentRevisionFormState } = SM.useStores();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
   const isStatusReleased = isDocumentRevisionInStatus(
@@ -187,6 +188,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   if (isPO && isStatusReleased) {
     if (isUserAdminEnforce && SM.isNewVersion) {
       headerInfoStatus = STATUS_TYPES_LABEL.EDIT;
+      _documentRevisionFormState?.setDirty(true);
     } else {
       headerInfoStatus = STATUS_TYPES_LABEL.APPROVED;
     }
