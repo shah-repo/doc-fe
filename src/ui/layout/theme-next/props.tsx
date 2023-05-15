@@ -29,6 +29,9 @@ const props = (theme: Theme): ComponentsProps => ({
   MuiButtonBase: {
     disableRipple: true,
   },
+  MuiCheckbox: {
+    disableRipple: true,
+  },
   MuiButton: {
     variant: "contained",
     color: "primary",
