@@ -26,9 +26,10 @@ interface FBApprovalMatrixDocType {
   group: string;
   needsSignature: boolean;
   category: string;
+  active?: boolean
 }
 
-interface FBApprovalRolesStages {
+export interface FBApprovalRolesStages {
   stage1: boolean[];
   stage2: boolean[];
   stage3: boolean[];

@@ -4,6 +4,7 @@ import { Colors } from '../../layout/theme-next';
 const BASE_COLOR = Colors.primaryBg;
 
 const baseInputStyles = (theme: Theme) => ({
+  width: '100%',
   height: 30,
   background: 'none',
   backgroundColor: Colors.white,
@@ -146,9 +147,6 @@ export default makeStyles((theme) => ({
               boxShadow: '5px 0 10px 2px rgba(0, 0, 0, .1)',
             },
           },
-        },
-        '& .k-textbox': {
-          width: '100%',
         },
         '& .k-button': {
           marginLeft: theme.spacing(0.5),
@@ -365,13 +363,11 @@ export default makeStyles((theme) => ({
       },
     },
     '.k-dropdown': {
+      width: '100%',
+
       '& .k-dropdown-wrap': {
         ...baseInputStyles(theme),
-
-        '&:hover': {
-          backgroundColor: Colors.hover,
-          borderColor: Colors.tableStroke,
-        },
+        justifyContent: 'space-between',
       },
     },
     '.k-select': {

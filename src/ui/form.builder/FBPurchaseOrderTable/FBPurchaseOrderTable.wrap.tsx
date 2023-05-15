@@ -91,10 +91,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           try {
             const prevPODoc = await getPOIndexDbInstance().toArray();
             if (prevPODoc.length) {
+              await workspaceState?.updateDocRevById(getLatestDocRevData(true) as DocumentRevision, createdDocumentRevision.id);
               await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
-              await getPOIndexDbInstance().clear();
             }
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
+          await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -103,48 +106,22 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       },
     });
 
-    onAlertNotificationConfirm = () => {
+    onAlertNotificationConfirm = async () => {
       if (isPOEditState && isPOAddAction && handleItem) {
         handleItem();
         setIsPOAddAction(false);
         dialog?.close();
         return;
       }
-      const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
-      if (values?.formInput) {
-        const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME] as FBPurchaseOrderValue;
-        const previousItems = allItems?.items;
-        delete previousItems[selectedItemIndex];
-        const previousLineItemsLength = previousItems?.length;
-        const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
-        let tax = 0;
-        if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
-          tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
+      const latestDocRevData = getLatestDocRevData(false);
+      try {
+        const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];
+        if (latestDocRevData && prevPODoc.length) {
+          latestDocRevData.formInput = prevPODoc[0]?.formInput;
+          latestDocRevData.description = prevPODoc[0]?.description;
         }
-        const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || '0') : 0;
-        const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
-        const totalInUSD = totalAmount * allItems.exchangeRate;
-
-        values.formInput[PO_ITEMS_COMPONENT_NAME] = {
-          ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
-          subTotal: formatCost(UpdatedLineItemsTotalObj.subTotal),
-          tax: formatCost(tax, 6),
-          shippingCost: formatCost(shippingCost),
-          totalAmount: formatCost(totalAmount),
-          totalInUSD: formatCost(totalInUSD),
-        };
-
-        values.formInput[PO_ITEMS_COMPONENT_NAME].items = compact(previousItems);
-        values.formDocument = { id: workspaceState?.document?.formDocument?.id };
-
-        each(values.formInput[PO_ITEMS_COMPONENT_NAME], (value, key) => {
-          if (values?.formInput && key.includes(PO_APPROVAL_KEY)) {
-            values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
-          }
-        });
-
-        async.start(createDocAction, toNewVersionRequestBody(values), async);
-      }
+      } catch (e) {}
+      async.start(createDocAction, latestDocRevData, async);
     };
 
     onAlertNotificationCancel = () => {
@@ -159,6 +136,46 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       } else {
         handleItem && handleItem();
       }
+    };
+
+    const getLatestDocRevData = (deleteLineItem) => {
+      const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
+      if (!values?.formInput) {
+        return;
+      }
+      const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME] as FBPurchaseOrderValue;
+      const previousItems = cloneDeep(allItems?.items);
+      if (deleteLineItem) {
+        delete previousItems[selectedItemIndex];
+      }
+      const previousLineItemsLength = previousItems?.length;
+      const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
+      let tax = 0;
+      if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
+        tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
+      }
+      const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || '0') : 0;
+      const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
+      const totalInUSD = totalAmount * allItems.exchangeRate;
+
+      values.formInput[PO_ITEMS_COMPONENT_NAME] = {
+        ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
+        subTotal: formatCost(UpdatedLineItemsTotalObj.subTotal),
+        tax: formatCost(tax, 6),
+        shippingCost: formatCost(shippingCost),
+        totalAmount: formatCost(totalAmount),
+        totalInUSD: formatCost(totalInUSD),
+      };
+
+      values.formInput[PO_ITEMS_COMPONENT_NAME].items = compact(previousItems);
+      values.formDocument = { id: workspaceState?.document?.formDocument?.id };
+
+      each(values.formInput[PO_ITEMS_COMPONENT_NAME], (value, key) => {
+        if (values?.formInput && key.includes(PO_APPROVAL_KEY)) {
+          values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
+        }
+      });
+      return cloneDeep(toNewVersionRequestBody(cloneDeep(values)));
     };
 
     handleDelete = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {

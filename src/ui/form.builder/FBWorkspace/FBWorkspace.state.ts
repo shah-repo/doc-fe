@@ -313,6 +313,18 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
+  public updateDocRevById = (documentRevision?: DocumentRevision, id?: string) => {
+    return this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      body: {
+        formInput: documentRevision?.formInput,
+        description: documentRevision?.description,
+      },
+      method: 'patch',
+    });
+  };
+
   @action public addHiddenFieldByRules = (name: string): void => {
     this.hiddenFieldsByRules.add(name);
   };
