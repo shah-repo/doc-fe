@@ -9,7 +9,7 @@ const KendoDataGridCell: React.FC<PropsWithDataset<GridCellProps>> = ({ children
       if (React.isValidElement(element)) {
         const enhancedProps = {
           ...element.props,
-          'data-cy': props['data-cy'],
+          'data-cy': String(props['data-cy']),
         };
         return React.cloneElement(element, enhancedProps, children);
       }
