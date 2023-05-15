@@ -267,6 +267,7 @@
   "common.wip": "WIP",
   "common.last.signed": "Last Signed",
   "common.canceled": "Canceled",
+  "common.not.applicable": "N/A",
   "common.effective.date": "Effective Date",
   "common.justifications": "Justifications",
   "common.attachments": "Attachments",
