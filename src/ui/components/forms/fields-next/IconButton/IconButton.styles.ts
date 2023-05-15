@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import { Colors } from "../../../../layout/theme-next";
+import { createStyles, makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme) => createStyles({
   button: {
@@ -10,19 +10,19 @@ export default makeStyles((theme) => createStyles({
     fontSize: 16,
   },
   square: {
-    "width": 30,
-    "height": 30,
-    "minHeight": 30,
-    "color": Colors.textGray,
-    "borderRadius": theme.shape.borderRadius / 2,
-    "&:hover": {
+    width: 30,
+    height: 30,
+    minHeight: 30,
+    color: Colors.textGray,
+    borderRadius: theme.shape.borderRadius / 2,
+    '&:hover': {
       color: Colors.textBlack,
       background: Colors.hover,
     },
   },
   destructive: {
-    "color": Colors.error,
-    "&:hover": {
+    color: Colors.error,
+    '&:hover': {
       color: Colors.error,
       background: Colors.errorHighlight,
     },
@@ -31,13 +31,13 @@ export default makeStyles((theme) => createStyles({
     background: Colors.darkGray,
     borderRadius: theme.shape.borderRadius,
   },
-  simple: ({ size }) => ({
-    "width": "auto",
-    "height": "auto",
-    "minHeight": 0,
-    "fontSize": size,
-    "& svg": {
-      height: "1em",
+  simple: ({ size }: { size: number }) => ({
+    width: 'auto',
+    height: 'auto',
+    minHeight: 0,
+    fontSize: size,
+    '& svg': {
+      height: '1em',
     },
   }),
 }));

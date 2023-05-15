@@ -1,13 +1,13 @@
-import cx from "classnames";
-import React from "react";
-import { Button } from "..";
-import { withThemeNext } from "../../../../layout/theme-next";
-import { useButtonType } from "../Button/Button.utils";
-import useStyles from "./IconButton.styles";
-import { IconButtonProps } from "./IconButton.types";
+import cx from 'classnames';
+import React from 'react';
+import { Button } from '..';
+import { withThemeNext } from '../../../../layout/theme-next';
+import { useButtonType } from '../Button/Button.utils';
+import useStyles from './IconButton.styles';
+import { IconButtonProps } from './IconButton.types';
 
-const IconButton: React.FC<IconButtonProps> = ({
-  kind = "primary",
+const IconButton: React.FC<IconButtonProps> = React.forwardRef(({
+  kind = 'primary',
   size = 16,
   variant,
   color,
@@ -15,20 +15,20 @@ const IconButton: React.FC<IconButtonProps> = ({
   className,
   ...props
 }, ref) => {
-  const [muiVariant, muiColor] = useButtonType<IconButtonProps["kind"]>(
+  const [muiVariant, muiColor] = useButtonType<IconButtonProps['kind']>(
     kind,
     {
-      form: ["text", "default"],
-      simple: ["text", "default"],
-      action: ["contained", "default"],
-      destructive: ["text", "default"],
+      form: ['text', 'default'],
+      simple: ['text', 'default'],
+      action: ['contained', 'default'],
+      destructive: ['text', 'default'],
     },
   );
   const classes = useStyles({ size });
-  const isSquare = kind && ["form", "action", "destructive"].includes(kind);
-  const isBoxed = kind === "action";
-  const isSimple = kind === "simple";
-  const isDesctructive = kind === "destructive";
+  const isSquare = kind && ['form', 'action', 'destructive'].includes(kind);
+  const isBoxed = kind === 'action';
+  const isSimple = kind === 'simple';
+  const isDesctructive = kind === 'destructive';
 
   return (
     <Button
@@ -44,12 +44,12 @@ const IconButton: React.FC<IconButtonProps> = ({
           [classes.boxed]: isBoxed,
           [classes.destructive]: isDesctructive,
         },
-        className
+        className,
       )}
     >
       {children}
     </Button>
   );
-};
+});
 
-export default withThemeNext(React.forwardRef(IconButton));
+export default withThemeNext(IconButton);
