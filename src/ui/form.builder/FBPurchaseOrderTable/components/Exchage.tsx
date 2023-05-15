@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
 import Text from '../../../components/Text';
-import { FBPurchaseOrderTableProps } from '../FBPurchaseOrderTable.types';
+import { FBPurchaseOrderTableProps } from '../types';
 
 type Props = Pick<FBPurchaseOrderTableProps, 'calculation'>;
 

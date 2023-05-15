@@ -22,9 +22,8 @@ import useGetHasTag from '../../hooks/useGetHasTag';
 import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
 import FBStore from '../FBStore/FBStore';
-import FBPurchaseOrderClasses from './FBPurchaseOrderTable.styles';
-import { FBPurchaseOrderTableProps } from './FBPurchaseOrderTable.types';
 import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
+import { FBPurchaseOrderTableProps } from './types';
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -39,7 +38,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     onAlertNotificationConfirm,
     onAlertNotificationCancel,
     handleItem,
-    classes,
     calculation,
     loading,
     disabled,
@@ -60,7 +58,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const isReceivable = checkIsDocumentReceivable(document?.document.documentType.groupOptions);
     const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
-    classes = FBPurchaseOrderClasses();
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
@@ -280,7 +277,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       onAlertNotificationConfirm,
       onAlertNotificationCancel,
       onAddLineItemClick,
-      classes,
       calculation,
       loading,
       disabled,

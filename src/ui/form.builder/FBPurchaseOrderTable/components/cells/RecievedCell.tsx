@@ -3,7 +3,7 @@ import cx from 'classnames';
 import React from 'react';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBPurchaseOrderItem } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
-import { useStyles } from '../../FBPurchaseOrderTable.styles';
+import useStyles from '../../styles';
 import ContentCell from './ContentCell';
 
 const RecievedCell: CellComponent<FBPurchaseOrderItem, { loading?: boolean }> = ({

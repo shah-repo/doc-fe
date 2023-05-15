@@ -4,8 +4,8 @@ import React from 'react';
 import { FormattedNumber } from 'react-intl';
 import { FBData, FBSelect, FBTextField } from '../..';
 import Text from '../../../components/Text';
-import { useStyles } from '../FBPurchaseOrderTable.styles';
-import { FBPurchaseOrderTableTotalProps } from '../FBPurchaseOrderTable.types';
+import useStyles from '../styles';
+import { FBPurchaseOrderTableTotalProps } from '../types';
 import Exchange from './Exchage';
 
 const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
