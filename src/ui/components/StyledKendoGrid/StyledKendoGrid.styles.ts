@@ -218,8 +218,6 @@ export default makeStyles((theme) => ({
         minWidth: '100%',
       },
       '& tr': {
-        height: 40,
-
         '&.k-grouping-row': {
           backgroundColor: Colors.gray,
         },

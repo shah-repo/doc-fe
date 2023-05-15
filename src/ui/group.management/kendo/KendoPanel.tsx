@@ -543,6 +543,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       <StyledKendoGrid
         className={`${classes.grid} no-row-pointer`}
         style={{ width: `${width}px` }}
+        rowHeight={40}
         data={result}
         editField={editField}
         total={resultState.total}

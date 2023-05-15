@@ -422,6 +422,7 @@ export function KendoGrid<T extends any>({
     <>
       <StyledKendoGrid
         style={{ width: `${width}px` }}
+        rowHeight={40}
         className={classes.grid}
         filterable={true}
         sortable={true}

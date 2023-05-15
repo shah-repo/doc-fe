@@ -142,6 +142,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
       <StyledKendoGrid
         className={classes.root}
         style={{ width: `${width}px` }}
+        rowHeight={40}
         data={resultState.data}
         total={resultState.total}
         filterable
