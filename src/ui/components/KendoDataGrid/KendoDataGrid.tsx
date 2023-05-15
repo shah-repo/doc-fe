@@ -30,6 +30,13 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
     )
 );
 
+const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...props }) => {
+  if (column.headerCell) {
+    return <column.headerCell {...props} column={column} />;
+  }
+  return column.title ? <GridHeaderCell {...props} /> : null;
+};
+
 function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
@@ -43,6 +50,7 @@ const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, ca
         field={column.field ?? `custom-${column.id}`}
         title={column.title ? translate(column.title) : undefined}
         cell={(props) => <CustomGridCell { ...props} column={column} />}
+        headerCell={(props) => <CustomHeaderCell { ...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'
