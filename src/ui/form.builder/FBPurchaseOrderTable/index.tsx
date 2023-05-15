@@ -6,6 +6,7 @@ import React from 'react';
 import { FBPurchaseOrderItem } from '..';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
+import { DataGridRowClickEvent } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import Text from '../../components/Text';
 import { Button } from '../../components/forms/fields-next';
 import Total from './components/Total';
@@ -41,6 +42,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
 }) => {
   const classes = useStyles();
   const isActionsAllowed = !disabled || isReceivable;
+
+  const editItem = ({ dataItem }: DataGridRowClickEvent<FBPurchaseOrderItem>) => {
+    handleItem?.(dataItem);
+  };
 
   const schema = baseShema.map((column) => {
     if (['price', 'sum'].includes(column.id)) {
@@ -107,7 +112,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           data={items}
           schema={schema}
           className={cx(classes.grid, { [classes.activeGrid]: !disabled })}
-          onRowClick={({ dataItem }) => { handleItem?.(dataItem); }}
+          onRowClick={editItem}
           fullWidth
           hasBoxScrollbars
         />

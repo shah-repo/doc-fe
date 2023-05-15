@@ -39,7 +39,7 @@ const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...prop
   return column.title ? <GridHeaderCell {...props} /> : null;
 };
 
-function isGenericColumns(columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
+function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
@@ -80,7 +80,7 @@ const defaultDataState: State = {
   sort: [],
 };
 
-function KendoDataGrid<T>({
+function KendoDataGrid<T> ({
   data,
   filter = defaultDataState.filter,
   group = defaultDataState.group,

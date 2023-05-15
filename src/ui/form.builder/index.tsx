@@ -245,8 +245,6 @@ export * from './FBSupplier/FBSupplier.types';
 export { default as FBSupplierForm } from './FBSupplierForm/FBSupplierForm';
 export { default as FBSupplierFormActions } from './FBSupplierForm/FBSupplierForm.actions';
 export * from './FBSupplierForm/FBSupplierForm.types';
-export { default as FBTableCell } from './FBTableCell/FBTableCell';
-export * from './FBTableCell/FBTableCell.types';
 export { default as FBTaskState } from './FBTask/FBTask.state';
 export * from './FBTask/FBTask.types';
 export { default as FBTaskField } from './FBTaskField/FBTaskField';

@@ -1,10 +1,4 @@
 import { FBPurchaseOrderItem, FBPurchaseOrderItemType, FBPurchaseOrderValue } from '../FBPurchaseOrder/FBPurchaseOrder.types';
-import { FBPurchaseOrderDetailsProduct, FBPurchaseOrderDetailsService } from './types';
-
-export const FBPurchaseOrderCollection = {
-  product: FBPurchaseOrderDetailsProduct,
-  service: FBPurchaseOrderDetailsService,
-};
 
 export const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue): boolean => poItems?.items?.some((item) =>
   item.type === FBPurchaseOrderItemType.SERVICE
