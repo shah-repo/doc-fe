@@ -14,7 +14,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from './constants';
+import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from './constants';
 import { translate } from '../../../../../common/intl';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 
@@ -227,6 +227,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         onRowClick={!disabled ? handleRowClick : undefined}
         onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
+        defaultDataState={DEFAULT_DATA_STATE}
         filterable
         fullWidth
         hasBoxScrollbars
