@@ -52,7 +52,7 @@ const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, ca
         {...column}
         key={column.id}
         field={field}
-        title={translate(column.title)}
+        title={translate(column.title) as string}
         cell={(props) => <CustomGridCell {...props} column={column} field={field} />}
         headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}

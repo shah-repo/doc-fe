@@ -128,6 +128,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             attached
             fullWidth
             onClick={onAddLineItemClick}
+            data-cy="form-builder-add-line-item"
           >
             <Text message="form.builder.add.line.item" />
           </Button>
