@@ -1,19 +1,20 @@
 import { State, process } from '@progress/kendo-data-query';
-import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridNoRecords, GridProps } from '@progress/kendo-react-grid';
+import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps } from '@progress/kendo-react-grid';
+import { kebabCase } from 'lodash';
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
-import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
-import { kebabCase } from 'lodash';
+import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
 
-const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
+const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, ...props }) => (
   column.cell
-    ? <column.cell {...props} column={column} />
+    ? <column.cell {...props} column={column} field={field} />
     : (
       <GridCell
         {...props}
+        field={field}
         render={(element, props) => {
           if (React.isValidElement(element) && column.template) {
             return React.cloneElement(
@@ -22,7 +23,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
                 ...element.props,
                 ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
               },
-              column.template({ ...props, column }),
+              column.template({ ...props, column, field }),
             );
           }
           return element;
@@ -31,19 +32,29 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => 
     )
 );
 
+const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...props }) => {
+  if (column.headerCell) {
+    return <column.headerCell {...props} column={column} />;
+  }
+  return column.title ? <GridHeaderCell {...props} /> : null;
+};
+
 function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
 const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
   columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
+    const field = column.field ?? `custom-${column.id}`;
+
     return (
       <GridColumn
         {...column}
         key={column.id}
-        field={column.field ?? `custom-${column.id}`}
-        title={column.title ? translate(column.title) : undefined}
-        cell={(props) => <CustomGridCell { ...props} column={column} />}
+        field={field}
+        title={translate(column.title)}
+        cell={(props) => <CustomGridCell {...props} column={column} field={field} />}
+        headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'

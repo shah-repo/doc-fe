@@ -32,14 +32,18 @@ export default makeStyles((theme) => ({
     '.k-grid': {
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${Colors.tableStroke}`,
-      backgroundColor: Colors.tableStroke,
       color: Colors.textBlack,
-      overflow: 'hidden',
     },
     '.k-grid-toolbar': {
       padding: theme.spacing(1.25, 2, 0),
       backgroundColor: BASE_COLOR,
       border: 'none',
+      overflow: 'hidden',
+
+      '&:first-child': {
+        borderTopLeftRadius: theme.shape.borderRadius,
+        borderTopRightRadius: theme.shape.borderRadius,
+      },
     },
     '.k-grouping-header': {
       padding: theme.spacing(1.25, 1),
@@ -83,7 +87,12 @@ export default makeStyles((theme) => ({
       backgroundColor: BASE_COLOR,
       border: 'none',
       paddingInlineEnd: 0,
+      overflow: 'hidden',
 
+      '&:first-child': {
+        borderTopLeftRadius: theme.shape.borderRadius,
+        borderTopRightRadius: theme.shape.borderRadius,
+      },
       '& .k-grid-header-wrap': {
         borderColor: 'transparent',
         borderWidth: '0 0 0 0',
@@ -101,10 +110,18 @@ export default makeStyles((theme) => ({
         },
       },
       '& th': {
-        padding: theme.spacing(0.5, 2),
+        padding: theme.spacing(0.5, 1.5),
         border: 'none',
         borderRight: `1px solid ${Colors.white}`,
+        verticalAlign: 'middle',
 
+        '& .k-cell-inner': {
+          margin: theme.spacing(-0.5, -1.5),
+
+          '& > .k-link': {
+            padding: theme.spacing(0.5, 1.5),
+          },
+        },
         '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {
           borderRight: `1px solid ${Colors.white}`,
           boxShadow: '-5px 12px 10px 2px rgba(0, 0, 0, .1)',
@@ -184,6 +201,14 @@ export default makeStyles((theme) => ({
         },
       },
     },
+    '.k-grid-container': {
+      overflow: 'hidden',
+
+      '&:last-child': {
+        borderBottomLeftRadius: theme.shape.borderRadius,
+        borderBottomRightRadius: `${theme.shape.borderRadius}px`,
+      },
+    },
     '.k-grid-content': {
       overflow: 'auto',
       overflowX: 'auto',
@@ -193,8 +218,6 @@ export default makeStyles((theme) => ({
         minWidth: '100%',
       },
       '& tr': {
-        height: 40,
-
         '&.k-grouping-row': {
           backgroundColor: Colors.gray,
         },
@@ -204,8 +227,9 @@ export default makeStyles((theme) => ({
         '& td': {
           border: 'none',
           backgroundColor: Colors.white,
-          padding: theme.spacing(0.75, 2),
+          padding: theme.spacing(0.5, 1.5),
           borderBottom: `1px solid ${Colors.tableStroke}`,
+          verticalAlign: 'middle',
           whiteSpace: 'nowrap', // TODO move to concrete component
 
           '&.k-group-cell': {
@@ -266,6 +290,12 @@ export default makeStyles((theme) => ({
       background: BASE_COLOR,
       color: Colors.textBlack,
       border: 'none',
+      overflow: 'hidden',
+
+      '&:last-child': {
+        borderBottomLeftRadius: theme.shape.borderRadius,
+        borderBottomRightRadius: `${theme.shape.borderRadius}px`,
+      },
     },
     '.k-pager': {
       backgroundColor: BASE_COLOR,

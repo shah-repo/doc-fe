@@ -498,6 +498,7 @@ export function KendoPanel<T>({
       <StyledKendoGrid
         className={`${classes.grid} no-row-pointer`}
         style={{ width: `${width}px` }}
+        rowHeight={40}
         data={result}
         total={resultState.total}
         pageable={gridConfiguration.pagerSettings}

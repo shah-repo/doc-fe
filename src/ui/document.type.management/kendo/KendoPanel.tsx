@@ -543,6 +543,7 @@ export function KendoPanel<T extends { id?: string }>({
       <StyledKendoGrid
         className={`${gridClasses.grid} no-row-pointer`}
         style={{ width: `${width}px` }}
+        rowHeight={40}
         data={result}
         sortable={true}
         filterable={true}
