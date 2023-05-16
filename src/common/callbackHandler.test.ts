@@ -1,9 +1,9 @@
-import CallbackHandler from "./callbackHandler";
+import CallbackHandler from './callbackHandler';
 
-describe("callbackHandler tests", () => {
+describe('callbackHandler tests', () => {
   const callbackHandler = new CallbackHandler();
 
-  it("sets and calls handler", () => {
+  it('sets and calls handler', () => {
     const handler = jest.fn();
     callbackHandler.connect(handler);
     callbackHandler.execute({});
@@ -11,7 +11,7 @@ describe("callbackHandler tests", () => {
     expect(handler).toHaveBeenCalled();
   });
 
-  it("diconnects and does not call handler", () => {
+  it('diconnects and does not call handler', () => {
     const handler = jest.fn();
     callbackHandler.connect(handler);
     callbackHandler.disconnect();

@@ -1,10 +1,10 @@
-import { map } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBFormState, FBNoteItem, FBNotesFormProps } from "..";
-import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
-import FBNotesFormState from "./FBNotesForm.state";
+import { map } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBFormState, FBNoteItem, FBNotesFormProps } from '..';
+import { isDocumentRevisionInDraft } from '../../documentRevision/helpers/documentRevisionStatus';
+import FBNotesFormState from './FBNotesForm.state';
 
 export const withFBNotesForm = <T extends FBNotesFormProps>(
   Component: React.FunctionComponent<T>,
@@ -25,7 +25,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
     const { workspaceState } = FB.useStores();
     const {
       document: {
-        id = "",
+        id = '',
         status = undefined,
       } = {},
       company: {
@@ -50,7 +50,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.inputState.get("noteFile")?.value,
+        () => formState?.inputState.get('noteFile')?.value,
         // eslint-disable-next-line react-hooks/exhaustive-deps
         (value) => notesFormState?.setfiles(value),
       );
@@ -68,7 +68,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
         return;
       }
       const note = {
-        description: values?.noteText || "",
+        description: values?.noteText || '',
         formBuilderFieldName: name as string,
         documentRevision: {
           id,
@@ -77,8 +77,8 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
       };
       notesFormState?.setNote(note);
       notesState?.setNumberOfNotes(notesState?.noteNumber as number + 1);
-      formState?.setFieldValue("noteText", "", true);
-      formState?.setFieldValue("noteFile", [], true);
+      formState?.setFieldValue('noteText', '', true);
+      formState?.setFieldValue('noteFile', [], true);
     };
 
     // MARK: @observer
@@ -109,6 +109,6 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
     });
   };
 
-  Comp.displayName = "withFBNotesForm";
+  Comp.displayName = 'withFBNotesForm';
   return Comp;
 };

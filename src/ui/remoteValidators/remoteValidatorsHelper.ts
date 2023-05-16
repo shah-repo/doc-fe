@@ -1,13 +1,13 @@
-import { AxiosRequestConfig } from "axios";
-import apiClient from "../../state/apiClient";
-import { VALIDATORS_HELPER_REMOTE_URL_URL } from "../../state/ducks/auth/constants";
-import { store } from "../../state/store";
-import { IRemoteValidatorsHelper } from "./interfaces";
+import { AxiosRequestConfig } from 'axios';
+import apiClient from '../../state/apiClient';
+import { VALIDATORS_HELPER_REMOTE_URL_URL } from '../../state/ducks/auth/constants';
+import { store } from '../../state/store';
+import { IRemoteValidatorsHelper } from './interfaces';
 
 const doApiRequest = async (name: string, args: any[]) => {
   try {
     const requestConfig: AxiosRequestConfig = {
-      method: "post",
+      method: 'post',
       url: VALIDATORS_HELPER_REMOTE_URL_URL,
       data: {
         name,
@@ -23,7 +23,7 @@ const doApiRequest = async (name: string, args: any[]) => {
     const { data } = await apiClient.request(requestConfig);
     return data;
   } catch (error) {
-    throw new Error("HTTP REQUEST FOR VALIDATORS FAILED");
+    throw new Error('HTTP REQUEST FOR VALIDATORS FAILED');
   }
 };
 

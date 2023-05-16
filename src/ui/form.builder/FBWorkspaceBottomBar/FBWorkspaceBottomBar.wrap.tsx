@@ -1,10 +1,10 @@
-import { find, get, map, unionBy } from "lodash";
-import React from "react";
-import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceModeOptions, FBWorkspaceTplActions } from "..";
-import { toastError } from "../../components/notifications";
-import DocumentPreview from "../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview";
-import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
-import useStyles from "./FBWorkspaceBottomBar.styles";
+import { find, get, map, unionBy } from 'lodash';
+import React from 'react';
+import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceModeOptions, FBWorkspaceTplActions } from '..';
+import { toastError } from '../../components/notifications';
+import DocumentPreview from '../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview';
+import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
+import useStyles from './FBWorkspaceBottomBar.styles';
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -20,15 +20,15 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     const classes = useStyles();
     const { workspaceState, dialogState } = FB.useStores();
     previewDisabled = !(
-      workspaceState?.mode === "formPreview" ||
-      workspaceState?.mode === "design" ||
-      workspaceState?.mode === "preview"
+      workspaceState?.mode === 'formPreview' ||
+      workspaceState?.mode === 'design' ||
+      workspaceState?.mode === 'preview'
     );
     includeTransport =
       includeTransport &&
-      (workspaceState?.mode === "formPreview" ||
-        workspaceState?.mode === "design" ||
-        workspaceState?.mode === "preview");
+      (workspaceState?.mode === 'formPreview' ||
+        workspaceState?.mode === 'design' ||
+        workspaceState?.mode === 'preview');
 
     const { document: { document: { documentType = {} } = {} } = {} } = workspaceState || {};
     // Form options should remain disabled in output doc types, regardless of their state.
@@ -50,21 +50,21 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
 
     const setFileContent = (result: string | ArrayBuffer | null) => {
       if (!result as unknown as string) {
-        return toastError("Not a valid template.");
+        return toastError('Not a valid template.');
       }
 
       let { schema: workspaceSchema = [] } = workspaceState ?? {};
       const schema: FBSchemaProps[] = JSON.parse(result as string);
-      if (!find(schema, "type") && !find(schema, "index")) {
-        return toastError("Not a valid template.");
+      if (!find(schema, 'type') && !find(schema, 'index')) {
+        return toastError('Not a valid template.');
       }
 
       const items = map(schema, (schemaItem) => {
         const { type, uniqueSchemaItem } = schemaItem;
-        if (type === "inlineapproval") {
+        if (type === 'inlineapproval') {
           schemaItem.editorConfig = {};
         }
-        const itemsByType = map(workspaceState?.getItemsByType(type) ?? [], "name");
+        const itemsByType = map(workspaceState?.getItemsByType(type) ?? [], 'name');
         if (uniqueSchemaItem && (itemsByType.length > 0)) {
           workspaceSchema = map(workspaceSchema, (workspaceItem) => {
             if (itemsByType.includes(workspaceItem.name)) {
@@ -78,14 +78,14 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         }
         return schemaItem;
       });
-      const mergedSchema = unionBy(items, workspaceSchema, "name");
+      const mergedSchema = unionBy(items, workspaceSchema, 'name');
       workspaceState?.setSchema(mergedSchema);
     };
 
     importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = get(event, "currentTarget.files[0]");
+      const file = get(event, 'currentTarget.files[0]');
       if (!file) {
-        return toastError("Invalid file.");
+        return toastError('Invalid file.');
       }
       return readFile(file);
     };
@@ -109,8 +109,8 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     handleFormPreview = () => {
       dialogState?.config({
         open: true,
-        maxWidth: "md",
-        title: "form.builder.form.preview",
+        maxWidth: 'md',
+        title: 'form.builder.form.preview',
         classes: {
           paper: classes.previewDialog,
         },

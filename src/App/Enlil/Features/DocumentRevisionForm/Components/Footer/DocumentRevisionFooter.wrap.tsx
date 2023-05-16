@@ -1,8 +1,8 @@
-import React from "react";
-import { DocumentRevisionFooterState, SM, SMProvider } from "../../../../..";
-import { FBDocumentRevisionProps } from "../../../../../../state/ducks/documentRevisions/types";
-import { generateRevisionNumber } from "../../../../../../ui/documentRevision/helpers/generateRevisionNumber";
-import { DocumentRevisionFooterProps } from "./DocumentRevisionFooter.types";
+import React from 'react';
+import { DocumentRevisionFooterState, SM, SMProvider } from '../../../../..';
+import { FBDocumentRevisionProps } from '../../../../../../state/ducks/documentRevisions/types';
+import { generateRevisionNumber } from '../../../../../../ui/documentRevision/helpers/generateRevisionNumber';
+import { DocumentRevisionFooterProps } from './DocumentRevisionFooter.types';
 
 export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterProps>(
   Component: React.FunctionComponent<T>,
@@ -16,14 +16,14 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
     // MARK: @config
     _documentRevisionFooterState = SM.useRef(DocumentRevisionFooterState);
     const { _formState } = SM.useStores();
-    if (_formState?.values?.get("formDocument")) {
-      setFormDocument(_formState?.values?.get("formDocument"));
+    if (_formState?.values?.get('formDocument')) {
+      setFormDocument(_formState?.values?.get('formDocument'));
     }
     // MARK: @state
 
     // MARK: @reactions
     SM.reaction(
-      () => _formState?.values?.get("formDocument"),
+      () => _formState?.values?.get('formDocument'),
       (formDocument?: FBDocumentRevisionProps) => setFormDocument(formDocument),
     );
 
@@ -39,7 +39,7 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
         revisionStage,
         revisionChangeType,
         releasedAt,
-        document: { docId = "" } = {},
+        document: { docId = '' } = {},
       } = formDocument || {};
 
       const version = generateRevisionNumber(
@@ -64,6 +64,6 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
     );
   };
 
-  Comp.displayName = "withDocumentRevisionFooterWrap";
+  Comp.displayName = 'withDocumentRevisionFooterWrap';
   return (props: T) => Comp(props);
 };

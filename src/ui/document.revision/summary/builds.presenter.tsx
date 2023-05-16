@@ -1,14 +1,14 @@
-import { Box, BoxProps, Grid, IconButton, ListItem, Tooltip, Typography } from "@material-ui/core";
-import { HighlightOffOutlined } from "@material-ui/icons";
-import React from "react";
-import { Link } from "react-router-dom";
-import { stripTags } from "../../../common/utils/helpers";
-import { DataProps } from "../../../state/ducks/common/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import { documentVersionPath } from "../utils/paths";
-import { styles } from "./builds.presenter.styles";
+import { Box, BoxProps, Grid, IconButton, ListItem, Tooltip, Typography } from '@material-ui/core';
+import { HighlightOffOutlined } from '@material-ui/icons';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { stripTags } from '../../../common/utils/helpers';
+import { DataProps } from '../../../state/ducks/common/types';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
+import { documentVersionPath } from '../utils/paths';
+import { styles } from './builds.presenter.styles';
 
 interface OwnProps {
   label: string;

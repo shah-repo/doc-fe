@@ -1,11 +1,11 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from "@material-ui/core";
-import { ExportToCsv } from "export-to-csv";
-import React, { useEffect, useState } from "react";
-import { ReactComponent as ExportIcon } from "../../../../assets/images/icon_export_data.svg";
-import { HeaderTableType } from "../../../../state/ducks/documentRevisions/types";
-import Text from "../../../components/Text";
-import { DialogHandler } from "../../../hooks/useDialog";
-import { styles } from "./ExportListDialog.styles";
+import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from '@material-ui/core';
+import { ExportToCsv } from 'export-to-csv';
+import React, { useEffect, useState } from 'react';
+import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
+import { HeaderTableType } from '../../../../state/ducks/documentRevisions/types';
+import Text from '../../../components/Text';
+import { DialogHandler } from '../../../hooks/useDialog';
+import { styles } from './ExportListDialog.styles';
 
 interface Props {
   dialog: DialogHandler;
@@ -23,12 +23,12 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   customFileName,
 }) => {
   const classes = styles();
-  const [fileName, saveFileName] = useState("");
+  const [fileName, saveFileName] = useState('');
 
   const options = {
     showLabels: true,
     headers: headers?.map((e) => e.label),
-    filename: fileName === "" ? customFileName : fileName,
+    filename: fileName === '' ? customFileName : fileName,
     useTextFile: false,
     useBom: true,
     useKeysAsHeaders,
@@ -38,7 +38,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (dialog.isOpen) {
-      saveFileName("");
+      saveFileName('');
     }
   }, [dialog.isOpen]);
 
@@ -54,7 +54,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"
-          PaperProps={{ id: "exportListDialog" }}
+          PaperProps={{ id: 'exportListDialog' }}
         >
           <DialogContent>
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
@@ -72,7 +72,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
                     <Text translation="document.revision.enter.file.name" />
                   </Typography>
                   <TextField
-                    error={fileName === ""}
+                    error={fileName === ''}
                     variant="outlined"
                     id="ExportListDialog-fileName"
                     style={{ width: 400 }}

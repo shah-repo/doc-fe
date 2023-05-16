@@ -1,4 +1,4 @@
-import translations from "./en.json";
+import translations from './en.json';
 
 export type Translation = keyof typeof translations;
 

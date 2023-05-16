@@ -1,18 +1,18 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { first, get, has, isArray, join } from "lodash";
-import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
-import { intl } from "../../../common/intl";
-import { redirectTo } from "../../../common/redirectHandler";
-import { encodeString } from "../../../common/utils/helpers";
-import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from "../../../ui/constants/urls";
-import apiClient from "../../apiClient";
-import apiXClient from "../../apiXClient";
-import { authActions } from "../../ducks/auth";
-import { ApplicationState } from "../../reducers";
-import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
-import { AsyncActionErrorResponse } from "./types";
+import axios, { AxiosRequestConfig } from 'axios';
+import { first, get, has, isArray, join } from 'lodash';
+import { Action, Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import { intl } from '../../../common/intl';
+import { redirectTo } from '../../../common/redirectHandler';
+import { encodeString } from '../../../common/utils/helpers';
+import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from '../../../ui/constants/urls';
+import apiClient from '../../apiClient';
+import apiXClient from '../../apiXClient';
+import { authActions } from '../../ducks/auth';
+import { ApplicationState } from '../../reducers';
+import { ApiAction, AsyncAction, AsyncStatus } from '../../types';
+import { AsyncActionErrorResponse } from './types';
 
-export const CALL_API = "middlewares/CALL_API";
+export const CALL_API = 'middlewares/CALL_API';
 
 function isApiAction(action: Action): action is ApiAction {
   return action.type === CALL_API;
@@ -22,7 +22,7 @@ const dispatchAsyncStatusAction = (
   dispatch: Dispatch,
   type: string | undefined,
   status: AsyncStatus,
-  message = "",
+  message = '',
 ): void => {
   if (!type) {
     return;
@@ -57,7 +57,7 @@ const apiMiddleware: Middleware = ({
     };
 
     if (action.contentType) {
-      requestConfig.headers["Content-Type"] = action.contentType;
+      requestConfig.headers['Content-Type'] = action.contentType;
     }
 
     if (action.cancelToken) {
@@ -82,7 +82,7 @@ const apiMiddleware: Middleware = ({
     }
 
     if (action.sendNoResponseHeader) {
-      requestConfig.headers["X-Enlil-Send-No-Response"] = true;
+      requestConfig.headers['X-Enlil-Send-No-Response'] = true;
     }
 
     const { data } = await apiClient.request(requestConfig);
@@ -105,7 +105,7 @@ const apiMiddleware: Middleware = ({
     userLocked && redirectTo(USER_LOCKED)();
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
-    let responseMessage = "";
+    let responseMessage = '';
     const isUnauthorizedRequest = exception?.response?.status === 401 && action.includeAuthorization;
     const isPasswordAction = exception?.response?.status === 401 && action.password;
 
@@ -116,7 +116,7 @@ const apiMiddleware: Middleware = ({
     switch (exception?.response?.status) {
       case 425: {
         responseMessage = intl.formatMessage({
-          id: "errors.somethingWentWrong",
+          id: 'errors.somethingWentWrong',
         });
         break;
       }
@@ -124,10 +124,10 @@ const apiMiddleware: Middleware = ({
         const {
           data: { message },
         } = exception.response as AsyncActionErrorResponse;
-        if (isArray(message) && has(first(message), "message")) {
-          responseMessage = join(get(first(message), "message"), "\n");
+        if (isArray(message) && has(first(message), 'message')) {
+          responseMessage = join(get(first(message), 'message'), '\n');
         } else {
-          responseMessage = Array.isArray(message) ? message.join("; ") : message;
+          responseMessage = Array.isArray(message) ? message.join('; ') : message;
         }
         break;
       }

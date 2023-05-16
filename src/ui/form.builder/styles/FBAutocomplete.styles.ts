@@ -1,11 +1,11 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 export const styles = {
   inputPropStyle: {
     minHeight: 40,
     borderRadius: 3,
-    padding: "0 80px 0 6px",
+    padding: '0 80px 0 6px',
   },
   labelProps: {
     marginBottom: 10,
@@ -27,13 +27,13 @@ export const styles = {
 export const FBAutoCompleteStyle = makeStyles(() =>
   createStyles({
     root: {
-      "& .MuiAutocomplete-inputRoot": {
+      '& .MuiAutocomplete-inputRoot': {
         height: 40,
         padding: 0,
       },
-      "& input": {
-        minHeight: "initial !important",
-        fontSize: "12px",
+      '& input': {
+        minHeight: 'initial !important',
+        fontSize: '12px',
         color: Colors.almost_black,
       },
     },

@@ -1,10 +1,10 @@
-import { shallow } from "enzyme";
-import React from "react";
-import TaskPresenter from "./Task.presenter";
-import TaskFormDialog from "./TaskFormDialog";
-import TasksPresenter, { Props } from "./Tasks.presenter";
+import { shallow } from 'enzyme';
+import React from 'react';
+import TaskPresenter from './Task.presenter';
+import TaskFormDialog from './TaskFormDialog';
+import TasksPresenter, { Props } from './Tasks.presenter';
 
-describe("Tasks presenter test without tasks", () => {
+describe('Tasks presenter test without tasks', () => {
 
   const defaultProps: Props = {
     tasks: [],
@@ -22,7 +22,7 @@ describe("Tasks presenter test without tasks", () => {
     <TasksPresenter {...defaultProps} {...props}/>,
   );
 
-  it("Doesnt show task presenter if there is no tasks", () => {
+  it('Doesnt show task presenter if there is no tasks', () => {
     const wrapper = getWrapper();
 
     expect(wrapper.find(TaskPresenter)).toHaveLength(0);
@@ -30,18 +30,18 @@ describe("Tasks presenter test without tasks", () => {
   });
 });
 
-describe("Tasks presenter test with tasks", () => {
+describe('Tasks presenter test with tasks', () => {
 
   const defaultProps: Props = {
     tasks: [{
-      title: "Task 1",
-      description: "Test",
-      status: "DONE",
+      title: 'Task 1',
+      description: 'Test',
+      status: 'DONE',
     },
     {
-      title: "Task 2",
-      description: "Test",
-      status: "PENDING",
+      title: 'Task 2',
+      description: 'Test',
+      status: 'PENDING',
     },
     ],
     openDialog: jest.fn(),
@@ -58,7 +58,7 @@ describe("Tasks presenter test with tasks", () => {
     <TasksPresenter {...defaultProps} {...props}/>,
   );
 
-  it("Match number of task presenters to number of tasks", () => {
+  it('Match number of task presenters to number of tasks', () => {
 
     const wrapper = getWrapper({ ...defaultProps });
 

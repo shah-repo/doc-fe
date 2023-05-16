@@ -1,15 +1,15 @@
-import { DialogProps } from "@material-ui/core";
+import { DialogProps } from '@material-ui/core';
 
 export enum SMDialogAction {
-  done = "done",
-  close = "close",
-  save = "save",
-  cancel = "cancel",
-  lhrBuildSwitch = "lhr.build.switch"
+  done = 'done',
+  close = 'close',
+  save = 'save',
+  cancel = 'cancel',
+  lhrBuildSwitch = 'lhr.build.switch'
 }
 
 export type SMDialogProps =
-& Pick<Partial<DialogProps>, "maxWidth">
+& Pick<Partial<DialogProps>, 'maxWidth'>
 & SMDialogContextProps
 & {
   onDialogActionClick?: (action: SMDialogAction) => void;

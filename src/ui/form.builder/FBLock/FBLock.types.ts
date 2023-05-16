@@ -1,7 +1,7 @@
-import { FBFormProps } from "..";
+import { FBFormProps } from '..';
 
 export type FBLockProps =
-& Pick<FBFormProps, "children">
+& Pick<FBFormProps, 'children'>
 & {
   fields?: Record<string, boolean>[];
 };

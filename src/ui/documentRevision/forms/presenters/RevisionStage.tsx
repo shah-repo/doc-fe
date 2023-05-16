@@ -1,14 +1,14 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { companySelectors } from "../../../../state/ducks/company";
-import { RevisionStageOptions } from "../../../../state/ducks/documentRevisions/types";
-import RadioButton from "../../../components/forms/fields/RadioButton";
-import RadioGroup from "../../../components/forms/fields/RadioGroup";
-import { required, validator } from "../../../components/forms/fields/validators";
-import Text from "../../../components/Text";
-import { useRevisionStageSelect } from "../../../hooks/docCustomization/useCustomization";
-import { styles } from "./styles/RevisionStage.styles";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { companySelectors } from '../../../../state/ducks/company';
+import { RevisionStageOptions } from '../../../../state/ducks/documentRevisions/types';
+import RadioButton from '../../../components/forms/fields/RadioButton';
+import RadioGroup from '../../../components/forms/fields/RadioGroup';
+import { required, validator } from '../../../components/forms/fields/validators';
+import Text from '../../../components/Text';
+import { useRevisionStageSelect } from '../../../hooks/docCustomization/useCustomization';
+import { styles } from './styles/RevisionStage.styles';
 
 interface Props {
   isDisabled: boolean;
@@ -39,7 +39,7 @@ const RevisionStage: React.FunctionComponent<Props> = ({
   return (
     <Box>
       <Typography variant="h6" className={classes.title}>
-        <Text message={"document.revision.stage"}/>
+        <Text message={'document.revision.stage'}/>
       </Typography>
       <RadioGroup name="revisionStage" validate={validator(required)}>
         {revStageOptions.map((option) =>
@@ -51,7 +51,7 @@ const RevisionStage: React.FunctionComponent<Props> = ({
             // if value is number, cheking radio buttons doesn't work correctly
             value={option.value.toString()}
             data-cy={option.text}
-            style={{ width: "fit-content", marginLeft: 0 }}
+            style={{ width: 'fit-content', marginLeft: 0 }}
           />)
         }
       </RadioGroup>

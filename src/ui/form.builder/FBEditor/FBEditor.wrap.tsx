@@ -1,6 +1,6 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBEditorProps, FBEditorState } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBEditorProps, FBEditorState } from '..';
 
 export const withFBEditor = <T extends FBEditorProps>(
   Component: React.FunctionComponent<T>
@@ -14,7 +14,7 @@ export const withFBEditor = <T extends FBEditorProps>(
 
     const { workspaceState } = FB.useStores();
     editorState = editorState || FB.useRef<FBEditorState>(FBEditorState);
-    isFormOutput = workspaceState?.mode === "formDesign";
+    isFormOutput = workspaceState?.mode === 'formDesign';
 
     useObserver(() => {
       mode = editorState?.mode;

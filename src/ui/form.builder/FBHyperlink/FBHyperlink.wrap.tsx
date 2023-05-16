@@ -1,17 +1,17 @@
-import React from "react";
-import { FBHyperlinkProps } from "..";
+import React from 'react';
+import { FBHyperlinkProps } from '..';
 
 export const withFBHyperlink = <T extends FBHyperlinkProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    linkUrl = "https://",
+    linkUrl = 'https://',
     onClick,
     ...props
   }: T) => {
 
     onClick = () =>
-      window.open(linkUrl.includes("http") ? linkUrl : `https://${linkUrl}`);
+      window.open(linkUrl.includes('http') ? linkUrl : `https://${linkUrl}`);
 
     return Component({
       ...(props as T),

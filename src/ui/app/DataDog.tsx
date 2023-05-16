@@ -1,9 +1,9 @@
-import { datadogRum } from "@datadog/browser-rum";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { deleteCookie } from "../../common/utils/helpers";
-import { authSelectors } from "../../state/ducks/auth";
-import { companySelectors } from "../../state/ducks/company";
+import { datadogRum } from '@datadog/browser-rum';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { deleteCookie } from '../../common/utils/helpers';
+import { authSelectors } from '../../state/ducks/auth';
+import { companySelectors } from '../../state/ducks/company';
 
 export const DataDog: React.FunctionComponent<any> = () => {
   const companyId = useSelector(companySelectors.companyIdSelector);
@@ -18,7 +18,7 @@ export const DataDog: React.FunctionComponent<any> = () => {
       employeeId.length === 0) {
       datadogRum.removeUser();
     } else {
-      deleteCookie("_dd_s");
+      deleteCookie('_dd_s');
       datadogRum.setUser({
         id: employeeId,
         name: `${userName} (${companyName})`,

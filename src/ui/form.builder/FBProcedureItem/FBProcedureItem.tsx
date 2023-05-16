@@ -1,14 +1,14 @@
-import { Box, IconButton } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import EditIcon from "@material-ui/icons/Edit";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import { isEmpty } from "lodash";
-import React, { useState } from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBProcedureItem } from "./FBProcedureItem.wrap";
+import { Box, IconButton } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import { isEmpty } from 'lodash';
+import React, { useState } from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBProcedureItem } from './FBProcedureItem.wrap';
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
@@ -31,7 +31,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
         borderTop={1}
         borderRight={1}
         borderLeft={1}
-        style={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
+        style={{ borderTopLeftRadius: '4px', borderTopRightRadius: '4px' }}
       >
         <FBDialog />
         <Box
@@ -44,7 +44,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             {...{ loading }}
             boxProps={{
               flexGrow: 1,
-              display: "flex",
+              display: 'flex',
               py: 1.7,
               pl: 2,
               color: Colors.almost_black,
@@ -57,13 +57,13 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               onMouseLeave={() => setIsHover(false)}>
               <FBTooltip title="form.builder.add">
                 {isHover ?
-                  <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
+                  <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
                     data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                     onClick={() => onClick?.()}
                     {...{ disabled }}
                   />
                   :
-                  <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: "17px", height: "17px" }}
+                  <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                     data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                     onClick={() => onClick?.()}
                     {...{ disabled }}
@@ -78,7 +78,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             <FBMediaAlbumField
               name={`${name}.attachments`}
               isTemplate={false}
-              editorProperties={["copyableValue"]}
+              editorProperties={['copyableValue']}
               gutter={false}
               fieldType="procedure"
               autosave={false}
@@ -98,7 +98,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               >
                 <Box
                   display="flex"
-                  bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
+                  bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
                   p={1.5}
                 >
                   <FBText
@@ -106,7 +106,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                     values={{
                       title: getItem?.(item.title),
                       lot: getLot?.(item.partLot),
-                      quantity: item.quantity || "form.builder.none",
+                      quantity: item.quantity || 'form.builder.none',
                       unit: item.unit,
                     }}
                     boxProps={{
@@ -141,8 +141,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                 </Box>
                 <Box
                   key="id"
-                  display={isEmpty(item.attachments) ? "none" : "flex"}
-                  bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
+                  display={isEmpty(item.attachments) ? 'none' : 'flex'}
+                  bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
                   p={1.5}
                   pt={0}
                   pb={0}

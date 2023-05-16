@@ -1,5 +1,5 @@
-import { ApplicationState } from "../../../reducers";
-import { AsyncState } from "../../../types";
+import { ApplicationState } from '../../../reducers';
+import { AsyncState } from '../../../types';
 
 const trainingList = (state: ApplicationState) =>
   state.dashboardNew.training.training;

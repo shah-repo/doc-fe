@@ -1,7 +1,7 @@
-import { cloneDeep } from "lodash";
-import { reaction } from "mobx";
-import React from "react";
-import { FB, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from "..";
+import { cloneDeep } from 'lodash';
+import { reaction } from 'mobx';
+import React from 'react';
+import { FB, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from '..';
 
 export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>
@@ -27,14 +27,14 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
       })) : approvalMatrixFieldState;
 
     handleAdd = () => {
-      approvalMatrixFieldState && (approvalMatrixFieldState.mode = "add");
+      approvalMatrixFieldState && (approvalMatrixFieldState.mode = 'add');
     };
 
     React.useEffect(() => {
       reaction( // Form sync & autosave
         () => approvalMatrixFieldState?.data,
         (data) => {
-          formState?.setFieldValue(name, cloneDeep(data?.[type || ""]));
+          formState?.setFieldValue(name, cloneDeep(data?.[type || '']));
           formState?.setFieldAutosave(name);
         }
       );

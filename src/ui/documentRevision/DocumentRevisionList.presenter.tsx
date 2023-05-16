@@ -1,19 +1,19 @@
-import classNames from "classnames";
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { Nullable } from "../../state/ducks/common/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
-import SummaryInfo from "../common/summary/SummaryInfo";
-import DateFormatter from "../components/Date";
-import Text from "../components/Text";
-import { documentVersionPath } from "../document.revision/utils/paths";
-import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
-import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
-import { Translation } from "../translations/types";
-import { styles } from "./DocumentRevisionList.container.styles";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
-import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
-import { isDocumentAlphaReleased } from "./helpers/revisionStage";
+import classNames from 'classnames';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Nullable } from '../../state/ducks/common/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
+import SummaryInfo from '../common/summary/SummaryInfo';
+import DateFormatter from '../components/Date';
+import Text from '../components/Text';
+import { documentVersionPath } from '../document.revision/utils/paths';
+import CustomLabelTooltip from '../hooks/docCustomization/CustomLabelTooltip';
+import { useDocumentStatus } from '../hooks/docCustomization/useCustomization';
+import { Translation } from '../translations/types';
+import { styles } from './DocumentRevisionList.container.styles';
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatus, isDocumentRevisionReleased } from './helpers/documentRevisionStatus';
+import { generateRevisionNumber } from './helpers/generateRevisionNumber';
+import { isDocumentAlphaReleased } from './helpers/revisionStage';
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -53,8 +53,8 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const { status, displayStatus } = documentRevision;
 
   const { isVisible: isStatusVisible, tooltipConfig } = useDocumentStatus(documentTypeId, status);
-  let verPrefix = "common.revision";
-  let recordDateLabel = "common.updated" as Translation;
+  let verPrefix = 'common.revision';
+  let recordDateLabel = 'common.updated' as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const isDraft = isDocumentRevisionInDraft(status);
@@ -66,13 +66,13 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
 
   if (isRecord) {
     if (isReleased) {
-      recordDateLabel = "document.revision.released.date";
+      recordDateLabel = 'document.revision.released.date';
     }
     if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isAlphaReleased)) {
-      verPrefix = "common.revision";
+      verPrefix = 'common.revision';
     }
     if (isVoided) {
-      recordDateLabel = "record.voided.date";
+      recordDateLabel = 'record.voided.date';
     }
   }
 
@@ -93,8 +93,8 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     return documentRevision.obsoletedAt || documentRevision.effectiveDate;
   };
 
-  const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
-  const recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
+  const docIdLabel = (isRecord ? 'common.id' : 'common.docId') as Translation;
+  const recordOwnerLabel = isVoided ? 'record.voided.by' : 'record.released.by';
 
   return (
     <div
@@ -102,7 +102,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       className={classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       })}
-      data-cy={"DocumentRevisionList-item"}
+      data-cy={'DocumentRevisionList-item'}
     >
       <NavLink
         to={link}
@@ -110,7 +110,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         activeClassName={classes.activeLinkTitle}
       >
         <div
-          data-cy={"revision"}>
+          data-cy={'revision'}>
           <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
@@ -130,7 +130,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         className={classes.linkBody}
       >
         <SummaryInfo
-          dataCy={"common.docId"}
+          dataCy={'common.docId'}
           label={isDocumentPO ? undefined : docIdLabel}
           value={docId}
         />
@@ -141,11 +141,11 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           />
         )}
         <SummaryInfo
-          label={isRecord && (isReleased || isVoided) ? recordOwnerLabel : "common.owner"}
+          label={isRecord && (isReleased || isVoided) ? recordOwnerLabel : 'common.owner'}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label={isRecord ? recordDateLabel : "common.effective.date"}
+          label={isRecord ? recordDateLabel : 'common.effective.date'}
           value={
             <DateFormatter value={getDateValue()}/>
           }

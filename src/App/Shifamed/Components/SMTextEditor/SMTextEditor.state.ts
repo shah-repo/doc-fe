@@ -1,6 +1,6 @@
-import { EditorState } from "draft-js";
-import { action, observable, set } from "mobx";
-import { SMTextEditorStateProps } from "../../..";
+import { EditorState } from 'draft-js';
+import { action, observable, set } from 'mobx';
+import { SMTextEditorStateProps } from '../../..';
 
 export default class SMTextEditorState implements SMTextEditorStateProps {
 
@@ -20,14 +20,14 @@ export default class SMTextEditorState implements SMTextEditorStateProps {
 
   // MARK: @actions
   @action public setEditorState = (editorState?: EditorState) => {
-    set(this, "editorState", editorState);
+    set(this, 'editorState', editorState);
   };
 
   @action public setMasked = (masked?: boolean) =>
-    set(this, "masked", masked);
+    set(this, 'masked', masked);
 
   @action public setPreviewMode = (previewMode?: boolean) =>
-    set(this, "previewMode", previewMode);
+    set(this, 'previewMode', previewMode);
 
   @action public togglePreviewMode = () =>
     this.setPreviewMode(!this.previewMode);

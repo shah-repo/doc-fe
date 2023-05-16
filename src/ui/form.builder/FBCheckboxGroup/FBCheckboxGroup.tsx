@@ -1,9 +1,9 @@
-import { FormGroup } from "@material-ui/core";
-import React from "react";
-import { FBCheckboxGroupProps, FBInput } from "..";
-import { styles } from "../styles/FBEditorCheckbox.styles";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { withFBCheckboxGroup } from "./FBCheckboxGroup.wrap";
+import { FormGroup } from '@material-ui/core';
+import React from 'react';
+import { FBCheckboxGroupProps, FBInput } from '..';
+import { styles } from '../styles/FBEditorCheckbox.styles';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { withFBCheckboxGroup } from './FBCheckboxGroup.wrap';
 
 const FBCheckboxGroupComp: React.FunctionComponent<FBCheckboxGroupProps> = ({
   row, controls, name,

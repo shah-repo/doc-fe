@@ -1,4 +1,4 @@
-import { SMBoxProps } from "../../..";
+import { SMBoxProps } from '../../..';
 
 export interface SMTemplateProps {
   /**

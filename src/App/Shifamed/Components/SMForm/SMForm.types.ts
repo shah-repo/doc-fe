@@ -1,5 +1,5 @@
-import { SMProviderProps, SMTemplateProps } from "../../..";
-import { FBWorkspaceMode } from "../../../../ui/form.builder";
+import { SMProviderProps, SMTemplateProps } from '../../..';
+import { FBWorkspaceMode } from '../../../../ui/form.builder';
 
 export type SMFormProps =
 & SMTemplateProps
@@ -14,7 +14,7 @@ export type SMFormProps =
 };
 
 export interface SMFormStateProps {
-  setValues: (values?: SMFormProps["values"]) => void;
+  setValues: (values?: SMFormProps['values']) => void;
   setValue: (name?: string, value?: any) => void;
   getValue: (name?: string) => any;
   getValues: () => Record<string, any>;
@@ -28,8 +28,8 @@ export interface SMFormStateProps {
   isLHRProductionBuild: boolean;
   Validator: any;
   values: Map<string, any>;
-  oldValues: SMFormProps["values"];
-  validationValues: SMFormProps["values"];
+  oldValues: SMFormProps['values'];
+  validationValues: SMFormProps['values'];
   validationAttributeNames: Record<string, string>;
   rules: Record<string, any>;
   errors: Map<string, string>;
@@ -42,4 +42,4 @@ export interface SMFormStateProps {
   loading: boolean;
 }
 
-export type SMFormHOCProps = Pick<SMProviderProps, "_formState">;
+export type SMFormHOCProps = Pick<SMProviderProps, '_formState'>;

@@ -1,9 +1,9 @@
-import { Box, Button } from "@material-ui/core";
-import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
+import { Box, Button } from '@material-ui/core';
+import WarningOutlinedIcon from '@material-ui/icons/WarningOutlined';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
   index: number;
@@ -42,24 +42,24 @@ const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
           alert &&
           <span
             style={{
-              backgroundColor: isHover ? Colors.light_red : "",
+              backgroundColor: isHover ? Colors.light_red : '',
               borderRadius: 50,
-              position: "absolute",
+              position: 'absolute',
               left: 30,
               width: 35,
               height: 35,
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
               paddingTop: 6,
             }}
           >
             <WarningOutlinedIcon color="error" fontSize="small" />
           </span>
         }
-        <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
+        <Link to={url} style={{ textDecoration: 'none', color: 'inherit' }}>
           <Box>
             <Box
-              color={alert ? "error.main" : "primary.main"}
+              color={alert ? 'error.main' : 'primary.main'}
               fontWeight="fontWeightBold"
               marginBottom="5px"
             >

@@ -1,14 +1,14 @@
-import { filter, find, findIndex, omit } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBClosingNoteProps, FBTaskItem, FBTaskItemStatus } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { filter, find, findIndex, omit } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBClosingNoteProps, FBTaskItem, FBTaskItemStatus } from '..';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps> {
   @observable public canAddTask = true;
 
   @action public handleAddTask = (canAdd: boolean) => {
-    set(this, "canAddTask", canAdd);
+    set(this, 'canAddTask', canAdd);
   };
 
   public tasks?: FBTaskItem[];
@@ -37,7 +37,7 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
       url: FBEndpoint.TaskAbandon,
       urlValues: { id: task.id },
       body: task,
-      method: "post",
+      method: 'post',
     });
   };
 
@@ -46,8 +46,8 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
     this.set({
       url: FBEndpoint.TaskDone,
       urlValues: { id: task.id },
-      body: omit(task, "id"),
-      method: "post",
+      body: omit(task, 'id'),
+      method: 'post',
     });
   };
 
@@ -58,11 +58,11 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
     if (!this.data) { return; }
     const { id } = this.data;
     switch (this.method) {
-      case "post": {
+      case 'post': {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const tasks = filter(this.tasks, (t) => t.id !== id);
-        const { status = "DRAFT" } = this.data || {};
-        const setTasks: Partial<Record<FBTaskItemStatus | "default", () => any>> = {
+        const { status = 'DRAFT' } = this.data || {};
+        const setTasks: Partial<Record<FBTaskItemStatus | 'default', () => any>> = {
           ABANDONED: () => this.setTasks(tasks),
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           default: () => this.setTasks([...tasks, ...[this.data!]]),
@@ -71,7 +71,7 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
         (setTasks[status] || setTasks.default)?.();
         break;
       }
-      case "patch": {
+      case 'patch': {
         const tasks = this.tasks || [];
         const indexOf = findIndex(tasks, { id });
         tasks[indexOf] = this.data;
@@ -92,8 +92,8 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
   private updateTask = (task: FBTaskItem) => this.set({
     url: FBEndpoint.Task,
     urlValues: { id: task.id },
-    body: { ...omit(task, ["id", "type", "partOf"]) },
-    method: "patch",
+    body: { ...omit(task, ['id', 'type', 'partOf']) },
+    method: 'patch',
   });
 }
 

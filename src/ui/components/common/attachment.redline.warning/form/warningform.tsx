@@ -1,12 +1,12 @@
-import { Box, Button, withStyles, WithStyles } from "@material-ui/core";
-import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
-import { Form } from "formik";
-import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../../../state/types";
-import { Translation } from "../../../../translations/types";
-import SubmitButton from "../../../forms/SubmitButton";
-import Text from "../../../Text";
-import styles from "./warningform.styles";
+import { Box, Button, withStyles, WithStyles } from '@material-ui/core';
+import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import { Form } from 'formik';
+import * as React from 'react';
+import { AsyncState, AsyncStatus } from '../../../../../state/types';
+import { Translation } from '../../../../translations/types';
+import SubmitButton from '../../../forms/SubmitButton';
+import Text from '../../../Text';
+import styles from './warningform.styles';
 
 interface RedlineWarningFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;

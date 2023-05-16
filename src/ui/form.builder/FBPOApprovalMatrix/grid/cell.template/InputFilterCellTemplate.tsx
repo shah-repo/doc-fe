@@ -1,11 +1,11 @@
-import { makeStyles } from "@material-ui/core";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
-import { debounce, isEmpty } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../../components/common/kendo/helpers";
-import { KendoGridFilterCellOperators } from "../../../../components/KendoGrid/interfaces";
+import { makeStyles } from '@material-ui/core';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
+import { debounce, isEmpty } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { DisplayText, TranslatedText } from '../../../../components/common/kendo/helpers';
+import { KendoGridFilterCellOperators } from '../../../../components/KendoGrid/interfaces';
 
 const useStyles = makeStyles((theme) => ({
   clearButton: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
-  value = "",
+  value = '',
   operator = KendoGridFilterCellOperators.CONTAINS,
   onChange,
 }) => {
@@ -25,9 +25,9 @@ export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
     newValue,
     newOperator,
   }: {
-    event: Parameters<GridFilterCellProps["onChange"]>[0]["syntheticEvent"];
-    newValue?: GridFilterCellProps["value"];
-    newOperator?: GridFilterCellProps["operator"];
+    event: Parameters<GridFilterCellProps['onChange']>[0]['syntheticEvent'];
+    newValue?: GridFilterCellProps['value'];
+    newOperator?: GridFilterCellProps['operator'];
   }) => {
     onChange({
       value: newValue ?? value,
@@ -37,7 +37,7 @@ export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
   };
 
   const clearFilter = (event: React.MouseEvent<HTMLButtonElement>) => {
-    updateFilter({ event, newValue: "", newOperator: "" });
+    updateFilter({ event, newValue: '', newOperator: '' });
   };
 
   const updateValue = debounce((e: InputChangeEvent) => {
@@ -53,7 +53,7 @@ export const InputFilterCellTemplate: React.FC<GridFilterCellProps> = ({
       <Input
         defaultValue={value}
         onChange={updateValue}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       />
       <button
         className={`k-button k-button-icon k-clear-button-visible ${classes.clearButton}`}

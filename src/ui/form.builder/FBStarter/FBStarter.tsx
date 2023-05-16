@@ -1,12 +1,12 @@
-import { Box } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import React, { useState } from "react";
-import { FBButton, FBStarterProps } from "..";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
-import Colors from "../../layout/theme/utils/colors";
-import { styles } from "./FBStarter.styles";
-import { withFBStarter } from "./FBStarter.wrap";
+import { Box } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import React, { useState } from 'react';
+import { FBButton, FBStarterProps } from '..';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
+import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
+import Colors from '../../layout/theme/utils/colors';
+import { styles } from './FBStarter.styles';
+import { withFBStarter } from './FBStarter.wrap';
 
 const FBStarter: React.FunctionComponent<FBStarterProps> = ({
   index = 0,
@@ -25,7 +25,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
     return (
       <Box
         display="flex"
-        className={"fbStarterAddField"}
+        className={'fbStarterAddField'}
         mb={1}
         mt={6}
         onMouseEnter={() => setIsHover(true)}
@@ -37,14 +37,14 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
           my="auto"
           width="100%"
           color={Colors.navy}
-          style={{ borderStyle: isHover ? "solid" : "dashed" }}
+          style={{ borderStyle: isHover ? 'solid' : 'dashed' }}
         />
         <FBButton
           className={classes.button}
           label={
-            (_tabsState?.isTabActive("specification") && isEQ)
-              ? "form.builder.addEquiSpec"
-              : "form.builder.add.field"
+            (_tabsState?.isTabActive('specification') && isEQ)
+              ? 'form.builder.addEquiSpec'
+              : 'form.builder.add.field'
           }
           dataCy="form.builder.add.field"
           size="medium"
@@ -61,7 +61,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
           my="auto"
           width="100%"
           color={Colors.navy}
-          style={{ borderStyle: isHover ? "solid" : "dashed" }}
+          style={{ borderStyle: isHover ? 'solid' : 'dashed' }}
         />
       </Box>
     );
@@ -71,7 +71,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
       display="flex"
       my={1}
       border={1}
-      style={{ borderStyle: "dashed" }}
+      style={{ borderStyle: 'dashed' }}
     >
       <FBButton
         label="form.builder.add.field"

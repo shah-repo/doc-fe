@@ -1,16 +1,16 @@
-import { Formik, FormikProps } from "formik";
-import * as React from "react";
-import * as Yup from "yup";
-import { logo } from "../../../common/utils/helpers";
-import { authActions } from "../../../state/ducks/auth";
-import { emailSchema, passwordSchema } from "../../components/forms/fields/validators";
-import { FormContext } from "../../components/forms/FormContext";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { Translation } from "../../translations/types";
-import LoginFormPresenter from "../forms/LoginForm.presenter";
-import { LoginFormValues } from "../types";
-import VerificationEmailPage from "./VerificationEmailPage";
+import { Formik, FormikProps } from 'formik';
+import * as React from 'react';
+import * as Yup from 'yup';
+import { logo } from '../../../common/utils/helpers';
+import { authActions } from '../../../state/ducks/auth';
+import { emailSchema, passwordSchema } from '../../components/forms/fields/validators';
+import { FormContext } from '../../components/forms/FormContext';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
+import LoginFormPresenter from '../forms/LoginForm.presenter';
+import { LoginFormValues } from '../types';
+import VerificationEmailPage from './VerificationEmailPage';
 
 interface Props {
   signMessage: Translation;
@@ -31,8 +31,8 @@ const SignupFormContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-  const [signupEmail, saveSignupEmail] = React.useState("");
-  const [message, saveMessage] = React.useState("");
+  const [signupEmail, saveSignupEmail] = React.useState('');
+  const [message, saveMessage] = React.useState('');
   const [signupSuccess, toggleSignupSuccess] = React.useState(false);
   const signupAction = useActionCreator(authActions.signup);
 
@@ -43,8 +43,8 @@ const SignupFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const initialValues: LoginFormValues = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   };
 
   const render = (props: FormikProps<LoginFormValues>) => (
@@ -56,7 +56,7 @@ const SignupFormContainer: React.FunctionComponent<Props> = ({
       signLabel={signLabel}
       title={title}
       logo={logo}
-      buttonLabel={"signup.submit"}
+      buttonLabel={'signup.submit'}
     />
   );
 
@@ -70,7 +70,7 @@ const SignupFormContainer: React.FunctionComponent<Props> = ({
       {signupSuccess &&
         <VerificationEmailPage
           email={signupEmail}
-          message={"signup.verification.message"}
+          message={'signup.verification.message'}
           logo={logo}
           isForgotPassword={false}
         />}

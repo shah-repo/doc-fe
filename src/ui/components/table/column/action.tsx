@@ -1,8 +1,8 @@
-import { Fab } from "@material-ui/core";
-import { Add, Edit, FileCopy, OpenInNew } from "@material-ui/icons";
-import React from "react";
-import { TableSelectionProps } from "../types";
-import { TableColumnActionProps } from "./types";
+import { Fab } from '@material-ui/core';
+import { Add, Edit, FileCopy, OpenInNew } from '@material-ui/icons';
+import React from 'react';
+import { TableSelectionProps } from '../types';
+import { TableColumnActionProps } from './types';
 
 type Props<T> = TableColumnActionProps<T>;
 
@@ -11,13 +11,13 @@ Props<T>
 > => ({ actionType, rowData, onSelect }) => {
   const iconRenderer = () => {
     switch (actionType) {
-      case "EDIT":
+      case 'EDIT':
         return <Edit />;
-      case "FILE_COPY":
+      case 'FILE_COPY':
         return <FileCopy />;
-      case "PREVIEW":
+      case 'PREVIEW':
         return <OpenInNew />;
-      case "ADD":
+      case 'ADD':
         return <Add />;
       default:
         return null;
@@ -35,7 +35,7 @@ Props<T>
 
   return (
     <Fab
-      color={actionType === "ADD" ? "secondary" : undefined}
+      color={actionType === 'ADD' ? 'secondary' : undefined}
       size="small"
       onClick={handleClick({ rowData, actionType })}
     >

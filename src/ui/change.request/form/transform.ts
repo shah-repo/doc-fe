@@ -1,7 +1,7 @@
-import { isEmpty, pick } from "lodash";
-import { getStartOfDayDateString } from "../../../common/utils/date";
-import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
-import { ChangeRequestFormValues, TemplateOption } from "./types";
+import { isEmpty, pick } from 'lodash';
+import { getStartOfDayDateString } from '../../../common/utils/date';
+import { ChangeRequest, ChangeRequestEditRequestBody } from '../../../state/ducks/changeRequest/types';
+import { ChangeRequestFormValues, TemplateOption } from './types';
 
 interface OptionApproverType {
   value: string;
@@ -42,8 +42,8 @@ export const templateOptionToChangeRequestCreateBody = (option: TemplateOption):
     formDocument: {
       id: option.value,
     },
-    title: "",
-    description: "",
+    title: '',
+    description: '',
     formInput: option.formInput ?? {},
     documentType: {
       id: option.docTypeId,
@@ -55,7 +55,7 @@ export const templateOptionToChangeRequestCreateBody = (option: TemplateOption):
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
-    ...pick(values, ["formDocument"]),
+    ...pick(values, ['formDocument']),
     title: values.title,
     description: values.description,
     formInput: {

@@ -1,8 +1,8 @@
-import { isEmpty } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBFileUploadProps, FBFileUploadState } from "..";
+import { isEmpty } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBFileUploadProps, FBFileUploadState } from '..';
 
 export const withFBFileUpload = <T extends FBFileUploadProps>(
   Component: React.FunctionComponent<T>,
@@ -10,7 +10,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
   const Comp = ({
     fileUploadState,
     disabled,
-    name = "",
+    name = '',
     defaultValue,
     withState,
     files,

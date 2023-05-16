@@ -1,21 +1,21 @@
 // Todo: ENC-13302 Business logic from this file should be moved to BE side.
 
-import { compact, difference, find, isEmpty, map, minBy, some, sortBy } from "lodash";
-import { reaction, when } from "mobx";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from "..";
-import { GroupType } from "../../../state/ducks/auth/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
-import { store } from "../../../state/store";
-import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
-import { canEditDocumentRevision } from "../../documentRevision/helpers/documentRevisionPermissions";
-import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
-import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
-import FBDataStore from "../FBStore/FBDataStore";
+import { compact, difference, find, isEmpty, map, minBy, some, sortBy } from 'lodash';
+import { reaction, when } from 'mobx';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from '..';
+import { GroupType } from '../../../state/ducks/auth/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
+import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalStatus } from '../../../state/ducks/documents/types';
+import { store } from '../../../state/store';
+import { FBDataStoreApprovalKeys } from '../../documentRevision/forms/types';
+import { canEditDocumentRevision } from '../../documentRevision/helpers/documentRevisionPermissions';
+import { isDocumentRevisionInDraft } from '../../documentRevision/helpers/documentRevisionStatus';
+import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers';
+import FBDataStore from '../FBStore/FBDataStore';
 
 interface CheckApprovalsArguments {
   prevRequester?: string;
@@ -31,20 +31,20 @@ export const usePoApprovals = (
 
   const { document: documentRevision }  = workspaceState || {};
   const authUser = store.getState().auth.user;
-  const isCurrentUserOperator = some(documentRevision?.document.operators, ["user.email", authUser.email ]);
+  const isCurrentUserOperator = some(documentRevision?.document.operators, ['user.email', authUser.email ]);
   const canEditDocRev = documentRevision &&
   canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
 
   const getSignatureGroupName = (id: string) => {
     const approversGroups = compact(map(poApprovalsState?.groups, (group) =>
-      (group.joinedEmployees as string[]).includes(id) ? group : ""));
+      (group.joinedEmployees as string[]).includes(id) ? group : ''));
     const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
 
     if (isEmpty(poApprovalsState?.checkedGroups)) {
-      const groupToSign = minBy(poamGroups, "documentStage");
+      const groupToSign = minBy(poamGroups, 'documentStage');
       return groupToSign?.name;
     } else {
-      const sign = minBy(difference(poamGroups, poApprovalsState?.checkedGroups ?? []), "documentStage");
+      const sign = minBy(difference(poamGroups, poApprovalsState?.checkedGroups ?? []), 'documentStage');
       return sign?.name;
     }
   };
@@ -86,7 +86,7 @@ export const usePoApprovals = (
     }
 
     return updateSignaturesQueue(
-      sortBy(poApprovalsState?.activeApprovals, "signatureGroupName").map((approval) => approval.id)
+      sortBy(poApprovalsState?.activeApprovals, 'signatureGroupName').map((approval) => approval.id)
     );
   };
 
@@ -111,7 +111,7 @@ export const usePoApprovals = (
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
     const hasRequesterInAutoApprovers = hasUserInApprovers(requester, autoApprovers);
-    const hasPrevRequesterInAutoApprovers = hasUserInApprovers(prevRequester ?? "", autoApprovers);
+    const hasPrevRequesterInAutoApprovers = hasUserInApprovers(prevRequester ?? '', autoApprovers);
 
     const shouldAddRequester = !hasRequesterInAllApprovers && hasServiceOrProductPart && !isAdministrativeChange;
     const shouldRemoveRequester = hasRequesterInAutoApprovers && (!hasServiceOrProductPart || isAdministrativeChange);
@@ -147,7 +147,7 @@ export const usePoApprovals = (
         const signatureGroupName = getSignatureGroupName(approver);
         return poApprovalsState?.addApproval({
           assigned: { id: approver },
-          type: "MASTER",
+          type: 'MASTER',
           fieldId: fieldName,
           partOf: { id },
           signatureGroupName,
@@ -175,7 +175,7 @@ export const usePoApprovals = (
       if (approval?.status === ApprovalStatus.Abandoned) {
         return;
       }
-      return poApprovalsState?.applyTransition("abandon", approval?.id, undefined);
+      return poApprovalsState?.applyTransition('abandon', approval?.id, undefined);
     });
 
     return Promise.all(removeActions).then(() => {

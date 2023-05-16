@@ -1,7 +1,7 @@
-import * as React from "react";
-import { LOGIN_URL } from "../../constants/urls";
-import { LoginContainerProps } from "../Login.container";
-import SignupFormContainer from "./SignupForm.container";
+import * as React from 'react';
+import { LOGIN_URL } from '../../constants/urls';
+import { LoginContainerProps } from '../Login.container';
+import SignupFormContainer from './SignupForm.container';
 
 type Props = LoginContainerProps;
 

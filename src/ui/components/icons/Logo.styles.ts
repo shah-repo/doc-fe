@@ -1,11 +1,11 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     svgRoot: {
-      height: "auto",
-      width: "60%",
+      height: 'auto',
+      width: '60%',
     },
     letters: {
       color: theme.palette.secondary.contrastText,
@@ -14,17 +14,17 @@ const styles = makeStyles((theme: Theme) =>
       color: theme.palette.secondary.light,
     },
     envCnt: {
-      background: "0% 0% no-repeat padding-box",
+      background: '0% 0% no-repeat padding-box',
       backgroundColor: theme.palette.secondary.contrastText,
-      width: "100%",
+      width: '100%',
       marginBottom: 20,
-      display: "flex",
-      justifyContent: "center",
-      height: "25px",
-      alignItems: "center",
+      display: 'flex',
+      justifyContent: 'center',
+      height: '25px',
+      alignItems: 'center',
     },
     evnTxt: {
-      textAlign: "center",
+      textAlign: 'center',
       fontSize: 10,
       fontWeight: 600,
       letterSpacing: 0,
@@ -39,7 +39,7 @@ const styles = makeStyles((theme: Theme) =>
       background: Colors.blaze_orange,
     },
     logo: {
-      maxWidth: "100%",
+      maxWidth: '100%',
       paddingLeft: 24,
       paddingRight: 24,
     },

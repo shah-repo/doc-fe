@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from "..";
-import useStyles from "./FBFieldWrapper.styles";
-import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from '..';
+import useStyles from './FBFieldWrapper.styles';
+import { withFBFieldWrapper } from './FBFieldWrapper.wrap';
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   fieldWrapperState,

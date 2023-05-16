@@ -1,6 +1,6 @@
-import { compact, Dictionary, get, isArray, isDate, isObject, join, map } from "lodash";
-import React from "react";
-import { FBValidationProps } from "..";
+import { compact, Dictionary, get, isArray, isDate, isObject, join, map } from 'lodash';
+import React from 'react';
+import { FBValidationProps } from '..';
 
 export const withFBValidation = <T extends FBValidationProps>(
   Component: React.FunctionComponent<T>,
@@ -12,7 +12,7 @@ export const withFBValidation = <T extends FBValidationProps>(
 
     function valueByType(value: any, key: string, validator: string): any {
       switch (true) {
-        case isArray(value): return validator === "required_if_in" ? JSON.stringify({ ...value }) : value;
+        case isArray(value): return validator === 'required_if_in' ? JSON.stringify({ ...value }) : value;
         case isDate(value): return (value as string);
         case isObject(value): return get(value, key);
         default: return value;
@@ -20,8 +20,8 @@ export const withFBValidation = <T extends FBValidationProps>(
     }
 
     function valueSplit(key: string, value: any): string {
-      const ruleDelimiter = [":", ","];
-      let rules = value ? key : "";
+      const ruleDelimiter = [':', ','];
+      let rules = value ? key : '';
       if (isObject(value)) {
         map(value, (v, k) => {
           rules += `${ruleDelimiter.shift()}${valueByType(v, k, key)}`;
@@ -32,7 +32,7 @@ export const withFBValidation = <T extends FBValidationProps>(
 
     toStringRules = (validators: Dictionary<any>): string | undefined => {
       const rules = map(validators, (value, key) => `${valueSplit(key, value)}`);
-      return join(compact(rules), "|");
+      return join(compact(rules), '|');
     };
 
     return Component({

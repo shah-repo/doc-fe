@@ -1,7 +1,7 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { HelpCenterVideoItemData } from "../../../../HelpCenter.types";
-import useStyles from "./HelpCenterVideoItem.style";
+import { Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { HelpCenterVideoItemData } from '../../../../HelpCenter.types';
+import useStyles from './HelpCenterVideoItem.style';
 
 const getYoutubeId = (url: string) => {
   const regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;

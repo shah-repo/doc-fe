@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { companyActions, companySelectors } from "../../../../../state/ducks/company";
-import Text from "../../../../components/Text";
-import useStyles from "./Redline.banner.styles";
+import { Box } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { companyActions, companySelectors } from '../../../../../state/ducks/company';
+import Text from '../../../../components/Text';
+import useStyles from './Redline.banner.styles';
 
 const RedlineBanner: React.FunctionComponent = () => {
   const redlineActive = useSelector(companySelectors.getRedlineActive);

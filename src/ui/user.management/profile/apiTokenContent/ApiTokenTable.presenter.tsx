@@ -1,12 +1,12 @@
-import { Button } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as DisableIcon } from "../../../../assets/images/disable-icon.svg";
-import { API_TOKEN } from "../../../../state/ducks/userManagement/constants";
-import { GetApiTokenList } from "../../../../state/ducks/userManagement/types";
-import { TableColumnProps } from "../../../components/table/column/types";
-import { TablePanel } from "../../../components/table/panel";
-import Text from "../../../components/Text";
-import { styles } from "./ApiToken.style";
+import { Button } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as DisableIcon } from '../../../../assets/images/disable-icon.svg';
+import { API_TOKEN } from '../../../../state/ducks/userManagement/constants';
+import { GetApiTokenList } from '../../../../state/ducks/userManagement/types';
+import { TableColumnProps } from '../../../components/table/column/types';
+import { TablePanel } from '../../../components/table/panel';
+import Text from '../../../components/Text';
+import { styles } from './ApiToken.style';
 
 interface Props {
   tableName: string;
@@ -21,27 +21,27 @@ const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({
 
   const columns: TableColumnProps<GetApiTokenList>[] = [
     {
-      key: "name",
-      id: "ApiTokenContent-name",
-      label: "common.token.name",
+      key: 'name',
+      id: 'ApiTokenContent-name',
+      label: 'common.token.name',
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.name,
       },
       omitSearch: true,
     },
     {
-      key: "id" as keyof GetApiTokenList,
-      id: "ApiTokenContent-id",
-      label: "common.token.key",
+      key: 'id' as keyof GetApiTokenList,
+      id: 'ApiTokenContent-id',
+      label: 'common.token.key',
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.id,
       },
       omitSearch: true,
     },
     {
-      key: "active",
-      id: "ApiTokenContent-active",
-      label: "common.token.action",
+      key: 'active',
+      id: 'ApiTokenContent-active',
+      label: 'common.token.action',
       columnOptions: {
         cellDataGetter: ({ rowData }) => {
           if (rowData.active) {

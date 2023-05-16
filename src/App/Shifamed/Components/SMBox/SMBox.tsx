@@ -1,6 +1,6 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { SMBoxProps } from "../../..";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { SMBoxProps } from '../../..';
 
 const SMBox: React.FunctionComponent<SMBoxProps> = ({
   stretchX,

@@ -1,13 +1,13 @@
-import { isEmpty } from "lodash";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import UpgradeToLatestBanner from "./UpgradeToLatest.banner";
-import UpgradeToLatestButton from "./UpgradeToLatest.button";
+import { isEmpty } from 'lodash';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import UpgradeToLatestBanner from './UpgradeToLatest.banner';
+import UpgradeToLatestButton from './UpgradeToLatest.button';
 
-type DisplayType = "button" | "banner";
+type DisplayType = 'button' | 'banner';
 
 interface Props {
   formDocumentId?: string;
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
-  formDocumentId = "",
+  formDocumentId = '',
   docRevId,
   type,
   bannerPortal,
@@ -48,11 +48,11 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        type === "button" &&
+        type === 'button' &&
         <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade, renderAsButton }}/>
       }
       {
-        type === "banner" &&
+        type === 'banner' &&
         <UpgradeToLatestBanner {...{ onUpgradeClick, shouldShowUpgrade, bannerPortal }} />
       }
     </>

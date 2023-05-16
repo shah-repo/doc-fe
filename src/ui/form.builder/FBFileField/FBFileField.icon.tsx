@@ -1,8 +1,8 @@
-import { Box, CircularProgress, Link } from "@material-ui/core";
-import { AttachFile } from "@material-ui/icons";
-import React from "react";
-import { FBFileFieldProps } from "..";
-import { withFBAttachmentField } from "./FBFileField.wrap";
+import { Box, CircularProgress, Link } from '@material-ui/core';
+import { AttachFile } from '@material-ui/icons';
+import React from 'react';
+import { FBFileFieldProps } from '..';
+import { withFBAttachmentField } from './FBFileField.wrap';
 
 const FBFileFieldIcon: React.FunctionComponent<FBFileFieldProps> = ({
   name,
@@ -16,7 +16,7 @@ const FBFileFieldIcon: React.FunctionComponent<FBFileFieldProps> = ({
       accept="*"
       type="file"
       id={`fb-attachment-field-${name}`}
-      style={{ display: "none" }}
+      style={{ display: 'none' }}
       {...{ onChange, multiple, disabled }}
     />
     <label htmlFor={`fb-attachment-field-${name}`}>

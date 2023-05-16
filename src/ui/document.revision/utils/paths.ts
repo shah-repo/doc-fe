@@ -1,6 +1,6 @@
-import { generatePath } from "react-router-dom";
-import { DOCUMENT_REVISION_NEW_VERSION_URL, DOCUMENT_REVISION_VERSION_URL } from "../../constants/urls";
-import { RouteParams } from "./types";
+import { generatePath } from 'react-router-dom';
+import { DOCUMENT_REVISION_NEW_VERSION_URL, DOCUMENT_REVISION_VERSION_URL } from '../../constants/urls';
+import { RouteParams } from './types';
 
 const documentPath = (path: string, routeParams: RouteParams) =>
   generatePath(path, { ...routeParams });

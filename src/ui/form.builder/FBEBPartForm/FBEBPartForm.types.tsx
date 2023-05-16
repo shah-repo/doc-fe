@@ -1,9 +1,9 @@
-import { FBFormProps, FBInputProps } from "..";
-import { DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
+import { FBFormProps, FBInputProps } from '..';
+import { DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export type FBEBPartFormProps =
-& Pick<FBFormProps, "formState">
-& Pick<FBInputProps, "children" | "disabled" | "loading">
+& Pick<FBFormProps, 'formState'>
+& Pick<FBInputProps, 'children' | 'disabled' | 'loading'>
 & {
   onDialogClose?: () => void;
   onDialogConfirm?: () => void;

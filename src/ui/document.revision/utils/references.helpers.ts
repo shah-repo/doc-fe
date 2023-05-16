@@ -1,7 +1,7 @@
-import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions/types";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInStatus, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import { documentVersionPath } from "./paths";
-import { ReferenceSummary } from "./types";
+import { DocumentRevision, DocumentRevisionStatus, Reference } from '../../../state/ducks/documentRevisions/types';
+import { isDocumentRevisionDeprecated, isDocumentRevisionInStatus, isDocumentRevisionObsolete, isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import { documentVersionPath } from './paths';
+import { ReferenceSummary } from './types';
 
 const handleReferenceForDeprecated = (documentRevisions: DocumentRevision[], deprecatedAt: string) => {
   const docRevDeprecatedAfterThisDocument = documentRevisions.find((docRev) => {

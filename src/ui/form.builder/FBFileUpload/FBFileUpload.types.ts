@@ -1,5 +1,5 @@
-import { FBFileUploadState, FBInputProps } from "..";
-import { Id } from "../../../state/ducks/common/types";
+import { FBFileUploadState, FBInputProps } from '..';
+import { Id } from '../../../state/ducks/common/types';
 
 export type FBFileUploadProps =
 & FBInputProps
@@ -10,4 +10,4 @@ export type FBFileUploadProps =
   mode?: FBFileFieldType;
 };
 
-type FBFileFieldType = "fileUploadIcon" | "fileUpload";
+type FBFileFieldType = 'fileUploadIcon' | 'fileUpload';

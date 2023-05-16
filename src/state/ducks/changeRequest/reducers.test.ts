@@ -1,9 +1,9 @@
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
-import { allIds, approversAllIds, approversById, auditsAllId, auditsByCRId, byId } from "./reducers";
-import { getApprover, getAudit, getChangeRequest } from "./tests/factories";
-import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction } from "./types";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from './constants';
+import { allIds, approversAllIds, approversById, auditsAllId, auditsByCRId, byId } from './reducers';
+import { getApprover, getAudit, getChangeRequest } from './tests/factories';
+import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction } from './types';
 
-describe("change requests reducers tests", () => {
+describe('change requests reducers tests', () => {
   const changeRequestList: ChangeRequest[] = [
     getChangeRequest(),
     getChangeRequest(),
@@ -42,7 +42,7 @@ describe("change requests reducers tests", () => {
     payload: auditPayload,
   };
 
-  describe("byId reducer tests", () => {
+  describe('byId reducer tests', () => {
     const initialChangeRequest = getChangeRequest();
     const initialState = {
       [initialChangeRequest.id]: initialChangeRequest,
@@ -53,11 +53,11 @@ describe("change requests reducers tests", () => {
       [changeRequestList[1].id]: changeRequestList[1],
     };
 
-    it("sets ids on CHANGE_REQUEST_LIST action", () => {
+    it('sets ids on CHANGE_REQUEST_LIST action', () => {
       expect(byId(initialState, changeRequestListAction)).toEqual(expectedState);
     });
 
-    it("sets new changeRequest on CHANGE_REQUEST_SET action", () => {
+    it('sets new changeRequest on CHANGE_REQUEST_SET action', () => {
       expect(byId(initialState, changeRequestSetAction)).toEqual({
         ...initialState,
         [changeRequest.id]: changeRequest,
@@ -65,7 +65,7 @@ describe("change requests reducers tests", () => {
     });
   });
 
-  describe("allIds reducer tests", () => {
+  describe('allIds reducer tests', () => {
     const initialChangeRequest = getChangeRequest();
     const initialState = [initialChangeRequest.id];
 
@@ -74,11 +74,11 @@ describe("change requests reducers tests", () => {
       changeRequestList[1].id,
     ];
 
-    it("sets ids on CHANGE_REQUEST_LIST action", () => {
+    it('sets ids on CHANGE_REQUEST_LIST action', () => {
       expect(allIds(initialState, changeRequestListAction)).toEqual(expectedState);
     });
 
-    it("sets new change request on CHANGE_REQUEST_SET action", () => {
+    it('sets new change request on CHANGE_REQUEST_SET action', () => {
       expect(allIds(initialState, changeRequestSetAction)).toEqual([
         ...initialState,
         changeRequest.id,
@@ -86,7 +86,7 @@ describe("change requests reducers tests", () => {
     });
   });
 
-  describe("approversById reducer tests", () => {
+  describe('approversById reducer tests', () => {
     const initialApprover = getApprover();
     const initialState = {
       [initialApprover.id]: initialApprover,
@@ -97,12 +97,12 @@ describe("change requests reducers tests", () => {
       [approversList[1].user.id]: approversList[1],
     };
 
-    it("sets ids on CHANGE_REQUEST_LIST_APPROVERS action", () => {
+    it('sets ids on CHANGE_REQUEST_LIST_APPROVERS action', () => {
       expect(approversById(initialState, changeRequestListApproverAction)).toEqual(expectedState);
     });
   });
 
-  describe("approversAllIds reducer tests", () => {
+  describe('approversAllIds reducer tests', () => {
     const initialApprover = getApprover();
     const initialState = [initialApprover.id];
 
@@ -111,24 +111,24 @@ describe("change requests reducers tests", () => {
       approversList[1].user.id,
     ];
 
-    it("sets ids on CHANGE_REQUEST_LIST_APPROVERS action", () => {
+    it('sets ids on CHANGE_REQUEST_LIST_APPROVERS action', () => {
       expect(approversAllIds(initialState, changeRequestListApproverAction)).toEqual(expectedState);
     });
   });
 
-  describe("auditsByCRId reducer tests", () => {
+  describe('auditsByCRId reducer tests', () => {
     const initialState = {};
 
     const expectedState = {
       [changeRequest.id]: { 1: audit },
     };
 
-    it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {
+    it('sets ids on CHANGE_REQUEST_AUDIT_SET action', () => {
       expect(auditsByCRId(initialState, auditAction)).toEqual(expectedState);
     });
   });
 
-  describe("auditsAllId reducer tests", () => {
+  describe('auditsAllId reducer tests', () => {
     const initialState = [changeRequestList[0].id];
 
     const expectedState = [
@@ -136,7 +136,7 @@ describe("change requests reducers tests", () => {
       changeRequest.id,
     ];
 
-    it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {
+    it('sets ids on CHANGE_REQUEST_AUDIT_SET action', () => {
       expect(auditsAllId(initialState, auditAction)).toEqual(expectedState);
     });
   });

@@ -1,4 +1,4 @@
-import { Action, Middleware } from "redux";
+import { Action, Middleware } from 'redux';
 
 const middlewareMockStore = (middlewareFn: Middleware, defaultState: any = {}) => {
 

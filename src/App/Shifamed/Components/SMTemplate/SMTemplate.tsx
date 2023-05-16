@@ -1,6 +1,6 @@
-import { Observer } from "mobx-react";
-import React from "react";
-import { SMBox, SMTemplateProps } from "../../..";
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { SMBox, SMTemplateProps } from '../../..';
 
 const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   header,

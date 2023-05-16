@@ -1,17 +1,17 @@
-import { Avatar, Box, Collapse, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import classNames from "classnames";
-import React from "react";
-import { ReactComponent as EmailSuccessIcon } from "../../../../../../../src/assets/images/email_success.svg";
-import { ReactComponent as ListCollapseIcon } from "../../../../../../../src/assets/images/list_collapse.svg";
-import { ReactComponent as ListExpandIcon } from "../../../../../../../src/assets/images/list_expand.svg";
-import { ReactComponent as NoTrainingIcon } from "../../../../../../../src/assets/images/no_training_icon.svg";
-import { getFormattedDateString, MomentFormats } from "../../../../../../common/utils/date";
-import Loader from "../../../../../../ui/components/common/kendo/Loader";
-import { getInitalsFromName } from "../../../../../../ui/components/icons/avatar/helpers";
-import Text from "../../../../../../ui/components/Text";
-import { isDocumentRevisionReleased } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { styles } from "./FBTrainingInfo.styles";
-import { FBTrainingInfoProps, TrainingItem, TrainingStates, TrainingStatusHeaders } from "./FBTrainingInfo.types";
+import { Avatar, Box, Collapse, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import classNames from 'classnames';
+import React from 'react';
+import { ReactComponent as EmailSuccessIcon } from '../../../../../../../src/assets/images/email_success.svg';
+import { ReactComponent as ListCollapseIcon } from '../../../../../../../src/assets/images/list_collapse.svg';
+import { ReactComponent as ListExpandIcon } from '../../../../../../../src/assets/images/list_expand.svg';
+import { ReactComponent as NoTrainingIcon } from '../../../../../../../src/assets/images/no_training_icon.svg';
+import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import Loader from '../../../../../../ui/components/common/kendo/Loader';
+import { getInitalsFromName } from '../../../../../../ui/components/icons/avatar/helpers';
+import Text from '../../../../../../ui/components/Text';
+import { isDocumentRevisionReleased } from '../../../../../../ui/documentRevision/helpers/documentRevisionStatus';
+import { styles } from './FBTrainingInfo.styles';
+import { FBTrainingInfoProps, TrainingItem, TrainingStates, TrainingStatusHeaders } from './FBTrainingInfo.types';
 
 const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
   trainingData,
@@ -33,8 +33,8 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
           <NoTrainingIcon />
           <Box display="flex" justifyContent="center">
             <Typography className={classes.noTrainingMessage}>
-              <Text translation={isReleased ? "common.training.released.state.doc.not.found"
-                : "common.training.not.found"} />
+              <Text translation={isReleased ? 'common.training.released.state.doc.not.found'
+                : 'common.training.not.found'} />
             </Typography>
           </Box>
         </Box>

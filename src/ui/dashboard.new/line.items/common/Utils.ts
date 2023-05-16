@@ -1,21 +1,21 @@
-import { size, toNumber } from "lodash";
-import { Translation } from "../../../translations/types";
+import { size, toNumber } from 'lodash';
+import { Translation } from '../../../translations/types';
 
 export const formatCurrency = (data: string) =>  {
-  const language = "en";
+  const language = 'en';
   if (data && !isNaN(+data)) {
     return (+data).toLocaleString(language, {
       minimumFractionDigits: 2,
     });
   }
-  return "";
+  return '';
 };
 
 export const formatNumberToCurrency = (data: number) =>  {
   if (!isNaN(data)) {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
     }).format(data);
   }
   return data;
@@ -34,10 +34,10 @@ export const toFixedDecimals = (value: string | number) => {
   if (Number.isNaN(toNumber(value))) {
     return value;
   }
-  const arr = value?.toString()?.split(".");
+  const arr = value?.toString()?.split('.');
   return `${arr[0]}.${arr[1].slice(0, 10)}`;
 };
-export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split(".")[1]?.length > length;
+export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split('.')[1]?.length > length;
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];
@@ -56,21 +56,21 @@ export const linearScale = (domain: number[], range: number[]) => {
 
 export const scrollToBottom = (selector) => {
   const el = document.querySelector<HTMLElement>(selector);
-  el?.scrollIntoView({ behavior: "smooth" });
+  el?.scrollIntoView({ behavior: 'smooth' });
 };
 
 export const getPendingTooltipText = (pendingCount, approvedCount) => {
   const pending = size(pendingCount);
   const approved = size(approvedCount);
   const count = pending + approved;
-  const primaryText = count > 1 ? "assigned.users.counts" : "assigned.users.count";
-  let secondaryText = "approved.and.pending.count.many.to.many";
+  const primaryText = count > 1 ? 'assigned.users.counts' : 'assigned.users.count';
+  let secondaryText = 'approved.and.pending.count.many.to.many';
   if (approved <= 1 && pending > 1) {
-    secondaryText = "approved.and.pending.count.one.to.many";
+    secondaryText = 'approved.and.pending.count.one.to.many';
   } else if (approved <= 1 && pending <= 1) {
-    secondaryText = "approved.and.pending.count.one.to.one";
+    secondaryText = 'approved.and.pending.count.one.to.one';
   } else if (approved > 1 && pending <= 1) {
-    secondaryText = "approved.and.pending.count.many.to.one";
+    secondaryText = 'approved.and.pending.count.many.to.one';
   }
   return {
     count,

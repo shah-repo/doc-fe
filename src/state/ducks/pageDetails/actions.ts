@@ -1,7 +1,7 @@
-import { apiAction, apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { PageDetails } from "../documentRevisions/documentType/types";
-import { ALL_PAGE_DETAILS_FETCHED, PAGE_DETAILS_ROOT_URL } from "./constants";
+import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { PageDetails } from '../documentRevisions/documentType/types';
+import { ALL_PAGE_DETAILS_FETCHED, PAGE_DETAILS_ROOT_URL } from './constants';
 
 const allPageDetailsFetched = (pageDetails: PageDetails[]) => ({
   type: ALL_PAGE_DETAILS_FETCHED,
@@ -10,7 +10,7 @@ const allPageDetailsFetched = (pageDetails: PageDetails[]) => ({
 
 const allPageDetails = (): ApiAction<PageDetails[]> => apiAction({
   url: PAGE_DETAILS_ROOT_URL,
-  method: "get",
+  method: 'get',
   onSuccess: (pageDetails, dispatch) => {
     dispatch(allPageDetailsFetched(pageDetails));
   },
@@ -22,7 +22,7 @@ const updatePageDetails = (
   handlers: Handlers,
 ): ApiAction<PageDetails> => apiActionWithCallbacks({
   url: `${PAGE_DETAILS_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (pageDetails, dispatch) => {
     dispatch(allPageDetails());
@@ -32,7 +32,7 @@ const updatePageDetails = (
 
 const deletePageDetails = (id: string): ApiAction<PageDetails[]> => apiAction({
   url: `${PAGE_DETAILS_ROOT_URL}/${id}`,
-  method: "delete",
+  method: 'delete',
   onSuccess: (m, dispatch) => {
     dispatch(allPageDetails());
   },
@@ -43,7 +43,7 @@ const addPageDetails = (
   handlers: Handlers,
 ): ApiAction<PageDetails[]> => apiActionWithCallbacks({
   url: PAGE_DETAILS_ROOT_URL,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (m, dispatch) => {
     dispatch(allPageDetails());

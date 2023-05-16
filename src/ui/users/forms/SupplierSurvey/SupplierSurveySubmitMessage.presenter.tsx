@@ -1,6 +1,6 @@
-import { Box } from "@material-ui/core";
-import * as React from "react";
-import Text from "../../../components/Text";
+import { Box } from '@material-ui/core';
+import * as React from 'react';
+import Text from '../../../components/Text';
 
 const SupplierSurveySubmitMessage: React.FunctionComponent = () => (
   <Box

@@ -1,13 +1,13 @@
-import { compact, filter, get, groupBy, isEmpty, last, map, range, sortBy, toNumber } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import moment from "moment";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBAuditPOCalculation, FBAuditPOItem, FBFieldName, FBInputType } from "..";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBStore from "../FBStore/FBStore";
+import { compact, filter, get, groupBy, isEmpty, last, map, range, sortBy, toNumber } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBAuditPOCalculation, FBAuditPOItem, FBFieldName, FBInputType } from '..';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import FBStore from '../FBStore/FBStore';
 
 // *NOTE: This needs to be refactored! Wait for the BE changes
 export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
@@ -42,8 +42,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       const underApprovalField: string[] = [name];
       range(0, index).reverse().some((current) => {
         if (!schema) { return false; }
-        const { type, name = "" } =  schema[current];
-        if (type === "requestapproval" || type === "inlineapproval") { return true; }
+        const { type, name = '' } =  schema[current];
+        if (type === 'requestapproval' || type === 'inlineapproval') { return true; }
         underApprovalField.push(name);
         return false;
       });
@@ -54,67 +54,67 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       if (!audits || !isApproved()) { return; }
       const underApprovalFields = underApproval();
       const grouped = groupBy(audits, (audit) => {
-        const fieldName = audit.field.split(".")[1]?.split("[")[0];
-        const cleanFieldName = fieldName?.replace(`${FBFieldName.Context}-`, "");
+        const fieldName = audit.field.split('.')[1]?.split('[')[0];
+        const cleanFieldName = fieldName?.replace(`${FBFieldName.Context}-`, '');
         let { type, label } = workspaceState?.getSchemaItem(cleanFieldName) || {};
         if (fieldName?.includes(FBFieldName.Context)) {
-          type = "textfield";
-          label += " " + intl.formatMessage({ id: "form.builder.note" });
+          type = 'textfield';
+          label += ' ' + intl.formatMessage({ id: 'form.builder.note' });
         }
-        if (!type) { return "none"; }
+        if (!type) { return 'none'; }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const isOmitted = FBApprovalAuditState.omitAudit.includes(type);
         if (!underApprovalFields?.includes(cleanFieldName) || isOmitted) {
-          return "none";
+          return 'none';
         }
         const { groupId, nextValue, previousValue } = audit;
-        if (type === "checkboxgroup" || type === "autocomplete") {
+        if (type === 'checkboxgroup' || type === 'autocomplete') {
           return `${groupId}.${fieldName}.${type}.${label}.${nextValue}.${previousValue}`;
         }
         return `${groupId}.${fieldName}.${type}.${label}`;
       });
 
       const mapped = map(grouped, (v, k) => {
-        if (k === "none") { return; }
-        const fieldName = k.split(".")[1] || "";
-        const type = k.split(".")[2];
-        const label = k.split(".")[3] || "";
+        if (k === 'none') { return; }
+        const fieldName = k.split('.')[1] || '';
+        const type = k.split('.')[2];
+        const label = k.split('.')[3] || '';
 
         function isSimple() {
           let prevValue = v[0].previousValue;
           let nextValue = v[0].nextValue;
 
-          if (nextValue === "[]") { return; } // checkgroup
-          if (prevValue !== "undefined" && prevValue !== "") {
+          if (nextValue === '[]') { return; } // checkgroup
+          if (prevValue !== 'undefined' && prevValue !== '') {
             // Date string
             moment(prevValue, moment.ISO_8601, true).isValid() && (
               prevValue = getFormattedDateString(prevValue, MomentFormats.MonthDateYearAlt)
             );
             // Other option
-            (prevValue === "includeContext") && (
-              prevValue = intl.formatMessage({ id: "form.builder.other" })
+            (prevValue === 'includeContext') && (
+              prevValue = intl.formatMessage({ id: 'form.builder.other' })
             );
             // None option
-            (prevValue === "includeNone") && (
-              prevValue = intl.formatMessage({ id: "form.builder.none" })
+            (prevValue === 'includeNone') && (
+              prevValue = intl.formatMessage({ id: 'form.builder.none' })
             );
             prevValue = <span> from <b>{FB.stripTags(prevValue)}</b></span>;
           } else {
-            prevValue = "";
+            prevValue = '';
           }
           // Date string
           (moment(nextValue, moment.ISO_8601, true).isValid()) && (
             nextValue = getFormattedDateString(nextValue, MomentFormats.MonthDateYearAlt)
           );
           // Other option
-          (nextValue === "includeContext") && (
-            nextValue = intl.formatMessage({ id: "form.builder.other" })
+          (nextValue === 'includeContext') && (
+            nextValue = intl.formatMessage({ id: 'form.builder.other' })
           );
           // None option
-          (nextValue === "includeNone") && (
-            nextValue = intl.formatMessage({ id: "form.builder.none" })
+          (nextValue === 'includeNone') && (
+            nextValue = intl.formatMessage({ id: 'form.builder.none' })
           );
-          isEmpty(nextValue) && (nextValue = intl.formatMessage({ id: "form.builder.none" }));
+          isEmpty(nextValue) && (nextValue = intl.formatMessage({ id: 'form.builder.none' }));
           return (<span>Changed {label} {prevValue} to <b>{FB.stripTags(nextValue)}</b></span>);
         }
 
@@ -123,79 +123,79 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         }
 
         function isPurchaseorder(): string {
-          let desc = "Changed " + label + ": ";
-          let calculation = "";
-          let item = "";
+          let desc = 'Changed ' + label + ': ';
+          let calculation = '';
+          let item = '';
           let itemIndex = 1;
           map(v, (p: FBAuditData) => {
             const { field, previousValue, nextValue } = p;
-            const poKey = last(field.split("."));
+            const poKey = last(field.split('.'));
             const poCalcName = FBAuditPOCalculation[poKey as keyof typeof FBAuditPOCalculation];
             const poItemName = FBAuditPOItem[poKey as keyof typeof FBAuditPOItem];
             const hasNoChange = (
-              (previousValue === "undefined" || toNumber(previousValue) === 0) &&
+              (previousValue === 'undefined' || toNumber(previousValue) === 0) &&
               toNumber(nextValue) === 0
             );
 
-            if (!field.includes("items") && poCalcName) { // Calculation
+            if (!field.includes('items') && poCalcName) { // Calculation
               if (hasNoChange) { return; }
               calculation += poCalcName;
-              if (previousValue !== "undefined") {
-                calculation += " from " + previousValue;
+              if (previousValue !== 'undefined') {
+                calculation += ' from ' + previousValue;
               }
-              calculation += " to " + nextValue + ", ";
+              calculation += ' to ' + nextValue + ', ';
             } else if (poItemName) {
-              if (poKey === "index") {
+              if (poKey === 'index') {
                 itemIndex += toNumber(nextValue);
               }
               if (hasNoChange) { return; }
               item += poItemName;
-              if (previousValue !== "undefined") {
-                item += " from " + previousValue;
+              if (previousValue !== 'undefined') {
+                item += ' from ' + previousValue;
               }
-              item += " to " + nextValue + ", ";
+              item += ' to ' + nextValue + ', ';
             }
           });
-          !isEmpty(item) && (desc += "Item " + itemIndex + ": " + item.slice(0, -2));
-          !isEmpty(item) && !isEmpty(calculation) && (desc += " | ");
-          !isEmpty(calculation) && (desc += "Calculation: " + calculation.slice(0, -2));
+          !isEmpty(item) && (desc += 'Item ' + itemIndex + ': ' + item.slice(0, -2));
+          !isEmpty(item) && !isEmpty(calculation) && (desc += ' | ');
+          !isEmpty(calculation) && (desc += 'Calculation: ' + calculation.slice(0, -2));
           return desc;
         }
 
         function isCheckGroup() {
           let { previousValue, nextValue } = v[0];
-          if (previousValue === "undefined" && nextValue === "[]") { return; }
-          if (nextValue === "undefined" || nextValue === "false") {
-            (previousValue === "includeContext") && (
-              previousValue = intl.formatMessage({ id: "form.builder.other" })
+          if (previousValue === 'undefined' && nextValue === '[]') { return; }
+          if (nextValue === 'undefined' || nextValue === 'false') {
+            (previousValue === 'includeContext') && (
+              previousValue = intl.formatMessage({ id: 'form.builder.other' })
             );
             return (<span>Unchecked in {label}: <b>{previousValue}</b></span>);
           }
-          (nextValue === "includeContext") && (
-            nextValue = intl.formatMessage({ id: "form.builder.other" })
+          (nextValue === 'includeContext') && (
+            nextValue = intl.formatMessage({ id: 'form.builder.other' })
           );
           return (<span>Checked in {label}: <b>{nextValue}</b></span>);
         }
 
         function isFileupload() {
-          const fields = ["name", "type"];
+          const fields = ['name', 'type'];
           const r = v.reduce((merged, clearValue, index) => {
-            const { type: auditType = "" } = clearValue;
+            const { type: auditType = '' } = clearValue;
             if (index === 0) {
-              merged += auditType.includes("NEW")
-                ? "Uploaded: "
-                : "Removed: ";
+              merged += auditType.includes('NEW')
+                ? 'Uploaded: '
+                : 'Removed: ';
             }
-            const clearKey: string = last(clearValue.field.split(".")) || "";
-            if (!fields.includes(clearKey) || clearValue.field.includes("company")) {
+            const clearKey: string = last(clearValue.field.split('.')) || '';
+            if (!fields.includes(clearKey) || clearValue.field.includes('company')) {
               return merged;
             }
-            const activeFieldValue = auditType.includes("NEW")
+            const activeFieldValue = auditType.includes('NEW')
               ? clearValue.nextValue
               : clearValue.previousValue;
-            merged += activeFieldValue + ((index % 2) === 0 ? "." : ", ");
+            merged += activeFieldValue + ((index % 2) === 0 ? '.' : ', ');
             return merged;
-          }, "");
+          }, '');
           return r;
         }
 
@@ -203,17 +203,17 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           const { optionId } = workspaceState?.getSchemaItem(fieldName) || {};
           if (!optionId) { return; }
           approvalAuditState?.setAutocompleteOptionId(optionId);
-          const data = FBAutocompleteAsyncStore.data.get(optionId || "");
+          const data = FBAutocompleteAsyncStore.data.get(optionId || '');
           if (!data) { return; }
-          const { labelKey = "text", labelPrefixRoot = "" } =
+          const { labelKey = 'text', labelPrefixRoot = '' } =
               approvalAuditState?.autocompleteApi.optionConfig || {};
           let prevIds: string[] = [];
           let nextIds: string[] = [];
-          let desc = "Changed " + label + ": ";
+          let desc = 'Changed ' + label + ': ';
           v.reduce((desc, audit) => {
             const { previousValue, nextValue } = audit;
 
-            if (previousValue !== "undefined") {
+            if (previousValue !== 'undefined') {
               try {
                 prevIds = JSON.parse(previousValue);
               } catch {
@@ -226,26 +226,26 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
               nextIds.push(nextValue);
             }
             return desc;
-          }, "");
+          }, '');
           const previousDescription = (prevIds || []).reduce((prevDesc, id) => {
             const record = data.get(id);
-            prevDesc += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+            prevDesc += get(record, labelPrefixRoot, '') + ' ' + get(record, labelKey, '');
             return prevDesc;
-          }, " ");
+          }, ' ');
           const nextDescription = (nextIds || []).reduce((nextDesc, id) => {
             const record = data.get(id);
-            nextDesc += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+            nextDesc += get(record, labelPrefixRoot, '') + ' ' + get(record, labelKey, '');
             return nextDesc;
-          }, "");
-          !isEmpty(previousDescription.trim()) && (desc += "Removed: " + previousDescription);
-          !isEmpty(previousDescription.trim()) && !isEmpty(nextDescription) && (desc += " | ");
-          !isEmpty(nextDescription) && (desc += "Added: " + nextDescription);
+          }, '');
+          !isEmpty(previousDescription.trim()) && (desc += 'Removed: ' + previousDescription);
+          !isEmpty(previousDescription.trim()) && !isEmpty(nextDescription) && (desc += ' | ');
+          !isEmpty(nextDescription) && (desc += 'Added: ' + nextDescription);
           return desc;
         }
 
-        const description: Partial<Record<FBInputType | "default", () => React.ReactNode>> = {
+        const description: Partial<Record<FBInputType | 'default', () => React.ReactNode>> = {
           purchaseorder: () => isPurchaseorder(),
-          inlineapproval: () => "Approved",
+          inlineapproval: () => 'Approved',
           checkboxgroup: () => isCheckGroup(),
           textfield: () => isSimple(),
           texteditor: () => isSimple(),
@@ -260,7 +260,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           default: () => undefined,
         };
 
-        const desc = (description[type || ""] || description.default)();
+        const desc = (description[type || ''] || description.default)();
         if (!desc) { return; }
         return {
           ownerName: v[0].owner.user.name,
@@ -271,15 +271,15 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         };
       });
 
-      const compactMapped = sortBy(compact(mapped), "timestamp");
+      const compactMapped = sortBy(compact(mapped), 'timestamp');
       const approvals = filter(compactMapped,  ({ type, timestamp }) =>
-        type === "inlineapproval" || type === "requestapproval"
+        type === 'inlineapproval' || type === 'requestapproval'
       );
 
 
       // TODO: refacoring & sync approveAt with createdAt
       let startDate = last(approvals)?.timestamp || (new Date()).toISOString();
-      if (moment(startDate).subtract(1, "seconds").isAfter(moment(createdAt)) && approvals[approvals.length - 2]) {
+      if (moment(startDate).subtract(1, 'seconds').isAfter(moment(createdAt)) && approvals[approvals.length - 2]) {
         startDate = approvals[approvals.length - 2].timestamp;
       }
 
@@ -295,7 +295,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     }
 
     function isApproved(): boolean {
-      let hasValue = type === "inlineapproval"
+      let hasValue = type === 'inlineapproval'
         ? formState?.getFieldValue(name)
         : formState?.getFieldValue(FBFieldName.RequestApproval + name);
       hasValue = Boolean(hasValue);

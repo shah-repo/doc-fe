@@ -1,11 +1,11 @@
 import {
   DropDownList,
   DropDownListChangeEvent,
-} from "@progress/kendo-react-dropdowns";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import React from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+} from '@progress/kendo-react-dropdowns';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface SelectedItemProps {
   text: string;
@@ -54,8 +54,8 @@ export const DropdownFilterTemplate = ({
       value: target.value,
     });
     onChange({
-      value: isValueExists ? selectedItem?.value : "",
-      operator: isValueExists ? customOperator || "eq" : "",
+      value: isValueExists ? selectedItem?.value : '',
+      operator: isValueExists ? customOperator || 'eq' : '',
       syntheticEvent,
     });
     onStateChange && onStateChange({ selectedItem, parentField: field });
@@ -64,8 +64,8 @@ export const DropdownFilterTemplate = ({
   const onClearButtonClick = (event: React.MouseEvent) => {
     event.preventDefault();
     onChange({
-      value: "",
-      operator: "",
+      value: '',
+      operator: '',
       syntheticEvent: event,
     });
     setState({
@@ -88,7 +88,7 @@ export const DropdownFilterTemplate = ({
         className="k-button k-button-icon k-clear-button-visible"
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={onClearButtonClick}
-        disabled={(value === "" || value === null)}
+        disabled={(value === '' || value === null)}
       >
         <span className="k-icon k-i-filter-clear" />
       </button>

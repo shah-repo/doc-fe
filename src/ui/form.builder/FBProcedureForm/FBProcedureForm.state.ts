@@ -1,6 +1,6 @@
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBProcedureFormState {
 
@@ -21,7 +21,7 @@ class FBProcedureFormState {
     this.lotsApi.set({
       url: FBEndpoint.LotsToPart,
       urlValues: { id },
-      method: "get",
+      method: 'get',
     });
   };
 
@@ -29,7 +29,7 @@ class FBProcedureFormState {
     this.partsApi.set({
       url: FBEndpoint.PartsOfLot,
       urlValues: { id },
-      method: "get",
+      method: 'get',
     });
   };
 

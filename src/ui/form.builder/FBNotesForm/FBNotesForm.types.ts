@@ -1,7 +1,7 @@
-import { FBFormProps } from "..";
-import { Id } from "../../../state/ducks/common/types";
-import FBNotesState from "../FBNotes/FBNotes.state";
-import FBNotesFormState from "./FBNotesForm.state";
+import { FBFormProps } from '..';
+import { Id } from '../../../state/ducks/common/types';
+import FBNotesState from '../FBNotes/FBNotes.state';
+import FBNotesFormState from './FBNotesForm.state';
 
 export type FBNotesFormProps =
 & FBFormProps

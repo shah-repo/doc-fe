@@ -1,6 +1,6 @@
-import React from "react";
-import Text from "../../../../components/Text";
-import useStyles from "./RelatedPart.styles";
+import React from 'react';
+import Text from '../../../../components/Text';
+import useStyles from './RelatedPart.styles';
 
 const RelatedPartsTableHeader: React.FC = () => {
   const classes = useStyles();

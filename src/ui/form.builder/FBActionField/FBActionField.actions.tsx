@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBActionFieldActionsProps, FBSubmitButton } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
-import { withFBActionFieldActions } from "./FBActionField.actions.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBActionFieldActionsProps, FBSubmitButton } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
+import { withFBActionFieldActions } from './FBActionField.actions.wrap';
 
 const FBActionFieldActions: React.FunctionComponent<FBActionFieldActionsProps> = ({
   handleRequest,

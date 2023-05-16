@@ -1,4 +1,4 @@
-import { action, observable, set } from "mobx";
+import { action, observable, set } from 'mobx';
 
 class FBNotesState {
   @observable public noteNumber?: number;
@@ -8,7 +8,7 @@ class FBNotesState {
   }
 
   @action public setNumberOfNotes = (noteNumber?: number) => {
-    set(this, "noteNumber", noteNumber);
+    set(this, 'noteNumber', noteNumber);
   };
 }
 

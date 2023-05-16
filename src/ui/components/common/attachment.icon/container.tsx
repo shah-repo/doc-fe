@@ -1,45 +1,45 @@
-import { isEmpty, omit } from "lodash";
-import React, { useMemo, useState } from "react";
-import { connect, useSelector } from "react-redux";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { Attachment, AttachmentDownloadResponse, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments/types";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { Id, Nullable } from "../../../../state/ducks/common/types";
-import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../../state/reducers";
-import { AsyncStatus } from "../../../../state/types";
-import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
-import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
-import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.container";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { Translation } from "../../../translations/types";
-import { useFormContext } from "../../forms/FormContext";
-import { withFormik } from "../../hoc/formik";
-import { toastError } from "../../notifications";
-import PasswordDialog from "../../password/dialog";
-import { Password } from "../../password/types";
-import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
-import ViewFile from "../view.file/container";
-import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import Menu from "./menu";
-import PresenterFactory from "./presenter.factory";
-import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from "./utils/types";
-import WatermarkContainer from "./watermark/container";
+import { isEmpty, omit } from 'lodash';
+import React, { useMemo, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
+import { attachmentsActions } from '../../../../state/ducks/attachments';
+import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
+import { Attachment, AttachmentDownloadResponse, AttachmentType, WatermarkRequest, WatermarkRequestBody } from '../../../../state/ducks/attachments/types';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { Id, Nullable } from '../../../../state/ducks/common/types';
+import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../state/reducers';
+import { AsyncStatus } from '../../../../state/types';
+import { FormHeaderSummaryContext } from '../../../document.revision/header/SummaryHeader';
+import { isOperator } from '../../../documentRevision/DocumentRevisionDisplay.container';
+import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
+import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
+import { documentTypeContext, isOwnerContext } from '../../../documentRevision/forms/DocumentRevisionForm.container';
+import FBDynamicValidatorStore from '../../../form.builder/stores/ui/FBDynamicValidatorStore';
+import FBStore from '../../../form.builder/stores/ui/FBStore';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import { Translation } from '../../../translations/types';
+import { useFormContext } from '../../forms/FormContext';
+import { withFormik } from '../../hoc/formik';
+import { toastError } from '../../notifications';
+import PasswordDialog from '../../password/dialog';
+import { Password } from '../../password/types';
+import { AttachmentRedLineWarningDialog } from '../attachment.redline.warning/dialog';
+import ViewFile from '../view.file/container';
+import { checkIfFileIsViewable } from '../view.file/utils/helpers';
+import Menu from './menu';
+import PresenterFactory from './presenter.factory';
+import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
+import WatermarkContainer from './watermark/container';
 
 type DispatchProps = AttachmentIconDispatchProps;
 
 export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
 const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
-  name = "",
+  name = '',
   form,
   field,
   value,
@@ -49,7 +49,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, docRevId || "")
+    documentRevisionsSelectors.getDocumentRevision(state, docRevId || '')
   );
   documentRevision = documentRevision || documentRevisionFromState;
   const dialogHandler = useDialog();
@@ -57,7 +57,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const redlineWarningDialogHandler = useDialog();
   const attachments = value || field?.value as Attachment[] || [];
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
-  const [newWatermakrError, setNewWatermarkError] = useState<string>("");
+  const [newWatermakrError, setNewWatermarkError] = useState<string>('');
   const [selectedAttachment, setSelectedAttachment] = useState<undefined | Attachment>(undefined);
   const [password, setPassword] = useState<Password | undefined>();
   const [downloadType, setdownloadType] = useState<AttachmentType>();
@@ -78,25 +78,25 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
 
   const passwordState = {
     status: AsyncStatus.Idle,
-    message: "",
+    message: '',
   };
   const warningState = {
     status: AsyncStatus.Idle,
-    message: "",
+    message: '',
   };
 
   const requestWatermarkAsync = useAsync<WatermarkRequest>({
     onSuccess: (data = {} as WatermarkRequest) => {
       setNewWatermarkRequest(data);
     },
-    onError: (msg = "Watermark error") => {
+    onError: (msg = 'Watermark error') => {
       setNewWatermarkError(msg);
     },
   });
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, "_parent");
+      downloadInfo && window.open(downloadInfo.url, '_parent');
       setPassword(undefined);
     },
     onError: (message) => {
@@ -149,7 +149,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     if (!form && !field) { return; }
     const filtered = (field.value as Attachment[]).filter((a) => a.id !== attachment.id);
 
-    if (FBStore.mode === "form") {
+    if (FBStore.mode === 'form') {
       let values = {
         ...FBStore.values,
         [name]: filtered,
@@ -204,7 +204,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     attachment: Attachment,
     attachmentType: AttachmentType,
     documentRevisionId?: string) => {
-    setNewWatermarkError("");
+    setNewWatermarkError('');
     setNewWatermarkRequest(null);
 
     if (documentRevisionId) {
@@ -267,21 +267,21 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const warningPasswordText = (): Translation => {
 
     if (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete) {
-      return "common.attachment.redline.warning.download.obsoleted";
+      return 'common.attachment.redline.warning.download.obsoleted';
     }
 
     if (documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) {
-      return "common.attachment.redline.warning.download.deprecated";
+      return 'common.attachment.redline.warning.download.deprecated';
     }
 
     if (documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete) {
-      return "common.attachment.redline.warning.download.obsoleted";
+      return 'common.attachment.redline.warning.download.obsoleted';
     }
 
     if (documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated) {
-      return "common.attachment.redline.warning.download.deprecated";
+      return 'common.attachment.redline.warning.download.deprecated';
     }
-    return "common.attachment.redline.warning.download.redline";
+    return 'common.attachment.redline.warning.download.redline';
   };
 
   const warningSubmit = () => {
@@ -340,7 +340,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;
     let canDeleteFile = true;
-    if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {
+    if (isCurrentUserOperator && (documentType === 'LOT' || documentType === 'EB')) {
       const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
       showAttachment = isOwnerOfFile;
       canDeleteFile = isOwnerOfFile;
@@ -375,7 +375,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   });
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", marginTop: sortedAttachments.length ? "2rem" : "0rem" }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '2rem' : '0rem' }}>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
         onSubmit={warningSubmit}

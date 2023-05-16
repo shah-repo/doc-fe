@@ -1,4 +1,4 @@
-import { BoxProps } from "@material-ui/core";
+import { BoxProps } from '@material-ui/core';
 
 export interface FBIconProps {
   icon: FBIconType | FBIconConfig[];
@@ -8,7 +8,7 @@ export interface FBIconProps {
 }
 
 export type FBIconType =
-| "Attachment";
+| 'Attachment';
 
 export interface FBIconConfig {
   path: string;

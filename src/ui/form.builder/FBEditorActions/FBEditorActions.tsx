@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBButton, FBEditorActionsProps, FBSubmitButton } from "..";
-import styles from "./FBEditorActions.styles";
-import { withFBEditorActions } from "./FBEditorActions.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBButton, FBEditorActionsProps, FBSubmitButton } from '..';
+import styles from './FBEditorActions.styles';
+import { withFBEditorActions } from './FBEditorActions.wrap';
 
 interface FBLeftEditorActionsProps extends FBEditorActionsProps {
   outerContainerMargin?: number;
@@ -19,14 +19,14 @@ const FBEditorActions: React.FunctionComponent<FBLeftEditorActionsProps> = ({
         variant="outlined"
         label="common.add"
         onClick={handleAdd}
-        dataCy={"fb-editor-actions-add"}
+        dataCy={'fb-editor-actions-add'}
         autoFocus
         style={style.submitStyle}
       />
       <FBButton
         variant="outlined"
         label="common.cancel"
-        dataCy={"fb-editor-actions-cancel"}
+        dataCy={'fb-editor-actions-cancel'}
         onClick={handleCancel}
         style={style.cancelStyle}
       />

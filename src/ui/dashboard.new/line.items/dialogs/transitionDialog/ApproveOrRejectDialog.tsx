@@ -8,18 +8,18 @@ import {
   Typography,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { ReactComponent as ModelCloseIcon } from "../../../../../../src/assets/images/modelClose.svg";
-import { TransitionTypes } from "../../../../../state/ducks/dashboard/types";
-import { AsyncState } from "../../../../../state/types";
-import { FormContext } from "../../../../components/forms/FormContext";
-import Text from "../../../../components/Text";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import PasswordFormApproval from "./form/PasswordForm";
-import styles from "./TransitionDialog.styles";
-import { PasswordFormValues, Transition } from "./types";
+} from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { ReactComponent as ModelCloseIcon } from '../../../../../../src/assets/images/modelClose.svg';
+import { TransitionTypes } from '../../../../../state/ducks/dashboard/types';
+import { AsyncState } from '../../../../../state/types';
+import { FormContext } from '../../../../components/forms/FormContext';
+import Text from '../../../../components/Text';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import PasswordFormApproval from './form/PasswordForm';
+import styles from './TransitionDialog.styles';
+import { PasswordFormValues, Transition } from './types';
 
 interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues) => void;
@@ -69,8 +69,8 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 <Text
                   translation={
                     transition === TransitionTypes.TRANSITION_REJECT
-                      ? "transition.action.reject.title"
-                      : "transition.action.approve.title"
+                      ? 'transition.action.reject.title'
+                      : 'transition.action.approve.title'
                   }
                 />
               </Typography>
@@ -87,7 +87,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
           </Grid>
           <DialogContent className={classes.pendingBox}>
             <FormContext.Provider value={{ submitOnChange: false }}>
-              <Formik initialValues={{ password: "" }} onSubmit={onSubmit}>
+              <Formik initialValues={{ password: '' }} onSubmit={onSubmit}>
                 {renderPasswordForm}
               </Formik>
             </FormContext.Provider>

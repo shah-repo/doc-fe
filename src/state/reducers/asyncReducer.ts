@@ -1,8 +1,8 @@
-import { AsyncAction, AsyncReducerState, AsyncStatus } from "../types";
+import { AsyncAction, AsyncReducerState, AsyncStatus } from '../types';
 
 export const ASYNC_REDUCER_INITIAL_STATE: AsyncReducerState = {
   status: AsyncStatus.Idle,
-  message: "",
+  message: '',
 };
 
 const asyncReducer = (type: string) =>

@@ -1,8 +1,8 @@
-import { Button, Grid } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { DialogHandler } from "../../../hooks/useDialog";
-import { styles } from "../FormList.styles";
+import { Button, Grid } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../components/Text';
+import { DialogHandler } from '../../../hooks/useDialog';
+import { styles } from '../FormList.styles';
 
 interface Props {
   dialog: DialogHandler;

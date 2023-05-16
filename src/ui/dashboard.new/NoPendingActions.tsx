@@ -1,7 +1,7 @@
-import { Box, makeStyles } from "@material-ui/core";
-import React from "react";
-import Text from "../components/Text";
-import Colors from "../layout/theme/utils/colors";
+import { Box, makeStyles } from '@material-ui/core';
+import React from 'react';
+import Text from '../components/Text';
+import Colors from '../layout/theme/utils/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {

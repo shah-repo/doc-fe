@@ -1,7 +1,7 @@
-import { filter, map } from "lodash";
-import { reaction } from "mobx";
-import React from "react";
-import { FB, FBFieldName, FBPartsProps, FBPartsState } from "..";
+import { filter, map } from 'lodash';
+import { reaction } from 'mobx';
+import React from 'react';
+import { FB, FBFieldName, FBPartsProps, FBPartsState } from '..';
 
 export const withFBParts = <T extends FBPartsProps>(
   Component: React.FunctionComponent<T>,
@@ -22,8 +22,8 @@ export const withFBParts = <T extends FBPartsProps>(
     React.useEffect(() => reaction(
       () => workspaceState?.schema,
       (schema) => {
-        const procedureItems = filter(schema, { type: "procedure" });
-        const procedureNames = map(procedureItems, "name");
+        const procedureItems = filter(schema, { type: 'procedure' });
+        const procedureNames = map(procedureItems, 'name');
         map(procedureNames, (procedure) => {
           if (!procedure) { return; }
           if (partsState?.parts.get(procedure)) { return; }
@@ -66,6 +66,6 @@ export const withFBParts = <T extends FBPartsProps>(
     });
   };
 
-  Comp.displayName = "withFBParts";
+  Comp.displayName = 'withFBParts';
   return Comp;
 };

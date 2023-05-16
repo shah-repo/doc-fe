@@ -1,10 +1,10 @@
-import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { DocumentTypeByIdForm } from "../../../../state/ducks/documentRevisions/documentType/types";
-import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import Text from "../../../components/Text";
-import { DialogHandler } from "../../../hooks/useDialog";
-import { styles } from "./FormListDialog.styles";
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { DocumentTypeByIdForm } from '../../../../state/ducks/documentRevisions/documentType/types';
+import AutocompleteField from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import Text from '../../../components/Text';
+import { DialogHandler } from '../../../hooks/useDialog';
+import { styles } from './FormListDialog.styles';
 
 interface FormListDialogProps {
   formIds: DocumentTypeByIdForm[];
@@ -16,7 +16,7 @@ const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
   formIds,
   handleSelection,
 }) => {
-  const [selectedFormId, setSelectedFormId] = useState<string>("");
+  const [selectedFormId, setSelectedFormId] = useState<string>('');
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const handleSelect = (id: string) => {
@@ -24,7 +24,7 @@ const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
     handleSelection(id);
   };
   useEffect(() => {
-    setSelectedFormId("");
+    setSelectedFormId('');
   }, [dialog.isOpen]);
   return (
     <Dialog
@@ -36,11 +36,11 @@ const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
       <DialogTitle>
         <Text translation="supplier.select.form" />
       </DialogTitle>
-      <DialogContent classes={{ root: classes.dialogContent }} style={{ position: "relative" }}>
+      <DialogContent classes={{ root: classes.dialogContent }} style={{ position: 'relative' }}>
         {
           selectedFormId &&
           <div
-            style={{ position: "absolute", top: "50%", left: "50%", marginTop: -45, marginLeft: -23 }}
+            style={{ position: 'absolute', top: '50%', left: '50%', marginTop: -45, marginLeft: -23 }}
           >
             <CircularProgress size={45} />
           </div>
@@ -48,7 +48,7 @@ const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
         <AutocompleteField
           name="select-form"
           size="sm"
-          autocompleteProps={{ id: "FormListDialog-selectForm" }}
+          autocompleteProps={{ id: 'FormListDialog-selectForm' }}
           options={formIds.map((form) => ({
             label: form.name,
             value: form.id,

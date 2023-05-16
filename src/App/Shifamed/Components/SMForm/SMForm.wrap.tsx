@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { SM, SMFormProps } from "../../..";
+import React, { useEffect } from 'react';
+import { SM, SMFormProps } from '../../..';
 
 export const withSMFormWrap = <T extends SMFormProps>(
   Component: React.FunctionComponent<T>,
@@ -38,6 +38,6 @@ export const withSMFormWrap = <T extends SMFormProps>(
     );
   };
 
-  Comp.displayName = "withSMFormWrap";
+  Comp.displayName = 'withSMFormWrap';
   return Comp;
 };

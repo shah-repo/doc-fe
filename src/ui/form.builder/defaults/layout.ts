@@ -1,6 +1,6 @@
 
 export enum FBClasses {
-  inputPreview = "FBInput-preview",
-  nonOwner = "FBInput-nonOwner",
-  hoverVisibility = "FBInput-hoverVisibility"
+  inputPreview = 'FBInput-preview',
+  nonOwner = 'FBInput-nonOwner',
+  hoverVisibility = 'FBInput-hoverVisibility'
 }

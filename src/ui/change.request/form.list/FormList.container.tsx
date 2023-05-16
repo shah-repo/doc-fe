@@ -1,20 +1,20 @@
-import { flatten, isEmpty } from "lodash";
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
-import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../components/notifications";
-import { TableDataProps } from "../../components/table/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import { templateOptionToChangeRequestCreateBody } from "../form/transform";
-import { TemplateOption } from "../form/types";
-import { changeRequestEditPath } from "../utils/paths";
-import FormListPresenter from "./FormList.presenter";
+import { flatten, isEmpty } from 'lodash';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { documentTypeActions } from '../../../state/ducks/documentRevisions/documentType';
+import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
+import { HeaderTableType } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
+import { TableDataProps } from '../../components/table/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import { templateOptionToChangeRequestCreateBody } from '../form/transform';
+import { TemplateOption } from '../form/types';
+import { changeRequestEditPath } from '../utils/paths';
+import FormListPresenter from './FormList.presenter';
 
 interface Props {
   headers: HeaderTableType[];
@@ -69,7 +69,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
         state: e.state,
       }));
     }
-    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: '' }));
     return [Object.assign({}, ...defaultEmptyColumn)];
   };
 
@@ -78,7 +78,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
   const handleCreateButton = () => {
     asyncGetDocTypeByGroup.start(
       getDocTypeByGroupAction,
-      { docTypeGroupOption: "CHANGE_REQUEST" },
+      { docTypeGroupOption: 'CHANGE_REQUEST' },
       asyncGetDocTypeByGroup);
   };
 

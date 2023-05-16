@@ -1,22 +1,22 @@
-import { Link, Typography } from "@material-ui/core";
-import { useFormikContext } from "formik";
-import { get } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
-import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
-import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
-import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
-import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
-import { toastSuccess } from "../../../../components/notifications";
-import Text from "../../../../components/Text";
-import { documentPreviewPath } from "../../../../document.revision/utils/paths";
-import { FB } from "../../../../form.builder";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useStyles from "./RelatedPart.styles";
-import RelatedParts from "./RelatedParts";
-import RelatedPartsState from "./RelatedParts.state";
+import { Link, Typography } from '@material-ui/core';
+import { useFormikContext } from 'formik';
+import { get } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
+import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
+import { toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
+import { documentPreviewPath } from '../../../../document.revision/utils/paths';
+import { FB } from '../../../../form.builder';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useStyles from './RelatedPart.styles';
+import RelatedParts from './RelatedParts';
+import RelatedPartsState from './RelatedParts.state';
 
 interface Props {
   viewOnly: boolean;
@@ -174,26 +174,26 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
     let docDto = {
       formDocument: {
-        id: get(documentRevision, "formDocumentId"),
+        id: get(documentRevision, 'formDocumentId'),
       },
-      description: "",
-      name: "",
-      suffixName: "",
+      description: '',
+      name: '',
+      suffixName: '',
       attachments: [],
       referenceTo: [],
-      revisionStage: get(documentRevision, "revisionStage"),
-      revisionChangeType: get(documentRevision, "revisionChangeType"),
+      revisionStage: get(documentRevision, 'revisionStage'),
+      revisionChangeType: get(documentRevision, 'revisionChangeType'),
       document: {
-        docId: "",
+        docId: '',
         securityList: {
-          securityEmployees: (get(documentRevision, "document.securityEmployees", []))
+          securityEmployees: (get(documentRevision, 'document.securityEmployees', []))
             .map((employee) => ({ id: employee.value })),
-          securityGroups: (get(documentRevision, "document.securityGroups", []))
+          securityGroups: (get(documentRevision, 'document.securityGroups', []))
             .map((group) => ({ id: group.id })),
-          operators: get(documentRevision, "document.operators"),
+          operators: get(documentRevision, 'document.operators'),
         },
         documentType: {
-          id: get(documentRevision, "document.documentType.id"),
+          id: get(documentRevision, 'document.documentType.id'),
         },
       },
     };
@@ -229,7 +229,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const viewRelatedPart = (docRevId: string, documentId: string) => {
     const urlPath = documentPreviewPath(docRevId, documentId);
-    window.open(urlPath, "_blank");
+    window.open(urlPath, '_blank');
   };
 
   return useObserver(() => (

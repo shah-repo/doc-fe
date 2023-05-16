@@ -1,22 +1,22 @@
-import { Dialog } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { TRAINING_RECORDS_SEARCH_URL } from "../../../state/ducks/training/constants";
-import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from "../../../state/ducks/training/types";
-import { getSchemaFromColumns } from "../../common/utils/helpers";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { DataStateProps } from "../../components/KendoGrid/interfaces";
-import useDialog from "../../hooks/useDialog";
-import TrainingDetails from "../details/TrainingDetails";
-import gridConfiguration from "./column.definition";
-import { TrainingListPresenter } from "./presenter";
-import KendoGridStyles from "./presenter.styles";
+import { Dialog } from '@material-ui/core';
+import { isEmpty } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
+import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from '../../../state/ducks/training/types';
+import { getSchemaFromColumns } from '../../common/utils/helpers';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import useDialog from '../../hooks/useDialog';
+import TrainingDetails from '../details/TrainingDetails';
+import gridConfiguration from './column.definition';
+import { TrainingListPresenter } from './presenter';
+import KendoGridStyles from './presenter.styles';
 
-export const TRAINING_TABLE_NAME = "training";
+export const TRAINING_TABLE_NAME = 'training';
 
 const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const schema = getSchemaFromColumns(gridConfiguration.columns);
@@ -32,7 +32,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          apiError: "",
+          apiError: '',
           queryDict: {
             dataState,
           },
@@ -51,11 +51,11 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
     ) {
       const dataState: DataStateProps = {
         filter: {
-          logic: "and",
+          logic: 'and',
           filters: [
             {
-              field: "trainingPlan.employee.active",
-              operator: "eq",
+              field: 'trainingPlan.employee.active',
+              operator: 'eq',
               value: true,
             },
           ],

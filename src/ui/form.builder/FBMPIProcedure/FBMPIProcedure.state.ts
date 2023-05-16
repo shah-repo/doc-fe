@@ -1,10 +1,10 @@
-import { cloneDeep } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBMPIProcedureSelectValue, FBProcedureValue } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import FBProcedureState from "../FBProcedure/FBProcedure.state";
+import { cloneDeep } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBMPIProcedureSelectValue, FBProcedureValue } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import FBProcedureState from '../FBProcedure/FBProcedure.state';
 
 export default class FBMPIProcedureState extends FBProcedureState {
   // MARK: @config
@@ -27,7 +27,7 @@ export default class FBMPIProcedureState extends FBProcedureState {
   @action addPartsSelected = (part: FBMPIProcedureSelectValue) => {
     const selection = cloneDeep(this.partsSelected);
     selection.push(part);
-    set(this, "partsSelected", selection);
+    set(this, 'partsSelected', selection);
   };
 
   // MARK: @helpers
@@ -35,9 +35,9 @@ export default class FBMPIProcedureState extends FBProcedureState {
     this.deleteLotApi.set({
       url: FBEndpoint.RemoveOverride,
       urlValues: { id, refId },
-      method: "post",
+      method: 'post',
     });
   };
 
-  public setPartsSelected = (partsSelected) => set(this, "partsSelected", partsSelected);
+  public setPartsSelected = (partsSelected) => set(this, 'partsSelected', partsSelected);
 }

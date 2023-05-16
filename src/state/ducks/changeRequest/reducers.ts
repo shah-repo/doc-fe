@@ -1,9 +1,9 @@
-import { groupBy, keyBy, uniq } from "lodash";
-import { combineReducers } from "redux";
-import asyncReducer from "../../reducers/asyncReducer";
-import { AuditByCRIdState } from "../audit/types";
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET } from "./constants";
-import { allIdsState, ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState, ChangeRequestSetAction } from "./types";
+import { groupBy, keyBy, uniq } from 'lodash';
+import { combineReducers } from 'redux';
+import asyncReducer from '../../reducers/asyncReducer';
+import { AuditByCRIdState } from '../audit/types';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET } from './constants';
+import { allIdsState, ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState, ChangeRequestSetAction } from './types';
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
 
@@ -78,7 +78,7 @@ export const auditsByCRId = (
 ): AuditByCRIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET: {
-      const audits = groupBy(action.payload.audit, "groupId");
+      const audits = groupBy(action.payload.audit, 'groupId');
       return { ...state, [action.payload.id]: audits };
     }
     default:

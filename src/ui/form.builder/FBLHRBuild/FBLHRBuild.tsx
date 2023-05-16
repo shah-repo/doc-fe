@@ -1,10 +1,10 @@
-import { Observer } from "mobx-react";
-import React from "react";
-import { FBLHRBuildProps } from "..";
-import { SMDialogAction, SMText } from "../../../App";
-import SMDialog from "../../../App/Shifamed/Components/SMDialog/SMDialog";
-import FBRadioGroup from "../FBRadioGroup/FBRadioGroup";
-import { withFBLHRBuild } from "./FBLHRBuild.wrap";
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { FBLHRBuildProps } from '..';
+import { SMDialogAction, SMText } from '../../../App';
+import SMDialog from '../../../App/Shifamed/Components/SMDialog/SMDialog';
+import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
+import { withFBLHRBuild } from './FBLHRBuild.wrap';
 
 const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
   onDialogActionClick,
@@ -21,10 +21,10 @@ const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
     >
       <SMText
         label={{
-          locale: "form.builder.build.production.msg",
+          locale: 'form.builder.build.production.msg',
           values: {
-            prod: "form.builder.Production",
-            rd: "form.builder.R&D",
+            prod: 'form.builder.Production',
+            rd: 'form.builder.R&D',
           },
         }}
       />

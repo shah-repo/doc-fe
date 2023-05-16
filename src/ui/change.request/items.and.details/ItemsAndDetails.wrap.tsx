@@ -1,14 +1,14 @@
-import { cloneDeep, map } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../state/types";
-import { useFormContext } from "../../components/forms/FormContext";
-import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from "../../form.builder";
-import { formDataToStoreData, storeDataToFormData } from "./helpers";
-import ItemsAndDetails from "./ItemsAndDetails";
-import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
+import { cloneDeep, map } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../state/types';
+import { useFormContext } from '../../components/forms/FormContext';
+import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from '../../form.builder';
+import { formDataToStoreData, storeDataToFormData } from './helpers';
+import ItemsAndDetails from './ItemsAndDetails';
+import ItemsAndDetailsState from './ItemsAndDetails.state';
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from './ItemsAndDetails.types';
 
 const ItemsAndDetailsContainer: React.FunctionComponent<
   ItemsAndDetailsWrapperProps & {name: string}
@@ -119,7 +119,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (changeRequest && !currentDocRevPresent && currentDocRevId) {
       itemsAndDetailsState.setApprovalRequestItemInEditMode(currentDocRevId);
     } else {
-      itemsAndDetailsState.setApprovalRequestItemInEditMode("");
+      itemsAndDetailsState.setApprovalRequestItemInEditMode('');
     }
 
     itemsAndDetailsState.setApprovalRequestItemsList(entries);

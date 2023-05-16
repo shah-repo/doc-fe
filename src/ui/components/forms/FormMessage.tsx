@@ -1,7 +1,7 @@
-import { FormHelperTextProps } from "@material-ui/core/FormHelperText";
-import * as React from "react";
-import { AsyncState } from "../../../state/types";
-import { toastError } from "../notifications";
+import { FormHelperTextProps } from '@material-ui/core/FormHelperText';
+import * as React from 'react';
+import { AsyncState } from '../../../state/types';
+import { toastError } from '../notifications';
 
 export interface FormMessageProps extends FormHelperTextProps {
   asyncState: AsyncState;

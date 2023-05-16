@@ -1,12 +1,12 @@
-import { Box } from "@material-ui/core";
-import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, sortBy } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useMemo } from "react";
-import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
-import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
-import Colors from "../../layout/theme/utils/colors";
+import { Box } from '@material-ui/core';
+import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, sortBy } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useMemo } from 'react';
+import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from '..';
+import { useFormContext } from '../../components/forms/FormContext';
+import { checkIsDocumentPO } from '../../documentRevision/helpers/checkDocumentGroup';
+import Colors from '../../layout/theme/utils/colors';
 
 export const withFBApprovers = <T extends FBApproversProps>(
   Component: React.FunctionComponent<T>,
@@ -17,7 +17,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     isIncluded,
     onBlur,
     approversState,
-    name = "",
+    name = '',
     loading,
     value,
     groups,
@@ -31,10 +31,10 @@ export const withFBApprovers = <T extends FBApproversProps>(
     const { submitForm } = useFormContext();
     const schema = workspaceState?.getSchema();
     const changeRequestApprovals = workspaceState?.changeRequest?.approvals;
-    const { name: docRevName } = useMemo(() => find(schema, { type: "documentRevisions" }) || {}, [schema]);
+    const { name: docRevName } = useMemo(() => find(schema, { type: 'documentRevisions' }) || {}, [schema]);
     const docRevFormValue = formState?.getFieldValue(docRevName);
-    const documentRevisions = useMemo(() => map(docRevFormValue, "proposedDocumentRevision.id"), [docRevFormValue]);
-    const formValue = map(formState?.getFieldValue(name), "id");
+    const documentRevisions = useMemo(() => map(docRevFormValue, 'proposedDocumentRevision.id'), [docRevFormValue]);
+    const formValue = map(formState?.getFieldValue(name), 'id');
     approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
     const isARforPO = Boolean(find(workspaceState?.changeRequest?.documentRevisions,
       (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions)));
@@ -44,12 +44,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
     React.useEffect(() => {
       reaction( // React on documentRevisions comp changes
-        () => formState?.inputState.get(docRevName || "")?.value,
+        () => formState?.inputState.get(docRevName || '')?.value,
         (value) => getRequiredApprovers(cloneDeep(value)),
       );
 
       reaction( // React on approvers autocomplete changes
-        () => formState?.inputState.get(`fb-approvers-${name}` || "")?.value,
+        () => formState?.inputState.get(`fb-approvers-${name}` || '')?.value,
         (value) => {
           markGroupChecked(value);
 
@@ -86,7 +86,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
         return acc;
       }, []);
       const initialGroupsDAM = filter(requiredGroups, (group) =>
-        map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) =>
+        map((group.joinedEmployees as FBJoinedEmployee[]), 'id').some((employee) =>
           initialApprovers?.map((e) => e.approver.id).includes(employee)));
 
       if (isARforPO) {
@@ -97,7 +97,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     };
 
     function getRequiredApprovers(documentRevisions: FBDocumentRevisionsValue[]) {
-      const ids: string[] = map(documentRevisions, "proposedDocumentRevision.id");
+      const ids: string[] = map(documentRevisions, 'proposedDocumentRevision.id');
       approversState?.fetchRequiredApprovers(ids);
     }
 
@@ -108,13 +108,13 @@ export const withFBApprovers = <T extends FBApproversProps>(
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
       const requiredGroups: string [] =
-        compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ""));
+        compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
           <b>{option.user?.name}</b>&nbsp; ({option.user?.email})
           {!isEmpty(requiredGroups) && (
             <Box color={Colors.font_gray}>
-              &nbsp;{`- ${requiredGroups.join(", ")}`}
+              &nbsp;{`- ${requiredGroups.join(', ')}`}
             </Box>
           )}
         </Box>
@@ -122,21 +122,21 @@ export const withFBApprovers = <T extends FBApproversProps>(
     };
 
     isIncluded = (group: FBRequiredApprover): boolean => (
-      includes(map(approversState?.checkedGroups, "id"), group.id));
+      includes(map(approversState?.checkedGroups, 'id'), group.id));
 
     /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection
    * @selectedUsers Current autocomplete selection.
    */
     const markGroupChecked = (selectedUsers: FBOption[]) => {
       const previousSelectionIds = approversState?.value || [];
-      const newSelectionIds = map(selectedUsers, "id");
-      const requiredGroups = sortBy(approversState?.data || [], "documentStage");
+      const newSelectionIds = map(selectedUsers, 'id');
+      const requiredGroups = sortBy(approversState?.data || [], 'documentStage');
       if (isARforPO) { // one user can fullfil only one signature requirement (POAM)
         if (!isEmpty(difference(newSelectionIds, previousSelectionIds))) { // user added
           const newUserId = last(difference(newSelectionIds, previousSelectionIds));
           const checkedGroup =
             find(requiredGroups, (group) =>
-              includes(map((group.joinedEmployees as FBJoinedEmployee[]), "id"), newUserId)
+              includes(map((group.joinedEmployees as FBJoinedEmployee[]), 'id'), newUserId)
               && !includes(approversState?.checkedGroups?.map((g) => g.id), group.id)) as FBRequiredApprover;
           if (!checkedGroup) {
             approversState?.setValue(newSelectionIds);
@@ -152,7 +152,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
         }
       } else { // user can fullfil all available signature requirements (DAM)
         const newGroups = filter(requiredGroups, (group) =>
-          map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) =>
+          map((group.joinedEmployees as FBJoinedEmployee[]), 'id').some((employee) =>
             newSelectionIds?.includes(employee)));
         approversState?.setCheckedGroups(newGroups);
       }
@@ -182,6 +182,6 @@ export const withFBApprovers = <T extends FBApproversProps>(
     });
   };
 
-  Comp.displayName = "withFBApprovers";
+  Comp.displayName = 'withFBApprovers';
   return Comp;
 };

@@ -37,10 +37,10 @@ import {
   FBTextEditorState,
   FBTextFieldWithRangeState,
   FBWorkspaceState,
-} from "..";
-import FBLeftPanelState from "../FBLeftPanel/FBLeftPanel.state";
-import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
-import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
+} from '..';
+import FBLeftPanelState from '../FBLeftPanel/FBLeftPanel.state';
+import FBLHRBuildState from '../FBLHRBuild/FBLHRBuild.state';
+import FBMPIProcedureSelectState from '../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
 
 
 export interface FBProviderProps {

@@ -1,6 +1,6 @@
-import { TooltipProps } from "@material-ui/core";
-import { TooltipLabelConfig } from "../../../state/ducks/documentRevisions/documentType/types";
-import { Validator } from "../../components/forms/fields/validators";
+import { TooltipProps } from '@material-ui/core';
+import { TooltipLabelConfig } from '../../../state/ducks/documentRevisions/documentType/types';
+import { Validator } from '../../components/forms/fields/validators';
 
 export interface UIConfig {
   isVisible: boolean;
@@ -15,7 +15,7 @@ export interface ConditionalWrapperProps {
   children: React.ReactNode | React.ReactNode[];
 }
 
-export type CustomLabelTooltipProps = Omit<TooltipProps, "children" | "title"> & {
-  children?: TooltipProps["children"] | string | number;
+export type CustomLabelTooltipProps = Omit<TooltipProps, 'children' | 'title'> & {
+  children?: TooltipProps['children'] | string | number;
   tooltipConfig?: TooltipLabelConfig;
 };

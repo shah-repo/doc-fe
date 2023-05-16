@@ -1,12 +1,12 @@
-import { DurationCell } from "../../../async.tasks/grid/cell.templates/DurationCell";
-import { DocumentTypeCellTemplate } from "../../../document.revision/grid/cell.templates/DocumentTypeCellTemplate";
-import { CustomGridCellProps } from "../kendo/types";
-import { Active } from "./Active";
-import { CommonCell } from "./CommonCell";
-import { DateCompleted } from "./DateCompleted";
-import { DateInfo } from "./DateInfo";
-import { Status } from "./Status";
-import { UserAvatar } from "./UserAvatar";
+import { DurationCell } from '../../../async.tasks/grid/cell.templates/DurationCell';
+import { DocumentTypeCellTemplate } from '../../../document.revision/grid/cell.templates/DocumentTypeCellTemplate';
+import { CustomGridCellProps } from '../kendo/types';
+import { Active } from './Active';
+import { CommonCell } from './CommonCell';
+import { DateCompleted } from './DateCompleted';
+import { DateInfo } from './DateInfo';
+import { Status } from './Status';
+import { UserAvatar } from './UserAvatar';
 
 interface CellTemplateProps {
   Active: (props: CustomGridCellProps) => JSX.Element | null;

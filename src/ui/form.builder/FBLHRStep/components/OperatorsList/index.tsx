@@ -1,14 +1,14 @@
-import React from "react";
-import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import { find, capitalize } from "lodash";
-import { observer } from "mobx-react";
-import { FBInlineApprovalStatusIdent, FBLHRStepState } from "../../../";
-import { ReactComponent as OperatorApprovedIcon } from "../../../../../assets/images/OperatorApproved.svg";
-import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
-import { Nullable, User } from "../../../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import styles from "./styles";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
+import React from 'react';
+import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { find, capitalize } from 'lodash';
+import { observer } from 'mobx-react';
+import { FBInlineApprovalStatusIdent, FBLHRStepState } from '../../../';
+import { ReactComponent as OperatorApprovedIcon } from '../../../../../assets/images/OperatorApproved.svg';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { Nullable, User } from '../../../../../state/ducks/common/types';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import styles from './styles';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 
 interface OperatorsListProps {
   operators: { stepId: string; user: User }[];
@@ -38,8 +38,8 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
               <Badge
                 overlap="circle"
                 anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
+                  vertical: 'bottom',
+                  horizontal: 'right',
                 }}
                 badgeContent={
                   statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />

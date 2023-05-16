@@ -1,11 +1,11 @@
-import { Checkbox, FormControlLabel } from "@material-ui/core";
-import { at, includes, map } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FB, FBCheckboxGroupProps, FBOption } from "..";
-import Text from "../../components/Text";
-import { isTranslation } from "../../translations/types";
-import { withFBOption } from "../FBOption/FBOption.wrap";
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { at, includes, map } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBCheckboxGroupProps, FBOption } from '..';
+import Text from '../../components/Text';
+import { isTranslation } from '../../translations/types';
+import { withFBOption } from '../FBOption/FBOption.wrap';
 
 export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
   Component: React.FunctionComponent<T>,
@@ -13,12 +13,12 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
   const Comp = ({
     onChange,
     options,
-    optionValueKey = "",
-    optionLabelKey = "",
+    optionValueKey = '',
+    optionLabelKey = '',
     defaultValue,
     controls,
     disabled,
-    name = "",
+    name = '',
     isInputOwner,
     ...props
   }: T) => {

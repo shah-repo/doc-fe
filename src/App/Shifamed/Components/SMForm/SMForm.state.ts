@@ -1,9 +1,9 @@
-import { get, isEmpty, isString, isUndefined, join, map, omitBy } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import * as Validator from "validatorjs";
-import { SMFormProps, SMFormStateProps } from "../../..";
-import { SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
-import { FBLHRBuildOptions, FBWorkspaceMode } from "../../../../ui/form.builder";
+import { get, isEmpty, isString, isUndefined, join, map, omitBy } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import * as Validator from 'validatorjs';
+import { SMFormProps, SMFormStateProps } from '../../..';
+import { SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { FBLHRBuildOptions, FBWorkspaceMode } from '../../../../ui/form.builder';
 
 class SMFormState implements SMFormStateProps {
   @observable public render = false;
@@ -18,13 +18,13 @@ class SMFormState implements SMFormStateProps {
   /**
    * @cfg {Record<input name, input value>} Prev state of values for each input in the form.
    */
-  public oldValues: SMFormProps["values"] = {};
+  public oldValues: SMFormProps['values'] = {};
 
   /**
    * @cfg {Record<input name, input value>} Validation values.
    * Values we want to include in validation process.
    */
-  public validationValues: SMFormProps["values"] = {};
+  public validationValues: SMFormProps['values'] = {};
   public validationAttributeNames: Record<string, string> = {};
   public rules: Record<string, any> = {};
 
@@ -64,46 +64,46 @@ class SMFormState implements SMFormStateProps {
   /**
    * @cfg {FBWorkspaceMode} Layout form mode.
    */
-  @observable public mode: FBWorkspaceMode = "none";
+  @observable public mode: FBWorkspaceMode = 'none';
 
   // MARK: @constructor
 
   // MARK: @computed
   @computed public get active(): boolean {
-    return this.mode !== "none";
+    return this.mode !== 'none';
   }
 
   @computed public get Validator(): any {
-    return get(window, "EnlilRemoteValidators.validator") || Validator;
+    return get(window, 'EnlilRemoteValidators.validator') || Validator;
   }
 
   // MARK: @actions
   @action public setMode = (mode: FBWorkspaceMode) => {
-    set(this, "mode", mode);
+    set(this, 'mode', mode);
   };
 
   @action public setDirty = (isDirty: boolean) => {
-    set(this, "isDirty", isDirty);
+    set(this, 'isDirty', isDirty);
   };
 
   @action public setAutosave = (autosave: boolean) => {
-    set(this, "autosave", autosave);
+    set(this, 'autosave', autosave);
   };
 
-  @action public setValues = (values?: SMFormProps["values"]) => {
+  @action public setValues = (values?: SMFormProps['values']) => {
     map(values, (v, k) => this.values.set(k, v));
   };
 
   @action public setLoading = (loading?: boolean) => {
-    set(this, "loading", loading || false);
+    set(this, 'loading', loading || false);
   };
 
   // MARK: @helpers
   public get isLHRProductionBuild(): boolean {
-    const refs = this.getValue("smartReferencesTo");
+    const refs = this.getValue('smartReferencesTo');
     return refs?.filter(
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
-      toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
+      toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
   }
 
   public setValue = (
@@ -146,7 +146,7 @@ class SMFormState implements SMFormStateProps {
       () => callback && callback(true), // passes
       () => { // failed
         const errors = validator.errors.all();
-        map(errors, (v, k) => this.errors.set(k, join(v, "\n")));
+        map(errors, (v, k) => this.errors.set(k, join(v, '\n')));
         callback && callback(false);
       });
   };

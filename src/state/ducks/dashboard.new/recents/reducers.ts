@@ -1,7 +1,7 @@
-import { combineReducers } from "redux";
-import asyncReducer from "../../../reducers/asyncReducer";
-import { RECENTS_LIST, RECENTS_LIST_ASYNC } from "./constants";
-import { RecentsListAction, RecentsState } from "./types";
+import { combineReducers } from 'redux';
+import asyncReducer from '../../../reducers/asyncReducer';
+import { RECENTS_LIST, RECENTS_LIST_ASYNC } from './constants';
+import { RecentsListAction, RecentsState } from './types';
 
 const recentsList = (
   state: RecentsState = [], action: RecentsListAction): RecentsState => {

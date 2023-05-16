@@ -1,6 +1,6 @@
-import React from "react";
-import { FB, FBRequestApprovalProps } from "..";
-import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
+import React from 'react';
+import { FB, FBRequestApprovalProps } from '..';
+import { withFBEditorHelper } from '../FBEditor/FBEditor.helper';
 
 export const withFBRequestApproval = <T extends FBRequestApprovalProps>(
   Component: React.FunctionComponent<T>

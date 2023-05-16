@@ -1,11 +1,11 @@
-import Box from "@material-ui/core/Box";
-import FormLabel from "@material-ui/core/FormLabel/FormLabel";
-import { hasIn, isString } from "lodash";
-import React from "react";
-import { FBLabelProps, FBText } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { FBLabelLocaleProps } from "./FBLabel.types";
-import { withFBLabel } from "./FBLabel.wrap";
+import Box from '@material-ui/core/Box';
+import FormLabel from '@material-ui/core/FormLabel/FormLabel';
+import { hasIn, isString } from 'lodash';
+import React from 'react';
+import { FBLabelProps, FBText } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { FBLabelLocaleProps } from './FBLabel.types';
+import { withFBLabel } from './FBLabel.wrap';
 
 const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   label,
@@ -24,7 +24,7 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
       {isString(label) && (
         <FBText {...{ loading, labelProps }} locale={label} />
       )}
-      {hasIn(label, "locale") && (
+      {hasIn(label, 'locale') && (
         <FBText
           {...{ loading, labelProps }}
           locale={(label as FBLabelLocaleProps).locale}

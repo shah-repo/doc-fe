@@ -1,7 +1,7 @@
-import { APPROVALS_ROOT_URL } from ".";
-import { FBApprovalsStatusEndpoint } from "../../../ui/form.builder";
-import { apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
+import { APPROVALS_ROOT_URL } from '.';
+import { FBApprovalsStatusEndpoint } from '../../../ui/form.builder';
+import { apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
 
 const applyTransition = (
   id: string,
@@ -10,7 +10,7 @@ const applyTransition = (
   password?: string,
 ): ApiAction<any, any> => apiActionWithCallbacks({
   url: `${APPROVALS_ROOT_URL}/${id}/${transition}`,
-  method: "post",
+  method: 'post',
   password,
   handlers,
 });

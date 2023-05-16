@@ -1,15 +1,15 @@
-import { LinearProgress, List } from "@material-ui/core";
-import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import DocumentRevisionSidebarState from "../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
-import { Nullable } from "../../state/ducks/common/types";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../state/types";
-import { styles } from "./DocumentRevisionList.container.styles";
-import DocumentRevisionListPresenter from "./DocumentRevisionList.presenter.new";
-import { checkIsDocumentPO } from "./helpers/checkDocumentGroup";
+import { LinearProgress, List } from '@material-ui/core';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import DocumentRevisionSidebarState from '../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state';
+import { Nullable } from '../../state/ducks/common/types';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
+import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../state/types';
+import { styles } from './DocumentRevisionList.container.styles';
+import DocumentRevisionListPresenter from './DocumentRevisionList.presenter.new';
+import { checkIsDocumentPO } from './helpers/checkDocumentGroup';
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -50,12 +50,12 @@ DocumentRevisionListContainerProps
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
 
-  const documentTypeGroupOptions = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.groupOptions;
+  const documentTypeGroupOptions = useSelector(documentTypeSelectors.byId)[documentTypeId || '']?.groupOptions;
   const isDocumentPO = checkIsDocumentPO(documentTypeGroupOptions);
 
   return (
     <div className={classes.container}>
-      {loading && <LinearProgress style={{ width: "100%" }} />}
+      {loading && <LinearProgress style={{ width: '100%' }} />}
       <List disablePadding>
         {
           documentRevisions.map((documentRevision) => (

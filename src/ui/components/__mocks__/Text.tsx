@@ -1,5 +1,5 @@
-import * as React from "react";
-import { TextProps } from "../Text";
+import * as React from 'react';
+import { TextProps } from '../Text';
 
 const Text: React.FunctionComponent<TextProps> = (props: TextProps) => (
   <span>

@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBSubmitButton, FBTaskFormProps } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBSubmitButton, FBTaskFormProps } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 
 const FBTaskFormActions: React.FunctionComponent<FBTaskFormProps> = ({
   handleAdd,

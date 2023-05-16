@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
+import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../../../layout/theme/utils/colors';
 
 export default makeStyles((theme) =>
   createStyles({
@@ -7,18 +7,18 @@ export default makeStyles((theme) =>
       color: `${theme.palette.text.disabled}`,
     },
     previewColumn: {
-      flex: "0 0 auto",
+      flex: '0 0 auto',
     },
     previewButton: {
-      "height": 40,
-      "padding": "10px 20px",
-      "margin": "0 0 20px 0",
-      "borderRadius": 100,
-      "color": Colors.white,
-      "&, &:hover": {
+      'height': 40,
+      'padding': '10px 20px',
+      'margin': '0 0 20px 0',
+      'borderRadius': 100,
+      'color': Colors.white,
+      '&, &:hover': {
         backgroundColor: Colors.navy,
       },
-      "& svg": {
+      '& svg': {
         marginRight: 10,
       },
     },

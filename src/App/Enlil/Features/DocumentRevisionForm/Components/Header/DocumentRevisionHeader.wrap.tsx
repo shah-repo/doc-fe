@@ -1,5 +1,5 @@
-import React from "react";
-import { DocumentRevisionHeaderProps, SM } from "../../../../..";
+import React from 'react';
+import { DocumentRevisionHeaderProps, SM } from '../../../../..';
 
 export const withDocumentRevisionHeaderWrap = <T extends DocumentRevisionHeaderProps>(
   Component: React.FunctionComponent<T>,
@@ -29,6 +29,6 @@ export const withDocumentRevisionHeaderWrap = <T extends DocumentRevisionHeaderP
     );
   };
 
-  Comp.displayName = "withDocumentRevisionHeaderWrap";
+  Comp.displayName = 'withDocumentRevisionHeaderWrap';
   return (props: T) => Comp(props);
 };
