@@ -1,9 +1,9 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBApprovalMatrixRolesActions, FBApprovalMatrixRolesProps, FBDAMFields, FBData, FBDialogState, FBForm } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBApprovalMatrixRolesActions, FBApprovalMatrixRolesProps, FBDAMFields, FBData, FBDialogState, FBForm } from '..';
 
 export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     onClick,
@@ -19,7 +19,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     onClick = () => {
       dialogState?.config({
         open: true,
-        title: "form.build.approvalMatrix.addRole",
+        title: 'form.build.approvalMatrix.addRole',
         content: <FBForm schema={FBData.approvalMatrixRoleSchema} />,
         actions: <FBApprovalMatrixRolesActions />,
       });
