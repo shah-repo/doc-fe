@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxCellTemplate from './components/CheckboxCellTemplate';
 import DropdownCellTemplate from './components/DropdownCellTemplate';
-import ActiveCellTemplate from './components/ActiveCellTemplate';
+import StatusCellTemplate from './components/StatusCellTemplate';
 import InputCellTemplate from './components/InputCellTemplate';
 import BooleanFilter from './components/BooleanFilter';
 import StatusFilter from './components/StatusFilter';
@@ -76,7 +76,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      template: ActiveCellTemplate,
+      template: StatusCellTemplate,
       locked: true,
       width: 140,
     },
