@@ -413,13 +413,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isDocumentObsolete = isDocumentRevisionObsolete(documentRevision.status);
   const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
-  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+  if (isPO && isRenderHTMLDefined) {
     accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
-  if (!(!isDocumentDraft || !canCreateInspection)) {
+  if (isDocumentDraft && canCreateInspection) {
     accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
-  if (documentRevision.pdf) {
+  if (documentRevision.pdf && !isPO) {
     accessableButtons.push(PreviewControlButtons.Pdf);
   }
   if (canChangeOwnerShip) {
