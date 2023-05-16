@@ -23,6 +23,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
 
   const schema = createSchema({
     data,
+    withoutStatus,
     documentTypeCategories,
     clearRightBorderClassName: classes.clearRightBorder,
     cellARClassName: classes.cellAR,
