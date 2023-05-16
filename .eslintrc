@@ -24,7 +24,6 @@
       "error",
       "prefer-double"
     ],
-    // "@typescript-eslint/quotes": "off",
     "comma-dangle": "off",
     //    "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
     "no-useless-constructor": "off",
@@ -64,41 +63,41 @@
     // @todo: remove .eslintignore creation in build.sh
     // @todo: remove @typescript-eslint resolutions in package.json after react-scripts update
     "@typescript-eslint/array-type": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/ban-types": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/brace-style": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/comma-dangle": [
-      "off",
+      "warn",
       "always-multiline"
     ],
     "@typescript-eslint/consistent-type-assertions": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/default-param-last": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/dot-notation": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/explicit-module-boundary-types": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/indent": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/keyword-spacing": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/lines-between-class-members": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/member-delimiter-style": [
-      "off",
+      "warn",
       {
         "multiline": {
           "delimiter": "none"
@@ -110,119 +109,119 @@
       }
     ],
     "@typescript-eslint/method-signature-style": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-base-to-string": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-dynamic-delete": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-explicit-any": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-extraneous-class": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-floating-promises": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-non-null-asserted-optional-chain": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-redeclare": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-unnecessary-boolean-literal-compare": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-unsafe-assignment": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-unsafe-call": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-unsafe-member-access": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-unsafe-return": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-unused-vars": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/no-var-requires": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/prefer-nullish-coalescing": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/prefer-optional-chain": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/prefer-readonly": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/prefer-reduce-type-parameter": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/promise-function-async": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/require-array-sort-compare": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/restrict-plus-operands": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/restrict-template-expressions": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/return-await": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/space-before-function-paren": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/triple-slash-reference": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/type-annotation-spacing": [
-      "off"
+      "warn"
     ],
     "@typescript-eslint/unbound-method": [
-      "off"
+      "warn"
     ],
     "array-bracket-spacing": [
-      "off",
+      "warn",
       "never"
     ],
     "array-callback-return": [
-      "off"
+      "warn"
     ],
     "dot-location": [
-      "off",
+      "warn",
       "property"
     ],
     "eqeqeq": [
-      "off",
+      "warn",
       "always",
       {
         "null": "ignore"
       }
     ],
     "handle-callback-err": [
-      "off",
+      "warn",
       "^(err|error)$"
     ],
     "import/no-duplicates": [
-      "off"
+      "warn"
     ],
     "import/no-named-default": [
-      "off"
+      "warn"
     ],
     "new-cap": [
-      "off",
+      "warn",
       {
         "newIsCap": true,
         "capIsNew": false,
@@ -230,17 +229,17 @@
       }
     ],
     "no-extra-parens": [
-      "off",
+      "warn",
       "functions"
     ],
     "no-floating-decimal": [
-      "off"
+      "warn"
     ],
     "no-multi-spaces": [
-      "off"
+      "warn"
     ],
     "no-multiple-empty-lines": [
-      "off",
+      "warn",
       {
         "maxBOF": 0,
         "max": 1,
@@ -248,40 +247,40 @@
       }
     ],
     "no-return-assign": [
-      "off",
+      "warn",
       "except-parens"
     ],
     "no-unexpected-multiline": [
-      "off"
+      "warn"
     ],
     "no-unneeded-ternary": [
-      "off",
+      "warn",
       {
         "defaultAssignment": false
       }
     ],
     "no-useless-call": [
-      "off"
+      "warn"
     ],
     "no-useless-return": [
-      "off"
+      "warn"
     ],
     "no-void": [
-      "off"
+      "warn"
     ],
     "object-property-newline": [
-      "off",
+      "warn",
       {
         "allowMultiplePropertiesPerLine": true,
         "allowAllPropertiesOnSameLine": false
       }
     ],
     "operator-linebreak": [
-      "off",
+      "warn",
       "before"
     ],
     "padded-blocks": [
-      "off",
+      "warn",
       {
         "blocks": "never",
         "switches": "never",
@@ -289,36 +288,36 @@
       }
     ],
     "prefer-promise-reject-errors": [
-      "off"
+      "warn"
     ],
     "quote-props": [
-      "off",
+      "warn",
       "as-needed"
     ],
     "react-hooks/exhaustive-deps": [
-      "off"
+      "warn"
     ],
     "react-hooks/rules-of-hooks": [
-      "off"
+      "warn"
     ],
     "react/jsx-curly-brace-presence": [
-      "off"
+      "warn"
     ],
     "react/jsx-tag-spacing": [
-      "off"
+      "warn"
     ],
     "react/self-closing-comp": [
-      "off"
+      "warn"
     ],
     "space-in-parens": [
-      "off",
+      "warn",
       "never"
     ],
     "standard/no-callback-literal": [
-      "off"
+      "warn"
     ],
     "template-curly-spacing": [
-      "off",
+      "warn",
       "never"
     ]
   }
