@@ -1,27 +1,27 @@
-import { Box, Button, Typography } from "@material-ui/core";
-import { get, isEqual, kebabCase, size } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from "..";
-import { ReactComponent as AddIcon } from "../../../assets/images/formBuilder/add_icon.svg";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { Box, Button, Typography } from '@material-ui/core';
+import { get, isEqual, kebabCase, size } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from '..';
+import { ReactComponent as AddIcon } from '../../../assets/images/formBuilder/add_icon.svg';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import {
   DocumentGroupType,
   DOC_TYPE_GROUP,
-} from "../../../state/ducks/documentRevisions/documentType/types";
-import SummaryInfo from "../../common/summary/SummaryInfo";
-import Text from "../../components/Text";
-import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
-import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
-import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
-import Colors from "../../layout/theme/utils/colors";
+} from '../../../state/ducks/documentRevisions/documentType/types';
+import SummaryInfo from '../../common/summary/SummaryInfo';
+import Text from '../../components/Text';
+import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
+import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
+import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
+import Colors from '../../layout/theme/utils/colors';
 
 const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   isStarter,
   schema,
-  mode = "none",
+  mode = 'none',
   includeTransport = true,
   workspaceState,
   withoutBottomBar = false,
@@ -31,13 +31,13 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
     const index = size(workspaceState?.getSchema());
     workspaceState?.setSchemaItemAt(
       {
-        name: `${kebabCase("lhr-step")}-${FB.uniqid}`,
-        type: "lhrstep",
-        label: "LHR Step",
+        name: `${kebabCase('lhr-step')}-${FB.uniqid}`,
+        type: 'lhrstep',
+        label: 'LHR Step',
         index,
         tabId: _tabsState?.activeTabId,
-        applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-        validationMode: "default",
+        applicableOn: ['ON_STATE_TO_IN_REVIEW'],
+        validationMode: 'default',
         applicableValidationSchema: true,
       },
       index
@@ -45,12 +45,12 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   };
   const docTypeGroup = get(
     workspaceState?.document?.document?.documentType,
-    "group",
-    "OTHER"
+    'group',
+    'OTHER'
   );
   const outputTypeGroup = get(
     workspaceState?.document?.formTemplate?.outputDocumentTypes[0],
-    "group"
+    'group'
   );
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
@@ -64,14 +64,14 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
         <Text translation="document.revision.release.details" />
       </Typography>
       <SummaryInfo
-        label={"record.released.by"}
-        value={documentInfo?.owner?.user.name || ""}
-        dataCy={"releasedBy"}
+        label={'record.released.by'}
+        value={documentInfo?.owner?.user.name || ''}
+        dataCy={'releasedBy'}
       />
       <SummaryInfo
-        label={"document.revision.released.date"}
+        label={'document.revision.released.date'}
         value={getFormattedDateString(documentInfo?.releasedAt, MomentFormats.MonthDateYear)}
-        dataCy={"releasedDate"}
+        dataCy={'releasedDate'}
       />
     </Box>
   );
@@ -88,10 +88,10 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
               workspaceMode={mode}
             />
           )}
-          {isRecord && isInlineApproval && isFirstAlphaReleased && _tabsState?.isTabActive("overview") &&
+          {isRecord && isInlineApproval && isFirstAlphaReleased && _tabsState?.isTabActive('overview') &&
         isDocumentRevisionReleased(workspaceState?.document?.status) && renderReleaseDetails()}
-          {_tabsState?.isTabActive("details") &&
-            workspaceState?.mode === "design" &&
+          {_tabsState?.isTabActive('details') &&
+            workspaceState?.mode === 'design' &&
             [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
               <Button
                 variant="outlined"
@@ -104,7 +104,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                   background: Colors.navy,
                   color: Colors.white,
                   border: `1px solid ${Colors.navy}`,
-                  borderRadius: "100px",
+                  borderRadius: '100px',
                 }}
               >
                 <Text translation="form.builder.add.step" />

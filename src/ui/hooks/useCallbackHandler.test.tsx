@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { mount, ReactWrapper } from "enzyme";
-import React from "react";
-import { act } from "react-dom/test-utils";
-import CallbackHandler from "../../common/callbackHandler";
-import useCallbackHandler from "./useCallbackHandler";
+import { mount, ReactWrapper } from 'enzyme';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
+import CallbackHandler from '../../common/callbackHandler';
+import useCallbackHandler from './useCallbackHandler';
 
-jest.mock("../../common/callbackHandler", () => class {
+jest.mock('../../common/callbackHandler', () => class {
   public connect = jest.fn();
   public disconnect = jest.fn();
 });
 
-describe("useCallbackHandler hook tests", () => {
-  it("calls connect/disconnect on every render", () => {
+describe('useCallbackHandler hook tests', () => {
+  it('calls connect/disconnect on every render', () => {
     let callbackHandler: CallbackHandler = new CallbackHandler();
     let wrapper: ReactWrapper;
 

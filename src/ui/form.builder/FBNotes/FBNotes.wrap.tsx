@@ -1,7 +1,7 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBDialogState, FBNotesForm, FBNotesProps } from "..";
-import FBNotesState from "./FBNotes.state";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBDialogState, FBNotesForm, FBNotesProps } from '..';
+import FBNotesState from './FBNotes.state';
 
 export const withFBNotes = <T extends FBNotesProps>(
   Component: React.FunctionComponent<T>,
@@ -34,7 +34,7 @@ export const withFBNotes = <T extends FBNotesProps>(
     onClick = () => {
       dialogState?.config({
         open: true,
-        title: "form.builder.add.note",
+        title: 'form.builder.add.note',
         content: <FBNotesForm {...{ name, notesState }} />,
       });
     };
@@ -52,6 +52,6 @@ export const withFBNotes = <T extends FBNotesProps>(
     });
   };
 
-  Comp.displayName = "withFBNotes";
+  Comp.displayName = 'withFBNotes';
   return Comp;
 };

@@ -1,9 +1,9 @@
-import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_SET } from "./constants";
-import { allIds, byId } from "./reducers";
-import { getDocument } from "./tests/factories";
-import { Document, DocumentListAction, DocumentSetAction, DocumentsToReviewListAction } from "./types";
+import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_SET } from './constants';
+import { allIds, byId } from './reducers';
+import { getDocument } from './tests/factories';
+import { Document, DocumentListAction, DocumentSetAction, DocumentsToReviewListAction } from './types';
 
-describe("documents reducers tests", () => {
+describe('documents reducers tests', () => {
   const documentList: Document[] = [
     getDocument(),
     getDocument(),
@@ -25,7 +25,7 @@ describe("documents reducers tests", () => {
     payload: document,
   };
 
-  describe("byId reducer tests", () => {
+  describe('byId reducer tests', () => {
     const initialDocument = getDocument();
     const initialState = {
       [initialDocument.id]: initialDocument,
@@ -37,15 +37,15 @@ describe("documents reducers tests", () => {
       [documentList[1].id]: documentList[1],
     };
 
-    it("sets ids on DOCUMENTS_LIST action", () => {
+    it('sets ids on DOCUMENTS_LIST action', () => {
       expect(byId(initialState, documentListAction)).toEqual(expectedState);
     });
 
-    it("sets ids on DOCUMENTS_TO_REVIEW_LIST action", () => {
+    it('sets ids on DOCUMENTS_TO_REVIEW_LIST action', () => {
       expect(byId(initialState, documentsToReviewListAction)).toEqual(expectedState);
     });
 
-    it("sets new document on DOCUMENT_SET action", () => {
+    it('sets new document on DOCUMENT_SET action', () => {
       expect(byId(initialState, documentSetAction)).toEqual({
         ...initialState,
         [document.id]: document,
@@ -53,7 +53,7 @@ describe("documents reducers tests", () => {
     });
   });
 
-  describe("allIds reducer tests", () => {
+  describe('allIds reducer tests', () => {
     const initialDocument = getDocument();
     const initialState = [initialDocument.id];
 
@@ -63,15 +63,15 @@ describe("documents reducers tests", () => {
       documentList[1].id,
     ];
 
-    it("sets ids on DOCUMENTS_LIST action", () => {
+    it('sets ids on DOCUMENTS_LIST action', () => {
       expect(allIds(initialState, documentListAction)).toEqual(expectedState);
     });
 
-    it("sets ids on DOCUMENTS_TO_REVIEW_LIST action", () => {
+    it('sets ids on DOCUMENTS_TO_REVIEW_LIST action', () => {
       expect(allIds(initialState, documentsToReviewListAction)).toEqual(expectedState);
     });
 
-    it("sets new document on DOCUMENT_SET action", () => {
+    it('sets new document on DOCUMENT_SET action', () => {
       expect(allIds(initialState, documentSetAction)).toEqual([
         ...initialState,
         document.id,
@@ -79,8 +79,8 @@ describe("documents reducers tests", () => {
     });
   });
 
-  describe("reviewIds reducer tests", () => {
-    it("sets ids on DOCUMENTS_TO_REVIEW_LIST action", () => {
+  describe('reviewIds reducer tests', () => {
+    it('sets ids on DOCUMENTS_TO_REVIEW_LIST action', () => {
       expect(allIds([], documentsToReviewListAction)).toEqual([
         documentList[0].id,
         documentList[1].id,

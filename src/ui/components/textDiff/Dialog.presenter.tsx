@@ -1,8 +1,8 @@
-import React from "react";
-import AsyncGate from "../AsyncGate";
-import Dialog from "../dialogs";
-import Diff from "./Diff.container";
-import { DialogPresenterProps } from "./utils/types";
+import React from 'react';
+import AsyncGate from '../AsyncGate';
+import Dialog from '../dialogs';
+import Diff from './Diff.container';
+import { DialogPresenterProps } from './utils/types';
 
 type Props = DialogPresenterProps;
 
@@ -29,6 +29,6 @@ const DialogPresenter: React.FunctionComponent<Props> = ({
   </Dialog>
 );
 
-DialogPresenter.displayName = "TextDiffDialogPresenter";
+DialogPresenter.displayName = 'TextDiffDialogPresenter';
 
 export default DialogPresenter;

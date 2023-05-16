@@ -1,7 +1,7 @@
-import { Box, Button, Dialog, DialogContent } from "@material-ui/core";
-import React from "react";
-import Text from "../../../../components/Text";
-import { DialogHandler } from "../../../../hooks/useDialog";
+import { Box, Button, Dialog, DialogContent } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../../components/Text';
+import { DialogHandler } from '../../../../hooks/useDialog';
 
 interface Props {
   dialog: DialogHandler;

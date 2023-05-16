@@ -1,9 +1,9 @@
-import { Box, IconButton } from "@material-ui/core";
-import RemoveCircleOutlineOutlinedIcon from "@material-ui/icons/RemoveCircleOutlineOutlined";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import React from "react";
-import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDocumentRevisionsItemProps, FBSection, FBTextField } from "..";
-import Colors from "../../layout/theme/utils/colors";
+import { Box, IconButton } from '@material-ui/core';
+import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import React from 'react';
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDocumentRevisionsItemProps, FBSection, FBTextField } from '..';
+import Colors from '../../layout/theme/utils/colors';
 
 const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemProps> = ({
   handleOpen,
@@ -23,7 +23,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
       <Box
         display="flex"
         flexDirection="row-reverse"
-        visibility={disabled ? "hidden" : "visible"}
+        visibility={disabled ? 'hidden' : 'visible'}
         mt={-3.5}
       >
         <IconButton

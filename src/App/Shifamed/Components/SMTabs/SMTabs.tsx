@@ -1,9 +1,9 @@
-import { Tab, Tabs } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React, { ReactNode } from "react";
-import { SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from "../../..";
-import useStyles from "./SMTabs.styles";
-import { withSMTabsWrap } from "./SMTabs.wrap";
+import { Tab, Tabs } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React, { ReactNode } from 'react';
+import { SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from '../../..';
+import useStyles from './SMTabs.styles';
+import { withSMTabsWrap } from './SMTabs.wrap';
 
 const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   onChange,

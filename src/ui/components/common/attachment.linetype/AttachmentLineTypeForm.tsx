@@ -1,11 +1,11 @@
-import { Box, CircularProgress, IconButton, Link } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import NotesIcon from "@material-ui/icons/Notes";
-import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
-import * as React from "react";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import Text from "../../Text";
-import { styles } from "./utils/styles";
+import { Box, CircularProgress, IconButton, Link } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import NotesIcon from '@material-ui/icons/Notes';
+import PublishRoundedIcon from '@material-ui/icons/PublishRounded';
+import * as React from 'react';
+import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
+import Text from '../../Text';
+import { styles } from './utils/styles';
 
 interface Props {
   onCancel: () => void;
@@ -21,7 +21,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   onCancel,
   onChange,
   multiple = true,
-  name = "",
+  name = '',
   disabled,
   isUploading,
   documentTypeCanRedline,

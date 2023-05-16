@@ -1,9 +1,9 @@
-import { Box, Button } from "@material-ui/core";
-import React from "react";
-import Text from "../../components/Text";
-import AuditItemsContainer from "../audit.panel/container";
-import AddGroupStyles from "./AddGroup.styles";
-import AddGroup from "./Group";
+import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import Text from '../../components/Text';
+import AuditItemsContainer from '../audit.panel/container';
+import AddGroupStyles from './AddGroup.styles';
+import AddGroup from './Group';
 
 interface OwnProps {
   isOpen: boolean;
@@ -44,7 +44,7 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
       <AddGroup
         isOpen={isOpen}
         closeDialog={closeDialog}
-        title={"group.management.create.group"}
+        title={'group.management.create.group'}
         isCreateMode={true}
       />
       {openHistoryPanel &&

@@ -1,22 +1,22 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { Form, Formik } from "formik";
-import React from "react";
-import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as ChangeOwnerIcon } from "../../../../assets/images/change_owner_avatar.svg";
-import { Owner } from "../../../../state/ducks/common/types";
-import { AsyncState } from "../../../../state/types";
-import SelectField, { SelectOption } from "../../forms/fields/Select";
-import { FormContext } from "../../forms/FormContext";
-import FormMessage from "../../forms/FormMessage";
-import FormProgress from "../../forms/FormProgress";
-import StyledSubmitButton from "../../forms/StyledSubmitButton";
-import Text from "../../Text";
-import { styles } from "./styles";
+import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListIcon } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as ChangeOwnerIcon } from '../../../../assets/images/change_owner_avatar.svg';
+import { Owner } from '../../../../state/ducks/common/types';
+import { AsyncState } from '../../../../state/types';
+import SelectField, { SelectOption } from '../../forms/fields/Select';
+import { FormContext } from '../../forms/FormContext';
+import FormMessage from '../../forms/FormMessage';
+import FormProgress from '../../forms/FormProgress';
+import StyledSubmitButton from '../../forms/StyledSubmitButton';
+import Text from '../../Text';
+import { styles } from './styles';
 
 interface OwnProps {
   employees: SelectOption[];
@@ -51,7 +51,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
         <FormMessage asyncState={asyncState} />
         <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
           <SelectField
-            selectProps={{ id: "employee" }}
+            selectProps={{ id: 'employee' }}
             name="employee"
             includeEmpty={false}
             options={employees}

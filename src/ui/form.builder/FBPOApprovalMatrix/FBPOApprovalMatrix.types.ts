@@ -1,12 +1,12 @@
-import { ButtonProps } from "@material-ui/core";
-import { Dictionary } from "lodash";
-import { FBDialogState, FBFormProps, FBFormState, FBInputProps, FBPOApprovalMatrixState } from "..";
-import { Group } from "../../../state/ducks/auth/types";
-import { Employee } from "../../../state/ducks/company/types";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { ButtonProps } from '@material-ui/core';
+import { Dictionary } from 'lodash';
+import { FBDialogState, FBFormProps, FBFormState, FBInputProps, FBPOApprovalMatrixState } from '..';
+import { Group } from '../../../state/ducks/auth/types';
+import { Employee } from '../../../state/ducks/company/types';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 
-type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;
+type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, 'name' | 'disabled' | 'label' | 'autosave' | 'isInputOwner'>;
 
 export type FBPOApprovalMatrixFieldProps =
 & FBPOApprovalMatrixBasicProps
@@ -30,13 +30,13 @@ export type FBPOApprovalMatrixDialogProps =
 };
 
 export type FBPOApprovalMatrixFormProps =
-& Pick<FBFormProps, "initialValues">
-& Pick<FBPOApprovalMatrixDialogProps, "signatureStages">;
+& Pick<FBFormProps, 'initialValues'>
+& Pick<FBPOApprovalMatrixDialogProps, 'signatureStages'>;
 
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps
-& Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
-"closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages">
+& Pick<FBPOApprovalMatrixDialogProps, 'onSubmit' |
+'closeDialog' | 'isDialogOpen' | 'initialValues' | 'groupOptions' | 'employees' | 'signatureStages'>
 & {
   approvalLevels?: POApprovalMatrixLevel[];
   handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
@@ -71,8 +71,8 @@ export interface Signature {
 
 export type FBPOApprovalMatrixFormActionsProps =
 & {
-  handleAdd?: ButtonProps["onClick"];
-  handleCancel?: ButtonProps["onClick"];
+  handleAdd?: ButtonProps['onClick'];
+  handleCancel?: ButtonProps['onClick'];
 };
 
 export interface FBPOApprovalMatrixConstructor {

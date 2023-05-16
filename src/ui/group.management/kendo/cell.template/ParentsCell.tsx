@@ -1,10 +1,10 @@
-import { filterBy } from "@progress/kendo-data-query";
-import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { sortBy } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import { filterBy } from '@progress/kendo-data-query';
+import { MultiSelect, MultiSelectFilterChangeEvent } from '@progress/kendo-react-dropdowns';
+import { sortBy } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface ParentCellProps {
   dataItem: any;
@@ -27,21 +27,21 @@ export const ParentsCell = ({
   isOfficial,
   field,
 }: ParentCellProps) => {
-  const parents = dataItem[field || ""];
+  const parents = dataItem[field || ''];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const [result, setResult] = React.useState([]);
-  const [data, setData] = React.useState(sortBy(allGroups, "label"));
+  const [data, setData] = React.useState(sortBy(allGroups, 'label'));
   const updateParentField = ({ target }) => {
-    dataItem.parents = target?.value.map((item) => ({ id: item?.value || "" }));
+    dataItem.parents = target?.value.map((item) => ({ id: item?.value || '' }));
     setResult(target.value);
   };
 
   const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
     const newData = filterBy(allGroups, filter);
-    setData(sortBy(newData, "label"));
+    setData(sortBy(newData, 'label'));
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 

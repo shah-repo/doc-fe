@@ -1,6 +1,6 @@
-import { Nullable } from "../../../state/ducks/common/types";
+import { Nullable } from '../../../state/ducks/common/types';
 
-type SidebarType = "bookmarks" | "history" | "note" | "permissions" | "crHistory" | "formMigration" | "references";
+type SidebarType = 'bookmarks' | 'history' | 'note' | 'permissions' | 'crHistory' | 'formMigration' | 'references';
 export interface Sidebar {
   icon: JSX.Element;
   details: SidebarDetails;

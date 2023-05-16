@@ -1,8 +1,8 @@
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEditor, FBEditorProps, FBInlineApprovalValue, FBTextField } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { styles as FBAutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEditor, FBEditorProps, FBInlineApprovalValue, FBTextField } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { styles as FBAutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorInlineApproval: React.FunctionComponent<FBEditorProps> = ({
   children,

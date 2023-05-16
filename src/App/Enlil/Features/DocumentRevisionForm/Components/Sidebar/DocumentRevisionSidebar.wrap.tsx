@@ -1,17 +1,17 @@
-import React, { useMemo } from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { withRouter } from "react-router-dom";
-import { DocumentRevisionSidebarProps, DocumentRevisionSidebarState, SM, SMProvider } from "../../../../..";
-import { authSelectors } from "../../../../../../state/ducks/auth";
-import { documentRevisionsSelectors } from "../../../../../../state/ducks/documentRevisions";
-import { DocumentRevisionStatus } from "../../../../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../../../../state/reducers";
-import { DOCUMENT_REVISION_OUTPUT_URL } from "../../../../../../ui/constants/urls";
-import { checkIsDocumentRecord, checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { isOwner } from "../../../../../../ui/documentRevision/helpers/documentRevisionPermissions";
-import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "../../../../../../ui/documentRevision/helpers/records";
+import React, { useMemo } from 'react';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { DocumentRevisionSidebarProps, DocumentRevisionSidebarState, SM, SMProvider } from '../../../../..';
+import { authSelectors } from '../../../../../../state/ducks/auth';
+import { documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../../../state/reducers';
+import { DOCUMENT_REVISION_OUTPUT_URL } from '../../../../../../ui/constants/urls';
+import { checkIsDocumentRecord, checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from '../../../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { isOwner } from '../../../../../../ui/documentRevision/helpers/documentRevisionPermissions';
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../../../../../ui/documentRevision/helpers/documentRevisionStatus';
+import { isFormWithInlineApproval } from '../../../../../../ui/documentRevision/helpers/records';
 
 export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSidebarProps>(
   Component: React.FunctionComponent<T>,
@@ -40,7 +40,7 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     isNewOutput = match.path === DOCUMENT_REVISION_OUTPUT_URL;
     intl = useIntl();
 
-    documentRevisions = useSelector((state: ApplicationState) => getDocumentRevisions(state, documentId || ""));
+    documentRevisions = useSelector((state: ApplicationState) => getDocumentRevisions(state, documentId || ''));
 
     docRevsWithoutCanceled = useMemo(() => documentRevisions?.filter((docrev) =>
       docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
@@ -108,6 +108,6 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     );
   };
 
-  Comp.displayName = "withDocumentRevisionSidebarWrap";
+  Comp.displayName = 'withDocumentRevisionSidebarWrap';
   return withRouter((props: T) => Comp(props));
 };

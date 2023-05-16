@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { auditActions } from "../../../state/ducks/audit";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import DialogPresenter from "./Dialog.presenter";
-import { DialogContainerProps } from "./utils/types";
+import React, { useState } from 'react';
+import { auditActions } from '../../../state/ducks/audit';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import DialogPresenter from './Dialog.presenter';
+import { DialogContainerProps } from './utils/types';
 
 type Props = DialogContainerProps;
 
 const DialogContainer: React.FunctionComponent<Props> = ({
   auditId, dialogHandler,
 }) => {
-  const [oldText, setOldText] = useState("");
-  const [newText, setNewText] = useState("");
+  const [oldText, setOldText] = useState('');
+  const [newText, setNewText] = useState('');
   const async = useAsync({
     onSuccess: (data: any) => {
       setOldText(data.previousValue);
@@ -33,6 +33,6 @@ const DialogContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-DialogContainer.displayName = "TextDiffDialogContainer";
+DialogContainer.displayName = 'TextDiffDialogContainer';
 
 export default DialogContainer;

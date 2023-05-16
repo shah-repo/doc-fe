@@ -1,8 +1,8 @@
-import { Box, Button, TextField } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { SQS_TYPES } from "../../types";
-import { styles } from "./uuid.form.styles";
+import { Box, Button, TextField } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../components/Text';
+import { SQS_TYPES } from '../../types';
+import { styles } from './uuid.form.styles';
 
 interface Props {
   handleuuidFormSubmit: (id: string) => void;
@@ -13,7 +13,7 @@ const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   type,
 }) => {
   const classes = styles();
-  const [uuid, setuuid] = React.useState("");
+  const [uuid, setuuid] = React.useState('');
   const handleUserEmailsChange = (event: any) => {
     setuuid(event?.target?.value);
   };
@@ -26,8 +26,8 @@ const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
             <Text
               translation={
                 type === SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS
-                  ? "async.tasks.pageDetailsId"
-                  : "async.tasks.docRevId"
+                  ? 'async.tasks.pageDetailsId'
+                  : 'async.tasks.docRevId'
               }
             />
           }
@@ -46,7 +46,7 @@ const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
             handleuuidFormSubmit(uuid);
           }}
         >
-          <Text translation={"common.submit"} />
+          <Text translation={'common.submit'} />
         </Button>
       </Box>
     </Box>

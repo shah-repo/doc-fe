@@ -1,11 +1,11 @@
-import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import { truncate } from "lodash";
-import React, { useCallback, useState } from "react";
-import { useIntl } from "react-intl";
-import { convertHtmlEntities } from "../../../common/utils/helpers";
-import Text from "../../components/Text";
-import styles from "./styles";
-import { SummaryBaseProps } from "./types";
+import { Box, Grid, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { truncate } from 'lodash';
+import React, { useCallback, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { convertHtmlEntities } from '../../../common/utils/helpers';
+import Text from '../../components/Text';
+import styles from './styles';
+import { SummaryBaseProps } from './types';
 
 type Props = SummaryBaseProps & WithStyles<typeof styles>;
 
@@ -23,19 +23,19 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
     []
   );
 
-  const sanitizedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, "")) : "";
+  const sanitizedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, '')) : '';
   const isValueOverLimit = sanitizedValue.length > LENGTH_LIMIT;
   const truncatedValue = isValueOverLimit && isTruncated
     ? truncate(sanitizedValue, {
       length: LENGTH_LIMIT,
-      separator: " ",
+      separator: ' ',
     })
     : sanitizedValue;
   const displayValue = truncatedValue.trim();
 
   const intl = useIntl();
   const btnText =
-    intl.formatMessage({ id: isTruncated ? "document.revision.view.more" : "document.revision.view.less" });
+    intl.formatMessage({ id: isTruncated ? 'document.revision.view.more' : 'document.revision.view.less' });
 
   return (
     <Grid item={true} xs={12} className={classes.root}>

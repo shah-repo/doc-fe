@@ -1,5 +1,5 @@
-import { Nullable } from "../../common/types";
-import { TRAINING_LIST } from "./constants";
+import { Nullable } from '../../common/types';
+import { TRAINING_LIST } from './constants';
 
 interface User {
   employeeId: string;

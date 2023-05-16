@@ -1,28 +1,28 @@
-import { Box, Typography } from "@material-ui/core";
-import { Form, Formik } from "formik";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { getTableData } from "../../../../common/utils/selectors";
-import { tableSearchActions } from "../../../../state/ducks/tableSearch";
-import { userManagementActions } from "../../../../state/ducks/userManagement";
-import { ApiTokenData, ApiTokenState, GetApiTokenList } from "../../../../state/ducks/userManagement/types";
-import { FormContext } from "../../../components/forms/FormContext";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import ApiTokenDialog from "./ApiTokenDialog";
-import ApiTokenTablePresenter from "./ApiTokenTable.presenter";
-import GenerateTokenFormPresenter from "./GenerateTokenForm.presenter";
+import { Box, Typography } from '@material-ui/core';
+import { Form, Formik } from 'formik';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getTableData } from '../../../../common/utils/selectors';
+import { tableSearchActions } from '../../../../state/ducks/tableSearch';
+import { userManagementActions } from '../../../../state/ducks/userManagement';
+import { ApiTokenData, ApiTokenState, GetApiTokenList } from '../../../../state/ducks/userManagement/types';
+import { FormContext } from '../../../components/forms/FormContext';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import ApiTokenDialog from './ApiTokenDialog';
+import ApiTokenTablePresenter from './ApiTokenTable.presenter';
+import GenerateTokenFormPresenter from './GenerateTokenForm.presenter';
 
 const ApiTokenContent: React.FunctionComponent = () => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
 
-  const TABLE_NAME = "apiTokens";
+  const TABLE_NAME = 'apiTokens';
 
   const async = useAsync({
-    onSuccess: (data: ApiTokenState = { id: "", name: "", secretKey: "" }) => {
+    onSuccess: (data: ApiTokenState = { id: '', name: '', secretKey: '' }) => {
       setApiToken(data);
       openDialog();
       resetTableData(
@@ -36,7 +36,7 @@ const ApiTokenContent: React.FunctionComponent = () => {
   });
 
   const asyncDeleteToken = useAsync({
-    onSuccess: (deletedToken: GetApiTokenList = { id: "", name: "", active: true }) => {
+    onSuccess: (deletedToken: GetApiTokenList = { id: '', name: '', active: true }) => {
       resetTableData(
         [
           ...tableData.filter((obj) => obj.id !== deletedToken.id),
@@ -47,7 +47,7 @@ const ApiTokenContent: React.FunctionComponent = () => {
   });
 
   const generateAction = useActionCreator(userManagementActions.generateApiToken);
-  const [apiToken, setApiToken] = useState<ApiTokenState>({ id: "", name: "", secretKey: "" });
+  const [apiToken, setApiToken] = useState<ApiTokenState>({ id: '', name: '', secretKey: '' });
   const revokeApiToken = useActionCreator(userManagementActions.revokeApiToken);
   const resetTableData = useActionCreator(tableSearchActions.setData);
 
@@ -62,7 +62,7 @@ const ApiTokenContent: React.FunctionComponent = () => {
   };
 
   const initialValues = {
-    name: "",
+    name: '',
   };
 
   const renderForm = () => (

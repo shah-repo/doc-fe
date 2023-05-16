@@ -1,5 +1,5 @@
-import React from "react";
-import { FBInput, FBInputProps, FBRequestApprovalField } from "..";
+import React from 'react';
+import { FBInput, FBInputProps, FBRequestApprovalField } from '..';
 
 const FBRequestApproval: React.FunctionComponent<FBInputProps> = ({
   label,

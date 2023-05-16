@@ -1,6 +1,6 @@
-import { FormikHybridFieldProps } from "../../../hoc/utils/types";
+import { FormikHybridFieldProps } from '../../../hoc/utils/types';
 
-type AttachmentComponent = "field" | "button";
+type AttachmentComponent = 'field' | 'button';
 
 export interface AttachmentFieldProps extends FormikHybridFieldProps {
   multiple?: boolean;

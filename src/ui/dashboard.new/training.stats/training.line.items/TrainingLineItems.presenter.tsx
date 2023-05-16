@@ -1,13 +1,13 @@
-import { Box, List } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Nullable } from "../../../../state/ducks/common/types";
-import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
-import LoadMoreButton from "../../../components/common/load.more.button/LoadMoreButton";
-import Text from "../../../components/Text";
-import TrainingItem from "./TrainingItem";
-import useStyles from "./TrainingLineItems.styles";
+import { Box, List } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Nullable } from '../../../../state/ducks/common/types';
+import { trainingStatsSelectors } from '../../../../state/ducks/dashboard.new/training.stats';
+import LoadMoreButton from '../../../components/common/load.more.button/LoadMoreButton';
+import Text from '../../../components/Text';
+import TrainingItem from './TrainingItem';
+import useStyles from './TrainingLineItems.styles';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -89,7 +89,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
     const trainingStatsList = useSelector(trainingStatsSelectors.trainingStatsList);
     const classes = useStyles();
     return (
-      <Box component="div" className={cx(classes.root, "containing-box-scrollbar")} >
+      <Box component="div" className={cx(classes.root, 'containing-box-scrollbar')} >
         <TabPanel
           key={0}
           value={tabValue}

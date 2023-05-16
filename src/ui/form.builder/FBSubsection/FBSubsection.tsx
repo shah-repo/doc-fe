@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBSectionProps } from "..";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBSectionProps } from '..';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
 
 const FBSubsection: React.FunctionComponent<FBSectionProps> = ({
   label,

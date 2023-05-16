@@ -1,14 +1,14 @@
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
 
 export const DEFAULT_SELECTED_EMPLOYEE: GetEmployeeResponse = {
-  id: "",
+  id: '',
   active: false,
   user: {
     avatar: null,
-    id: "",
-    name: "",
-    email: "",
-    initialColor: "",
+    id: '',
+    name: '',
+    email: '',
+    initialColor: '',
   },
   groups: [],
 };

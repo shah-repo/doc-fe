@@ -1,7 +1,7 @@
-import { DataResult, State } from "@progress/kendo-data-query";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { TablePanelStateProps } from "../../components/table/types";
+import { DataResult, State } from '@progress/kendo-data-query';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { TablePanelStateProps } from '../../components/table/types';
 
 interface FilterList {
   field: string;
@@ -10,17 +10,17 @@ interface FilterList {
 }
 
 interface FilterObject {
-  logic: "and";
+  logic: 'and';
   filters: FilterList[];
 }
 
 interface SortObject {
   field: string;
-  dir: "asc" | "desc";
+  dir: 'asc' | 'desc';
 }
 interface GroupObject {
   field: string;
-  dir?: "asc" | "desc";
+  dir?: 'asc' | 'desc';
 }
 export interface DataStateProps {
   filter: FilterObject;
@@ -64,30 +64,30 @@ export interface DataLoaderProps {
 }
 
 export enum KendoGridFilterCell {
-  ACTIVE="active",
-  DISPLAY_STATUS="displayStatus",
-  PO_STATUS="poStatus",
-  DOCUMENT_TYPE_ACRONYM= "document.documentType.documentTypeAcronym",
-  EFFECTIVE_DATE="effectiveDate",
-  COMPLETED_AT="completedAt",
-  DUE_ON= "dueOn",
-  CREATED_AT= "createdAt",
-  RELEASED_AT = "releasedAt",
-  STATE = "state",
-  TASKTYPE = "taskType",
-  STATUS = "status",
-  ASYNC_CREATED_AT = "createdAtt"
+  ACTIVE='active',
+  DISPLAY_STATUS='displayStatus',
+  PO_STATUS='poStatus',
+  DOCUMENT_TYPE_ACRONYM= 'document.documentType.documentTypeAcronym',
+  EFFECTIVE_DATE='effectiveDate',
+  COMPLETED_AT='completedAt',
+  DUE_ON= 'dueOn',
+  CREATED_AT= 'createdAt',
+  RELEASED_AT = 'releasedAt',
+  STATE = 'state',
+  TASKTYPE = 'taskType',
+  STATUS = 'status',
+  ASYNC_CREATED_AT = 'createdAtt'
 }
 
 export enum KendoGridFilterCellOperators {
-  CONTAINS = "contains",
-  DOES_NOT_CONTAIN = "doesnotcontain",
-  EQ = "eq",
-  NEQ = "neq",
-  STARTS_WITH = "startswith",
-  ENDS_WITH = "endswith",
-  IS_NULL = "isnull",
-  IS_NOT_NULL = "isnotnull",
-  IS_EMPTY = "isempty",
-  IS_NOT_EMPTY = "isnotempty",
+  CONTAINS = 'contains',
+  DOES_NOT_CONTAIN = 'doesnotcontain',
+  EQ = 'eq',
+  NEQ = 'neq',
+  STARTS_WITH = 'startswith',
+  ENDS_WITH = 'endswith',
+  IS_NULL = 'isnull',
+  IS_NOT_NULL = 'isnotnull',
+  IS_EMPTY = 'isempty',
+  IS_NOT_EMPTY = 'isnotempty',
 }

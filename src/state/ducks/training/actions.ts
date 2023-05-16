@@ -1,8 +1,8 @@
-import { apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { documentRevisionsActions } from "../documentRevisions";
-import { TRAINING_RECORD_ROOT_URL } from "./constants";
-import { TrainingPlanTransition, TrainingRequestBody, TrainingTransitionRequestBody } from "./types";
+import { apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { documentRevisionsActions } from '../documentRevisions';
+import { TRAINING_RECORD_ROOT_URL } from './constants';
+import { TrainingPlanTransition, TrainingRequestBody, TrainingTransitionRequestBody } from './types';
 
 const applyTransition = (
   id: string,
@@ -12,7 +12,7 @@ const applyTransition = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${TRAINING_RECORD_ROOT_URL}/${id}/${transition}`,
-  method: "post",
+  method: 'post',
   data: body,
   password: body.password,
   onSuccess: (trainingRecord, dispatch) => {
@@ -28,7 +28,7 @@ const completeSelfTaughtTraining = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${TRAINING_RECORD_ROOT_URL}/self_taught/complete`,
-  method: "post",
+  method: 'post',
   data: body,
   password: values.password,
   onSuccess: (trainingRecord, dispatch) => {
@@ -43,7 +43,7 @@ const exportTrainingRecord = (
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `/export/training_record/${id}/email`,
-    method: "post",
+    method: 'post',
     handlers,
   });
 

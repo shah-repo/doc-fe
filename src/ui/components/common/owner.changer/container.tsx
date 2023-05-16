@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { companySelectors } from "../../../../state/ducks/company";
-import { ApplicationState } from "../../../../state/reducers";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { SelectOption } from "../../forms/fields/Select";
-import { getUrlandActions } from "./helpers";
-import { RequestType } from "./helpers/types";
-import OwnerChangerPresenter from "./presenter";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { companySelectors } from '../../../../state/ducks/company';
+import { ApplicationState } from '../../../../state/reducers';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import { SelectOption } from '../../forms/fields/Select';
+import { getUrlandActions } from './helpers';
+import { RequestType } from './helpers/types';
+import OwnerChangerPresenter from './presenter';
 
 interface OwnProps {
   requestId: string;
@@ -27,7 +27,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   const openDialog = () => {
     const activeEmployees = companyEmployes.map((employee) => ({
       value: employee.id as string,
-      text: employee.user?.name || "",
+      text: employee.user?.name || '',
     }));
     setEmployees(activeEmployees);
     dialog.open();

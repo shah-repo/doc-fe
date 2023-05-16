@@ -1,9 +1,9 @@
-import { filter, flattenDeep, get, omit, unionBy } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
+import { filter, flattenDeep, get, omit, unionBy } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 
 class FBProcedureState {
   // MARK: @config
@@ -47,10 +47,10 @@ class FBProcedureState {
         const highestId = ids.sort().pop();
         nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
       }
-      item = { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
+      item = { title: item.title, id: String.fromCharCode(nextId),  type: 'params', LHRTparameter: item.LHRTparameter };
     }
 
-    const items = unionBy([item], get(this, `value.${type}`), "id");
+    const items = unionBy([item], get(this, `value.${type}`), 'id');
     const value = {
       ...this.value,
       [type]: items.reverse(),
@@ -68,10 +68,10 @@ class FBProcedureState {
   };
 
   @action public setValue = (value?: FBProcedureValue) => {
-    set(this, "value", value);
+    set(this, 'value', value);
   };
 
-  @action setDiffValue = (value?: FBProcedureValue) => set(this, "diffValue", value);
+  @action setDiffValue = (value?: FBProcedureValue) => set(this, 'diffValue', value);
 
   // MARK: @helpers
   public get materialsId(): string {
@@ -95,7 +95,7 @@ class FBProcedureState {
   };
 
   public getLot = (id?: string): string | undefined => {
-    if (!id) { return "?"; }
+    if (!id) { return '?'; }
     const item = this.findLot(id);
     if (!item) { return id; }
     return item.document?.docId;
@@ -115,7 +115,7 @@ class FBProcedureState {
     return item;
   };
 
-  public setDiffPreview = (state: boolean) => set(this, "isDiffPreview", state);
+  public setDiffPreview = (state: boolean) => set(this, 'isDiffPreview', state);
 }
 
 export default FBProcedureState;

@@ -1,28 +1,28 @@
-import { LinearProgress } from "@material-ui/core";
-import { mount } from "enzyme";
-import React from "react";
-import { AsyncStatus } from "../../../state/types";
-import FormProgress, { FormProgressProps } from "./FormProgress";
+import { LinearProgress } from '@material-ui/core';
+import { mount } from 'enzyme';
+import React from 'react';
+import { AsyncStatus } from '../../../state/types';
+import FormProgress, { FormProgressProps } from './FormProgress';
 
-describe("FormProgress component unit tests", () => {
+describe('FormProgress component unit tests', () => {
   const getWrapper = (props: FormProgressProps) => mount(
     <FormProgress {...props} />,
   );
 
-  it("displays nothing when not active", () => {
+  it('displays nothing when not active', () => {
     expect(getWrapper({
       asyncState: {
         status: AsyncStatus.Idle,
-        message: "",
+        message: '',
       },
-    }).text()).toBe("");
+    }).text()).toBe('');
   });
 
-  it("displays LinearProgress when active", () => {
+  it('displays LinearProgress when active', () => {
     const wrapper = getWrapper({
       asyncState: {
         status: AsyncStatus.Active,
-        message: "",
+        message: '',
       },
     });
 

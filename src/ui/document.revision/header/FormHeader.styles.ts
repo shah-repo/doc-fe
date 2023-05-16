@@ -1,9 +1,9 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 export default makeStyles((theme: Theme) =>
   createStyles({
     linearProgress: (isCreateUrl: boolean) => ({
-      position: "absolute",
+      position: 'absolute',
       left: isCreateUrl ? 0 : 10,
       right: isCreateUrl ? 0 : 10,
       bottom: isCreateUrl ? 0 : 10,

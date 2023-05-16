@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../../../layout/theme/utils/colors';
 
 export default makeStyles(() => ({
   listItem: {
@@ -26,7 +26,7 @@ export default makeStyles(() => ({
     height: 45,
     fontWeight: 600,
     color: Colors.white,
-    borderRadius: "50%",
-    fontSize: "12px",
+    borderRadius: '50%',
+    fontSize: '12px',
   },
 }));

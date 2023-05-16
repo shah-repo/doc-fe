@@ -1,6 +1,6 @@
-import * as React from "react";
-import Moment, { MomentProps } from "react-moment";
-import { MomentFormats, TIME_ZONE } from "../../common/utils/date";
+import * as React from 'react';
+import Moment, { MomentProps } from 'react-moment';
+import { MomentFormats, TIME_ZONE } from '../../common/utils/date';
 
 interface DateTimeProps extends MomentProps {
   value: string;

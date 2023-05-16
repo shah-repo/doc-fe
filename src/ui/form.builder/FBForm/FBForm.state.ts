@@ -1,8 +1,8 @@
-import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from "lodash";
-import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from "..";
-import FBSchemaState from "../FBSchema/FBSchema.state";
+import { flatten, unflatten } from 'flat';
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
+import { action, computed, get, observable, set } from 'mobx';
+import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
+import FBSchemaState from '../FBSchema/FBSchema.state';
 
 class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
@@ -52,7 +52,7 @@ class FBFormState extends FBSchemaState {
   }
 
   @computed public get Validator(): any {
-    return lodashGet(window, "EnlilRemoteValidators.validator");
+    return lodashGet(window, 'EnlilRemoteValidators.validator');
   }
 
   public get shouldValidate(): boolean {
@@ -143,7 +143,7 @@ class FBFormState extends FBSchemaState {
   };
 
   @action public setApprovalMap = (approvals) => {
-    set(this, "approvalMap", { ...this.approvalMap, ...approvals });
+    set(this, 'approvalMap', { ...this.approvalMap, ...approvals });
   };
   @action public setRules = (rules: Dictionary<string>) =>
     set(this.rules, rules);
@@ -151,7 +151,7 @@ class FBFormState extends FBSchemaState {
   @action public getRules = () => this.rules;
 
   @action public setErrors = (errors: Dictionary<string>) =>
-    set(this, "errors", errors);
+    set(this, 'errors', errors);
 
   @action public setFieldError = (fieldName: string, error: string) =>
     set(this.errors, fieldName, error);
@@ -160,7 +160,7 @@ class FBFormState extends FBSchemaState {
     get(this.errors, fieldName);
 
   @action public setHelpers = (helpers: Dictionary<string>) => {
-    set(this, "helpers", helpers);
+    set(this, 'helpers', helpers);
   };
 
   @action public setFieldHelper = (fieldName: string, value: string) => {
@@ -242,7 +242,7 @@ class FBFormState extends FBSchemaState {
       () => callback && callback(true),
       () => { // failed
         const errors = validator.errors.all();
-        map(errors, (v, k) => this.setFieldError(k, join(v, "\n")));
+        map(errors, (v, k) => this.setFieldError(k, join(v, '\n')));
         callback && callback(false);
       });
   };
@@ -251,17 +251,17 @@ class FBFormState extends FBSchemaState {
     const parsedRules = {};
     map(rules, (value, key) => {
       if (!isString(value)) { return; }
-      const rulesArray = value?.split("|");
+      const rulesArray = value?.split('|');
       const valuesArray: any = [];
       map(rulesArray, (val) => {
         if (!val) {
           return;
         }
-        const splitVal = val.split(":");
+        const splitVal = val.split(':');
         if (splitVal.length === 1) {
           parsedRules[key] = val;
         } else {
-          const finalValue = splitVal[1].split(",");
+          const finalValue = splitVal[1].split(',');
           if (finalValue.length === 1) {
             valuesArray.push({
               [splitVal[0]]: finalValue[0],
@@ -274,9 +274,9 @@ class FBFormState extends FBSchemaState {
             });
           } else { // array value (required_if_in validator)
             // const ruleName = splitVal[1].split(",")[0];
-            const splitArray = splitVal[1].split(",");
-            const splitValue = val.split(",");
-            const finalValue = slice(splitValue, 1, splitValue.length).join(",");
+            const splitArray = splitVal[1].split(',');
+            const splitValue = val.split(',');
+            const finalValue = slice(splitValue, 1, splitValue.length).join(',');
             valuesArray.push({
               [splitVal[0]]: [splitArray[0], finalValue],
             });
@@ -291,10 +291,10 @@ class FBFormState extends FBSchemaState {
   // *NOTE: remove this after it is set in be script
   public registerValidator = (validator: any) => {
     this.Validator.registerAsyncImplicit(
-      "required_if_in",
+      'required_if_in',
       function(val: string[], req: string[], attribute: string, passes) {
         const reqs = req?.[1];
-        const reqName = req?.[0] || "";
+        const reqName = req?.[0] || '';
         let inputValue = lodashGet(validator.input, reqName);
         // Radio group support
         !isArray(inputValue) && (inputValue = [inputValue]);
@@ -319,10 +319,10 @@ class FBFormState extends FBSchemaState {
         return passes();
       });
     this.Validator.registerAsyncImplicit(
-      "required_if",
+      'required_if',
       function(val: string[], req: string[], attribute: string, passes) {
         const reqs = req?.[1];
-        const reqName = req?.[0] || "";
+        const reqName = req?.[0] || '';
         const inputValue = lodashGet(validator.input, reqName);
         const { messages: { attributeNames } } = validator;
         if (!inputValue) {  return passes(); }

@@ -1,10 +1,10 @@
-import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
-import AlbumIcon from "@material-ui/icons/Album";
-import QRCode from "qrcode.react";
-import React from "react";
-import { FBMediaQRProps } from "..";
-import Text from "../../components/Text";
-import { withFBMediaQR } from "./FBMediaQR.wrap";
+import { Box, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import AlbumIcon from '@material-ui/icons/Album';
+import QRCode from 'qrcode.react';
+import React from 'react';
+import { FBMediaQRProps } from '..';
+import Text from '../../components/Text';
+import { withFBMediaQR } from './FBMediaQR.wrap';
 
 const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
   setMediaFieldMode,
@@ -13,7 +13,7 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
   mode,
 }) => (
   <Box fontWeight= "600" fontSize= "12px">
-    {mode === "qr" && (
+    {mode === 'qr' && (
       <>
         <Box display="flex" flexDirection="row-reverse" py={0.8}>
           <IconButton data-cy="albumMediaButton" size="small" onClick={setMediaFieldMode}>
@@ -38,8 +38,8 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
         </Box>
       </>
     )}
-    {mode === "placeholder" && <Text message="form.builder.media.album.placeholder" />}
-    {mode === "preupload" && <Text message="form.builder.media.album.output.placeholder" />}
+    {mode === 'placeholder' && <Text message="form.builder.media.album.placeholder" />}
+    {mode === 'preupload' && <Text message="form.builder.media.album.output.placeholder" />}
   </Box>
 );
 

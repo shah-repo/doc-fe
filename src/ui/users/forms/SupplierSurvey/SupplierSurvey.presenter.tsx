@@ -1,11 +1,11 @@
-import { Formik, FormikProps } from "formik";
-import * as React from "react";
-import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions/types";
-import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey/types";
-import { AsyncState } from "../../../../state/types";
-import { FormContext } from "../../../components/forms/FormContext";
-import { toSupplierSurveyFormValues } from "../transform";
-import SupplierSurveyFormBuild from "./SupplierSurveyFormBuild.presenter";
+import { Formik, FormikProps } from 'formik';
+import * as React from 'react';
+import { FBDocumentRevisionProps } from '../../../../state/ducks/documentRevisions/types';
+import { SupplierSurveyForm } from '../../../../state/ducks/supplierSurvey/types';
+import { AsyncState } from '../../../../state/types';
+import { FormContext } from '../../../components/forms/FormContext';
+import { toSupplierSurveyFormValues } from '../transform';
+import SupplierSurveyFormBuild from './SupplierSurveyFormBuild.presenter';
 
 interface Props {
   asyncState: AsyncState;

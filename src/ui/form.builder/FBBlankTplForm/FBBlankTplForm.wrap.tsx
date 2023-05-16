@@ -1,8 +1,8 @@
-import { reaction } from "mobx";
-import React from "react";
-import { useSelector } from "react-redux";
-import { FB, FBBlankTplFormProps, FBWorkspaceModeOptions } from "..";
-import { companySelectors } from "../../../state/ducks/company";
+import { reaction } from 'mobx';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { FB, FBBlankTplFormProps, FBWorkspaceModeOptions } from '..';
+import { companySelectors } from '../../../state/ducks/company';
 
 
 export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
@@ -23,12 +23,12 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.inputState.get(name || "")?.value?.length,
+        () => formState?.inputState.get(name || '')?.value?.length,
         () => {
           workspaceState?.setSchemaItem({
             ...props,
             name,
-            defaultValue: formState?.inputState.get(name || "")?.value,
+            defaultValue: formState?.inputState.get(name || '')?.value,
           });
         }
       );
@@ -43,6 +43,6 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
     });
   };
 
-  Comp.displayName = "withFBBlankTplForm";
+  Comp.displayName = 'withFBBlankTplForm';
   return Comp;
 };

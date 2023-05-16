@@ -1,10 +1,10 @@
-import { FBFormProps, FBPOReceiveProps, FBPurchaseOrderItem } from "..";
-import { Id } from "../../../state/ducks/common/types";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { FBFormProps, FBPOReceiveProps, FBPurchaseOrderItem } from '..';
+import { Id } from '../../../state/ducks/common/types';
+import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export type FBPOReceiveFormProps =
-& Pick<FBPOReceiveProps, "name">
-& Pick<FBFormProps, "children">
+& Pick<FBPOReceiveProps, 'name'>
+& Pick<FBFormProps, 'children'>
 & {
   handleReceive?: () => any;
   handleCancel?: () => any;

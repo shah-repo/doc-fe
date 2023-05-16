@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { AuditGroupType } from "../../../state/ducks/audit/types";
-import { Approval } from "../../../state/ducks/common/types";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../state/reducers";
-import { FBSchemaProps } from "../../form.builder";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
-import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
-import AuditPresenter from "./Audit.presenter.new";
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { AuditGroupType } from '../../../state/ducks/audit/types';
+import { Approval } from '../../../state/ducks/common/types';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../state/reducers';
+import { FBSchemaProps } from '../../form.builder';
+import CustomLabelTooltip from '../../hooks/docCustomization/CustomLabelTooltip';
+import { useDocumentStatus } from '../../hooks/docCustomization/useCustomization';
+import AuditPresenter from './Audit.presenter.new';
 
 interface OwnProps {
   documentRevisionId: string;

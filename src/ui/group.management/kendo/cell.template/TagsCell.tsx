@@ -1,11 +1,11 @@
-import { filterBy } from "@progress/kendo-data-query";
-import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { cloneDeep, isEmpty, uniq } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
+import { filterBy } from '@progress/kendo-data-query';
+import { MultiSelect, MultiSelectFilterChangeEvent } from '@progress/kendo-react-dropdowns';
+import { cloneDeep, isEmpty, uniq } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
 
 interface TagsCellProps {
   dataItem: any;
@@ -29,7 +29,7 @@ export const TagsCell = ({
   isOfficial,
 }: TagsCellProps) => {
   const [result, setResult] = React.useState([]);
-  const tags = dataItem[field || ""];
+  const tags = dataItem[field || ''];
 
   const allGroups = cloneDeep(uniq(useSelector(userManagementSelectors.getOfficialGroups).filter(
     (group) => group.tags && group.tags.length
@@ -51,10 +51,10 @@ export const TagsCell = ({
     setData(newData);
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
-  const tagsList = isEmpty(tags) ? [] : tags.split(",");
+  const tagsList = isEmpty(tags) ? [] : tags.split(',');
   return (
     <td
       id="kendo-expandable-column"

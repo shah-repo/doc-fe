@@ -1,12 +1,12 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, Theme } from '@material-ui/core';
 
 export default (theme: Theme) =>
   createStyles({
     errorContainer: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     tryAgainButton: {
       marginLeft: theme.spacing(1),
@@ -16,12 +16,12 @@ export default (theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     passiveContainer: {
-      position: "relative",
+      position: 'relative',
     },
     passiveProgress: {
-      width: "100%",
+      width: '100%',
       marginTop: theme.spacing(1),
-      position: "absolute",
+      position: 'absolute',
       zIndex: 2,
     },
   });

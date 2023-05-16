@@ -1,8 +1,8 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { FBApprovalAuditProps, FBAuditData, FBMapWrapper } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBApprovalAudit } from "./FBApprovalAudit.wrap";
+import { Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { FBApprovalAuditProps, FBAuditData, FBMapWrapper } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBApprovalAudit } from './FBApprovalAudit.wrap';
 
 const FBApprovalAudit: React.FunctionComponent<FBApprovalAuditProps> = ({
   audits,

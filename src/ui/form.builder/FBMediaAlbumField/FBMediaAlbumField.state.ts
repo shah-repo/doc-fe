@@ -1,14 +1,14 @@
-import { filter, find, isUndefined, map, union } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import { FBAttachment, FBFile, FBMediaAlbumFieldMode } from "..";
-import { ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments/constants";
-import { Attachment, AttachmentDownloadResponse, AttachmentType } from "../../../state/ducks/attachments/types";
-import { Id } from "../../../state/ducks/common/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { filter, find, isUndefined, map, union } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import { FBAttachment, FBFile, FBMediaAlbumFieldMode } from '..';
+import { ATTACHMENT_ROOT_URL } from '../../../state/ducks/attachments/constants';
+import { Attachment, AttachmentDownloadResponse, AttachmentType } from '../../../state/ducks/attachments/types';
+import { Id } from '../../../state/ducks/common/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBMediaAlbumFieldState {
-  @observable public mode: FBMediaAlbumFieldMode = "qr";
+  @observable public mode: FBMediaAlbumFieldMode = 'qr';
   @observable public filesUploaded: File[] = [];
   @observable public attachmentApi = new FBRequest<Attachment, FBFile>();
   @observable public attachmentsApi: FBRequest<FBAttachment[], null> = new FBRequest();
@@ -39,11 +39,11 @@ class FBMediaAlbumFieldState {
   public getFiles = (ids: string[]) => this.filesApi.set({
     url: FBEndpoint.AttachmentsByIds,
     urlValues: { ids },
-    method: "get",
+    method: 'get',
   }, (data, error) => {
     if (data) {
       map(data, (d) => {
-        const collectionIds = map(this.collection, "id");
+        const collectionIds = map(this.collection, 'id');
         if (!collectionIds.includes(d.id)) {
           this.download(d);
         }
@@ -58,7 +58,7 @@ class FBMediaAlbumFieldState {
   public getAllAttachments = (id: string) => this.allAttachmentsApi.set({
     url: FBEndpoint.AllDocRevAttachments,
     urlValues: { id },
-    method: "get",
+    method: 'get',
   }, (data, error) => {
     if (data) {
       map(data, (d) => {
@@ -74,17 +74,17 @@ class FBMediaAlbumFieldState {
   });
 
   @action public removeFile = (id: string) => {
-    set(this, "files", filter(this.files, (f) => f.id !== id));
-    set(this, "collection", filter(this.collection, (f) => f.id !== id));
+    set(this, 'files', filter(this.files, (f) => f.id !== id));
+    set(this, 'collection', filter(this.collection, (f) => f.id !== id));
   };
 
   @action public addFile = (file: FBAttachment) => {
     const files = union(this.collection, [file]);
-    set(this, "collection", files);
+    set(this, 'collection', files);
   };
 
   @action public setFiles = (files: Id[]) => {
-    set(this, "files", files);
+    set(this, 'files', files);
   };
 
   public upload = (files: File[] | undefined) => {
@@ -108,7 +108,7 @@ class FBMediaAlbumFieldState {
     this.attachmentApi.set({
       url: FBEndpoint.AttachmentUpload,
       body: { file } as FBFile,
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         this.attachmentApi.onError(error);
@@ -127,7 +127,7 @@ class FBMediaAlbumFieldState {
     const queryParams = `?type=${this.attachmentType(file)}`;
     this.attachmentDownloadApi.set({
       url: `${ATTACHMENT_ROOT_URL}/${file.id}/download${queryParams}`,
-      method: "get",
+      method: 'get',
     }, (data, error) => {
       this.filesUploaded.pop();
       if (data) {
@@ -152,7 +152,7 @@ class FBMediaAlbumFieldState {
       return;
     }
     if (find(this.files, { id })) { return; }
-    set(this, "files", union(this.files, [{ id }]));
+    set(this, 'files', union(this.files, [{ id }]));
   };
 
   private attachmentType = (file: Attachment): AttachmentType | undefined => {
@@ -162,7 +162,7 @@ class FBMediaAlbumFieldState {
       : AttachmentType.CleanCopy;
   };
 
-  @action public setMode = (mode: FBMediaAlbumFieldMode) => set(this, "mode", mode);
+  @action public setMode = (mode: FBMediaAlbumFieldMode) => set(this, 'mode', mode);
 }
 
 export default FBMediaAlbumFieldState;

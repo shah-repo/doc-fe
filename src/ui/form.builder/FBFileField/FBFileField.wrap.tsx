@@ -1,9 +1,9 @@
-import { filter, get, isEmpty, join } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBFileFieldProps, FBFileFieldState } from "..";
-import { toastError } from "../../components/notifications";
+import { filter, get, isEmpty, join } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBFileFieldProps, FBFileFieldState } from '..';
+import { toastError } from '../../components/notifications';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -13,7 +13,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     onClick,
     onChange,
     fileFieldState,
-    name = "",
+    name = '',
     ...props
   }: T) => {
     const { fileUploadState, workspaceState, formState  } = FB.useStores();
@@ -56,34 +56,34 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     };
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const eventFiles = get(event, "currentTarget.files", []);
+      const eventFiles = get(event, 'currentTarget.files', []);
       const invalidFiles: string[] = [];
 
       const validFiles: File[] = filter(eventFiles, (file) => {
-        const fileName = get(file, "name", "");
-        const type = fileName.split(".").pop();
-        (type === "doc") && (invalidFiles.push(fileName));
-        return type !== "doc";
+        const fileName = get(file, 'name', '');
+        const type = fileName.split('.').pop();
+        (type === 'doc') && (invalidFiles.push(fileName));
+        return type !== 'doc';
       });
 
       if (!isEmpty(invalidFiles)) {
-        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
+        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ', ')}`);
       }
-      if (workspaceState?.mode !== "preview") {
+      if (workspaceState?.mode !== 'preview') {
         fileFieldState?.upload(validFiles);
       }
     };
 
     onClick = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
       const element = event.target as HTMLInputElement;
-      element.value = "";
+      element.value = '';
     };
 
     React.useEffect(() => {
       reaction(
         () => fileFieldState?.data,
         (data) => {
-          if (workspaceState?.mode !== "preview") {
+          if (workspaceState?.mode !== 'preview') {
             fileUploadState?.addFile(data);
           }
         }

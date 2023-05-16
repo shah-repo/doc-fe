@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../../../layout/theme/utils/colors';
 
 export default makeStyles((theme) => ({
   form: {
@@ -7,55 +7,55 @@ export default makeStyles((theme) => ({
   },
   formLoading: {
     height: 20,
-    overflow: "hidden",
+    overflow: 'hidden',
     margin: theme.spacing(-2.5, -2.5, 2, -3),
   },
   submitButton: {
-    float: "right",
-    clear: "right",
+    float: 'right',
+    clear: 'right',
   },
   cancelButton: {
-    float: "right",
+    float: 'right',
     marginRight: theme.spacing(1),
   },
   passwordInput: {
     height: 40,
-    marginTop: "0 !important",
+    marginTop: '0 !important',
   },
   dropDown: {
-    top: "2px !important",
-    width: "161px",
-    left: "-10px",
+    top: '2px !important',
+    width: '161px',
+    left: '-10px',
   },
   buttonHover: {
-    "&:hover": {
+    '&:hover': {
       backgroundColor: `${Colors.light_gray} !important`,
-      borderTopLeftRadius: "100px",
+      borderTopLeftRadius: '100px',
     },
-    "&:disabled": {
+    '&:disabled': {
       backgroundColor: `${Colors.gray_goose} !important`,
       color: `${Colors.gray} !important`,
     },
-    "borderTopLeftRadius": "100px",
-    "borderBottomLeftRadius": "100px",
+    'borderTopLeftRadius': '100px',
+    'borderBottomLeftRadius': '100px',
   },
   hoverArrow: {
-    "&:hover": {
+    '&:hover': {
       backgroundColor: `${Colors.light_gray} !important`,
-      borderTopRightRadius: "100px",
+      borderTopRightRadius: '100px',
     },
-    "borderTopRightRadius": "100px",
-    "borderBottomRightRadius": "100px",
+    'borderTopRightRadius': '100px',
+    'borderBottomRightRadius': '100px',
   },
   button: {
     margin: theme.spacing(0, 1),
   },
   dialog: {
-    width: "100%",
+    width: '100%',
     maxWidth: 500,
   },
   dialogPaper: {
-    overflowY: "unset",
+    overflowY: 'unset',
   },
   dialogTitle: {
     paddingBottom: theme.spacing(1.75),
@@ -63,14 +63,14 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
   },
   dialogContent: {
-    overflowY: "unset",
+    overflowY: 'unset',
     paddingTop: theme.spacing(1.5),
     borderTop: `1px solid ${Colors.light_gray}`,
   },
   dialogActions: {
     backgroundColor: Colors.white_smoke,
-    display: "flex",
-    justifyContent: "flex-end",
+    display: 'flex',
+    justifyContent: 'flex-end',
     columnGap: theme.spacing(1),
     margin: theme.spacing(1, -2.5, -2.5, -3),
     padding: theme.spacing(2.5, 2.5, 2.5, 3),
@@ -78,11 +78,11 @@ export default makeStyles((theme) => ({
     borderBottomRightRadius: theme.shape.borderRadius,
   },
   releaseButton: {
-    "border": `1px solid ${Colors.white}`,
-    "backgroundColor": Colors.white,
-    "color": Colors.navy,
-    "borderRadius": "100px",
-    "&:hover": {
+    'border': `1px solid ${Colors.white}`,
+    'backgroundColor': Colors.white,
+    'color': Colors.navy,
+    'borderRadius': '100px',
+    '&:hover': {
       backgroundColor: Colors.white,
       borderColor: Colors.white,
     },

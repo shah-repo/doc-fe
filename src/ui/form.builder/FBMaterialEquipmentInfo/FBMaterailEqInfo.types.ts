@@ -1,12 +1,12 @@
-import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import useStyles from "./FBMaterialEqInfo.styles";
+import React from 'react';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import useStyles from './FBMaterialEqInfo.styles';
 
 export enum FBMEQItemStatus {
-  Removed = "removed",
-  Added = "added",
-  Updated = "updated",
-  None = "none"
+  Removed = 'removed',
+  Added = 'added',
+  Updated = 'updated',
+  None = 'none'
 }
 
 export interface LotItem {

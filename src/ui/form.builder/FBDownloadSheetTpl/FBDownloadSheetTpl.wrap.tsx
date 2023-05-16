@@ -1,7 +1,7 @@
-import React from "react";
-import { useIntl } from "react-intl";
-import { FB, FBDownloadSheetTplState } from "..";
-import { FBDownloadSheetTplProps } from "./FBDownloadSheetTpl.types";
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBDownloadSheetTplState } from '..';
+import { FBDownloadSheetTplProps } from './FBDownloadSheetTpl.types';
 
 export const withFBDownloadSheetTpl = <T extends FBDownloadSheetTplProps>(
   Component: React.FunctionComponent<T>

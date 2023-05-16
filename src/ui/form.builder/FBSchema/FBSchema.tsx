@@ -1,6 +1,6 @@
-import React from "react";
-import { FBProvider, FBSchemaComponentProps } from "..";
-import { withFBSchema } from "./FBSchema.wrap";
+import React from 'react';
+import { FBProvider, FBSchemaComponentProps } from '..';
+import { withFBSchema } from './FBSchema.wrap';
 
 const FBSchema: React.FunctionComponent<FBSchemaComponentProps> = ({
   schemaState,

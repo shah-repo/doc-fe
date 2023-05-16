@@ -1,13 +1,13 @@
-import { Box, Tab, Typography } from "@material-ui/core";
-import * as echarts from "echarts";
-import React, { useCallback, useEffect } from "react";
-import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
-import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
-import { linearScale } from "../../line.items/common/Utils";
-import StyledTabs from "../../tabs/common/StyledTabs";
-import DoughnutChartOptions from "./DoughnutChartOptions";
-import { styles } from "./TrainingChart.styles";
+import { Box, Tab, Typography } from '@material-ui/core';
+import * as echarts from 'echarts';
+import React, { useCallback, useEffect } from 'react';
+import { TrainingStatusChartLabelTypes } from '../../../../state/ducks/dashboard.new/training.stats/types';
+import Text from '../../../components/Text';
+import Colors from '../../../layout/theme/utils/colors';
+import { linearScale } from '../../line.items/common/Utils';
+import StyledTabs from '../../tabs/common/StyledTabs';
+import DoughnutChartOptions from './DoughnutChartOptions';
+import { styles } from './TrainingChart.styles';
 
 interface TrainingChartPresenterProps {
   overdue: number;
@@ -62,22 +62,22 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       },
     ];
     const defaultTitle = {
-      text: "" + totalCount,
+      text: '' + totalCount,
       subtext: TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING,
       textStyle: {
-        fontWeight: "bold",
+        fontWeight: 'bold',
         color: Colors.almost_black,
         fontSize: 40,
       },
       subtextStyle: {
-        fontWeight: "bold",
+        fontWeight: 'bold',
         color: Colors.font_gray,
         fontSize: 12,
         lineHeight: 50,
       },
       itemGap: -20,
-      left: "center",
-      top: "55%",
+      left: 'center',
+      top: '55%',
     };
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
@@ -86,11 +86,11 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     const classes = styles();
     const updateChart = useCallback(
       (tabValue) => {
-        let text = "";
-        let subText = "";
-        let color = "";
+        let text = '';
+        let subText = '';
+        let color = '';
         if (tabValue === 0) {
-          text = "" + totalCount;
+          text = '' + totalCount;
           subText = TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
           color = Colors.gray;
           DoughnutChartOptions.series.data[0].itemStyle.color =
@@ -98,7 +98,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           DoughnutChartOptions.series.data[1].itemStyle.color =
           Colors.latest_yellow_varient;
         } else if (tabValue === 2) {
-          text = "" + dueInSeven;
+          text = '' + dueInSeven;
           subText = TrainingStatusChartLabelTypes.DUE;
           color = Colors.latest_yellow_varient;
           DoughnutChartOptions.series.data[0].itemStyle.color =
@@ -106,7 +106,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           DoughnutChartOptions.series.data[1].itemStyle.color =
           Colors.latest_yellow_varient;
         } else if (tabValue === 1) {
-          text = "" + overdue;
+          text = '' + overdue;
           subText = TrainingStatusChartLabelTypes.OVERDUE;
           color = Colors.latest_red_varient;
           DoughnutChartOptions.series.data[0].itemStyle.color =
@@ -126,13 +126,13 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     useEffect(() => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       myChart = echarts.init(
-        document.getElementById("training-chart") as HTMLInputElement
+        document.getElementById('training-chart') as HTMLInputElement
       );
       myChart.setOption(DoughnutChartOptions);
       window.onresize = function() {
         myChart.resize();
       };
-      myChart.on("mouseover", (evt: any) => {
+      myChart.on('mouseover', (evt: any) => {
         DoughnutChartOptions.series.data.forEach((data, index) => {
           if (index !== evt?.dataIndex) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
@@ -160,7 +160,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         }
         myChart.setOption(DoughnutChartOptions);
       });
-      myChart.on("mouseout", (e: any) => {
+      myChart.on('mouseout', (e: any) => {
         DoughnutChartOptions.series.data[0].itemStyle.color =
         Colors.latest_red_varient;
         DoughnutChartOptions.series.data[1].itemStyle.color =
@@ -169,8 +169,8 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       });
       updateChart(tabValue);
       return () => {
-        myChart.off("mouseover");
-        myChart.off("mouseout");
+        myChart.off('mouseover');
+        myChart.off('mouseout');
       };
     }, [tabValue, dueInSeven, overdue, totalCount]);
 
@@ -181,8 +181,8 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     };
     function tabCustomClasses(index: any) {
       return {
-        "id": `full-width-tab-${index}`,
-        "aria-controls": `full-width-tabpanel-${index}`,
+        'id': `full-width-tab-${index}`,
+        'aria-controls': `full-width-tabpanel-${index}`,
       };
     }
 

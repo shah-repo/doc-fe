@@ -1,15 +1,15 @@
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import * as React from "react";
-import { default as ReactDatePicker, ReactDatePickerProps } from "react-datepicker";
-import { TypographyProps } from "../../../../state/ducks/common/types";
-import { useFormContext } from "../FormContext";
-import { styles } from "./DatePicker.styles";
-import Field, { FieldOwnProps } from "./Field";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import * as React from 'react';
+import { default as ReactDatePicker, ReactDatePickerProps } from 'react-datepicker';
+import { TypographyProps } from '../../../../state/ducks/common/types';
+import { useFormContext } from '../FormContext';
+import { styles } from './DatePicker.styles';
+import Field, { FieldOwnProps } from './Field';
 
 interface DatePickerOwnProps extends FieldOwnProps {
   datePickerProps?: Pick<
   ReactDatePickerProps,
-  Exclude<keyof ReactDatePickerProps, "onChange">
+  Exclude<keyof ReactDatePickerProps, 'onChange'>
   >;
 }
 

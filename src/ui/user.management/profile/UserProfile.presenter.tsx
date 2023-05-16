@@ -1,18 +1,18 @@
-import { Dialog, makeStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
-import { companyActions } from "../../../state/ducks/company";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { AsyncState } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import AvatarContainer from "../../components/icons/avatar/avatar.container";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import DialogContent from "./dialog/DialogContent";
-import DialogTitle from "./dialog/DialogTitle";
-import { Translation } from "../../translations/types";
+import { Dialog, makeStyles } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
+import { EmployeeEditRequestBody } from '../../../state/ducks/auth/types';
+import { companyActions } from '../../../state/ducks/company';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { AsyncState } from '../../../state/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import AvatarContainer from '../../components/icons/avatar/avatar.container';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import DialogContent from './dialog/DialogContent';
+import DialogTitle from './dialog/DialogTitle';
+import { Translation } from '../../translations/types';
 
 interface OwnProps {
   isOpen: boolean;
@@ -91,7 +91,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
 
   const handleCloseEdit = () => {
     closeEdit();
-    setPreviewAvatar("");
+    setPreviewAvatar('');
     setUsernameError(null);
     async.start(getCompanyMine, currentEmployeeId, async);
   };
@@ -101,8 +101,8 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   };
   const styles = makeStyles(() => ({
     dialogPaper: {
-      height: "90%",
-      width: "90%",
+      height: '90%',
+      width: '90%',
     },
   }));
   const classes = styles();

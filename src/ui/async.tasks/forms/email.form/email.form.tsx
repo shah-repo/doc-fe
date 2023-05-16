@@ -1,7 +1,7 @@
-import { Box, Button, TextField } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { styles } from "./email.form.styles";
+import { Box, Button, TextField } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../components/Text';
+import { styles } from './email.form.styles';
 
 interface Props {
   handleEmailFormSubmit: (id: string) => void;
@@ -12,7 +12,7 @@ const EmailAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   type,
 }) => {
   const classes = styles();
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState('');
   const handleUserEmailsChange = (event: any) => {
     setEmail(event?.target?.value);
   };
@@ -23,7 +23,7 @@ const EmailAsyncTaskPresenter: React.FunctionComponent<Props> = ({
           id="filled-textarea"
           label={
             <Text
-              translation={"async.tasks.user.email"}
+              translation={'async.tasks.user.email'}
             />
           }
           multiline
@@ -41,7 +41,7 @@ const EmailAsyncTaskPresenter: React.FunctionComponent<Props> = ({
             handleEmailFormSubmit(email);
           }}
         >
-          <Text translation={"common.submit"} />
+          <Text translation={'common.submit'} />
         </Button>
       </Box>
     </Box>

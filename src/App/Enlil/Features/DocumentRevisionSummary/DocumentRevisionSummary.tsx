@@ -1,28 +1,28 @@
-import { Formik } from "formik";
-import { filter, get, includes, isEmpty, map, size } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { useSelector } from "react-redux";
-import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../../state/reducers";
-import ItemsAndDetailsWrapper from "../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap";
-import { FormContext } from "../../../../ui/components/forms/FormContext";
-import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
-import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
-import Attachment from "../../../../ui/document.revision/summary/attachment";
-import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
-import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
-import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
-import Colors from "../../../../ui/layout/theme/utils/colors";
-import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
-import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
-import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
-import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
+import { Formik } from 'formik';
+import { filter, get, includes, isEmpty, map, size } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../state/reducers';
+import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
+import { FormContext } from '../../../../ui/components/forms/FormContext';
+import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
+import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader';
+import Attachment from '../../../../ui/document.revision/summary/attachment';
+import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
+import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import Colors from '../../../../ui/layout/theme/utils/colors';
+import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
+import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
+import FBTrainingInfoContainer from '../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
+import { withDocumentRevisionSummaryWrap } from './DocumentRevisionSummary.wrap';
 
 const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryProps> = ({
   onScroll,
@@ -34,8 +34,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   isFB,
   isSideBarHidden = false,
 }) => {
-  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
-  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+  const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
+  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
@@ -56,14 +56,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   if (tabConfig &&  [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
-      labelId: "tabId.materialsandequipment",
+      labelId: 'tabId.materialsandequipment',
       tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
   if (documentRevision.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
-      labelId: "tabId.training",
+      labelId: 'tabId.training',
       tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
     }];
@@ -96,8 +96,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   return (
     <SMForm
-      templateBoxProps={{ stretchY: "100%", width: "100%" }}
-      headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
+      templateBoxProps={{ stretchY: '100%', width: '100%' }}
+      headerBoxProps={{ maxHeight: '30%', minHeight: 84 }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={documentRevision}
       header= {
@@ -108,9 +108,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       }
     >
       <SMTemplate
-        boxProps={{ className: "hide-scroll" }}
-        templateBoxProps={{ stretchY: "100%" }}
-        contentBoxProps={{ stretchY: "100%" }}
+        boxProps={{ className: 'hide-scroll' }}
+        templateBoxProps={{ stretchY: '100%' }}
+        contentBoxProps={{ stretchY: '100%' }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {..._documentRevisionFormState?.documentRevision && !isSideBarHidden && {
           rightSidebar: (
@@ -124,9 +124,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         <Observer>
           {() => (
             <SMTemplate
-              templateBoxProps={{ stretchY: "100%" }}
+              templateBoxProps={{ stretchY: '100%' }}
               contentBoxProps={{
-                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
+                overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -135,7 +135,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                 {() => (
                   <SMTabs
                     tabs={tabConfig}
-                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo) => {
@@ -163,7 +163,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           </>}
                           {tabType === TabTypeOptions.DYNAMIC && isFB && (
                             <>
-                              {tabInfo.tabId === "lineitems" && (
+                              {tabInfo.tabId === 'lineitems' && (
                                 <FormContext.Provider
                                   value={{ submitOnChange: false }}>
                                   <Formik
@@ -172,13 +172,13 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                     enableReinitialize={true}
                                   >
                                     <>
-                                      <FBSection name={`fb-po-section-po-items-built-in`}
+                                      <FBSection name={'fb-po-section-po-items-built-in'}
                                         label="form.builder.po.details" />
                                       <Attachment
                                         isAttachmentEmpty={isAttachmentEmpty}
                                         docRevId={documentRevision.id}
                                         containsRedline={false}
-                                        label={"Supporting Documents"}
+                                        label={'Supporting Documents'}
                                         docRevStatus={documentRevision.status}
                                         {...{ isDownloadAllVisible }}
                                       />

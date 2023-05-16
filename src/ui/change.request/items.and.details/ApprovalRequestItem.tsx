@@ -1,11 +1,11 @@
-import { isEmpty } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useState } from "react";
-import { FBFormState } from "../../form.builder";
-import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
-import ApprovalRequestViewGridItem from "./ApprovalRequestViewGridItem";
-import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
+import { isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useState } from 'react';
+import { FBFormState } from '../../form.builder';
+import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
+import ApprovalRequestViewGridItem from './ApprovalRequestViewGridItem';
+import ItemsAndDetailsState from './ItemsAndDetails.state';
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 const ApprovalRequestItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -46,9 +46,9 @@ const ApprovalRequestItem: React.FunctionComponent<{
 
   function editItem() {
     const values = [
-      { key: "proposedDocumentRevision", value: { id: entry.docRevId } },
-      { key: "descriptionOfChange", value: entry.descriptionOfChange },
-      { key: "justificationOfChange", value: entry.justificationOfChange },
+      { key: 'proposedDocumentRevision', value: { id: entry.docRevId } },
+      { key: 'descriptionOfChange', value: entry.descriptionOfChange },
+      { key: 'justificationOfChange', value: entry.justificationOfChange },
     ];
     values.forEach((item) => {
       formState.setFieldValue(item.key, item.value);

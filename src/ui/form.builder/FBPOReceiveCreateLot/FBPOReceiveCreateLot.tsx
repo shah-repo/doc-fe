@@ -1,10 +1,10 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBForm, FBPOReceiveCreateLotProps, FBTextField } from "..";
-import { FormContext } from "../../components/forms/FormContext";
-import FBAutocomplete from "../FBAutocomplete/FBAutocomplete";
-import FBDatePicker from "../FBDatePicker/FBDatePicker";
-import { withFBPOReceiveCreateLot } from "./FBPOReceiveCreateLot.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBForm, FBPOReceiveCreateLotProps, FBTextField } from '..';
+import { FormContext } from '../../components/forms/FormContext';
+import FBAutocomplete from '../FBAutocomplete/FBAutocomplete';
+import FBDatePicker from '../FBDatePicker/FBDatePicker';
+import { withFBPOReceiveCreateLot } from './FBPOReceiveCreateLot.wrap';
 
 
 const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> = ({
@@ -50,7 +50,7 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
         </Box>
       </Box>
       <FBTextField
-        inputProps={{ type: "number", min: "0" }}
+        inputProps={{ type: 'number', min: '0' }}
         defaultValue={item?.received}
         label="form.builder.quantity.received"
         name="received"

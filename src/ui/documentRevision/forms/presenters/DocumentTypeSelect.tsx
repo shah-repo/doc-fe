@@ -1,26 +1,26 @@
-import { useFormikContext } from "formik";
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { SM } from "../../../../App";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions/types";
-import { documentsActions } from "../../../../state/ducks/documents";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
-import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
-import { FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
-import { styles as FBAutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
-import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
-import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
-import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
-import { getActiveDocumentTypes } from "../transform";
-import { styles } from "./styles/DocIdInput.styles";
+import { useFormikContext } from 'formik';
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { SM } from '../../../../App';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { DocumentRevision, FBOutputDocumentType } from '../../../../state/ducks/documentRevisions/types';
+import { documentsActions } from '../../../../state/ducks/documents';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import SelectField, { SelectOption } from '../../../components/forms/fields/Select';
+import { filterSecurityGroupsForQms } from '../../../documentType/list/helpers';
+import { FBEditorPropertiesType, FBSchemaProps } from '../../../form.builder';
+import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
+import { FBWorkspaceMode } from '../../../form.builder/types/workspace';
+import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
+import { useDocumentTypeSelect } from '../../../hooks/docCustomization/useCustomization';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { DocumentCloneType } from '../../Clone.container';
+import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from '../../helpers/checkDocumentGroup';
+import { getFBSchemeByDocType } from '../../helpers/getFBSchemeByDocType';
+import { getActiveDocumentTypes } from '../transform';
+import { styles } from './styles/DocIdInput.styles';
 
 interface Props {
   isDocRevStatusDraft: boolean;
@@ -30,7 +30,7 @@ interface Props {
   documentTypeId?: string;
 }
 
-const schemaFieldsWithoutNormalisation = ["approvals", "section", "subsection", "stepsection", "teststep"];
+const schemaFieldsWithoutNormalisation = ['approvals', 'section', 'subsection', 'stepsection', 'teststep'];
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDocRevStatusDraft,
@@ -62,8 +62,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
-  const isDocTypeDisabled = (type === "newVersion" || isDocRevStatusDraft) || isDisabled;
-  const isNewOutput = type === "newOutput";
+  const isDocTypeDisabled = (type === 'newVersion' || isDocRevStatusDraft) || isDisabled;
+  const isNewOutput = type === 'newOutput';
 
   const options: SelectOption[] = React.useMemo(() => {
     if (isNewOutput && outputDocumentTypes) {
@@ -97,31 +97,31 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     const type = documentTypesById[typeId] || {};
     const docTypeHasDefaultNote = hasDefaultNote(type.groupOptions);
     _documentRevisionFormState?.setDocInfo({
-      name: event.target.name || "",
+      name: event.target.name || '',
       isQms: type.isQms,
       needsSignature: type.needsSignature as boolean,
     });
-    formik.setFieldValue("securityGroups", []);
+    formik.setFieldValue('securityGroups', []);
 
     if (loadDocumentProposedId) {
-      formik.setFieldValue("retrain", type.defaultTraining);
+      formik.setFieldValue('retrain', type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
     // Security groups
     if (type.isQms) {
       const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
-      formik.setFieldValue("securityGroups", securityGroups);
+      formik.setFieldValue('securityGroups', securityGroups);
     }
     formik.handleChange(event);
 
     // FB mode
-    const mode: FBWorkspaceMode = isNewOutput ? "form" :
-      checkIsDocumentForm(type.groupOptions) ? "design" : "none";
+    const mode: FBWorkspaceMode = isNewOutput ? 'form' :
+      checkIsDocumentForm(type.groupOptions) ? 'design' : 'none';
     let scheme: FBSchemaProps[] = [];
-    if (mode === "design" && !checkIsDynamicForm(type.groupOptions)) {
+    if (mode === 'design' && !checkIsDynamicForm(type.groupOptions)) {
       const formValues = {
         ...formik.values as Partial<DocumentRevision>,
-        "document.documentType.id": typeId,
+        'document.documentType.id': typeId,
       };
       // TO DO: This needs clenaup
       scheme = getFBSchemeByDocType(
@@ -139,10 +139,10 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       if (
         schemaFieldsWithoutNormalisation.includes(e.type as string)
         || !docTypeHasDefaultNote
-        || (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && e.includeNotes)) {
+        || (docTypeHasDefaultNote && e.editorProperties?.includes('includeNotes') && e.includeNotes)) {
         return e;
       }
-      if (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && !e.includeNotes) {
+      if (docTypeHasDefaultNote && e.editorProperties?.includes('includeNotes') && !e.includeNotes) {
         return {
           ...e,
           includeNotes: true,
@@ -152,22 +152,22 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ...e,
         editorProperties: [
           ...e.editorProperties || [],
-          "includeNotes" as FBEditorPropertiesType,
+          'includeNotes' as FBEditorPropertiesType,
         ],
         includeNotes: true,
       };
     });
     if (checkIsDocumentEditableSchema(type.groupOptions)) {
-      _formState?.setValue("schema", predefinedSchema);
+      _formState?.setValue('schema', predefinedSchema);
     } else {
-      _formState?.setValue("formTemplate.schema", predefinedSchema);
+      _formState?.setValue('formTemplate.schema', predefinedSchema);
       if (predefinedSchema.length) {
         _documentRevisionFormState?.setFBSchema(predefinedSchema);
       }
     }
   };
 
-  if (!isVisible && type !== "newOutput") {
+  if (!isVisible && type !== 'newOutput') {
     return null;
   }
 
@@ -178,7 +178,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         label={label}
         selectProps={{
           disabled: isDocTypeDisabled,
-          inputProps: { id: "documentType", disabled: isDocTypeDisabled },
+          inputProps: { id: 'documentType', disabled: isDocTypeDisabled },
           onChange: handleTypeChange,
         }}
         options={options}

@@ -1,6 +1,6 @@
-import { makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
-import { grayDotStyles, lineItemStyles } from "../../common/styles";
+import { makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../../../layout/theme/utils/colors';
+import { grayDotStyles, lineItemStyles } from '../../common/styles';
 
 export default makeStyles((theme: Theme) => ({
   ...lineItemStyles(theme),
@@ -10,13 +10,13 @@ export default makeStyles((theme: Theme) => ({
     marginRight: 5,
   }),
   typographyDueInfewDays: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 13,
     color: Colors.latest_yellow_varient,
     letterSpacing: 0,
   },
   typographyOverdue: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 13,
     color: Colors.latest_red_varient,
     letterSpacing: 0,
@@ -25,14 +25,14 @@ export default makeStyles((theme: Theme) => ({
     width: 4,
     height: 4,
     right: 4,
-    position: "relative",
+    position: 'relative',
     background: Colors.latest_red_varient,
   },
   yellowDot: {
     width: 4,
     height: 4,
     right: 4,
-    position: "relative",
+    position: 'relative',
     background: Colors.latest_yellow_varient,
   },
 }));

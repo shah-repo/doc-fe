@@ -1,14 +1,14 @@
-import { CircularProgress } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import FormLabel from "@material-ui/core/FormLabel/FormLabel";
-import React from "react";
-import Text from "../../../components/Text";
-import { FBLabelFontSize, FBLabelProps } from "../../types/common";
+import { CircularProgress } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import FormLabel from '@material-ui/core/FormLabel/FormLabel';
+import React from 'react';
+import Text from '../../../components/Text';
+import { FBLabelFontSize, FBLabelProps } from '../../types/common';
 
 const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   label,
   error,
-  fontSize = "md",
+  fontSize = 'md',
   loading,
   ...boxProps
 }) => (

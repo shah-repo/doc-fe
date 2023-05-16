@@ -1,9 +1,9 @@
-import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
-import { RECENTS_LIST } from "./constants";
+import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
+import { RECENTS_LIST } from './constants';
 
 export enum RecentTypes {
-  DOCUMENT = "DOCUMENT",
-  CHANGE_REQUEST = "CHANGE_REQUEST",
+  DOCUMENT = 'DOCUMENT',
+  CHANGE_REQUEST = 'CHANGE_REQUEST',
 }
 
 export interface RecentItems {

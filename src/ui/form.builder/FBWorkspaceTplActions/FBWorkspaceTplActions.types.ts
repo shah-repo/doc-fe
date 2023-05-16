@@ -1,7 +1,7 @@
-import { ButtonProps } from "@material-ui/core";
+import { ButtonProps } from '@material-ui/core';
 
 export type FBWorkspaceTplActionsProps =
 & {
-  handleCancel?: ButtonProps["onClick"];
+  handleCancel?: ButtonProps['onClick'];
   handleTplName?: () => any;
 };

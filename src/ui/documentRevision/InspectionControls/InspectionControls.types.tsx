@@ -1,6 +1,6 @@
-import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { DialogHandler } from "../../hooks/useDialog";
+import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { DialogHandler } from '../../hooks/useDialog';
 
 export interface InspectionControlsPresenterProps extends InspectionDialogProps {
   onButtonClick(): void;
@@ -27,9 +27,9 @@ export interface InspectionDialogProps {
 }
 
 export interface CreateInspectionBody {
-  lot: Pick<DocumentRevision, "id">;
-  documentType: Pick<DocumentRevision, "id">;
-  formDocument: Pick<DocumentRevision, "id">;
+  lot: Pick<DocumentRevision, 'id'>;
+  documentType: Pick<DocumentRevision, 'id'>;
+  formDocument: Pick<DocumentRevision, 'id'>;
 }
 
 export interface FormOptionType extends OptionType {

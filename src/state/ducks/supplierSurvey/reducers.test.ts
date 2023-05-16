@@ -1,12 +1,12 @@
-import { SUPPLIER_SURVEY } from "./constants";
-import { supplierSurvey, SUPPLIER_SURVEY_DEFAULT_STATE } from "./reducers";
-import { getSurveyFormDocumentRevision } from "./tests/factories";
+import { SUPPLIER_SURVEY } from './constants';
+import { supplierSurvey, SUPPLIER_SURVEY_DEFAULT_STATE } from './reducers';
+import { getSurveyFormDocumentRevision } from './tests/factories';
 import {
   SupplierSurveyAction,
   SupplierSurveyForm,
-} from "./types";
+} from './types';
 
-describe("supplier survey reducers tests", () => {
+describe('supplier survey reducers tests', () => {
   const initialState: SupplierSurveyForm = SUPPLIER_SURVEY_DEFAULT_STATE;
   const supplierSurveyForm = getSurveyFormDocumentRevision();
   const supplierSurveyAction: SupplierSurveyAction = {
@@ -14,8 +14,8 @@ describe("supplier survey reducers tests", () => {
     payload: supplierSurveyForm,
   };
 
-  describe("supplierSurvey reducer test", () => {
-    it("sets supplier survey on SUPPLIER_SURVEY action", () => {
+  describe('supplierSurvey reducer test', () => {
+    it('sets supplier survey on SUPPLIER_SURVEY action', () => {
       expect(supplierSurvey(initialState, supplierSurveyAction)).toEqual({
         ...supplierSurveyForm,
       });

@@ -1,4 +1,4 @@
-import { FBPassPercentageValue, FBRangeValue, FBTextFieldProps } from "..";
+import { FBPassPercentageValue, FBRangeValue, FBTextFieldProps } from '..';
 
 export type FBTextFieldWithRangeProps =
 & FBTextFieldProps
@@ -11,7 +11,7 @@ export type FBTextFieldWithRangeProps =
 };
 
 export interface FBPassValueRange {
-  type: "percentage" | "value";
+  type: 'percentage' | 'value';
   percentage?: FBPassPercentageValue;
   value?: FBRangeValue;
 }

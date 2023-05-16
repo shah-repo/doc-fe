@@ -1,12 +1,12 @@
-import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import cx from "classnames";
-import React from "react";
-import { Button, ButtonGroup } from "..";
-import { withThemeNext } from "../../../../layout/theme-next";
-import { renderNode } from "../utils";
-import useStyles from "./SplitButton.styles";
-import { SplitButtonProps } from "./SplitButton.types";
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import cx from 'classnames';
+import React from 'react';
+import { Button, ButtonGroup } from '..';
+import { withThemeNext } from '../../../../layout/theme-next';
+import { renderNode } from '../utils';
+import useStyles from './SplitButton.styles';
+import { SplitButtonProps } from './SplitButton.types';
 
 const SplitButton: React.FC<SplitButtonProps> = ({
   children,
@@ -35,7 +35,7 @@ const SplitButton: React.FC<SplitButtonProps> = ({
           className={classes.toggle}
           onClick={onToggle}
         >
-          { toggleIcon ?? <FontAwesomeIcon icon={solid("chevron-down")} /> }
+          { toggleIcon ?? <FontAwesomeIcon icon={solid('chevron-down')} /> }
         </Button>
       </ButtonGroup>
       {children}

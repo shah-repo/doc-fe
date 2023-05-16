@@ -1,19 +1,19 @@
-import { Formik, FormikProps } from "formik";
-import { cloneDeep } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { SMFormHOCProps } from "../../../App";
-import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { companySelectors } from "../../../state/ducks/company";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
-import { AsyncState } from "../../../state/types";
-import styles from "../../common/style/styles";
-import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from "../../form.builder";
-import FBDataStore from "../../form.builder/FBStore/FBDataStore";
-import ChangeRequestForm from "./ChangeRequestForm";
-import { ChangeRequestFormValues } from "./types";
+import { Formik, FormikProps } from 'formik';
+import { cloneDeep } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { SMFormHOCProps } from '../../../App';
+import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
+import { AsyncState } from '../../../state/types';
+import styles from '../../common/style/styles';
+import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from '../../form.builder';
+import FBDataStore from '../../form.builder/FBStore/FBDataStore';
+import ChangeRequestForm from './ChangeRequestForm';
+import { ChangeRequestFormValues } from './types';
 
 
 interface OwnProps {

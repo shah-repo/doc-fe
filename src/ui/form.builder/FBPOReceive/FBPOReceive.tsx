@@ -1,8 +1,8 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDialog, FBForm, FBInput, FBPOReceiveProps, FBProvider } from "..";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { withFBPOReceive } from "./FBPOReceive.wrap";
+import { Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDialog, FBForm, FBInput, FBPOReceiveProps, FBProvider } from '..';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { withFBPOReceive } from './FBPOReceive.wrap';
 
 const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
   onChange,

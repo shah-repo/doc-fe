@@ -1,12 +1,12 @@
-import { ContentState, convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import { isEmpty } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { FB, FBFieldName, FBTextEditorProps, FBTextEditorState } from "..";
+import { ContentState, convertToRaw, EditorState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import { isEmpty } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBFieldName, FBTextEditorProps, FBTextEditorState } from '..';
 
 export const withFBTextEditor = <T extends FBTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -24,7 +24,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     formValue,
     toolbar,
     masked,
-    name = "",
+    name = '',
     disabled,
     isInputOwner,
     withState,
@@ -41,17 +41,17 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     // const [timeoutID, setTimeoutID] = useState<number>();
     const { formState, workspaceState } = FB.useStores();
     const { id } = workspaceState || {};
-    const emptyHtmlContent = "<p></p>";
+    const emptyHtmlContent = '<p></p>';
     formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
     // const { submitForm } = useFormContext();
     // form preview mode just disables the text editor
     // preview mode pulls a new style
-    isPreview = formState?.workspaceMode === "preview";
+    isPreview = formState?.workspaceMode === 'preview';
 
     // Default value for preview mode
     if (!formValue && isEmpty(formValue) && isPreview) {
-      formValue = intl.formatMessage({ id: "form.builder.none" });
+      formValue = intl.formatMessage({ id: 'form.builder.none' });
     }
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
@@ -59,18 +59,18 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
     !toolbar && (toolbar = {
       options: [
-        "inline",
-        "blockType",
-        "fontSize",
-        "fontFamily",
-        "list",
-        "textAlign",
-        "colorPicker",
-        "link",
-        "remove",
-        "history",
+        'inline',
+        'blockType',
+        'fontSize',
+        'fontFamily',
+        'list',
+        'textAlign',
+        'colorPicker',
+        'link',
+        'remove',
+        'history',
       ],
-      inline: { options: ["bold", "italic", "underline", "monospace"] },
+      inline: { options: ['bold', 'italic', 'underline', 'monospace'] },
     });
 
     useEffect(() => {
@@ -83,7 +83,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (!autoScrollTo) { return; }
       const selector = `[id="${FBFieldName.MPIProcedureId}-${name}"]`;
       const el = document.querySelector(selector) as HTMLElement;
-      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -95,7 +95,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         (data) => {
           if (!data) { return; }
           let htmlContent = draftToHtml(convertToRaw(data.getCurrentContent())).trim();
-          (htmlContent === emptyHtmlContent) && (htmlContent = "");
+          (htmlContent === emptyHtmlContent) && (htmlContent = '');
           const oldValue = formState?.getFieldValue(name);
           if (oldValue === htmlContent) { return; }
           formState?.setFieldValue(name, htmlContent, false, omitFormValue);
@@ -189,7 +189,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (!editorState) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       let htmlContent = draftToHtml(convertToRaw(textEditorState.editorState!.getCurrentContent())).trim();
-      (htmlContent === emptyHtmlContent) && (htmlContent = "");
+      (htmlContent === emptyHtmlContent) && (htmlContent = '');
       if (formState?.getFieldValue(name) === htmlContent) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
@@ -222,6 +222,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     });
   };
 
-  Comp.displayName = "withFBTextEditor";
+  Comp.displayName = 'withFBTextEditor';
   return Comp;
 };

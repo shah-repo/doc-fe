@@ -1,1 +1,1 @@
-export { default as relatedPartsActions } from "./actions";
+export { default as relatedPartsActions } from './actions';

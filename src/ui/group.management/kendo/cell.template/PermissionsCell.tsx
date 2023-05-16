@@ -1,11 +1,11 @@
-import { filterBy } from "@progress/kendo-data-query";
-import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { isEmpty, sortBy } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../state/ducks/auth";
-import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
-import { toOptions } from "../../utils/transform";
+import { filterBy } from '@progress/kendo-data-query';
+import { MultiSelect, MultiSelectFilterChangeEvent } from '@progress/kendo-react-dropdowns';
+import { isEmpty, sortBy } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../state/ducks/auth';
+import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
+import { toOptions } from '../../utils/transform';
 
 interface PermissionCellProps {
   dataItem: any;
@@ -31,10 +31,10 @@ export const PermissionsCell = ({
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
-  const [data, setData] = React.useState(sortBy(toOptions(currentEmployeePermissions), "label"));
+  const [data, setData] = React.useState(sortBy(toOptions(currentEmployeePermissions), 'label'));
   const [result, setResult] = React.useState([]);
 
-  const permissions = dataItem[field || ""];
+  const permissions = dataItem[field || ''];
 
   const updatePermissionField = ({ target }) => {
     dataItem.permissions = target?.value.map((e: { value: string }) => e.value);
@@ -43,13 +43,13 @@ export const PermissionsCell = ({
 
   const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
     const newData = filterBy(toOptions(currentEmployeePermissions), filter);
-    setData(sortBy(newData, "label"));
+    setData(sortBy(newData, 'label'));
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
-  const permissionsList = isEmpty(permissions) ? [] : permissions.split(",");
+  const permissionsList = isEmpty(permissions) ? [] : permissions.split(',');
   return (
     <td
       id="kendo-expandable-column"

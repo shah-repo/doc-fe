@@ -1,22 +1,22 @@
-import { Box, Button } from "@material-ui/core";
-import React, { useMemo } from "react";
-import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
-import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../../state/types";
-import AlertDialog from "../../../app/alert.dialog/AlertDialog";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
+import { Box, Button } from '@material-ui/core';
+import React, { useMemo } from 'react';
+import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListIcon } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as VoidDocumentIcon } from '../../../../assets/images/void_document.svg';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../../state/types';
+import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import FormMessage from '../../../components/forms/FormMessage';
+import FormProgress from '../../../components/forms/FormProgress';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import { checkIsDocumentRecord } from '../../helpers/checkDocumentGroup';
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
@@ -84,7 +84,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
       )}
       <AlertDialog
         confirmAction={voidDocument}
-        message={isRecord ? "documentRevision.record.void.alert" : "documentRevision.void.alert"}
+        message={isRecord ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert'}
         {...{ dialog }}
       />
     </>

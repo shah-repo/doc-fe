@@ -1,11 +1,11 @@
-import { ListItemIcon, withStyles } from "@material-ui/core";
+import { ListItemIcon, withStyles } from '@material-ui/core';
 
 const styles = () => ({
   root: {
-    minWidth: "30px",
+    minWidth: '30px',
   },
   alignItemsFlexStart: {
-    marginTop: "4px",
+    marginTop: '4px',
   },
 });
 

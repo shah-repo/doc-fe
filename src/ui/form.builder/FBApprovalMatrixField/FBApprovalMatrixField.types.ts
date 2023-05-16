@@ -1,10 +1,10 @@
-import { FBApprovalMatrixFieldState, FBButtonProps, FBInputProps } from "..";
-import { FBWorkspaceMode } from "../types/workspace";
+import { FBApprovalMatrixFieldState, FBButtonProps, FBInputProps } from '..';
+import { FBWorkspaceMode } from '../types/workspace';
 
 export type FBApprovalMatrixFieldProps =
-& Pick<FBInputProps, "name" | "disabled" | "autosave" | "type">
+& Pick<FBInputProps, 'name' | 'disabled' | 'autosave' | 'type'>
 & {
-  handleAdd?: FBButtonProps["onClick"];
+  handleAdd?: FBButtonProps['onClick'];
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
   mode?: FBApprovalMatrixFieldMode;
   workspaceMode: FBWorkspaceMode;
@@ -47,7 +47,7 @@ export interface FBApprovalMatrixFieldData {
   approvalMatrix: FBApprovalMatrixItem[];
 }
 
-export type FBApprovalMatrixFieldMode = "none" | "add" | "edit" | "fullscreen";
+export type FBApprovalMatrixFieldMode = 'none' | 'add' | 'edit' | 'fullscreen';
 
 export interface FBApprovalMatrixConstructor {
   formValue?: FBApprovalMatrixFieldData;

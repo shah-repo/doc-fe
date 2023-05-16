@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBApprovalMatrixRolesActionsProps, FBSubmitButton } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
-import { withFBApprovalMatrixRolesActions } from "./FBApprovalMatrixRolesActions.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBApprovalMatrixRolesActionsProps, FBSubmitButton } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
+import { withFBApprovalMatrixRolesActions } from './FBApprovalMatrixRolesActions.wrap';
 
 // *TODO: find a way to handle action state from dialog
 const FBApprovalMatrixRolesActions: React.FunctionComponent<FBApprovalMatrixRolesActionsProps> = ({

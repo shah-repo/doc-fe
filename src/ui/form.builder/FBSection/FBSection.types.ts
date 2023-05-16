@@ -1,11 +1,11 @@
-import { FBFormProps, FBInputProps, FBInputType } from "..";
+import { FBFormProps, FBInputProps, FBInputType } from '..';
 
 export const FBSectionTypes: FBInputType[] = [
-  "section",
-  "stepsection",
-  "teststep",
+  'section',
+  'stepsection',
+  'teststep',
 ];
 
 export type FBSectionProps =
 & FBInputProps
-& Pick<FBFormProps, "children">;
+& Pick<FBFormProps, 'children'>;

@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DropDownList, DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
-import React from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
+import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface GroupCellProps {
   dataItem: any;
@@ -29,7 +29,7 @@ export const GroupCell = ({
   field,
 }: GroupCellProps) => {
   const intl = useIntl();
-  const groupData = dataItem[field || ""];
+  const groupData = dataItem[field || ''];
   const localizedData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }),
@@ -53,7 +53,7 @@ export const GroupCell = ({
     return e.value === groupType;
   });
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 

@@ -1,8 +1,8 @@
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { isDocumentRevisionInDraft } from "./documentRevisionStatus";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { isDocumentRevisionInDraft } from './documentRevisionStatus';
 
 const getAlphabetFromNumber = (num: number) => {
-  let str = "";
+  let str = '';
 
   const multiples = Math.ceil(num / 26);
   const charAtCode = num - (multiples - 1) * 26;
@@ -23,13 +23,13 @@ export const generateRevisionNumber = (
   isRecord = false,
 ) => {
   if (!revision || !revisionStage) {
-    return "";
+    return '';
   }
   if (revisionChangeType === RevisionChangeType.Void) {
-    return "Void";
+    return 'Void';
   }
   if (revisionChangeType === RevisionChangeType.Obsolete) {
-    return isRecord ? "Void" : "OBS";
+    return isRecord ? 'Void' : 'OBS';
   }
 
   /** Subrevision should only be displayed in the doc revision table if a document is in draft.
@@ -37,7 +37,7 @@ export const generateRevisionNumber = (
   const isInDraft = isDocumentRevisionInDraft(revisionStatus);
   const suffix = (isInDraft || !revisionStatus) && subRevision && subRevision > 0
     ? `.${subRevision}`
-    : "";
+    : '';
 
   switch (revisionStage) {
     case 1: {
@@ -48,7 +48,7 @@ export const generateRevisionNumber = (
     case 3:
       return `${getAlphabetFromNumber(revision)}${suffix}`;
     default:
-      return "N/A";
+      return 'N/A';
   }
 };
 
@@ -68,7 +68,7 @@ export const versionNumber = (
 ) => {
   if (!revisionChangeType) {
     // no change
-    return "";
+    return '';
   }
   if (!releasedDocRev) {
     // this is first document
@@ -91,7 +91,7 @@ export const versionNumber = (
         );
       }
       default: {
-        return "";
+        return '';
       }
     }
   }
@@ -130,7 +130,7 @@ export const versionNumber = (
       );
     }
     default: {
-      return "";
+      return '';
     }
   }
 };

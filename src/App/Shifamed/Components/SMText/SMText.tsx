@@ -1,10 +1,10 @@
 
-import { Box, CircularProgress } from "@material-ui/core";
-import { hasIn, isEmpty, isString } from "lodash";
-import React from "react";
-import { FormattedMessage } from "react-intl";
-import { SMTextLocaleProps, SMTextProps } from "../../..";
-import { withSMText } from "./SMText.wrap";
+import { Box, CircularProgress } from '@material-ui/core';
+import { hasIn, isEmpty, isString } from 'lodash';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { SMTextLocaleProps, SMTextProps } from '../../..';
+import { withSMText } from './SMText.wrap';
 
 const SMText: React.FunctionComponent<SMTextProps> = ({
   boxProps,
@@ -21,7 +21,7 @@ const SMText: React.FunctionComponent<SMTextProps> = ({
       {isString(label) && !isEmpty(label) && (
         <FormattedMessage id={label} />
       )}
-      {hasIn(label, "locale") && (
+      {hasIn(label, 'locale') && (
         <FormattedMessage
           id={(label as SMTextLocaleProps).locale}
           values={(label as SMTextLocaleProps).values}

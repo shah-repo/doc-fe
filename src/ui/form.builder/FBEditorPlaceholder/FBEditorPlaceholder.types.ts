@@ -1,4 +1,4 @@
-import { BoxProps } from "@material-ui/core";
+import { BoxProps } from '@material-ui/core';
 
 export interface FBEditorPlaceholderProps {
   boxProps?: BoxProps;

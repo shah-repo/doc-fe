@@ -1,12 +1,12 @@
-import { first } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { useSelector } from "react-redux";
-import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps, SupplierPostBody } from "..";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { Id } from "../../../state/ducks/common/types";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { first } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps, SupplierPostBody } from '..';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { Id } from '../../../state/ducks/common/types';
+import { userManagementSelectors } from '../../../state/ducks/userManagement';
 
 export const withFBSupplierForm = <T extends FBSupplierFormProps>(
   Component: React.FunctionComponent<T>,
@@ -52,8 +52,8 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     };
 
     const setFormDocument = (value?: string) => {
-      formState?.setFieldValue("formDocument.id", value);
-      formState?.getInputState("formDocument.id")?.setRender();
+      formState?.setFieldValue('formDocument.id', value);
+      formState?.getInputState('formDocument.id')?.setRender();
       formState?.validate();
     };
 
@@ -62,7 +62,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // MARK: @reactions
     // on document type autocomplete change
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("document.documentType.id")?.value,
+      () => formState?.inputState.get('document.documentType.id')?.value,
       (data) => {
         setFormDocument(undefined);
         if (!data || !FB.isUUID(data)) { return; }
@@ -75,7 +75,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // on fetch proposed doc id
     React.useEffect(() => reaction(
       () => supplierState?.proposedDocIdApi.data,
-      (data) => formState.setFieldValue("document.docId", data?.docId),
+      (data) => formState.setFieldValue('document.docId', data?.docId),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -103,7 +103,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
       disabled = disabled || loading;
 
       // disable Choose a Form Autocomplete if document type isn't selected
-      formAutocompleteDisabled = !FB.isUUID(formState?.getInputState("document.documentType.id")?.value);
+      formAutocompleteDisabled = !FB.isUUID(formState?.getInputState('document.documentType.id')?.value);
 
       // map forms from fetched document type
       formOptions = supplierState?.documentTypeApi.data?.forms;
@@ -119,6 +119,6 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     });
   };
 
-  Comp.displayName = "withFBSupplierForm";
+  Comp.displayName = 'withFBSupplierForm';
   return Comp;
 };

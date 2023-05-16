@@ -1,7 +1,7 @@
-import useStyles from "./ApprovalRequestGrid.styles";
+import useStyles from './ApprovalRequestGrid.styles';
 
-import React from "react";
-import Text from "../../components/Text";
+import React from 'react';
+import Text from '../../components/Text';
 
 const ApprovalRequestGridHeader: React.FunctionComponent<{}> = () => {
   const classes = useStyles();

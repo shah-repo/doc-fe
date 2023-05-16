@@ -1,8 +1,8 @@
-import { FBEditorProps, FBPassPercentageValue, FBRangeValue } from "..";
+import { FBEditorProps, FBPassPercentageValue, FBRangeValue } from '..';
 
 export enum FBPassType {
-  percentage = "percentage",
-  value = "value",
+  percentage = 'percentage',
+  value = 'value',
 }
 
 interface FBPassValue {

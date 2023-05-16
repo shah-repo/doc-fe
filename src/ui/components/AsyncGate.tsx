@@ -1,9 +1,9 @@
-import { Button, LinearProgress, Typography, WithStyles, withStyles } from "@material-ui/core";
-import React, { useCallback, useEffect } from "react";
-import { AsyncState, AsyncStatus } from "../../state/types";
-import useDidMount from "../hooks/useDidMount";
-import styles from "./AsyncGate.styles";
-import Text from "./Text";
+import { Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
+import React, { useCallback, useEffect } from 'react';
+import { AsyncState, AsyncStatus } from '../../state/types';
+import useDidMount from '../hooks/useDidMount';
+import styles from './AsyncGate.styles';
+import Text from './Text';
 
 export interface AsyncGateProps  {
   asyncState: AsyncState;

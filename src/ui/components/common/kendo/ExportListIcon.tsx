@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as DisabledExportIcon } from "../../../../assets/images/disabled_export_data.svg";
-import { ReactComponent as ExportIcon } from "../../../../assets/images/export_data.svg";
-import { styles } from "./ExportListIcon.styles";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as DisabledExportIcon } from '../../../../assets/images/disabled_export_data.svg';
+import { ReactComponent as ExportIcon } from '../../../../assets/images/export_data.svg';
+import { styles } from './ExportListIcon.styles';
 
 interface Props {
   isGrouped: boolean;

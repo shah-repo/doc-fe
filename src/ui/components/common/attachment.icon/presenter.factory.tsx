@@ -1,7 +1,7 @@
-import React from "react";
-import { Attachment } from "../../../../state/ducks/attachments/types";
-import Presenter from "./presenter";
-import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
+import React from 'react';
+import { Attachment } from '../../../../state/ducks/attachments/types';
+import Presenter from './presenter';
+import { AttachmentIconFactoryProps, AttachmentIconProps } from './utils/types';
 
 const AttachmentIconPresenterFactory: React.FunctionComponent<
 AttachmentIconFactoryProps
@@ -22,7 +22,7 @@ AttachmentIconFactoryProps
   const file = attachment || {} as Attachment;
   const isUploading = file.s3link == null;
   const isLoading = file.isLoading || false;
-  const isRedLine = file.lineType === "RED_LINE";
+  const isRedLine = file.lineType === 'RED_LINE';
   const defaultProps = {
     name,
     attachment,

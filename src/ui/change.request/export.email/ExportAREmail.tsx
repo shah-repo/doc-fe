@@ -1,17 +1,17 @@
-import { Button } from "@material-ui/core";
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { SM } from "../../../App";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import { ReactComponent as SendToEmail } from "../../../assets/images/send_to_email.svg";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { toastError, toastSuccess } from "../../components/notifications";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+import { Button } from '@material-ui/core';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { SM } from '../../../App';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { ReactComponent as SendToEmail } from '../../../assets/images/send_to_email.svg';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { toastError, toastSuccess } from '../../components/notifications';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 
 interface Props {
   id: string;
@@ -26,10 +26,10 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const async = useAsync({
     onSuccess: () => {
-      toastSuccess(intl.formatMessage({ id: "common.send.to.email.success" }));
+      toastSuccess(intl.formatMessage({ id: 'common.send.to.email.success' }));
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: "common.send.to.email.error"  }));
+      toastError(intl.formatMessage({ id: 'common.send.to.email.error'  }));
     },
   });
 

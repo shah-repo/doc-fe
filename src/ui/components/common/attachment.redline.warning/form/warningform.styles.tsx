@@ -1,4 +1,4 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, Theme } from '@material-ui/core';
 
 export default (theme: Theme) =>
   createStyles({
@@ -6,28 +6,28 @@ export default (theme: Theme) =>
       minWidth: 400,
     },
     submitButton: {
-      float: "right",
-      clear: "right",
+      float: 'right',
+      clear: 'right',
     },
     cancelButton: {
-      float: "left",
+      float: 'left',
       marginRight: theme.spacing(1),
     },
     Box: {
       minWidth: 150,
       paddingBottom: 25,
-      display: "flex",
+      display: 'flex',
       flex: 1,
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     Box2: {
-      display: "flex",
+      display: 'flex',
       flex: 1,
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     h4: {
       margin: 5,

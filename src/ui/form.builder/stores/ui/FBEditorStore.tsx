@@ -1,29 +1,29 @@
-import { get, isUndefined } from "lodash";
-import { action, observable } from "mobx";
-import React from "react";
-import FBForm from "../../components/form/FBForm";
-import { withEditorRenderer } from "../../hocs/withEditorRenderer";
-import { FBEditorElementType, FBEditorModeType } from "../../types/editor";
-import { FBTemplateSchema } from "../../types/store";
-import FBValidatorStore from "../ui/FBValidatorStore";
-import FBDynamicValidatorStore from "./FBDynamicValidatorStore";
-import FBStore from "./FBStore";
+import { get, isUndefined } from 'lodash';
+import { action, observable } from 'mobx';
+import React from 'react';
+import FBForm from '../../components/form/FBForm';
+import { withEditorRenderer } from '../../hocs/withEditorRenderer';
+import { FBEditorElementType, FBEditorModeType } from '../../types/editor';
+import { FBTemplateSchema } from '../../types/store';
+import FBValidatorStore from '../ui/FBValidatorStore';
+import FBDynamicValidatorStore from './FBDynamicValidatorStore';
+import FBStore from './FBStore';
 
 class FBEditorStore {
   @observable public open = false;
   @observable public content?: React.ReactNode = undefined;
   @observable public title?: string = undefined;
-  @observable public maxWidth?: "sm" | "md" | "lg" = "md";
+  @observable public maxWidth?: 'sm' | 'md' | 'lg' = 'md';
   @observable public isHelloSignIntegrationEnabled?: boolean = false;
   public editorIndex = 0;
-  public editorMode: FBEditorModeType = "create";
+  public editorMode: FBEditorModeType = 'create';
 
   @action public setOpen = (forIndex = -1) => () => {
     this.open = true;
     this.editorIndex = forIndex + 1;
     // this.content = this.sections();
-    this.title = "";
-    this.editorMode = "create";
+    this.title = '';
+    this.editorMode = 'create';
   };
 
   @action public reset = () => {
@@ -44,7 +44,7 @@ class FBEditorStore {
     title?: string,
   ) => () => {
 
-    FBValidatorStore.formValues = get(initialValues, "formValuesRules") || {};
+    FBValidatorStore.formValues = get(initialValues, 'formValuesRules') || {};
 
     this.content = (
       <FBForm
@@ -56,16 +56,16 @@ class FBEditorStore {
         })}
       />
     );
-    this.title = title || "form.builder.create.field";
+    this.title = title || 'form.builder.create.field';
   };
 
   @action public editorTypeEdit = (schema: FBTemplateSchema) => {
     if (isUndefined(schema.index)) {
       return;
     }
-    const { type, index, name = "" } = schema;
+    const { type, index, name = '' } = schema;
     this.editorIndex = index;
-    this.editorMode = "update";
+    this.editorMode = 'update';
     this.open = true;
     const formValues = FBStore.getValue(name);
     const newSchema = {
@@ -75,7 +75,7 @@ class FBEditorStore {
     this.editorTypeRenderer(
       type as FBEditorElementType,
       newSchema,
-      "form.builder.edit.field",
+      'form.builder.edit.field',
     )();
   };
 

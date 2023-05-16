@@ -1,12 +1,12 @@
-import { filter, isUndefined } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBBookmarkItem } from "..";
+import { filter, isUndefined } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBBookmarkItem } from '..';
 
 class FBBookmarkState {
   @observable public bookmarks?: FBBookmarkItem[];
   @observable public loading?: boolean;
 
-  @action public setLoading = (state: boolean) => set(this, "loading", state);
+  @action public setLoading = (state: boolean) => set(this, 'loading', state);
 
   @action public addBookmark = (bookmark?: FBBookmarkItem, at?: number) => {
     if (!bookmark) { return; }
@@ -15,18 +15,18 @@ class FBBookmarkState {
     at = isUndefined(at) ? (newBookmarks.length || 0) : at;
     newBookmarks = newBookmarks.slice(0) || [];
     newBookmarks?.splice(at, 0, bookmark);
-    set(this, "bookmarks", newBookmarks);
+    set(this, 'bookmarks', newBookmarks);
   };
 
   @action public removeBookmarks = (names?: (string | undefined)[]) => {
     if (!names) { return; }
-    const newBookmarks = filter(this.bookmarks, (bookmark) => !names.includes(bookmark.name || ""));
-    set(this, "bookmarks", newBookmarks);
+    const newBookmarks = filter(this.bookmarks, (bookmark) => !names.includes(bookmark.name || ''));
+    set(this, 'bookmarks', newBookmarks);
   };
 
   @action public removeBookmark = (name: string) => {
     if (!name) { return; }
-    set(this, "bookmarks", filter(this.bookmarks, (bookmark) => bookmark.name !== name));
+    set(this, 'bookmarks', filter(this.bookmarks, (bookmark) => bookmark.name !== name));
   };
 }
 

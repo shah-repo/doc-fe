@@ -1,7 +1,7 @@
-import faker from "faker";
-import { getDocumentRevision } from "../../documentRevisions/tests/factories";
-import { FBFormTemplateProps } from "../../documentRevisions/types";
-import { SupplierSurveyForm } from "../types";
+import faker from 'faker';
+import { getDocumentRevision } from '../../documentRevisions/tests/factories';
+import { FBFormTemplateProps } from '../../documentRevisions/types';
+import { SupplierSurveyForm } from '../types';
 
 const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
   outputDocumentTypes: [{
@@ -9,7 +9,7 @@ const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFor
     documentTypeName: faker.random.word(),
   }],
   schema: [{
-    type: "textfield",
+    type: 'textfield',
     index: 0,
     name: faker.random.word(),
     label: faker.random.word(),

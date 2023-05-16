@@ -1,8 +1,8 @@
-import { FBInputProps, FBProviderProps } from "..";
+import { FBInputProps, FBProviderProps } from '..';
 
 export type FBSupplierProps =
-& Pick<FBProviderProps, "dialogState" | "supplierState">
-& Pick<FBInputProps, "name" | "label" | "disabled" | "loading" | "isInputOwner">
+& Pick<FBProviderProps, 'dialogState' | 'supplierState'>
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'loading' | 'isInputOwner'>
 & {
   handleAdd(): void;
   isPreview?: boolean;

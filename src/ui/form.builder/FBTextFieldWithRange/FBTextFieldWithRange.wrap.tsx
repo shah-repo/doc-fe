@@ -1,5 +1,5 @@
-import React from "react";
-import { FBPassValueRange, FBRangeValue, FBTextFieldWithRangeProps } from "..";
+import React from 'react';
+import { FBPassValueRange, FBRangeValue, FBTextFieldWithRangeProps } from '..';
 
 export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
   Component: React.FunctionComponent<T>,
@@ -18,7 +18,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     // MARK: @methods
     const calculatePassValue = (passRange?: FBPassValueRange): FBRangeValue | undefined => {
       if (!passRange) { return; }
-      if (passRange.type === "value") { return passRange.value; }
+      if (passRange.type === 'value') { return passRange.value; }
       if (!passRange.percentage) { return; }
       const { decrease, increase, value } = passRange.percentage;
       if (!decrease || !increase || !value ) { return; }
@@ -28,7 +28,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     };
 
     const getRules = (): string => {
-      if (!range) { return ""; }
+      if (!range) { return ''; }
       if (range.from && range.to) {
         return `between:${range?.from},${range?.to}`;
       }
@@ -38,7 +38,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       if (!range.from && range.to) {
         return `max:${range?.to}`;
       }
-      return "";
+      return '';
     };
 
     // MARK: @observer
@@ -54,6 +54,6 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     });
   };
 
-  Comp.displayName = "withFBTextFieldWithRange";
+  Comp.displayName = 'withFBTextFieldWithRange';
   return Comp;
 };

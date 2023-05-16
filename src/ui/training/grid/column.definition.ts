@@ -1,27 +1,27 @@
-import { chain } from "lodash";
-import { pagerSettings } from "../../components/common/kendo/helpers";
-import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
-import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
-import { DateFields } from "./interfaces";
+import { chain } from 'lodash';
+import { pagerSettings } from '../../components/common/kendo/helpers';
+import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
+import { DateFields } from './interfaces';
 
 const columns: KendoColumn[] = [
   {
-    field: "trId",
-    title: "common.trId",
+    field: 'trId',
+    title: 'common.trId',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 10,
     showColumnMenu: true,
     groupable: false,
     orderIndex: 1,
-    extraFields: ["id"],
+    extraFields: ['id'],
   },
   {
-    field: "trainingPlan.document.docId",
-    title: "common.docId",
+    field: 'trainingPlan.document.docId',
+    title: 'common.docId',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 10,
     showColumnMenu: true,
@@ -29,10 +29,10 @@ const columns: KendoColumn[] = [
     orderIndex: 2,
   },
   {
-    field: "documentRevision.displayRevision",
-    title: "common.revision",
+    field: 'documentRevision.displayRevision',
+    title: 'common.revision',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 9,
     showColumnMenu: true,
@@ -40,10 +40,10 @@ const columns: KendoColumn[] = [
     orderIndex: 3,
   },
   {
-    field: "documentRevision.name",
-    title: "document.title",
+    field: 'documentRevision.name',
+    title: 'document.title',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 20,
     showColumnMenu: true,
@@ -51,21 +51,21 @@ const columns: KendoColumn[] = [
     orderIndex: 4,
   },
   {
-    field: "trainingPlan.employee.user.name",
-    title: "common.trainee",
+    field: 'trainingPlan.employee.user.name',
+    title: 'common.trainee',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 20,
     groupable: true,
     cell: KendoCellTemplates.USER_AVATAR,
     showColumnMenu: true,
     orderIndex: 5,
-    extraFields: ["trainingPlan.employee.user.avatar", "trainingPlan.employee.user.initialColor"],
+    extraFields: ['trainingPlan.employee.user.avatar', 'trainingPlan.employee.user.initialColor'],
   },
   {
     field: DateFields.CREATED_AT,
-    title: "common.assign.date",
+    title: 'common.assign.date',
     show: true,
     locked: false,
     width: 12,
@@ -77,9 +77,9 @@ const columns: KendoColumn[] = [
   },
   {
     field: DateFields.DUE_ON,
-    title: "common.due.date",
+    title: 'common.due.date',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 12,
     groupable: false,
@@ -90,9 +90,9 @@ const columns: KendoColumn[] = [
   },
   {
     field: DateFields.COMPLETED_AT,
-    title: "common.completed.on",
+    title: 'common.completed.on',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 12,
     groupable: false,
@@ -102,26 +102,26 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.COMPLETED_AT,
   },
   {
-    field: "trainingPlan.curriculumDocIds",
-    title: "common.tc.id",
+    field: 'trainingPlan.curriculumDocIds',
+    title: 'common.tc.id',
     show: true,
     locked: false,
     width: 10,
     groupable: false,
     showColumnMenu: true,
     orderIndex: 9,
-    filter: "text",
+    filter: 'text',
   },
   {
-    field: "trainingPlan.employee.active",
-    title: "common.active",
+    field: 'trainingPlan.employee.active',
+    title: 'common.active',
     show: true,
     locked: false,
     width: 10,
     groupable: false,
     showColumnMenu: true,
     orderIndex: 10,
-    filter: "boolean",
+    filter: 'boolean',
     cell: KendoCellTemplates.ACTIVE,
     filterCell: KendoGridFilterCell.ACTIVE,
   },
@@ -132,7 +132,7 @@ const gridConfiguration: KendoGridConfiguration = {
   pagerSettings,
   groupableFields: chain(columns)
     .filter({ groupable: true })
-    .map("field")
+    .map('field')
     .value(),
 };
 

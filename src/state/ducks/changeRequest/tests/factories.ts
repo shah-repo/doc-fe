@@ -1,8 +1,8 @@
-import faker from "faker";
-import { Audit } from "../../audit/types";
-import { getOwner, getUser } from "../../common/tests/factories";
-import { DocumentType } from "../../documentRevisions/documentType/types";
-import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestStatus } from "../types";
+import faker from 'faker';
+import { Audit } from '../../audit/types';
+import { getOwner, getUser } from '../../common/tests/factories';
+import { DocumentType } from '../../documentRevisions/documentType/types';
+import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestStatus } from '../types';
 
 const createNestedObject = () => (
   {
@@ -16,7 +16,7 @@ const createDocumentType = (docType: Partial<DocumentType> = {}): DocumentType =
   id: faker.random.uuid(),
   documentTypeAcronym: faker.random.word(),
   documentTypeName: faker.random.words(),
-  group: "OTHER",
+  group: 'OTHER',
   isQms: false,
   defaultTraining: false,
   ...docType,
@@ -26,7 +26,7 @@ const createAssessment = () => (
   {
     description: faker.lorem.sentence(),
     design: {
-      reasoning: "",
+      reasoning: '',
       attachment: {
         id: faker.random.uuid(),
         name: faker.lorem.word(),
@@ -35,10 +35,10 @@ const createAssessment = () => (
       },
     },
     process: {
-      reasoning: "No Attachment",
+      reasoning: 'No Attachment',
     },
     regulatory: {
-      reasoning: "No Attachment",
+      reasoning: 'No Attachment',
     },
   }
 );
@@ -52,7 +52,7 @@ const createImplementationPlan = () => (
 );
 
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
-  createdAt: "2019-05-31",
+  createdAt: '2019-05-31',
   id: faker.random.uuid(),
   crId: faker.random.alphaNumeric(),
   ordinalNumber: faker.random.number(),
@@ -62,12 +62,12 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   assessments: createAssessment(),
   implementationPlan: createImplementationPlan(),
   justifications: createNestedObject(),
-  effectiveDate: faker.date.future(undefined, "2019-05-31"),
+  effectiveDate: faker.date.future(undefined, '2019-05-31'),
   approvals: [],
   owner: getOwner(),
   documentRevisions: [],
   documentType: createDocumentType(),
-  closedAt: faker.date.future(undefined, "2019-05-31"),
+  closedAt: faker.date.future(undefined, '2019-05-31'),
   ...changeRequest,
 });
 
@@ -81,10 +81,10 @@ export const getApprover = (
 
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   id: faker.random.uuid(),
-  type: "ARRAY_NEW",
+  type: 'ARRAY_NEW',
   field: faker.lorem.word(),
   nextValue: faker.lorem.sentence(),
-  groupId: "1",
+  groupId: '1',
   timestamp: faker.date.recent().toString(),
   owner: getOwner(),
   ...audit,

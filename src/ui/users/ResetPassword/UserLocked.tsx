@@ -1,10 +1,10 @@
-import { Box, Paper, Typography } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { logo } from "../../../common/utils/helpers";
-import { authActions } from "../../../state/ducks/auth";
-import FBStore from "../../form.builder/stores/ui/FBStore";
-import { styles } from "./ResetPasswordSuccessful.styles";
+import { Box, Paper, Typography } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { logo } from '../../../common/utils/helpers';
+import { authActions } from '../../../state/ducks/auth';
+import FBStore from '../../form.builder/stores/ui/FBStore';
+import { styles } from './ResetPasswordSuccessful.styles';
 
 const UserLocked: React.FunctionComponent<{}> = () => {
   const classes = styles();

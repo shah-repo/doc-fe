@@ -1,9 +1,9 @@
-import { Grid } from "@material-ui/core";
-import { get } from "lodash";
-import React from "react";
-import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import Tooltip from "../kendo/Tooltip";
-import { CustomGridCellProps } from "../kendo/types";
+import { Grid } from '@material-ui/core';
+import { get } from 'lodash';
+import React from 'react';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import Tooltip from '../kendo/Tooltip';
+import { CustomGridCellProps } from '../kendo/types';
 
 export const DateInfo = ({
   dataItem,
@@ -15,9 +15,9 @@ export const DateInfo = ({
   columnIndex,
   cellRowClick,
 }: CustomGridCellProps) => {
-  const date = get(dataItem, field || "");
+  const date = get(dataItem, field || '');
   const formattedDate = date ? getFormattedDateString(date, MomentFormats.MonthDateYear) : null;
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   const cellClickEvent = () => {

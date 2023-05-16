@@ -1,7 +1,7 @@
-import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { statesWithLastSavedEnabled } from "../utils/helpers";
-import SummaryHeaderPresenter from "./SummaryHeader.presenter";
+import React from 'react';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { statesWithLastSavedEnabled } from '../utils/helpers';
+import SummaryHeaderPresenter from './SummaryHeader.presenter';
 
 interface Props {
   documentRevision: DocumentRevision;

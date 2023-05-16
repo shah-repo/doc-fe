@@ -1,11 +1,11 @@
-import { cloneDeep } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBInputConstructor, FBInputType } from "..";
+import { cloneDeep } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBInputConstructor, FBInputType } from '..';
 
 class FBInputState {
-  public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink", "section"];
+  public static omitLabel: FBInputType[] = ['checkbox', 'radio', 'hyperlink', 'section'];
   // Set value on blur
-  public static omitOnChange: FBInputType[] = ["textfield", "texteditor", "purchaseorder"];
+  public static omitOnChange: FBInputType[] = ['textfield', 'texteditor', 'purchaseorder'];
   public autosavePrevValue?: any;
   @observable public value: any;
   @observable public includeContext = false;
@@ -21,32 +21,32 @@ class FBInputState {
   }
 
   @action public setChildren = (children: React.ReactElement) => {
-    set(this, "children", children);
+    set(this, 'children', children);
   };
 
   @action public setAutosaveValue = (value: any) => {
     this.autosavePrevValue = cloneDeep(this.autosaveNextValue);
-    set(this, "autosaveNextValue", cloneDeep(value));
+    set(this, 'autosaveNextValue', cloneDeep(value));
   };
 
   @action public setIncludeContext = (state: boolean) => {
-    set(this, "includeContext", state);
+    set(this, 'includeContext', state);
   };
 
   @action public setIncludeNotes = (state: boolean) => {
-    set(this, "includeNotes", state);
+    set(this, 'includeNotes', state);
   };
 
   @action public setValue = (value: any) => {
-    set(this, "value", value);
+    set(this, 'value', value);
   };
 
   @action public setHidden = (state: boolean) => {
-    set(this, "hidden", state);
+    set(this, 'hidden', state);
   };
 
   @action public setRender = () => {
-    set(this, "forceRender", !this.forceRender);
+    set(this, 'forceRender', !this.forceRender);
   };
 }
 

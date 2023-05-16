@@ -1,9 +1,9 @@
-import { Grid } from "@material-ui/core";
-import { get } from "lodash";
-import React from "react";
-import { removeLastCharacterIfNotAlphaNumeric } from "../../../common/utils/helpers";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import { CustomGridCellProps } from "../../../components/common/kendo/types";
+import { Grid } from '@material-ui/core';
+import { get } from 'lodash';
+import React from 'react';
+import { removeLastCharacterIfNotAlphaNumeric } from '../../../common/utils/helpers';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import { CustomGridCellProps } from '../../../components/common/kendo/types';
 
 export const DocumentTypeCellTemplate = ({
   dataItem,
@@ -15,8 +15,8 @@ export const DocumentTypeCellTemplate = ({
   columnIndex,
   cellRowClick,
 }: CustomGridCellProps) => {
-  const documentType = get(dataItem, field || "");
-  if (rowType === "groupHeader") {
+  const documentType = get(dataItem, field || '');
+  if (rowType === 'groupHeader') {
     return null;
   }
   const cellClickEvent = () => {

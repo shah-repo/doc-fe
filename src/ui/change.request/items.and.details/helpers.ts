@@ -1,6 +1,6 @@
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string) => (
   `${docId} • Rev ${displayRevision} - ${name}`
@@ -28,10 +28,10 @@ export const formDataToStoreData = (
       justificationOfChange: item.justificationOfChange,
       descriptionOfChange: item.descriptionOfChange,
       docRevId: item.proposedDocumentRevision.id,
-      documentId: "",
+      documentId: '',
       id: item.id,
-      titleText: "",
-      displayRevision: "",
+      titleText: '',
+      displayRevision: '',
       isPart: false,
     };
 

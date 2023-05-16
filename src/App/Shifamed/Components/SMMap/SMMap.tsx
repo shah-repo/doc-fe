@@ -1,6 +1,6 @@
-import { map } from "lodash";
-import React from "react";
-import { SMMapProps } from "../../..";
+import { map } from 'lodash';
+import React from 'react';
+import { SMMapProps } from '../../..';
 
 const SMMap = <T extends any>({
   collection,

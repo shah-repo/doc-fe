@@ -1,14 +1,14 @@
-import faker from "faker";
-import { Audit } from "../../audit/types";
-import { getOwner } from "../../common/tests/factories";
-import { DocumentType } from "../documentType/types";
-import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../types";
+import faker from 'faker';
+import { Audit } from '../../audit/types';
+import { getOwner } from '../../common/tests/factories';
+import { DocumentType } from '../documentType/types';
+import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../types';
 
 const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
   id: faker.random.uuid(),
   documentTypeAcronym: faker.random.word(),
   documentTypeName: faker.random.words(),
-  group: "OTHER",
+  group: 'OTHER',
   isQms: false,
   defaultTraining: false,
   ...docType,
@@ -41,7 +41,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
       id: faker.random.uuid(),
       documentTypeAcronym: faker.random.word(),
       documentTypeName: faker.random.word(),
-      group: "OTHER",
+      group: 'OTHER',
     },
     securityList: {
       securityEmployees: [
@@ -78,7 +78,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
     },
     canAccess: true,
   },
-  released: faker.date.future(undefined, "2019-05-31"),
+  released: faker.date.future(undefined, '2019-05-31'),
   referenceTo: [],
   trainingRecords: [],
   ...documentRevision,
@@ -128,10 +128,10 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
 
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   id: faker.random.uuid(),
-  type: "ARRAY_DELETED",
+  type: 'ARRAY_DELETED',
   field: faker.lorem.word(),
   nextValue: faker.lorem.sentence(),
-  groupId: "1",
+  groupId: '1',
   timestamp: faker.date.recent().toString(),
   owner: getOwner(),
   ownerUser: getOwner(),

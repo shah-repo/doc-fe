@@ -1,18 +1,18 @@
-import { PasswordType } from "aws-sdk/clients/cognitoidentityserviceprovider";
-import axios from "axios";
-import { intl } from "../../../common/intl";
-import { toastError } from "../../../ui/components/notifications";
-import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
-import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
-import { apiAction, apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { Audit, AuditActionPayload } from "../audit/types";
-import { Group } from "../auth/types";
-import { documentsActions } from "../documents";
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, PO_ROOT_URL } from "./constants";
-import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from "./types";
+import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import axios from 'axios';
+import { intl } from '../../../common/intl';
+import { toastError } from '../../../ui/components/notifications';
+import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
+import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { Audit, AuditActionPayload } from '../audit/types';
+import { Group } from '../auth/types';
+import { documentsActions } from '../documents';
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, PO_ROOT_URL } from './constants';
+import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -38,7 +38,7 @@ const loadList = (
   return apiAction({
     url,
     params: queryParams,
-    method: "get",
+    method: 'get',
     asyncType: DOCUMENT_REVISION_LIST_ASYNC,
     onSuccess: (documentRevisions, dispatch) => {
       dispatch(documentRevisionsList(documentRevisions));
@@ -48,7 +48,7 @@ const loadList = (
 
 const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   asyncType,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
@@ -61,7 +61,7 @@ const loadWithCallback = (
 ): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-    method: "get",
+    method: 'get',
     handlers,
   });
 
@@ -70,7 +70,7 @@ const loadWithCallback = (
 // this is a silent load
 const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
@@ -79,7 +79,7 @@ const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
 const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>, helpers?: any):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
@@ -96,7 +96,7 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
 const saveWithNoResponse = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   handlers,
   cancelToken: axios.CancelToken.source(),
@@ -105,7 +105,7 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
 
 const update = (id: string, body: FBDocumentRevisionProps): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
@@ -115,7 +115,7 @@ const update = (id: string, body: FBDocumentRevisionProps): ApiAction<DocumentRe
 const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(loadAudit(id));
@@ -128,15 +128,15 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: DOCUMENT_REVISION_ROOT_URL,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (documentRevision, dispatch) => {
-    documentsActions.setDocumentProposedId("");
+    documentsActions.setDocumentProposedId('');
     dispatch(documentRevisionSet(documentRevision));
   },
   onFailure: () => {
-    const { docId } = body.document || { docId: "" };
-    documentsActions.setDocumentProposedId(docId || "");
+    const { docId } = body.document || { docId: '' };
+    documentsActions.setDocumentProposedId(docId || '');
   },
   handlers,
 });
@@ -148,7 +148,7 @@ const documentSet = (document: Document): DocumentSetAction => ({
 
 const loadDocument = (id: string): ApiAction<Document> => apiAction({
   url: `${DOCUMENT_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENT_GET_ASYNC,
   onSuccess: (document, dispatch) => {
     dispatch(documentSet(document));
@@ -161,7 +161,7 @@ const applyTransition = (
   handlers: Handlers<DocumentRevisionTransitionResponse>,
 ): ApiAction<DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${transition}/${id}`,
-  method: "post",
+  method: 'post',
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
   },
@@ -175,7 +175,7 @@ const approveAndReleaseNonQms = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release_unsigned/${id}`,
-  method: "post",
+  method: 'post',
   data: body,
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
@@ -192,7 +192,7 @@ const auditSet = (audit: AuditActionPayload): DocumentRevisionAuditSetAction => 
 
 const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/audit`,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENT_REVISION_GET_AUDIT_ASYNC,
   onSuccess: (audit, dispatch) => {
     dispatch(auditSet({
@@ -209,7 +209,7 @@ const approveAndRelease = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
-  method: "post",
+  method: 'post',
   data: body,
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
@@ -225,7 +225,7 @@ const finalizeAndRelease = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release_without_ar/${id}`,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     if (checkIsDocumentRecord(docRev.document?.documentType?.groupOptions)) {
@@ -244,7 +244,7 @@ const createAndRelease = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/create_and_release`,
-  method: "post",
+  method: 'post',
   data: body,
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
@@ -256,7 +256,7 @@ const createAndRelease = (
 const updateAccess = (id: string, body: SecurityList, handlers: Handlers<Document>):
 ApiAction<Document, SecurityList> => apiActionWithCallbacks({
   url: `${DOCUMENT_ROOT_URL}/${id}/update_security`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentSet(documentRevision));
@@ -269,7 +269,7 @@ const getRenderTemplatePreview = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/renderTemplatePreview/${id}`,
-  method: "get",
+  method: 'get',
   handlers,
 });
 
@@ -278,7 +278,7 @@ const upgradeToReleasedForm = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_UPGRADE_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   asyncType: DOCUMENT_REVISION_GET_ASYNC,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
@@ -289,13 +289,13 @@ const upgradeToReleasedForm = (
 const loadGroupsByStage = (id: string, handlers: Handlers): ApiAction<Group[]> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/required_approvers`,
-    method: "get",
+    method: 'get',
     handlers,
   });
 
 const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/cancel/${id}`,
-  method: "patch",
+  method: 'patch',
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
@@ -303,7 +303,7 @@ const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
 
 const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/void/${id}`,
-  method: "patch",
+  method: 'patch',
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
@@ -311,25 +311,25 @@ const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
 
 const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
   url: `${PO_ROOT_URL}/${id}/status`,
-  method: "put",
+  method: 'put',
   data: body,
   onSuccess: (response, dispatch) => {
     dispatch(load(id));
   },
   onFailure: () => {
-    toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+    toastError(intl.formatMessage({ id: 'documentRevision.po.status.update.failed' }));
   },
 });
 
 const obsoletePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}${PO_ROOT_URL}/obsolete_void/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (response, dispatch) => {
     dispatch(load(id));
   },
   onFailure: () => {
-    toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+    toastError(intl.formatMessage({ id: 'documentRevision.po.status.update.failed' }));
   },
 });
 
@@ -340,7 +340,7 @@ const setPrimaryAttachment = (
 ): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${docRevId}/set_primary/${attachmentId}`,
-    method: "patch",
+    method: 'patch',
     onSuccess: (documentRevision, dispatch) => {
       dispatch(documentRevisionSet(documentRevision));
     },
@@ -350,7 +350,7 @@ const setPrimaryAttachment = (
 const cloneDoc = (id: string, payload: PasswordType, handlers: Handlers): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
-    method: "post",
+    method: 'post',
     data: payload,
     handlers,
   });
@@ -374,7 +374,7 @@ const getDocRevStatuses = (
     notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
-    method: "get",
+    method: 'get',
     handlers,
   });
 };
@@ -388,7 +388,7 @@ const fetchAvailableForms = (
     params: {
       docTypeGroupOption,
     },
-    method: "get",
+    method: 'get',
     handlers,
   });
 
@@ -397,7 +397,7 @@ const fetchAvailableParts = (
 ): ApiAction<DocumentRevision[]> =>
   apiActionWithCallbacks({
     url: DOCUMENT_REVISION_PARTS_URL,
-    method: "get",
+    method: 'get',
     handlers,
   });
 
@@ -407,7 +407,7 @@ const createFaiInspection = (
 ): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: DOCUMENT_REVISION_FAI_INSPECTION_URL,
-    method: "post",
+    method: 'post',
     data,
     handlers,
   });
@@ -418,7 +418,7 @@ const removePreviousBuild = (
 ): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/parent_remove`,
-    method: "post",
+    method: 'post',
     onSuccess: (documentRevision, dispatch) => {
       dispatch(documentRevisionSet(documentRevision));
     },
@@ -432,7 +432,7 @@ const exportToEmail = (
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `/export/revision/${revisionId}/email`,
-    method: "post",
+    method: 'post',
     data: body,
     handlers,
   });
@@ -443,7 +443,7 @@ const updateForm = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/update_form`,
-  method: "post",
+  method: 'post',
   data: body,
   handlers,
 });
@@ -454,7 +454,7 @@ const getFormMappingTemplate = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `/form_mapping/${sourceFormId}/${targetFormId}`,
-  method: "get",
+  method: 'get',
   handlers,
 });
 

@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { getCurrentDate, MomentFormats } from "../../../../common/utils/date";
-import { trainingStatsActions, trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
-import { TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT } from "../../../../state/ducks/dashboard.new/training.stats/constants";
-import AsyncGate from "../../../components/AsyncGate";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDidMount from "../../../hooks/useDidMount";
-import { scrollToBottom } from "../../line.items/common/Utils";
-import TrainingLineItemsPresenter from "./TrainingLineItems.presenter";
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getCurrentDate, MomentFormats } from '../../../../common/utils/date';
+import { trainingStatsActions, trainingStatsSelectors } from '../../../../state/ducks/dashboard.new/training.stats';
+import { TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT } from '../../../../state/ducks/dashboard.new/training.stats/constants';
+import AsyncGate from '../../../components/AsyncGate';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDidMount from '../../../hooks/useDidMount';
+import { scrollToBottom } from '../../line.items/common/Utils';
+import TrainingLineItemsPresenter from './TrainingLineItems.presenter';
 
 interface TrainingLineItemsProps {
   tabValue: number;
@@ -33,16 +33,16 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   const createTrainingLineItemsTabChangePayload = (tabValue: number) => {
     const currentDate = getCurrentDate(MomentFormats.YearMonthDate);
     const filters = {
-      field: "dueOn",
-      operator: "",
+      field: 'dueOn',
+      operator: '',
       value: currentDate,
     };
     switch (tabValue) {
       case 1:
-        filters.operator = "lt";
+        filters.operator = 'lt';
         return [filters];
       case 2:
-        filters.operator = "gte";
+        filters.operator = 'gte';
         return [filters];
       default:
         return [];
@@ -70,7 +70,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     payload.offset = nextOffset;
     async.start(loadTrainingStatsList, payload);
     setTimeout(() => {
-      scrollToBottom("#trainingListBoxLoadMore");
+      scrollToBottom('#trainingListBoxLoadMore');
     }, 2000);
   };
 

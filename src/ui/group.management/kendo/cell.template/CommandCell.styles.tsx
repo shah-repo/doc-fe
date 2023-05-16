@@ -1,10 +1,10 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../../layout/theme/utils/colors';
 
 const Commandstyles = makeStyles(() => ({
   button: {
-    "&:hover": {
-      backgroundColor: "transparent",
+    '&:hover': {
+      backgroundColor: 'transparent',
     },
   },
   ButtonColor: {

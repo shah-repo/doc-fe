@@ -1,14 +1,14 @@
-import { parse } from "query-string";
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router-dom";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { RESET_PASSWORD_SUCCESSFUL_URL } from "../../constants/urls";
-import useAsync from "../../hooks/useAsync";
-import { PasswordValues } from "../types";
-import ConfirmPasswordContainer from "./ConfirmPassword.container";
+import { parse } from 'query-string';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import { RESET_PASSWORD_SUCCESSFUL_URL } from '../../constants/urls';
+import useAsync from '../../hooks/useAsync';
+import { PasswordValues } from '../types';
+import ConfirmPasswordContainer from './ConfirmPassword.container';
 
-type SetForgotPasswordContainerProps = Pick<RouteComponentProps, "location">;
+type SetForgotPasswordContainerProps = Pick<RouteComponentProps, 'location'>;
 
 const SetForgotPasswordContainer: React.FunctionComponent<SetForgotPasswordContainerProps> = ({
   location,
@@ -18,7 +18,7 @@ const SetForgotPasswordContainer: React.FunctionComponent<SetForgotPasswordConta
   const isUserAuth = useSelector(authSelectors.isAuthenticated);
   const parsedLocation = parse(location.search);
   const clientCode = parsedLocation.code;
-  const clientEmail = (parsedLocation.email as string).split(" ").join("+");
+  const clientEmail = (parsedLocation.email as string).split(' ').join('+');
 
   const async = useAsync({
     onSuccess: () => {

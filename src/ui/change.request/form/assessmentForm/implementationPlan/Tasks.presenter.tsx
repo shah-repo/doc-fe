@@ -1,7 +1,7 @@
-import React from "react";
-import { ImplementationPlanTaskFormValues } from "../../types";
-import TaskPresenter from "./Task.presenter";
-import TaskFormDialog from "./TaskFormDialog";
+import React from 'react';
+import { ImplementationPlanTaskFormValues } from '../../types';
+import TaskPresenter from './Task.presenter';
+import TaskFormDialog from './TaskFormDialog';
 
 interface OwnProps {
   tasks: ImplementationPlanTaskFormValues[];

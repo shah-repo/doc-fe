@@ -1,5 +1,5 @@
-import { createStyles, Theme } from "@material-ui/core";
-import Colors from "../layout/theme/utils/colors";
+import { createStyles, Theme } from '@material-ui/core';
+import Colors from '../layout/theme/utils/colors';
 
 export const DRAWER_WIDTH = 240;
 
@@ -13,14 +13,14 @@ export default (theme: Theme) =>
       width: DRAWER_WIDTH,
       background: Colors.mirage,
       zIndex: theme.zIndex.drawer + 2,
-      overflow: "hidden",
-      borderRight: "none",
+      overflow: 'hidden',
+      borderRight: 'none',
     },
     root: {
       flex: 1,
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
     },
     toolbar: {
       backgroundColor: Colors.mirage,
@@ -31,19 +31,19 @@ export default (theme: Theme) =>
     },
     toolbarTitle: {
       flex: 1,
-      textAlign: "center",
+      textAlign: 'center',
     },
     headerLink: {
-      textDecoration: "none",
+      textDecoration: 'none',
       color: theme.palette.common.white,
     },
     list: {
       flexGrow: 1,
-      overflowX: "hidden",
-      overflowY: "auto",
+      overflowX: 'hidden',
+      overflowY: 'auto',
     },
     progress: {
-      margin: "auto",
+      margin: 'auto',
       marginTop: 16,
     },
     bottom: {
