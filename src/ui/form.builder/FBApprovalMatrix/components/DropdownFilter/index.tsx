@@ -12,6 +12,7 @@ const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
     defaultItem,
     defaultValue,
     onChange,
+    disabled,
   } = props;
 
   const handleChange = (event: DropDownListChangeEvent) => {
@@ -38,6 +39,7 @@ const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
         defaultItem={defaultItem}
         defaultValue={defaultValue}
         value={data.find((item) => item[DATA_ITEM_KEY] === value) ?? defaultItem}
+        disabled={disabled}
       />
     </Filter>
   );

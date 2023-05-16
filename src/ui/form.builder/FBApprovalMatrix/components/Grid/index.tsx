@@ -14,7 +14,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from './constants';
+import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from '.';
 import { translate } from '../../../../../common/intl';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 
@@ -29,6 +29,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     schema,
     disabled, onSave,
     defaultNewValue,
+    withoutStatus,
     ...restProps
   } = props;
   const classes = useStyles();
@@ -148,7 +149,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     const { dataItem } = props;
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-    const isActive = Boolean(dataItem?.docType?.active);
+    const isInactive = dataItem?.docType?.active === false;
     const dataCy = `row-${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
 
     if (!isUpdating) {
@@ -157,7 +158,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         {
           ...row.props,
           ['data-cy' as string]: dataCy,
-          className: cx(row.props.className, { [classes.inactive]: !isActive }),
+          className: cx(row.props.className, { [classes.inactive]: isInactive }),
         },
       );
     }
@@ -227,6 +228,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         onRowClick={!disabled ? handleRowClick : undefined}
         onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
+        defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
         filterable
         fullWidth
         hasBoxScrollbars

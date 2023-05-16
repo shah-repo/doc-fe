@@ -71,20 +71,19 @@ const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, ca
     );
   });
 
-const defaultDataState: State = {
+const DEFAULT_DATA_STATE: State = {
   filter: {
     logic: 'and',
     filters: [],
   },
-  group: [],
-  sort: [],
 };
 
 function KendoDataGrid<T> ({
   data,
-  filter = defaultDataState.filter,
-  group = defaultDataState.group,
-  sort = defaultDataState.sort,
+  defaultDataState = DEFAULT_DATA_STATE,
+  filter,
+  group,
+  sort,
   skipDataProcessing,
   loading,
   schema,
@@ -104,9 +103,9 @@ function KendoDataGrid<T> ({
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
   const [dataState, setDataState] = useState<State>({
     ...defaultDataState,
-    filter,
-    group,
-    sort,
+    ...filter && { filter },
+    ...group && { group },
+    ...sort && { sort },
   });
 
   useEffect(() => {
@@ -116,23 +115,11 @@ function KendoDataGrid<T> ({
   useEffect(() => {
     setDataState((prev) => ({
       ...prev,
-      filter,
+      ...filter && { filter },
+      ...group && { group },
+      ...sort && { sort },
     }));
-  }, [filter]);
-
-  useEffect(() => {
-    setDataState((prev) => ({
-      ...prev,
-      group,
-    }));
-  }, [group]);
-
-  useEffect(() => {
-    setDataState((prev) => ({
-      ...prev,
-      sort,
-    }));
-  }, [sort]);
+  }, [filter, group, sort]);
 
   const resultData = useMemo(
     () => skipDataProcessing ? data : process(data, dataState),

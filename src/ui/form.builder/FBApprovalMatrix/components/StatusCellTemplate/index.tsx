@@ -8,7 +8,7 @@ import { translate } from '../../../../../common/intl';
 
 const DEFAULT_VALUE = true;
 
-const ActiveCellTemplate: CellTemplate = (props) => {
+const StatusCellTemplate: CellTemplate = (props) => {
   const { dataItem, dataIndex, field, column, onChange } = props;
   const { editable } = column;
 
@@ -34,6 +34,11 @@ const ActiveCellTemplate: CellTemplate = (props) => {
     });
   };
 
+  // Empty for deprecated documents.
+  if (value === undefined) {
+    return '-';
+  }
+
   if (!canBeModified) {
     return <Status value={value} />;
   }
@@ -54,4 +59,4 @@ const ActiveCellTemplate: CellTemplate = (props) => {
   );
 };
 
-export default ActiveCellTemplate;
+export default StatusCellTemplate;

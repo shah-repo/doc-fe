@@ -10,4 +10,5 @@ export interface GridProps<T> extends DataGridProps<T> {
   defaultNewValue: Omit<GridItem<T>, 'id'>
   onSave?: (data: DataGridProps<T>['data']) => void
   disabled?: boolean
+  withoutStatus?: boolean
 }

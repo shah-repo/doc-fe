@@ -48,6 +48,7 @@ export interface DataGridProps<T> extends StyledKendoGridProps {
   onColumnReorder?: (event: GridColumnReorderEvent) => Array<ColumnDefinition<T>>
   calculateColumWidth?: WidthCalculator
   ref?: React.MutableRefObject<Grid>
+  defaultDataState?: State
 }
 
 export interface CustomGridCellProps extends Omit<GridCellProps, 'field'> {
