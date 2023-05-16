@@ -416,7 +416,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isPO && isRenderHTMLDefined) {
     accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
-  if (!(!isDocumentDraft || !canCreateInspection)) {
+  if (isDocumentDraft && canCreateInspection) {
     accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
   if (documentRevision.pdf && !isPO) {
