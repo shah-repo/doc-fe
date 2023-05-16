@@ -1,13 +1,13 @@
-import { Button } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
-import DoneIcon from "@material-ui/icons/Done";
-import cx from "classnames";
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { ReactComponent as DeleteIcon } from "../../../assets/images/trash-can 2.svg";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from "../../form.builder";
-import useStyles from "./ApprovalRequestGrid.styles";
-import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
+import { Button } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
+import DoneIcon from '@material-ui/icons/Done';
+import cx from 'classnames';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from '../../form.builder';
+import useStyles from './ApprovalRequestGrid.styles';
+import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
   disabledOptions: string[];

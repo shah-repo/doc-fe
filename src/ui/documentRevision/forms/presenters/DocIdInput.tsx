@@ -1,17 +1,17 @@
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions/types";
-import { documentsSelectors } from "../../../../state/ducks/documents";
-import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents/types";
-import { AsyncStatus } from "../../../../state/types";
-import InputField from "../../../components/forms/fields/Input";
-import { toastError } from "../../../components/notifications";
-import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
-import { useDocId } from "../../../hooks/docCustomization/useCustomization";
-import { DocumentCloneType } from "../../Clone.container";
-import { styles } from "./styles/DocIdInput.styles";
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { DocumentTypeByIdState } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionDocument } from '../../../../state/ducks/documentRevisions/types';
+import { documentsSelectors } from '../../../../state/ducks/documents';
+import { DocumentProposedIdSetAction } from '../../../../state/ducks/documents/types';
+import { AsyncStatus } from '../../../../state/types';
+import InputField from '../../../components/forms/fields/Input';
+import { toastError } from '../../../components/notifications';
+import { styles as AutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
+import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
+import { useDocId } from '../../../hooks/docCustomization/useCustomization';
+import { DocumentCloneType } from '../../Clone.container';
+import { styles } from './styles/DocIdInput.styles';
 
 interface Props {
   isDisabled: boolean;
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const DocIdInput: React.FunctionComponent<Props> = ({
-  documentTypeId = "",
+  documentTypeId = '',
   isDisabled,
   document = {},
   documentTypesById,
@@ -51,7 +51,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     if (!document && !type) {
       return;
     }
-    const pattern = new RegExp("^" + type + "\\d{0," + type.length + "}", "g");
+    const pattern = new RegExp('^' + type + '\\d{0,' + type.length + '}', 'g');
 
     if (!pattern.test(value) || !setDocId) {
       return;
@@ -59,7 +59,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     setDocId(value);
   };
 
-  if (!isVisible && type !== "newOutput") {
+  if (!isVisible && type !== 'newOutput') {
     return null;
   }
 
@@ -69,7 +69,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
         name="document.docId"
         label={label}
         inputProps={{
-          id: "document.docId",
+          id: 'document.docId',
           value: document.docId,
           disabled: isDisabled,
           onChange: handleDocIdChange,

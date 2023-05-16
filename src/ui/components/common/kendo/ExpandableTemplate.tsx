@@ -1,9 +1,9 @@
-import { Box, Button } from "@material-ui/core";
-import classNames from "classnames";
-import React, { useState } from "react";
+import { Box, Button } from '@material-ui/core';
+import classNames from 'classnames';
+import React, { useState } from 'react';
 // import { ReactComponent as TriangleDown } from "../../../assets/images/triangle-down.svg";
-import { ReactComponent as TriangleDown } from "../../../../assets/images/triangle-down.svg";
-import { styles } from "./ExpandableTemplate.styles";
+import { ReactComponent as TriangleDown } from '../../../../assets/images/triangle-down.svg';
+import { styles } from './ExpandableTemplate.styles';
 
 interface Props {
   items: string[];
@@ -22,11 +22,11 @@ const ExpandableTemplate = ({ items, dataId, noOfItems = 15  }: Props) => {
   const remainder = groupId === expandedGroupId ? 0 : items.length - noOfItems;
   return (
     <Box justifyContent="flex-start" alignContent="flex-start">
-      {itemsToDisplay.join(", ")}
+      {itemsToDisplay.join(', ')}
       {
         items.length > noOfItems && (
           <>
-            {groupId !== expandedGroupId && "..."}
+            {groupId !== expandedGroupId && '...'}
             <Button
               color="primary"
               variant="contained"

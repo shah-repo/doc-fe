@@ -1,4 +1,4 @@
-import { FBInputType } from "../../form.builder";
+import { FBInputType } from '../../form.builder';
 
 export interface SubmitFormRelation {
   type: FBInputType;

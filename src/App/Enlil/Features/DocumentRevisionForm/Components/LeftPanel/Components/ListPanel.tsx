@@ -7,25 +7,25 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import { ChevronRight, ExpandMore } from "@material-ui/icons";
-import { each } from "lodash";
-import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
-import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
-import Text from "../../../../../../../ui/components/Text";
+} from '@material-ui/core';
+import { ChevronRight, ExpandMore } from '@material-ui/icons';
+import { each } from 'lodash';
+import { Observer } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { ReactComponent as FavoriteIcon } from '../../../../../../../assets/images/favorite.svg';
+import { ReactComponent as StarIcon } from '../../../../../../../assets/images/starIcon.svg';
+import Text from '../../../../../../../ui/components/Text';
 import {
   FB, FBEditorState, FBInputType, FBMapWrapper,
-} from "../../../../../../../ui/form.builder";
+} from '../../../../../../../ui/form.builder';
 import {
   FBControlPickerDataProps,
   FBControlPickerProps,
-} from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
-import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
-import styles from "./ListPanel.styles";
-import SearchBox from "./SearchBox";
+} from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types';
+import { withFBControlPicker } from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap';
+import styles from './ListPanel.styles';
+import SearchBox from './SearchBox';
 
 const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   controlPickerState,
@@ -66,8 +66,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
             onClick={() => {
               handleClick(section);
             }}
-            data-cy={intl.formatMessage({ id: `form.builder.${section}` }) + "-btn"}
-            className={`${classes.listItemBtn} ${ section === "section" ? "firstItem" : ""}`}
+            data-cy={intl.formatMessage({ id: `form.builder.${section}` }) + '-btn'}
+            className={`${classes.listItemBtn} ${ section === 'section' ? 'firstItem' : ''}`}
           >
             <ListItemText key={section}>
               <Typography className={classes.listItemText}
@@ -96,7 +96,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                       <ListItem
                         key={index}
                         className={`${classes.listItemStyle} ${
-                          editors.length - 1 === i ? "lastItem" : ""
+                          editors.length - 1 === i ? 'lastItem' : ''
                         }`}
                         disableGutters
                       >
@@ -189,7 +189,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
           <>
             {controlPickerState?.loading && (
               <Box width="100%" pt={1}>
-                <LinearProgress style={{ width: "100%" }} />
+                <LinearProgress style={{ width: '100%' }} />
               </Box>
             )}
           </>

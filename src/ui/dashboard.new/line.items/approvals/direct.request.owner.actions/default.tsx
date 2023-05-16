@@ -1,23 +1,23 @@
-import { Box, Grid, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
-import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import Colors from "../../../../layout/theme/utils/colors";
-import { getDocIcon, getStatusLabel } from "../../common/DocIcon";
-import DocId from "../../common/DocId/presenter";
-import DocTitle from "../../common/DocTitle/presenter";
-import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { DocTypeGroups } from "../../common/types";
-import useStyles from "./default.styles";
-import DismissAction from "../../common/DismissAction";
+import { Box, Grid, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
+import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import Colors from '../../../../layout/theme/utils/colors';
+import { getDocIcon, getStatusLabel } from '../../common/DocIcon';
+import DocId from '../../common/DocId/presenter';
+import DocTitle from '../../common/DocTitle/presenter';
+import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
+import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { DocTypeGroups } from '../../common/types';
+import useStyles from './default.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string;
@@ -101,11 +101,11 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
               alignItems="center"
             >
               <Grid item={true}>
-                <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId} />
+                <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <DocTitle
-                  url={documentVersionPath(docRevId || "", docDocumentId)}
+                  url={documentVersionPath(docRevId || '', docDocumentId)}
                   docRevVersion={docRevVersion}
                   docRevName={docRevName}
                 />

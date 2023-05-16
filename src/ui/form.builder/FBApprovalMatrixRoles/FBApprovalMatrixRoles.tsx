@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBApprovalMatrixRolesProps, FBApprovalRole, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTextField } from "..";
-import { withFBApprovalMatrixRoles } from "./FBApprovalMatrixRoles.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBApprovalMatrixRolesProps, FBApprovalRole, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTextField } from '..';
+import { withFBApprovalMatrixRoles } from './FBApprovalMatrixRoles.wrap';
 
 const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps> = ({
   onClick,

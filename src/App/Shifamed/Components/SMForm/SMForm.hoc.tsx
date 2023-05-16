@@ -1,5 +1,5 @@
-import React from "react";
-import { SM, SMFormHOCProps, SMFormState, SMProvider } from "../../..";
+import React from 'react';
+import { SM, SMFormHOCProps, SMFormState, SMProvider } from '../../..';
 
 export const withSMForm = <T extends SMFormHOCProps>(
   Component: React.FunctionComponent<T>,
@@ -18,6 +18,6 @@ export const withSMForm = <T extends SMFormHOCProps>(
     );
   };
 
-  Comp.displayName = "withSMForm";
+  Comp.displayName = 'withSMForm';
   return Comp;
 };

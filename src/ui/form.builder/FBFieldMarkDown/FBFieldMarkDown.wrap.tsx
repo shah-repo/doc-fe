@@ -1,6 +1,6 @@
-import { get, template as lodashTemplate } from "lodash";
-import React from "react";
-import { FB, FBFieldMarkDownProps } from "..";
+import { get, template as lodashTemplate } from 'lodash';
+import React from 'react';
+import { FB, FBFieldMarkDownProps } from '..';
 
 export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
   Component: React.FunctionComponent<T>,
@@ -26,9 +26,9 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
 
     const source = template({
       ...schemaItem,
-      label: get(schemaItem, "label") || "",
-      rules: get(schemaItem, "rules", ""),
-      value: formState?.getFieldValue(name, ""),
+      label: get(schemaItem, 'label') || '',
+      rules: get(schemaItem, 'rules', ''),
+      value: formState?.getFieldValue(name, ''),
     });
 
     return Component({

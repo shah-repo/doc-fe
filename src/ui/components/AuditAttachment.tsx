@@ -1,9 +1,9 @@
-import { CircularProgress } from "@material-ui/core";
-import { first, isString } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { Fragment } from "react";
-import { Audit } from "../../state/ducks/audit/types";
-import { FB, FBFilesPresenterState } from "../form.builder";
+import { CircularProgress } from '@material-ui/core';
+import { first, isString } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { Fragment } from 'react';
+import { Audit } from '../../state/ducks/audit/types';
+import { FB, FBFilesPresenterState } from '../form.builder';
 
 interface OwnProps {
   audit: Audit;
@@ -20,12 +20,12 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
   const attachmentState = FB.useRef(FBFilesPresenterState);
   const { nextValue, previousValue } = audit;
   let auditValue: any = nextValue;
-  if (auditValue === "undefined") {
+  if (auditValue === 'undefined') {
     auditValue = previousValue;
   }
 
   React.useEffect(() => {
-    if (auditValue === "undefined") { return; }
+    if (auditValue === 'undefined') { return; }
     try {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       auditValue = JSON.parse(auditValue)?.id;

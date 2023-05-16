@@ -1,5 +1,5 @@
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEditor, FBEditorApprovalFieldProps } from "..";
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEditor, FBEditorApprovalFieldProps } from '..';
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
   approverGroups,

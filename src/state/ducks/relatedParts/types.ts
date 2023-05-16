@@ -1,19 +1,19 @@
-import { DocumentRevisionStatus, RevisionChangeType } from "../documentRevisions/types";
+import { DocumentRevisionStatus, RevisionChangeType } from '../documentRevisions/types';
 
 export enum RELATED_PARTS_STATUS {
-  RELATED_SEPARATE = "related_separate",
-  RELATED_TOGETHER = "related_together",
-  PARENT_NO = "parent_no",
-  PARENT_SEPARATE = "parent_separate",
-  PARENT_TOGETHER = "parent_together"
+  RELATED_SEPARATE = 'related_separate',
+  RELATED_TOGETHER = 'related_together',
+  PARENT_NO = 'parent_no',
+  PARENT_SEPARATE = 'parent_separate',
+  PARENT_TOGETHER = 'parent_together'
 }
 
 export enum COLOR_TYPES {
-  PRIMARY = "primary",
-  SECONDARY = "secondary",
-  DISABLED = "disabled",
-  INHERIT ="inherit",
-  ERROR ="ERROR"
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  DISABLED = 'disabled',
+  INHERIT ='inherit',
+  ERROR ='ERROR'
 }
 
 export interface RelatedPartsChoiceRequestBody {

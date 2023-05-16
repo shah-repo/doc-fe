@@ -1,6 +1,6 @@
-import { ButtonProps } from "@material-ui/core";
+import { ButtonProps } from '@material-ui/core';
 
 export interface FBApprovalMatrixRolesActionsProps {
-  handleAdd?: ButtonProps["onClick"];
-  handleCancel?: ButtonProps["onClick"];
+  handleAdd?: ButtonProps['onClick'];
+  handleCancel?: ButtonProps['onClick'];
 }

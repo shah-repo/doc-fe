@@ -1,14 +1,14 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { Document, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../state/reducers";
-import { getIsLastVersionObsolete, isDocumentRevisionDeprecated, isDocumentRevisionInStatus } from "../documentRevision/helpers/documentRevisionStatus";
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { Document, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../state/reducers';
+import { getIsLastVersionObsolete, isDocumentRevisionDeprecated, isDocumentRevisionInStatus } from '../documentRevision/helpers/documentRevisionStatus';
 
 const useShouldUpgradeToLatest = (
   documentStatus?: DocumentRevisionStatus,
   formDocumentStatus?: DocumentRevisionStatus,
-  formDocumentId = "",
+  formDocumentId = '',
 ): boolean => {
   const isFormStatusDeprecated = isDocumentRevisionDeprecated(formDocumentStatus);
   const isDocumentStatusDraftOrPending =

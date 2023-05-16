@@ -1,10 +1,10 @@
-import { mount } from "enzyme";
-import React from "react";
-import { act } from "react-dom/test-utils";
-import { AsyncStatus } from "../../state/types";
-import useAsync, { Async, ASYNC_DEFAULT_STATE } from "./useAsync";
+import { mount } from 'enzyme';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
+import { AsyncStatus } from '../../state/types';
+import useAsync, { Async, ASYNC_DEFAULT_STATE } from './useAsync';
 
-describe("useAsync hook tests", () => {
+describe('useAsync hook tests', () => {
   let async: Async;
   const onSuccess = jest.fn();
   const onError = jest.fn();
@@ -18,11 +18,11 @@ describe("useAsync hook tests", () => {
     mount(<TestComponent />);
   });
 
-  it("has initial state", () => {
+  it('has initial state', () => {
     expect(async.asyncState).toEqual(ASYNC_DEFAULT_STATE);
   });
 
-  it("calls action and has active state", () => {
+  it('calls action and has active state', () => {
     const action = jest.fn();
     act(() => {
       async.start(action);
@@ -31,11 +31,11 @@ describe("useAsync hook tests", () => {
     expect(action).toHaveBeenCalled();
     expect(async.asyncState).toEqual({
       status: AsyncStatus.Active,
-      message: "",
+      message: '',
     });
   });
 
-  it("calls onSuccess and has success state", () => {
+  it('calls onSuccess and has success state', () => {
     act(() => {
       async.successHandler.execute({});
     });
@@ -43,25 +43,25 @@ describe("useAsync hook tests", () => {
     expect(onSuccess).toHaveBeenCalledWith({});
     expect(async.asyncState).toEqual({
       status: AsyncStatus.Success,
-      message: "",
+      message: '',
     });
   });
 
-  it("calls onError and has error state", () => {
+  it('calls onError and has error state', () => {
     act(() => {
-      async.errorHandler.execute("ERROR");
+      async.errorHandler.execute('ERROR');
     });
 
-    expect(onError).toHaveBeenCalledWith("ERROR");
+    expect(onError).toHaveBeenCalledWith('ERROR');
     expect(async.asyncState).toEqual({
       status: AsyncStatus.Error,
-      message: "ERROR",
+      message: 'ERROR',
     });
   });
 
-  it("resets state", () => {
+  it('resets state', () => {
     act(() => {
-      async.errorHandler.execute("ERROR");
+      async.errorHandler.execute('ERROR');
       async.reset();
     });
 

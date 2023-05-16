@@ -1,43 +1,43 @@
-import moment from "moment";
-import { combineReducers } from "redux";
-import { MomentFormats } from "../../../common/utils/date";
-import Colors from "../../../ui/layout/theme/utils/colors";
-import asyncReducer from "../../reducers/asyncReducer";
-import { COMPANY_DEFAULT_STATE } from "../company/reducers";
-import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
-import { EditGroupsAction, EditUserInfoAction } from "../tableSearch/types";
-import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
-import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, ToggleCustomLabelsAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
+import moment from 'moment';
+import { combineReducers } from 'redux';
+import { MomentFormats } from '../../../common/utils/date';
+import Colors from '../../../ui/layout/theme/utils/colors';
+import asyncReducer from '../../reducers/asyncReducer';
+import { COMPANY_DEFAULT_STATE } from '../company/reducers';
+import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from '../tableSearch/constants';
+import { EditGroupsAction, EditUserInfoAction } from '../tableSearch/types';
+import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
+import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, ToggleCustomLabelsAction, UserGroupsAction, UserGroupsState, UserState } from './types';
 
 export const DEFAULT_EMPLOYEE = {
-  id: "",
+  id: '',
   active: true,
   company: COMPANY_DEFAULT_STATE,
-  slackUserId: "",
+  slackUserId: '',
 };
 
 const DEFAULT_CREDENTIALS = {
   credentials: {
-    AccessKeyId: "",
-    SecretAccessKey: "",
-    SessionToken: "",
+    AccessKeyId: '',
+    SecretAccessKey: '',
+    SessionToken: '',
     Expiration: new Date(0).toISOString(),
   },
-  endpoint: "",
-  environment: "",
-  companyId: "",
-  region: "",
-  employeeId: "",
+  endpoint: '',
+  environment: '',
+  companyId: '',
+  region: '',
+  employeeId: '',
 };
 
 const USER_DEFAULT_STATE: UserState = {
-  email: "",
-  name: "",
-  id: "",
-  employeeId: "",
-  sessionId: "",
+  email: '',
+  name: '',
+  id: '',
+  employeeId: '',
+  sessionId: '',
   employees: [],
-  avatar: "",
+  avatar: '',
   groups: [],
   employee: DEFAULT_EMPLOYEE,
   iotCredentials: DEFAULT_CREDENTIALS,
@@ -71,7 +71,7 @@ const user = (
       return {
         ...state,
         ...action.payload,
-        daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(currentDate), "days"),
+        daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(currentDate), 'days'),
       };
     }
     case SET_EMPLOYEE:

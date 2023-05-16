@@ -1,7 +1,7 @@
-import { get, map } from "lodash";
-import React from "react";
-import { FB, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
-import predefinedValidators from "../data/predefinedValidators.json";
+import { get, map } from 'lodash';
+import React from 'react';
+import { FB, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from '..';
+import predefinedValidators from '../data/predefinedValidators.json';
 
 export const withFBEditorValidation = <T extends FBEditorValidationProps>(
   Component: React.FunctionComponent<T>
@@ -19,14 +19,14 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
     const { formState } = FB.useStores();
 
     const onChange = (ev: React.ChangeEvent<any>, schemaItem: FBSchemaProps) => {
-      const value = get(ev.target, "checked");
+      const value = get(ev.target, 'checked');
       const { name } = schemaItem;
       if (!value) {
-        formState?.omitFieldValue(name + ".value");
-        formState?.omitFieldValue(name + ".name");
+        formState?.omitFieldValue(name + '.value');
+        formState?.omitFieldValue(name + '.name');
       }
       formState?.getInputState(`${name}.name`)?.setHidden(!value);
-      const schemaSelectItem = schemaState?.getSchemaItem(name + ".value");
+      const schemaSelectItem = schemaState?.getSchemaItem(name + '.value');
       schemaSelectItem && schemaState && (schemaState.removeSchemaItem(schemaSelectItem));
     };
 

@@ -1,13 +1,13 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../../../../../../ui/layout/theme/utils/colors";
+import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../../../../../../ui/layout/theme/utils/colors';
 
 export default makeStyles((theme) =>
   createStyles({
     root: {
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      overflow: "hidden",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
     },
     collapseRoot: {
       padding: theme.spacing(2),
@@ -24,7 +24,7 @@ export default makeStyles((theme) =>
     listItemBtn: {
       padding: theme.spacing(0, 1.25, 0, 2),
       height: 50,
-      borderTop: "none",
+      borderTop: 'none',
       borderBottom: `1px solid ${Colors.lightest_grey1}`,
     },
     listItemStyle: {
@@ -38,8 +38,8 @@ export default makeStyles((theme) =>
       fontWeight: 500,
       fontSize: 12,
       lineHeight: 1.25,
-      display: "flex",
-      textTransform: "uppercase",
+      display: 'flex',
+      textTransform: 'uppercase',
       color: Colors.almost_black,
     },
     listSubItem: {
@@ -49,17 +49,17 @@ export default makeStyles((theme) =>
       letterSpacing: 0,
       marginLeft: 3,
       color: Colors.almost_black,
-      cursor: "pointer",
+      cursor: 'pointer',
     },
     searchBox: {
       padding: theme.spacing(2.5, 0),
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     list: {
       flexGrow: 1,
-      overflowY: "auto",
+      overflowY: 'auto',
       padding: 0,
     },
     iconBtn: {

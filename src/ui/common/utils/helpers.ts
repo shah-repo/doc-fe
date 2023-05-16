@@ -1,7 +1,7 @@
-import { chain, set } from "lodash";
-import { KendoColumn } from "../../components/common/kendo/types";
+import { chain, set } from 'lodash';
+import { KendoColumn } from '../../components/common/kendo/types';
 
-export const removeLastCharacterIfNotAlphaNumeric = (text = "") => {
+export const removeLastCharacterIfNotAlphaNumeric = (text = '') => {
   if (!text) {
     return text;
   }

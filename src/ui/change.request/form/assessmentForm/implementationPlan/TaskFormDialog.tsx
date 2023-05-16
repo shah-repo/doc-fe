@@ -1,11 +1,11 @@
-import { Box, Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { FormContext } from "../../../../components/forms/FormContext";
-import Text from "../../../../components/Text";
-import { ImplementationPlanTaskFormValues } from "../../types";
-import TaskForm from "./TaskForm";
+import { Box, Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { FormContext } from '../../../../components/forms/FormContext';
+import Text from '../../../../components/Text';
+import { ImplementationPlanTaskFormValues } from '../../types';
+import TaskForm from './TaskForm';
 
 interface OwnProps {
   onSubmit: (values: ImplementationPlanTaskFormValues) => void;
@@ -19,18 +19,18 @@ interface OwnProps {
 export type TaskFormDialogProps = OwnProps;
 
 const INITIAL_VALUES = {
-  title: "",
-  description: "",
-  status: "PENDING",
+  title: '',
+  description: '',
+  status: 'PENDING',
 };
 
 const styles = makeStyles(() =>
   createStyles({
     dialogPaper: {
-      overflowY: "unset",
+      overflowY: 'unset',
     },
     dialogContent: {
-      overflowY: "unset",
+      overflowY: 'unset',
     },
   },
   ));

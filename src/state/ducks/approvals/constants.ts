@@ -1,1 +1,1 @@
-export const APPROVALS_ROOT_URL = "/approvals";
+export const APPROVALS_ROOT_URL = '/approvals';

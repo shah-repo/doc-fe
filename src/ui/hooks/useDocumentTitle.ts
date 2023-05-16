@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 const useDocumentTitle = (title) => {
   useEffect(() => {
-    document.title = title || "Enlil";
+    document.title = title || 'Enlil';
     return () => {
-      document.title = "Enlil";
+      document.title = 'Enlil';
     };
   }); };
 

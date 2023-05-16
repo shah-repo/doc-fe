@@ -1,13 +1,13 @@
-import { FBOptionProps } from "..";
+import { FBOptionProps } from '..';
 
 export const withFBOption = <T extends FBOptionProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     options,
-    optionLabelKey = "text",
-    optionValueKey = "value",
-    optionValueType = "key",
+    optionLabelKey = 'text',
+    optionValueKey = 'value',
+    optionValueType = 'key',
     ...props
   }: T) => Component({
     ...(props as T),

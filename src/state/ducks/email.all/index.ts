@@ -1,1 +1,1 @@
-export { default as emailAllActions } from "./actions";
+export { default as emailAllActions } from './actions';

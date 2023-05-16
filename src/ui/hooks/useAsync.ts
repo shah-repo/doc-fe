@@ -1,7 +1,7 @@
-import { CancelTokenSource } from "axios";
-import { useState } from "react";
-import { AsyncState, AsyncStatus } from "../../state/types";
-import useCallbackHandler from "./useCallbackHandler";
+import { CancelTokenSource } from 'axios';
+import { useState } from 'react';
+import { AsyncState, AsyncStatus } from '../../state/types';
+import useCallbackHandler from './useCallbackHandler';
 
 interface AsyncHandlers<T> {
   onSuccess?: (arg?: T) => void;
@@ -11,7 +11,7 @@ interface AsyncHandlers<T> {
 
 export const ASYNC_DEFAULT_STATE = {
   status: AsyncStatus.Idle,
-  message: "",
+  message: '',
 };
 
 const useAsync = <T>({
@@ -25,12 +25,12 @@ const useAsync = <T>({
     action: A,
     ...args: Parameters<A>
   ) => {
-    setAsyncState({ status: AsyncStatus.Active, message: "" });
+    setAsyncState({ status: AsyncStatus.Active, message: '' });
     return action(...args);
   };
 
   const successHandler = useCallbackHandler((result: T) => {
-    setAsyncState({ status: AsyncStatus.Success, message: "" });
+    setAsyncState({ status: AsyncStatus.Success, message: '' });
     onSuccess(result);
   });
 

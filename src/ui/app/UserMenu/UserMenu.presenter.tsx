@@ -1,15 +1,15 @@
-import { ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
-import Menu from "@material-ui/core/Menu";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import SyncAltOutlinedIcon from "@material-ui/icons/SyncAltOutlined";
-import React from "react";
-import { Nullable } from "../../../state/ducks/common/types";
-import SwitchCompanyButtonContainer from "../../components/icons/SwitchCompanyButton/SwitchCompanyButton.container";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import { UserMenuContext } from "../NavigationProfile.container";
+import { ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
+import Menu from '@material-ui/core/Menu';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import SyncAltOutlinedIcon from '@material-ui/icons/SyncAltOutlined';
+import React from 'react';
+import { Nullable } from '../../../state/ducks/common/types';
+import SwitchCompanyButtonContainer from '../../components/icons/SwitchCompanyButton/SwitchCompanyButton.container';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
+import { UserMenuContext } from '../NavigationProfile.container';
 
 interface Props {
   location: any;
@@ -41,8 +41,8 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
         onClose={handleCloseMenu}
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
       >
         <MenuItem onClick={openUserProfile}>

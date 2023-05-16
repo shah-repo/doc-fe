@@ -1,27 +1,27 @@
-import { map, template } from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBPassType, FBSchemaProps } from "..";
-import { FBCurrencyOption } from "../FBPurchaseOrderTable/FBPurchaseOrderTable.types";
-import actionOptions from "./actionOptions.json";
-import additionalSchema from "./additionalSchema.json";
-import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
-import aqlOptions from "./aqlOptions.json";
-import autocompleteOptions from "./autocompleteOptions.json";
-import closingTaskSchema from "./closingTaskSchema.json";
-import currencyOptions from "./currencyOptions.json";
-import editorProperties from "./editorProperties.json";
-import editorPropertiesControl from "./editorPropertiesControl.json";
-import eqMaintenanceOptions from "./eqMaintenanceOptions.json";
-import icons from "./icons.json";
-import partTypeOptions from "./partTypeOptions.json";
-import passTypeOptions from "./passTypeOptions.json";
-import requirementOptions from "./requirementOptions.json";
-import taskSchema from "./taskSchema.json";
-import testStepSchema from "./testStepSchema.json";
-import unitsOptions from "./unitsOptions.json";
-import yesNoOptions from "./yesNoOptions.json";
+import { map, template } from 'lodash';
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBPassType, FBSchemaProps } from '..';
+import { FBCurrencyOption } from '../FBPurchaseOrderTable/types';
+import actionOptions from './actionOptions.json';
+import additionalSchema from './additionalSchema.json';
+import approvalMatrixRoleSchema from './approvalMatrixRoleSchema.json';
+import aqlOptions from './aqlOptions.json';
+import autocompleteOptions from './autocompleteOptions.json';
+import closingTaskSchema from './closingTaskSchema.json';
+import currencyOptions from './currencyOptions.json';
+import editorProperties from './editorProperties.json';
+import editorPropertiesControl from './editorPropertiesControl.json';
+import eqMaintenanceOptions from './eqMaintenanceOptions.json';
+import icons from './icons.json';
+import partTypeOptions from './partTypeOptions.json';
+import passTypeOptions from './passTypeOptions.json';
+import requirementOptions from './requirementOptions.json';
+import taskSchema from './taskSchema.json';
+import testStepSchema from './testStepSchema.json';
+import unitsOptions from './unitsOptions.json';
+import yesNoOptions from './yesNoOptions.json';
 
 class FBData {
-  public static get testStepSchema(): FBSchemaProps[]  {
+  public static get testStepSchema(): FBSchemaProps[] {
     const compiled = template(JSON.stringify(testStepSchema));
     return JSON.parse(compiled({ id: FB.uniqid })) as unknown as FBSchemaProps[];
   }
@@ -41,8 +41,8 @@ class FBData {
       value: itm,
       ...FBData.editorProperties[itm],
       // :/
-      ...(itm === "includeContext" && (type === "checkbox" || type === "radio")) && {
-        text: "form.builder.include.note",
+      ...(itm === 'includeContext' && (type === 'checkbox' || type === 'radio')) && {
+        text: 'form.builder.include.note',
       },
     })) as FBEditorPropertiesOption[];
   }
@@ -56,8 +56,8 @@ class FBData {
   }
 
   public static get productUnitsOptions(): FBOption[] {
-    const notAllowedItems = ["hours", "days", "months"];
-    return unitsOptions.filter((item: {[key: string]: string}) => !notAllowedItems.includes(item.value));
+    const notAllowedItems = ['hours', 'days', 'months'];
+    return unitsOptions.filter((item: { [key: string]: string }) => !notAllowedItems.includes(item.value));
   }
 
   public static get requirementOptions(): FBOption[] {
@@ -68,7 +68,7 @@ class FBData {
     return currencyOptions as FBCurrencyOption[];
   }
 
-  public static additionalSchema(type: FBInputType): Partial<FBSchemaProps>[] {
+  public static additionalSchema(type: FBInputType): Array<Partial<FBSchemaProps>> {
     const compiled = template(JSON.stringify(additionalSchema));
     const parse = JSON.parse(compiled({ id: FB.uniqid }));
     return parse[type];

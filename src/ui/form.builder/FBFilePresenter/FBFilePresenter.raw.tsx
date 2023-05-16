@@ -1,9 +1,9 @@
-import { Box, CircularProgress, Typography } from "@material-ui/core";
-import AttachFile from "@material-ui/icons/AttachFile";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FBContextMenu, FBFilePresenterModeProps, FBTooltip } from "..";
-import Colors from "../../layout/theme/utils/colors";
+import { Box, CircularProgress, Typography } from '@material-ui/core';
+import AttachFile from '@material-ui/icons/AttachFile';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FBContextMenu, FBFilePresenterModeProps, FBTooltip } from '..';
+import Colors from '../../layout/theme/utils/colors';
 
 const FBFilePresenterRaw: React.FunctionComponent<FBFilePresenterModeProps> = ({
   filePresenterState,
@@ -17,9 +17,9 @@ const FBFilePresenterRaw: React.FunctionComponent<FBFilePresenterModeProps> = ({
       p: 0.25,
       mr: 1,
       mb: 2,
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
       borderRadius: 4,
       bgcolor: Colors.background_blue,
     }}

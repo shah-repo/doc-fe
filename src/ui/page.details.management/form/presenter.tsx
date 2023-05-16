@@ -1,15 +1,15 @@
-import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
-import { Field, FormikProps } from "formik";
-import { camelCase } from "lodash";
-import React from "react";
-import { HelpModule } from "../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
-import InputField from "../../components/forms/fields/Input";
-import SelectField from "../../components/forms/fields/Select";
-import FormWrapper from "../../components/forms/FormWrapper";
-import Text from "../../components/Text";
-import { Translation } from "../../translations/types";
-import { PageDetailsCategory } from "../types";
-import styles from "./styles";
+import { Box, Button, Grid, InputLabel, TextareaAutosize } from '@material-ui/core';
+import { Field, FormikProps } from 'formik';
+import { camelCase } from 'lodash';
+import React from 'react';
+import { HelpModule } from '../../../App/Enlil/Features/HelpCenter/HelpCenter.types';
+import InputField from '../../components/forms/fields/Input';
+import SelectField from '../../components/forms/fields/Select';
+import FormWrapper from '../../components/forms/FormWrapper';
+import Text from '../../components/Text';
+import { Translation } from '../../translations/types';
+import { PageDetailsCategory } from '../types';
+import styles from './styles';
 
 interface Props extends FormikProps<PageDetailsCategory> {
   handleTransition: () => void;
@@ -52,28 +52,28 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
           <InputField
             name="category"
             label="Category"
-            inputProps={{ id: "category" }}
+            inputProps={{ id: 'category' }}
           />
           <InputField
             name="addNewBtnLabel"
             label="Add New Button Label"
-            inputProps={{ id: "addNewBtnLabel" }}
+            inputProps={{ id: 'addNewBtnLabel' }}
           />
           <SelectField
             options={Object.entries(HelpModule).map(([value, text]) => ({ value, text }))}
             name="helpModule"
             label="Help Module"
-            selectProps={{ id: "helpModule" }}
+            selectProps={{ id: 'helpModule' }}
           />
-          {autoSizerRenderer({ label: "Columns", name: "columns" })}
+          {autoSizerRenderer({ label: 'Columns', name: 'columns' })}
         </Box>
         <Box display="flex" justifyContent="flex-end" mt={6}>
           <Button
             type="submit"
             variant="outlined"
-            data-cy={`submit.${props.values.category ? camelCase(props.values.category) : "new"}`}
+            data-cy={`submit.${props.values.category ? camelCase(props.values.category) : 'new'}`}
           >
-            <Text translation={"common.save"} />
+            <Text translation={'common.save'} />
           </Button>
           <Button onClick={handleTransition} variant="outlined">
             <Text translation={transitionLabel} />

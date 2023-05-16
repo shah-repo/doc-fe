@@ -1,12 +1,12 @@
-import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { groupBy } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
-import apiClient from "../../../../../../state/apiClient";
-import { DocumentRevisionStatus } from "../../../../../../state/ducks/documentRevisions/types";
-import { TRAINING_RECORDS_SEARCH_URL } from "../../../../../../state/ducks/training/constants";
-import { store } from "../../../../../../state/store";
-import FBTrainingInfoPresenter from "./FBTrainingInfo.presenter";
-import { GroupByStateProps, TrainingItem, TrainingStates } from "./FBTrainingInfo.types";
+import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
+import { groupBy } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
+import apiClient from '../../../../../../state/apiClient';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { TRAINING_RECORDS_SEARCH_URL } from '../../../../../../state/ducks/training/constants';
+import { store } from '../../../../../../state/store';
+import FBTrainingInfoPresenter from './FBTrainingInfo.presenter';
+import { GroupByStateProps, TrainingItem, TrainingStates } from './FBTrainingInfo.types';
 
 interface TrainingInfoContainerProps {
   documentRevisionId?: string;
@@ -26,13 +26,13 @@ const FBTrainingInfoContainer: React.FunctionComponent<
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
-      method: "post",
+      method: 'post',
       url: TRAINING_RECORDS_SEARCH_URL,
       data: {
         filters: [
           {
-            field: "documentRevision.id",
-            operator: "eq",
+            field: 'documentRevision.id',
+            operator: 'eq',
             value: documentRevisionId,
           },
         ],
@@ -96,7 +96,7 @@ const FBTrainingInfoContainer: React.FunctionComponent<
   }, [documentRevisionId, queryApi]);
 
   const processTrainingData = (data: TrainingItem) => {
-    const groupData = groupBy(data, "state");
+    const groupData = groupBy(data, 'state');
     const obj = {};
     Object.keys(groupData)
       .reverse()

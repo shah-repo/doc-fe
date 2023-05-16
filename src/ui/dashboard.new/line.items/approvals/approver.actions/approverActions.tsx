@@ -1,27 +1,27 @@
-import { Avatar, Grid, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
-import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import Colors from "../../../../layout/theme/utils/colors";
-import DocId from "../../common/DocId/presenter";
-import DocTitle from "../../common/DocTitle/presenter";
-import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
-import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
-import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
-import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import useStyles from "./approverActions.styles";
-import DismissAction from "../../common/DismissAction";
+import { Avatar, Grid, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
+import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_status.svg';
+import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject_status_solid.svg';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import Colors from '../../../../layout/theme/utils/colors';
+import DocId from '../../common/DocId/presenter';
+import DocTitle from '../../common/DocTitle/presenter';
+import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
+import { HoverStyleChip as RejectedHoverStyleChip } from '../../common/HoverStyleChipApprovalRejected';
+import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
+import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalStyleChipApprovalRejected';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import useStyles from './approverActions.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string;
@@ -217,7 +217,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   </Typography>
                 </Grid> */}
               <Grid item={true}>
-                <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId= {docId}/>
+                <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId= {docId}/>
               </Grid>
               {/* {docRevName && (
                   <Grid item={true}>
@@ -234,7 +234,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 )} */}
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <DocTitle
-                  url={documentVersionPath(docRevId || "", docDocumentId)}
+                  url={documentVersionPath(docRevId || '', docDocumentId)}
                   docRevVersion={docRevVersion} docRevName={docRevName}
                 />
               </Grid>

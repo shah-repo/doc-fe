@@ -1,26 +1,26 @@
-import { ButtonProps } from "@material-ui/core/Button";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { ReactComponent as SuccessIcon } from "../../../../assets/images/success_iconn.svg";
-import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
+import { ButtonProps } from '@material-ui/core/Button';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { ReactComponent as SuccessIcon } from '../../../../assets/images/success_iconn.svg';
+import { changeRequestsActions } from '../../../../state/ducks/changeRequest';
 import {
   ChangeRequestTransition,
   ChangeRequestTransitionResponse,
-} from "../../../../state/ducks/changeRequest/types";
-import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
-import { dashboardTodoActions } from "../../../../state/ducks/dashboard.new/todo";
+} from '../../../../state/ducks/changeRequest/types';
+import { dashboardMyFeedsActions } from '../../../../state/ducks/dashboard.new/my.feeds';
+import { dashboardTodoActions } from '../../../../state/ducks/dashboard.new/todo';
 import {
   EffectiveDateFormValues,
   PasswordFormValues,
-} from "../../../change.request/form/types";
-import { toastSuccess } from "../../../components/notifications";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import Colors from "../../../layout/theme/utils/colors";
-import { Translation } from "../../../translations/types";
-import TransitionDialog from "./transitionDialog/TransitionDialog";
+} from '../../../change.request/form/types';
+import { toastSuccess } from '../../../components/notifications';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import Colors from '../../../layout/theme/utils/colors';
+import { Translation } from '../../../translations/types';
+import TransitionDialog from './transitionDialog/TransitionDialog';
 
 interface Props {
   changeRequestId: string;
@@ -54,13 +54,13 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       onSuccess && onSuccess();
       effectiveDateDialog.close();
       transitionDialog.close();
-      toastSuccess(<><div style={{ display: "flex" }}>
-        <div><SuccessIcon style={{ height: "30px" }}/></div>
+      toastSuccess(<><div style={{ display: 'flex' }}>
+        <div><SuccessIcon style={{ height: '30px' }}/></div>
         <div style={{ color: Colors.black }}>
-          <div><span style={{ fontWeight: "bold" }}>
+          <div><span style={{ fontWeight: 'bold' }}>
             <Text translation={`approvalRequest.status.${response?.state}` as Translation}/></span></div>
-          {response?.state === "IN_REVIEW" ?
-            <div><Text translation={"approvalRequest.status.message.IN_REVIEW_PENDING" as Translation}
+          {response?.state === 'IN_REVIEW' ?
+            <div><Text translation={'approvalRequest.status.message.IN_REVIEW_PENDING' as Translation}
             /> </div> :
             <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
               values={{ crId: response?.crId, title: response?.title }} />

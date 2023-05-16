@@ -1,30 +1,30 @@
-import { Avatar, Box, Collapse, Grid, IconButton, List, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
-import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
-import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
-import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { changeRequestEditPath } from "../../../../change.request/utils/paths";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import Text from "../../../../components/Text";
-import useDialog from "../../../../hooks/useDialog";
-import Colors from "../../../../layout/theme/utils/colors";
-import ApprovalTitle from "../../common/ApprovalTitle/presenter";
-import { getDocIcon } from "../../common/DocIcon";
-import DocId from "../../common/DocId/presenter";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { DocTypeGroups } from "../../common/types";
-import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
-import useStyles from "./taskApproval.styles";
-import DismissAction from "../../common/DismissAction";
+import { Avatar, Box, Collapse, Grid, IconButton, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
+import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
+import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
+import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
+import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { changeRequestEditPath } from '../../../../change.request/utils/paths';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
+import useDialog from '../../../../hooks/useDialog';
+import Colors from '../../../../layout/theme/utils/colors';
+import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import { getDocIcon } from '../../common/DocIcon';
+import DocId from '../../common/DocId/presenter';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { DocTypeGroups } from '../../common/types';
+import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
+import useStyles from './taskApproval.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string;
@@ -73,7 +73,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [viewHoverItem, setViewHoverItem] = React.useState("");
+  const [viewHoverItem, setViewHoverItem] = React.useState('');
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -93,7 +93,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setViewHoverItem(id);
   };
   const onMouseLeaveViewIcon = () => {
-    setViewHoverItem("");
+    setViewHoverItem('');
   };
   const onMouseLeaveActionIcons = () => {
     setApproveHover(false);
@@ -156,7 +156,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
               className={classes.avatar}
             >
-              {getInitalsFromName(docRevOwnerName || "")}
+              {getInitalsFromName(docRevOwnerName || '')}
             </Avatar>
           )}
         </ListItemAvatar>
@@ -195,7 +195,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId}/>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle  url={changeRequestEditPath(arChangeRequestId)} title={title || ""}/>
+                  <ApprovalTitle  url={changeRequestEditPath(arChangeRequestId)} title={title || ''}/>
                 </Grid>
               </Grid>
               <Grid

@@ -1,8 +1,8 @@
-import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { FBPOApprovalMatrixDialogProps } from "../FBPOApprovalMatrix.types";
-import FBPOApprovalMatrixForm from "./FBPOApprovalMatrixForm";
+import { Dialog, DialogContent, DialogTitle, Typography } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../components/Text';
+import { FBPOApprovalMatrixDialogProps } from '../FBPOApprovalMatrix.types';
+import FBPOApprovalMatrixForm from './FBPOApprovalMatrixForm';
 
 const FBPOApprovalMatrixDialog: React.FunctionComponent<FBPOApprovalMatrixDialogProps> = ({
   onSubmit,

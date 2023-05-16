@@ -1,4 +1,4 @@
-import { Adapter } from "..";
+import { Adapter } from '..';
 
 let currentAdapter: any;
 
@@ -14,7 +14,7 @@ export default function apiClient(
   }
 
   if (!currentAdapter) {
-    throw new Error("You must set an adapter first!");
+    throw new Error('You must set an adapter first!');
   }
 
   return currentAdapter;

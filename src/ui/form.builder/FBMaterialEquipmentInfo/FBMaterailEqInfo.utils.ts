@@ -1,5 +1,5 @@
-import { find, isEqual, keys, omit, union, unionWith } from "lodash";
-import { FBMEQItemStatus, GenericItem, MaterialAndEquipment } from "./FBMaterailEqInfo.types";
+import { find, isEqual, keys, omit, union, unionWith } from 'lodash';
+import { FBMEQItemStatus, GenericItem, MaterialAndEquipment } from './FBMaterailEqInfo.types';
 
 const getItemStatus = (
   childItem?: GenericItem,
@@ -17,7 +17,7 @@ const getItemStatus = (
   return FBMEQItemStatus.Removed;
 };
 
-const normalizeItem = (item: GenericItem) => omit(item, ["quantity", "unit"]);
+const normalizeItem = (item: GenericItem) => omit(item, ['quantity', 'unit']);
 
 const calculateSectionDiff = <K extends (GenericItem)[]>(childItems: K, parentItems: K): K => {
   const allItems = unionWith(

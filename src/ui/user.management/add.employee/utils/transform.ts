@@ -1,5 +1,5 @@
-import { AddEmployeeRequest } from "../../../../state/ducks/userManagement/types";
-import { AddEmployeeFormValues } from "../form.container";
+import { AddEmployeeRequest } from '../../../../state/ducks/userManagement/types';
+import { AddEmployeeFormValues } from '../form.container';
 
 export const transformToAddEmployeeRequest = (values: AddEmployeeFormValues): AddEmployeeRequest => {
   const { name, email } = values;

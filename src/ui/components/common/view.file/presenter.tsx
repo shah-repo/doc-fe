@@ -1,11 +1,11 @@
-import Dialog from "@material-ui/core/Dialog";
-import React, { useMemo } from "react";
-import { Attachment } from "../../../../state/ducks/attachments/types";
-import ViewFileContent from "./components/dialog.content";
-import ViewFileTitle from "./components/dialog.title";
-import { PDF, SUPPORTED_IMAGE_FILES } from "./utils/constants";
-import { styles } from "./utils/styles";
-import { ViewFilePresenterProps } from "./utils/types";
+import Dialog from '@material-ui/core/Dialog';
+import React, { useMemo } from 'react';
+import { Attachment } from '../../../../state/ducks/attachments/types';
+import ViewFileContent from './components/dialog.content';
+import ViewFileTitle from './components/dialog.title';
+import { PDF, SUPPORTED_IMAGE_FILES } from './utils/constants';
+import { styles } from './utils/styles';
+import { ViewFilePresenterProps } from './utils/types';
 
 const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
   handleClose,
@@ -25,7 +25,7 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
       onClose={handleClose}
       open={isOpen}
       classes={{ paper: classes.paper }}
-      maxWidth={isImage ? "xl" : "lg"}
+      maxWidth={isImage ? 'xl' : 'lg'}
       fullWidth={isPDF || isImage}
     >
       <ViewFileTitle

@@ -1,9 +1,9 @@
-import { Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import { styles } from "./LHR.banner.styles";
+import { Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import { styles } from './LHR.banner.styles';
 
 interface LHRBannerProps{
   documentRevision: DocumentRevision;
@@ -21,7 +21,7 @@ const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }
   if (!lhrData?.part.docRevId || !lhrData?.part.documentId) {
     return null;
   }
-  const url = documentVersionPath(lhrData?.part.docRevId || "", lhrData?.part.documentId || "");
+  const url = documentVersionPath(lhrData?.part.docRevId || '', lhrData?.part.documentId || '');
 
   return (
     <Typography className={classes.container}>

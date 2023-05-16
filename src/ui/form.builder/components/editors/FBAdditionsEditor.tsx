@@ -1,11 +1,11 @@
-import { get } from "lodash";
-import React from "react";
-import { FBGroupEditorOptions } from "../../defaults/editor";
-import { FBAdditionEditorProps } from "../../types/editors/additions";
-import FBCheckboxGroup from "../inputs/FBCheckboxGroup";
+import { get } from 'lodash';
+import React from 'react';
+import { FBGroupEditorOptions } from '../../defaults/editor';
+import { FBAdditionEditorProps } from '../../types/editors/additions';
+import FBCheckboxGroup from '../inputs/FBCheckboxGroup';
 
 const FBAdditionsEditor: React.FunctionComponent<FBAdditionEditorProps> = ({
-  type = "",
+  type = '',
   contextLabel,
 }) => (
   <FBCheckboxGroup

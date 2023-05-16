@@ -4,7 +4,7 @@ export interface SMStoreProps {
   loading: Map<string, boolean>;
 }
 
-export type SMStoreRequestMethod = "get" | "post" | "patch" | "delete";
+export type SMStoreRequestMethod = 'get' | 'post' | 'patch' | 'delete';
 
 interface SMStoreResponse {
   abort: () => void;

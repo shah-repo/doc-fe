@@ -1,50 +1,50 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 const commonButtonStyles = {
-  "margin": 0,
-  "boxShadow": "none",
-  "borderRadius": 100,
-  "text-transform": "capitalize",
+  'margin': 0,
+  'boxShadow': 'none',
+  'borderRadius': 100,
+  'text-transform': 'capitalize',
 };
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
       background: Colors.medium_blue,
       color: Colors.white,
-      boxShadow: "none",
+      boxShadow: 'none',
       margin: 0,
     },
     cancelButton: {
       background: Colors.light_blue,
       color: Colors.medium_blue,
-      boxShadow: "none",
+      boxShadow: 'none',
       margin: 0,
     },
     dialogPaper: {
-      overflowY: "unset",
-      minWidth: "400px",
+      overflowY: 'unset',
+      minWidth: '400px',
     },
     dialogContent: {
-      overflowY: "unset",
+      overflowY: 'unset',
     },
     createButton: {
       ...commonButtonStyles,
-      "paddingRight": theme.spacing(2.5),
-      "paddingLeft": theme.spacing(2.5),
-      "background": Colors.navy,
-      "color": Colors.white,
-      "&:hover": {
+      'paddingRight': theme.spacing(2.5),
+      'paddingLeft': theme.spacing(2.5),
+      'background': Colors.navy,
+      'color': Colors.white,
+      '&:hover': {
         background: Colors.navy,
       },
     },
     templateRadioGroup: {
-      maxHeight: "500px",
-      overflowY: "auto",
-      width: "100%",
-      flexWrap: "unset",
-      WebkitFlexWrap: "unset",
-      marginBottom: "10px",
+      maxHeight: '500px',
+      overflowY: 'auto',
+      width: '100%',
+      flexWrap: 'unset',
+      WebkitFlexWrap: 'unset',
+      marginBottom: '10px',
     },
     exportListbutton: {
       ...commonButtonStyles,

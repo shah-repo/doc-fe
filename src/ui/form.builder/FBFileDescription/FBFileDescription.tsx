@@ -1,6 +1,6 @@
-import React from "react";
-import { FBFileDescriptionProps, FBFilePresenterIcon, FBForm, FBTextField } from "..";
-import { withFBFileDescription } from "./FBFileDescription.wrap";
+import React from 'react';
+import { FBFileDescriptionProps, FBFilePresenterIcon, FBForm, FBTextField } from '..';
+import { withFBFileDescription } from './FBFileDescription.wrap';
 
 const FBFileDescription: React.FunctionComponent<FBFileDescriptionProps> = ({
   formState,

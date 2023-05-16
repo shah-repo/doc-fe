@@ -1,6 +1,6 @@
-import React from "react";
-import { FB, FBApprovalPasswordFormActions, FBFormState } from "..";
-import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
+import React from 'react';
+import { FB, FBApprovalPasswordFormActions, FBFormState } from '..';
+import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 
 export const withFBApprovalPasswordForm = (
   Component: React.FunctionComponent<FBApprovalPasswordFormProps>,
@@ -15,12 +15,12 @@ export const withFBApprovalPasswordForm = (
 
     const onDialogClose = () => {
       dialogState?.closeDialog();
-      formState?.setFieldValue("password", null);
+      formState?.setFieldValue('password', null);
     };
 
     const onDialogApprove = () => {
-      const password = formState?.getFieldValue("password");
-      approvalTransition?.("approve", approvalId, password);
+      const password = formState?.getFieldValue('password');
+      approvalTransition?.('approve', approvalId, password);
       onDialogClose();
     };
 
@@ -36,6 +36,6 @@ export const withFBApprovalPasswordForm = (
       formState,
     });
   };
-  Comp.displayName = "withFBApprovalPasswordForm";
+  Comp.displayName = 'withFBApprovalPasswordForm';
   return Comp;
 };

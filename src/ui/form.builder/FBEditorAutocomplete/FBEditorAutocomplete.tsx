@@ -1,8 +1,8 @@
-import { filter } from "lodash";
-import React from "react";
-import { FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import { filter } from 'lodash';
+import React from 'react';
+import { FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   children,

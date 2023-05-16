@@ -1,18 +1,18 @@
 /* eslint-disable arrow-body-style */
-import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import React from "react";
-import { useSelector } from "react-redux";
-import { ReactComponent as NewTabIcon } from "../../../assets/images/new_tab.svg";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { ApplicationState } from "../../../state/reducers";
-import AsyncGate from "../../components/AsyncGate";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import { DialogHandler } from "../../hooks/useDialog";
-import ChangeRequestUpdateContainer from "../ChangeRequestUpdate.container";
-import { changeRequestPreviewPath } from "../utils/paths";
-import useStyles from "./ChangeRequestEditDialog.styles";
+import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { ReactComponent as NewTabIcon } from '../../../assets/images/new_tab.svg';
+import { changeRequestsActions, changeRequestsSelectors } from '../../../state/ducks/changeRequest';
+import { ApplicationState } from '../../../state/reducers';
+import AsyncGate from '../../components/AsyncGate';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import { DialogHandler } from '../../hooks/useDialog';
+import ChangeRequestUpdateContainer from '../ChangeRequestUpdate.container';
+import { changeRequestPreviewPath } from '../utils/paths';
+import useStyles from './ChangeRequestEditDialog.styles';
 
 interface Props {
   changeRequestId: string;
@@ -57,7 +57,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
         onSubmit={(event: React.FormEvent) => event.stopPropagation()}
         id="ApprovalRequest-dialog"
       >
-        <DialogTitle style={{ display: "flex" }} disableTypography>
+        <DialogTitle style={{ display: 'flex' }} disableTypography>
           <Typography className={classes.heading}>
             <Text translation="approvalRequest.dialog.title" />
           </Typography>

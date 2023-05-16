@@ -1,8 +1,8 @@
-import { DTMAddRow } from "../types";
+import { DTMAddRow } from '../types';
 
 export const NewRowObject: DTMAddRow = {
-  documentTypeName: "",
-  documentTypeAcronym: "",
+  documentTypeName: '',
+  documentTypeAcronym: '',
   privateNumberPool: false,
   canRedLine: false,
   isQms: false,
@@ -10,7 +10,7 @@ export const NewRowObject: DTMAddRow = {
   defaultTraining: false,
   startingNumber: 1,
   hiddenForCreationForUsersWithoutTags: [],
-  group: "",
+  group: '',
   category: null,
   schema: [],
   fieldsConfig: undefined,

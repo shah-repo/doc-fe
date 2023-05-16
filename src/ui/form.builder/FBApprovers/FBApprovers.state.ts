@@ -1,8 +1,8 @@
-import { isEmpty, map } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBApproversBody, FBApproversConstructor, FBJoinedEmployee, FBRequiredApprover } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { isEmpty, map } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBApproversBody, FBApproversConstructor, FBJoinedEmployee, FBRequiredApprover } from '..';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBApproversState extends FBRequest<FBRequiredApprover[], FBApproversBody> {
 
@@ -30,7 +30,7 @@ class FBApproversState extends FBRequest<FBRequiredApprover[], FBApproversBody> 
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,
-        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], "id"),
+        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], 'id'),
       };
       return group;
     }, {});
@@ -38,9 +38,9 @@ class FBApproversState extends FBRequest<FBRequiredApprover[], FBApproversBody> 
   };
 
   @action setValue = (value: string[]) =>
-    set(this, "value", value);
+    set(this, 'value', value);
 
-  @action setCheckedGroups = (groups: FBRequiredApprover[]) => set(this, "checkedGroups", groups);
+  @action setCheckedGroups = (groups: FBRequiredApprover[]) => set(this, 'checkedGroups', groups);
 }
 
 export default FBApproversState;

@@ -1,5 +1,5 @@
-import { Dictionary } from "lodash";
-import { FBFormState, FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
+import { Dictionary } from 'lodash';
+import { FBFormState, FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from '..';
 
 export interface FBValidationRelatedRules {
   name: string;
@@ -7,8 +7,8 @@ export interface FBValidationRelatedRules {
 }
 
 export enum FBFormMode {
-  add = "form.builder.add",
-  edit = "form.builder.edit",
+  add = 'form.builder.add',
+  edit = 'form.builder.edit',
 }
 
 export interface FBFormProps {
@@ -22,7 +22,7 @@ export interface FBFormProps {
   includeLocking?: boolean;
 }
 
-export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues" | "workspaceMode">
+export type FBFormConstructor = Pick<FBFormProps, 'schema' | 'initialValues' | 'workspaceMode'>
 & {
   workspaceState?: FBWorkspaceState;
 };

@@ -1,5 +1,5 @@
-import { action, observable } from "mobx";
-import { FBMediaProps } from "..";
+import { action, observable } from 'mobx';
+import { FBMediaProps } from '..';
 
 class FBMediaAlbumFieldStore {
   @observable public data = new Map<string, any>();

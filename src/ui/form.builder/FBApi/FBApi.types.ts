@@ -1,4 +1,4 @@
-import { ApiActionMethod } from "../../../state/types";
+import { ApiActionMethod } from '../../../state/types';
 
 interface Response {
   abort: () => void;

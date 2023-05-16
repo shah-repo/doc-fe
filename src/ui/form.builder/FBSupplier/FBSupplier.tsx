@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInput, FBProvider, FBSupplierProps } from "..";
-import { FBButtonStyles } from "../styles/FBButton.styles";
-import { withFBSupplier } from "./FBSupplier.wrap";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInput, FBProvider, FBSupplierProps } from '..';
+import { FBButtonStyles } from '../styles/FBButton.styles';
+import { withFBSupplier } from './FBSupplier.wrap';
 
 const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   handleAdd,

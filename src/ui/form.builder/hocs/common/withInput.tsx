@@ -1,14 +1,14 @@
-import { Dictionary, get, includes, isEmpty, map, pick } from "lodash";
-import { observer, useObserver } from "mobx-react";
-import React from "react";
-import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
-import FBStore from "../../stores/ui/FBStore";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { FBInputProps } from "../../types/common";
-import { FBTemplateSchema } from "../../types/store";
-import { withFormik } from "./withFormik";
-import { withOnChange } from "./withOnChange";
-import { withValidation } from "./withValidation";
+import { Dictionary, get, includes, isEmpty, map, pick } from 'lodash';
+import { observer, useObserver } from 'mobx-react';
+import React from 'react';
+import FBDynamicValidatorStore from '../../stores/ui/FBDynamicValidatorStore';
+import FBStore from '../../stores/ui/FBStore';
+import FBValidatorStore from '../../stores/ui/FBValidatorStore';
+import { FBInputProps } from '../../types/common';
+import { FBTemplateSchema } from '../../types/store';
+import { withFormik } from './withFormik';
+import { withOnChange } from './withOnChange';
+import { withValidation } from './withValidation';
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -16,8 +16,8 @@ export const withInput = <T extends FBInputProps>(
   const Comp = ({
     form,
     field,
-    name = "",
-    type = "",
+    name = '',
+    type = '',
     children,
     value,
     defaultValue,
@@ -34,31 +34,31 @@ export const withInput = <T extends FBInputProps>(
       get(FBStore.getValues(), name) ||
       defaultValue ||
       get(FBValidatorStore.formValues, name) ||
-      "";
+      '';
 
     error = Boolean(get(form, `errors.${name}`));
     helperText =
       (error && get(form, `errors.${name}`)) ||
       FBDynamicValidatorStore.helperText[name];
 
-    if (FBStore.mode === "form") {
+    if (FBStore.mode === 'form') {
       const isFieldHidden = isEmpty(helperText) && isEmpty(field?.value);
-      hidden = includes(validationMode, "ValidationHidden") && isFieldHidden;
+      hidden = includes(validationMode, 'ValidationHidden') && isFieldHidden;
       disabled =
-        (includes(validationMode, "ValidationDisabled") && isFieldHidden) ||
+        (includes(validationMode, 'ValidationDisabled') && isFieldHidden) ||
         disabled;
     }
 
     children = map(elements, (el) => React.cloneElement(
       el as React.ReactElement, {
         name,
-        ...((type !== "autocomplete" && type !== "texteditor") && { value }),
-        ...(type === "texteditor" && { defaultValue: value }),
+        ...((type !== 'autocomplete' && type !== 'texteditor') && { value }),
+        ...(type === 'texteditor' && { defaultValue: value }),
         type,
         error,
         checked: value,
         disabled,
-        ...pick(props, ["onChange", "afterChange"]),
+        ...pick(props, ['onChange', 'afterChange']),
       },
     ));
 

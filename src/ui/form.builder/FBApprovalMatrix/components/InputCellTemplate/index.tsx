@@ -3,6 +3,7 @@ import { get, set, debounce } from 'lodash';
 import { Input, InputProps } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
 import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { translate } from '../../../../../common/intl';
 
 const InputCellTemplate: CellTemplate = (props) => {
   const { dataItem, field, dataIndex, column, onChange } = props;
@@ -33,7 +34,7 @@ const InputCellTemplate: CellTemplate = (props) => {
 
   return (
     <Input
-      placeholder={title}
+      placeholder={translate(title)}
       defaultValue={value}
       onChange={handleChange}
     />

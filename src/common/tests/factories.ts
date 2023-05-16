@@ -1,4 +1,4 @@
-import CallbackHandler from "../callbackHandler";
+import CallbackHandler from '../callbackHandler';
 
 export const getCallbackHandler = <T>(): CallbackHandler<T> => ({
   execute: jest.fn(),

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { InDraftAROption, TemplateOption } from "../../../../change.request/form/types";
-import { Dialog } from "../../../../components/dialogs";
-import { Autocomplete, FormField } from "../../../../components/forms/fields-next";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import useStyles from "./ApproveAndRelease.styles";
+import React, { useState } from 'react';
+import { InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
+import { Dialog } from '../../../../components/dialogs';
+import { Autocomplete, FormField } from '../../../../components/forms/fields-next';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import useStyles from './ApproveAndRelease.styles';
 
 type Option = TemplateOption & InDraftAROption;
 

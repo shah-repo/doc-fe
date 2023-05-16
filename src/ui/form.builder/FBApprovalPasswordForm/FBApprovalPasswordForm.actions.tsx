@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBSubmitButton } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
-import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBSubmitButton } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
+import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 
 const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   onDialogApprove,

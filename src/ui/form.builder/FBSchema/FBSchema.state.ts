@@ -1,6 +1,6 @@
-import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from "lodash";
-import { action, get, observable, set } from "mobx";
-import React from "react";
+import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from 'lodash';
+import { action, get, observable, set } from 'mobx';
+import React from 'react';
 import {
   FBActionField,
   FBApproval,
@@ -10,69 +10,69 @@ import {
   FBInputProps,
   FBInputType,
   FBSchemaProps,
-} from "..";
-import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
-import FBApprovalMatrixFieldRoles from "../FBApprovalMatrixField/FBApprovalMatrixFieldRoles";
-import FBApprovals from "../FBApprovals/FBApprovals";
-import FBApprovers from "../FBApprovers/FBApprovers";
-import FBBlankTplForm from "../FBBlankTplForm/FBBlankTplForm";
-import FBButton from "../FBButton/FBButton";
-import FBCheckbox from "../FBCheckbox/FBCheckbox";
-import FBDatePicker from "../FBDatePicker/FBDatePicker";
-import FBDocumentRevisions from "../FBDocumentRevisions/FBDocumentRevisions";
-import FBDownloadSheetTpl from "../FBDownloadSheetTpl/FBDownloadSheetTpl";
-import FBEBPart from "../FBEBPart/FBEBPart";
-import FBEQMaintenance from "../FBEQMaintenance/FBEQMaintenance";
-import FBFileUpload from "../FBFileUpload/FBFileUpload";
-import FBHelloSign from "../FBHelloSign/FBHelloSign";
-import FBHyperlink from "../FBHyperlink/FBHyperlink";
-import FBInlineApproval from "../FBInlineApproval/FBInlineApproval";
-import FBInstructionsDocument from "../FBInstructionsDocument/FBInstructionsDocument";
-import FBLHRBuild from "../FBLHRBuild/FBLHRBuild";
-import FBLHRStep from "../FBLHRStep/FBLHRStep";
-import FBMediaAlbumField from "../FBMediaAlbumField/FBMediaAlbumField";
-import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
-import FBParagraph from "../FBParagraph/FBParagraph";
-import FBParts from "../FBParts/FBParts";
-import FBPartsSelection from "../FBPartsSelection/FBPartsSelection";
-import FBPOApprovalMatrix from "../FBPOApprovalMatrix/FBPOApprovalMatrix";
-import FBPOApprovals from "../FBPOApprovals/FBPOApprovals";
-import FBPOReceive from "../FBPOReceive/FBPOReceive";
-import FBProcedure from "../FBProcedure/FBProcedure";
-import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
-import FBPurchaseOrder from "../FBPurchaseOrder/FBPurchaseOrder";
-import FBPurchaseOrderSummary from "../FBPurchaseOrder/FBPurchaseOrderSummary";
-import FBQuantityField from "../FBQuantityField/FBQuantityField";
-import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
-import FBRadio from "../FBRadio/FBRadio";
-import FBRadioGroup from "../FBRadioGroup/FBRadioGroup";
-import FBRequestApproval from "../FBRequestApproval/FBRequestApproval";
-import FBSchemaSelect from "../FBSchemaSelect/FBSchemaSelect";
-import FBSection from "../FBSection/FBSection";
-import FBSelect from "../FBSelect/FBSelect";
-import FBSelectDocument from "../FBSelectDocument/FBSelectDocument";
-import FBSubsection from "../FBSubsection/FBSubsection";
-import FBSupplier from "../FBSupplier/FBSupplier";
-import FBTask from "../FBTask/FBTask";
-import FBTextEditor from "../FBTextEditor/FBTextEditor";
-import FBTextField from "../FBTextField/FBTextField";
-import FBTextFieldWithRange from "../FBTextFieldWithRange/FBTextFieldWithRange";
-import FBTimerField from "../FBTimerField/FBTimerField";
-import FBUnitMeasures from "../FBUnitMeasures/FBUnitMeasures";
-import FBZIPUpload from "../FBZIPUpload/FBZIPUpload";
+} from '..';
+import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
+import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
+import FBApprovals from '../FBApprovals/FBApprovals';
+import FBApprovers from '../FBApprovers/FBApprovers';
+import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
+import FBButton from '../FBButton/FBButton';
+import FBCheckbox from '../FBCheckbox/FBCheckbox';
+import FBDatePicker from '../FBDatePicker/FBDatePicker';
+import FBDocumentRevisions from '../FBDocumentRevisions/FBDocumentRevisions';
+import FBDownloadSheetTpl from '../FBDownloadSheetTpl/FBDownloadSheetTpl';
+import FBEBPart from '../FBEBPart/FBEBPart';
+import FBEQMaintenance from '../FBEQMaintenance/FBEQMaintenance';
+import FBFileUpload from '../FBFileUpload/FBFileUpload';
+import FBHelloSign from '../FBHelloSign/FBHelloSign';
+import FBHyperlink from '../FBHyperlink/FBHyperlink';
+import FBInlineApproval from '../FBInlineApproval/FBInlineApproval';
+import FBInstructionsDocument from '../FBInstructionsDocument/FBInstructionsDocument';
+import FBLHRBuild from '../FBLHRBuild/FBLHRBuild';
+import FBLHRStep from '../FBLHRStep/FBLHRStep';
+import FBMediaAlbumField from '../FBMediaAlbumField/FBMediaAlbumField';
+import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
+import FBParagraph from '../FBParagraph/FBParagraph';
+import FBParts from '../FBParts/FBParts';
+import FBPartsSelection from '../FBPartsSelection/FBPartsSelection';
+import FBPOApprovalMatrix from '../FBPOApprovalMatrix/FBPOApprovalMatrix';
+import FBPOApprovals from '../FBPOApprovals/FBPOApprovals';
+import FBPOReceive from '../FBPOReceive/FBPOReceive';
+import FBProcedure from '../FBProcedure/FBProcedure';
+import FBProcedureDiff from '../FBProcedureDiff/FBProcedureDiff';
+import FBPurchaseOrder from '../FBPurchaseOrder/FBPurchaseOrder';
+import FBPurchaseOrderSummary from '../FBPurchaseOrder/FBPurchaseOrderSummary';
+import FBQuantityField from '../FBQuantityField/FBQuantityField';
+import FBQuantityUnitField from '../FBQuantityUnitField/FBQuantityUnitField';
+import FBRadio from '../FBRadio/FBRadio';
+import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
+import FBRequestApproval from '../FBRequestApproval/FBRequestApproval';
+import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
+import FBSection from '../FBSection/FBSection';
+import FBSelect from '../FBSelect/FBSelect';
+import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBSubsection from '../FBSubsection/FBSubsection';
+import FBSupplier from '../FBSupplier/FBSupplier';
+import FBTask from '../FBTask/FBTask';
+import FBTextEditor from '../FBTextEditor/FBTextEditor';
+import FBTextField from '../FBTextField/FBTextField';
+import FBTextFieldWithRange from '../FBTextFieldWithRange/FBTextFieldWithRange';
+import FBTimerField from '../FBTimerField/FBTimerField';
+import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
+import FBZIPUpload from '../FBZIPUpload/FBZIPUpload';
 
 class FBSchemaState {
   public static omitLabel: FBInputType[] = [
-    "section",
-    "subsection",
-    "stepsection",
-    "teststep",
-    "purchaseorder",
-    "task",
-    "blanktplform",
-    "approvals",
-    "eqmaintenance",
-    "lhrstep",
+    'section',
+    'subsection',
+    'stepsection',
+    'teststep',
+    'purchaseorder',
+    'task',
+    'blanktplform',
+    'approvals',
+    'eqmaintenance',
+    'lhrstep',
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -145,7 +145,7 @@ class FBSchemaState {
 
   public static component = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
-    const schemaControl = FBSchemaState.control[type || ""];
+    const schemaControl = FBSchemaState.control[type || ''];
     if (!schemaControl) {
       return;
     }
@@ -157,12 +157,12 @@ class FBSchemaState {
 
   public setValidationSchemaItem = (item: Partial<FBSchemaProps>) => {
     if (!item.name || !item.label) { return; }
-    set(this, "validationSchema", unionBy(this.validationSchema || [], [item], "name"));
+    set(this, 'validationSchema', unionBy(this.validationSchema || [], [item], 'name'));
   };
 
-  public getValidationSchema = () => cloneDeep(get(this, "validationSchema"));
+  public getValidationSchema = () => cloneDeep(get(this, 'validationSchema'));
 
-  @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, "schema"));
+  @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, 'schema'));
 
   @action public getSchemaItem = (name?: string): FBSchemaProps | undefined => {
     if (!name) {
@@ -187,7 +187,7 @@ class FBSchemaState {
           !step.deleted && includes(FBEditorState.pickStepIndex, step.type))),
       },
     }));
-    set(this, "schema", schema);
+    set(this, 'schema', schema);
   };
 
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {

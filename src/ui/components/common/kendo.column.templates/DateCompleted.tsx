@@ -1,8 +1,8 @@
-import React from "react";
-import { useIntl } from "react-intl";
-import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import Tooltip from "../kendo/Tooltip";
-import { CustomGridCellProps } from "../kendo/types";
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import Tooltip from '../kendo/Tooltip';
+import { CustomGridCellProps } from '../kendo/types';
 
 export const DateCompleted = ({
   dataItem,
@@ -15,15 +15,15 @@ export const DateCompleted = ({
   cellRowClick,
 }: CustomGridCellProps) => {
   const intl = useIntl();
-  const date = dataItem[field || ""];
+  const date = dataItem[field || ''];
   const formattedDate = date
     ? getFormattedDateString(date, MomentFormats.DateTimeComplete)
-    : intl.formatMessage({ id: "common.pending" });
+    : intl.formatMessage({ id: 'common.pending' });
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   return (

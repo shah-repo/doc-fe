@@ -1,32 +1,32 @@
-import { GridRowClickEvent } from "@progress/kendo-react-grid";
-import { each, isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, RouteComponentProps, useHistory } from "react-router-dom";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { ApplicationState } from "../../../state/reducers";
-import { getSchemaFromColumns } from "../../common/utils/helpers";
-import { KendoCellTemplates, KendoColumn } from "../../components/common/kendo/types";
-import { DataStateProps, KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
-import { TableColumnProps } from "../../components/table/column/types";
-import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
-import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
-import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { isTranslation } from "../../translations/types";
-import { RouteParams } from "../utils/types";
-import { columnSearchConfiguration, getStaticColumns } from "./helpers";
-import { DocumentTypePresenter } from "./presenter";
+import { GridRowClickEvent } from '@progress/kendo-react-grid';
+import { each, isEmpty } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, RouteComponentProps, useHistory } from 'react-router-dom';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { companySelectors } from '../../../state/ducks/company';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { PageDetailsColumn } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { ApplicationState } from '../../../state/reducers';
+import { getSchemaFromColumns } from '../../common/utils/helpers';
+import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
+import { TableColumnProps } from '../../components/table/column/types';
+import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from '../../constants/urls';
+import { canEditDocumentRevision, documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
+import { documentEditPath, documentPreviewPath } from '../../document.revision/utils/paths';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { isTranslation } from '../../translations/types';
+import { RouteParams } from '../utils/types';
+import { columnSearchConfiguration, getStaticColumns } from './helpers';
+import { DocumentTypePresenter } from './presenter';
 
 const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<RouteParams>> = ({
   match,
@@ -59,8 +59,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   // Remove once column value modified on BE
   each(documentCategory.columns, (col) => {
     const label = col?.label as string;
-    if (col && label === "PO Status") {
-      col.valuePath = "poStatus";
+    if (col && label === 'PO Status') {
+      col.valuePath = 'poStatus';
     }
   });
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
@@ -73,7 +73,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
         return {
           key: column.valuePath as keyof DocumentRevision,
           // version is a hack need to insert inside configuration 20.19
-          label: column.label === "Version" as string ? "common.revision" : column.label,
+          label: column.label === 'Version' as string ? 'common.revision' : column.label,
           searchOptions,
         };
       },
@@ -116,7 +116,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     if (isEmpty(tableCriteria.queryDict)) {
       const dataState: DataStateProps = {
         filter: {
-          logic: "and",
+          logic: 'and',
           filters: [],
         },
         sort: [],
@@ -133,7 +133,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   }, [tableCriteria.queryDict, categoryName]);
 
   const ownerFieldsMapping = {
-    "owner.user.name": ["owner.user.avatar", "owner.user.initialColor"],
+    'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
   };
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
@@ -152,7 +152,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     } else if (columnDetails.searchOptions?.statusTemplate) {
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
-      upDateField = "displayStatus";
+      upDateField = 'displayStatus';
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     }
@@ -163,7 +163,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     return {
       field: upDateField,
       title: columnLabel,
-      filter: "text",
+      filter: 'text',
       width: 15,
       groupable: dynamicCellGroupable,
       cell: dynamicCellTemplate,
@@ -172,7 +172,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       showColumnMenu: true,
       filterCell: filterCellTemplate,
       key: { index },
-      extraFields: ["id", "document.id", ...ownerFieldsMapping[upDateField] || []],
+      extraFields: ['id', 'document.id', ...ownerFieldsMapping[upDateField] || []],
     };
   });
   const schema = getSchemaFromColumns(kendoColumnDef as KendoColumn[]);

@@ -1,26 +1,26 @@
-import { Box, Grid, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
-import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
-import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
-import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
-import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
-import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { TrainingStatus, TrainingStatusLabels } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import DocId from "../../common/DocId/presenter";
-import DocTitle from "../../common/DocTitle/presenter";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { HoverStyleChip } from "./DefaultHoverStyleChip";
-import { NormalStyleChip } from "./DefaultNormalStyleChip";
-import useStyles from "./DefaultTraining.styles";
-import DismissAction from "../../common/DismissAction";
+import { Box, Grid, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
+import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
+import { ReactComponent as OverdueIcon } from '../../../../../assets/images/overdue_status.svg';
+import { ReactComponent as OverdueWhiteIcon } from '../../../../../assets/images/overdue_status_white.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as TrainingIcon } from '../../../../../assets/images/training.svg';
+import { ReactComponent as WarningIcon } from '../../../../../assets/images/warning_status.svg';
+import { ReactComponent as WarningWhiteIcon } from '../../../../../assets/images/warning_status_white.svg';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { TrainingStatus, TrainingStatusLabels } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import DocId from '../../common/DocId/presenter';
+import DocTitle from '../../common/DocTitle/presenter';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { HoverStyleChip } from './DefaultHoverStyleChip';
+import { NormalStyleChip } from './DefaultNormalStyleChip';
+import useStyles from './DefaultTraining.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string;
@@ -79,8 +79,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
-  docDocumentId = docDocumentId || "";
-  docRevId = docRevId || "";
+  docDocumentId = docDocumentId || '';
+  docRevId = docRevId || '';
 
   const isPinShown = pinLineItem && !pinned;
   const isUnpinShown = unPinLineItem && pinned;
@@ -117,8 +117,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     <Text
                       translation={
                         status === TrainingStatus.OVERDUE
-                          ? "training.your"
-                          : "training.your.on"
+                          ? 'training.your'
+                          : 'training.your.on'
                       }
                     />
                   </Typography>
@@ -142,7 +142,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                   noWrap
                 >
-                  {TrainingStatus.ASSIGNED !== status ? "is" : ""}
+                  {TrainingStatus.ASSIGNED !== status ? 'is' : ''}
                   {TrainingStatus.ASSIGNED === status && (
                     <Text translation="training.assign" />
                   )}

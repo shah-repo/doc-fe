@@ -1,6 +1,6 @@
-import { createSelector } from "reselect";
-import { ApplicationState } from "../../reducers";
-import { AsyncState } from "../../types";
+import { createSelector } from 'reselect';
+import { ApplicationState } from '../../reducers';
+import { AsyncState } from '../../types';
 
 const allIds = (state: ApplicationState) => state.documents.allIds;
 const reviewIds = (state: ApplicationState) => state.documents.reviewIds;

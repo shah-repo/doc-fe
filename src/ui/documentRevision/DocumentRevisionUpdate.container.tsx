@@ -1,30 +1,30 @@
-import { debounce, get, has, isEmpty, map, pick, set } from "lodash";
-import React, { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { DocumentRevisionSummary, SM } from "../../App";
-import { authSelectors } from "../../state/ducks/auth";
-import { GroupTag } from "../../state/ducks/auth/types";
-import { companyActions, companySelectors } from "../../state/ducks/company";
-import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
-import { FormContext } from "../components/forms/FormContext";
-import { compareValuesToSubmit } from "../components/forms/helpers";
-import { FBDAMFields } from "../form.builder";
-import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
-import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
-import FBDataStore from "../form.builder/FBStore/FBDataStore";
-import FBStore from "../form.builder/FBStore/FBStore";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
-import useDocumentTitle from "../hooks/useDocumentTitle";
-import useGetHasTag from "../hooks/useGetHasTag";
-import { isOperator } from "./DocumentRevisionDisplay.container";
-import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
-import { DocumentRevisionFormValues } from "./forms/types";
-import { checkIsDocumentDAM, checkIsDocumentPO, checkIsDocumentReceivable } from "./helpers/checkDocumentGroup";
-import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
-import { isDocumentRevisionHasOutput } from "./helpers/documentRevisionStatus";
+import { debounce, get, has, isEmpty, map, pick, set } from 'lodash';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DocumentRevisionSummary, SM } from '../../App';
+import { authSelectors } from '../../state/ducks/auth';
+import { GroupTag } from '../../state/ducks/auth/types';
+import { companyActions, companySelectors } from '../../state/ducks/company';
+import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
+import { FormContext } from '../components/forms/FormContext';
+import { compareValuesToSubmit } from '../components/forms/helpers';
+import { FBDAMFields } from '../form.builder';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
+import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
+import FBDataStore from '../form.builder/FBStore/FBDataStore';
+import FBStore from '../form.builder/FBStore/FBStore';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
+import useDocumentTitle from '../hooks/useDocumentTitle';
+import useGetHasTag from '../hooks/useGetHasTag';
+import { isOperator } from './DocumentRevisionDisplay.container';
+import DocumentRevisionForm from './forms/DocumentRevisionForm.container';
+import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from './forms/transform';
+import { DocumentRevisionFormValues } from './forms/types';
+import { checkIsDocumentDAM, checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDocumentGroup';
+import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
+import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
 
 interface Props {
   documentId?: string;
@@ -68,7 +68,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       if (redlineActive) {
         dispatch(companyActions.redlineConfig(false));
       }
-      setDoNotPrompt(true);
+      if (!isPOEditState) {
+        setDoNotPrompt(true);
+      }
     },
   });
 
@@ -103,7 +105,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         FBStore.audit.set({
           url: FBEndpoint.DocumentRevisionAudit,
           urlValues: { documentId: documentRevision.id },
-          method: "get",
+          method: 'get',
         });
       }
 
@@ -119,16 +121,16 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
-      set(values, "formInput", formStateContext?._currentValue);
+      set(values, 'formInput', formStateContext?._currentValue);
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-    const formInput = get(dataToSubmit, "formInput");
+    const formInput = get(dataToSubmit, 'formInput');
 
     if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
-      set(dataToSubmit, "formInput", {
+      set(dataToSubmit, 'formInput', {
         ...formInput, ...{
-          [FBDAMFields.DAM]: FBStore.damData?.["approvalMatrix"],
-          [FBDAMFields.DAR]: FBStore.damData?.["approvalRoles"],
+          [FBDAMFields.DAM]: FBStore.damData?.['approvalMatrix'],
+          [FBDAMFields.DAR]: FBStore.damData?.['approvalRoles'],
         },
       });
     }
@@ -160,27 +162,27 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         });
         return am;
       });
-      set(dataToSubmit, "formInput", {
+      set(dataToSubmit, 'formInput', {
         ...formInput,
         [FBDAMFields.DAR]: approvalRoles, [FBDAMFields.DAM]: approvalMatrix,
       });
     }
-    const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
+    const redlineDataToSubmit = pick(values, 'schema', 'formInput', 'redline');
 
     // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
     if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
       const hasReceivableKeyExists = Object.keys(
         formStateContext?._currentValue
-      )?.some((key) => key.includes("receivable"));
+      )?.some((key) => key.includes('receivable'));
       if (hasReceivableKeyExists) {
-        set(dataToSubmit, "formInput", formStateContext?._currentValue);
+        set(dataToSubmit, 'formInput', formStateContext?._currentValue);
       }
     }
 
     if (redlineActive) {
       if (
         isEmpty(dataToSubmit) ||
-        (Object.keys(dataToSubmit).includes("formInput") &&
+        (Object.keys(dataToSubmit).includes('formInput') &&
           Object.keys(dataToSubmit).length === 1)
       ) {
         dispatch(companyActions.redlineConfig(false));
@@ -216,6 +218,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
+        setDoNotPrompt={setDoNotPrompt}
         asyncState={async.asyncState}
         onSubmit={debouncedSubmit}
         initialValues={initialValues}

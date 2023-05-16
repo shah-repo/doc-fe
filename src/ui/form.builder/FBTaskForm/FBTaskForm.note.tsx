@@ -1,6 +1,6 @@
-import React from "react";
-import { FBFileUpload, FBForm, FBSchema, FBTaskFormProps, FBTextField } from "..";
-import { withFBTaskForm } from "./FBTaskForm.wrap";
+import React from 'react';
+import { FBFileUpload, FBForm, FBSchema, FBTaskFormProps, FBTextField } from '..';
+import { withFBTaskForm } from './FBTaskForm.wrap';
 
 const FBTaskFormNote: React.FunctionComponent<FBTaskFormProps> = ({
   formState,

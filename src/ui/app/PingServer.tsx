@@ -1,9 +1,9 @@
-import { throttle } from "lodash";
-import React, { useCallback, useEffect } from "react";
-import IdleTimer from "react-idle-timer";
-import { useDispatch, useSelector } from "react-redux";
-import { authActions, authSelectors } from "../../state/ducks/auth";
-import useDialog from "../hooks/useDialog";
+import { throttle } from 'lodash';
+import React, { useCallback, useEffect } from 'react';
+import IdleTimer from 'react-idle-timer';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions, authSelectors } from '../../state/ducks/auth';
+import useDialog from '../hooks/useDialog';
 
 const tenMinutes = 1000 * 60 * 10;
 

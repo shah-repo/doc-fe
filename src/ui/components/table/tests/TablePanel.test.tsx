@@ -1,25 +1,25 @@
-import { mount } from "enzyme";
-import React from "react";
-import { IntlProvider } from "react-intl";
-import { Document } from "../../../../state/ducks/documents/types";
-import messagesEn from "../../../translations/en.json";
-import { StyledTableHeader } from "../column/styles";
-import { TableColumnProps } from "../column/types";
-import { TablePanel } from "../panel";
-import { TableSelectionProps } from "../types";
+import { mount } from 'enzyme';
+import React from 'react';
+import { IntlProvider } from 'react-intl';
+import { Document } from '../../../../state/ducks/documents/types';
+import messagesEn from '../../../translations/en.json';
+import { StyledTableHeader } from '../column/styles';
+import { TableColumnProps } from '../column/types';
+import { TablePanel } from '../panel';
+import { TableSelectionProps } from '../types';
 
-jest.mock("react-redux", () => ({
+jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
   useSelector: () => ({
     queryDict: {},
   }),
 }));
 
-describe("TablePanel component tests", () => {
+describe('TablePanel component tests', () => {
   const messages = { en: messagesEn };
-  const language = "en";
+  const language = 'en';
 
-  const noRowsTranslation = "table.no.results.found";
+  const noRowsTranslation = 'table.no.results.found';
 
   const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {
     // do nothing
@@ -27,28 +27,28 @@ describe("TablePanel component tests", () => {
 
   const columns: TableColumnProps<Document>[] = [
     {
-      key: "name",
-      label: "header.title",
+      key: 'name',
+      label: 'header.title',
     },
     {
-      key: "owner",
-      label: "header.title",
+      key: 'owner',
+      label: 'header.title',
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.user.email,
       },
     },
     {
-      key: "type",
-      label: "login.title",
-      cellType: "LINK",
+      key: 'type',
+      label: 'login.title',
+      cellType: 'LINK',
     },
     {
-      key: "actions",
-      label: "login.title",
-      cellType: "ACTION",
+      key: 'actions',
+      label: 'login.title',
+      cellType: 'ACTION',
       onSelect: onActionSelect,
-      columnOptions: { cellDataGetter: () => ["EDIT"] },
-      cellOptions: { align: "right" },
+      columnOptions: { cellDataGetter: () => ['EDIT'] },
+      cellOptions: { align: 'right' },
     },
   ];
 
@@ -62,7 +62,7 @@ describe("TablePanel component tests", () => {
     </IntlProvider>
   );
 
-  it.skip("should mount", () => {
+  it.skip('should mount', () => {
     const wrapper = mount(getDocumentList());
 
     // Render columns

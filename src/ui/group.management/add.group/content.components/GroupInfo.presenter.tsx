@@ -1,9 +1,9 @@
-import { Box, Typography } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React from "react";
-import Text from "../../../components/Text";
-import { Translation } from "../../../translations/types";
-import { styles } from "./GroupInfo.styles";
+import { Box, Typography } from '@material-ui/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import Text from '../../../components/Text';
+import { Translation } from '../../../translations/types';
+import { styles } from './GroupInfo.styles';
 
 interface Props {
   items: any[];

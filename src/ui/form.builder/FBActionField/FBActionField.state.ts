@@ -1,5 +1,5 @@
-import { toastSuccess } from "../../components/notifications";
-import FBRequest from "../FBApi/FBApi.request";
+import { toastSuccess } from '../../components/notifications';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBActionFieldState extends FBRequest<null, any> {
 
@@ -9,7 +9,7 @@ class FBActionFieldState extends FBRequest<null, any> {
   }
 
   public onSuccess = () => {
-    toastSuccess("Message sent.");
+    toastSuccess('Message sent.');
   };
 }
 

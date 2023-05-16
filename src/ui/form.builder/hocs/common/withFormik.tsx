@@ -1,6 +1,6 @@
-import { Field as FormikField, FieldProps } from "formik";
-import React from "react";
-import { FBInputProps } from "../../types/common";
+import { Field as FormikField, FieldProps } from 'formik';
+import React from 'react';
+import { FBInputProps } from '../../types/common';
 
 export const withFormik = <T extends FBInputProps, U>(
   Component: React.FunctionComponent<T>,

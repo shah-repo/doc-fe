@@ -1,5 +1,5 @@
-import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, RefAttributes, useContext, useEffect, useRef } from "react";
-import { ListChildComponentProps, VariableSizeList } from "react-window";
+import React, { Children, cloneElement, ComponentType, createContext, forwardRef, HTMLAttributes, RefAttributes, useContext, useEffect, useRef } from 'react';
+import { ListChildComponentProps, VariableSizeList } from 'react-window';
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
@@ -9,13 +9,13 @@ const OuterElementType = forwardRef<HTMLDivElement>((props, ref) => {
   const outerProps = useContext(OuterElementContext);
   return <div ref={ref} {...props} {...outerProps} />;
 });
-OuterElementType.displayName = "OuterElementType";
+OuterElementType.displayName = 'OuterElementType';
 
 const InnerElementType = forwardRef<HTMLDivElement>((props, ref) => {
   const outerProps = useContext(InnerElementContext);
-  return <ul {...props} {...outerProps} style={{ height: "auto" }} />;
+  return <ul {...props} {...outerProps} style={{ height: 'auto' }} />;
 });
-InnerElementType.displayName = "InnerElementType";
+InnerElementType.displayName = 'InnerElementType';
 
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
@@ -30,7 +30,7 @@ const renderRow = (props: ListChildComponentProps) => {
     style: {
       ...style,
       top: (style.top as number) + LISTBOX_PADDING,
-      whiteSpace: "nowrap",
+      whiteSpace: 'nowrap',
     },
   });
   return listItem;

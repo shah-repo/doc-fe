@@ -1,10 +1,10 @@
-import { isArray, isEmpty, isObject, isString, isUndefined, size } from "lodash";
-import { IReactionOptions, IReactionPublic, reaction as xReaction } from "mobx";
-import { MobXProviderContext } from "mobx-react";
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { SMProviderProps } from "../../..";
-import { HOME_URL } from "../../../../ui/constants/urls";
+import { isArray, isEmpty, isObject, isString, isUndefined, size } from 'lodash';
+import { IReactionOptions, IReactionPublic, reaction as xReaction } from 'mobx';
+import { MobXProviderContext } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { SMProviderProps } from '../../..';
+import { HOME_URL } from '../../../../ui/constants/urls';
 
 export default class SM {
 
@@ -51,16 +51,16 @@ export default class SM {
   // For the new tabpanel layout
   // This can be removed once all is refactored to new layout
   public static get isNewLayout(): boolean {
-    return SM.pathname.includes("document_revision/");
+    return SM.pathname.includes('document_revision/');
   }
 
   // For the Update PO cases
   public static get isNewVersion(): boolean {
-    return SM.pathname.includes("new-version/");
+    return SM.pathname.includes('new-version/');
   }
 
   public static get isNewCRLayout(): boolean {
-    return SM.pathname.includes("change_request/");
+    return SM.pathname.includes('change_request/');
   }
   public static get isHomeURL(): boolean {
     return SM.pathname === HOME_URL;

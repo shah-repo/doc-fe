@@ -1,8 +1,8 @@
-import { Dictionary } from "lodash";
-import { Group, GroupTag, GroupType, Permission } from "../auth/types";
-import { Id, Nullable, User } from "../common/types";
-import { Company, Employee } from "../company/types";
-import { COMPANY_GROUPS_LIST } from "./constants";
+import { Dictionary } from 'lodash';
+import { Group, GroupTag, GroupType, Permission } from '../auth/types';
+import { Id, Nullable, User } from '../common/types';
+import { Company, Employee } from '../company/types';
+import { COMPANY_GROUPS_LIST } from './constants';
 
 export interface GetEmployeeResponse {
   id: string;
@@ -100,55 +100,55 @@ export interface AuditDetailsProps {
 }
 
 export enum ACTION_TITLE_MAPPING {
-  AddedToGroups = "AddedToGroups",
-  AddedToGroup = "AddedToGroup",
-  CreatedNewUser = "CreatedNewUser",
-  CreatedNewUserEmail = "CreatedNewUserEmail",
-  DeactivateUser = "DeactivateUser",
-  ReactivateUser = "ReactivateUser",
-  ActivateUser = "ActivateUser",
-  Unknown = "Unknown",
-  EmployeeNameUpdated = "EmployeeNameUpdated",
-  DeletedFromGroup = "DeletedFromGroup",
-  DeletedFromGroups = "DeletedFromGroups",
-  AddedUserName = "AddedUserName",
-  AddedUserEmail = "AddedUserEmail",
-  ResetPassword = "ResetPassword",
-  ResentPassword = "ResentPassword",
-  ResetPasswordDescription = "ResetPasswordDescription",
-  ResentPasswordDescription = "ResentPasswordDescription",
-  ForUser = "ForUser",
-  EmployeesDeleteFromGroup = "EmployeesDeleteFromGroup",
-  EmployeesAddedToGroup= "EmployeesAddedToGroup",
-  EmployeesDeleteFromGroups = "EmployeesDeleteFromGroups",
-  EmployeesAddedToGroups= "EmployeesAddedToGroups",
-  RemovedUserEmail="RemovedUserEmail",
-  RemovedUserName="RemovedUserName",
-  RemovedGroupName="RemovedGroupName",
-  GroupNameUpdated = "GroupNameUpdated",
-  AddedGroup = "AddedGroup",
-  AddedMembers = "AddedMembers",
-  AddedMember = "AddedMember",
-  AddedPermissions = "AddedPermissions",
-  AddedTags= "AddedTags",
-  AddedParentGroups="AddedParentGroups",
-  RemovedMembers="RemovedMembers",
-  RemovedMember="RemovedMember",
-  RemovedPermissions="RemovedPermissions",
-  RemovedTags="RemovedTags",
-  RemovedParentGroups="RemovedParentGroups",
-  UpdatedGroups="UpdatedGroups",
-  UpdatedGroup="UpdatedGroup",
-  Removed="Removed",
-  Added="Added",
-  UpdatedAvatar="UpdatedAvatar"
+  AddedToGroups = 'AddedToGroups',
+  AddedToGroup = 'AddedToGroup',
+  CreatedNewUser = 'CreatedNewUser',
+  CreatedNewUserEmail = 'CreatedNewUserEmail',
+  DeactivateUser = 'DeactivateUser',
+  ReactivateUser = 'ReactivateUser',
+  ActivateUser = 'ActivateUser',
+  Unknown = 'Unknown',
+  EmployeeNameUpdated = 'EmployeeNameUpdated',
+  DeletedFromGroup = 'DeletedFromGroup',
+  DeletedFromGroups = 'DeletedFromGroups',
+  AddedUserName = 'AddedUserName',
+  AddedUserEmail = 'AddedUserEmail',
+  ResetPassword = 'ResetPassword',
+  ResentPassword = 'ResentPassword',
+  ResetPasswordDescription = 'ResetPasswordDescription',
+  ResentPasswordDescription = 'ResentPasswordDescription',
+  ForUser = 'ForUser',
+  EmployeesDeleteFromGroup = 'EmployeesDeleteFromGroup',
+  EmployeesAddedToGroup= 'EmployeesAddedToGroup',
+  EmployeesDeleteFromGroups = 'EmployeesDeleteFromGroups',
+  EmployeesAddedToGroups= 'EmployeesAddedToGroups',
+  RemovedUserEmail='RemovedUserEmail',
+  RemovedUserName='RemovedUserName',
+  RemovedGroupName='RemovedGroupName',
+  GroupNameUpdated = 'GroupNameUpdated',
+  AddedGroup = 'AddedGroup',
+  AddedMembers = 'AddedMembers',
+  AddedMember = 'AddedMember',
+  AddedPermissions = 'AddedPermissions',
+  AddedTags= 'AddedTags',
+  AddedParentGroups='AddedParentGroups',
+  RemovedMembers='RemovedMembers',
+  RemovedMember='RemovedMember',
+  RemovedPermissions='RemovedPermissions',
+  RemovedTags='RemovedTags',
+  RemovedParentGroups='RemovedParentGroups',
+  UpdatedGroups='UpdatedGroups',
+  UpdatedGroup='UpdatedGroup',
+  Removed='Removed',
+  Added='Added',
+  UpdatedAvatar='UpdatedAvatar'
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
-  NameSeparator = "-NAME-UPDATED-TO-",
-  DeleteFromGroup = "-DELETED-FROM-GROUP-",
-  AddToGroup = "-ADDED-TO-GROUP-",
-  AvatarUpdated="-AVATAR-UPDATED-FOR-"
+  NameSeparator = '-NAME-UPDATED-TO-',
+  DeleteFromGroup = '-DELETED-FROM-GROUP-',
+  AddToGroup = '-ADDED-TO-GROUP-',
+  AvatarUpdated='-AVATAR-UPDATED-FOR-'
 }
 
 export interface UMAuditProps {

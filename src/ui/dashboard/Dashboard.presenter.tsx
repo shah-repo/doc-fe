@@ -1,16 +1,16 @@
-import { Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { PendingAction, PendingActionType } from "../../state/ducks/dashboard/types";
-import { AsyncState } from "../../state/types";
-import AsyncGate from "../components/AsyncGate";
-import Text from "../components/Text";
-import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
-import CloseApprovalRequest from "./action.types/CloseApprovalRequest";
-import DocumentRevisionApproval from "./action.types/DocumentRevisionApproval";
-import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApproval";
-import TaskApproval from "./action.types/TaskApproval";
-import TrainingRequest from "./action.types/TrainingRequest";
-import { styles } from "./Dashboard.styles";
+import { Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { PendingAction, PendingActionType } from '../../state/ducks/dashboard/types';
+import { AsyncState } from '../../state/types';
+import AsyncGate from '../components/AsyncGate';
+import Text from '../components/Text';
+import ChangeRequestApproval from './action.types/ChangeRequestApproval';
+import CloseApprovalRequest from './action.types/CloseApprovalRequest';
+import DocumentRevisionApproval from './action.types/DocumentRevisionApproval';
+import PurchaseOrderApproval from './action.types/purchaseOrder/PurchaseOrderApproval';
+import TaskApproval from './action.types/TaskApproval';
+import TrainingRequest from './action.types/TrainingRequest';
+import { styles } from './Dashboard.styles';
 
 interface Props {
   loadPendingActions: any;

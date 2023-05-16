@@ -1,10 +1,10 @@
-import { BoxProps } from "@material-ui/core";
-import { EditorProps, EditorState } from "react-draft-wysiwyg";
-import { SMProviderProps, SMTextLocaleProps } from "../../..";
+import { BoxProps } from '@material-ui/core';
+import { EditorProps, EditorState } from 'react-draft-wysiwyg';
+import { SMProviderProps, SMTextLocaleProps } from '../../..';
 
 export type SMTextEditorProps =
-& Pick<EditorProps, "editorState" | "onEditorStateChange" | "toolbar" | "placeholder">
-& Pick<SMProviderProps, "_textEditorState" | "_formState" | "_documentRevisionFormState">
+& Pick<EditorProps, 'editorState' | 'onEditorStateChange' | 'toolbar' | 'placeholder'>
+& Pick<SMProviderProps, '_textEditorState' | '_formState' | '_documentRevisionFormState'>
 & {
   handleMask?: (masked: boolean) => void;
   onBlur?: (ev: any) => void;

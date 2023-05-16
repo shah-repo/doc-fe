@@ -1,14 +1,14 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import { Form, Formik } from "formik";
-import React from "react";
-import { useIntl } from "react-intl";
-import { timeTravelValidator } from "../../../components/forms/fields/validators";
-import { toastError } from "../../../components/notifications";
-import Text from "../../../components/Text";
-import { SQS_TYPES, TimeTravelProps } from "../../types";
-import AsyncNextTask from "../async.next.task";
-import AsyncTime from "../async.time";
-import { styles } from "./time.travel.user.form.styles";
+import { Box, Button, Grid } from '@material-ui/core';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { timeTravelValidator } from '../../../components/forms/fields/validators';
+import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
+import { SQS_TYPES, TimeTravelProps } from '../../types';
+import AsyncNextTask from '../async.next.task';
+import AsyncTime from '../async.time';
+import { styles } from './time.travel.user.form.styles';
 
 interface Props {
   handleTimeTravelUser: (values: TimeTravelProps) => void;
@@ -35,7 +35,7 @@ const TimeTravelUser: React.FunctionComponent<Props> = ({
       handleTimeTravelUser(values);
       return;
     }
-    toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
+    toastError(intl.formatMessage({ id: 'async.task.timetravel.error' }));
   };
 
   return (
@@ -64,7 +64,7 @@ const TimeTravelUser: React.FunctionComponent<Props> = ({
             </Box>
             <Box display="flex" justifyContent="flex-end" mt={1}>
               <Button type="submit" variant="contained" color="secondary">
-                <Text translation={"common.submit"} />
+                <Text translation={'common.submit'} />
               </Button>
             </Box>
           </Form>

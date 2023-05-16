@@ -1,10 +1,10 @@
-import { CircularProgress, IconButton, ListItem, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { FBEditorCustomControlProps, FBEditorState, FBMapWrapper } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../../ui/components/Text";
-import styles from "./FBEditorCustomControl.styles";
-import { withFBEditorCustomControl } from "./FBEditorCustomControl.wrap";
+import { CircularProgress, IconButton, ListItem, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { FBEditorCustomControlProps, FBEditorState, FBMapWrapper } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../../ui/components/Text';
+import styles from './FBEditorCustomControl.styles';
+import { withFBEditorCustomControl } from './FBEditorCustomControl.wrap';
 
 const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps> = ({
   controls = [],
@@ -23,7 +23,7 @@ const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps>
               key={`form.builder.${control.id}-${i}`}
               data-cy={control.name}
               className={`${classes.listItemStyle} ${
-                controls.length - 1 === i ? "lastItem" : ""
+                controls.length - 1 === i ? 'lastItem' : ''
               }`}
               onClick={() => handleSelect && handleSelect(control)}
             >

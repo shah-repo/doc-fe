@@ -1,21 +1,21 @@
-import { CircularProgress, createStyles, Link, makeStyles, Theme } from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
-import React, { useState } from "react";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../../state/types";
-import Text from "../../../components/Text";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from "../../../documentRevision/helpers/documentRevisionStatus";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import Colors from "../../../layout/theme/utils/colors";
-import { Translation } from "../../../translations/types";
-import { toastError } from "../../notifications";
-import PasswordDialog from "../../password/dialog";
-import { Password } from "../../password/types";
-import AttachmentRedLineWarningDialog from "../attachment.redline.warning/dialog";
+import { CircularProgress, createStyles, Link, makeStyles, Theme } from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import React, { useState } from 'react';
+import { attachmentsActions } from '../../../../state/ducks/attachments';
+import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../../state/types';
+import Text from '../../../components/Text';
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import Colors from '../../../layout/theme/utils/colors';
+import { Translation } from '../../../translations/types';
+import { toastError } from '../../notifications';
+import PasswordDialog from '../../password/dialog';
+import { Password } from '../../password/types';
+import AttachmentRedLineWarningDialog from '../attachment.redline.warning/dialog';
 
 
 interface Props {
@@ -28,18 +28,18 @@ interface Props {
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     downloadLabel: ({ isAttachmentEmpty }) => ({
-      flex: "0 0 50%",
-      display: isAttachmentEmpty ? "none" : "flex",
-      justifyContent: "flex-end",
-      paddingRight: "25px",
+      flex: '0 0 50%',
+      display: isAttachmentEmpty ? 'none' : 'flex',
+      justifyContent: 'flex-end',
+      paddingRight: '25px',
     }),
     icon: {
-      verticalAlign: "middle",
-      maxHeight: "20px",
-      maxWidth: "20px",
+      verticalAlign: 'middle',
+      maxHeight: '20px',
+      maxWidth: '20px',
     },
     link: {
-      cursor: "pointer",
+      cursor: 'pointer',
       color: Colors.navy,
     },
   }));
@@ -53,12 +53,12 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
 
   const passwordState = {
     status: AsyncStatus.Idle,
-    message: "",
+    message: '',
   };
 
   const warningState = {
     status: AsyncStatus.Idle,
-    message: "",
+    message: '',
   };
 
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
@@ -74,7 +74,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     onSuccess: (downloadInfo) => {
       setIsDownloading(false);
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, "_parent");
+      downloadInfo && window.open(downloadInfo.url, '_parent');
     },
     onError: (message) => {
       setIsDownloading(false);
@@ -91,14 +91,14 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const warningPasswordText = (): Translation => {
 
     if (isDocumentRevisionObsolete(docRevStatus)) {
-      return "common.attachment.redline.warning.download.obsoletedAll";
+      return 'common.attachment.redline.warning.download.obsoletedAll';
     }
 
     if (isDocumentRevisionDeprecated(docRevStatus)) {
-      return "common.attachment.redline.warning.download.deprecatedAll";
+      return 'common.attachment.redline.warning.download.deprecatedAll';
     }
 
-    return "common.attachment.redline.warning.download.redlineAll";
+    return 'common.attachment.redline.warning.download.redlineAll';
   };
 
 
@@ -143,7 +143,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         asyncState={passwordState}
       />
       <label
-        htmlFor={"button-file"}
+        htmlFor={'button-file'}
         className={classes.downloadLabel}
         onClick={handleAllDownload(docRevId, undefined)}>
         <Link

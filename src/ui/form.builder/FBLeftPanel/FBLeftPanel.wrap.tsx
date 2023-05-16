@@ -1,12 +1,12 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBDialogProps } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBDialogProps } from '..';
 
 export const withFBLeftPanel = <T extends FBDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    maxWidth = "sm",
+    maxWidth = 'sm',
     content,
     title,
     actions,
@@ -37,7 +37,7 @@ export const withFBLeftPanel = <T extends FBDialogProps>(
       open = leftPanelState?.open;
       content = leftPanelState?.content;
       title = leftPanelState?.title;
-      maxWidth = leftPanelState?.maxWidth || "sm";
+      maxWidth = leftPanelState?.maxWidth || 'sm';
       actions = leftPanelState?.actions;
     });
 

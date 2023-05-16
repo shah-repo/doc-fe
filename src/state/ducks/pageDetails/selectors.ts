@@ -1,5 +1,5 @@
-import { flatMap } from "lodash";
-import { ApplicationState } from "../../reducers";
+import { flatMap } from 'lodash';
+import { ApplicationState } from '../../reducers';
 
 const byCategory = (state: ApplicationState) => state.pageDetails.byCategory;
 

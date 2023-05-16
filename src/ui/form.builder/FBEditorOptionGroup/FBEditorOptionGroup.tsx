@@ -1,8 +1,8 @@
-import React from "react";
-import { FBEditor, FBEditorOptions, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { editorOptionStyles } from "../styles/FBEditorOptions.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import React from 'react';
+import { FBEditor, FBEditorOptions, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { editorOptionStyles } from '../styles/FBEditorOptions.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorOptionGroup: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -18,7 +18,7 @@ const FBEditorOptionGroup: React.FunctionComponent<FBEditorProps> = ({
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={AutoCompleteStyles.labelProps}/>
-      {type === "select" && (
+      {type === 'select' && (
         <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`}
           boxProps={{ mb: 3.125, className: classes.error }}
           labelProps={AutoCompleteStyles.labelProps}

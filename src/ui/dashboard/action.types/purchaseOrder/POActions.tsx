@@ -1,11 +1,11 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../../state/reducers";
-import GenerateHtmlPreview from "../../../documentRevision/forms/presenters/GenerateHtmlPreview";
-import POApproveOrReject from "./POApproveOrReject";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../state/reducers';
+import GenerateHtmlPreview from '../../../documentRevision/forms/presenters/GenerateHtmlPreview';
+import POApproveOrReject from './POApproveOrReject';
 
 interface Props {
   documentRevision: DocumentRevision;

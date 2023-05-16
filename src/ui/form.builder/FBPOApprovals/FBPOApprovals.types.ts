@@ -1,8 +1,8 @@
-import { FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBPOApprovalsState, FBRequiredApprover, Owner } from "..";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBPOApprovalsState, FBRequiredApprover, Owner } from '..';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export type FBPOApprovalsProps =
-& Pick<FBInputProps, "name" | "label" | "disabled" | "value">
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
 & FBAutocompleteAsyncProps
 & {
   approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;

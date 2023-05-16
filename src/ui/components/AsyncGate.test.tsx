@@ -1,19 +1,19 @@
-import { Button, LinearProgress } from "@material-ui/core";
-import { mount, ReactWrapper } from "enzyme";
-import React from "react";
-import { act } from "react-dom/test-utils";
-import { AsyncStatus } from "../../state/types";
-import AsyncGate, { AsyncGateProps } from "./AsyncGate";
+import { Button, LinearProgress } from '@material-ui/core';
+import { mount, ReactWrapper } from 'enzyme';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
+import { AsyncStatus } from '../../state/types';
+import AsyncGate, { AsyncGateProps } from './AsyncGate';
 
-jest.mock("./Text", () => () => null);
+jest.mock('./Text', () => () => null);
 
-describe("AsyncGate component unit tests", () => {
+describe('AsyncGate component unit tests', () => {
   const TestComponent = () => <div>TEST</div>;
 
   const defaultProps: AsyncGateProps = {
     asyncState: {
       status: AsyncStatus.Idle,
-      message: "",
+      message: '',
     },
   };
 
@@ -28,7 +28,7 @@ describe("AsyncGate component unit tests", () => {
     </AsyncGate>
   ));
 
-  it("does not call asyncAction on start by default", () => {
+  it('does not call asyncAction on start by default', () => {
     const asyncAction = jest.fn();
 
     act(() => {
@@ -38,7 +38,7 @@ describe("AsyncGate component unit tests", () => {
     expect(asyncAction).not.toHaveBeenCalled();
   });
 
-  it("calls asyncAction on start if defined", () => {
+  it('calls asyncAction on start if defined', () => {
     const asyncAction = jest.fn();
     const startActionOnMount = true;
 
@@ -49,19 +49,19 @@ describe("AsyncGate component unit tests", () => {
     expect(asyncAction).toHaveBeenCalled();
   });
 
-  it("displays children when async action is a success", () => {
+  it('displays children when async action is a success', () => {
     const wrapper: ReactWrapper = getWrapper(getProps({
       asyncState: {
         status: AsyncStatus.Success,
-        message: "",
+        message: '',
       },
     }));
 
     expect(wrapper.find(TestComponent)).toHaveLength(1);
   });
 
-  it("displays error message when async action is a failure", () => {
-    const message = "TEST ERROR MESSAGE";
+  it('displays error message when async action is a failure', () => {
+    const message = 'TEST ERROR MESSAGE';
     const wrapper: ReactWrapper = getWrapper(getProps({
       asyncState: {
         status: AsyncStatus.Error,
@@ -72,23 +72,23 @@ describe("AsyncGate component unit tests", () => {
     expect(wrapper.text()).toContain(message);
   });
 
-  it("does not render button if asyncAction is not defined", () => {
+  it('does not render button if asyncAction is not defined', () => {
     const wrapper: ReactWrapper = getWrapper(getProps({
       asyncState: {
         status: AsyncStatus.Error,
-        message: "ERR",
+        message: 'ERR',
       },
     }));
 
     expect(wrapper.find(Button)).toHaveLength(0);
   });
 
-  it("calls async action on error button click", () => {
+  it('calls async action on error button click', () => {
     const asyncAction = jest.fn();
     const wrapper: ReactWrapper = getWrapper(getProps({
       asyncState: {
         status: AsyncStatus.Error,
-        message: "TEST ERROR MESSAGE",
+        message: 'TEST ERROR MESSAGE',
       },
       asyncAction,
     }));
@@ -96,15 +96,15 @@ describe("AsyncGate component unit tests", () => {
     const button = wrapper.find(Button).first();
     expect(button).toBeDefined();
 
-    button.simulate("click");
+    button.simulate('click');
     expect(asyncAction).toHaveBeenCalled();
   });
 
-  it("displays LinearProgress when async action is active", () => {
+  it('displays LinearProgress when async action is active', () => {
     const wrapper: ReactWrapper = getWrapper(getProps({
       asyncState: {
         status: AsyncStatus.Active,
-        message: "",
+        message: '',
       },
     }));
 

@@ -1,8 +1,8 @@
-import { get } from "lodash";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
-import { checkIsDocumentForm } from "./checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./documentRevisionStatus";
+import { get } from 'lodash';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
+import { checkIsDocumentForm } from './checkDocumentGroup';
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from './documentRevisionStatus';
 
 export const isOwner = (
   documentRevision: DocumentRevision,
@@ -33,7 +33,7 @@ export const canCreateNewVersion = (
   !isDocumentRelatedPartTogether(documentRevision);
 
 export const canCreateOutput = (documentRevision: DocumentRevision) => {
-  const documentType = get(documentRevision, "document.documentType");
+  const documentType = get(documentRevision, 'document.documentType');
   return (
     documentType &&
     checkIsDocumentForm(documentType.groupOptions) &&

@@ -1,7 +1,7 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { BlockTypeField } from "..";
-import { FBFieldOutputWrapperProps } from "./FBFieldOutputWrapper.types";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { BlockTypeField } from '..';
+import { FBFieldOutputWrapperProps } from './FBFieldOutputWrapper.types';
 
 export const withFBFieldOutputWrapper = <T extends FBFieldOutputWrapperProps>(
   Component: React.FunctionComponent<T>,
@@ -13,7 +13,7 @@ export const withFBFieldOutputWrapper = <T extends FBFieldOutputWrapperProps>(
   }: T) => {
     const { type } = inputProps || {};
 
-    const isSection = type === "section" || type === "subsection";
+    const isSection = type === 'section' || type === 'subsection';
     const isBlock = type && BlockTypeField.includes(type);
     const isFirst = position === 1;
     const mt = isFirst ? 0 : isBlock ? 6 : 3.5;

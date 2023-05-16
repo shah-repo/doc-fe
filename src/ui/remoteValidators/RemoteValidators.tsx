@@ -1,15 +1,15 @@
-import { AxiosRequestConfig } from "axios";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import apiClient from "../../state/apiClient";
-import { authSelectors } from "../../state/ducks/auth";
-import { FETCH_VALIDATORS_REMOTE_URL_URL, REMOTE_VALIDATORS_STATUS_URL } from "../../state/ducks/auth/constants";
-import { store } from "../../state/store";
-import { RemoteValidatorHelper } from "./remoteValidatorsHelper";
+import { AxiosRequestConfig } from 'axios';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import apiClient from '../../state/apiClient';
+import { authSelectors } from '../../state/ducks/auth';
+import { FETCH_VALIDATORS_REMOTE_URL_URL, REMOTE_VALIDATORS_STATUS_URL } from '../../state/ducks/auth/constants';
+import { store } from '../../state/store';
+import { RemoteValidatorHelper } from './remoteValidatorsHelper';
 
 export const fetchRemoteValidatorsStatus = async () => {
   const requestConfig: AxiosRequestConfig = {
-    method: "get",
+    method: 'get',
     url: REMOTE_VALIDATORS_STATUS_URL,
     headers: {},
   };
@@ -21,7 +21,7 @@ export const fetchRemoteValidatorsStatus = async () => {
 const fetchRemoteValidators = async () => {
   try {
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
+      method: 'get',
       url: FETCH_VALIDATORS_REMOTE_URL_URL,
       headers: {},
     };

@@ -1,11 +1,11 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as SlackLogo } from "../../../assets/images/slack_full_logo.svg";
-import { logo } from "../../../common/utils/helpers";
-import SlackLandingError from "./Error";
-import SlackLandingProgress from "./Progress";
-import { styles } from "./styles";
-import SlackLandingSuccess from "./Success";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as SlackLogo } from '../../../assets/images/slack_full_logo.svg';
+import { logo } from '../../../common/utils/helpers';
+import SlackLandingError from './Error';
+import SlackLandingProgress from './Progress';
+import { styles } from './styles';
+import SlackLandingSuccess from './Success';
 
 interface Props {
   successMessage: string;

@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
   root: {
@@ -8,7 +8,7 @@ export default makeStyles((theme) => ({
     margin: theme.spacing(1.5, -2, 0),
   },
   link: {
-    textDecoration: "none",
+    textDecoration: 'none',
   },
 }));
 
@@ -22,7 +22,7 @@ export const itemStyles = (theme: Theme) => createStyles({
     lineHeight: 1.25,
   },
   icon: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginTop: theme.spacing(.25),
   },
 });

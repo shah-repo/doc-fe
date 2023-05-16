@@ -1,7 +1,7 @@
-import { omit } from "lodash";
-import { EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody } from "../../../state/ducks/userManagement/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { parseJSON, stringifyJSON } from "../../document.type.management/transform";
+import { omit } from 'lodash';
+import { EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody } from '../../../state/ducks/userManagement/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { parseJSON, stringifyJSON } from '../../document.type.management/transform';
 
 export const toEmployeeGroupsEditRequestBody = (employeeGroups: OptionType[] | null):
 EmployeeGroupsEditRequestBody => {
@@ -24,7 +24,7 @@ export const toNavigationIntialValues = (navigationItems) => {
   // We omit "isOpen" value because that is an internal flag
   // for menus in navigation
   const navigationOmitedValues = navigationItems.map((item) => (
-    omit(item, ["isOpen"]))
+    omit(item, ['isOpen']))
   );
 
   return ({

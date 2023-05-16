@@ -1,11 +1,11 @@
-import { Button } from "@material-ui/core";
-import { shallow, ShallowWrapper } from "enzyme";
-import faker from "faker";
-import React from "react";
-import { ImplementationPlanTaskFormValues } from "../../types";
-import TaskPresenter, { Props } from "./Task.presenter";
+import { Button } from '@material-ui/core';
+import { shallow, ShallowWrapper } from 'enzyme';
+import faker from 'faker';
+import React from 'react';
+import { ImplementationPlanTaskFormValues } from '../../types';
+import TaskPresenter, { Props } from './Task.presenter';
 
-describe("TaskPresenter tests", () => {
+describe('TaskPresenter tests', () => {
   let wrapper: ShallowWrapper;
 
   const task: ImplementationPlanTaskFormValues = {
@@ -13,7 +13,7 @@ describe("TaskPresenter tests", () => {
     description: faker.lorem.sentence(),
     dueDate: faker.date.recent(),
     assigned: { label: faker.lorem.word(), value: faker.lorem.word() },
-    status: "PENDING",
+    status: 'PENDING',
   };
   const defaultProps = {
     task,
@@ -29,8 +29,8 @@ describe("TaskPresenter tests", () => {
     wrapper = getWrapper({});
   });
 
-  it("should call removeTask", () => {
-    wrapper.find(Button).at(0).simulate("click");
+  it('should call removeTask', () => {
+    wrapper.find(Button).at(0).simulate('click');
 
     expect(defaultProps.removeTask).toHaveBeenCalledTimes(1);
     expect(defaultProps.removeTask).toHaveBeenLastCalledWith(2);

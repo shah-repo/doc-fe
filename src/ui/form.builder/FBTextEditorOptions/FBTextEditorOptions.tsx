@@ -1,9 +1,9 @@
-import { Box, Menu, MenuItem } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import React from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBMapWrapper, FBOption, FBTextEditorOptionsProps } from "..";
-import { withFBTextEditorOptions } from "./FBTextEditorOptions.wrap";
+import { Box, Menu, MenuItem } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { FBButton, FBMapWrapper, FBOption, FBTextEditorOptionsProps } from '..';
+import { withFBTextEditorOptions } from './FBTextEditorOptions.wrap';
 
 const FBTextEditorOptions: React.FunctionComponent<FBTextEditorOptionsProps> = ({
   handleButtonClick,
@@ -20,7 +20,7 @@ const FBTextEditorOptions: React.FunctionComponent<FBTextEditorOptionsProps> = (
       variant="outlined"
       size="small"
       onClick={handleButtonClick}
-      style={{ textTransform: "inherit" }}
+      style={{ textTransform: 'inherit' }}
     />
     <Menu
       open={menuVisible}

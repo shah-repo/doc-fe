@@ -1,4 +1,5 @@
 import { Box, Button, Grid } from '@material-ui/core';
+import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -140,10 +141,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const clonePODocument = () => {
     try {
-      getPOIndexDbInstance().put({
+      getPOIndexDbInstance().put(cloneDeep({
         description: documentRevision.description,
         formInput: documentRevision.formInput,
-      });
+      }));
     } catch (e) {}
     cloneDocument();
   };
@@ -412,13 +413,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isDocumentObsolete = isDocumentRevisionObsolete(documentRevision.status);
   const isRenderHTMLDefined = documentRevision.formDocument?.renderHTMLDefined;
 
-  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+  if (isPO && isRenderHTMLDefined) {
     accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
-  if (!(!isDocumentDraft || !canCreateInspection)) {
+  if (isDocumentDraft && canCreateInspection) {
     accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
-  if (documentRevision.pdf) {
+  if (documentRevision.pdf && !isPO) {
     accessableButtons.push(PreviewControlButtons.Pdf);
   }
   if (canChangeOwnerShip) {

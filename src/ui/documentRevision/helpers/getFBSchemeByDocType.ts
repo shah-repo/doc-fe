@@ -1,11 +1,11 @@
-import { find, get, isEmpty, map, maxBy, some, union, unionBy } from "lodash";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
-import { store as appStore } from "../../../state/store";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FB, FBSchemaProps } from "../../form.builder";
-import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumentGroup";
+import { find, get, isEmpty, map, maxBy, some, union, unionBy } from 'lodash';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, FBFormTemplateProps } from '../../../state/ducks/documentRevisions/types';
+import { store as appStore } from '../../../state/store';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FB, FBSchemaProps } from '../../form.builder';
+import { checkIsDocumentDirectApproved, checkIsDocumentPO } from './checkDocumentGroup';
 
 /**
  * Checks if any of the given output types are records.
@@ -37,9 +37,9 @@ export const getFBSchemeByDocType = (
   originScheme?: FBSchemaProps[],
   tabId?: string,
 ): FBSchemaProps[] => {
-  const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
+  const outputTypes = map(formValue.outputDocumentTypes as OptionType[], 'value');
   const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
-  const tplType = get(formValue, "document.documentType.id") || "";
+  const tplType = get(formValue, 'document.documentType.id') || '';
   const documentTypes = union([tplType], outputTypes);
 
   const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
@@ -52,20 +52,20 @@ export const getFBSchemeByDocType = (
       deleteDisabled: schemaItem.deleteInFormDisabled,
     })));
 
-    return unionBy(scheme, typeScheme, "name");
+    return unionBy(scheme, typeScheme, 'name');
   }, [] as FBSchemaProps[]);
   let indexLast;
-  !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, "index")?.index : indexLast = 0;
+  !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, 'index')?.index : indexLast = 0;
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
 
       const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
         appStore.getState(), outputTypesWithGroups[0].group);
-      const tabId = get(tabConfig, "0.tabId", "details");
+      const tabId = get(tabConfig, '0.tabId', 'details');
 
       finalScheme.push({
-        label: "form.builder.approvals",
-        type: "poapprovals",
+        label: 'form.builder.approvals',
+        type: 'poapprovals',
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
@@ -74,8 +74,8 @@ export const getFBSchemeByDocType = (
       });
     } else {
       finalScheme.push({
-        label: "form.builder.approvals",
-        type: "approvals",
+        label: 'form.builder.approvals',
+        type: 'approvals',
         deleteDisabled: true,
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,

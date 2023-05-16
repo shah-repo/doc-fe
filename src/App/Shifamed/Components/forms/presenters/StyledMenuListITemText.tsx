@@ -1,10 +1,10 @@
-import { ListItemText, withStyles } from "@material-ui/core";
-import Colors from "../../../../../ui/layout/theme/utils/colors";
+import { ListItemText, withStyles } from '@material-ui/core';
+import Colors from '../../../../../ui/layout/theme/utils/colors';
 
 const styles = () => ({
   primary: {
-    fontFamily: "Sora",
-    fontSize: "14px",
+    fontFamily: 'Sora',
+    fontSize: '14px',
     color: Colors.dark_jungle_green,
   },
 });

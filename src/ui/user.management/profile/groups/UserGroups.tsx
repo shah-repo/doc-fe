@@ -1,18 +1,18 @@
-import { Box, Button, Icon, Typography } from "@material-ui/core";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
-import { Nullable } from "../../../../state/ducks/common/types";
-import { userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
-import SummaryField from "../../../common/summary/base";
-import { MultiValueRemove, selectStyles, selectTheme } from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
-import Text from "../../../components/Text";
-import useAsync from "../../../hooks/useAsync";
-import { toEmployeeGroupsEditRequestBody } from "../../utils/transform";
-import { styles } from "./UserGroups.style";
+import { Box, Button, Icon, Typography } from '@material-ui/core';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Select from 'react-select';
+import { Nullable } from '../../../../state/ducks/common/types';
+import { userManagementActions, userManagementSelectors } from '../../../../state/ducks/userManagement';
+import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
+import SummaryField from '../../../common/summary/base';
+import { MultiValueRemove, selectStyles, selectTheme } from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import Text from '../../../components/Text';
+import useAsync from '../../../hooks/useAsync';
+import { toEmployeeGroupsEditRequestBody } from '../../utils/transform';
+import { styles } from './UserGroups.style';
 
 
 interface OwnProps {
@@ -61,7 +61,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
     );
   };
 
-  const handleGroups = (groups: OptionType[]) => groups.map((group) => group.label).join(", ");
+  const handleGroups = (groups: OptionType[]) => groups.map((group) => group.label).join(', ');
 
   const onChange = (state: any) => (groups = state);
 
@@ -73,7 +73,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
       className={classes.addGroupsButton}
       id="UserGroups-addGroups"
     >
-      <Icon style={{ marginRight: "10px" }}>
+      <Icon style={{ marginRight: '10px' }}>
         <AddCircleOutlineOutlinedIcon />
       </Icon>
       <Text translation="user.management.add.to.groups" />
@@ -93,8 +93,8 @@ const UserGroups: React.FunctionComponent<Props> = ({
 
   const editGroupsRenderer = () => (
     <Box>
-      <Typography variant="h6" style={{ marginBottom: "16px" }}>
-        <Text message={"common.groups"} />
+      <Typography variant="h6" style={{ marginBottom: '16px' }}>
+        <Text message={'common.groups'} />
       </Typography>
       <Select
         id="UserGroups-groups"

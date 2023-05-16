@@ -41,9 +41,6 @@ export default makeStyles((theme) => {
       '& .k-grid-container': {
         maxHeight: 300, // @todo
       },
-      '& th': {
-        borderRight: 'none !important',
-      },
       '& .k-column-title': {
         fontSize: 12,
         textTransform: 'uppercase',
@@ -66,14 +63,19 @@ export default makeStyles((theme) => {
       '& .k-link': {
         justifyContent: 'center',
       },
+      '& .k-column-title': {
+        whiteSpace: 'normal',
+        textAlign: 'center',
+      },
     },
     cellAR: {
       textAlign: 'center !important' as 'center',
     },
-    cellBorderLeft: {
-      borderLeft: `1px solid ${Colors.tableStroke} !important`,
+    clearRightBorder: {
+      borderRight: 'none !important',
     },
     buttonAdd: {
+      width: '100%',
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
     },
@@ -121,6 +123,9 @@ export default makeStyles((theme) => {
       top: 0,
       right: 0,
       zIndex: 3,
+    },
+    buttonFullscreen: {
+      marginLeft: 'auto',
     },
   };
 });

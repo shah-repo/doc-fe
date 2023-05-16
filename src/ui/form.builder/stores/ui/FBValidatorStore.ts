@@ -1,10 +1,10 @@
-import { assign, Dictionary, isEmpty, isNull, isUndefined, map } from "lodash";
-import { action, computed, observable } from "mobx";
-import Validator from "validatorjs";
-import { SelectOption } from "../../../components/forms/fields/Select";
-import { FBEditorElementType } from "../../types/editor";
-import { FBValidatorTrigger } from "../../types/validation/validator";
-import FBStore from "./FBStore";
+import { assign, Dictionary, isEmpty, isNull, isUndefined, map } from 'lodash';
+import { action, computed, observable } from 'mobx';
+import Validator from 'validatorjs';
+import { SelectOption } from '../../../components/forms/fields/Select';
+import { FBEditorElementType } from '../../types/editor';
+import { FBValidatorTrigger } from '../../types/validation/validator';
+import FBStore from './FBStore';
 
 class FormBuilderValidatorStored {
   @observable public errors: Dictionary<string> = {};
@@ -33,7 +33,7 @@ class FormBuilderValidatorStored {
       map(v, (val, key) => (k += `${key}${val}`));
       return k;
     });
-    return flattenArray.join("|");
+    return flattenArray.join('|');
   };
 
   @action public getSchemaRules = (): Dictionary<string> => {
@@ -41,10 +41,10 @@ class FormBuilderValidatorStored {
     map(FBStore.getSchema(), (schemaItem) => {
       if (
         schemaItem.rules &&
-        schemaItem.rules !== "" &&
+        schemaItem.rules !== '' &&
         isEmpty(schemaItem.applicableOn)
       ) {
-        rules[schemaItem.name || ""] = schemaItem.rules;
+        rules[schemaItem.name || ''] = schemaItem.rules;
       }
     });
     return rules;
@@ -55,10 +55,10 @@ class FormBuilderValidatorStored {
     map(FBStore.getSchema(), (schemaItem) => {
       if (
         schemaItem.rules &&
-        schemaItem.rules !== "" &&
+        schemaItem.rules !== '' &&
         !isEmpty(schemaItem.applicableOn)
       ) {
-        rules[schemaItem.name || ""] = schemaItem.rules;
+        rules[schemaItem.name || ''] = schemaItem.rules;
       }
     });
     return rules;
@@ -88,7 +88,7 @@ class FormBuilderValidatorStored {
 
   @action public hasError = (name: string): boolean => Boolean(this.errors[name]);
 
-  @action public errorText = (name: string): string => this.errors[name] || "";
+  @action public errorText = (name: string): string => this.errors[name] || '';
 
   @action public triggers = (): SelectOption[] => map(
     FBValidatorTrigger,
@@ -101,11 +101,11 @@ class FormBuilderValidatorStored {
     attributes?: Validator.AttributeNames,
   ): Validator.ValidationErrors => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const flatten = require("flat");
+    const flatten = require('flat');
     Validator.register(
-      "",
+      '',
       () => true,
-      "",
+      '',
     );
 
     const validator = new Validator(flatten(data), rules);

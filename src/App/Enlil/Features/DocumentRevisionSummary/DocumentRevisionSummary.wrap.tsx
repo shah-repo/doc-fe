@@ -1,9 +1,9 @@
-import { get, isUndefined } from "lodash";
-import React, { useEffect } from "react";
-import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from "../../..";
-import { openPOToastr } from "../../../../ui/components/notifications/POStatus";
-import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FB, FBPOApprovalsState, FBProvider } from "../../../../ui/form.builder";
+import { get, isUndefined } from 'lodash';
+import React, { useEffect } from 'react';
+import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from '../../..';
+import { openPOToastr } from '../../../../ui/components/notifications/POStatus';
+import { checkIsDocumentPO, checkIsDocumentReceivable } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { FB, FBPOApprovalsState, FBProvider } from '../../../../ui/form.builder';
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
   Component: React.FunctionComponent<T>,
@@ -38,20 +38,20 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     // MARK: @state
     useEffect(() => {
-      const reOpenedPOInfo = localStorage.getItem("reOpenedPOInfo");
+      const reOpenedPOInfo = localStorage.getItem('reOpenedPOInfo');
       if (isReceivable && reOpenedPOInfo) {
         try {
           openPOToastr(JSON.parse(reOpenedPOInfo));
         } catch {}
-        localStorage.removeItem("reOpenedPOInfo");
+        localStorage.removeItem('reOpenedPOInfo');
       }
-      _formState?.setMode("preview");
+      _formState?.setMode('preview');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     onScroll = (ev) => {
       if (!_documentRevisionFormState) { return; }
-      const pageYOffset = get(ev.target, "scrollTop");
+      const pageYOffset = get(ev.target, 'scrollTop');
       const isHeaderHidden = pageYOffset > 0;
       if (isHeaderHidden !== _documentRevisionFormState.isHeaderHidden) {
         _documentRevisionFormState.setIsHeaderHidden(isHeaderHidden);
@@ -77,6 +77,6 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     );
   };
 
-  Comp.displayName = "withDocumentRevisionSummaryWrap";
+  Comp.displayName = 'withDocumentRevisionSummaryWrap';
   return (props: T) => Comp(props);
 };

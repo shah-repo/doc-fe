@@ -1,19 +1,19 @@
-import { isUndefined } from "lodash";
-import { action, observable, set } from "mobx";
-import React from "react";
-import { FBDialogProps } from "..";
+import { isUndefined } from 'lodash';
+import { action, observable, set } from 'mobx';
+import React from 'react';
+import { FBDialogProps } from '..';
 
 class FBDialogState {
   @observable public open = false;
-  @observable public maxWidth: FBDialogProps["maxWidth"] = "sm";
-  @observable public classes: FBDialogProps["classes"];
+  @observable public maxWidth: FBDialogProps['maxWidth'] = 'sm';
+  @observable public classes: FBDialogProps['classes'];
   @observable public content?: React.ReactElement;
   @observable public title?: React.ReactNode | string;
   @observable public actions?: React.ReactNode;
   public props?: FBDialogProps;
 
   @action public setDialog = (open: boolean) => {
-    set(this, "open", open);
+    set(this, 'open', open);
   };
 
   @action public openDialog = () => {
@@ -37,24 +37,24 @@ class FBDialogState {
     this.setContent(content || this.content);
   };
 
-  @action public setMaxWidth = (maxWidth: FBDialogProps["maxWidth"]) => {
-    set(this, "maxWidth", maxWidth);
+  @action public setMaxWidth = (maxWidth: FBDialogProps['maxWidth']) => {
+    set(this, 'maxWidth', maxWidth);
   };
 
-  @action public setClasses = (classes: FBDialogProps["classes"]) => {
-    set(this, "classes", classes);
+  @action public setClasses = (classes: FBDialogProps['classes']) => {
+    set(this, 'classes', classes);
   };
 
   @action public setContent = (content?: React.ReactElement) => {
-    set(this, "content", content);
+    set(this, 'content', content);
   };
 
   @action public setTitle = (title: React.ReactNode | string) => {
-    set(this, "title", title);
+    set(this, 'title', title);
   };
 
   @action public setActions = (actions: React.ReactNode) => {
-    set(this, "actions", actions);
+    set(this, 'actions', actions);
   };
 
   private reset = () => {

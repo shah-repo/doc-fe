@@ -1,13 +1,13 @@
-import { BoxProps } from "@material-ui/core";
-import { FormikProps } from "formik";
-import { SMFormStateProps, SMProviderProps, SMTabsHOCProps } from "../../..";
-import { Id } from "../../../../state/ducks/common/types";
-import { DocumentType, DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { Document, DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
-import { documentsActions } from "../../../../state/ducks/documents";
-import { DocumentCloneType } from "../../../../ui/documentRevision/Clone.container";
-import { DocumentRevisionFormValues } from "../../../../ui/documentRevision/forms/types";
-import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "../../../../ui/form.builder";
+import { BoxProps } from '@material-ui/core';
+import { FormikProps } from 'formik';
+import { SMFormStateProps, SMProviderProps, SMTabsHOCProps } from '../../..';
+import { Id } from '../../../../state/ducks/common/types';
+import { DocumentType, DocumentTypeByIdState } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { Document, DocumentRevision, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import { documentsActions } from '../../../../state/ducks/documents';
+import { DocumentCloneType } from '../../../../ui/documentRevision/Clone.container';
+import { DocumentRevisionFormValues } from '../../../../ui/documentRevision/forms/types';
+import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from '../../../../ui/form.builder';
 
 export interface DocumentInfo {
   name: string;
@@ -16,12 +16,13 @@ export interface DocumentInfo {
 }
 
 export type DocumentRevisionFormProps =
-& Pick<SMProviderProps, "_formState" | "_documentRevisionFormState">
+& Pick<SMProviderProps, '_formState' | '_documentRevisionFormState'>
 & SMTabsHOCProps
-& Pick<BoxProps, "onScroll">
+& Pick<BoxProps, 'onScroll'>
 & {
   setDocId?: typeof documentsActions.setDocumentProposedId;
   onDirtyFlagChange?: ((dirty: boolean) => void);
+  setDoNotPrompt?: (value: boolean) => void;
   documentRevision: DocumentRevision;
   bannerPortal: React.MutableRefObject<null>;
   shouldShowUpgrade: boolean;
@@ -59,8 +60,8 @@ export interface DocumentRevisionFormStateProps {
   setDocumentRevision: (documentRevision?: DocumentRevision) => void;
   setScrollOffset: (offset: number) => void;
   setIsHeaderHidden: (isHidden: boolean) => void;
-  setFormMode: SMFormStateProps["setMode"];
-  setFormAutosave: SMFormStateProps["setAutosave"];
+  setFormMode: SMFormStateProps['setMode'];
+  setFormAutosave: SMFormStateProps['setAutosave'];
   setDisabledAction: (disabledAction: boolean) =>  void;
   setLeftPanelOpen: () => void;
   isHeaderHidden: boolean;
@@ -76,8 +77,8 @@ export interface DocumentRevisionFormStateProps {
   documentTypeAcronym: string;
   documentTypeId: string;
   scrollOffset: any;
-  formMode: SMFormStateProps["mode"];
-  formAutosave: SMFormStateProps["autosave"];
+  formMode: SMFormStateProps['mode'];
+  formAutosave: SMFormStateProps['autosave'];
   disabledAction: boolean;
   loading: boolean;
   id?: string;

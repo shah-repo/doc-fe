@@ -1,10 +1,10 @@
-import { Dialog, DialogContent } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { AsyncState } from "../../../../state/types";
-import { Translation } from "../../../translations/types";
-import { FormContext } from "../../forms/FormContext";
-import RedlineWarningForm from "./form/warningform";
+import { Dialog, DialogContent } from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { AsyncState } from '../../../../state/types';
+import { Translation } from '../../../translations/types';
+import { FormContext } from '../../forms/FormContext';
+import RedlineWarningForm from './form/warningform';
 
 interface Props {
   onSubmit: () => void;
@@ -22,7 +22,7 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
   isDialogOpen,
   onSubmit,
   translationText,
-  translationButtonText = "common.attachment.redline.warning.download.label",
+  translationButtonText = 'common.attachment.redline.warning.download.label',
 }) => {
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<any>) => (
@@ -42,10 +42,10 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
       open={isDialogOpen}
       onSubmit={preventPropagation}
     >
-      <DialogContent data-cy={"download.warning"}>
+      <DialogContent data-cy={'download.warning'}>
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
-            initialValues={{ password: "" }}
+            initialValues={{ password: '' }}
             onSubmit={onSubmit}
           >
             {renderForm}

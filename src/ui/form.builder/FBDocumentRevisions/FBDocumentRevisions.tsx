@@ -1,6 +1,6 @@
-import React from "react";
-import { FBButton, FBDialog, FBDocumentRevisionsItem, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from "..";
-import { withFBDocumentRevisions } from "./FBDocumentRevisions.wrap";
+import React from 'react';
+import { FBButton, FBDialog, FBDocumentRevisionsItem, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from '..';
+import { withFBDocumentRevisions } from './FBDocumentRevisions.wrap';
 
 const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = ({
   handleForm,
@@ -32,7 +32,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
         variant="outlined"
         style={{ margin: 0 }}
         onClick={handleForm}
-        dataCy={"fb.add.document"}
+        dataCy={'fb.add.document'}
       />
     </FBInput>
   </ FBProvider>

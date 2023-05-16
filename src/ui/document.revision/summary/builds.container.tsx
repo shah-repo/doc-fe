@@ -1,13 +1,13 @@
-import { BoxProps, Grid } from "@material-ui/core";
-import React from "react";
-import { DataProps } from "../../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../components/notifications";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { Translation } from "../../translations/types";
-import BuildsPresenter from "./builds.presenter";
+import { BoxProps, Grid } from '@material-ui/core';
+import React from 'react';
+import { DataProps } from '../../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
+import BuildsPresenter from './builds.presenter';
 
 interface OwnProps {
   label: Translation;

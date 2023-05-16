@@ -1,5 +1,5 @@
-import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
-import { SMTextProps } from "../../..";
+import { BaseTextFieldProps, BoxProps } from '@material-ui/core';
+import { SMTextProps } from '../../..';
 
 interface SMInputValidationProps {
   /**
@@ -11,20 +11,20 @@ interface SMInputValidationProps {
 
 export type SMInputProps =
 & Pick<BaseTextFieldProps,
-  | "children"
-  | "error"
-  | "value"
-  | "disabled"
-  | "name"
-  | "helperText"
-  | "rows"
-  | "placeholder"
-  | "defaultChecked"
-  | "fullWidth"
-  | "hidden"
+  | 'children'
+  | 'error'
+  | 'value'
+  | 'disabled'
+  | 'name'
+  | 'helperText'
+  | 'rows'
+  | 'placeholder'
+  | 'defaultChecked'
+  | 'fullWidth'
+  | 'hidden'
 >
 & {
-  label?: SMTextProps["label"];
+  label?: SMTextProps['label'];
   boxProps?: BoxProps;
   /**
    * @cfg {String} Validation rules.

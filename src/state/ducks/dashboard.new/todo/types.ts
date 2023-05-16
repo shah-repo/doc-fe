@@ -1,5 +1,5 @@
-import { MY_FEEDS_LIST } from "./constants";
-import * as feedTypes from "../my.feeds/types";
+import { MY_FEEDS_LIST } from './constants';
+import * as feedTypes from '../my.feeds/types';
 
 export type MyFeedsListApiResponse = feedTypes.MyFeedsListApiResponse;
 export type MyFeedsState = feedTypes.MyFeedsState;

@@ -1,12 +1,12 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      textAlign: "center",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "flex-start",
+      textAlign: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
       color: theme.palette.secondary.contrastText,
       letterSpacing: 1,
       fontWeight: 100,

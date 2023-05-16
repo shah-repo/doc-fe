@@ -1,6 +1,6 @@
-import { SelectOption } from "../../forms/fields/Select";
+import { SelectOption } from '../../forms/fields/Select';
 
-type TableSearchType = "text" | "select";
+type TableSearchType = 'text' | 'select';
 type TableSearchQueryHandler = (query: string) => any;
 
 export interface TableSearchFieldProps {

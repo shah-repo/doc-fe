@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getHasPermission } from "../../../common/utils/selectors";
-import Config from "../../../config";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, Group, GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { companySelectors } from "../../../state/ducks/company";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import UserProfilePresenter from "./UserProfile.presenter";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getHasPermission } from '../../../common/utils/selectors';
+import Config from '../../../config';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import { EmployeeEditRequestBody, Group, GroupTag, Permission } from '../../../state/ducks/auth/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { userManagementActions } from '../../../state/ducks/userManagement';
+import { USER_SLACK_URL } from '../../../state/ducks/userManagement/constants';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import UserProfilePresenter from './UserProfile.presenter';
 
 interface GetEmployeeResponseCustom extends GetEmployeeResponse {
   groupsOrg?: Group[];
@@ -40,7 +40,7 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 
   const [realUser, setRealUser] = useState<GetEmployeeResponseCustom>(selectedEmployee);
   const [showEditUser, setEditUser] = useState(false);
-  const [previewAvatar, setPreviewAvatar] = useState("");
+  const [previewAvatar, setPreviewAvatar] = useState('');
 
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);

@@ -1,5 +1,5 @@
 import { State } from '@progress/kendo-data-query';
-import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridRowClickEvent } from '@progress/kendo-react-grid';
+import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridHeaderCellProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import React, { ComponentType, ReactElement } from 'react';
 import { StyledKendoGridProps } from '../StyledKendoGrid/StyledKendoGrid.types';
 
@@ -9,19 +9,24 @@ export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
 
 export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
+  field: string
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
 }
 
-export type CellComponent<T = unknown> = ComponentType<CellTemplateProps<T>>;
+export type CellComponent<T = unknown, R = Record<string, unknown>> = ComponentType<CellTemplateProps<T> & R>;
 
-export type CellTemplate<T = unknown> = (props: CellTemplateProps<T>) => React.ReactNode;
+export type CellTemplate<T = unknown, R = Record<string, unknown>> = (props: CellTemplateProps<T> & R) => React.ReactNode;
 
-export interface GenericColumnDefinition<T = unknown> extends Omit<GridColumnProps, 'id' | 'cell' | 'children'> {
+// ts-unused-exports:disable-next-line
+export type HeaderCellComponent = ComponentType<CustomGridHeaderCellProps>;
+
+export interface GenericColumnDefinition<T = unknown> extends Omit<GridColumnProps, 'id' | 'cell' | 'headerCell' | 'children'> {
   id: string
   hidden?: boolean
   fitContent?: boolean
   children?: Array<GenericColumnDefinition<T>>
   cell?: CellComponent<T>
+  headerCell?: HeaderCellComponent
   template?: CellTemplate<T>
 }
 
@@ -45,7 +50,12 @@ export interface DataGridProps<T> extends StyledKendoGridProps {
   ref?: React.MutableRefObject<Grid>
 }
 
-export interface CustomGridCellProps extends GridCellProps {
+export interface CustomGridCellProps extends Omit<GridCellProps, 'field'> {
+  field: string
+  column: GenericColumnDefinition
+}
+export interface CustomGridHeaderCellProps extends Omit<GridHeaderCellProps, 'field'> {
+  field: string
   column: GenericColumnDefinition
 }
 

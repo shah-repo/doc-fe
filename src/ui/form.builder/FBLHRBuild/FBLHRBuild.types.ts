@@ -1,12 +1,12 @@
-import { FBProviderProps, FBRadioGroupProps } from "..";
-import { SMDialogHOCProps, SMDialogProps } from "../../../App";
-import { Nullable } from "../../../state/ducks/common/types";
+import { FBProviderProps, FBRadioGroupProps } from '..';
+import { SMDialogHOCProps, SMDialogProps } from '../../../App';
+import { Nullable } from '../../../state/ducks/common/types';
 
 export type FBLHRBuildProps =
 & FBRadioGroupProps
 & SMDialogHOCProps
-& Pick<FBProviderProps, "lhrBuildState">
-& Pick<SMDialogProps, "onDialogActionClick">
+& Pick<FBProviderProps, 'lhrBuildState'>
+& Pick<SMDialogProps, 'onDialogActionClick'>
 & {
   buildValidationRules: Nullable<string>;
 };
@@ -17,6 +17,6 @@ export interface FBLHRBuildConstructor {
 }
 
 export enum FBLHRBuildOptions {
-  "R&D" = "R&D",
-  Production = "Production"
+  'R&D' = 'R&D',
+  Production = 'Production'
 }

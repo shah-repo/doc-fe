@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useMemo } from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { attachmentsActions } from "../../../state/ducks/attachments";
-import { WatermarkRequest, WatermarkRequestStatus } from "../../../state/ducks/attachments/types";
-import { authSelectors } from "../../../state/ducks/auth";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useMqttSubscription from "../../hooks/useMqttSubscription";
-import { Translation } from "../../translations/types";
-import { WatermarkResponse } from "./types";
+import React, { useCallback, useMemo } from 'react';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { attachmentsActions } from '../../../state/ducks/attachments';
+import { WatermarkRequest, WatermarkRequestStatus } from '../../../state/ducks/attachments/types';
+import { authSelectors } from '../../../state/ducks/auth';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
+import { Translation } from '../../translations/types';
+import { WatermarkResponse } from './types';
 
 interface Props {
   addRequestResult: (data: WatermarkResponse) => void;
@@ -27,11 +27,11 @@ const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
   const async = useAsync<WatermarkRequest>({
     onSuccess: (watermarkRequest = {} as WatermarkRequest) => {
       let isSuccess = false;
-      let translation = "watermark.request.failed";
+      let translation = 'watermark.request.failed';
 
       if (watermarkRequest.status === WatermarkRequestStatus.Done) {
         isSuccess = true;
-        translation = "watermark.download.ready";
+        translation = 'watermark.download.ready';
       }
 
       addRequestResult(
@@ -41,9 +41,9 @@ const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
             translation: translation as Translation,
             values: {
               fileType: watermarkRequest.hasWatermarks ? intl.formatMessage({
-                id: "watermark.file",
+                id: 'watermark.file',
               }) : intl.formatMessage({
-                id: "pdf.file",
+                id: 'pdf.file',
               }),
               name: watermarkRequest.attachment.name,
               type: watermarkRequest.attachment.type,

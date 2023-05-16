@@ -1,14 +1,14 @@
-import { Box, IconButton } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import EditIcon from "@material-ui/icons/Edit";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import { isEmpty } from "lodash";
-import { Observer } from "mobx-react";
-import moment from "moment";
-import React, { useState } from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Box, IconButton } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import { isEmpty } from 'lodash';
+import { Observer } from 'mobx-react';
+import moment from 'moment';
+import React, { useState } from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
   FB,
   FBButton,
@@ -25,12 +25,12 @@ import {
   FBProvider,
   FBText,
   FBTooltip,
-} from "..";
-import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
-import { MomentFormats } from "../../../common/utils/date";
-import Colors from "../../layout/theme/utils/colors";
-import { FBClasses } from "../defaults/layout";
-import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
+} from '..';
+import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warning.svg';
+import { MomentFormats } from '../../../common/utils/date';
+import Colors from '../../layout/theme/utils/colors';
+import { FBClasses } from '../defaults/layout';
+import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   onClick,
@@ -75,7 +75,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           {...{ loading }}
           boxProps={{
             flexGrow: 1,
-            display: "flex",
+            display: 'flex',
             p: 1.5,
           }}
           locale={FBProcedureItemLocale[type]}
@@ -86,13 +86,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             onMouseLeave={() => setIsHover(false)}>
             <FBTooltip title="form.builder.add">
               { isHover ?
-                <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
+                <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
                 />
                 :
-                <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: "17px", height: "17px" }}
+                <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
@@ -107,7 +107,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           <FBMediaAlbumField
             name={`${name}.attachments`}
             isTemplate={true}
-            editorProperties={["copyableValue"]}
+            editorProperties={['copyableValue']}
             gutter={false}
             editorConfig={defaultValue}
             autosave={false}
@@ -128,7 +128,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             >
               <Box
                 display="flex"
-                bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
+                bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
                 alignItems="center"
                 p={1.5}
                 minHeight={55}
@@ -143,8 +143,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                       color: Colors.raven,
                       flexGrow: 1,
                       fontWeight: 400,
-                      fontSize: "14px",
-                      lineHeight: "18px",
+                      fontSize: '14px',
+                      lineHeight: '18px',
                     }}
                   />
                   <Observer>
@@ -158,7 +158,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                               {(selection: FBMPIProcedureSelectValue, index) => {
                                 const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
                                 const calOverdue = isDateOverdue?.(selection?.calDueDate);
-                                const eqOverdue = type === "equipment" && (pmOverdue || calOverdue);
+                                const eqOverdue = type === 'equipment' && (pmOverdue || calOverdue);
 
                                 return (
                                   <Box key={`fb-mpi-procedure-selection-${index}`}>
@@ -175,26 +175,26 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                           mb={1}
                                           p={0.5}
                                           style={{
-                                            float: "left",
+                                            float: 'left',
                                           }}
                                         >
                                           <FBText
                                             locale={`form.builder.mpi.part.selection.${type}`}
                                             values={{
-                                              docId: selection.overrideDocId || "",
-                                              lotPart: selection.lotPart || "",
+                                              docId: selection.overrideDocId || '',
+                                              lotPart: selection.lotPart || '',
                                               quantity: selection.quantity || 0,
-                                              unit: selection.unit || "",
+                                              unit: selection.unit || '',
                                             }}
                                             boxProps={{
                                               color: Colors.almost_black,
                                               pr: 1,
                                             }}
                                           />
-                                          {(selection.calDueDate !== "N/A") && type === "equipment" &&
+                                          {(selection.calDueDate !== 'N/A') && type === 'equipment' &&
                                           <Box
                                             color={calOverdue ? Colors.error_red : Colors.dark_gray}
-                                            fontWeight={calOverdue ? "bold" : "normal"}
+                                            fontWeight={calOverdue ? 'bold' : 'normal'}
                                             ml={1}
                                           >
                                             <Box
@@ -209,10 +209,10 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                           }
-                                          {(selection.pmDueDate !== "N/A") && type === "equipment" &&
+                                          {(selection.pmDueDate !== 'N/A') && type === 'equipment' &&
                                           <Box
                                             color={pmOverdue ? Colors.error_red : Colors.dark_gray}
-                                            fontWeight={pmOverdue ? "bold" : "normal"}
+                                            fontWeight={pmOverdue ? 'bold' : 'normal'}
                                             ml={1}
                                           >
                                             <Box
@@ -267,12 +267,12 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                         selection.materialId === item.title || selection.equipmentId === item.title);
                       return (
                         <FBButton
-                          label={hasSelected ? "form.builder.change" : "form.builder.select"}
-                          style={{ margin: 0, padding: "4px" }}
+                          label={hasSelected ? 'form.builder.change' : 'form.builder.select'}
+                          style={{ margin: 0, padding: '4px' }}
                           onClick={() => handleSelect?.({
                             ...item,
                             id: item.title,
-                            title: getItem?.(item.title) || "",
+                            title: getItem?.(item.title) || '',
                           })}
                         />
                       ); }}
@@ -305,8 +305,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               </Box>
               <Box
                 key="id"
-                display={isEmpty(item.attachments) ? "none" : "flex"}
-                bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
+                display={isEmpty(item.attachments) ? 'none' : 'flex'}
+                bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
                 p={1.5}
                 pt={0}
                 pb={0}

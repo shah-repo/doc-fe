@@ -1,6 +1,6 @@
 
-import { useEffect, useState } from "react";
-import CallbackHandler, { CallbackHandlerFn } from "../../common/callbackHandler";
+import { useEffect, useState } from 'react';
+import CallbackHandler, { CallbackHandlerFn } from '../../common/callbackHandler';
 
 const useCallbackHandler = <T>(handler: CallbackHandlerFn<T>) => {
   const [callbackHandler] = useState(new CallbackHandler<T>(handler));
