@@ -15,7 +15,7 @@ import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  const { data, handleSave, disabled } = props;
+  const { data, handleSave, disabled, withoutStatus } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
@@ -56,6 +56,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       disabled={disabled}
       defaultNewValue={defaultNewValue}
       onSave={handleSave}
+      withoutStatus={withoutStatus}
     />
   );
 

@@ -34,6 +34,11 @@ const ActiveCellTemplate: CellTemplate = (props) => {
     });
   };
 
+  // Empty for deprecated documents.
+  if (value === undefined) {
+    return '-';
+  }
+
   if (!canBeModified) {
     return <Status value={value} />;
   }
