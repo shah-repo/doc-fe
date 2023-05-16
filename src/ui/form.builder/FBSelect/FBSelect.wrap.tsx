@@ -1,16 +1,16 @@
-import { MenuItem } from "@material-ui/core";
-import { at, find, isUndefined, map } from "lodash";
-import React from "react";
-import { FB, FBSelectProps } from "..";
-import Text from "../../components/Text";
-import { withFBOption } from "../FBOption/FBOption.wrap";
+import { MenuItem } from '@material-ui/core';
+import { at, find, isUndefined, map } from 'lodash';
+import React from 'react';
+import { FB, FBSelectProps } from '..';
+import Text from '../../components/Text';
+import { withFBOption } from '../FBOption/FBOption.wrap';
 
 export const withFBSelect = <T extends FBSelectProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
     options,
-    optionValueKey = "",
+    optionValueKey = '',
     optionLabelKey,
     defaultValue,
     menuItems,

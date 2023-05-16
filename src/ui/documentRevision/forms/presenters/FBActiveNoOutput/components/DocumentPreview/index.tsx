@@ -1,29 +1,29 @@
-import { Formik, FormikProps, useFormikContext } from "formik";
-import { filter, get, includes, map, size } from "lodash";
-import { Observer } from "mobx-react";
-import * as React from "react";
-import { useContext, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from "../../../../../../../App";
-import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
-import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
-import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
-import { emptyFunction } from "../../../../../../../common/utils/helpers";
-import { authSelectors } from "../../../../../../../state/ducks/auth";
-import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from "../../../../../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../../../../../state/reducers";
-import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
-import AttachmentsField from "../../../../../../document.revision/form/attachments";
-import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from "../../../../../../form.builder";
-import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
-import { DocumentCloneTypeOptions } from "../../../../../Clone.container";
-import { isOperator } from "../../../../../DocumentRevisionDisplay.container";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../../helpers/checkDocumentGroup";
-import DocumentRevisionFormPresenter from "../../../../DocumentRevisionForm.presenter";
-import { DocumentRevisionFormValues } from "../../../../types";
-import styles from "./styles";
+import { Formik, FormikProps, useFormikContext } from 'formik';
+import { filter, get, includes, map, size } from 'lodash';
+import { Observer } from 'mobx-react';
+import * as React from 'react';
+import { useContext, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from '../../../../../../../App';
+import FBTrainingInfoContainer from '../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
+import { withSMForm } from '../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc';
+import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
+import { emptyFunction } from '../../../../../../../common/utils/helpers';
+import { authSelectors } from '../../../../../../../state/ducks/auth';
+import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../../../../state/reducers';
+import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
+import AttachmentsField from '../../../../../../document.revision/form/attachments';
+import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
+import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../../../../helpers/checkDocumentGroup';
+import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
+import { DocumentRevisionFormValues } from '../../../../types';
+import styles from './styles';
 
 interface ContainerProps {
   docRevId?: string;
@@ -62,7 +62,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
   const documentType = documentTypesById[docTypeId];
-  const docTypeGroup = get(documentType, "group", DOC_TYPE_GROUP.OTHER);
+  const docTypeGroup = get(documentType, 'group', DOC_TYPE_GROUP.OTHER);
   const templateOutputDocumentTypes = documentRevision?.formTemplate?.outputDocumentTypes?.[0] as FBOutputDocumentType;
   let schema = workspaceState?.schema ?? _documentRevisionFormState?.schema;
 
@@ -78,7 +78,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   if (documentRevision && outputType) {
     documentRevision.document.documentType = outputType;
   }
-  const outputTypeGroup = get(outputType, "group");
+  const outputTypeGroup = get(outputType, 'group');
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   const email = useSelector(authSelectors.currentUserEmail);
@@ -126,7 +126,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
-      labelId: "tabId.materialsandequipment",
+      labelId: 'tabId.materialsandequipment',
       tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
       type: TabTypeOptions.TABS_MEQ,
     }];
@@ -134,7 +134,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   if (formik.values?.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
-      labelId: "tabId.training",
+      labelId: 'tabId.training',
       tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
     }];
@@ -174,12 +174,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       {() => (
         <SMTemplate
           templateBoxProps={{
-            stretchY: "100%",
+            stretchY: '100%',
             mx: -3.75,
             mt: -3,
           }}
           contentBoxProps={{
-            overflow: "unset",
+            overflow: 'unset',
           }}
           header={(!isLHR && !isTypeMpiDoc) && !formPreview && (
             <DocumentRevisionFormHeader type={type} documentTypeId={formik.values.document?.documentType?.id} />
@@ -192,7 +192,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
             {() => (
               <SMTabs
                 tabs={tabConfig}
-                boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
                 panelProps={{ flex: 1 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
@@ -232,17 +232,17 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       {tabType === TabTypeOptions.DYNAMIC && showTabContent
                         && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
                         <>
-                          {tabInfo.tabId === "lineitems" && (
+                          {tabInfo.tabId === 'lineitems' && (
                             <AttachmentsField
                               isDisabled={isDisabledInput}
                               isNewVersion={false}
-                              docRevId={docRevId || ""}
+                              docRevId={docRevId || ''}
                               isAttachmentEmpty={isAttachmentEmpty}
                               containsRedline={false}
                               docRevStatus={documentRevision?.status}
                               documentRevision={documentRevision}
-                              documentTypeId={docTypeId || ""}
-                              labeld={"Supporting Documents"}
+                              documentTypeId={docTypeId || ''}
+                              labeld={'Supporting Documents'}
                             />
                           )}
                           <FBSchema

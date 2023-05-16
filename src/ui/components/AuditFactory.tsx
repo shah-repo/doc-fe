@@ -89,6 +89,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       autocomplete () {
         return <AuditAutocomplete audit={audit} />;
       },
+      supplier () {
+        if (audit.fbSchemaItem) {
+          audit.fbSchemaItem.optionId = '5';
+        }
+        return <AuditAutocomplete audit={audit} />;
+      },
       fileupload () { return (<AuditAttachment audit={audit} />); },
       checkboxgroup () {
         const arrayValue: string[] = [];
@@ -330,7 +336,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const entry: POLineItem & { value: string } = JSON.parse(auditValue);
           const partNumberText = poDefinePartNumberText(entry);
-          if (entry.value) {
+          if (typeof entry.value !== undefined) {
             returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);

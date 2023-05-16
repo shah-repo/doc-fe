@@ -1,31 +1,31 @@
-import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Tooltip, Typography } from "@material-ui/core";
-import cx from "classnames";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
-import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
-import { FBButton, FBTooltip } from "../../../../form.builder";
+import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Tooltip, Typography } from '@material-ui/core';
+import cx from 'classnames';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
+import { ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
+import { FBButton, FBTooltip } from '../../../../form.builder';
 
-import { regular, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import ClearIcon from "@material-ui/icons/Clear";
-import DoneIcon from "@material-ui/icons/Done";
-import InfoIcon from "@material-ui/icons/Info";
-import { ReactComponent as DeleteIcon } from "../../../../../assets/images/trash-can 2.svg";
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ClearIcon from '@material-ui/icons/Clear';
+import DoneIcon from '@material-ui/icons/Done';
+import InfoIcon from '@material-ui/icons/Info';
+import { ReactComponent as DeleteIcon } from '../../../../../assets/images/trash-can 2.svg';
 
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import { Link } from "react-router-dom";
-import { COLOR_TYPES } from "../../../../../state/ducks/relatedParts/types";
-import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import useDialog from "../../../../hooks/useDialog";
-import { isDocumentRevisionReleased } from "../../../helpers/documentRevisionStatus";
-import useStyles from "./RelatedPart.styles";
-import RelatedPartsState from "./RelatedParts.state";
-import RelatedPartsQuickViewDialog from "./relatedPartsQuickViewDialog";
-import RelatedPartsTableHeader from "./RelatedPartsTableHeader";
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import { Link } from 'react-router-dom';
+import { COLOR_TYPES } from '../../../../../state/ducks/relatedParts/types';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import useDialog from '../../../../hooks/useDialog';
+import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionStatus';
+import useStyles from './RelatedPart.styles';
+import RelatedPartsState from './RelatedParts.state';
+import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
+import RelatedPartsTableHeader from './RelatedPartsTableHeader';
 
 
 const ParentPartSelector: React.FunctionComponent<{
@@ -209,7 +209,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                 </Typography>
                 <div className={classes.filterOptions}>
                   <span>
-                    <Text translation="relatedParts.text.show" />{":"}&nbsp;
+                    <Text translation="relatedParts.text.show" />{':'}&nbsp;
                   </span>
                   <span className={cx(relatedPartsState.showOnlyActiveSubParts
                     ? classes.normalFontWeight : classes.boldFontWeight)}
@@ -217,7 +217,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                   >
                     <Text translation="common.all" />
                   </span>
-                  <span> {" | "} </span>
+                  <span> {' | '} </span>
                   <span className={cx(relatedPartsState.showOnlyActiveSubParts
                     ? classes.boldFontWeight : classes.normalFontWeight)}
                   onClick={setActivePartsFilter(true)}
@@ -372,7 +372,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const isRevChangeTypeObs = listItem.revisionChangeType === RevisionChangeType.Obsolete;
   const isStatusObsolete = listItem.status === DocumentRevisionStatus.Obsolete;
 
-  const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
+  const lastIndexOfDash = listItem.rootDocId.lastIndexOf('-');
 
   const confirmationDialog = useDialog();
 
@@ -440,7 +440,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           <Tooltip title={
             <span>
               {isVoided ? listItem.name :
-                <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
+                <>{rootPartName} {listItem.suffixName && '-'} <b>{listItem.suffixName}</b></>}
             </span>
           }
           disableHoverListener={scrollHeight <= clientHeight}
@@ -449,7 +449,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           arrow >
             <span ref={titleCellRef} className={classes.relatedPartRowTitleCell} data-cy="view-row-title-cell">
               {isVoided ? listItem.name :
-                <>{rootPartName} {listItem.suffixName && "-"} <b>{listItem.suffixName}</b></>}
+                <>{rootPartName} {listItem.suffixName && '-'} <b>{listItem.suffixName}</b></>}
             </span>
           </Tooltip>
         </div>
@@ -471,7 +471,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
                   dialog={confirmationDialog}
                   confirmAction={confirmAction}
                   cancelAction={cancelAction}
-                  message={isRevChangeTypeObs ? "relatedParts.void.bringBack" : "relatedParts.void.alert"}
+                  message={isRevChangeTypeObs ? 'relatedParts.void.bringBack' : 'relatedParts.void.alert'}
                 />
               )}
             </>
@@ -501,7 +501,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
             <FontAwesomeIcon
-              icon={isHover ? solid("eye") : regular("eye") }
+              icon={isHover ? solid('eye') : regular('eye') }
               className={cx(classes.viewIcon, {
                 [classes.viewIconHover]: isHover,
               })}
@@ -542,18 +542,18 @@ const RelatedPartEditRow: React.FunctionComponent<{
   relatedPartsState,
 }) => {
   const [relatedPartDetails, setRelatedPartDetails] = React.useState({
-    docId: listItemBeingEdited?.docId ?? "",
-    name: listItemBeingEdited?.name ?? "",
+    docId: listItemBeingEdited?.docId ?? '',
+    name: listItemBeingEdited?.name ?? '',
   });
 
-  const skipId = listItemBeingEdited?.docId ?? "";
+  const skipId = listItemBeingEdited?.docId ?? '';
 
   const classes = useStyles();
 
-  const showDeleteButton = listItemBeingEdited?.version === 1 && listItemBeingEdited?.docRevId !== "";
+  const showDeleteButton = listItemBeingEdited?.version === 1 && listItemBeingEdited?.docRevId !== '';
 
   const resetAndCancelEdit = () => {
-    setRelatedPartDetails({ docId: "", name: "" });
+    setRelatedPartDetails({ docId: '', name: '' });
     relatedPartsState.resetDocIdErrorMsg();
     cancelEdit();
   };
@@ -600,7 +600,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             onBlur = {validateDocId}
             value={relatedPartDetails.docId}
             error = {Boolean(relatedPartsState.docIdErrorMsg)}
-            helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
+            helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ''}
             name="relatedPartDocId"
           />
         </div>

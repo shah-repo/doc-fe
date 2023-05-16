@@ -1,4 +1,4 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, Theme } from '@material-ui/core';
 
 export default (theme: Theme) =>
   createStyles({
@@ -6,7 +6,7 @@ export default (theme: Theme) =>
       flexGrow: 1,
     },
     boxContainer: {
-      minHeight: "calc(100vh - 105px)",
+      minHeight: 'calc(100vh - 105px)',
     },
     previewBox: {
       marginTop: theme.spacing(5),

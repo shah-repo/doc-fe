@@ -1,6 +1,6 @@
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { TablePanelStateProps } from "../../components/table/types";
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { TablePanelStateProps } from '../../components/table/types';
 
 export interface KendoPresenterProps {
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];

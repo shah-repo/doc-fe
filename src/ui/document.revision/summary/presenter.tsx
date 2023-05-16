@@ -1,34 +1,34 @@
-import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
-import { Formik } from "formik";
-import { flatten, includes, omit, set } from "lodash";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { SM } from "../../../App";
-import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
-import { DataProps } from "../../../state/ducks/common/types";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
-import { documentsActions } from "../../../state/ducks/documents";
-import { RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
-import { ApplicationState } from "../../../state/reducers";
-import SummaryField from "../../common/summary/base";
-import { FormContext } from "../../components/forms/FormContext";
-import Text from "../../components/Text";
-import RelatedPartsWrapper from "../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap";
-import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionInStatus } from "../../documentRevision/helpers/documentRevisionStatus";
-import { styles as AutoCompleteStyles } from "../../form.builder/styles/FBAutocomplete.styles";
-import { useTraining } from "../../hooks/docCustomization/useCustomization";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { Translation } from "../../translations/types";
-import Attachment from "./attachment";
-import BuildsContainer from "./builds.container";
-import styles from "./styles";
-import CompleteTraining from "./training/complete.training";
-import TrainingControl from "./training/training.control";
+import { Box, Grid, WithStyles, withStyles } from '@material-ui/core';
+import { Formik } from 'formik';
+import { flatten, includes, omit, set } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { SM } from '../../../App';
+import { LINE_TYPES } from '../../../state/ducks/attachments/constants';
+import { DataProps } from '../../../state/ducks/common/types';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
+import { documentsActions } from '../../../state/ducks/documents';
+import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
+import { ApplicationState } from '../../../state/reducers';
+import SummaryField from '../../common/summary/base';
+import { FormContext } from '../../components/forms/FormContext';
+import Text from '../../components/Text';
+import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
+import { getHighestRevision } from '../../documentRevision/forms/transform';
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionInStatus } from '../../documentRevision/helpers/documentRevisionStatus';
+import { styles as AutoCompleteStyles } from '../../form.builder/styles/FBAutocomplete.styles';
+import { useTraining } from '../../hooks/docCustomization/useCustomization';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { useScrollIntoView } from '../../hooks/useScrollIntoView';
+import { Translation } from '../../translations/types';
+import Attachment from './attachment';
+import BuildsContainer from './builds.container';
+import styles from './styles';
+import CompleteTraining from './training/complete.training';
+import TrainingControl from './training/training.control';
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -86,7 +86,7 @@ const Presenter: React.FunctionComponent<Props> = ({
     status);
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
-      documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+      documentTypeSelectors.getDocTypeName(state, i.id)).join(', ') : []);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
 
@@ -124,7 +124,7 @@ const Presenter: React.FunctionComponent<Props> = ({
     onSuccess: (data?: Document) => {
       const childPart = getHighestRevision(data?.documentRevisions || []);
       if (!childPart) { return; }
-      set(childPart, "document", omit(data, "documentRevisions"));
+      set(childPart, 'document', omit(data, 'documentRevisions'));
       setDisplayChildrenParts([childPart]);
     },
   });
@@ -185,8 +185,8 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {isPO || includes(outputDocumentTypeName, "Purchase Order")
-          ? attachments && !_tabsState?.isTabActive("details") && (
+        {isPO || includes(outputDocumentTypeName, 'Purchase Order')
+          ? attachments && !_tabsState?.isTabActive('details') && (
             <Attachment
               isAttachmentEmpty={attachments?.length < 1}
               docRevId={id}
@@ -223,6 +223,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   );
 };
 
-Presenter.displayName = "DocRevSummaryPresenter";
+Presenter.displayName = 'DocRevSummaryPresenter';
 
 export default withStyles(styles)(Presenter);

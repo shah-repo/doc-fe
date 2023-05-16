@@ -1,14 +1,14 @@
-import { Approval } from "aws-sdk/clients/codecommit";
-import { every, filter, isEmpty, map, unionBy, values } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from "..";
-import { GroupType } from "../../../state/ducks/auth/types";
-import { ApprovalStatus } from "../../../state/ducks/common/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import { POApprovalMatrixLevel } from "../FBPOApprovalMatrix/FBPOApprovalMatrix.types";
+import { Approval } from 'aws-sdk/clients/codecommit';
+import { every, filter, isEmpty, map, unionBy, values } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from '..';
+import { GroupType } from '../../../state/ducks/auth/types';
+import { ApprovalStatus } from '../../../state/ducks/common/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import { POApprovalMatrixLevel } from '../FBPOApprovalMatrix/FBPOApprovalMatrix.types';
 
-class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": string[]} | Approval> {
+class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
   @observable public isMounted = false;
@@ -24,7 +24,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
 
   public constructor({ id, approvals }: FBPOApprovalsConstructor) {
     super();
-    this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     if (!id) {
       return;
     }
@@ -38,7 +38,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   }
 
   @computed public get activeApprovals(): FBInlineApprovalBody[] {
-    return filter(this.approvals, (a) => a.status !== "ABANDONED" && a.type === "MASTER");
+    return filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER');
   }
 
   @computed public get requireAdditionalApprovers() {
@@ -70,7 +70,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
       return;
     }
     this.setUrl(FBEndpoint.RequiredApprovers);
-    this.setBody({ "ids[]": documentRevisions });
+    this.setBody({ 'ids[]': documentRevisions });
     return this.fetch();
   };
 
@@ -83,23 +83,23 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,
-        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], "id"),
+        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], 'id'),
       };
       return group;
     }, {});
   };
 
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
-    set(this, "approvals", approvals);
+    set(this, 'approvals', approvals);
 
   @action public setApprovalLevels = (approvalLevels?: POApprovalMatrixLevel[]) =>
-    set(this, "approvalLevels", approvalLevels);
+    set(this, 'approvalLevels', approvalLevels);
 
   @action public setMounted = (mount: boolean) =>
-    set(this, "isMounted", mount);
+    set(this, 'isMounted', mount);
 
   @action public upsertApproval = (approval: FBInlineApprovalBody) => {
-    this.setApprovals(unionBy([approval], this.approvals, "id"));
+    this.setApprovals(unionBy([approval], this.approvals, 'id'));
   };
 
   public addApproval = (
@@ -107,7 +107,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   ) => this.approvalApi.set({
     url: FBEndpoint.Approvals,
     body: approval,
-    method: "post",
+    method: 'post',
   }, (data, error) => {
     if (error) {
       return this.approvalApi.onError(error);
@@ -129,7 +129,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       body,
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         return this.transitionApi.onError(error);
@@ -151,7 +151,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     body: {
       signatureGroupName,
     },
-    method: "post",
+    method: 'post',
   }, (data, error) => {
     if (error) {
       return this.updateApi.onError(error);
@@ -165,7 +165,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
 
   public fetchApprovalsThreshold = () => this.approvalLevelsAPI.set({
     url: FBEndpoint.ApprovalLevels,
-    method: "get",
+    method: 'get',
   }, (data, error) => {
     if (error) {
       return this.approvalLevelsAPI.onError(error);

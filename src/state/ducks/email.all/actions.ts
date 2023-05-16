@@ -1,5 +1,5 @@
-import { apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
+import { apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
 
 const sendEmail = (
   id: string,
@@ -7,7 +7,7 @@ const sendEmail = (
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `/dashboard_feed/${id}/send_call_to_action_email`,
-    method: "post",
+    method: 'post',
     handlers,
   });
 
@@ -17,7 +17,7 @@ const sendDueTrainingEmail = (
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `/dashboard_feed/${id}/send_due_training_email`,
-    method: "post",
+    method: 'post',
     handlers,
   });
 

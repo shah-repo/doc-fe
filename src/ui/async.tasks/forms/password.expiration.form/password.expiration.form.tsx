@@ -1,9 +1,9 @@
-import { Box, Button, Grid, TextField } from "@material-ui/core";
-import moment from "moment";
-import React from "react";
-import { MomentFormats } from "../../../../common/utils/date";
-import Text from "../../../components/Text";
-import { styles } from "./password.expiration.form.styles";
+import { Box, Button, Grid, TextField } from '@material-ui/core';
+import moment from 'moment';
+import React from 'react';
+import { MomentFormats } from '../../../../common/utils/date';
+import Text from '../../../components/Text';
+import { styles } from './password.expiration.form.styles';
 
 interface Props {
   handlePasswordExpirationFormSubmit: ( { passwordUpdatedAt, userEmails, passwordLastEmailSentAt } ) => void;
@@ -21,7 +21,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   const [passwordLastEmailSentAt, setPasswordLastEmailSentAt] = React.useState(
     getUtcFormattedString(defaultDate)
   );
-  const [userEmails, setUserEmails] = React.useState("");
+  const [userEmails, setUserEmails] = React.useState('');
   const handlePasswordUpdatedDateChange = (event: any) => {
     setPasswordUpdatedAt(getUtcFormattedString(event?.target?.value));
   };
@@ -78,7 +78,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             handlePasswordExpirationFormSubmit({ ...{ passwordUpdatedAt, userEmails, passwordLastEmailSentAt } });
           }}
         >
-          <Text translation={"common.submit"} />
+          <Text translation={'common.submit'} />
         </Button>
       </Box>
     </Box>

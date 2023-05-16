@@ -1,13 +1,13 @@
-import { BoxProps } from "@material-ui/core";
-import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskFieldState, FBTaskState, FBVisibilityType } from "..";
-import { Attachment } from "../../../state/ducks/attachments/types";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { Employee } from "../../../state/ducks/company/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { BoxProps } from '@material-ui/core';
+import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskFieldState, FBTaskState, FBVisibilityType } from '..';
+import { Attachment } from '../../../state/ducks/attachments/types';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { Employee } from '../../../state/ducks/company/types';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
-type FBTaskItemType = "CR_IMPLEMENTATION_PLAN" | "GENERIC";
-export type FBTaskItemStatus = "DRAFT" | "PENDING" | "DONE" | "ABANDONED";
-export type FBTaskActionMode = "description" | "note";
+type FBTaskItemType = 'CR_IMPLEMENTATION_PLAN' | 'GENERIC';
+export type FBTaskItemStatus = 'DRAFT' | 'PENDING' | 'DONE' | 'ABANDONED';
+export type FBTaskActionMode = 'description' | 'note';
 
 export interface FBTaskItem {
   id?: string;
@@ -24,10 +24,10 @@ export interface FBTaskItem {
   partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
 }
 
-export type FBClosingNoteProps = Pick<FBTaskItem, "id" | "closingNoteInput" | "attachments">;
+export type FBClosingNoteProps = Pick<FBTaskItem, 'id' | 'closingNoteInput' | 'attachments'>;
 
 export type FBTaskProps =
-& Pick<FBInputProps, "name" | "label" | "disabled">
+& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
   onClick?: (id?: string) => any;
   taskState?: FBTaskState;
@@ -38,9 +38,9 @@ export type FBTaskProps =
 };
 
 export type FBTaskFormProps =
-& Pick<FBInputProps, "name">
-& Pick<FBFormProps, "formState" | "children" | "initialValues">
-& Pick<FBSchemaComponentProps, "schema">
+& Pick<FBInputProps, 'name'>
+& Pick<FBFormProps, 'formState' | 'children' | 'initialValues'>
+& Pick<FBSchemaComponentProps, 'schema'>
 & {
   handleAdd?: () => any;
   handleCancel?: () => any;
@@ -48,8 +48,8 @@ export type FBTaskFormProps =
 };
 
 export type FBTaskFieldProps =
-& Pick<FBTaskProps, "onClick">
-& Pick<BoxProps, "onMouseOver" | "onMouseLeave">
+& Pick<FBTaskProps, 'onClick'>
+& Pick<BoxProps, 'onMouseOver' | 'onMouseLeave'>
 & {
   handleRemoveTask?: (task?: FBTaskItem) => any;
   handleClosingNote?: () => any;

@@ -1,9 +1,9 @@
-import { DocumentRevisionSummaryProps, SMProviderProps } from "../../../../..";
-import { TooltipLabelConfig } from "../../../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevisionSummaryProps, SMProviderProps } from '../../../../..';
+import { TooltipLabelConfig } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 
 export type DocumentRevisionSummaryHeaderProps =
-& Pick<SMProviderProps, "_documentRevisionFormState">
-& Pick<DocumentRevisionSummaryProps, "documentRevision">
+& Pick<SMProviderProps, '_documentRevisionFormState'>
+& Pick<DocumentRevisionSummaryProps, 'documentRevision'>
 & {
   isCRLinkVisible?: boolean;
   isTitleVisible?: boolean;

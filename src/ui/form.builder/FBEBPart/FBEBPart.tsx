@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup, PartType } from "..";
-import { FBButtonStyles } from "../styles/FBButton.styles";
-import { withFBEBPart } from "./FBEBPart.wrap";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup, PartType } from '..';
+import { FBButtonStyles } from '../styles/FBButton.styles';
+import { withFBEBPart } from './FBEBPart.wrap';
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   handleAdd,
@@ -47,7 +47,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
               shouldReloadOnInit
               withState
               omitFormValue
-              name={revisionMode ? "childrenParts" : "childForRevise"}
+              name={revisionMode ? 'childrenParts' : 'childForRevise'}
               optionId={
                 revisionMode
                   ? FBAutocompleteAsyncOption.availableParts

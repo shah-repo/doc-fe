@@ -1,13 +1,13 @@
-import { DocumentRevisionStatus } from "../../../../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 
 export enum TrainingStatusHeaders {
-  Completed="Training Completed",
-  Pending="Training Pending"
+  Completed='Training Completed',
+  Pending='Training Pending'
 }
 
 export enum TrainingStates {
-  COMPLETED="Completed",
-  PENDING="Pending"
+  COMPLETED='Completed',
+  PENDING='Pending'
 }
 
 export interface TrainingItem {

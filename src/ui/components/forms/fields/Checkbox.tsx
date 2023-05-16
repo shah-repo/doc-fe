@@ -1,12 +1,12 @@
-import { Checkbox as MuiCheckbox, FormControlLabel } from "@material-ui/core";
-import { CheckboxProps as MuiCheckboxProps } from "@material-ui/core/Checkbox";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import * as React from "react";
-import { styles } from "../../../../../src/ui/form.builder/styles/FBEditorTextFieldWithRange.styles";
-import { Translation } from "../../../translations/types";
-import Text from "../../Text";
-import { useFormContext } from "../FormContext";
-import Field, { FieldOwnProps } from "./Field";
+import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
+import { CheckboxProps as MuiCheckboxProps } from '@material-ui/core/Checkbox';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import * as React from 'react';
+import { styles } from '../../../../../src/ui/form.builder/styles/FBEditorTextFieldWithRange.styles';
+import { Translation } from '../../../translations/types';
+import Text from '../../Text';
+import { useFormContext } from '../FormContext';
+import Field, { FieldOwnProps } from './Field';
 
 interface CheckboxOwnProps extends FieldOwnProps {
   checkboxProps?: MuiCheckboxProps;
@@ -30,7 +30,7 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
             {...fieldProps.field}
             {...checkboxProps}
             checked={field.value}
-            value={field.value ? "checked" : ""}
+            value={field.value ? 'checked' : ''}
             id="Checkbox-box"
             onChange={(evt, checked: boolean) => {
               field.onChange(evt);

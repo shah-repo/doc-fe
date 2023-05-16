@@ -1,9 +1,9 @@
-import { Box, Grid } from "@material-ui/core";
-import { DataResult, State, process } from "@progress/kendo-data-query";
+import { Box, Grid } from '@material-ui/core';
+import { DataResult, State, process } from '@progress/kendo-data-query';
 import {
   setExpandedState,
   setGroupIds,
-} from "@progress/kendo-react-data-tools";
+} from '@progress/kendo-react-data-tools';
 import {
   GridCellProps,
   GridColumn,
@@ -12,48 +12,48 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
-} from "@progress/kendo-react-grid";
-import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, flatten, get, isEmpty, map, set, sortBy, startCase, values } from "lodash";
-import qs from "query-string";
-import React, { useCallback, useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { AutoSizer, Size } from "react-virtualized";
-import * as generateUuid from "uuid/v4";
-import apiClient from "../../../state/apiClient";
-import { authActions } from "../../../state/ducks/auth";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
-import { store } from "../../../state/store";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
-import StyledKendoGrid from "../../components/StyledKendoGrid/StyledKendoGrid";
-import CellRender from "../../components/common/kendo.column.templates/CellRender";
-import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
-import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import Loader from "../../components/common/kendo/Loader";
-import NoDataFound from "../../components/common/kendo/NoDataFound";
-import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth } from "../../components/common/kendo/helpers";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { toastError } from "../../components/notifications";
-import ClearFilters from "../../components/table/ClearFilters";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDidMount from "../../hooks/useDidMount";
-import AddEmployeeContainer from "../add.employee/container";
-import UMExport from "./UMExport";
-import { CommandCell } from "./cell.template/CommandCell";
-import { DropdownFilterCell } from "./cell.template/DropdownFilterCell";
-import { EmailCell } from "./cell.template/EmailCell";
-import { GroupDropdown } from "./cell.template/GroupDropdown";
-import { GroupsCell } from "./cell.template/GroupsCell";
-import { NameCell } from "./cell.template/NameCell";
-import { SignedCell } from "./cell.template/SignedCell";
-import { enterUserInfo } from "./column.definition";
-import { AddUserManage, UserManage, UserManagementProps } from "./types";
+} from '@progress/kendo-react-grid';
+import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
+import { find, flatten, get, isEmpty, map, set, sortBy, startCase, values } from 'lodash';
+import qs from 'query-string';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { AutoSizer, Size } from 'react-virtualized';
+import * as generateUuid from 'uuid/v4';
+import apiClient from '../../../state/apiClient';
+import { authActions } from '../../../state/ducks/auth';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { userManagementActions, userManagementSelectors } from '../../../state/ducks/userManagement';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
+import { store } from '../../../state/store';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
+import CellRender from '../../components/common/kendo.column.templates/CellRender';
+import { DropdownFilterTemplate } from '../../components/common/kendo.column.templates/DropdownFilterTemplate';
+import ColumnHeader from '../../components/common/kendo/ColumnHeader';
+import Loader from '../../components/common/kendo/Loader';
+import NoDataFound from '../../components/common/kendo/NoDataFound';
+import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth } from '../../components/common/kendo/helpers';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { toastError } from '../../components/notifications';
+import ClearFilters from '../../components/table/ClearFilters';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDidMount from '../../hooks/useDidMount';
+import AddEmployeeContainer from '../add.employee/container';
+import UMExport from './UMExport';
+import { CommandCell } from './cell.template/CommandCell';
+import { DropdownFilterCell } from './cell.template/DropdownFilterCell';
+import { EmailCell } from './cell.template/EmailCell';
+import { GroupDropdown } from './cell.template/GroupDropdown';
+import { GroupsCell } from './cell.template/GroupsCell';
+import { NameCell } from './cell.template/NameCell';
+import { SignedCell } from './cell.template/SignedCell';
+import { enterUserInfo } from './column.definition';
+import { AddUserManage, UserManage, UserManagementProps } from './types';
 
 let call: CancelTokenSource;
 
@@ -62,12 +62,12 @@ export function KendoPanel<T>({
   tableName,
   gridData,
   tableCriteria,
-  queryUrl = "",
+  queryUrl = '',
   rerender,
   onSelect,
 }: UserManagementProps<Partial<GetEmployeeResponse>>) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -118,16 +118,16 @@ export function KendoPanel<T>({
   const [updatedGridData, setUpdatedGridData] = useState<AddUserManage>();
   const async = useAsync({
     onSuccess: () => {
-      enterUserInfo.name = "";
-      enterUserInfo.email = "";
+      enterUserInfo.name = '';
+      enterUserInfo.email = '';
       queryApi();
     },
     onError: (error) => {
-      if (gridData.length && get(gridData, "[0].inEdit") && updatedGridData) {
-        set(gridData, "[0].name", updatedGridData.user.name);
-        set(gridData, "[0].email", updatedGridData.user.email);
-        set(gridData, "[0].groups", updatedGridData.groups);
-        set(gridData, "[0].id", updatedGridData.user.id);
+      if (gridData.length && get(gridData, '[0].inEdit') && updatedGridData) {
+        set(gridData, '[0].name', updatedGridData.user.name);
+        set(gridData, '[0].email', updatedGridData.user.email);
+        set(gridData, '[0].groups', updatedGridData.groups);
+        set(gridData, '[0].id', updatedGridData.user.id);
         const newDataState = processWithGroups(gridData, dataState);
         setResultState(newDataState);
       }
@@ -157,7 +157,7 @@ export function KendoPanel<T>({
     initialDataState = {
       filter:
         {
-          logic: "and",
+          logic: 'and',
           filters: [],
         },
       skip: 0,
@@ -169,7 +169,7 @@ export function KendoPanel<T>({
 
   const setSearchStatus = (reset: boolean) => {
     dataState.filter = {
-      logic: "and",
+      logic: 'and',
       filters: [],
     };
     if (reset) {
@@ -238,7 +238,7 @@ export function KendoPanel<T>({
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
+      method: 'get',
       url: queryUrl,
       params: {},
       paramsSerializer: (params) => qs.stringify(params),
@@ -254,7 +254,7 @@ export function KendoPanel<T>({
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
-          apiError: "",
+          apiError: '',
           scrollToIndex: 0,
           forceUpdate: false,
           kendoConfig: JSON.stringify(initialDataState),
@@ -273,13 +273,13 @@ export function KendoPanel<T>({
           groups: el.groups
             .map((e: { name: string }) => e.name.trimLeft().trimEnd())
             .sort()
-            .join(", "),
+            .join(', '),
           status:
             el?.user?.confirmed && !el?.user?.locked
-              ? getTranslatedText("user.management.signed.up")
+              ? getTranslatedText('user.management.signed.up')
               : !el?.user?.confirmed
-                ? getTranslatedText("user.management.resend.signup.email")
-                : getTranslatedText("reset.password"),
+                ? getTranslatedText('user.management.resend.signup.email')
+                : getTranslatedText('reset.password'),
           activeStatus: el?.active
             ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
             : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
@@ -300,7 +300,7 @@ export function KendoPanel<T>({
         }
         setIsLoading(false);
         setFireAPI(false);
-        let responseMessage = "";
+        let responseMessage = '';
         const isUnauthorizedRequest = exception.response?.status === 401;
         if (isUnauthorizedRequest) {
           dispatch(authActions.logoutUser());
@@ -311,7 +311,7 @@ export function KendoPanel<T>({
             data: { message },
           } = exception.response as AsyncActionErrorResponse;
           responseMessage = Array.isArray(message)
-            ? message.join("; ")
+            ? message.join('; ')
             : message;
         }
         const errorMessage: string = responseMessage || exception.message;
@@ -319,7 +319,7 @@ export function KendoPanel<T>({
           tableSearchActions.setSearchCriteria(
             {
               queryDict: {},
-              apiError: "Error: " + errorMessage,
+              apiError: 'Error: ' + errorMessage,
               forceUpdate: false,
               kendoConfig: JSON.stringify(initialDataState),
               columnConfig: JSON.stringify(columnDefinitions),
@@ -414,15 +414,15 @@ export function KendoPanel<T>({
     <GroupsCell {...props} updatedGridData ={updatedGridData} />;
 
   const fieldToCellMapping = {
-    "user.name": NameCell,
-    "user.email": EmailCell,
-    "groups": userGroups,
-    "status": SignedCell,
-    "": commandCell,
+    'user.name': NameCell,
+    'user.email': EmailCell,
+    'groups': userGroups,
+    'status': SignedCell,
+    '': commandCell,
   };
 
   const columnRenderer = (gridWidth: number) => (
-    sortBy(columnDefinitions, ["orderIndex"]).map((column, idx) => (
+    sortBy(columnDefinitions, ['orderIndex']).map((column, idx) => (
       <GridColumn
         key={idx}
         {...column}
@@ -535,7 +535,7 @@ export function KendoPanel<T>({
   );
   const getExportData = (data) => {
     if (data.length && data[0].items) {
-      return getExportData(flatten(map(values(data), "items")));
+      return getExportData(flatten(map(values(data), 'items')));
     }
     return data;
   };
@@ -557,7 +557,7 @@ export function KendoPanel<T>({
         </Grid>
       </Grid>
       <Grid item xs={12} className={classes.kendoGridItem}>
-        <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+        <div style={{ color: 'red' }}>{tableCriteria.apiError}</div>
         {renderBody()}
       </Grid>
     </>

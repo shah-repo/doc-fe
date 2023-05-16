@@ -1,5 +1,5 @@
-import { isEmpty, map } from "lodash";
-import { action, observable, ObservableMap } from "mobx";
+import { isEmpty, map } from 'lodash';
+import { action, observable, ObservableMap } from 'mobx';
 
 class FBAutocompleteAsyncStore {
   @observable public data = new Map<string, any>();

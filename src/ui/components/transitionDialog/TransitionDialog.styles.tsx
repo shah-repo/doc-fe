@@ -1,8 +1,8 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, Theme } from '@material-ui/core';
 
 export default (theme: Theme) =>
   createStyles({
     container: {
-      display: "inline-block",
+      display: 'inline-block',
     },
   });

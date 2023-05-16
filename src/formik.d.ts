@@ -1,5 +1,5 @@
-import { FormikFormProps } from "formik";
+import { FormikFormProps } from 'formik';
 
-declare module "formik" {
+declare module 'formik' {
   export function Form(props: FormikFormProps): JSX.Element;
 }

@@ -1,8 +1,8 @@
-import { first } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { EBPartPostBody, FB, FBEBPartFormActions, FBEBPartFormProps, FBFormState } from "..";
+import { first } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { EBPartPostBody, FB, FBEBPartFormActions, FBEBPartFormProps, FBFormState } from '..';
 
 export const withFBEBPartForm = <T extends FBEBPartFormProps>(
   Component: React.FunctionComponent<T>,
@@ -37,8 +37,8 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     };
 
     const setFormDocument = (value?: string) => {
-      formState?.setFieldValue("formDocument.id", value);
-      formState?.getInputState("formDocument.id")?.setRender();
+      formState?.setFieldValue('formDocument.id', value);
+      formState?.getInputState('formDocument.id')?.setRender();
       formState?.validate();
     };
 
@@ -47,7 +47,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     // MARK: @reactions
     // on document type autocomplete change
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("document.documentType.id")?.value,
+      () => formState?.inputState.get('document.documentType.id')?.value,
       (data) => {
         setFormDocument(undefined);
         if (!data || !FB.isUUID(data)) { return; }
@@ -60,7 +60,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     // on fetch proposed doc id
     React.useEffect(() => reaction(
       () => ebPartState?.proposedDocIdApi.data,
-      (data) => formState.setFieldValue("document.docId", data?.docId),
+      (data) => formState.setFieldValue('document.docId', data?.docId),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -85,7 +85,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
       disabled = disabled || loading;
 
       // disable Choose a Form Autocomplete if document type isn't selected
-      formAutocompleteDisabled = !FB.isUUID(formState?.getInputState("document.documentType.id")?.value);
+      formAutocompleteDisabled = !FB.isUUID(formState?.getInputState('document.documentType.id')?.value);
 
       // map forms from fetched document type
       formOptions = ebPartState?.documentTypeApi.data?.forms;
@@ -102,6 +102,6 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     });
   };
 
-  Comp.displayName = "withFBEBPartForm";
+  Comp.displayName = 'withFBEBPartForm';
   return Comp;
 };

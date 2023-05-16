@@ -1,8 +1,8 @@
-import { FormControlLabel, Switch } from "@material-ui/core";
-import React from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBProcedureDiffProps, FBText } from "..";
-import { withFBProcedureDiff } from "./FBProcedureDiff.wrap";
+import { FormControlLabel, Switch } from '@material-ui/core';
+import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { FBInput, FBProcedureDiffProps, FBText } from '..';
+import { withFBProcedureDiff } from './FBProcedureDiff.wrap';
 
 const FBProcedureDiff: React.FunctionComponent<FBProcedureDiffProps> = ({
   handleChange,

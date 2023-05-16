@@ -1,10 +1,10 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2, 2, 0),
     borderTopWidth: 1,
-    borderTopStyle: "solid",
+    borderTopStyle: 'solid',
     borderTopColor: theme.palette.divider,
   },
   list: {

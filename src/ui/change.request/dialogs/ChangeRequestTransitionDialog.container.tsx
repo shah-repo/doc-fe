@@ -1,12 +1,12 @@
-import { ButtonProps } from "@material-ui/core/Button";
-import React from "react";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
-import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import { EffectiveDateFormValues, PasswordFormValues } from "../form/types";
+import { ButtonProps } from '@material-ui/core/Button';
+import React from 'react';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../state/ducks/changeRequest/types';
+import TransitionDialog from '../../components/transitionDialog/TransitionDialog';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import { EffectiveDateFormValues, PasswordFormValues } from '../form/types';
 
 interface Props {
   changeRequestId: string;
@@ -30,7 +30,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       onSuccess && onSuccess();
-      if (transition === "closed") {
+      if (transition === 'closed') {
         effectiveDateDialog.close();
       } else {
         transitionDialog.close();
@@ -43,7 +43,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
 
   const openDialog = () => {
     async.reset();
-    if (transition === "closed") {
+    if (transition === 'closed') {
       effectiveDateDialog.open();
     } else {
       transitionDialog.open();

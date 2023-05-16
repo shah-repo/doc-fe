@@ -1,4 +1,4 @@
-import { TableSearchQueryProps } from "./types";
+import { TableSearchQueryProps } from './types';
 
 export const searchQueryString = ({ query, searchValueGetter }: TableSearchQueryProps) => {
   let queryValue = query.toString();

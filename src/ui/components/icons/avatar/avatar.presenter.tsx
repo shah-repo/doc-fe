@@ -1,10 +1,10 @@
-import { Avatar, Box } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { Nullable } from "../../../../state/ducks/common/types";
-import AvatarUploadContainer from "../../common/avatar.field/container";
-import styles from "./avatar.styles";
+import { Avatar, Box } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { Nullable } from '../../../../state/ducks/common/types';
+import AvatarUploadContainer from '../../common/avatar.field/container';
+import styles from './avatar.styles';
 
 interface OwnProps {
   avatar: Nullable<string>;

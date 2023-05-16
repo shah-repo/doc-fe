@@ -1,17 +1,17 @@
-import { Box, Grid } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FormContext } from "../../components/forms/FormContext";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import AddEmployeeFormPresenter from "./form.presenter";
-import { transformToAddEmployeeRequest } from "./utils/transform";
+import { Box, Grid } from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { userManagementActions, userManagementSelectors } from '../../../state/ducks/userManagement';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../components/forms/FormContext';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import AddEmployeeFormPresenter from './form.presenter';
+import { transformToAddEmployeeRequest } from './utils/transform';
 
 export interface AddEmployeeFormValues {
   id?: string;
@@ -21,7 +21,7 @@ export interface AddEmployeeFormValues {
 }
 
 const AddEmployeeFormContainer: React.FunctionComponent = () => {
-  const TABLE_NAME = "userManagement";
+  const TABLE_NAME = 'userManagement';
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -31,8 +31,8 @@ const AddEmployeeFormContainer: React.FunctionComponent = () => {
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
 
   const initialValues = {
-    name: "",
-    email: "",
+    name: '',
+    email: '',
     groups: defaultGroups,
   };
 

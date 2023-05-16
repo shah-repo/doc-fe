@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo } from "react";
-import { changeRequestsActions } from "../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../state/ducks/changeRequest/types";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
-import useMqttSubscription from "../hooks/useMqttSubscription";
+import React, { useCallback, useMemo } from 'react';
+import { changeRequestsActions } from '../../state/ducks/changeRequest';
+import { ChangeRequest } from '../../state/ducks/changeRequest/types';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
+import useMqttSubscription from '../hooks/useMqttSubscription';
 
 interface Props {
   changeRequest: ChangeRequest;

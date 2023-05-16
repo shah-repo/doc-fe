@@ -1,14 +1,14 @@
-import { Box, Typography } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBMPIProcedureSelectProps, FBProcedureItemType, FBQuantityUnitField } from "..";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import Text from "../../components/Text";
-import { checkIsDocumentLot } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBMPIProcedureSelect } from "./FBMPIProcedureSelect.wrap";
+import { Box, Typography } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBMPIProcedureSelectProps, FBProcedureItemType, FBQuantityUnitField } from '..';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import Text from '../../components/Text';
+import { checkIsDocumentLot } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionInDraft } from '../../documentRevision/helpers/documentRevisionStatus';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBMPIProcedureSelect } from './FBMPIProcedureSelect.wrap';
 
 const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> = ({
   isOptionDisabled,
@@ -41,10 +41,10 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 optionLabelKey="document.docId"
                 optionValueType="object"
                 renderOption={(option) =>
-                  `${option.document.docId} | ${option.precalc?.lot_part || ""}`
+                  `${option.document.docId} | ${option.precalc?.lot_part || ''}`
                 }
                 getOptionLabel={(option) =>
-                  `${option.document.docId} | ${option.precalc?.lot_part || ""}`
+                  `${option.document.docId} | ${option.precalc?.lot_part || ''}`
                 }
                 inputPropStyleSize="small"
                 customStyles = {{ height: 40 }}
@@ -70,8 +70,8 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
           />
           {selectedEQ && <>
             {selectedEQ.status &&
-            <Box mb={3} fontWeight={"bold"}>
-              <Typography style={{ color: Colors.font_gray, fontWeight: "bold"  }}>
+            <Box mb={3} fontWeight={'bold'}>
+              <Typography style={{ color: Colors.font_gray, fontWeight: 'bold'  }}>
                 <Text message="common.status"/>:
               </Typography>
               {selectedEQ?.status}
@@ -79,20 +79,20 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
             }
             {selectedEQ.calDate &&
             <Box mb={3}>
-              <Typography style={{ color: Colors.font_gray, fontWeight: "bold" }}>
+              <Typography style={{ color: Colors.font_gray, fontWeight: 'bold' }}>
                 <Text message="form.builder.calibration"/>:
               </Typography>
-              <Text message="common.next"/>: <Box component={"span"} fontWeight={"bold"}>
+              <Text message="common.next"/>: <Box component={'span'} fontWeight={'bold'}>
                 {getFormattedDateString(selectedEQ.calDate, MomentFormats.BriefDate)}
               </Box>
             </Box>
             }
             {selectedEQ.pmDate &&
             <Box>
-              <Typography style={{ color: Colors.font_gray, fontWeight: "bold" }}>
+              <Typography style={{ color: Colors.font_gray, fontWeight: 'bold' }}>
                 <Text message="form.builder.preventative.maintenance"/>:
               </Typography>
-              <Text message="common.next"/>: <Box component={"span"} fontWeight={"bold"}>
+              <Text message="common.next"/>: <Box component={'span'} fontWeight={'bold'}>
                 {getFormattedDateString(selectedEQ.pmDate, MomentFormats.BriefDate)}
               </Box>
             </Box>

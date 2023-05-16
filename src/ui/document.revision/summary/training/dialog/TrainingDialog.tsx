@@ -1,17 +1,17 @@
-import { Button, createStyles, Dialog, DialogContent, DialogTitle, IconButton, makeStyles, Theme, Typography } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import CloseIcon from "@material-ui/icons/Close";
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import { AsyncState } from "../../../../../state/types";
-import { EffectiveDateFormValues } from "../../../../change.request/form/types";
-import { FormContext } from "../../../../components/forms/FormContext";
-import Text from "../../../../components/Text";
-import { PasswordFormValues, Transition } from "../../../../components/transitionDialog/types";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import Colors from "../../../../layout/theme/utils/colors";
-import TrainingForm from "./TrainingForm";
+import { Button, createStyles, Dialog, DialogContent, DialogTitle, IconButton, makeStyles, Theme, Typography } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { AsyncState } from '../../../../../state/types';
+import { EffectiveDateFormValues } from '../../../../change.request/form/types';
+import { FormContext } from '../../../../components/forms/FormContext';
+import Text from '../../../../components/Text';
+import { PasswordFormValues, Transition } from '../../../../components/transitionDialog/types';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import Colors from '../../../../layout/theme/utils/colors';
+import TrainingForm from './TrainingForm';
 
 interface Props {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
@@ -28,15 +28,15 @@ interface Props {
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     dialogContent: {
-      padding: "25px",
+      padding: '25px',
     },
     dialogTitle: {
-      fontSize: "1.5rem",
+      fontSize: '1.5rem',
       color: Colors.black,
       fontWeight: 500,
     },
     closeButton: {
-      position: "absolute",
+      position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
@@ -94,14 +94,14 @@ const TrainingDialog: React.FunctionComponent<Props> =
           </IconButton>
           <DialogTitle>
             <Typography className={classes.dialogTitle}>
-              <Text translation={"training.acknowledge.completion"} />
+              <Text translation={'training.acknowledge.completion'} />
             </Typography>
           </DialogTitle>
 
           <DialogContent>
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={{ password: "" }}
+                initialValues={{ password: '' }}
                 onSubmit={onSubmit}
               >
                 {renderForm}

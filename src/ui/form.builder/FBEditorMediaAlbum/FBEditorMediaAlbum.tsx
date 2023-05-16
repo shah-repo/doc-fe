@@ -1,8 +1,8 @@
-import React from "react";
-import { FBCheckbox, FBEditor, FBEditorProps, FBTextField } from "..";
-import Text from "../../components/Text";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import React from 'react';
+import { FBCheckbox, FBEditor, FBEditorProps, FBTextField } from '..';
+import Text from '../../components/Text';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorMediaAlbum: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -28,7 +28,7 @@ const FBEditorMediaAlbum: React.FunctionComponent<FBEditorProps> = ({
         )}
       </Text>
       <FBCheckbox
-        defaultChecked={type === "instructionsmediaupload"}
+        defaultChecked={type === 'instructionsmediaupload'}
         name="isTemplate"
         hidden={true}
       />

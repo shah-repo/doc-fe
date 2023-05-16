@@ -1,13 +1,13 @@
-import { Box, Tooltip } from "@material-ui/core";
-import { isString, isUndefined } from "lodash";
-import React from "react";
-import { FBConditionalWrapper, FBTooltipProps } from "..";
-import Text from "../../components/Text";
-import useStyles from "./FBTooltip.styles";
+import { Box, Tooltip } from '@material-ui/core';
+import { isString, isUndefined } from 'lodash';
+import React from 'react';
+import { FBConditionalWrapper, FBTooltipProps } from '..';
+import Text from '../../components/Text';
+import useStyles from './FBTooltip.styles';
 
 const FBTooltip: React.FC<FBTooltipProps> = ({
   arrow = true,
-  placement = "top",
+  placement = 'top',
   title,
   children,
   ...props

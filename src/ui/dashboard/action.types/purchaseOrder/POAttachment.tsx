@@ -1,7 +1,7 @@
-import { Box, CircularProgress, createStyles, makeStyles } from "@material-ui/core";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
-import React from "react";
-import { Attachment } from "../../../change.request/form/types";
+import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import React from 'react';
+import { Attachment } from '../../../change.request/form/types';
 
 interface Props {
   attachment: Attachment;
@@ -11,11 +11,11 @@ interface Props {
 const styles = makeStyles((theme) =>
   createStyles({
     link: {
-      "color": theme.palette.primary.main,
-      "marginRight": 15,
-      "cursor": "pointer",
-      "&:hover": {
-        textDecoration: "underline",
+      'color': theme.palette.primary.main,
+      'marginRight': 15,
+      'cursor': 'pointer',
+      '&:hover': {
+        textDecoration: 'underline',
       },
     },
   }));

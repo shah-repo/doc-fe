@@ -1,11 +1,11 @@
-import { reaction } from "mobx";
-import React, { useCallback } from "react";
-import { FB } from "..";
-import useMqttSubscription from "../../hooks/useMqttSubscription";
+import { reaction } from 'mobx';
+import React, { useCallback } from 'react';
+import { FB } from '..';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ docRevisionId }) => {
   const { fileUploadState } = FB.useStores();
-  const [topic, setTopic] = React.useState("");
+  const [topic, setTopic] = React.useState('');
   const [attachmentId, setAttachmentId] = React.useState<string>();
 
   React.useEffect(() => reaction(

@@ -1,7 +1,7 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { BlockTypeField, FB, FBFieldWrapperProps, FBFieldWrapperState } from "..";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { BlockTypeField, FB, FBFieldWrapperProps, FBFieldWrapperState } from '..';
+import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   Component: React.FunctionComponent<T>,
@@ -19,7 +19,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   }: T) => {
     const { workspaceState, sortableState } = FB.useStores();
     const { designDisabled = false, index, type } = inputProps || {};
-    const reviseDisabled = inputProps?.editorProperties?.includes("reviseDisabled");
+    const reviseDisabled = inputProps?.editorProperties?.includes('reviseDisabled');
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
     const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
 
@@ -59,7 +59,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
       isDragged = index === sortableState?.draggedIndex;
     });
 
-    const isSection = type === "section" || type === "subsection";
+    const isSection = type === 'section' || type === 'subsection';
     const isBlock = type && BlockTypeField.includes(type);
     const isFirst = position === 1;
     const mt = isFirst || isDragged ? 0 : isBlock ? 6 : 3.5;

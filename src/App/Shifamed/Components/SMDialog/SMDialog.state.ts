@@ -1,5 +1,5 @@
-import { action, observable, set } from "mobx";
-import { SMDialogStateProps } from "../../..";
+import { action, observable, set } from 'mobx';
+import { SMDialogStateProps } from '../../..';
 
 export default class SMDialogState implements SMDialogStateProps {
 
@@ -13,5 +13,5 @@ export default class SMDialogState implements SMDialogStateProps {
   // MARK: @computed
 
   // MARK: @actions
-  @action public setOpen = (isOpen: boolean) => set(this, "isOpen", isOpen);
+  @action public setOpen = (isOpen: boolean) => set(this, 'isOpen', isOpen);
 }

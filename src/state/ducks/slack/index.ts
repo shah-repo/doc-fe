@@ -1,1 +1,1 @@
-export { default as slackActions } from "./actions";
+export { default as slackActions } from './actions';

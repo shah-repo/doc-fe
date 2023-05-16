@@ -1,7 +1,7 @@
-import React from "react";
-import { DocumentRevisionSummaryHeaderProps, SM } from "../../../../..";
-import { useCRLink, useTitle } from "../../../../../../ui/hooks/docCustomization/useCustomization";
-import useDescription from "../../../../../../ui/hooks/docCustomization/useDescription";
+import React from 'react';
+import { DocumentRevisionSummaryHeaderProps, SM } from '../../../../..';
+import { useCRLink, useTitle } from '../../../../../../ui/hooks/docCustomization/useCustomization';
+import useDescription from '../../../../../../ui/hooks/docCustomization/useDescription';
 
 export const withDocumentRevisionSummaryHeader = <T extends DocumentRevisionSummaryHeaderProps>(
   Component: React.FunctionComponent<T>,
@@ -47,6 +47,6 @@ export const withDocumentRevisionSummaryHeader = <T extends DocumentRevisionSumm
     );
   };
 
-  Comp.displayName = "withDocumentRevisionSummaryHeader";
+  Comp.displayName = 'withDocumentRevisionSummaryHeader';
   return Comp;
 };

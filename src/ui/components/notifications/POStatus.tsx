@@ -4,14 +4,14 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import { Slide, toast } from "react-toastify";
-import { ReactComponent as CloseIcon } from "../../../assets/images/po_status_close.svg";
-import { ReactComponent as InfoIcon } from "../../../assets/images/po_status_info.svg";
-import Text from "../Text";
-import POStatusToastrStyles from "./POStatus.styles";
-import "./styles.css";
+} from '@material-ui/core';
+import React from 'react';
+import { Slide, toast } from 'react-toastify';
+import { ReactComponent as CloseIcon } from '../../../assets/images/po_status_close.svg';
+import { ReactComponent as InfoIcon } from '../../../assets/images/po_status_info.svg';
+import Text from '../Text';
+import POStatusToastrStyles from './POStatus.styles';
+import './styles.css';
 
 interface Props {
   id?: string;
@@ -50,14 +50,14 @@ const POToastr: React.FC<Props> = (props) => {
               id="po-status-link-text"
               className={classes.secondaryLinkText}
             >
-              <span style={{ display: "inline-block" }}>
+              <span style={{ display: 'inline-block' }}>
                 { props?.id }
                 <div className={classes.blackDot} />
                 <Text
                   translation="form.builder.header.rev"
                   values={{ revision: props?.revId }}/>
               </span>
-            </Link>{" "}
+            </Link>{' '}
             <Text translation="documentRevision.po.reopen"/>
           </Typography>
         }
@@ -74,9 +74,9 @@ const closeButton = ({ closeToast }) => (
 export const openPOToastr = (myProps, options = {}) =>
   toast(<POToastr {...myProps} />, {
     ...{
-      toastId: "poStatusToast",
-      bodyClassName: "poStatusToastrBody",
-      position: "top-center",
+      toastId: 'poStatusToast',
+      bodyClassName: 'poStatusToastrBody',
+      position: 'top-center',
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: true,
@@ -84,7 +84,7 @@ export const openPOToastr = (myProps, options = {}) =>
       transition: Slide,
       timeout: 0,
       extendedTimeout: 0,
-      theme: "Light",
+      theme: 'Light',
       closeButton,
     },
     ...options,

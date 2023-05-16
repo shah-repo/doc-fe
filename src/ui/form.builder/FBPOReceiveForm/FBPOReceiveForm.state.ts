@@ -1,14 +1,14 @@
-import { template } from "lodash";
-import { action } from "mobx";
-import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from "..";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { documentPreviewPath } from "../../document.revision/utils/paths";
-import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
-import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { template } from 'lodash';
+import { action } from 'mobx';
+import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from '..';
+import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { documentPreviewPath } from '../../document.revision/utils/paths';
+import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
+import { filterSecurityGroupsForQms } from '../../documentType/list/helpers';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBPOReceiveFormState {
   public docIdAPI: FBRequest<any, any> = new FBRequest();
@@ -35,10 +35,10 @@ class FBPOReceiveFormState {
 
   @action public async submit(values: any, poDocumentId?: string) {
     if (!this.releasedLfpoAPI.data || this.releasedLfpoAPI.data?.length === 0) {
-      throw new Error("form.builder.missing.lfpo");
+      throw new Error('form.builder.missing.lfpo');
     }
     if (!this.lfpoDocType || !this.lotDocType) {
-      throw new Error("form.builder.po.no.document.lot");
+      throw new Error('form.builder.po.no.document.lot');
     }
     const data = await this.docIdAPI.fetch();
     await this.createLot(data.docId, values, poDocumentId);
@@ -55,7 +55,7 @@ class FBPOReceiveFormState {
       // name: `${this.item?.glCode}-${this.item?.description}`,
       description: `<p>${this.item?.partNumberDocId}-${this.item?.partNumberTitle}</p>`,
       attachments: [],
-      referenceTo: [{ value: this.documentId, label: "" }],
+      referenceTo: [{ value: this.documentId, label: '' }],
       securityEmployees: [],
       securityGroups,
       operators: [],
@@ -82,7 +82,7 @@ class FBPOReceiveFormState {
     const docRev = await this.createLotAPI.post();
 
     const path = documentPreviewPath(docRev.id, docRev.document.id);
-    window.open(path, "_blank");
+    window.open(path, '_blank');
   }
 
   private fetchLfpoDocs() {

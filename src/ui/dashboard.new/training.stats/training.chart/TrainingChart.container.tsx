@@ -1,7 +1,7 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
-import TrainingChartPresenter from "./TrainingChart.presenter";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { trainingStatsSelectors } from '../../../../state/ducks/dashboard.new/training.stats';
+import TrainingChartPresenter from './TrainingChart.presenter';
 
 interface TrainingChartProps {
   tabValue: number;

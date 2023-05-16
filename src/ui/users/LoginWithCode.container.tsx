@@ -1,11 +1,11 @@
-import queryString from "query-string";
-import React, { useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { authActions } from "../../state/ducks/auth";
-import AsyncGate from "../components/AsyncGate";
-import { LOGIN_URL } from "../constants/urls";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
+import queryString from 'query-string';
+import React, { useEffect } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { authActions } from '../../state/ducks/auth';
+import AsyncGate from '../components/AsyncGate';
+import { LOGIN_URL } from '../constants/urls';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
 
 const LoginWithCodeContainer: React.FunctionComponent<RouteComponentProps> = ({
   location,

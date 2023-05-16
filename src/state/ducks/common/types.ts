@@ -1,13 +1,13 @@
-import { ChangeRequest } from "../changeRequest/types";
-import { Employee } from "../company/types";
-import { DocumentRevision } from "../documentRevisions/types";
+import { ChangeRequest } from '../changeRequest/types';
+import { Employee } from '../company/types';
+import { DocumentRevision } from '../documentRevisions/types';
 
 export enum ApprovalStatus {
-  Draft = "DRAFT",
-  Pending = "PENDING",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
-  Abandoned = "ABANDONED",
+  Draft = 'DRAFT',
+  Pending = 'PENDING',
+  Approved = 'APPROVED',
+  Rejected = 'REJECTED',
+  Abandoned = 'ABANDONED',
 }
 
 export interface Owner {
@@ -29,7 +29,7 @@ export interface Approval {
   updatedAt: string;
   id: string;
   status: ApprovalStatus;
-  type: "MASTER" | "SECTION";
+  type: 'MASTER' | 'SECTION';
   fieldId?: string;
   approver: Owner;
   approverId?: string;
@@ -53,18 +53,18 @@ export interface DataProps<T> {
   dataProp: T;
 }
 
-export type RenderSize = "sm" | "md" | "lg";
+export type RenderSize = 'sm' | 'md' | 'lg';
 
 export enum TypographySize {
-  sm = "subtitle1",
-  md = "h6",
-  mdw = "h5",
-  lg = "h4",
+  sm = 'subtitle1',
+  md = 'h6',
+  mdw = 'h5',
+  lg = 'h4',
 }
 
 export enum TypographyColor {
-  primary = "textPrimary",
-  secondary = "textSecondary",
+  primary = 'textPrimary',
+  secondary = 'textSecondary',
 }
 
 export interface TypographyProps {

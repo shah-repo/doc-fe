@@ -1,9 +1,9 @@
-import { PaletteType } from "@material-ui/core";
-import { PaletteOptions } from "@material-ui/core/styles/createPalette";
-import Colors from "./colors";
+import { PaletteType } from '@material-ui/core';
+import { PaletteOptions } from '@material-ui/core/styles/createPalette';
+import Colors from './colors';
 
 const palette = (): PaletteOptions => ({
-  type: "light" as PaletteType,
+  type: 'light' as PaletteType,
   common: {
     black: Colors.black,
     white: Colors.white,

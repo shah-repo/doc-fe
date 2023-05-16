@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { IotService } from "../../common/utils/iot/iotService";
+import { useEffect } from 'react';
+import { IotService } from '../../common/utils/iot/iotService';
 
 const iotService = IotService.getInstance();
 

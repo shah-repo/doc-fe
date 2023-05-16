@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { ActionCreator, bindActionCreators } from "redux";
+import { useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { ActionCreator, bindActionCreators } from 'redux';
 
 const useActionCreator = <A> (
   action: ActionCreator<A>,

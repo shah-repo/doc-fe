@@ -1,4 +1,4 @@
-import { FBInputProps } from "..";
+import { FBInputProps } from '..';
 
 export type FBInstructionsDocumentProps =
-& Pick<FBInputProps, "name" | "label" | "instructionsDocument">;
+& Pick<FBInputProps, 'name' | 'label' | 'instructionsDocument'>;

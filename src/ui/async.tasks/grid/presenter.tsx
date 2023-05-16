@@ -1,24 +1,24 @@
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
-import { orderBy } from "lodash";
-import React from "react";
-import { GetAsyncTaskResponse } from "../../../state/ducks/async.tasks/types";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import Text from "../../components/Text";
-import PasswordDialogueContainer from "../dialogs/PasswordDialogue";
-import DateForm from "../forms/date.form/date.form";
-import EmailForm from "../forms/email.form/email.form";
-import EmptyForm from "../forms/empty.form/empty.form";
-import PasswordExpirationEmailSpecificForm from "../forms/password.expiration.email.specific/password.expiration.email.specific.form";
-import PasswordExpirationForm from "../forms/password.expiration.form/password.expiration.form";
-import TimeTravelCompany from "../forms/time.travel.company.form/time.travel.company.form";
-import TimeTravelForm from "../forms/time.travel.form/time.travel.form";
-import TimeTravelUser from "../forms/time.travel.user.form/time.travel.user.form";
-import UUIDBasedForm from "../forms/uuid.form/uuid.form";
-import { SQS_TYPES } from "../types";
-import { dropDownOptions } from "./helper";
-import { KendoPresenterProps } from "./interfaces";
-import { styles } from "./presenter.styles";
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { orderBy } from 'lodash';
+import React from 'react';
+import { GetAsyncTaskResponse } from '../../../state/ducks/async.tasks/types';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
+import Text from '../../components/Text';
+import PasswordDialogueContainer from '../dialogs/PasswordDialogue';
+import DateForm from '../forms/date.form/date.form';
+import EmailForm from '../forms/email.form/email.form';
+import EmptyForm from '../forms/empty.form/empty.form';
+import PasswordExpirationEmailSpecificForm from '../forms/password.expiration.email.specific/password.expiration.email.specific.form';
+import PasswordExpirationForm from '../forms/password.expiration.form/password.expiration.form';
+import TimeTravelCompany from '../forms/time.travel.company.form/time.travel.company.form';
+import TimeTravelForm from '../forms/time.travel.form/time.travel.form';
+import TimeTravelUser from '../forms/time.travel.user.form/time.travel.user.form';
+import UUIDBasedForm from '../forms/uuid.form/uuid.form';
+import { SQS_TYPES } from '../types';
+import { dropDownOptions } from './helper';
+import { KendoPresenterProps } from './interfaces';
+import { styles } from './presenter.styles';
 
 export function AsyncTasksPresenter({
   tableName,
@@ -59,7 +59,7 @@ export function AsyncTasksPresenter({
               className={classes.optionSelect}
               onChange={handleChange}
             >
-              {orderBy(dropDownOptions, ["text"], ["asc"]).map((data, index) => (
+              {orderBy(dropDownOptions, ['text'], ['asc']).map((data, index) => (
                 <MenuItem key={data.value} value={data.text}>
                   {data.text}
                 </MenuItem>
@@ -143,7 +143,7 @@ export function AsyncTasksPresenter({
             tableName={tableName}
             tableCriteria={tableCriteria}
             schema={schema}
-            exportDataChanges={() => ""}
+            exportDataChanges={() => ''}
             onRowClick={onRowClick}
             queryUrl={queryUrl}
             defaultPayloadData={{}}

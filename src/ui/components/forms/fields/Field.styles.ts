@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core";
-import { FieldStyleProps } from "./Field";
+import { makeStyles } from '@material-ui/core';
+import { FieldStyleProps } from './Field';
 
 export const styles = makeStyles((theme) => ({
   typography: ({ error }: FieldStyleProps) => ({

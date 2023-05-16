@@ -1,11 +1,11 @@
-import { find } from "lodash";
-import React from "react";
-import { FBControlPickerDataProps, FBEditorCustomControl, FBFavouritesBody, FBFavouritesResponse, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { store } from "../../../state/store";
-import { checkIsDocumentBulkCreate, checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { find } from 'lodash';
+import React from 'react';
+import { FBControlPickerDataProps, FBEditorCustomControl, FBFavouritesBody, FBFavouritesResponse, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from '..';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { store } from '../../../state/store';
+import { checkIsDocumentBulkCreate, checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFavouritesBody>> {
   public data: FBFavouritesResponse| undefined;
@@ -37,48 +37,48 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
     if (isEQ) {
       return {
         inputs: [
-          "eqmaintenance",
+          'eqmaintenance',
         ],
       };
     }
     return {
-      section: ["section", "subsection", "stepsection"],
+      section: ['section', 'subsection', 'stepsection'],
       inputs: [
-        "textfield",
-        "checkboxgroup",
-        "autocomplete",
-        "texteditor",
-        "datepicker",
-        "hyperlink",
-        "select",
-        "radiogroup",
-        "paragraph",
-        "fileupload",
-        ...this.isOutputBulkCreate ? ["zipattachment"] as FBInputType[] : [],
-        "blanktplform",
-        "quantity",
-        "timer",
-        ...this.hasPurchaseOrder ? ["purchaseorder"] as FBInputType[] : [],
-        ...this.hasRecPurchaseOrder ? ["poreceive"] as FBInputType[] : [],
-        "poApprovalMatrix",
-        "instructionsmediaupload",
-        "evidencemediaupload",
-        "procedure",
-        "mpiprocedure",
-        "eqmaintenance",
-        "textfieldwithrange",
-        "supplier",
+        'textfield',
+        'checkboxgroup',
+        'autocomplete',
+        'texteditor',
+        'datepicker',
+        'hyperlink',
+        'select',
+        'radiogroup',
+        'paragraph',
+        'fileupload',
+        ...this.isOutputBulkCreate ? ['zipattachment'] as FBInputType[] : [],
+        'blanktplform',
+        'quantity',
+        'timer',
+        ...this.hasPurchaseOrder ? ['purchaseorder'] as FBInputType[] : [],
+        ...this.hasRecPurchaseOrder ? ['poreceive'] as FBInputType[] : [],
+        'poApprovalMatrix',
+        'instructionsmediaupload',
+        'evidencemediaupload',
+        'procedure',
+        'mpiprocedure',
+        'eqmaintenance',
+        'textfieldwithrange',
+        'supplier',
       ],
       approvals: [
-        "approvals",
-        ...this.hasHelloSign ? ["hellosign"] as FBInputType[] : [],
-        ...this.hasApproval ? ["inlineapproval"] as FBInputType[] : [],
-        ...this.hasRequestApproval ? ["requestapproval"] as FBInputType[] : [],
+        'approvals',
+        ...this.hasHelloSign ? ['hellosign'] as FBInputType[] : [],
+        ...this.hasApproval ? ['inlineapproval'] as FBInputType[] : [],
+        ...this.hasRequestApproval ? ['requestapproval'] as FBInputType[] : [],
       ],
-      customcontrols: ["customcontrol"],
-      instructions: ["instructionsdocument", "selectdocument"],
-      buttons: ["checkpoint", "createlabel", "task"],
-      actions: ["action"],
+      customcontrols: ['customcontrol'],
+      instructions: ['instructionsdocument', 'selectdocument'],
+      buttons: ['checkpoint', 'createlabel', 'task'],
+      actions: ['action'],
     };
   }
 
@@ -115,7 +115,7 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
     this.favouritesAPI.set({
       url: FBEndpoint.Favourites,
       body: { fbComponent: type },
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         this.favouritesAPI.onError(error);
@@ -132,7 +132,7 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
     this.favouritesAPI.set({
       url: FBEndpoint.ModifyFavourites,
       urlValues: { id },
-      method: "delete",
+      method: 'delete',
     }, (data, error) => {
       if (error) {
         this.favouritesAPI.onError(error);

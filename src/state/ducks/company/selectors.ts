@@ -1,10 +1,10 @@
-import { chain, filter, find, pick } from "lodash";
-import { createSelector } from "reselect";
-import { sortStringsByKey } from "../../../common/utils/helpers";
-import Config from "../../../config";
-import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
-import { ApplicationState } from "../../reducers";
-import { WHITE_LABEL_DEFAULT } from "./constants";
+import { chain, filter, find, pick } from 'lodash';
+import { createSelector } from 'reselect';
+import { sortStringsByKey } from '../../../common/utils/helpers';
+import Config from '../../../config';
+import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
+import { ApplicationState } from '../../reducers';
+import { WHITE_LABEL_DEFAULT } from './constants';
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
 const companyIdSelector = (state: ApplicationState) => state.company.companyMine.id;
@@ -35,33 +35,33 @@ const getAutosaveEnabled = (state: ApplicationState) => state.company.autosaveCo
 const getRedlineActive = (state: ApplicationState) => state.company.redlineConfig.redlineActive;
 
 const getNavigationTitle = (state: ApplicationState, category: string) => {
-  const mainMenuItems = filter(state.company.companyMine.navigation, { type: "CATEGORY" });
+  const mainMenuItems = filter(state.company.companyMine.navigation, { type: 'CATEGORY' });
   const subMenuItems = chain(state.company.companyMine.navigation)
-    .filter({ type: "MENU" })
-    .map("menu")
+    .filter({ type: 'MENU' })
+    .map('menu')
     .flatten()
     .value();
-  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
+  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: 'CATEGORY', category });
   return menuItem?.label;
 };
 
 const getNavigationDetails = (state: ApplicationState, category: string) => {
-  const mainMenuItems = filter(state.company.companyMine.navigation, { type: "CATEGORY" });
+  const mainMenuItems = filter(state.company.companyMine.navigation, { type: 'CATEGORY' });
   const subMenuItems = chain(state.company.companyMine.navigation)
-    .filter({ type: "MENU" })
-    .map("menu")
+    .filter({ type: 'MENU' })
+    .map('menu')
     .flatten()
     .value();
-  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
+  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: 'CATEGORY', category });
   return { label: menuItem?.label, icon: menuItem?.icon, path: menuItem?.path, type: menuItem?.type };
 };
 
 const getActiveEmployees = (state: ApplicationState) =>
   chain(state.company.companyMine.employees)
     .filter({ active: true })
-    .map((employee) => pick(employee, ["id", "user.name"]))
+    .map((employee) => pick(employee, ['id', 'user.name']))
     .value()
-    .sort(sortStringsByKey("user.name"));
+    .sort(sortStringsByKey('user.name'));
 
 const getAllEmployees = (state: ApplicationState) => state.company.companyMine.employees;
 

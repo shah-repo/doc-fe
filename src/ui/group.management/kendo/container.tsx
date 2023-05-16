@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, RouteComponentProps } from "react-router-dom";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import {
   getTableCriteria,
   getTableData,
-} from "../../../common/utils/selectors";
-import { authSelectors } from "../../../state/ducks/auth";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
-import { HOME_URL } from "../../constants/urls";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import useGetHasTag from "../../hooks/useGetHasTag";
+} from '../../../common/utils/selectors';
+import { authSelectors } from '../../../state/ducks/auth';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import tableSearchActions from '../../../state/ducks/tableSearch/actions';
+import { userManagementActions } from '../../../state/ducks/userManagement';
+import { LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
+import { HOME_URL } from '../../constants/urls';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import useGetHasTag from '../../hooks/useGetHasTag';
 import {
   getHasOfficialPermissions,
   getHasUnofficialPermissions,
   getIsMemberOfGroup,
-} from "../utils/helpers";
-import { DEFAULT_SELECTED_GROUP } from "../utils/types";
-import KendoPresenter from "./presenter";
+} from '../utils/helpers';
+import { DEFAULT_SELECTED_GROUP } from '../utils/types';
+import KendoPresenter from './presenter';
 
 const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
     DEFAULT_SELECTED_GROUP
   );
 
-  const TABLE_NAME = "groupManagement";
+  const TABLE_NAME = 'groupManagement';
   const tableData = useSelector(getTableData(TABLE_NAME));
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const canManageGroups = useGetHasTag(GroupTag.GROUP_MANAGEMENT);

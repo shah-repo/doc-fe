@@ -1,22 +1,22 @@
-import { ButtonProps } from "@material-ui/core/Button";
-import { FormikErrors } from "formik";
-import { find, isEmpty } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest/types";
-import { ApprovalStatus } from "../../../../state/ducks/common/types";
-import HeaderMenu from "../../../components/common/header/Menu";
-import OwnerChangerContainer from "../../../components/common/owner.changer/container";
-import { RequestType } from "../../../components/common/owner.changer/helpers/types";
-import useGetHasTag from "../../../hooks/useGetHasTag";
-import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
-import ChangeRequestWithdrawDialog from "../../dialogs/ChangeRequestWithdrawDialog";
-import ExportARToEmail from "../../export.email/ExportAREmail";
-import { canChangeCROwner } from "../../utils/helpers";
-import TransitionButton from "./TransitionButton";
-import AssessmentFormVoidContainer from "./Void";
+import { ButtonProps } from '@material-ui/core/Button';
+import { FormikErrors } from 'formik';
+import { find, isEmpty } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from '../../../../state/ducks/changeRequest/types';
+import { ApprovalStatus } from '../../../../state/ducks/common/types';
+import HeaderMenu from '../../../components/common/header/Menu';
+import OwnerChangerContainer from '../../../components/common/owner.changer/container';
+import { RequestType } from '../../../components/common/owner.changer/helpers/types';
+import useGetHasTag from '../../../hooks/useGetHasTag';
+import ChangeRequestTransitionDialogContainer from '../../dialogs/ChangeRequestTransitionDialog.container';
+import ChangeRequestWithdrawDialog from '../../dialogs/ChangeRequestWithdrawDialog';
+import ExportARToEmail from '../../export.email/ExportAREmail';
+import { canChangeCROwner } from '../../utils/helpers';
+import TransitionButton from './TransitionButton';
+import AssessmentFormVoidContainer from './Void';
 
 interface Props {
   changeRequest?: ChangeRequest;
@@ -112,11 +112,11 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {renderTransitionButton(canSendToReview, "in_review")}
-      {renderDialogButton(canApproveOrReject, "reject", { disabled: formHasErrors })}
-      {renderDialogButton(canApproveOrReject, "approve", { disabled: formHasErrors })}
-      {renderDialogButton(canClose, "closed")}
-      {renderAlertDialogButton(canWithdraw, "withdrawn")}
+      {renderTransitionButton(canSendToReview, 'in_review')}
+      {renderDialogButton(canApproveOrReject, 'reject', { disabled: formHasErrors })}
+      {renderDialogButton(canApproveOrReject, 'approve', { disabled: formHasErrors })}
+      {renderDialogButton(canClose, 'closed')}
+      {renderAlertDialogButton(canWithdraw, 'withdrawn')}
       <HeaderMenu>
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {

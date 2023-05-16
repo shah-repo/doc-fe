@@ -1,8 +1,8 @@
-import React from "react";
-import { companyActions } from "../../../../state/ducks/company";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import EditRemoveAddFields from "./EditRemoveAddFields";
+import React from 'react';
+import { companyActions } from '../../../../state/ducks/company';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import EditRemoveAddFields from './EditRemoveAddFields';
 
 
 interface OwnProps {

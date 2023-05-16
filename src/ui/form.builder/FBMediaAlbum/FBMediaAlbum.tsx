@@ -1,14 +1,14 @@
-import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
-import AllOutIcon from "@material-ui/icons/AllOut";
-import AppsIcon from "@material-ui/icons/Apps";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import CropFreeIcon from "@material-ui/icons/CropFree";
-import { truncate } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { FBMediaAlbumProps, FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
-import Text from "../../components/Text";
-import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
+import { Box, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import AllOutIcon from '@material-ui/icons/AllOut';
+import AppsIcon from '@material-ui/icons/Apps';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import { truncate } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { FBMediaAlbumProps, FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from '..';
+import Text from '../../components/Text';
+import { withFBMediaAlbum } from './FBMediaAlbum.wrap';
 
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   onClick,
@@ -33,7 +33,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   <FBProvider {...{ mediaAlbumState }}>
     <input
       accept="image/*, video/*"
-      style={{ display: "none" }}
+      style={{ display: 'none' }}
       id={`fb-mediaalbum-upload-${name}`}
       onChange={onFileUploadChange}
       multiple
@@ -42,7 +42,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
     <Box {...props} >
       <Box display="flex" py={0.5}>
         <Box
-          style={{ whiteSpace: "nowrap" }}
+          style={{ whiteSpace: 'nowrap' }}
           textOverflow="ellipsis"
           overflow="hidden"
           flexGrow={1}
@@ -50,18 +50,18 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
           <FBTooltip {...{ title }}>
             {truncate(title, {
               length: 70,
-              omission: " ...",
+              omission: ' ...',
             })}
           </FBTooltip>
         </Box>
         <Box pl={0.3}>
           <IconButton size="small" onClick={setMediaMode}>
-            {mode === "carousel" && (
+            {mode === 'carousel' && (
               <Tooltip title={<Text message="form.builder.gallery" />}>
                 <AppsIcon />
               </Tooltip>
             )}
-            {mode === "gallery" && (
+            {mode === 'gallery' && (
               <Tooltip title={<Text message="form.builder.carousel" />}>
                 <AllOutIcon />
               </Tooltip>
@@ -95,8 +95,8 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
     </Box>
     {!hiddenContainer && (
       <>
-        {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled, autosave }} />}
-        {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled, autosave }} />}
+        {mode === 'carousel' && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled, autosave }} />}
+        {mode === 'gallery' && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled, autosave }} />}
       </>
     )}
   </FBProvider>

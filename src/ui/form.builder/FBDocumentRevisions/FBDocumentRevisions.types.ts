@@ -1,8 +1,8 @@
-import { FBAutocompleteProps, FBInputProps, FBProviderProps } from "..";
+import { FBAutocompleteProps, FBInputProps, FBProviderProps } from '..';
 
 export type FBDocumentRevisionsProps =
-& Pick<FBInputProps, "name" | "disabled" | "gutter" | "index">
-& Pick<FBProviderProps, "docRevState" | "dialogState" | "formState">
+& Pick<FBInputProps, 'name' | 'disabled' | 'gutter' | 'index'>
+& Pick<FBProviderProps, 'docRevState' | 'dialogState' | 'formState'>
 & {
   handleForm: () => void;
   handleAdd: () => void;
@@ -13,8 +13,8 @@ export type FBDocumentRevisionsProps =
 };
 
 export type FBDocumentRevisionsItemProps =
-& Pick<FBInputProps, "name" | "disabled" | "index">
-& Pick<FBDocumentRevisionsProps, "handleOpen" | "remove">
+& Pick<FBInputProps, 'name' | 'disabled' | 'index'>
+& Pick<FBDocumentRevisionsProps, 'handleOpen' | 'remove'>
 & {
   id: string;
 };
@@ -29,8 +29,8 @@ export interface FBDocumentRevisionsValue {
 }
 
 export type FBDocumentRevisionsFormProps =
-& Pick<FBProviderProps, "formState">
-& Pick<FBAutocompleteProps, "disabledOptions" | "renderOption" >;
+& Pick<FBProviderProps, 'formState'>
+& Pick<FBAutocompleteProps, 'disabledOptions' | 'renderOption' >;
 
 export type FBDocumentRevisionsActionsProps =
-& Pick<FBDocumentRevisionsProps, "handleAdd" | "handleCancel">;
+& Pick<FBDocumentRevisionsProps, 'handleAdd' | 'handleCancel'>;

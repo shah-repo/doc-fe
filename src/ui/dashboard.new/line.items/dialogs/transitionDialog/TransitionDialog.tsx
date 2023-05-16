@@ -8,23 +8,23 @@ import {
   Typography,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import moment from "moment";
-import React from "react";
-import { ReactComponent as ModelCloseIcon } from "../../../../../../src/assets/images/modelClose.svg";
-import { TransitionTypes } from "../../../../../state/ducks/dashboard/types";
-import { AsyncState } from "../../../../../state/types";
-import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
-import { EffectiveDateFormValues } from "../../../../change.request/form/types";
-import { FormContext } from "../../../../components/forms/FormContext";
-import Text from "../../../../components/Text";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import ClosedActionForm from "./form/ClosedActionForm";
-import EffectiveDateForm from "./form/EffectiveDateForm";
-import PasswordFormApproval from "./form/PasswordForm";
-import styles from "./TransitionDialog.styles";
-import { PasswordFormValues, Transition } from "./types";
+} from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import moment from 'moment';
+import React from 'react';
+import { ReactComponent as ModelCloseIcon } from '../../../../../../src/assets/images/modelClose.svg';
+import { TransitionTypes } from '../../../../../state/ducks/dashboard/types';
+import { AsyncState } from '../../../../../state/types';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import { EffectiveDateFormValues } from '../../../../change.request/form/types';
+import { FormContext } from '../../../../components/forms/FormContext';
+import Text from '../../../../components/Text';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import ClosedActionForm from './form/ClosedActionForm';
+import EffectiveDateForm from './form/EffectiveDateForm';
+import PasswordFormApproval from './form/PasswordForm';
+import styles from './TransitionDialog.styles';
+import { PasswordFormValues, Transition } from './types';
 
 interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
@@ -95,9 +95,9 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
             effectiveDateDialog.close();
             transitionDialog.open();
           }}
-          message={"transition.action.effective.date.message"}
-          confirmLabel={"common.true"}
-          cancelLabel={"common.false"}
+          message={'transition.action.effective.date.message'}
+          confirmLabel={'common.true'}
+          cancelLabel={'common.false'}
         />
       )}
       <Dialog
@@ -118,10 +118,10 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 {!hideLabel && <Text
                   translation={
                     transition === TransitionTypes.TRANSITION_CLOSED
-                      ? "transition.action.close.title"
+                      ? 'transition.action.close.title'
                       : transition === TransitionTypes.TRANSITION_REJECT
-                        ? "transition.action.reject.title"
-                        : "transition.action.approve.title"
+                        ? 'transition.action.reject.title'
+                        : 'transition.action.approve.title'
                   }
                 />}
               </Typography>
@@ -148,7 +148,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 initialValues={
                   transition === TransitionTypes.TRANSITION_CLOSED
                     ? { effectiveDate: moment.utc().toISOString() }
-                    : { password: "" }
+                    : { password: '' }
                 }
                 onSubmit={onSubmit}
               >
@@ -177,8 +177,8 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                   <Formik
                     initialValues={
                       transition === TransitionTypes.TRANSITION_CLOSED
-                        ? { effectiveDate: "" }
-                        : { password: "" }
+                        ? { effectiveDate: '' }
+                        : { password: '' }
                     }
                     onSubmit={onSubmit}
                   >

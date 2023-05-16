@@ -13,12 +13,13 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
   ...props
 }) => {
   const value: unknown = children ?? dataItem[field];
+  const dataCy = props['data-cy'] ?? kebabCase(field ?? column.id);
 
   return (
     <KendoDataGridCell
       {...props}
       field={field}
-      data-cy={kebabCase(String(props['data-cy']) ?? field ?? column.id)}
+      data-cy={dataCy}
       dataItem={dataItem}
     >
       <OveflowTooltip

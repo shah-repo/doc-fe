@@ -1,9 +1,9 @@
-import { isUndefined } from "lodash";
-import { action } from "mobx";
-import { FBFile } from "..";
-import { Attachment } from "../../../state/ducks/attachments/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { isUndefined } from 'lodash';
+import { action } from 'mobx';
+import { FBFile } from '..';
+import { Attachment } from '../../../state/ducks/attachments/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBFileFieldState extends FBRequest<Attachment, FBFile> {
   public url: string = FBEndpoint.AttachmentUpload;

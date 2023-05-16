@@ -1,13 +1,13 @@
-import { parse } from "query-string";
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import useAsync from "../../hooks/useAsync";
-import { PasswordValues } from "../types";
-import ConfirmPasswordContainer from "./ConfirmPassword.container";
+import { parse } from 'query-string';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import useAsync from '../../hooks/useAsync';
+import { PasswordValues } from '../types';
+import ConfirmPasswordContainer from './ConfirmPassword.container';
 
-type NewUserSetPasswordContainerProps = Pick<RouteComponentProps, "location">;
+type NewUserSetPasswordContainerProps = Pick<RouteComponentProps, 'location'>;
 
 const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordContainerProps> = ({
   location,
@@ -17,7 +17,7 @@ const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordCon
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const parsedLocation = parse(location.search);
   const tempPass = parsedLocation.tempPass;
-  const clientEmail = (parsedLocation.email as string).split(" ").join("+");
+  const clientEmail = (parsedLocation.email as string).split(' ').join('+');
 
   const async = useAsync();
 

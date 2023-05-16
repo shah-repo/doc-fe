@@ -592,6 +592,7 @@
   "documentRevision.audit.send.to.email": "{name} exported {docId}",
   "documentRevision.audit.view.pdf": "{name} viewed PDF",
   "documentRevision.audit.EMAIL_SENT.EMAIL_SENT": "Send to Email",
+  "changeRequest.audit.EMAIL_SENT.EMAIL_SENT": "Send to Email",
   "documentRevision.audit.VIEW_PDF.VIEW_PDF": " ",
   "documentRevision.audit.document.docId.STRING_NEW": "New Doc ID",
   "documentRevision.audit.document.type.STRING_NEW": "New document type",

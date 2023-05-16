@@ -1,10 +1,10 @@
-import { Box } from "@material-ui/core";
-import classNames from "classnames";
-import React from "react";
-import { attachmentColorByType } from "./attachmentColorByType";
-import { renderCOADefaultAttachment, renderCOAPrimaryAttachment, renderDefaultAttachment, renderPrimaryAttachment, renderRedLineAttachment } from "./attachmentIcons";
-import { styles } from "./utils/styles";
-import { AttachmentIconProps } from "./utils/types";
+import { Box } from '@material-ui/core';
+import classNames from 'classnames';
+import React from 'react';
+import { attachmentColorByType } from './attachmentColorByType';
+import { renderCOADefaultAttachment, renderCOAPrimaryAttachment, renderDefaultAttachment, renderPrimaryAttachment, renderRedLineAttachment } from './attachmentIcons';
+import { styles } from './utils/styles';
+import { AttachmentIconProps } from './utils/types';
 
 const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   extension,
@@ -14,12 +14,12 @@ const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   isPrimary,
   isTransferred,
 }) => {
-  const classes = styles({ size: size || "md", disabled: false });
+  const classes = styles({ size: size || 'md', disabled: false });
   const name = extension?.toUpperCase();
   const color = attachmentColorByType[extension?.toUpperCase() as string];
   return (
     <Box
-      data-cy={isPrimary ? "attachment.icon.primary" : isRedLine ? "attachment.icon.redline" : "attachment.icon"}
+      data-cy={isPrimary ? 'attachment.icon.primary' : isRedLine ? 'attachment.icon.redline' : 'attachment.icon'}
       className={classNames(classes.root,
         {
           [classes.isUploading]: isUploading,

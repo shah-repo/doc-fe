@@ -1,5 +1,5 @@
-import { action, observable, set } from "mobx";
-import { FBWorkspaceMode } from "..";
+import { action, observable, set } from 'mobx';
+import { FBWorkspaceMode } from '..';
 
 class FBProcedureDiffState {
   // MARK: @config
@@ -16,7 +16,7 @@ class FBProcedureDiffState {
   // MARK: @computed
 
   // MARK: @actions
-  @action setChecked = () => set(this, "checked", !this.checked);
+  @action setChecked = () => set(this, 'checked', !this.checked);
 
   // MARK: @helpers
 }

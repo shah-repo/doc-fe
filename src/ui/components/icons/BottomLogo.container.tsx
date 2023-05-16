@@ -1,8 +1,8 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { companySelectors } from "../../../state/ducks/company";
-import Text from "../Text";
-import styles from "./BottomLogo.styles";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { companySelectors } from '../../../state/ducks/company';
+import Text from '../Text';
+import styles from './BottomLogo.styles';
 
 const BottomLogoContainer: React.FunctionComponent = () => {
   const classes = styles();

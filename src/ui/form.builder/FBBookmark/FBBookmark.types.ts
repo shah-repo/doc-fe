@@ -1,3 +1,3 @@
-import { FBInputProps } from "../types/common";
+import { FBInputProps } from '../types/common';
 
-export type FBBookmarkItem = Pick<FBInputProps, "name" | "label"> & { tabId?: string };
+export type FBBookmarkItem = Pick<FBInputProps, 'name' | 'label'> & { tabId?: string };

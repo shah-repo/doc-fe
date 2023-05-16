@@ -1,15 +1,15 @@
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import React, { useMemo } from "react";
-import { Attachment, AttachmentType } from "../../../../state/ducks/attachments/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
-import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import Text from "../../Text";
-import { WATERMARK_FILES } from "../view.file/utils/constants";
-import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import MenuItemSetPrimary from "./menu.setPrimary";
-import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import React, { useMemo } from 'react';
+import { Attachment, AttachmentType } from '../../../../state/ducks/attachments/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { FormHeaderSummaryContext } from '../../../document.revision/header/SummaryHeader';
+import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
+import Text from '../../Text';
+import { WATERMARK_FILES } from '../view.file/utils/constants';
+import { checkIfFileIsViewable } from '../view.file/utils/helpers';
+import MenuItemSetPrimary from './menu.setPrimary';
+import { AttachmentMenuProps, PasswordSubmitActionType } from './utils/types';
 
 interface OwnProps {
   redLineRequiresPassword: (attachment: Attachment, type?: AttachmentType) => boolean;
@@ -102,7 +102,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
     </MenuItem>;
   const renderPDFFile = canWatermark &&
-    <MenuItem data-cy={"attachment.download.pdf"}
+    <MenuItem data-cy={'attachment.download.pdf'}
       onClick={handleWatermarkClick(AttachmentType.Attached, isDocObsoleteOrDeprecated)}>
       <Text translation="attachment.download.pdf" />
     </MenuItem>;

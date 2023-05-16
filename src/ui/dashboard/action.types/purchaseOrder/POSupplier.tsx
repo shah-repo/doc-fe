@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import PODetailItem from "./PODetailItem";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
+import PODetailItem from './PODetailItem';
 
 interface Props {
   supplierId: string;

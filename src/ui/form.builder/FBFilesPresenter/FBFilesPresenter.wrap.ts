@@ -1,7 +1,7 @@
-import { isEmpty, map } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { FB, FBFilesPresenterProps, FBFilesPresenterState } from "..";
+import { isEmpty, map } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { FB, FBFilesPresenterProps, FBFilesPresenterState } from '..';
 
 export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
   Component: React.FunctionComponent<T>,
@@ -17,7 +17,7 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
     attachments = [];
 
     useEffect(() => {
-      const ids = map(files, "id");
+      const ids = map(files, 'id');
       if (!isEmpty(ids)) {
         filesPresenterState?.getFiles(ids);
       }

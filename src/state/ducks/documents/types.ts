@@ -1,23 +1,23 @@
-import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { Attachment } from "../attachments/types";
-import { Owner, User } from "../common/types";
-import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
+import { TableColumnActionType } from '../../../ui/components/table/column/types';
+import { Attachment } from '../attachments/types';
+import { Owner, User } from '../common/types';
+import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from './constants';
 
 
 export enum DocumentStatus {
-  Draft = "DRAFT",
-  InReview = "IN_REVIEW",
-  Withdrawn = "WITHDRAWN",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
-  Released = "RELEASED"
+  Draft = 'DRAFT',
+  InReview = 'IN_REVIEW',
+  Withdrawn = 'WITHDRAWN',
+  Approved = 'APPROVED',
+  Rejected = 'REJECTED',
+  Released = 'RELEASED'
 }
 
 export enum ApprovalStatus {
-  Pending = "PENDING",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
-  Abandoned = "ABANDONED",
+  Pending = 'PENDING',
+  Approved = 'APPROVED',
+  Rejected = 'REJECTED',
+  Abandoned = 'ABANDONED',
 }
 
 interface Approval {
@@ -77,7 +77,7 @@ export interface DocumentsByIdState {
 export type DocumentsAllIdsState = string[];
 export type DocumentsReviewIdsState = string[];
 
-export type DocumentTransition = "approve" | "reject" | "to_review" | "withdraw";
+export type DocumentTransition = 'approve' | 'reject' | 'to_review' | 'withdraw';
 
 export interface DocumentTransitionRequestBody {
   password: string;

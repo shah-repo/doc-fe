@@ -1,8 +1,8 @@
-import { FBEditorCustomControlState, FBInputProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { FBEditorCustomControlState, FBInputProps } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
 export type FBEditorCustomControlProps =
-& Pick<FBInputProps, "index">
+& Pick<FBInputProps, 'index'>
 & {
   customControlState?: FBEditorCustomControlState;
   controls?: DocumentRevision[];

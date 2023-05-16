@@ -1,9 +1,9 @@
-import { useFormikContext } from "formik";
-import * as React from "react";
-import { useEffect } from "react";
-import { RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
-import CheckboxField from "../../../components/forms/fields/Checkbox";
-import { useTraining } from "../../../hooks/docCustomization/useCustomization";
+import { useFormikContext } from 'formik';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import CheckboxField from '../../../components/forms/fields/Checkbox';
+import { useTraining } from '../../../hooks/docCustomization/useCustomization';
 
 interface Props {
   revisionChangeType?: RevisionChangeType ;
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const RetrainField: React.FunctionComponent<Props> = ({
-  documentTypeId = "",
+  documentTypeId = '',
   revisionChangeType,
   isDisabled = false,
   isRecord,
@@ -23,7 +23,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
   const formik = useFormikContext();
   useEffect(() => {
     if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
-      formik.setFieldValue("retrain", false);
+      formik.setFieldValue('retrain', false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);

@@ -1,13 +1,13 @@
-import { get, isEmpty, isUndefined } from "lodash";
-import { action, set } from "mobx";
-import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../../../state/ducks/auth/constants";
-import { RemoteValidatorHelper } from "../../../remoteValidators/remoteValidatorsHelper";
-import FBRequest from "../../FBApi/FBApi.request";
+import { get, isEmpty, isUndefined } from 'lodash';
+import { action, set } from 'mobx';
+import { FETCH_VALIDATORS_REMOTE_URL_URL } from '../../../../state/ducks/auth/constants';
+import { RemoteValidatorHelper } from '../../../remoteValidators/remoteValidatorsHelper';
+import FBRequest from '../../FBApi/FBApi.request';
 
 class FBActionContainerState extends FBRequest<any, any> {
   constructor() {
     super();
-    this.data = get(window, "EnlilRemoteValidators.avaliableActions");
+    this.data = get(window, 'EnlilRemoteValidators.avaliableActions');
     if (!isEmpty(this.data) && !isUndefined(this.data)) {
       return;
     }
@@ -20,7 +20,7 @@ class FBActionContainerState extends FBRequest<any, any> {
     (window as any).EnlilRemoteValidators.registerHelperCallback(
       () => RemoteValidatorHelper,
     );
-    set(this, "data", get(window, "EnlilRemoteValidators.avaliableActions"));
+    set(this, 'data', get(window, 'EnlilRemoteValidators.avaliableActions'));
   };
 }
 

@@ -1,10 +1,10 @@
-import { cloneDeep, each, keys, map } from "lodash";
-import { toJS } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FB, FBControlPickerProps, FBControlPickerState, FBInputType } from "..";
-import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
+import { cloneDeep, each, keys, map } from 'lodash';
+import { toJS } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBControlPickerProps, FBControlPickerState, FBInputType } from '..';
+import { withFBEditorHelper } from '../FBEditor/FBEditor.helper';
 
 export const withFBControlPicker = <T extends FBControlPickerProps>(
   Component: React.FunctionComponent<T>,
@@ -39,10 +39,10 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
     });
     // Always show favourites on top and sort remaining sections
     let sortedSections = keys(translatedPickers);
-    if (sortedSections.includes("favourites")) {
+    if (sortedSections.includes('favourites')) {
       sortedSections = [
-        "favourites",
-        ...sortedSections.filter((section) => section !== "favourites"),
+        'favourites',
+        ...sortedSections.filter((section) => section !== 'favourites'),
       ];
     }
     const sortedPickers = {};

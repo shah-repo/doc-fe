@@ -1,1 +1,1 @@
-export const RELATED_PARTS_ROOT_URL = "/related_parts";
+export const RELATED_PARTS_ROOT_URL = '/related_parts';

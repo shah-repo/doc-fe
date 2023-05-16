@@ -1,27 +1,27 @@
-import { set, union } from "lodash";
-import { action, observable } from "mobx";
-import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
+import { set, union } from 'lodash';
+import { action, observable } from 'mobx';
+import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 
 class ItemsAndDetailsState {
 
   constructor() {
     this.setViewItemActionsVisibility(true);
-    this.setApprovalRequestItemInEditMode("");
+    this.setApprovalRequestItemInEditMode('');
     this.setLoadingState(false);
   }
 
   @observable approvalRequestItemsList: ApprovalRequestGridItem[] = [];
-  @observable approvalRequstItemInEditMode = "";
+  @observable approvalRequstItemInEditMode = '';
   @observable viewItemActionsVisible = true;
   @observable loadingState = false;
   @observable submitList = false;
 
   @action setApprovalRequestItemsList(list: ApprovalRequestGridItem[]) {
-    set(this, "approvalRequestItemsList", list);
+    set(this, 'approvalRequestItemsList', list);
   }
 
   @action setApprovalRequestItemInEditMode(id: string) {
-    set(this, "approvalRequstItemInEditMode", id);
+    set(this, 'approvalRequstItemInEditMode', id);
   }
 
   @action add(item: ApprovalRequestGridItem) {
@@ -29,11 +29,11 @@ class ItemsAndDetailsState {
   }
 
   @action setViewItemActionsVisibility(isVisible = true) {
-    set(this, "viewItemActionsVisible", isVisible);
+    set(this, 'viewItemActionsVisible', isVisible);
   }
 
   @action setLoadingState(isVisible = false) {
-    set(this, "loadingState", isVisible);
+    set(this, 'loadingState', isVisible);
   }
 }
 

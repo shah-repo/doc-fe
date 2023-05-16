@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBIconConfig, FBIconProps, FBMapWrapper } from "..";
-import { withFBIcon } from "./FBIcon.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBIconConfig, FBIconProps, FBMapWrapper } from '..';
+import { withFBIcon } from './FBIcon.wrap';
 
 const FBIcon: React.FunctionComponent<FBIconProps> = ({
   icon,

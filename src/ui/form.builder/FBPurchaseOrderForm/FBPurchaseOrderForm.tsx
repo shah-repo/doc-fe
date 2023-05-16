@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import { observer } from "mobx-react";
-import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBForm, FBPurchaseOrderFormProps, FBPurchaseOrderItemType, FBQuantityField, FBRadioGroup, FBTextField } from "..";
-import { FBAutoCompleteStyle, styles } from "../styles/FBAutocomplete.styles";
-import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
+import { Box } from '@material-ui/core';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBForm, FBPurchaseOrderFormProps, FBPurchaseOrderItemType, FBQuantityField, FBRadioGroup, FBTextField } from '..';
+import { FBAutoCompleteStyle, styles } from '../styles/FBAutocomplete.styles';
+import { withFBPurchaseOrderForm } from './FBPurchaseOrderForm.wrap';
 
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   handlePartTitle,
@@ -23,16 +23,16 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         defaultValue="product"
         options={[
           {
-            text: "Product",
-            value: "product",
+            text: 'Product',
+            value: 'product',
           },
           {
-            text: "Service",
-            value: "service",
+            text: 'Service',
+            value: 'service',
           },
         ]}
       />
-      {formState?.newValues.get("type") === "product" && (
+      {formState?.newValues.get('type') === 'product' && (
         <>
           <FBAutocompleteAsync
             label="form.builder.field.part.number"
@@ -58,7 +58,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           />
         </>
       )}
-      {formState?.newValues.get("type") === "service" && (
+      {formState?.newValues.get('type') === 'service' && (
         <>
           <FBTextField
             label="form.builder.field.service.id"
@@ -87,7 +87,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
             label="form.builder.field.units"
             name="units"
             options={
-                  formState?.newValues.get("type") === FBPurchaseOrderItemType.PRODUCT ? FBData.productUnitsOptions
+                  formState?.newValues.get('type') === FBPurchaseOrderItemType.PRODUCT ? FBData.productUnitsOptions
                     : FBData.unitsOptions
             }
             optionValueKey="value"
@@ -122,7 +122,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           gutter={false}
           labelProps={styles.labelProps}
         />
-        {formState?.newValues.get("type") !== "service" && (
+        {formState?.newValues.get('type') !== 'service' && (
           <FBCheckbox
             label="form.builder.field.capital.equipment"
             name="capitalEquipment"

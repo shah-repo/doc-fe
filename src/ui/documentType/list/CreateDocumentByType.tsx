@@ -1,40 +1,40 @@
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import { Formik, FormikProps } from "formik";
-import { get, isEmpty, isNull } from "lodash";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType, DocumentTypeById, DocumentTypeByIdForm, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, HeaderTableType } from "../../../state/ducks/documentRevisions/types";
-import { documentsActions } from "../../../state/ducks/documents";
-import { DocumentProposedId } from "../../../state/ducks/documents/types";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ApplicationState } from "../../../state/reducers";
-import { AsyncState, AsyncStatus } from "../../../state/types";
-import ExportListIcon from "../../components/common/kendo/ExportListIcon";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FormContext } from "../../components/forms/FormContext";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import { toastError } from "../../components/notifications";
-import Text from "../../components/Text";
-import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
-import { documentVersionPath } from "../../document.revision/utils/paths";
-import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
-import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync, { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
-import MultipleFormTemplateDialog from "../dialogs/MultipleFormTemplateDialog";
-import { filterSecurityGroupsForQms } from "./helpers";
-import { styles } from "./styles";
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import { Formik, FormikProps } from 'formik';
+import { get, isEmpty, isNull } from 'lodash';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { companySelectors } from '../../../state/ducks/company';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DocumentType, DocumentTypeById, DocumentTypeByIdForm, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, HeaderTableType } from '../../../state/ducks/documentRevisions/types';
+import { documentsActions } from '../../../state/ducks/documents';
+import { DocumentProposedId } from '../../../state/ducks/documents/types';
+import { userManagementSelectors } from '../../../state/ducks/userManagement';
+import { ApplicationState } from '../../../state/reducers';
+import { AsyncState, AsyncStatus } from '../../../state/types';
+import ExportListIcon from '../../components/common/kendo/ExportListIcon';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../components/forms/FormContext';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
+import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import CustomLabelTooltip from '../../hooks/docCustomization/CustomLabelTooltip';
+import { useCreateDocumentByTypeButton } from '../../hooks/docCustomization/useCustomization';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync, { ASYNC_DEFAULT_STATE } from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import FormListDialog from '../dialogs/FormListDialog/FormListDialog.presenter';
+import MultipleFormTemplateDialog from '../dialogs/MultipleFormTemplateDialog';
+import { filterSecurityGroupsForQms } from './helpers';
+import { styles } from './styles';
 
 interface MultipleFormInitialValues {
   selectType: OptionType[];
@@ -50,8 +50,8 @@ interface Props {
   isGrouped: boolean;
 }
 
-let selectedTypeLabel = "";
-let selectedDocumentTypeId = "";
+let selectedTypeLabel = '';
+let selectedDocumentTypeId = '';
 export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
 export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
@@ -71,7 +71,7 @@ export const useHandleCreateDoc = () => {
   const createDocAction = useActionCreator(documentRevisionsActions.create);
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
-      const path = documentVersionPath(documentRevision?.id || "", documentRevision?.document?.id || "");
+      const path = documentVersionPath(documentRevision?.id || '', documentRevision?.document?.id || '');
       history.push(path);
     },
     onError: (error) => {
@@ -95,11 +95,11 @@ export const useHandleCreateDoc = () => {
     createDocAsync.start(createDocAction, data, createDocAsync);
     // setting to initial value in case creating new ouput is immediately
     // after creating doc by type, otherwise wrong value for id is set
-    selectedDocumentTypeId = "";
+    selectedDocumentTypeId = '';
   };
   const redirect = (selectedForm = form) => {
     history.push({
-      pathname: "/document_revision/create",
+      pathname: '/document_revision/create',
       state: selectedForm,
     });
   };
@@ -123,7 +123,7 @@ export const useHandleCreateDoc = () => {
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
   labelName,
   documentTypeId,
-  categoryName = "",
+  categoryName = '',
   isByCategory,
   headers,
   isGrouped,
@@ -149,7 +149,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
-  const isLHR = categoryName?.toUpperCase() === "LHR";
+  const isLHR = categoryName?.toUpperCase() === 'LHR';
 
   const closeMultipleFormDialog = () => {
     multipleFormDialog.close();
@@ -178,7 +178,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         return;
       }
       if (isEmpty(formIds)) {
-        setErrorMessage("missing.form.error");
+        setErrorMessage('missing.form.error');
         return;
       }
       multipleFormDialog.open();
@@ -200,7 +200,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         return;
       }
       if (isEmpty(documentTypes)) {
-        setErrorMessage("missing.type.error");
+        setErrorMessage('missing.type.error');
         return;
       }
       setInitialValues({ selectType: [] });
@@ -233,7 +233,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       return;
     }
     selectedDocumentTypeId = docTypeId;
-    selectedTypeLabel = documentTypes.find((type) => type.id === docTypeId)?.documentTypeName || "";
+    selectedTypeLabel = documentTypes.find((type) => type.id === docTypeId)?.documentTypeName || '';
     idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };
 
@@ -267,24 +267,24 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!isEmpty(tableData)) {
       return tableData.map((e) => {
         const h = headers.map((column) => {
-          const columnValue =  get(e, column.key, "");
+          const columnValue =  get(e, column.key, '');
 
           switch (column.key) {
-            case "owner":
-              return { [column.key]: get(e, "owner.user.name") || "" };
-            case "docId":
-              return { [column.key]: get(e, "document.docId") || "" };
-            case "changeRequest":
-              return { [column.key]: get(e, "changeRequest.crId") || "" };
-            case "status":
-              return { [column.key]: get(e, "displayStatus") || "" };
+            case 'owner':
+              return { [column.key]: get(e, 'owner.user.name') || '' };
+            case 'docId':
+              return { [column.key]: get(e, 'document.docId') || '' };
+            case 'changeRequest':
+              return { [column.key]: get(e, 'changeRequest.crId') || '' };
+            case 'status':
+              return { [column.key]: get(e, 'displayStatus') || '' };
             default:
               if (moment(columnValue, moment.ISO_8601, true).isValid()) {
                 return {
                   [column.key]: getFormattedDateString(columnValue, MomentFormats.MonthDateYear),
                 };
               } else {
-                return { [column.key]: isNull(columnValue) ? "" : columnValue };
+                return { [column.key]: isNull(columnValue) ? '' : columnValue };
               }
           }
         });
@@ -294,7 +294,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         return rows;
       });
     }
-    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: '' }));
     return [Object.assign({}, ...defaultEmptyColumn)];
   };
 
@@ -345,7 +345,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       </Grid>
       {
         errorMessage && (
-          <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
+          <div style={{ color: 'red' }} id="DocumentByTypeListPresenter-showError">
             <Text
               message={errorMessage}
               values={{ name: isByCategory ? selectedTypeLabel : labelName }}

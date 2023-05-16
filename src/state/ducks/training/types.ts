@@ -1,17 +1,17 @@
-import { Id } from "../common/types";
-import { Employee } from "../company/types";
+import { Id } from '../common/types';
+import { Employee } from '../company/types';
 import {
   DocumentRevision,
   DocumentRevisionDocument,
-} from "../documentRevisions/types";
+} from '../documentRevisions/types';
 
 enum TrainingPlanStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }
 
 export enum TrainingPlanTransition {
-  Complete = "complete",
+  Complete = 'complete',
 }
 
 export interface TrainingRecord {
@@ -57,12 +57,12 @@ export interface TrainingRecordQuery {
 export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
   isValid: true,
   revision: 1,
-  docId: "",
-  docRevTitle: "",
-  userName: "",
-  tcId: "",
-  trId: "",
-  id: "",
+  docId: '',
+  docRevTitle: '',
+  userName: '',
+  tcId: '',
+  trId: '',
+  id: '',
 };
 
 

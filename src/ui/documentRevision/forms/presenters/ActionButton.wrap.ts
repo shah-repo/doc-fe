@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 export const withActionButton = <T extends any>(
   Component: React.FunctionComponent<T>
@@ -19,6 +19,6 @@ export const withActionButton = <T extends any>(
     });
   };
 
-  Comp.displayName = "withActionButton";
+  Comp.displayName = 'withActionButton';
   return Comp;
 };

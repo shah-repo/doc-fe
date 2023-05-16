@@ -1,11 +1,11 @@
-import { CALL_API } from "../middlewares/api";
-import { ApiAction, Handlers } from "../types";
+import { CALL_API } from '../middlewares/api';
+import { ApiAction, Handlers } from '../types';
 
 export const apiAction =
   <R, B>(apiDefinition: Partial<ApiAction<R, B>>): ApiAction<R, B> => {
     const action: ApiAction<R, B> = {
-      url: "/",
-      method: "get",
+      url: '/',
+      method: 'get',
       onCompleted: () => undefined,
       onSuccess: () => undefined,
       onFailure: () => undefined,

@@ -1,21 +1,21 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import { Form, FormikProps } from "formik";
-import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { AsyncState, AsyncStatus } from "../../../state/types";
-import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import InputField from "../../components/forms/fields/Input";
-import { email, required, validator } from "../../components/forms/fields/validators";
-import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
-import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { AddEmployeeFormValues } from "./form.container";
+import { Box, Button, Grid } from '@material-ui/core';
+import { Form, FormikProps } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import { userManagementActions } from '../../../state/ducks/userManagement';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { AsyncState, AsyncStatus } from '../../../state/types';
+import AutocompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import InputField from '../../components/forms/fields/Input';
+import { email, required, validator } from '../../components/forms/fields/validators';
+import FormMessage from '../../components/forms/FormMessage';
+import FormProgress from '../../components/forms/FormProgress';
+import SubmitButton from '../../components/forms/SubmitButton';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { AddEmployeeFormValues } from './form.container';
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
@@ -44,13 +44,13 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
     onSuccess: (data: GetEmployeeResponse[] = []) => {
       if (data.length === 0) {
         setIsNameDisabled(false);
-        setFieldValue("id", null);
+        setFieldValue('id', null);
         return;
       }
 
       setIsNameDisabled(true);
-      setFieldValue("name", data[0].user.name);
-      setFieldValue("id", data[0].user.id);
+      setFieldValue('name', data[0].user.name);
+      setFieldValue('id', data[0].user.id);
     },
   });
   const handleEmailChange = (value: string) => {
@@ -58,7 +58,7 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
 
     if (hasErrors) {
       setIsNameDisabled(false);
-      setFieldValue("id", null);
+      setFieldValue('id', null);
       return;
     }
     asyncName.start(getEmployeeAction, { email: value }, asyncName );
@@ -78,21 +78,21 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         name="email"
         label="common.email"
         inputProps={{
-          id: "AddEmployeeFormPresenter-commonEmail",
+          id: 'AddEmployeeFormPresenter-commonEmail',
         }}
         validate={validator(required, email)}
       />
       <InputField
         name="name"
         label="common.name"
-        inputProps={{ id: "AddEmployeeFormPresenter-commonName", disabled: isNameDisabled }}
+        inputProps={{ id: 'AddEmployeeFormPresenter-commonName', disabled: isNameDisabled }}
         validate={validator(required)}
       />
       <AutocompleteField
         name="groups"
         label="common.groups"
         autocompleteProps={{
-          id: "approvals",
+          id: 'approvals',
           isMulti: true,
           isClearable: true,
         }}
@@ -115,7 +115,7 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
           </Button>
           <SubmitButton
             asyncState={asyncState}
-            label={"common.save"}
+            label={'common.save'}
             id="AddEmployeeFormPresenter-submitForm"
           />
         </Grid>

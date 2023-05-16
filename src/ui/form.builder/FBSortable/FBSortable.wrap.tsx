@@ -1,9 +1,9 @@
-import { map } from "lodash";
-import { Observer, useObserver } from "mobx-react";
-import React from "react";
-import { arrayMove, SortableElement, SortEnd, SortStart } from "react-sortable-hoc";
-import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps, FBSortableState } from "..";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { map } from 'lodash';
+import { Observer, useObserver } from 'mobx-react';
+import React from 'react';
+import { arrayMove, SortableElement, SortEnd, SortStart } from 'react-sortable-hoc';
+import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps, FBSortableState } from '..';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
 
 export const withFBSortable = <T extends FBSortableProps>(
   Component: React.FunctionComponent<T>,
@@ -22,18 +22,18 @@ export const withFBSortable = <T extends FBSortableProps>(
       return FBSchemaState.component({
         ...schemaItem,
         autosave: isUnderWorkspace && workspaceState?.autosave,
-        disabled: workspaceState?.isMode("design"),
+        disabled: workspaceState?.isMode('design'),
         gutter: false,
       });
     };
 
     const isHiddenByRules = (item: FBSchemaProps) =>
-      !workspaceState?.isMode("design") && workspaceState?.hiddenFieldsByRules?.has(item.name as string);
+      !workspaceState?.isMode('design') && workspaceState?.hiddenFieldsByRules?.has(item.name as string);
 
     const SortableItem = SortableElement(({ value, position }: { value: FBSchemaProps; position: number }) => (
       <Observer>
         {() => (
-          <li style={{ listStyleType: "none", display: isHiddenByRules(value) ? "none" : "block" }}>
+          <li style={{ listStyleType: 'none', display: isHiddenByRules(value) ? 'none' : 'block' }}>
             <FBFieldWrapper
               key={`fb-sortable-wrapper-${value.index}`}
               inputProps={value as FBInputProps}
@@ -77,7 +77,7 @@ export const withFBSortable = <T extends FBSortableProps>(
 
     const shouldCancelStart = (e: { buttons: number; ctrlKey: boolean; button: number; target: HTMLElement }) => {
       // Limit sort to a sort icon click
-      if (workspaceState?.mode === "formDesign" && e.target.nodeName !== "svg") {
+      if (workspaceState?.mode === 'formDesign' && e.target.nodeName !== 'svg') {
         return true;
       }
       return (

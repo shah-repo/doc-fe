@@ -1,7 +1,7 @@
-import React from "react";
-import { DocRevOption, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { withFBPartsSelection } from "./FBPartsSelection.wrap";
+import React from 'react';
+import { DocRevOption, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBPartsSelectionProps } from '..';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { withFBPartsSelection } from './FBPartsSelection.wrap';
 
 const FBPartsSelection: React.FunctionComponent<FBPartsSelectionProps> = ({
   isOutput,
