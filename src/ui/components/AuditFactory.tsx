@@ -336,7 +336,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const entry: POLineItem & { value: string } = JSON.parse(auditValue);
           const partNumberText = poDefinePartNumberText(entry);
-          if (entry.value) {
+          if (typeof entry.value !== undefined) {
             returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
