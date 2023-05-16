@@ -11,6 +11,7 @@ const DescriptionCell: CellComponent<FBPurchaseOrderItem> = ({
   <ContentCell
     {...props}
     field={dataItem.type === FBPurchaseOrderItemType.PRODUCT ? 'partNumberTitle' : 'description'}
+    data-cy="description"
     dataItem={dataItem}
   />
 );

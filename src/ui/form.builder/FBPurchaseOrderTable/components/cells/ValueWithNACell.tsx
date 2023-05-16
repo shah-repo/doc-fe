@@ -14,7 +14,7 @@ const ValueWithNACell: CellComponent<FBPurchaseOrderItem> = ({
     field={field}
     dataItem={dataItem}
   >
-    {dataItem[field] || translate('common.not.applicable')}
+    {dataItem[field] ?? translate('common.not.applicable')}
   </ContentCell>
 );
 
