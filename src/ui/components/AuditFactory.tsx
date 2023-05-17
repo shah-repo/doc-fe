@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -225,7 +225,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               translation="documentRevision.audit.send.to.email"
               values={{
                 name: audit.ownerName,
-                docId: audit?.docId,
+                docId: audit?.docId ?? audit?.crId,
               }}
             />
           </>

@@ -42,7 +42,7 @@ export interface Audit {
   reference?: SmartReference
   timestamp: string
   documentRevisionId: string
-  docId: string
+  docId?: string
   groupId: string
   owner: Owner
   ownerUser?: Owner
@@ -51,6 +51,7 @@ export interface Audit {
   fbSchemaItem?: FBSchemaProps
   relatedEntity?: DocumentRevision | Approval
   hasPoReceivedQtyFlag?: boolean
+  crId?: string
 }
 
 export interface AuditActionPayload {
