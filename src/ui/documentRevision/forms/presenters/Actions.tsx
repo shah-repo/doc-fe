@@ -152,14 +152,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
     const values = get(formik, 'values') as DocumentRevision;
     const updatedMode = mode === 'none' ? _formState?.mode : mode;
+    let outputDocumentType: FBOutputDocumentType[] | OptionType[] = [];
+    if (values?.outputDocumentTypes) {
+      outputDocumentType = isArray(values?.outputDocumentTypes) ? values?.outputDocumentTypes : [values?.outputDocumentTypes];
+    }
     switch (updatedMode) {
       case 'design':
-        // eslint-disable-next-line no-case-declarations
-        let outputDocumentType: FBOutputDocumentType[] | OptionType[] = [];
-        if (values?.outputDocumentTypes) {
-          outputDocumentType = isArray(values?.outputDocumentTypes) ? values?.outputDocumentTypes : [values?.outputDocumentTypes];
-        }
-
         formik.setFieldValue('formTemplate', {
           outputDocumentTypes: outputDocumentType.map((outputDoc) => ({ id: outputDoc.value })),
           schema,
