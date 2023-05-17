@@ -1,5 +1,5 @@
 import { kebabCase } from 'lodash';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import KendoDataGridCell from '../../../../components/KendoDataGrid/KendoDataGridCell';
 import OveflowTooltip from '../../../../components/OverflowTooltip';
@@ -12,7 +12,7 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
   children,
   ...props
 }) => {
-  const value: unknown = children ?? dataItem[field];
+  const value: unknown = children ?? (dataItem[field] as ReactNode);
   const dataCy = props['data-cy'] ?? kebabCase(field ?? column.id);
 
   return (

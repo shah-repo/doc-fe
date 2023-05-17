@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-const OveflowTooltip: React.FC<TooltipProps> = ({
+const OveflowTooltip: React.FC<Omit<TooltipProps, 'children'>> = ({
   title,
   children,
   ...props
