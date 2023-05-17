@@ -72,8 +72,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 
     return (
       <Button
-        kind="outlined"
-        color="secondary"
+        kind="white"
         data-cy="exportToEmail"
         onClick={emailDialog.open}
       >
