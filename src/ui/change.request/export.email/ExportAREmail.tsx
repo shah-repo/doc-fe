@@ -1,4 +1,3 @@
-import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { SM } from '../../../App';
@@ -9,6 +8,7 @@ import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/p
 import { ReactComponent as SendToEmail } from '../../../assets/images/send_to_email.svg';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { Dialog } from '../../components/dialogs';
+import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
 import Text from '../../components/Text';
 import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
@@ -72,11 +72,10 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 
     return (
       <Button
-        variant="outlined"
+        kind="outlined"
         color="secondary"
         data-cy="exportToEmail"
-        style={{ margin: 0 }}
-        onClick={() => emailDialog.open()}
+        onClick={emailDialog.open}
       >
         <Text translation="common.send.to.email" />
       </Button>
