@@ -27,7 +27,10 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
           <Box className={classes.calculationLabel}>
             <Text message="form.builder.currency" />
           </Box>
-          <Box className={classes.calculationField}>
+          <Box
+            className={classes.calculationField}
+            data-cy="po-currency"
+          >
             <FBSelect
               name={`${name}.currency`}
               onChange={handleCurrencyChange}
@@ -44,7 +47,10 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
           <Box className={classes.calculationLabel}>
             <Text message="form.builder.subTotal" />
           </Box>
-          <Box className={cx(classes.calculationField, classes.calculationTotal)}>
+          <Box
+            className={cx(classes.calculationField, classes.calculationTotal)}
+            data-cy="po-subtotal"
+          >
             <FormattedNumber
               value={Number(calculation?.subTotal)}
               style="currency"
@@ -57,7 +63,10 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
             <Text message="form.builder.tax.rate" />
           </Box>
           <Box className={classes.calculationField}>
-            <Box className={classes.calculationTax}>
+            <Box
+              className={classes.calculationTax}
+              data-cy="po-tax-rate"
+            >
               <FBTextField
                 name={`${name}.taxRate`}
                 gutter={false}
@@ -83,7 +92,10 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
           <Box className={classes.calculationLabel}>
             <Text message="form.builder.tax" />
           </Box>
-          <Box className={classes.calculationField}>
+          <Box
+            className={classes.calculationField}
+            data-cy="po-tax"
+          >
             <FBTextField
               name={`${name}.tax`}
               gutter={false}
@@ -107,7 +119,10 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
           <Box className={classes.calculationLabel}>
             <Text message="form.builder.shipping.cost" />
           </Box>
-          <Box className={classes.calculationField}>
+          <Box
+            className={classes.calculationField}
+            data-cy="po-shipping-cost"
+          >
             <FBTextField
               name={`${name}.shippingCost`}
               gutter={false}
@@ -132,7 +147,10 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
           <Box className={classes.calculationLabel}>
             <Text message="form.builder.grand.total" />
           </Box>
-          <Box className={cx(classes.calculationField, classes.calculationTotal)}>
+          <Box
+            className={cx(classes.calculationField, classes.calculationTotal)}
+            data-cy="po-total"
+          >
             <FormattedNumber
               value={Number(calculation?.totalAmount)}
               style="currency"
