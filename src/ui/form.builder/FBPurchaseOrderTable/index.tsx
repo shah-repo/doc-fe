@@ -45,7 +45,6 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   const isActionsAllowed = !disabled || isReceivable;
 
   const editItem = ({ dataItem }: DataGridRowClickEvent<FBPurchaseOrderItem>) => {
-    console.log('CLICKED HANDLE ITEM');
     handleItem?.(dataItem);
   };
 
