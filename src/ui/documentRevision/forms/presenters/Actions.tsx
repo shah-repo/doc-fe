@@ -14,7 +14,7 @@ import { companyActions, companySelectors } from '../../../../state/ducks/compan
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
@@ -22,6 +22,7 @@ import { default as OwnerChangerContainer } from '../../../components/common/own
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
+import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
@@ -153,11 +154,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const updatedMode = mode === 'none' ? _formState?.mode : mode;
     switch (updatedMode) {
       case 'design':
+        // eslint-disable-next-line no-case-declarations
+        let outputDocumentType: FBOutputDocumentType[] | OptionType[] = [];
+        if (values?.outputDocumentTypes) {
+          outputDocumentType = isArray(values?.outputDocumentTypes) ? values?.outputDocumentTypes : [values?.outputDocumentTypes];
+        }
+
         formik.setFieldValue('formTemplate', {
-          outputDocumentTypes: (values?.outputDocumentTypes
-            ? isArray(values?.outputDocumentTypes) ? values?.outputDocumentTypes : [values?.outputDocumentTypes]
-            : [])
-            .map((outputDoc) => ({ id: outputDoc.value })),
+          outputDocumentTypes: outputDocumentType.map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
         formik.setFieldValue('formInput', documentRevision?.formInput);
