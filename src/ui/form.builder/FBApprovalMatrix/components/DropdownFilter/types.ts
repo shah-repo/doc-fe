@@ -9,4 +9,5 @@ export interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: Item
   defaultValue?: Item
   data: Item[]
+  disabled?: boolean
 }

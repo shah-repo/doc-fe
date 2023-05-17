@@ -6,14 +6,14 @@ import cx from 'classnames';
 import React from 'react';
 import { FBPurchaseOrderItem } from '..';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridRowClickEvent } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import Text from '../../components/Text';
-import { Button } from '../../components/forms/fields-next';
-import Total from './components/Total';
 import ActionCell from './components/cells/ActionCell';
 import SumCell from './components/cells/CurrencyCell';
 import RecievedCell from './components/cells/RecievedCell';
+import Total from './components/Total';
 import baseShema from './schema';
 import useStyles from './styles';
 import { FBPurchaseOrderTableProps } from './types';
@@ -128,6 +128,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             attached
             fullWidth
             onClick={onAddLineItemClick}
+            data-cy="form-builder-add-line-item"
           >
             <Text message="form.builder.add.line.item" />
           </Button>

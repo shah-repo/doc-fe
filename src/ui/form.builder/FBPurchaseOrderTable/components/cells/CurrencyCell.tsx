@@ -3,11 +3,12 @@ import { FormattedNumber } from 'react-intl';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBPurchaseOrderItem } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
 import ContentCell from './ContentCell';
+import { defaultCurrency } from '../../../../../common/intl';
 
 const SumCell: CellComponent<FBPurchaseOrderItem, { currency?: string }> = ({
   dataItem,
   field,
-  currency = 'usd',
+  currency = defaultCurrency,
   ...props
 }) => {
   const value = Number(dataItem[field] ?? 0);

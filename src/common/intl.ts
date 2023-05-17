@@ -7,6 +7,7 @@ const messages = {
 };
 
 export const locale = 'en';
+export const defaultCurrency = 'USD';
 
 export const currentLocaleMessages = messages[locale];
 
