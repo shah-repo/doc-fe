@@ -174,7 +174,7 @@
   "changeRequest.audit.tasks.title.STRING_EDITED": "Implementation Plan Task Title Updated",
   "changeRequest.audit.state.STRING_EDITED": "Status Updated",
   "changeRequest.audit.status.STRING_EDITED": "Reviewed",
-  "changeRequest.audit.EMAIL_SENT.EMAIL_SENT":"Send to Email",
+  "changeRequest.audit.EMAIL_SENT.EMAIL_SENT": "Send to Email",
   "changeRequest.audit.tasks.assigned.STRING_EDITED": "Implementation Plan Task Status Updated",
   "changeRequest.audit.assessments.process.reasoning.STRING_EDITED": "Process Assessment Reasoning Updated",
   "changeRequest.audit.assessments.process.attachment.STRING_EDITED": "Process Assessment Attachment Updated",
