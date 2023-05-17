@@ -20,6 +20,7 @@ import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { formatCost, getPOLineItemsTotalAndForTaxAmount } from '../FBPurchaseOrderTable/helpers';
+import FBDataStore from '../FBStore/FBDataStore';
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
@@ -108,6 +109,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           } catch (e) {
             console.error(e);
           }
+          FBDataStore.setRefreshData(undefined);
           await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(

@@ -21,6 +21,7 @@ import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
+import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
@@ -94,6 +95,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           } catch (e) {
             console.error(e);
           }
+          FBDataStore.setRefreshData(undefined);
           await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
