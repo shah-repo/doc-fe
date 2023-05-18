@@ -14,6 +14,10 @@ import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleT
 
 // @todo: correct row borders style
 
+function normalizeData <T> (data: T[]): T[] {
+  return cloneDeep(data).map(dataItem => set(dataItem as any, MODE_FIELD, Mode.show));
+}
+
 function Grid<T> (props: GridProps<T>): React.ReactElement {
   const {
     data: originData,
@@ -25,10 +29,15 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   } = props;
   const classes = useStyles();
 
-  const [data, setData] = useState<Array<GridItem<T>>>(
-    originData.map(dataItem => set(dataItem as any, MODE_FIELD, Mode.show)),
-  );
+  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
   const [prevDataItem, setPrevDataItem] = useState<GridItem<T>>();
+
+  useEffect(
+    () => {
+      setData(normalizeData(originData));
+    },
+    [originData],
+  );
 
   const handleDataStateChange: GridProps<T>['onDataStateChange'] = ({ dataState }) => {
     // Remove empty filters.
