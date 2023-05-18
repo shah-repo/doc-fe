@@ -1,5 +1,5 @@
 import { PrimitiveType } from 'intl-messageformat';
-import { IntlFormatters, createIntl, createIntlCache } from 'react-intl';
+import { createIntl, createIntlCache } from 'react-intl';
 import messagesEn from './../ui/translations/en.json';
 
 const messages = {
@@ -15,5 +15,5 @@ const cache = createIntlCache();
 
 export const intl = createIntl({ locale, messages: currentLocaleMessages }, cache);
 
-export const translate = (id?: string, values?: Record<string, PrimitiveType>): ReturnType<IntlFormatters['formatMessage']> =>
+export const translate = (id?: string, values?: Record<string, PrimitiveType>): string =>
   id ? intl.formatMessage({ id }, values) : '';
