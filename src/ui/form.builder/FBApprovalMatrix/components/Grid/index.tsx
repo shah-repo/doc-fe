@@ -15,7 +15,10 @@ import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleT
 // @todo: correct row borders style
 
 function normalizeData <T> (data: T[]): T[] {
-  return cloneDeep(data).map(dataItem => set(dataItem as any, MODE_FIELD, Mode.show));
+  return cloneDeep(data).map(dataItem => {
+    dataItem[MODE_FIELD] = Mode.show;
+    return dataItem;
+  });
 }
 
 function Grid<T> (props: GridProps<T>): React.ReactElement {
@@ -71,8 +74,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     [isAdding],
   );
 
-  const handleAdd: React.MouseEventHandler = () => {
-    handleItemDiscard(undefined as any);
+  const handleAdd: React.MouseEventHandler = (event) => {
+    handleItemDiscard(event);
 
     const newItem = {
       ...defaultNewValue,
