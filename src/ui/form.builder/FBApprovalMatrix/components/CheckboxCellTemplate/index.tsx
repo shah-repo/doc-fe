@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { get, set } from 'lodash';
 import { Checkbox, CheckboxProps } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
@@ -10,17 +10,23 @@ const CheckboxCellTemplate: CellTemplate = (props) => {
 
   const mode = get(dataItem, MODE_FIELD);
   const path = field ?? '';
-  const value = Boolean(get(dataItem, path));
+  const originValue = Boolean(get(dataItem, path));
+
+  const [value, setValue] = useState(originValue);
 
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const handleChange: CheckboxProps['onChange'] = (event) => {
+    const newValue = event.value;
+
+    setValue(newValue);
+
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem as Record<string, unknown>, path, event.value),
+      dataItem: set(dataItem as Record<string, unknown>, path, newValue),
       syntheticEvent: event.syntheticEvent,
       field,
-      value: event.target.value,
+      value: newValue,
     });
   };
 

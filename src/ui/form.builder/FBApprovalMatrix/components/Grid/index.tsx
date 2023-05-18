@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { cloneDeep, kebabCase } from 'lodash';
-import {
-  GridRowClickEvent,
-  GridItemChangeEvent,
-  GridDataStateChangeEvent,
-} from '@progress/kendo-react-grid';
+import { set, kebabCase, cloneDeep } from 'lodash';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { GridItem, GridProps } from './types';
-import { State } from '@progress/kendo-data-query';
 import cx from 'classnames';
 import useStyles from './styles';
 import { withThemeNext } from '../../../../layout/theme-next';
@@ -34,10 +28,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   } = props;
   const classes = useStyles();
 
-  const [data, setData] = useState<Array<GridItem<T>>>(originData);
+  const [data, setData] = useState<Array<GridItem<T>>>(
+    originData.map(dataItem => set(dataItem as any, MODE_FIELD, Mode.show)),
+  );
   const [prevDataItem, setPrevDataItem] = useState<GridItem<T>>();
 
-  const handleDataStateChange = ({ dataState }: GridDataStateChangeEvent): State => {
+  const handleDataStateChange: GridProps<T>['onDataStateChange'] = ({ dataState }) => {
     // Remove empty filters.
     if (dataState.filter?.filters) {
       dataState.filter.filters = dataState.filter.filters
@@ -82,43 +78,16 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     [data],
   );
 
-  const handleRowClick = ({ dataItem: clickedDataItem }: GridRowClickEvent) => {
-    handleItemDiscard(undefined as any);
+  const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem: clickedDataItem }) => {
     setPrevDataItem(cloneDeep(clickedDataItem));
-
     setData((data) => data.map((dataItem) => {
-      if (dataItem.id !== clickedDataItem.id) {
-        dataItem[MODE_FIELD] = Mode.show;
-        return dataItem;
-      }
-
-      dataItem[MODE_FIELD] = Mode.edit;
-
-      return dataItem;
-    }));
-  };
-
-  const handleItemChange = ({ dataItem: changedDataItem }: GridItemChangeEvent) => {
-    setData((data) => data.map((dataItem) => {
-      if (dataItem.id !== changedDataItem.id) {
-        return dataItem;
-      }
-
-      return changedDataItem;
+      return set(dataItem, MODE_FIELD, dataItem.id === clickedDataItem.id ? Mode.edit : Mode.show);
     }));
   };
 
   const handleItemSave: React.MouseEventHandler = () => {
     setData((data) => {
-      const newData = data.map((dataItem) => {
-        if (dataItem.id && dataItem.id !== prevDataItem?.id) {
-          return dataItem;
-        }
-
-        dataItem[MODE_FIELD] = Mode.show;
-
-        return dataItem;
-      });
+      const newData = data.map((dataItem) => set(dataItem, MODE_FIELD, Mode.show));
 
       onSave?.(newData);
 
@@ -132,13 +101,11 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     setData((data) => data
       .filter((dataItem) => dataItem[MODE_FIELD] !== Mode.add)
       .map((dataItem) => {
-        if (!prevDataItem || dataItem.id !== prevDataItem.id) {
-          return dataItem;
+        if (prevDataItem && dataItem.id === prevDataItem.id) {
+          return prevDataItem;
         }
 
-        prevDataItem[MODE_FIELD] = Mode.show;
-
-        return prevDataItem;
+        return set(dataItem, MODE_FIELD, Mode.show);
       }),
     );
 
@@ -228,7 +195,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         schema={schema}
         rowRender={rowRender}
         onRowClick={!disabled ? handleRowClick : undefined}
-        onItemChange={handleItemChange}
         onDataStateChange={handleDataStateChange}
         defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
         filterable
