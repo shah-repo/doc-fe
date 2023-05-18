@@ -65,7 +65,7 @@ const renderColumns = (
         {...column}
         key={column.id}
         field={field}
-        title={translate(column.title) as string}
+        title={translate(column.title)}
         cell={(props) => <CustomGridCell {...props} column={column} field={field} onClick={onRowClick} />}
         headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}

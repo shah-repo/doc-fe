@@ -35,9 +35,6 @@ export default makeStyles((theme) => {
       position: 'relative',
     },
     grid: {
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-      borderBottom: 'none',
       '& .k-grid-container': {
         maxHeight: 300, // @todo
       },
@@ -58,6 +55,11 @@ export default makeStyles((theme) => {
       '& .k-checkbox': {
         borderWidth: 1,
       },
+    },
+    gridWithButton: {
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderBottom: 'none',
     },
     cellARHeader: {
       '& .k-link': {

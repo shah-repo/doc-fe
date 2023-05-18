@@ -44,7 +44,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
       dataItemKey={DATA_ITEM_KEY}
       defaultItem={defaultItem}
       onChange={handleChange}
-      value={valueItem ?? defaultItem}
+      defaultValue={valueItem ?? defaultItem}
     />
   );
 };

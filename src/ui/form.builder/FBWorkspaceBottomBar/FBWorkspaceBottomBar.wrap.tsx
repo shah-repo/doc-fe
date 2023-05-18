@@ -1,9 +1,8 @@
 import { find, get, map, unionBy } from 'lodash';
 import React from 'react';
-import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceModeOptions, FBWorkspaceTplActions } from '..';
+import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from '..';
 import { toastError } from '../../components/notifications';
 import DocumentPreview from '../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview';
-import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import useStyles from './FBWorkspaceBottomBar.styles';
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
@@ -20,28 +19,16 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     const classes = useStyles();
     const { workspaceState, dialogState } = FB.useStores();
     previewDisabled = !(
-      workspaceState?.mode === 'formPreview' ||
-      workspaceState?.mode === 'design' ||
-      workspaceState?.mode === 'preview'
+      workspaceState?.mode === 'formPreview'
+        || workspaceState?.mode === 'design'
+        || workspaceState?.mode === 'preview'
     );
-    includeTransport =
-      includeTransport &&
-      (workspaceState?.mode === 'formPreview' ||
-        workspaceState?.mode === 'design' ||
-        workspaceState?.mode === 'preview');
+    includeTransport = includeTransport && (
+      workspaceState?.mode === 'formPreview'
+        || workspaceState?.mode === 'design'
+        || workspaceState?.mode === 'preview'
+    );
 
-    const { document: { document: { documentType = {} } = {} } = {} } = workspaceState || {};
-    // Form options should remain disabled in output doc types, regardless of their state.
-    if (
-      ![
-        FBWorkspaceModeOptions.DESIGN,
-        FBWorkspaceModeOptions.FORMPREVIEW,
-      ].includes(workspaceState?.mode as FBWorkspaceModeOptions) &&
-      !checkIsDocumentForm(documentType?.groupOptions)
-    ) {
-      previewDisabled = true;
-      includeTransport = false;
-    }
     const readFile = (file: Blob) => {
       const reader = new FileReader();
       reader.readAsText(file);
