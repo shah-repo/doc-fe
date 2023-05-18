@@ -1,5 +1,5 @@
 import React from 'react';
-import Grid, { Mode, MODE_FIELD } from './components/Grid';
+import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
@@ -47,7 +47,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-    [MODE_FIELD]: Mode.add,
   };
 
   const renderTable = () => (

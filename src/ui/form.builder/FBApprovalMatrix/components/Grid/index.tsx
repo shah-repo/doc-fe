@@ -12,9 +12,6 @@ import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from '.';
 import { translate } from '../../../../../common/intl';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 
-// @todo: refactoring
-// @todo: optimisations
-// @todo: filterTemplate
 // @todo: correct row borders style
 
 function Grid<T> (props: GridProps<T>): React.ReactElement {
@@ -49,6 +46,22 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     return dataState;
   };
 
+  const isAdding = data.some((dataItem) => dataItem[MODE_FIELD] === Mode.add);
+
+  // Scroll down on add.
+  useEffect(
+    () => {
+      if (!isAdding) {
+        return;
+      }
+
+      // @todo: use Grid API
+      const element = document.querySelector('.k-virtual-content');
+      element && (element.scrollTop = element.scrollHeight);
+    },
+    [isAdding],
+  );
+
   const handleAdd: React.MouseEventHandler = () => {
     handleItemDiscard(undefined as any);
 
@@ -59,24 +72,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     setData((data) => [...data, newItem]);
   };
-
-  // Scroll down.
-  useEffect(
-    () => {
-      const isAdding = data.some(
-        (dataItem) => dataItem[MODE_FIELD] === Mode.add,
-      );
-
-      if (!isAdding) {
-        return;
-      }
-
-      // @todo: use Grid API
-      const element = document.querySelector('.k-virtual-content');
-      element && (element.scrollTop = element.scrollHeight);
-    },
-    [data],
-  );
 
   const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem: clickedDataItem }) => {
     setPrevDataItem(cloneDeep(clickedDataItem));
@@ -207,6 +202,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
           data-cy="button-add"
           className={classes.buttonAdd}
           kind="add"
+          disabled={isAdding}
           onClick={handleAdd}
         >
           {translate('form.builder.am.add')}

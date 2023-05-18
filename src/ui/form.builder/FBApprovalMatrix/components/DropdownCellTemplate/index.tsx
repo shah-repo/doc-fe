@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { get, set } from 'lodash';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY } from '../Grid';
@@ -15,9 +15,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
 
   const mode = dataItem[MODE_FIELD];
   const path = field ?? '';
-  const originValue = get(dataItem, path);
-
-  const [value, setValue] = useState(originValue);
+  const value = get(dataItem, path);
 
   const valueItem = data.find((item) => item[DATA_ITEM_KEY] === value);
 
@@ -25,8 +23,6 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
     const newValue = event.target.value[DATA_ITEM_KEY];
-
-    setValue(newValue);
 
     onChange?.({
       dataIndex,
@@ -48,7 +44,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
       dataItemKey={DATA_ITEM_KEY}
       defaultItem={defaultItem}
       onChange={handleChange}
-      value={valueItem ?? defaultItem}
+      defaultValue={valueItem ?? defaultItem}
     />
   );
 };
