@@ -218,10 +218,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     });
   }, []);
 
+  const withButton = !disabled;
+
   return (
     <>
       <KendoDataGrid
-        className={classes.grid}
+        className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
         data={data}
         schema={schema}
         rowRender={rowRender}
@@ -234,7 +236,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         hasBoxScrollbars
         {...restProps}
       />
-      {!disabled && (
+      {withButton && (
         <Button
           data-cy="button-add"
           className={classes.buttonAdd}
