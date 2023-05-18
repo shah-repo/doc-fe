@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { Redirect, RouteComponentProps } from "react-router-dom";
-import { LOGIN_URL } from "../../constants/urls";
+import React, { useEffect } from 'react';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { LOGIN_URL } from '../../constants/urls';
 
-export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "location" | "history"> {
+export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, 'location' | 'history'> {
   isAuthenticated: boolean;
   component: React.ComponentType;
 }
@@ -11,7 +11,7 @@ const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps>
   ({ component: Component, isAuthenticated, ...rest }) => {
     useEffect(() => {
       if (!isAuthenticated) {
-        rest.history.replace("/");
+        rest.history.replace('/');
       }
     }, [isAuthenticated, rest.history]);
 

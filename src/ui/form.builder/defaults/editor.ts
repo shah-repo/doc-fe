@@ -1,6 +1,6 @@
-import { Dictionary } from "lodash";
-import FBLabelEditor from "../components/editors/FBLabelEditor";
-import { FBEditorElementType } from "../types/editor";
+import { Dictionary } from 'lodash';
+import FBLabelEditor from '../components/editors/FBLabelEditor';
+import { FBEditorElementType } from '../types/editor';
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
   section: FBLabelEditor,
@@ -40,62 +40,62 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [
-    { value: "multiple", text: "form.builder.multi.select" },
-    { value: "includeQRScan", text: "form.builder.include.qr.scan" },
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'multiple', text: 'form.builder.multi.select' },
+    { value: 'includeQRScan', text: 'form.builder.include.qr.scan' },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   mediaupload: [
-    { value: "isTemplate", text: "form.builder.is.template" },
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'isTemplate', text: 'form.builder.is.template' },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   select: [
-    { value: "includeNone", text: "form.builder.include.none" },
-    { value: "includeContext", text: "form.builder.include.other" },
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'includeNone', text: 'form.builder.include.none' },
+    { value: 'includeContext', text: 'form.builder.include.other' },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   control: [
-    { value: "includeContext", text: "form.builder.include.note" },
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'includeContext', text: 'form.builder.include.note' },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   controlgroup: [
-    { value: "includeContext", text: "form.builder.include.other" },
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'includeContext', text: 'form.builder.include.other' },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   textfield: [
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   label: [
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
   approval: [
-    { value: "approveIsBlocking", text: "form.builder.blocking" },
-    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+    { value: 'approveIsBlocking', text: 'form.builder.blocking' },
+    { value: 'reviseDisabled', text: 'form.builder.revise.disabled' },
   ],
 };
 
 export const omitReviseDisabledOption: string[] = [
-  "section",
-  "subsection",
+  'section',
+  'subsection',
 ];
 
 export const omitLabelValidation: FBEditorElementType[] = [
-  "action",
-  "paragraph",
-  "instructionsmediaupload",
-  "evidencemediaupload",
-  "instructionsdocument",
+  'action',
+  'paragraph',
+  'instructionsmediaupload',
+  'evidencemediaupload',
+  'instructionsdocument',
 ];
 
 export const pickDefaultLabel: FBEditorElementType[] = [
-  "checkpoint",
-  "approval",
-  "inlineapproval",
-  "createlabel",
-  "quantity",
-  "stepsection",
-  "teststep",
-  "instructionsdocument",
-  "selectdocument",
-  "instructionsmediaupload",
-  "evidencemediaupload",
+  'checkpoint',
+  'approval',
+  'inlineapproval',
+  'createlabel',
+  'quantity',
+  'stepsection',
+  'teststep',
+  'instructionsdocument',
+  'selectdocument',
+  'instructionsmediaupload',
+  'evidencemediaupload',
 ];

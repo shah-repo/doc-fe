@@ -1,6 +1,6 @@
-import { Dictionary } from "lodash";
-import { DocumentRevision } from "../documentRevisions/types";
-import { SUPPLIER_SURVEY, SUPPLIER_SURVEY_SUBMIT } from "./constants";
+import { Dictionary } from 'lodash';
+import { DocumentRevision } from '../documentRevisions/types';
+import { SUPPLIER_SURVEY, SUPPLIER_SURVEY_SUBMIT } from './constants';
 
 export interface SupplierSurveyForm {
   createdAt: string;

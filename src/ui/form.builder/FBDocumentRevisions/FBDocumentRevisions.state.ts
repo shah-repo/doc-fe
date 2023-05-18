@@ -1,6 +1,6 @@
-import { union } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBDocumentRevisionsValue } from "..";
+import { union } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBDocumentRevisionsValue } from '..';
 
 class FBDocumentRevisionsState {
   @observable public value?: FBDocumentRevisionsValue[];
@@ -10,7 +10,7 @@ class FBDocumentRevisionsState {
   }
 
   @action public setDocumentRevisions = (value?: FBDocumentRevisionsValue[]) =>
-    set(this, "value", value);
+    set(this, 'value', value);
 
   @action public addDocumentRevision = (item: FBDocumentRevisionsValue) => {
     this.setDocumentRevisions(union(this.value || [], [item]));

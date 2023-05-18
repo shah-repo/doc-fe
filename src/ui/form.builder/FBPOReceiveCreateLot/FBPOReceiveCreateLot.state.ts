@@ -1,7 +1,7 @@
-import { action } from "mobx";
-import { CreateLotBody, FBPOReceiveCreateLotConstructor, FBPurchaseOrderItem } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { action } from 'mobx';
+import { CreateLotBody, FBPOReceiveCreateLotConstructor, FBPurchaseOrderItem } from '..';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBPOReceiveCreateLotState  {
   public createLotAPI = new FBRequest<null, CreateLotBody>(FBEndpoint.PatchDocumentRevision);

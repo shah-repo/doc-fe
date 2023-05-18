@@ -1,15 +1,15 @@
-import { TableCellProps as MuiTableCellProps } from "@material-ui/core/TableCell";
+import { TableCellProps as MuiTableCellProps } from '@material-ui/core/TableCell';
 import {
   CellMeasurerCache,
   ColumnProps,
   SortDirectionType,
-} from "react-virtualized";
-import { Translation } from "../../../translations/types";
-import { TableSearchFieldProps } from "../search/types";
-import { TableSelectionRenderer } from "../types";
+} from 'react-virtualized';
+import { Translation } from '../../../translations/types';
+import { TableSearchFieldProps } from '../search/types';
+import { TableSelectionRenderer } from '../types';
 
-type TableColumnType = "BASE" | "LINK" | "ACTION";
-export type TableColumnActionType = "EDIT" | "FILE_COPY" | "PREVIEW" | "ADD";
+type TableColumnType = 'BASE' | 'LINK' | 'ACTION';
+export type TableColumnActionType = 'EDIT' | 'FILE_COPY' | 'PREVIEW' | 'ADD';
 type TableCellTypeRenderer<T> = (rowData: T) => TableColumnType;
 type TableCellTooltipRenderer<T> = (rowData: T) => string;
 

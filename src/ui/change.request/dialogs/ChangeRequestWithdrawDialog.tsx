@@ -1,18 +1,18 @@
-import Button, { ButtonProps } from "@material-ui/core/Button";
-import React from "react";
-import { SM } from "../../../App";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import { ReactComponent as WithdrawSubmissionIcon } from "../../../assets/images/withdraw_submission.svg";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
-import AlertDialog from "../../app/alert.dialog/AlertDialog";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
+import Button, { ButtonProps } from '@material-ui/core/Button';
+import React from 'react';
+import { SM } from '../../../App';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { ReactComponent as WithdrawSubmissionIcon } from '../../../assets/images/withdraw_submission.svg';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../state/ducks/changeRequest/types';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
 
 interface Props {
   buttonProps?: ButtonProps;
@@ -37,7 +37,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
     async.start(
       applyTransition,
       changeRequestId,
-      { password: "" },
+      { password: '' },
       transition,
       async,
     );
@@ -72,7 +72,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
       )}
       <AlertDialog
         confirmAction={withdrawAction}
-        message={"change.request.withdraw.alert"}
+        message={'change.request.withdraw.alert'}
         {...{ dialog }}
       />
     </>

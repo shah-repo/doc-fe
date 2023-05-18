@@ -1,14 +1,14 @@
-import { IconButton } from "@material-ui/core";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
-import EditIcon from "@material-ui/icons/Edit";
-import { GridRowClickEvent } from "@progress/kendo-react-grid";
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
-import { LoadCompanyGroup } from "../../../../state/ducks/userManagement/types";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import Commandstyles from "./CommandCell.styles";
+import { IconButton } from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import { GridRowClickEvent } from '@progress/kendo-react-grid';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { GroupRequestBody } from '../../../../state/ducks/groupManagement/types';
+import { LoadCompanyGroup } from '../../../../state/ducks/userManagement/types';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import Commandstyles from './CommandCell.styles';
 
 interface CommandCellProps {
   dataItem: any;
@@ -39,7 +39,7 @@ export const CommandCell = ({
   const classes = Commandstyles();
   const inEdit = dataItem.inEdit;
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 
@@ -53,7 +53,7 @@ export const CommandCell = ({
     >
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.add.group")}
+        data={getTranslatedText('common.add.group')}
         childrenElement={
           <IconButton
             disableRipple={true}
@@ -70,7 +70,7 @@ export const CommandCell = ({
       />
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.discard")}
+        data={getTranslatedText('common.discard')}
         childrenElement={
           <IconButton
             disableRipple={true}
@@ -93,7 +93,7 @@ export const CommandCell = ({
     >
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.edit.group")}
+        data={getTranslatedText('common.edit.group')}
         childrenElement={
           <IconButton
             disableRipple={true}

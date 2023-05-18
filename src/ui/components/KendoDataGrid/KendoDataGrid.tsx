@@ -1,5 +1,5 @@
 import { State, process } from '@progress/kendo-data-query';
-import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps } from '@progress/kendo-react-grid';
+import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import { kebabCase } from 'lodash';
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
@@ -8,29 +8,37 @@ import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
 import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
 
-const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, ...props }) => (
-  column.cell
-    ? <column.cell {...props} column={column} field={field} />
-    : (
-      <GridCell
-        {...props}
-        field={field}
-        render={(element, props) => {
-          if (React.isValidElement(element) && column.template) {
-            return React.cloneElement(
-              element,
-              {
-                ...element.props,
-                ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
-              },
-              column.template({ ...props, column, field }),
-            );
-          }
-          return element;
-        }}
-      />
-    )
-);
+const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick, ...props }) => {
+  const onCellClick = (e: GridRowClickEvent) => {
+    onClick?.({
+      ...e,
+      dataItem: props.dataItem as unknown,
+    });
+  };
+  return (
+    column.cell
+      ? <column.cell {...props} column={column} field={field} onClick={onCellClick} />
+      : (
+        <GridCell
+          {...props}
+          field={field}
+          render={(element, props) => {
+            if (React.isValidElement(element) && column.template) {
+              return React.cloneElement(
+                element,
+                {
+                  ...element.props,
+                  ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
+                },
+                column.template({ ...props, column, field, onClick: onCellClick }),
+              );
+            }
+            return element;
+          }}
+        />
+      )
+  );
+};
 
 const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...props }) => {
   if (column.headerCell) {
@@ -43,7 +51,12 @@ function isGenericColumns (columns: GenericColumnDefinition['children']): column
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
-const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
+const renderColumns = (
+  columns: GenericColumnDefinition[],
+  gridWidth: number,
+  calculateColumWidth?: WidthCalculator,
+  onRowClick?: GridProps['onRowClick'],
+) =>
   columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
     const field = column.field ?? `custom-${column.id}`;
 
@@ -53,7 +66,7 @@ const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, ca
         key={column.id}
         field={field}
         title={translate(column.title)}
-        cell={(props) => <CustomGridCell {...props} column={column} field={field} />}
+        cell={(props) => <CustomGridCell {...props} column={column} field={field} onClick={onRowClick} />}
         headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}
         width={
@@ -71,26 +84,26 @@ const renderColumns = (columns: GenericColumnDefinition[], gridWidth: number, ca
     );
   });
 
-const defaultDataState: State = {
+const DEFAULT_DATA_STATE: State = {
   filter: {
     logic: 'and',
     filters: [],
   },
-  group: [],
-  sort: [],
 };
 
 function KendoDataGrid<T> ({
   data,
-  filter = defaultDataState.filter,
-  group = defaultDataState.group,
-  sort = defaultDataState.sort,
+  defaultDataState = DEFAULT_DATA_STATE,
+  filter,
+  group,
+  sort,
   skipDataProcessing,
   loading,
   schema,
   fullWidth,
   fullHeight,
   fallback,
+  onRowClick,
   onColumnReorder,
   onDataStateChange,
   calculateColumWidth,
@@ -104,9 +117,9 @@ function KendoDataGrid<T> ({
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
   const [dataState, setDataState] = useState<State>({
     ...defaultDataState,
-    filter,
-    group,
-    sort,
+    ...filter && { filter },
+    ...group && { group },
+    ...sort && { sort },
   });
 
   useEffect(() => {
@@ -116,23 +129,11 @@ function KendoDataGrid<T> ({
   useEffect(() => {
     setDataState((prev) => ({
       ...prev,
-      filter,
+      ...filter && { filter },
+      ...group && { group },
+      ...sort && { sort },
     }));
-  }, [filter]);
-
-  useEffect(() => {
-    setDataState((prev) => ({
-      ...prev,
-      group,
-    }));
-  }, [group]);
-
-  useEffect(() => {
-    setDataState((prev) => ({
-      ...prev,
-      sort,
-    }));
-  }, [sort]);
+  }, [filter, group, sort]);
 
   const resultData = useMemo(
     () => skipDataProcessing ? data : process(data, dataState),
@@ -191,9 +192,10 @@ function KendoDataGrid<T> ({
             onColumnReorder={reorderColumns}
             ref={gridRef}
             containerRef={containerRef}
+            onRowClick={onRowClick}
             {...dataState}
           >
-            {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth)}
+            {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth, onRowClick)}
             {fallback && (
               <GridNoRecords>{fallback}</GridNoRecords>
             )}

@@ -1,17 +1,17 @@
-import { Button, Divider, Grid, Typography } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import cx from "classnames";
-import { isEmpty, map, some } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useEffect, useState } from "react";
-import Text from "../../components/Text";
-import { FBFormState } from "../../form.builder";
-import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
-import useStyles from "./ApprovalRequestGrid.styles";
-import ApprovalRequestGridHeader from "./ApprovalRequestGridHeader";
-import ApprovalRequestItem from "./ApprovalRequestItem";
-import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
+import { Button, Divider, Grid, Typography } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import cx from 'classnames';
+import { isEmpty, map, some } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+import Text from '../../components/Text';
+import { FBFormState } from '../../form.builder';
+import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
+import useStyles from './ApprovalRequestGrid.styles';
+import ApprovalRequestGridHeader from './ApprovalRequestGridHeader';
+import ApprovalRequestItem from './ApprovalRequestItem';
+import ItemsAndDetailsState from './ItemsAndDetails.state';
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 
 const Loader = () => {
@@ -51,7 +51,7 @@ const TopSection: React.FunctionComponent<{
               className={classes.btnMargin}
               disabled={!isButtonShown}
               color="primary"
-              startIcon={<AddCircleIcon color={!isButtonShown ? "disabled" : "primary"} />}
+              startIcon={<AddCircleIcon color={!isButtonShown ? 'disabled' : 'primary'} />}
               onClick={isButtonShown ? showEditRow : (e) => e.preventDefault()}
             >
               <Text translation="approvalRequest.items.button.addText"/>
@@ -82,8 +82,8 @@ const ItemsAndDetails: React.FunctionComponent<{
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
 
   useEffect(() => {
-    if (itemsAndDetailsState.approvalRequstItemInEditMode !== "") {
-      formState.setFieldValue("proposedDocumentRevision", { id: itemsAndDetailsState.approvalRequstItemInEditMode });
+    if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
+      formState.setFieldValue('proposedDocumentRevision', { id: itemsAndDetailsState.approvalRequstItemInEditMode });
       showEditRow();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,13 +92,13 @@ const ItemsAndDetails: React.FunctionComponent<{
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
-    if (itemsAndDetailsState.approvalRequstItemInEditMode === "") {
+    if (itemsAndDetailsState.approvalRequstItemInEditMode === '') {
       removePrePopulatedField();
     }
   };
 
   function disabledOptions(): string[] {
-    return map(itemsAndDetailsState?.approvalRequestItemsList, "proposedDocumentRevision.id");
+    return map(itemsAndDetailsState?.approvalRequestItemsList, 'proposedDocumentRevision.id');
   }
 
   function resetAndCancelEdit() {
@@ -110,7 +110,7 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   const removePrePopulatedField = () => {
-    const removeKeys = ["proposedDocumentRevision", "descriptionOfChange", "justificationOfChange"];
+    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange'];
     removeKeys.forEach((item) => {
       formState.setFieldValue(item, undefined);
     });

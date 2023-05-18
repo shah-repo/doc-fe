@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 const POStatusToastrStyles = makeStyles((theme) => ({
   listItem: {
@@ -7,25 +7,25 @@ const POStatusToastrStyles = makeStyles((theme) => ({
     margin: 0,
   },
   listItemText: {
-    margin: "auto",
+    margin: 'auto',
   },
   infoIcon: {
     minWidth: 36,
   },
   primaryText: {
     fontWeight: 700,
-    fontSize: "14px",
-    lineHeight: "21px",
+    fontSize: '14px',
+    lineHeight: '21px',
     color: Colors.almost_black,
   },
   secondaryLinkText: {
     fontWeight: 600,
-    fontSize: "12px",
+    fontSize: '12px',
     color: Colors.almost_black,
   },
   secondaryText: {
     fontWeight: 400,
-    fontSize: "12px",
+    fontSize: '12px',
     color: Colors.almost_black,
   },
   message: {
@@ -36,8 +36,8 @@ const POStatusToastrStyles = makeStyles((theme) => ({
   blackDot: {
     width: 4,
     height: 4,
-    margin: "3px",
-    display: "inline-block",
+    margin: '3px',
+    display: 'inline-block',
     background: Colors.almost_black,
   },
 }));

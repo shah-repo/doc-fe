@@ -1,14 +1,14 @@
-import { Button, withStyles, WithStyles } from "@material-ui/core";
-import { Form } from "formik";
-import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../../state/types";
-import InputField from "../../forms/fields/Input";
-import { required, validator } from "../../forms/fields/validators";
-import FormMessage from "../../forms/FormMessage";
-import FormProgress from "../../forms/FormProgress";
-import SubmitButton from "../../forms/SubmitButton";
-import Text from "../../Text";
-import styles from "./PasswordForm.styles";
+import { Button, withStyles, WithStyles } from '@material-ui/core';
+import { Form } from 'formik';
+import * as React from 'react';
+import { AsyncState, AsyncStatus } from '../../../../state/types';
+import InputField from '../../forms/fields/Input';
+import { required, validator } from '../../forms/fields/validators';
+import FormMessage from '../../forms/FormMessage';
+import FormProgress from '../../forms/FormProgress';
+import SubmitButton from '../../forms/SubmitButton';
+import Text from '../../Text';
+import styles from './PasswordForm.styles';
 
 interface PasswordFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;
@@ -22,7 +22,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
       name="password"
       label="transition.action.password"
       dataCy="transition.action.password"
-      inputProps={{ type: "password" }}
+      inputProps={{ type: 'password' }}
       validate={validator(required)}
     />
     <FormProgress asyncState={asyncState} />

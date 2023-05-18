@@ -1,14 +1,14 @@
-import { Button } from "@material-ui/core";
-import { isEmpty, map, startCase } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import ExportListIcon from "../../../components/common/kendo/ExportListIcon";
-import Text from "../../../components/Text";
-import useDialog from "../../../hooks/useDialog";
-import ExportListDialog from "../../list/ExportListDialog/ExportListDialog";
-import styles from "./styles";
+import { Button } from '@material-ui/core';
+import { isEmpty, map, startCase } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import ExportListIcon from '../../../components/common/kendo/ExportListIcon';
+import Text from '../../../components/Text';
+import useDialog from '../../../hooks/useDialog';
+import ExportListDialog from '../../list/ExportListDialog/ExportListDialog';
+import styles from './styles';
 
 interface Props {
   gridData: DocumentRevision[];
@@ -19,7 +19,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
   const classes = styles();
   const dialog = useDialog();
   const intl = useIntl();
-  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const headers = map(columns, (column) => ({
     label: startCase(getTranslatedText(column.title)),
     key: column.field,
@@ -32,14 +32,14 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
         documentTitle: e.name,
         type: e.document.documentType.documentTypeAcronym,
         owner: e.owner.user.name,
-        crId: e.changeRequest?.crId || "",
+        crId: e.changeRequest?.crId || '',
         status: e.displayStatus.toUpperCase(),
         effectiveDate: e.effectiveDate
           ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear)
-          : "",
+          : '',
       }));
     }
-    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: '' }));
     return [Object.assign({}, ...defaultEmptyColumn)];
   };
   const exportData = dialog.isOpen ? renderTableData() : [];

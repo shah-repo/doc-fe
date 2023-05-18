@@ -1,20 +1,20 @@
-import { Chip, withStyles } from "@material-ui/core";
-import { TrainingStatus } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import Colors from "../../../../layout/theme/utils/colors";
+import { Chip, withStyles } from '@material-ui/core';
+import { TrainingStatus } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import Colors from '../../../../layout/theme/utils/colors';
 
 const styles = () => ({
   root: {
     backgroundColor: Colors.white,
-    borderRadius: "3px",
+    borderRadius: '3px',
   },
   iconSmall: {
-    height: "14px",
-    width: "13px",
+    height: '14px',
+    width: '13px',
   },
   labelSmall: {
-    "fontSize": "12px",
-    "fontWeight": 700,
-    "text-transform": "uppercase",
+    'fontSize': '12px',
+    'fontWeight': 700,
+    'text-transform': 'uppercase',
   },
   colorPrimary: {
     color: (props) =>

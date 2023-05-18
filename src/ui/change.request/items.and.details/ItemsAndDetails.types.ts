@@ -1,7 +1,7 @@
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { AsyncActionPayload } from "../../../state/types";
-import { FBFormProps, FBWorkspaceMode } from "../../form.builder";
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { AsyncActionPayload } from '../../../state/types';
+import { FBFormProps, FBWorkspaceMode } from '../../form.builder';
 
 export interface FBDocumentRevisionResponse {
   createdAt: string;
@@ -42,7 +42,7 @@ export interface ApprovalRequestGridItem {
 export interface ItemsAndDetailsWrapperProps {
   currentDocRevId?: string;
   changeRequest?: ChangeRequest;
-  initialValues: Pick<FBFormProps, "initialValues">;
+  initialValues: Pick<FBFormProps, 'initialValues'>;
   autosave?: boolean;
   mode: FBWorkspaceMode;
   asyncState?: AsyncActionPayload;

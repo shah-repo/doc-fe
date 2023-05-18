@@ -1,15 +1,15 @@
-import { Formik, FormikProps } from "formik";
-import * as React from "react";
-import { Redirect } from "react-router-dom";
-import * as Yup from "yup";
-import { logo } from "../../../common/utils/helpers";
-import { AsyncState } from "../../../state/types";
-import { confirmPasswordSchema, passwordSchema } from "../../components/forms/fields/validators";
-import { FormContext } from "../../components/forms/FormContext";
-import { LOGIN_URL } from "../../constants/urls";
-import { Translation } from "../../translations/types";
-import { PasswordValues } from "../types";
-import ConfirmPasswordPresenter from "./ConfirmPassword.presenter";
+import { Formik, FormikProps } from 'formik';
+import * as React from 'react';
+import { Redirect } from 'react-router-dom';
+import * as Yup from 'yup';
+import { logo } from '../../../common/utils/helpers';
+import { AsyncState } from '../../../state/types';
+import { confirmPasswordSchema, passwordSchema } from '../../components/forms/fields/validators';
+import { FormContext } from '../../components/forms/FormContext';
+import { LOGIN_URL } from '../../constants/urls';
+import { Translation } from '../../translations/types';
+import { PasswordValues } from '../types';
+import ConfirmPasswordPresenter from './ConfirmPassword.presenter';
 
 interface Props {
   clientEmail: string;
@@ -29,8 +29,8 @@ const ConfirmPasswordContainer: React.FunctionComponent<Props> = ({
 
   const initialValues: PasswordValues = {
     email: clientEmail,
-    confirmPass: "",
-    password: "",
+    confirmPass: '',
+    password: '',
   };
 
   const render = (props: FormikProps<PasswordValues>) => (

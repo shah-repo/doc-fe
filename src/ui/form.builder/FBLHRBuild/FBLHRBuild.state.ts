@@ -1,5 +1,5 @@
-import { action, observable, set } from "mobx";
-import { FBLHRBuildConstructor, FBLHRBuildOptions } from "..";
+import { action, observable, set } from 'mobx';
+import { FBLHRBuildConstructor, FBLHRBuildOptions } from '..';
 
 class FBLHRBuildState {
   @observable public disabled?: boolean;
@@ -16,11 +16,11 @@ class FBLHRBuildState {
   }
 
   @action public setDisabled = (disabled?: boolean) => {
-    set(this, "disabled", disabled);
+    set(this, 'disabled', disabled);
   };
 
   @action public setValue = (value?: string) => {
-    set(this, "value", value);
+    set(this, 'value', value);
   };
 }
 

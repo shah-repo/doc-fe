@@ -1,11 +1,11 @@
-import { findIndex, isEmpty, union } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBFormState } from "..";
-import { intl } from "../../../common/intl";
-import { toastError } from "../../components/notifications";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import { FBPOApprovalMatrixConstructor, POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
+import { findIndex, isEmpty, union } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBFormState } from '..';
+import { intl } from '../../../common/intl';
+import { toastError } from '../../components/notifications';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import { FBPOApprovalMatrixConstructor, POApprovalMatrix, POApprovalMatrixLevel } from './FBPOApprovalMatrix.types';
 
 const DEFAULT_POAM: POApprovalMatrix = {
   approvalLevels: [] as POApprovalMatrixLevel[],
@@ -13,7 +13,7 @@ const DEFAULT_POAM: POApprovalMatrix = {
 
 class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
   public static stages = [1, 2, 3];
-  @observable public name = "";
+  @observable public name = '';
   @observable public poam = DEFAULT_POAM;
   @observable public approvalLevels: POApprovalMatrixLevel[] = [];
   public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.officialGroups });
@@ -35,7 +35,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
   }
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
-    set(this, "approvalLevels", approvalLevels);
+    set(this, 'approvalLevels', approvalLevels);
     this.updateFBStore();
   };
 
@@ -44,16 +44,16 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
     const checkDuplicate = this.approvalLevels.filter(
       (item) => item.name === approvalLevel.name || item.limit === approvalLevel.limit );
     if ((appLevelIndex === -1 && checkDuplicate?.length > 0) || (appLevelIndex >= 0 && checkDuplicate?.length === 2)) {
-      toastError(intl.formatMessage({ id: "documentRevision.form.PO.matrix.duplicate" }));
+      toastError(intl.formatMessage({ id: 'documentRevision.form.PO.matrix.duplicate' }));
       return;
     }
     if (appLevelIndex === -1) {
-      set(this, "approvalLevels", union(this.approvalLevels, [approvalLevel]));
+      set(this, 'approvalLevels', union(this.approvalLevels, [approvalLevel]));
       return;
     }
     const al = [...this.approvalLevels];
     al[appLevelIndex] = approvalLevel;
-    set(this, "approvalLevels", al);
+    set(this, 'approvalLevels', al);
   };
 
   @action public editItem = (index: number, approvalLevel: POApprovalMatrixLevel) => {
@@ -123,7 +123,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
   }
 
   private updateFBStore = () => {
-    if (!this.name || this.formState?.workspaceState?.mode === "design") {
+    if (!this.name || this.formState?.workspaceState?.mode === 'design') {
       return;
     }
     // this.formState?.setFieldValue(this.name, this.poam);

@@ -1,6 +1,6 @@
-import React from "react";
-import { FBTextField } from "..";
-import { FBEditorPlaceholderProps } from "./FBEditorPlaceholder.types";
+import React from 'react';
+import { FBTextField } from '..';
+import { FBEditorPlaceholderProps } from './FBEditorPlaceholder.types';
 
 const FBEditorPlaceholder: React.FunctionComponent<FBEditorPlaceholderProps> = ({
   boxProps,

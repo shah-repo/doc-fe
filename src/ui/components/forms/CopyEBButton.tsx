@@ -1,16 +1,16 @@
-import { Button, Modal } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import * as React from "react";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as CloneIcon } from "../../../assets/images/clone.svg";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import CloneModal from "./clone/CloneDialog";
-import { styles } from "./clone/CloneModal.styles";
+import { Button, Modal } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import * as React from 'react';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as CloneIcon } from '../../../assets/images/clone.svg';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../components/Text';
+import CloneModal from './clone/CloneDialog';
+import { styles } from './clone/CloneModal.styles';
 
 interface CloneEBButtonProps extends ButtonProps {
   documentRevision: DocumentRevision;

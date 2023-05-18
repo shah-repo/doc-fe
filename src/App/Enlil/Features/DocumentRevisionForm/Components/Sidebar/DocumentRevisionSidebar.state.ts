@@ -1,5 +1,5 @@
-import { action, computed, observable, set } from "mobx";
-import { DocumentRevisionSidebarStateProps } from "../../../../..";
+import { action, computed, observable, set } from 'mobx';
+import { DocumentRevisionSidebarStateProps } from '../../../../..';
 
 export default class DocumentRevisionSidebarState implements DocumentRevisionSidebarStateProps {
 
@@ -7,7 +7,7 @@ export default class DocumentRevisionSidebarState implements DocumentRevisionSid
 
   // MARK: @observables
   @observable public open = true;
-  @observable public title = "";
+  @observable public title = '';
 
   // MARK: @api
 
@@ -19,8 +19,8 @@ export default class DocumentRevisionSidebarState implements DocumentRevisionSid
   }
 
   // MARK: @actions
-  @action setOpen = () => set(this, "open", !this.open);
-  @action setTitle = (title: string) => set(this, "title", title);
+  @action setOpen = () => set(this, 'open', !this.open);
+  @action setTitle = (title: string) => set(this, 'title', title);
 
   // MARK: @helpers
 

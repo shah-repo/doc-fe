@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../../../../layout/theme/utils/colors";
+import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../../../../layout/theme/utils/colors';
 
 export default makeStyles(() =>
   createStyles({
@@ -15,10 +15,10 @@ export default makeStyles(() =>
       letterSpacing: 0,
     },
     description: {
-      "lineHeight": "21px",
-      "fontSize": 14,
-      "word-break": "break-all",
-      "letterSpacing": 0,
+      'lineHeight': '21px',
+      'fontSize': 14,
+      'word-break': 'break-all',
+      'letterSpacing': 0,
     },
   })
 );

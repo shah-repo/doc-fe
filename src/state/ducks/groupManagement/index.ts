@@ -1,2 +1,2 @@
-export { default as groupManagementActions } from "./actions";
+export { default as groupManagementActions } from './actions';
 

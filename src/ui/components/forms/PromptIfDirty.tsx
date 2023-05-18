@@ -5,6 +5,7 @@ import { getPOIndexDbInstance } from '../../../indexDb';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { FB } from '../../form.builder';
+import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDialog from '../../hooks/useDialog';
 
 export interface Props {
@@ -70,9 +71,9 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     const data = await workspaceState?.undoPO(
       prevPODoc[0] as DocumentRevision);
 
+    await getPOIndexDbInstance().clear();
+    FBDataStore.setRefreshData(undefined);
     history.push(lastLocation?.pathname);
-    getPOIndexDbInstance().clear();
-    setDocumentRevision?.(data);
   };
 
   return (

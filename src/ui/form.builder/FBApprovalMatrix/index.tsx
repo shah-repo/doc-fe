@@ -1,5 +1,5 @@
 import React from 'react';
-import Grid, { Mode, MODE_FIELD } from './components/Grid';
+import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
@@ -15,7 +15,7 @@ import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  const { data, handleSave, disabled } = props;
+  const { data, handleSave, disabled, withoutStatus } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
@@ -23,6 +23,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
 
   const schema = createSchema({
     data,
+    withoutStatus,
     documentTypeCategories,
     clearRightBorderClassName: classes.clearRightBorder,
     cellARClassName: classes.cellAR,
@@ -46,7 +47,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-    [MODE_FIELD]: Mode.add,
   };
 
   const renderTable = () => (
@@ -56,6 +56,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       disabled={disabled}
       defaultNewValue={defaultNewValue}
       onSave={handleSave}
+      withoutStatus={withoutStatus}
     />
   );
 

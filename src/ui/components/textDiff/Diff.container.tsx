@@ -1,10 +1,10 @@
 // eslint-disable-next-line: no-implicit-dependencies
-import { DeltaStatic } from "quill";
-import React, { useEffect, useRef, useState } from "react";
-import ReactQuill from "react-quill";
-import DiffPresenter from "./Diff.presenter";
-import { findDiff } from "./utils/helpers";
-import { DiffContainerProps } from "./utils/types";
+import { DeltaStatic } from 'quill';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactQuill from 'react-quill';
+import DiffPresenter from './Diff.presenter';
+import { findDiff } from './utils/helpers';
+import { DiffContainerProps } from './utils/types';
 
 type Props = DiffContainerProps;
 
@@ -19,7 +19,7 @@ const DiffContainer: React.FunctionComponent<Props> = ({
     if (!oldText || !newText) {
       return;
     }
-    if (oldText === "undefined" && refMain.current ) {
+    if (oldText === 'undefined' && refMain.current ) {
       const contents = refMain.current.getEditor().clipboard.convert(newText);
       refNew.current && refNew.current.getEditor().setContents(contents);
       return;
@@ -49,6 +49,6 @@ const DiffContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-DiffContainer.displayName = "TextDiffContainer";
+DiffContainer.displayName = 'TextDiffContainer';
 
 export default DiffContainer;

@@ -1,26 +1,26 @@
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from 'react-router-dom';
 
 const getRouteComponentProps = <P = {}>(params?: P): RouteComponentProps<P> => ({
   match: {
     isExact: true,
     params: params || {} as P,
-    path: "",
-    url: "",
+    path: '',
+    url: '',
   },
   location: {
-    pathname: "target/",
-    search: "",
-    state: "",
-    hash: "",
+    pathname: 'target/',
+    search: '',
+    state: '',
+    hash: '',
   },
   history: {
     length: 2,
-    action: "POP",
+    action: 'POP',
     location: {
-      pathname: "/",
-      search: "",
-      state: "",
-      hash: "",
+      pathname: '/',
+      search: '',
+      state: '',
+      hash: '',
     },
     push: jest.fn(),
     replace: jest.fn(),

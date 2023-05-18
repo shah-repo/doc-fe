@@ -1,9 +1,9 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as SuccessIcon } from "../../../assets/images/success_icon.svg";
-import Text from "../../components/Text";
-import SlackLandingCounter from "./Counter";
-import { styles } from "./styles";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as SuccessIcon } from '../../../assets/images/success_icon.svg';
+import Text from '../../components/Text';
+import SlackLandingCounter from './Counter';
+import { styles } from './styles';
 
 interface Props {
   successMessage: string;

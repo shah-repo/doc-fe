@@ -1,3 +1,3 @@
-import { FBInputProps } from "../types/common";
+import { FBInputProps } from '../types/common';
 
-export type FBTimerProps = Pick<FBInputProps, "name" | "label" | "value" | "disabled">;
+export type FBTimerProps = Pick<FBInputProps, 'name' | 'label' | 'value' | 'disabled'>;

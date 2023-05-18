@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core";
-import { itemStyles } from "../HelpCenterList/HelpCenterList.styles";
+import { makeStyles } from '@material-ui/core';
+import { itemStyles } from '../HelpCenterList/HelpCenterList.styles';
 
 export default makeStyles((theme) => ({
   ...itemStyles(theme),
@@ -9,12 +9,12 @@ export default makeStyles((theme) => ({
   contact: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
-    position: "relative",
+    position: 'relative',
   },
   out: {
-    "&:before": {
+    '&:before': {
       content: "''",
-      position: "absolute",
+      position: 'absolute',
       inset: 0,
     },
   },

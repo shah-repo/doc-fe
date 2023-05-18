@@ -1,6 +1,6 @@
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { SelectOption } from "../../components/forms/fields/Select";
-import { ChangeRequestUserProps } from "./types";
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { SelectOption } from '../../components/forms/fields/Select';
+import { ChangeRequestUserProps } from './types';
 
 export const canEditChangeRequest = ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) => (
   currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.Draft

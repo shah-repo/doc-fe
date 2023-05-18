@@ -1,10 +1,10 @@
-import { FBInputProps, FBMediaAlbumFieldProps } from "..";
+import { FBInputProps, FBMediaAlbumFieldProps } from '..';
 
-type FBMediaQRMode = "qr" | "placeholder" | "preupload";
+type FBMediaQRMode = 'qr' | 'placeholder' | 'preupload';
 
 export type FBMediaQRProps =
-& Pick<FBInputProps, "isTemplate">
-& Pick<FBMediaAlbumFieldProps, "setMediaFieldMode" | "loading" | "qrValue">
+& Pick<FBInputProps, 'isTemplate'>
+& Pick<FBMediaAlbumFieldProps, 'setMediaFieldMode' | 'loading' | 'qrValue'>
 & {
   mode?: FBMediaQRMode;
 };

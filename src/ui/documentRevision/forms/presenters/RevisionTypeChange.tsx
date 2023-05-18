@@ -1,16 +1,16 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { companySelectors } from "../../../../state/ducks/company";
-import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
-import RadioButton from "../../../components/forms/fields/RadioButton";
-import RadioGroup from "../../../components/forms/fields/RadioGroup";
-import { required, validator } from "../../../components/forms/fields/validators";
-import Text from "../../../components/Text";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
-import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from "../../../hooks/docCustomization/useCustomization";
-import { versionNumber } from "../../helpers/generateRevisionNumber";
-import { styles } from "./RevisionTypeChange.styles";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { companySelectors } from '../../../../state/ducks/company';
+import { DocumentRevision, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import RadioButton from '../../../components/forms/fields/RadioButton';
+import RadioGroup from '../../../components/forms/fields/RadioGroup';
+import { required, validator } from '../../../components/forms/fields/validators';
+import Text from '../../../components/Text';
+import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
+import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from '../../../hooks/docCustomization/useCustomization';
+import { versionNumber } from '../../helpers/generateRevisionNumber';
+import { styles } from './RevisionTypeChange.styles';
 
 interface Props {
   documentTypeId?: string;
@@ -23,7 +23,7 @@ interface Props {
   isAlphaReleased: boolean;
 }
 const RevisionTypeChange: React.FunctionComponent<Props> = ({
-  documentTypeId = "",
+  documentTypeId = '',
   isDisabled,
   isDocRevFirstDraft,
   showAdministrativeAndVoidChange,
@@ -131,7 +131,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
                 <RadioButton
                   label={
                     <Typography variant="body1" className={classes.labelSubTitle}>
-                      <Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />
+                      <Text message={ showAdministrativeAndVoidChange ? 'common.void' : obsoleteLabel} />
                     </Typography>}
                   value={RevisionChangeType.Obsolete}
                   id="RevisionTypeChange-obsolete"

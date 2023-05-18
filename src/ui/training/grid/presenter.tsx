@@ -1,11 +1,11 @@
-import { Grid } from "@material-ui/core";
-import React, { useState } from "react";
-import { TrainingListData } from "../../../state/ducks/training/types";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
-import ExportButton from "./ExportButton";
-import { KendoPresenterProps } from "./interfaces";
+import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import { TrainingListData } from '../../../state/ducks/training/types';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import ExportButton from './ExportButton';
+import { KendoPresenterProps } from './interfaces';
 
 export function TrainingListPresenter({
   statuses,

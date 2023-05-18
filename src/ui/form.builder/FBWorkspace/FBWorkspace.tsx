@@ -1,8 +1,8 @@
-import { Portal } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React from "react";
-import { FBDialog, FBForm, FBLock, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceModeOptions, FBWorkspaceProps } from "..";
-import { withFBWorkspace } from "./FBWorkspace.wrap";
+import { Portal } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { FBDialog, FBForm, FBLock, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceModeOptions, FBWorkspaceProps } from '..';
+import { withFBWorkspace } from './FBWorkspace.wrap';
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   workspaceState,

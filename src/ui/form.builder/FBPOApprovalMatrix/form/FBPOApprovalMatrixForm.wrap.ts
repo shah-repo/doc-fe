@@ -1,6 +1,6 @@
-import React from "react";
-import { FB } from "../..";
-import { FBPOApprovalMatrixFormActionsProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
+import React from 'react';
+import { FB } from '../..';
+import { FBPOApprovalMatrixFormActionsProps, POApprovalMatrixLevel } from '../FBPOApprovalMatrix.types';
 
 export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormActionsProps>(
   Component: React.FunctionComponent<T>

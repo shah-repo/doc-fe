@@ -1,8 +1,8 @@
-import { Dialog } from "@material-ui/core";
-import React from "react";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
-import DialogTitle from "../dialog/DialogTitle";
-import GroupsDisplayContent from "./GroupsDisplayContent";
+import { Dialog } from '@material-ui/core';
+import React from 'react';
+import { LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
+import DialogTitle from '../dialog/DialogTitle';
+import GroupsDisplayContent from './GroupsDisplayContent';
 
 interface OwnProps {
   closeDialog: () => void;
@@ -23,7 +23,7 @@ const GroupsDisplay: React.FunctionComponent<Props> = ({
     <Dialog fullScreen={true} open={isOpen}>
       <DialogTitle
         closeDialog={closeDialog}
-        title={"group.management.group.details"}
+        title={'group.management.group.details'}
       />
       <GroupsDisplayContent
         groupName={name}

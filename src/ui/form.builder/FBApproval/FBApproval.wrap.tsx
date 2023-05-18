@@ -1,13 +1,13 @@
-import { cloneDeep, filter, findLast, groupBy, includes, isEmpty, isUndefined, sortBy } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from "..";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { Employee } from "../../../state/ducks/company/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { store } from "../../../state/store";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { cloneDeep, filter, findLast, groupBy, includes, isEmpty, isUndefined, sortBy } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from '..';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { Employee } from '../../../state/ducks/company/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import { store } from '../../../state/store';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBApproval = <T extends FBApprovalProps>(
   Component: React.FunctionComponent<T>
@@ -17,7 +17,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     onApprove,
     approvalConfig,
     approvalState,
-    name = "",
+    name = '',
     hasApproved,
     disabled,
     isApproved = false,
@@ -35,7 +35,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    approvalNonVersioned = includes(editorProperties, "approvalNonVersioned");
+    approvalNonVersioned = includes(editorProperties, 'approvalNonVersioned');
     autosave = approvalNonVersioned;
     const currentUser = store.getState().auth.user;
     const {
@@ -43,11 +43,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
       isOutput,
       isReleased,
       isDeprecated,
-      document: { released = new Date(), revisionStage = "" } = { },
+      document: { released = new Date(), revisionStage = '' } = { },
     } = workspaceState || {};
 
-    const isRecord = workspaceState?.document?.document?.documentType?.groupOptions?.includes("RECORD") || false;
-    const formValue = sortBy(formState?.getFieldValue(name), "approvedAt")
+    const isRecord = workspaceState?.document?.document?.documentType?.groupOptions?.includes('RECORD') || false;
+    const formValue = sortBy(formState?.getFieldValue(name), 'approvedAt')
       .filter((value) => new Date(value.approvedAt) <= new Date(released));
 
     approvalState = FB.useRef<FBApprovalState>(FBApprovalState, {
@@ -98,8 +98,8 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function roleCheck(id: string): boolean {
-      const roles = groupBy(getRole(id)?.joinedEmployees || [], "id");
-      return !isUndefined(roles[currentUser?.employeeId || ""]);
+      const roles = groupBy(getRole(id)?.joinedEmployees || [], 'id');
+      return !isUndefined(roles[currentUser?.employeeId || '']);
     }
 
     function approverStatus(id: string): string {
@@ -130,7 +130,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
         (approver as Employee)?.user?.email ||
         (approver as GroupRequestBody)?.name ||
         (approver as FBInlineApprovalRole)?.name ||
-        ""
+        ''
       );
     }
 
@@ -138,11 +138,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
       const status = approverStatus(id);
       if (status === FBApprovalStatus.Approved) {
         const { userId, groupId, approvalRoleId, approvedAt } = findApprover(id) || {};
-        if (!approvedAt) { return ""; }
-        let approver = "";
+        if (!approvedAt) { return ''; }
+        let approver = '';
         if (userId && (groupId || approvalRoleId)) {
           const approverObj = FBAutocompleteAsyncStore.getValue<Employee>(approvalState?.approversId, userId);
-          approver = approverName(approverObj) + ",";
+          approver = approverName(approverObj) + ',';
         }
 
         const mom = getFormattedDateString(approvedAt, MomentFormats.DateTimeAlt);
@@ -181,7 +181,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       if (!approver) {
         return;
       }
-      const id = approver.id || "";
+      const id = approver.id || '';
       return {
         label: approverName(approver),
         isVisible: approverIsVisible(id),

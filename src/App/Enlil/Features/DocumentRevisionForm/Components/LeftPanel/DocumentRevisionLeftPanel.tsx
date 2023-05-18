@@ -1,13 +1,13 @@
-import { Box, IconButton, Typography } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React from "react";
-import { SM, SMBox } from "../../../../..";
-import { ReactComponent as CloseIcon } from "../../../../../../assets/images/leftPanel/close.svg";
-import Text from "../../../../../../ui/components/Text";
-import { FB } from "../../../../../../ui/form.builder";
-import LeftPanelFormEditor from "./Components/LeftPanelFormEditor";
-import ListPanel from "./Components/ListPanel";
-import useStyles from "./DocumentRevisionLeftPanel.styles";
+import { Box, IconButton, Typography } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { SM, SMBox } from '../../../../..';
+import { ReactComponent as CloseIcon } from '../../../../../../assets/images/leftPanel/close.svg';
+import Text from '../../../../../../ui/components/Text';
+import { FB } from '../../../../../../ui/form.builder';
+import LeftPanelFormEditor from './Components/LeftPanelFormEditor';
+import ListPanel from './Components/ListPanel';
+import useStyles from './DocumentRevisionLeftPanel.styles';
 
 const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
   const classes = useStyles();

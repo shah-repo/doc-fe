@@ -1,15 +1,15 @@
-import { Box, TextField } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBInputType, FBTextFieldProps } from "..";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { FBTextFieldStyles } from "../styles/FBTextField.styles";
-import { withFBTextField } from "./FBTextField.wrap";
+import { Box, TextField } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBInputType, FBTextFieldProps } from '..';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { FBTextFieldStyles } from '../styles/FBTextField.styles';
+import { withFBTextField } from './FBTextField.wrap';
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   onBlur,
   onFocus,
-  FBProps: { inputType = "textfield" } = {},
-  placeholder = "",
+  FBProps: { inputType = 'textfield' } = {},
+  placeholder = '',
   multiline,
   defaultValue,
   error,
@@ -31,10 +31,10 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   return (
     <FBInput {...props} {...{ error, defaultValue }}
       type={inputType as FBInputType} labelProps={FBFontStyle.labelProps}>
-      {mode === "preview" && (
+      {mode === 'preview' && (
         <Box>{defaultValue}</Box>
       )}
-      {mode !== "preview" && (
+      {mode !== 'preview' && (
         <TextField
           data-cy={dataCy ? dataCy : props.name}
           label=""
@@ -43,7 +43,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
           onFocus={(ev) => onFocus?.(ev)}
           inputProps={{
             ...inputProps,
-            ...(type === "number") && {
+            ...(type === 'number') && {
               onWheel: (e) => { e.currentTarget.blur(); },
             },
           }}

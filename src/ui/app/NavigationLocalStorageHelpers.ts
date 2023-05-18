@@ -1,17 +1,17 @@
-import { indexOf } from "lodash";
-import { NavigationMenu, NavigationMenuItem } from "../../state/ducks/company/types";
+import { indexOf } from 'lodash';
+import { NavigationMenu, NavigationMenuItem } from '../../state/ducks/company/types';
 
 let navigationMenu: NavigationMenu[];
 
 const getNavigation = () => {
-  const data = localStorage.getItem("navigationMenu");
+  const data = localStorage.getItem('navigationMenu');
   if (data) {
     return JSON.parse(data);
   }
 };
 
 export const getEmployeeNavigation = (id: string) => {
-  const data = localStorage.getItem("navigationMenu");
+  const data = localStorage.getItem('navigationMenu');
   if (data) {
     const navigation = JSON.parse(data);
     return navigation.find((item) => item.id === id);
@@ -25,11 +25,11 @@ export const setNavigation = (id: string, data: any) => {
   if (currentEmployeeNavigation) {
     const index = indexOf(navigationMenu, currentEmployeeNavigation);
     navigationMenu.splice(index, 1, data);
-    localStorage.setItem("navigationMenu", JSON.stringify(navigationMenu));
+    localStorage.setItem('navigationMenu', JSON.stringify(navigationMenu));
     return;
   }
   navigationMenu.push(data);
-  localStorage.setItem("navigationMenu", JSON.stringify(navigationMenu));
+  localStorage.setItem('navigationMenu', JSON.stringify(navigationMenu));
 };
 
 export const updateNavigationItem = ( id: string, data: NavigationMenuItem) => {

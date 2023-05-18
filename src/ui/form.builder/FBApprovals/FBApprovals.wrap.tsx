@@ -1,22 +1,22 @@
-import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
-import { SM } from "../../../App";
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { Approval } from "../../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
-import { store } from "../../../state/store";
-import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
-import FBStore from "../FBStore/FBStore";
-import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
+import { Box } from '@material-ui/core';
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from '..';
+import { SM } from '../../../App';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { Approval } from '../../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
+import { store } from '../../../state/store';
+import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
+import FBStore from '../FBStore/FBStore';
+import { FBApprovalsProps, FBApprovalsStatusEndpoint } from './FBApprovals.types';
 
 export const withFBApprovals = <T extends FBApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -25,7 +25,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     onApproveClick,
     requestApproval,
     approvals,
-    name = "",
+    name = '',
     loading,
     disabled,
     documentStatus,
@@ -65,7 +65,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const isReceivable = checkIsDocumentReceivable(document?.document?.documentType?.groupOptions);
 
     const {
-      owner: { user: { id: userId = "" } = {} } = {},
+      owner: { user: { id: userId = '' } = {} } = {},
     } = document || changeRequest || {};
     const isAlphaReleased = isDocumentAlphaReleased(document?.revisionStage);
 
@@ -103,7 +103,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     }
 
     React.useEffect(() => {
-      const fieldValue = map(approvalsState?.getApprovals, "approver.id");
+      const fieldValue = map(approvalsState?.getApprovals, 'approver.id');
       formState?.setFieldValue(`fb-approvals-${name}`, fieldValue, false);
       formState?.inputState.get(`fb-approvals-${name}`)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +111,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
-        title: "form.builder.password.prompt",
+        title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
       });
@@ -137,7 +137,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
           isReceivable &&
           data?.poDocId && data?.poDocRevision
         ) {
-          localStorage.setItem("reOpenedPOInfo", JSON.stringify({ id: data?.poDocId, revId: data?.poDocRevision }));
+          localStorage.setItem('reOpenedPOInfo', JSON.stringify({ id: data?.poDocId, revId: data?.poDocRevision }));
         }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
@@ -149,17 +149,17 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if (approval.status === "REJECTED" || approval.status === "APPROVED") {
+      if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
         window.location.reload();
       } else {
         const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
-        approvalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
+        approvalsState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
       }
     }
 
     requestApproval = (id?: string) => {
       if (!id) { return; }
-      approvalsState?.applyTransition("pending", id);
+      approvalsState?.applyTransition('pending', id);
     };
 
     React.useEffect(() => reaction(
@@ -176,7 +176,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       if (!id) { return; }
       map(ids, (approver) => approvalsState?.addApproval({
         assigned: { id: approver },
-        type: "MASTER",
+        type: 'MASTER',
         fieldId: name,
         partOf: { id },
       }, () => {
@@ -202,7 +202,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         if (document?.approvals?.[deletedApproverIndex]) {
           document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
         }
-        approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+        approvalsState?.applyTransition('abandon', (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
           if (!workspaceState?.autosave) { return; }
@@ -217,20 +217,20 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
 
     isContributorIncluded = (id: string): boolean => {
-      const values = formState?.inputState.get("fb-approvals-" + name)?.value;
+      const values = formState?.inputState.get('fb-approvals-' + name)?.value;
       return values?.includes(id);
     };
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
       const requiredGroups: string [] =
-        compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ""));
+        compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
           <Box fontWeight="fontWeightMedium">{option.user?.name}</Box>
           &nbsp;({option.user?.email})
           {!isEmpty(requiredGroups) && (
             <Box>
-              &nbsp;{`- ${requiredGroups.join(", ")}`}
+              &nbsp;{`- ${requiredGroups.join(', ')}`}
             </Box>
           )}
         </Box>
@@ -240,7 +240,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // MARK: @observer
     useObserver(() => {
       inlineApprovalExists = Boolean(_documentRevisionFormState?.documentRevision?.formDocument?.formTemplate?.schema
-      .some((e) => (!e.deleted && e.type === "inlineapproval" as string)));
+      .some((e) => (!e.deleted && e.type === 'inlineapproval' as string)));
 
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
@@ -298,6 +298,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     });
   };
 
-  Comp.displayName = "withFBApprovals";
+  Comp.displayName = 'withFBApprovals';
   return Comp;
 };

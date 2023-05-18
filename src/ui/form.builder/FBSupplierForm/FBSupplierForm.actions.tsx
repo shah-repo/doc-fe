@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBSubmitButton } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBSubmitButton } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 
 const FBSupplierFormActions: React.FunctionComponent<any> = ({
   onDialogConfirm,

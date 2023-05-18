@@ -1,9 +1,9 @@
-import { COMPANY_GROUPS_LIST } from "./constants";
-import { groupsAllIds, groupsById } from "./reducers";
-import { getCompanyGroup } from "./tests/factories";
-import { CompanyGroupsListAction, LoadCompanyGroups } from "./types";
+import { COMPANY_GROUPS_LIST } from './constants';
+import { groupsAllIds, groupsById } from './reducers';
+import { getCompanyGroup } from './tests/factories';
+import { CompanyGroupsListAction, LoadCompanyGroups } from './types';
 
-describe("user management reducer test", () => {
+describe('user management reducer test', () => {
   const companyGroups: LoadCompanyGroups = [
     getCompanyGroup(),
     getCompanyGroup(),
@@ -13,18 +13,18 @@ describe("user management reducer test", () => {
     payload: companyGroups,
   };
 
-  describe("groupsAllIds", () => {
+  describe('groupsAllIds', () => {
     const initialCompanyGroup = getCompanyGroup();
     const initialState = [initialCompanyGroup.id];
     const expectedState = [companyGroups[0].id, companyGroups[1].id];
-    it("sets ids on COMPANY_GROUPS_LIST action", () => {
+    it('sets ids on COMPANY_GROUPS_LIST action', () => {
       expect(groupsAllIds(initialState, companyGroupsListAction)).toEqual(
         expectedState,
       );
     });
   });
 
-  describe("groupsById", () => {
+  describe('groupsById', () => {
     const initialCompanyGroup = getCompanyGroup();
     const initialState = {
       [initialCompanyGroup.id]: initialCompanyGroup,
@@ -33,7 +33,7 @@ describe("user management reducer test", () => {
       [companyGroups[0].id]: companyGroups[0],
       [companyGroups[1].id]: companyGroups[1],
     };
-    it("sets ids on COMPANY_GROUPS_LIST action", () => {
+    it('sets ids on COMPANY_GROUPS_LIST action', () => {
       expect(groupsById(initialState, companyGroupsListAction)).toEqual(
         expectedState,
       );

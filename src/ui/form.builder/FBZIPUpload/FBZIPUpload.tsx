@@ -1,17 +1,17 @@
-import { Box, Grid } from "@material-ui/core";
-import CachedIcon from "@material-ui/icons/Cached";
-import CancelIcon from "@material-ui/icons/Cancel";
-import SuccessIcon from "@material-ui/icons/CheckCircle";
-import { isEmpty } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import FBButton from "../components/inputs/FBButton";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import FBZIPFileSocket from "./FBZIPFile.socket";
-import { withFBZIPUpload } from "./FBZIPUpload.wrap";
+import { Box, Grid } from '@material-ui/core';
+import CachedIcon from '@material-ui/icons/Cached';
+import CancelIcon from '@material-ui/icons/Cancel';
+import SuccessIcon from '@material-ui/icons/CheckCircle';
+import { isEmpty } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import FBButton from '../components/inputs/FBButton';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import FBZIPFileSocket from './FBZIPFile.socket';
+import { withFBZIPUpload } from './FBZIPUpload.wrap';
 
 const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
   name,
@@ -28,13 +28,13 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
   const getStatus = () => {
     switch (fileUploadState?.unzipStatus) {
       case FBUnzipStatus.DONE:
-        return intl.formatMessage({ id: "form.builder.unzip.status.done" });
+        return intl.formatMessage({ id: 'form.builder.unzip.status.done' });
       case FBUnzipStatus.PROCESSING:
-        return intl.formatMessage({ id: "form.builder.unzip.status.processing" });
+        return intl.formatMessage({ id: 'form.builder.unzip.status.processing' });
       case FBUnzipStatus.FAILED:
-        return intl.formatMessage({ id: "form.builder.unzip.status.failed" });
+        return intl.formatMessage({ id: 'form.builder.unzip.status.failed' });
       default:
-        return "";
+        return '';
     }
   };
   return (
@@ -58,19 +58,19 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                     {...{ files, disabled, name }}
                   />
                 </Grid>
-                <Grid item xs={4} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-                  <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                <Grid item xs={4} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                     {fileUploadState?.unzipStatus &&
                 <Box
                   css={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0 1.6em",
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '0 1.6em',
                     fontWeight: 600,
-                    fontSize: "12px",
-                    lineHeight: "15px",
-                    alignItems: "center",
-                    position: "absolute",
+                    fontSize: '12px',
+                    lineHeight: '15px',
+                    alignItems: 'center',
+                    position: 'absolute',
                   }}
                   color={Colors.almost_black}
                 >
@@ -80,15 +80,15 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                       <CachedIcon fontSize="small" style={{ color: Colors.font_gray }} /> :
                       <CancelIcon fontSize="small" style={{ color: Colors.latest_red_varient }} />)
                   }
-                  <b style={{ marginLeft: "10px" }}>
+                  <b style={{ marginLeft: '10px' }}>
                     {getStatus()}
                   </b>
                 </Box>}
                   </Grid>
-                  <Grid item xs={12} style={{ maxWidth: "fit-content" }}>
+                  <Grid item xs={12} style={{ maxWidth: 'fit-content' }}>
                     <FBButton
                       key={`fb-zip-attachment-button-${name}`}
-                      label={"form.builder.unzip.files"}
+                      label={'form.builder.unzip.files'}
                       onClick={() => { startUnzip(); }}
                       disabled= {
                         (fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING) || disableUnzipButton || disabled

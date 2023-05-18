@@ -1,9 +1,9 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { ReactComponent as CloudIcon } from "../../../../assets/images/cloud.svg";
-import { getHumanizedFormat } from "../../../../common/utils/date";
-import Text from "../../Text";
-import useStyles from "./HeaderLastSaved.styles";
+import { Box, CircularProgress } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { ReactComponent as CloudIcon } from '../../../../assets/images/cloud.svg';
+import { getHumanizedFormat } from '../../../../common/utils/date';
+import Text from '../../Text';
+import useStyles from './HeaderLastSaved.styles';
 
 interface Props {
   timestamp: string;

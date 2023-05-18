@@ -1,9 +1,9 @@
-import { BoxProps } from "@material-ui/core";
-import { FBInputProps } from "../types/common";
+import { BoxProps } from '@material-ui/core';
+import { FBInputProps } from '../types/common';
 
 export type FBFieldMarkDownProps =
-  & Pick<FBInputProps, "index">
-  & Pick<BoxProps, "mt" | "mb">
+  & Pick<FBInputProps, 'index'>
+  & Pick<BoxProps, 'mt' | 'mb'>
   & {
     source?: string;
   };

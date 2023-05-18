@@ -1,14 +1,14 @@
-import * as React from "react";
-import { useDispatch } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router-dom";
-import { authActions } from "../../../state/ducks/auth";
-import { RESET_PASSWORD_SUCCESSFUL_URL } from "../../constants/urls";
-import FBStore from "../../form.builder/stores/ui/FBStore";
-import useAsync from "../../hooks/useAsync";
-import { ResetPasswordValues } from "../types";
-import ResetPasswordContainer from "./ResetPassword.container";
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { authActions } from '../../../state/ducks/auth';
+import { RESET_PASSWORD_SUCCESSFUL_URL } from '../../constants/urls';
+import FBStore from '../../form.builder/stores/ui/FBStore';
+import useAsync from '../../hooks/useAsync';
+import { ResetPasswordValues } from '../types';
+import ResetPasswordContainer from './ResetPassword.container';
 
-type Props = Pick<RouteComponentProps, "location">;
+type Props = Pick<RouteComponentProps, 'location'>;
 
 const ResetPassword: React.FunctionComponent<Props> = ({
   location,

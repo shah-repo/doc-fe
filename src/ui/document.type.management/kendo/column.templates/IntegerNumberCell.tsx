@@ -1,13 +1,13 @@
 
-import { Box } from "@material-ui/core";
-import { GridCellProps } from "@progress/kendo-react-grid";
+import { Box } from '@material-ui/core';
+import { GridCellProps } from '@progress/kendo-react-grid';
 import {
   NumericTextBox, NumericTextBoxChangeEvent,
-} from "@progress/kendo-react-inputs";
-import { result, set } from "lodash";
-import React, { useEffect } from "react";
-import { Nullable } from "../../../../state/ducks/common/types";
-import "./KendoStyles.css";
+} from '@progress/kendo-react-inputs';
+import { result, set } from 'lodash';
+import React, { useEffect } from 'react';
+import { Nullable } from '../../../../state/ducks/common/types';
+import './KendoStyles.css';
 
 export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
   dataItem,
@@ -21,7 +21,7 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
   columnIndex,
 }) => {
   const editMode = dataItem.inEdit;
-  const path = field || "";
+  const path = field || '';
   const [dataValue, setValue] = React.useState<Nullable<number>>(dataItem[path] || 0);
 
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -40,12 +40,12 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
         value: target.value,
       });
       setTimeout(() => {
-        document.getElementById("k-input-dtm-sn")?.focus();
+        document.getElementById('k-input-dtm-sn')?.focus();
       });
     }
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   return (

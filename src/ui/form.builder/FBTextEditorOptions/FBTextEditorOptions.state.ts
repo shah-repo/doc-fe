@@ -1,4 +1,4 @@
-import { action, observable, set } from "mobx";
+import { action, observable, set } from 'mobx';
 
 class FBTextEditorOptionsState {
   // MARK: @observables
@@ -9,11 +9,11 @@ class FBTextEditorOptionsState {
 
   // MARK: @actions
   @action public setMenuVisible = (visible: boolean) =>
-    set(this, "menuVisible", visible);
+    set(this, 'menuVisible', visible);
 
   // MARK: @helpers
   public setAnchorElement = (el?: HTMLElement) =>
-    set(this, "menuAnchorElement", el);
+    set(this, 'menuAnchorElement', el);
 }
 
 export default FBTextEditorOptionsState;

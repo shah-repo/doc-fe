@@ -1,13 +1,13 @@
-import { Box, IconButton, Typography } from "@material-ui/core";
-import copy from "copy-to-clipboard";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { SM } from "../../../App";
-import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
-import { styles } from "./Bookmarks.new.styles";
+import { Box, IconButton, Typography } from '@material-ui/core';
+import copy from 'copy-to-clipboard';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { SM } from '../../../App';
+import { ReactComponent as CopyIcon } from '../../../assets/images/copy_outlined.svg';
+import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from '../../form.builder';
+import Colors from '../../layout/theme/utils/colors';
+import { styles } from './Bookmarks.new.styles';
 
 const Bookmarks: React.FC = () => {
   const history = useHistory();
@@ -30,10 +30,10 @@ const Bookmarks: React.FC = () => {
   return (
     <Box m={1.875}>
       <FBMapWrapper<FBBookmarkItem[]>
-        collection={bookmarks?.sort((a, b) => ((a?.name || "") > (b?.name || "")  ? 1 : -1)) || []}>
+        collection={bookmarks?.sort((a, b) => ((a?.name || '') > (b?.name || '')  ? 1 : -1)) || []}>
         {(bookmark: FBBookmarkItem, index) => {
-          const { name, label = "" } = bookmark;
-          const link = window.location.href.split("#");
+          const { name, label = '' } = bookmark;
+          const link = window.location.href.split('#');
           return (
             <Box
               display="flex"
@@ -48,7 +48,7 @@ const Bookmarks: React.FC = () => {
                 >
                   <Typography
                     className={classes.label}
-                    style={{ fontWeight: selectedBookmarkName === name ? 500 : "normal" }}
+                    style={{ fontWeight: selectedBookmarkName === name ? 500 : 'normal' }}
                   >
                     {label}
                   </Typography>

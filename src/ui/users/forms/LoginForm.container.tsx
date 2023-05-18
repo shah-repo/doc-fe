@@ -1,15 +1,15 @@
-import { Formik, FormikProps } from "formik";
-import * as React from "react";
-import { logo } from "../../../common/utils/helpers";
-import { authActions } from "../../../state/ducks/auth";
-import { FormContext } from "../../components/forms/FormContext";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { Translation } from "../../translations/types";
-import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
-import VerificationEmailPage from "../SignUp/VerificationEmailPage";
-import { LoginFormValues, PasswordEmail } from "../types";
-import LoginFormPresenter from "./LoginForm.presenter";
+import { Formik, FormikProps } from 'formik';
+import * as React from 'react';
+import { logo } from '../../../common/utils/helpers';
+import { authActions } from '../../../state/ducks/auth';
+import { FormContext } from '../../components/forms/FormContext';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
+import ForgotPasswordPage from '../SignUp/ForgotPasswordPage';
+import VerificationEmailPage from '../SignUp/VerificationEmailPage';
+import { LoginFormValues, PasswordEmail } from '../types';
+import LoginFormPresenter from './LoginForm.presenter';
 
 interface Props {
   signMessage: Translation;
@@ -43,8 +43,8 @@ const LoginFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const [verificationState, showVerificationState] = React.useState(false);
-  const [resetEmail, saveResetEmail] = React.useState("");
-  const [message, saveMessage] = React.useState("");
+  const [resetEmail, saveResetEmail] = React.useState('');
+  const [message, saveMessage] = React.useState('');
   const [forgotPasswordPage, showForgotPasswordState] = React.useState(false);
 
   const handleVerificationState = (
@@ -69,12 +69,12 @@ const LoginFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const initialValues: LoginFormValues = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   };
 
   const resetInitialValues: PasswordEmail = {
-    email: "",
+    email: '',
   };
 
   const render = (props: FormikProps<LoginFormValues>) => (
@@ -87,7 +87,7 @@ const LoginFormContainer: React.FunctionComponent<Props> = ({
       title={title}
       logo={logo}
       forgotPassword={handleForgotPassword}
-      buttonLabel={"login.submit"}
+      buttonLabel={'login.submit'}
     />
   );
 

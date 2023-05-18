@@ -1,17 +1,17 @@
-import { Box, Grid, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as EQIcon } from "../../../../assets/images/EQ.svg";
-import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../assets/images/pin_solid.svg";
-import { ActionTypes } from "../../../../state/ducks/dashboard.new/my.feeds/types";
-import Text from "../../../components/Text";
-import { documentVersionPath } from "../../../document.revision/utils/paths";
-import DocId from "../common/DocId/presenter";
-import DocTitle from "../common/DocTitle/presenter";
-import { StyledListItem } from "../common/StyledListItem";
-import { StyleTooltip } from "../common/StyleTooltip";
-import useStyles from "./calibrationItem.styles";
-import DismissAction from "../common/DismissAction";
+import { Box, Grid, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as EQIcon } from '../../../../assets/images/EQ.svg';
+import { ReactComponent as PinIcon } from '../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../assets/images/pin_solid.svg';
+import { ActionTypes } from '../../../../state/ducks/dashboard.new/my.feeds/types';
+import Text from '../../../components/Text';
+import { documentVersionPath } from '../../../document.revision/utils/paths';
+import DocId from '../common/DocId/presenter';
+import DocTitle from '../common/DocTitle/presenter';
+import { StyledListItem } from '../common/StyledListItem';
+import { StyleTooltip } from '../common/StyleTooltip';
+import useStyles from './calibrationItem.styles';
+import DismissAction from '../common/DismissAction';
 
 interface Props {
   id: string;
@@ -97,13 +97,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             >
               <Grid item={true}>
                 <DocId
-                  url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                  url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                   docId={docId}
                 />
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <DocTitle
-                  url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                  url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                   docRevVersion={docRevVersion}
                   docRevName={docRevName}
                 />
@@ -120,8 +120,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   <Text
                     translation={
                       type === ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR
-                        ? "dashboard.calibration.due"
-                        : "dashboard.preventive.maintenance.due"
+                        ? 'dashboard.calibration.due'
+                        : 'dashboard.preventive.maintenance.due'
                     }
                     values={{
                       noOfDays: equipmentInterval,

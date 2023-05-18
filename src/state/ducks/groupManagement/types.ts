@@ -1,5 +1,5 @@
-import { GroupTag, Permission } from "../auth/types";
-import { Id } from "../common/types";
+import { GroupTag, Permission } from '../auth/types';
+import { Id } from '../common/types';
 
 export interface GroupRequestBody {
   id?: string;

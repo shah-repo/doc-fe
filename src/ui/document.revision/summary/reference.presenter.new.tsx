@@ -1,10 +1,10 @@
-import { Box, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { Link } from "react-router-dom";
-import { DataProps } from "../../../state/ducks/common/types";
-import Text from "../../components/Text";
-import { ReferenceSummary as Model } from "../utils/types";
-import { styles } from "./references.styles";
+import { Box, Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { DataProps } from '../../../state/ducks/common/types';
+import Text from '../../components/Text';
+import { ReferenceSummary as Model } from '../utils/types';
+import { styles } from './references.styles';
 
 interface OwnProps {
   label: string;
@@ -62,7 +62,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   );
   return (
     <Box mb={2.5}>
-      <Box display={!canEdit && !fromReferencedBy ? "block" : "none"}>
+      <Box display={!canEdit && !fromReferencedBy ? 'block' : 'none'}>
         <Typography variant="h6" className={classes.header}>
           <Text message={label} />
         </Typography>

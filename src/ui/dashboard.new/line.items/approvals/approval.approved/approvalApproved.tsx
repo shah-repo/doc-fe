@@ -1,34 +1,34 @@
-import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
-import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
-import { ReactComponent as CloseIcon } from "../../../../../assets/images/close.svg";
-import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
-import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
-import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import { changeRequestEditPath } from "../../../../change.request/utils/paths";
-import Text from "../../../../components/Text";
-import useAsync from "../../../../hooks/useAsync";
-import useDialog from "../../../../hooks/useDialog";
-import Colors from "../../../../layout/theme/utils/colors";
-import ApprovalTitle from "../../common/ApprovalTitle/presenter";
-import { getDocIcon } from "../../common/DocIcon";
-import DocId from "../../common/DocId/presenter";
-import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { DocTypeGroups } from "../../common/types";
-import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
-import useStyles from "./approvalApproved.styles";
-import DismissAction from "../../common/DismissAction";
+import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
+import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
+import { ReactComponent as CloseIcon } from '../../../../../assets/images/close.svg';
+import { ReactComponent as CloseSolidIcon } from '../../../../../assets/images/close_solid.svg';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
+import { ReactComponent as PendingReviewIcon } from '../../../../../assets/images/pending_approval.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
+import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
+import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
+import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { changeRequestEditPath } from '../../../../change.request/utils/paths';
+import Text from '../../../../components/Text';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
+import Colors from '../../../../layout/theme/utils/colors';
+import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import { getDocIcon } from '../../common/DocIcon';
+import DocId from '../../common/DocId/presenter';
+import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
+import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { DocTypeGroups } from '../../common/types';
+import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
+import useStyles from './approvalApproved.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string;
@@ -75,7 +75,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [closed, setClosed] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [viewHoverItem, setViewHoverItem] = React.useState("");
+  const [viewHoverItem, setViewHoverItem] = React.useState('');
   const transitionDialog = useDialog();
   const hoverItem = hoverItemId === id;
 
@@ -118,7 +118,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
     setViewHoverItem(id);
   };
   const onMouseLeaveViewIcon = () => {
-    setViewHoverItem("");
+    setViewHoverItem('');
   };
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {

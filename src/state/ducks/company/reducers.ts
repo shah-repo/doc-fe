@@ -1,14 +1,14 @@
-import { combineReducers } from "redux";
-import { setNavigation } from "../../../ui/app/NavigationLocalStorageHelpers";
-import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
-import { LOGOUT_USER } from "../auth/constants";
-import { LogoutUserAction } from "../auth/types";
-import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from "./constants";
-import { AutosaveAction, AutosaveState, CompanyMineAction, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from "./types";
+import { combineReducers } from 'redux';
+import { setNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
+import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
+import { LOGOUT_USER } from '../auth/constants';
+import { LogoutUserAction } from '../auth/types';
+import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
+import { AutosaveAction, AutosaveState, CompanyMineAction, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
-  id: "",
-  name: "",
+  id: '',
+  name: '',
   numOfRevStages: 1,
   users: [],
   documentTypes: [],
@@ -19,8 +19,8 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
     [ThemeEnv.PRODUCTION_THEME]: WHITE_LABEL_DEFAULT,
   },
   slackIntegrationEnabled: false,
-  helloSignAppId: "",
-  teamId: "",
+  helloSignAppId: '',
+  teamId: '',
   addresses: [],
   acctCodes: [],
   helloSignIntegrationEnabled: false,
@@ -68,13 +68,13 @@ const companyMine = (
         action.payload.navigation = DEFAULT_NAVIGATION_ITEMS;
       }
       if (!action.navigationMenu) {
-        const menuItems = action.payload.navigation.filter((item) => item.type === "MENU");
+        const menuItems = action.payload.navigation.filter((item) => item.type === 'MENU');
         const menus = menuItems.map((item) => ({ label: item.label, isOpen: false }));
-        setNavigation(action.currentEmployeeId || "", { id: action.currentEmployeeId, menus });
+        setNavigation(action.currentEmployeeId || '', { id: action.currentEmployeeId, menus });
       }
 
       action.payload.navigation = action.payload.navigation.map((item) => {
-        if (item.type === "MENU") {
+        if (item.type === 'MENU') {
           const match = action?.navigationMenu?.menus.find((menu) => menu.label === item.label);
           if (match) {
             return { ...item, isOpen: match.isOpen };

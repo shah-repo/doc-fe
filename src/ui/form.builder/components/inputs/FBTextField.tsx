@@ -1,15 +1,15 @@
-import { TextField, TextFieldProps } from "@material-ui/core";
-import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
-import { get } from "lodash";
-import React from "react";
-import FBStore from "../../stores/ui/FBStore";
-import { FBInputProps } from "../../types/common";
-import FBInput from "../common/FBInput";
+import { TextField, TextFieldProps } from '@material-ui/core';
+import { RenderInputParams } from '@material-ui/lab/Autocomplete/Autocomplete';
+import { get } from 'lodash';
+import React from 'react';
+import FBStore from '../../stores/ui/FBStore';
+import { FBInputProps } from '../../types/common';
+import FBInput from '../common/FBInput';
 
 type FBTextFieldProps =
   & FBInputProps
-  & Partial<Omit<RenderInputParams, "InputProps">>
-  & Pick<TextFieldProps, "InputProps">;
+  & Partial<Omit<RenderInputParams, 'InputProps'>>
+  & Pick<TextFieldProps, 'InputProps'>;
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   rows = 1,
@@ -23,8 +23,8 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
 }) => {
   const disableEdit =
     disabled ||
-    get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
-    FBStore.getValue("signatureRequestId");
+    get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD' ||
+    FBStore.getValue('signatureRequestId');
 
   return (
     <FBInput disabled={disableEdit} {...props} type="textfield">

@@ -1,11 +1,11 @@
-import { Box, CircularProgress, IconButton } from "@material-ui/core";
-import cx from "classnames";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { SM } from "../../../App";
-import { FB, FBTooltip } from "../../form.builder";
-import useStyles from "./styles.new";
-import { Sidebar } from "./types.new";
+import { Box, CircularProgress, IconButton } from '@material-ui/core';
+import cx from 'classnames';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { SM } from '../../../App';
+import { FB, FBTooltip } from '../../form.builder';
+import useStyles from './styles.new';
+import { Sidebar } from './types.new';
 
 interface Props {
   isDrawerOpen: boolean;
@@ -52,8 +52,8 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                   onClick={() => handleMenuIconClick(index)}
                   className={cx(classes.iconButtonNew, { [classes.bgIsActiveTab]: indexNumber === index })}
                 >
-                  {(!loading || item.type !== "bookmarks") && item.icon}
-                  {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
+                  {(!loading || item.type !== 'bookmarks') && item.icon}
+                  {item.type === 'bookmarks' && loading && <CircularProgress size={18} />}
                 </IconButton>
               </FBTooltip>
             </Box>
@@ -62,7 +62,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
       </Box>
       <Box
         data-cy={`${sidebarList[indexNumber].details.title}-detail`}
-        className={cx(classes.references, "containing-box-scrollbar")}
+        className={cx(classes.references, 'containing-box-scrollbar')}
       >
         {sidebarList[indexNumber].details.component}
       </Box>

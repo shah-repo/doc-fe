@@ -1,8 +1,9 @@
 import React from 'react';
 import { useObserver } from 'mobx-react';
-import { isEmpty, get, has } from 'lodash';
+import { isEmpty, get, set, has } from 'lodash';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
 import { FBApprovalMatrixProps } from './types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>,
@@ -14,6 +15,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     mode = 'none',
     isInputOwner,
     data,
+    withoutStatus,
     ...props
   }: T) => {
     const { approvalMatrixFieldState, workspaceState } = FB.useStores();
@@ -41,17 +43,27 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       approvalMatrixFieldState?.setMode('none');
     };
 
-    const { formInput } = workspaceState || {};
+    const { document, formInput } = workspaceState ?? {};
+    const { status } = document ?? {};
     const approvalRoles = get(formInput, FBDAMFields.DAR, []);
     const formInputDAM = get(formInput, FBDAMFields.DAM, []);
     const isDAMInNewFormat = has(formInputDAM, 'approvalMatrix');
     const approvalMatrix = isDAMInNewFormat ? formInputDAM.approvalMatrix : formInputDAM;
 
-    data = useObserver(() => ({
-      ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
-      approvalMatrix,
-      approvalRoles,
-    }));
+    // Clear statuses for deprecated documents.
+    withoutStatus = status === DocumentRevisionStatus.Deprecated;
+
+    data = useObserver(() => {
+      const matrix = withoutStatus
+        ? (approvalMatrix ?? []).map(item => set(item, 'docType.active', undefined))
+        : approvalMatrix;
+
+      return {
+        ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
+        approvalMatrix: matrix,
+        approvalRoles,
+      };
+    });
 
     return Component({
       ...(props as T),
@@ -60,6 +72,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       name,
       mode,
       data,
+      withoutStatus,
     });
   };
 

@@ -1,13 +1,13 @@
-import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Theme } from "@material-ui/core";
-import { ComponentsProps } from "@material-ui/core/styles/props";
-import cx from "classnames";
-import React from "react";
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Theme } from '@material-ui/core';
+import { ComponentsProps } from '@material-ui/core/styles/props';
+import cx from 'classnames';
+import React from 'react';
 
 const DeleteButton: React.FC<{ className?: string; onClick?: () => void }> = ({ className, onClick }) => (
   <span className="chip-delete" onClick={onClick}>
-    <FontAwesomeIcon className={cx(className, "chip-delete-icon")} icon={regular("trash-can")} />
+    <FontAwesomeIcon className={cx(className, 'chip-delete-icon')} icon={regular('trash-can')} />
   </span>
 );
 
@@ -33,8 +33,8 @@ const props = (theme: Theme): ComponentsProps => ({
     disableRipple: true,
   },
   MuiButton: {
-    variant: "contained",
-    color: "primary",
+    variant: 'contained',
+    color: 'primary',
     // TODO uncomment after upgrading MUI
     // disableElevation: true,
   },

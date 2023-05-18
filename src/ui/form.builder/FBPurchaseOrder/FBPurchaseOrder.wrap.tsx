@@ -1,17 +1,17 @@
-import { isEmpty, map } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
-import { SM } from "../../../App";
-import { Id } from "../../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../state/types";
-import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
-import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import FBDataStore from "../FBStore/FBDataStore";
+import { isEmpty, map } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from '..';
+import { SM } from '../../../App';
+import { Id } from '../../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../state/types';
+import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
+import { checkIsDocumentPO, checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import FBDataStore from '../FBStore/FBDataStore';
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -54,8 +54,8 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       purchaseOrderState?.setItemTotalAmount(item);
       dialogState?.config({
         open: true,
-        maxWidth: "sm",
-        title: item?.id ? "form.builder.edit.item" : "form.builder.add.item",
+        maxWidth: 'sm',
+        title: item?.id ? 'form.builder.edit.item' : 'form.builder.add.item',
         content: (
           <FBPurchaseOrderForm initialValues={item} />
         ),

@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBDocumentRevisionsActionsProps, FBSubmitButton } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBDocumentRevisionsActionsProps, FBSubmitButton } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 
 const FBDocumentRevisionsActions: React.FunctionComponent<FBDocumentRevisionsActionsProps> = ({
   handleAdd,

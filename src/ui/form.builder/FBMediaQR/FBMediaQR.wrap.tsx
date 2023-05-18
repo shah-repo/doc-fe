@@ -1,13 +1,13 @@
-import React from "react";
-import { FB, FBMediaQRProps } from "..";
-import FBDRStore from "../stores/ui/FBDRStore";
+import React from 'react';
+import { FB, FBMediaQRProps } from '..';
+import FBDRStore from '../stores/ui/FBDRStore';
 
 export const withFBMediaQR = <T extends FBMediaQRProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
     isTemplate,
-    mode = "qr",
+    mode = 'qr',
     ...props
   }: T) => {
 
@@ -15,20 +15,20 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
     const { mode: workspaceMode, documentId, isOutput } = workspaceState || {};
 
     switch (true) {
-      case isTemplate && workspaceMode === "design":
-        !documentId && (mode = "preupload");
+      case isTemplate && workspaceMode === 'design':
+        !documentId && (mode = 'preupload');
         break;
-      case !isTemplate && workspaceMode === "design":
-        mode = "placeholder";
+      case !isTemplate && workspaceMode === 'design':
+        mode = 'placeholder';
         break;
-      case !isTemplate && workspaceMode === "form":
-        (!documentId || FBDRStore.mode === "outputCreate") && (mode = "preupload");
+      case !isTemplate && workspaceMode === 'form':
+        (!documentId || FBDRStore.mode === 'outputCreate') && (mode = 'preupload');
         break;
-      case !isTemplate && workspaceMode === "preview":
-        mode = isOutput ? "preupload" : "placeholder";
+      case !isTemplate && workspaceMode === 'preview':
+        mode = isOutput ? 'preupload' : 'placeholder';
         break;
       default:
-        mode = "qr";
+        mode = 'qr';
     }
 
     return Component({

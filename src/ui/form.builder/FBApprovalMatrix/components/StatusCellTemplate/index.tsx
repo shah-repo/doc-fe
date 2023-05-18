@@ -6,9 +6,7 @@ import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY } from '../Grid';
 import Status from './components/Status';
 import { translate } from '../../../../../common/intl';
 
-const DEFAULT_VALUE = true;
-
-const ActiveCellTemplate: CellTemplate = (props) => {
+const StatusCellTemplate: CellTemplate = (props) => {
   const { dataItem, dataIndex, field, column, onChange } = props;
   const { editable } = column;
 
@@ -16,10 +14,17 @@ const ActiveCellTemplate: CellTemplate = (props) => {
   const path = field ?? '';
   const value = get(dataItem, path);
 
+  const data = [
+    { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.active') },
+    { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.inactive') },
+  ];
+
+  const valueItem = data.find((item) => item[DATA_ITEM_KEY] === value);
+
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const renderValue: DropDownListProps['valueRender'] = (element, value) => (
-    <Status value={value} />
+    <Status value={value[DATA_ITEM_KEY]} />
   );
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
@@ -34,24 +39,25 @@ const ActiveCellTemplate: CellTemplate = (props) => {
     });
   };
 
+  // Empty for deprecated documents.
+  if (value === undefined) {
+    return '-';
+  }
+
   if (!canBeModified) {
     return <Status value={value} />;
   }
 
   return (
     <DropDownList
-      data={[
-        { [TEXT_FIELD]: translate('common.active'), [DATA_ITEM_KEY]: true },
-        { [TEXT_FIELD]: translate('common.inactive'), [DATA_ITEM_KEY]: false },
-      ]}
+      data={data}
       textField={TEXT_FIELD}
       dataItemKey={DATA_ITEM_KEY}
       valueRender={renderValue}
       onChange={handleChange}
-      defaultValue={DEFAULT_VALUE}
-      value={value ?? DEFAULT_VALUE}
+      defaultValue={valueItem}
     />
   );
 };
 
-export default ActiveCellTemplate;
+export default StatusCellTemplate;

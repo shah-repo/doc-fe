@@ -1,6 +1,6 @@
 export type FBWorkspaceMode =
-| "none"
-| "design"
-| "form"
-| "preview";
+| 'none'
+| 'design'
+| 'form'
+| 'preview';
 

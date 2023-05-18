@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CheckboxProps, Checkbox as MuiCheckbox } from "@material-ui/core";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CheckboxProps, Checkbox as MuiCheckbox } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { withThemeNext } from '../../../../layout/theme-next';

@@ -1,5 +1,5 @@
-import React from "react";
-import { FB, FBAttachment, FBFileDescriptionActions, FBFileDescriptionProps, FBFormState } from "..";
+import React from 'react';
+import { FB, FBAttachment, FBFileDescriptionActions, FBFileDescriptionProps, FBFormState } from '..';
 
 export const withFBFileDescription = <T extends FBFileDescriptionProps>(
   Component: React.FunctionComponent<T>,
@@ -42,6 +42,6 @@ export const withFBFileDescription = <T extends FBFileDescriptionProps>(
     });
   };
 
-  Comp.displayName = "withFBProcedureForm";
+  Comp.displayName = 'withFBProcedureForm';
   return Comp;
 };

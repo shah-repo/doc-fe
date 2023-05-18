@@ -1,7 +1,7 @@
-import { SMProviderProps } from "../../../../..";
+import { SMProviderProps } from '../../../../..';
 
 export type DocumentRevisionFooterProps =
-& Pick<SMProviderProps, "_documentRevisionFooterState">;
+& Pick<SMProviderProps, '_documentRevisionFooterState'>;
 
 export interface DocumentRevisionFooterInfo {
   version?: string;

@@ -1,14 +1,14 @@
-import { attachmentsActions } from "../../../../../state/ducks/attachments";
-import { Attachment, AttachmentType } from "../../../../../state/ducks/attachments/types";
-import { RenderSize } from "../../../../../state/ducks/common/types";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import { FormikHybridFieldProps } from "../../../hoc/utils/types";
+import { attachmentsActions } from '../../../../../state/ducks/attachments';
+import { Attachment, AttachmentType } from '../../../../../state/ducks/attachments/types';
+import { RenderSize } from '../../../../../state/ducks/common/types';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { FormikHybridFieldProps } from '../../../hoc/utils/types';
 
 export enum PasswordSubmitActionType {
-  DOWNLOAD_CLEAN_COPY_FILE = "DOWNLOAD_CLEAN_COPY_FILE",
-  DOWNLOAD_FILE = "DOWNLOAD_FILE",
-  OPEN_FILE_VIEW = "OPEN_FILE_VIEW",
-  DOWNLOAD_WATER_MARK = "DOWNLOAD_WATER_MARK"
+  DOWNLOAD_CLEAN_COPY_FILE = 'DOWNLOAD_CLEAN_COPY_FILE',
+  DOWNLOAD_FILE = 'DOWNLOAD_FILE',
+  OPEN_FILE_VIEW = 'OPEN_FILE_VIEW',
+  DOWNLOAD_WATER_MARK = 'DOWNLOAD_WATER_MARK'
 }
 
 export interface AttachmentIconDispatchProps {

@@ -1,8 +1,8 @@
-import React from "react";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { KendoGridConfiguration } from "../../components/common/kendo/types";
-import { TablePanelStateProps } from "../../components/table/types";
-import { KendoPanel } from "./KendoPanel";
+import React from 'react';
+import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { KendoGridConfiguration } from '../../components/common/kendo/types';
+import { TablePanelStateProps } from '../../components/table/types';
+import { KendoPanel } from './KendoPanel';
 
 interface DTMProps {
   gridData: DocumentType[];

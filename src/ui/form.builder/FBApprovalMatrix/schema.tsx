@@ -1,10 +1,9 @@
 import React from 'react';
 import CheckboxCellTemplate from './components/CheckboxCellTemplate';
 import DropdownCellTemplate from './components/DropdownCellTemplate';
-import ActiveCellTemplate from './components/ActiveCellTemplate';
+import StatusCellTemplate from './components/StatusCellTemplate';
 import InputCellTemplate from './components/InputCellTemplate';
 import BooleanFilter from './components/BooleanFilter';
-import StatusFilter from './components/StatusFilter';
 import InputFilter from './components/InputFilter';
 import {
   FBApprovalMatrixRoleTitles,
@@ -20,28 +19,44 @@ import DropdownFilter from './components/DropdownFilter';
 import { translate } from '../../../common/intl';
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
+import { DATA_ITEM_KEY, TEXT_FIELD } from './components/Grid';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
+  withoutStatus?: boolean
   documentTypeCategories?: string[]
   cellARHeaderClassName: string
   cellARClassName: string
   clearRightBorderClassName: string
 }
 
-export default function createSchema (
-  { data, documentTypeCategories = [], cellARHeaderClassName, cellARClassName, clearRightBorderClassName }: Options,
-): Array<ColumnDefinition<FBApprovalMatrixItem>> {
+export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
+  const {
+    data, withoutStatus, documentTypeCategories = [],
+    cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
+  } = options;
   const { approvalRoles = [] } = data ?? {};
 
   const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
   const categoryOptions = documentTypeCategories.map((category) => ({ value: category, text: category }));
 
+  const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      disabled={withoutStatus}
+      data={[
+        { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.active') },
+        { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.inactive') },
+      ]}
+      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+    />
+  );
+
   const InternalTypeFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
       data={internalTypeOptions}
-      defaultItem={{ value: '', text: translate('common.all') }}
+      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
     />
   );
 
@@ -56,7 +71,7 @@ export default function createSchema (
     <DropdownFilter
       {...props}
       data={categoryOptions}
-      defaultItem={{ value: '', text: translate('common.all') }}
+      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
     />
   );
 
@@ -64,7 +79,7 @@ export default function createSchema (
     <DropdownCellTemplate
       {...props}
       data={categoryOptions}
-      defaultItem={{ value: '', text: '-' }}
+      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: '-' }}
     />
   );
 
@@ -76,7 +91,7 @@ export default function createSchema (
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      template: ActiveCellTemplate,
+      template: StatusCellTemplate,
       locked: true,
       width: 140,
     },

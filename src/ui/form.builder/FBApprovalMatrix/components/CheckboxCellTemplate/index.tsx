@@ -15,18 +15,20 @@ const CheckboxCellTemplate: CellTemplate = (props) => {
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const handleChange: CheckboxProps['onChange'] = (event) => {
+    const newValue = event.value;
+
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem as Record<string, unknown>, path, event.value),
+      dataItem: set(dataItem as Record<string, unknown>, path, newValue),
       syntheticEvent: event.syntheticEvent,
       field,
-      value: event.target.value,
+      value: newValue,
     });
   };
 
   return (
     <Checkbox
-      value={value}
+      defaultValue={value}
       disabled={!canBeModified}
       onChange={handleChange}
     />

@@ -1,9 +1,9 @@
-import { FBFormProps, FBPOReceiveProps, FBPurchaseOrderItem } from "..";
-import { DocumentTypeByCategoryState, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
+import { FBFormProps, FBPOReceiveProps, FBPurchaseOrderItem } from '..';
+import { DocumentTypeByCategoryState, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export type FBPOReceiveCreateLotProps =
-& Pick<FBPOReceiveProps, "name">
-& Pick<FBFormProps, "children">
+& Pick<FBPOReceiveProps, 'name'>
+& Pick<FBFormProps, 'children'>
 & {
   handleCreateLot?: () => void;
   handleCancel?: () => void;

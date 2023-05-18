@@ -1,9 +1,9 @@
-import { Link, Typography, WithStyles, withStyles } from "@material-ui/core";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import * as React from "react";
-import Text from "../../Text";
-import Field, { FieldOwnProps } from "./Field";
-import styles from "./File.styles";
+import { Link, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import * as React from 'react';
+import Text from '../../Text';
+import Field, { FieldOwnProps } from './Field';
+import styles from './File.styles';
 
 export type FileOwnProps = FieldOwnProps;
 

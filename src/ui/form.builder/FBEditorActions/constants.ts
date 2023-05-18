@@ -1,3 +1,3 @@
 export enum Rules {
-  required = "required",
+  required = 'required',
 }

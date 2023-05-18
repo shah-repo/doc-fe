@@ -1,7 +1,7 @@
-import { Box, CircularProgress, Typography } from "@material-ui/core";
-import React from "react";
-import Text from "../../components/Text";
-import { styles } from "./styles";
+import { Box, CircularProgress, Typography } from '@material-ui/core';
+import React from 'react';
+import Text from '../../components/Text';
+import { styles } from './styles';
 
 const SlackLandingProgress: React.FunctionComponent = () => {
   const classes = styles();

@@ -1,15 +1,15 @@
-import { TextField } from "@material-ui/core";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import * as React from "react";
-import { useIntl } from "react-intl";
+import { TextField } from '@material-ui/core';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
 import {
   getFormattedDateString,
   MomentFormats,
-} from "../../../../common/utils/date";
+} from '../../../../common/utils/date';
 import {
   DisplayText,
   TranslatedText,
-} from "../../../components/common/kendo/helpers";
+} from '../../../components/common/kendo/helpers';
 
 export const DateFilterTemplate = ({
   onChange,
@@ -25,16 +25,16 @@ export const DateFilterTemplate = ({
           target.value,
           MomentFormats.AsyncTasksDefaultDateTimeFormatter
         )
-        : "",
-      operator: isValueExists ? "lte" : "",
+        : '',
+      operator: isValueExists ? 'lte' : '',
       syntheticEvent,
     });
   };
   const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange({
-      value: "",
-      operator: "",
+      value: '',
+      operator: '',
       syntheticEvent: event,
     });
   };

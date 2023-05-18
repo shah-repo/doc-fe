@@ -1,7 +1,7 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { Nullable } from "../../../state/ducks/common/types";
-import UserMenuPresenter from "./UserMenu.presenter";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { Nullable } from '../../../state/ducks/common/types';
+import UserMenuPresenter from './UserMenu.presenter';
 
 interface Props {
   anchorEl: Nullable<HTMLElement>;

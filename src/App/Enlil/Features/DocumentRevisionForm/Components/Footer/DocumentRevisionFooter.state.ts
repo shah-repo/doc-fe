@@ -1,5 +1,5 @@
-import { action, computed, observable, set } from "mobx";
-import { DocumentRevisionFooterInfo, DocumentRevisionFooterStateProps } from "../../../../..";
+import { action, computed, observable, set } from 'mobx';
+import { DocumentRevisionFooterInfo, DocumentRevisionFooterStateProps } from '../../../../..';
 
 export default class DocumentRevisionFooterState implements DocumentRevisionFooterStateProps {
 
@@ -28,11 +28,11 @@ export default class DocumentRevisionFooterState implements DocumentRevisionFoot
 
   // MARK: @actions
   @action public setInfo = (info?: DocumentRevisionFooterInfo) => {
-    set(this, "info", info);
+    set(this, 'info', info);
   };
 
   @action setHidden = (hidden: boolean) => {
-    set(this, "hidden", hidden);
+    set(this, 'hidden', hidden);
   };
 
   // MARK: @helpers

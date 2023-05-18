@@ -1,8 +1,8 @@
-import { Box, Grid, TextField } from "@material-ui/core";
-import React from "react";
-import Text from "../../components/Text";
-import { styles } from "../grid/presenter.styles";
-import { AsyncProps } from "../types";
+import { Box, Grid, TextField } from '@material-ui/core';
+import React from 'react';
+import Text from '../../components/Text';
+import { styles } from '../grid/presenter.styles';
+import { AsyncProps } from '../types';
 
 const AsyncTime: React.FunctionComponent<AsyncProps> = ({
   initialValues,
@@ -20,7 +20,7 @@ const AsyncTime: React.FunctionComponent<AsyncProps> = ({
             name="year"
             label={<Text translation="async.tasks.year" />}
             defaultValue={initialValues.year}
-            onChange={(event) => setFieldValue("year", +event.target.value)}
+            onChange={(event) => setFieldValue('year', +event.target.value)}
             variant="outlined"
             helperText={<span className={classes.error}>{errors.year}</span>}
           />
@@ -31,7 +31,7 @@ const AsyncTime: React.FunctionComponent<AsyncProps> = ({
             name="month"
             label={<Text translation="async.tasks.month" />}
             defaultValue={initialValues.month}
-            onChange={(event) => setFieldValue("month", +event.target.value)}
+            onChange={(event) => setFieldValue('month', +event.target.value)}
             variant="outlined"
             helperText={<span className={classes.error}>{errors.month}</span>}
           />
@@ -42,7 +42,7 @@ const AsyncTime: React.FunctionComponent<AsyncProps> = ({
             name="day"
             label={<Text translation="async.tasks.day" />}
             defaultValue={initialValues.day}
-            onChange={(event) => setFieldValue("day", +event.target.value)}
+            onChange={(event) => setFieldValue('day', +event.target.value)}
             variant="outlined"
             helperText={<span className={classes.error}>{errors.day}</span>}
           />
@@ -53,7 +53,7 @@ const AsyncTime: React.FunctionComponent<AsyncProps> = ({
             name="hour"
             label={<Text translation="async.tasks.hour" />}
             defaultValue={initialValues.hour}
-            onChange={(event) => setFieldValue("hour", +event.target.value)}
+            onChange={(event) => setFieldValue('hour', +event.target.value)}
             variant="outlined"
             helperText={<span className={classes.error}>{errors.hour}</span>}
           />
@@ -64,7 +64,7 @@ const AsyncTime: React.FunctionComponent<AsyncProps> = ({
             name="minute"
             label={<Text translation="async.tasks.minute" />}
             defaultValue={initialValues.minute}
-            onChange={(event) => setFieldValue("minute", +event.target.value)}
+            onChange={(event) => setFieldValue('minute', +event.target.value)}
             variant="outlined"
             helperText={<span className={classes.error}>{errors.minute}</span>}
           />
@@ -76,7 +76,7 @@ const AsyncTime: React.FunctionComponent<AsyncProps> = ({
             label={<Text translation="async.tasks.second" />}
             defaultValue={initialValues.second}
             variant="outlined"
-            onChange={(event) => setFieldValue("second", +event.target.value)}
+            onChange={(event) => setFieldValue('second', +event.target.value)}
             helperText={<span className={classes.error}>{errors.second}</span>}
           />
         </Grid>

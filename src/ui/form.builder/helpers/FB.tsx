@@ -1,7 +1,7 @@
-import { isUndefined, maxBy } from "lodash";
-import { MobXProviderContext } from "mobx-react";
-import React from "react";
-import { FBProviderProps, FBSchemaProps } from "..";
+import { isUndefined, maxBy } from 'lodash';
+import { MobXProviderContext } from 'mobx-react';
+import React from 'react';
+import { FBProviderProps, FBSchemaProps } from '..';
 
 class FB {
   public static useRef<T>(state: (new(props: any) => T), props: any = undefined): T {
@@ -18,13 +18,13 @@ class FB {
 
   public static get uniqid(): string {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const uniqid = require("uniqid");
+    const uniqid = require('uniqid');
     return uniqid();
   }
 
   public static stripTags(value?: string): string {
-    if (!value) { return ""; }
-    return value.replace(/(<([^>]+)>)/ig, "");
+    if (!value) { return ''; }
+    return value.replace(/(<([^>]+)>)/ig, '');
   }
 
   public static isUUID(uuid: string): boolean {
@@ -35,9 +35,9 @@ class FB {
 
   public static isConsideredEmptyInput(input: Record<string, any>): boolean {
     return input == null ||
-      (typeof input === "object" && Object.keys(input).length === 0) ||
+      (typeof input === 'object' && Object.keys(input).length === 0) ||
       (Array.isArray(input) && input.length === 0) ||
-      (typeof input !== "number" && !input);
+      (typeof input !== 'number' && !input);
   }
 
   public static calculateDateByType = (option: any, type: string) => {
@@ -50,15 +50,15 @@ class FB {
 
     // Get all the PM or CAL fields with formInput value.
     const fieldsByType = optionSchema.filter((field) => (
-      field.type === "eqmaintenance" && field.editorConfig.type === type && formInput[field?.name as string]
+      field.type === 'eqmaintenance' && field.editorConfig.type === type && formInput[field?.name as string]
     ));
 
     // Find the oldest due date if there is more than one PM or CAL
     const oldestDueDate = maxBy(fieldsByType, (field) =>
-      new Date(formInput[field?.name || ""].complianceDueDate).getTime());
+      new Date(formInput[field?.name || ''].complianceDueDate).getTime());
 
     // Return oldest due date
-    return formInput[oldestDueDate?.name || ""]?.complianceDueDate;
+    return formInput[oldestDueDate?.name || '']?.complianceDueDate;
   };
 }
 

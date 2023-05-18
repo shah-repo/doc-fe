@@ -1,23 +1,23 @@
-import faker from "faker";
-import { getCallbackHandler } from "../../../common/tests/factories";
-import { Handlers } from "../../types";
-import { Group } from "../auth/types";
-import { getUser } from "../common/tests/factories";
-import actions from "./actions";
-import { EMPLOYEES_URL, GROUPS_ME_URL, GROUPS_URL } from "./constants";
-import { getCompanyGroup, getGroup } from "./tests/factories";
-import { AddEmployeeRequest, EmployeeGroupsEditRequestBody, GetEmployeeResponse, LoadCompanyGroups } from "./types";
+import faker from 'faker';
+import { getCallbackHandler } from '../../../common/tests/factories';
+import { Handlers } from '../../types';
+import { Group } from '../auth/types';
+import { getUser } from '../common/tests/factories';
+import actions from './actions';
+import { EMPLOYEES_URL, GROUPS_ME_URL, GROUPS_URL } from './constants';
+import { getCompanyGroup, getGroup } from './tests/factories';
+import { AddEmployeeRequest, EmployeeGroupsEditRequestBody, GetEmployeeResponse, LoadCompanyGroups } from './types';
 
-describe(" survey management actions test", () => {
+describe(' survey management actions test', () => {
   const companyGroup: LoadCompanyGroups = [getCompanyGroup()];
 
-  describe("loadCompanyGroups test", () => {
+  describe('loadCompanyGroups test', () => {
     const action = actions.loadCompanyGroups();
-    it("calls GET on GROUPS_URL", () => {
+    it('calls GET on GROUPS_URL', () => {
       expect(action.url).toBe(`${GROUPS_URL}`);
-      expect(action.method).toBe("get");
+      expect(action.method).toBe('get');
     });
-    it("calls dispatch with companyGroupsList action on success", () => {
+    it('calls dispatch with companyGroupsList action on success', () => {
       const dispatch = jest.fn();
       action.onSuccess(companyGroup, dispatch);
       expect(dispatch).toHaveBeenLastCalledWith(
@@ -26,7 +26,7 @@ describe(" survey management actions test", () => {
     });
   });
 
-  describe("addEmployee test", () => {
+  describe('addEmployee test', () => {
     const data: AddEmployeeRequest = {
       user: getUser(),
       groups: null,
@@ -37,13 +37,13 @@ describe(" survey management actions test", () => {
     };
     const action = actions.addEmployee(data, handlers);
 
-    it("calls POST on EMPLOYEES_URL", () => {
+    it('calls POST on EMPLOYEES_URL', () => {
       expect(action.url).toBe(`${EMPLOYEES_URL}`);
-      expect(action.method).toBe("post");
+      expect(action.method).toBe('post');
     });
   });
 
-  describe("getEmployee test", () => {
+  describe('getEmployee test', () => {
     const params: any = {};
     const handlers: Handlers<GetEmployeeResponse[]> = {
       successHandler: getCallbackHandler<GetEmployeeResponse[]>(),
@@ -51,26 +51,26 @@ describe(" survey management actions test", () => {
     };
     const action = actions.getEmployee(params, handlers);
 
-    it("calls GET on EMPLOYEES_URL", () => {
+    it('calls GET on EMPLOYEES_URL', () => {
       expect(action.url).toBe(`${EMPLOYEES_URL}`);
-      expect(action.method).toBe("get");
+      expect(action.method).toBe('get');
     });
   });
 
-  describe("loadGroupsMe test", () => {
+  describe('loadGroupsMe test', () => {
     const handlers: Handlers<Group[]> = {
       successHandler: getCallbackHandler<Group[]>(),
       errorHandler: getCallbackHandler<string>(),
     };
     const action = actions.loadGroupsMe(handlers);
 
-    it("calls GET on GROUPS_ME_URL", () => {
+    it('calls GET on GROUPS_ME_URL', () => {
       expect(action.url).toBe(`${GROUPS_ME_URL}`);
-      expect(action.method).toBe("get");
+      expect(action.method).toBe('get');
     });
   });
 
-  describe("editEmployeeGroups test", () => {
+  describe('editEmployeeGroups test', () => {
     const employee: GetEmployeeResponse = {
       id: faker.random.uuid(),
       active: true,
@@ -90,11 +90,11 @@ describe(" survey management actions test", () => {
       errorHandler: getCallbackHandler<string>(),
     };
     const action = actions.editEmployeeGroups(employeeId, body, handlers);
-    it("calls PATCH on EMPLOYEES_URL/employeeId", () => {
+    it('calls PATCH on EMPLOYEES_URL/employeeId', () => {
       expect(action.url).toBe(`${EMPLOYEES_URL}/${employeeId}`);
-      expect(action.method).toBe("patch");
+      expect(action.method).toBe('patch');
     });
-    it("calls dispatch with editSelectedEmployeeGroups action on success", () => {
+    it('calls dispatch with editSelectedEmployeeGroups action on success', () => {
       const dispatch = jest.fn();
       action.onSuccess(employee, dispatch);
       expect(dispatch).toHaveBeenCalledWith(

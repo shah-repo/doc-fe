@@ -1,10 +1,10 @@
-import { reaction } from "mobx";
-import React, { useEffect } from "react";
-import { FB, FBDialogState } from "..";
-import FBPOApprovalMatrixState from "./FBPOApprovalMatrix.state";
-import { FBPOApprovalMatrixFieldProps, POApprovalMatrix } from "./FBPOApprovalMatrix.types";
-import FBPOApprovalMatrixForm from "./form/FBPOApprovalMatrixForm";
-import FBPOApprovalMatrixFormActions from "./form/FBPOApprovalMatrixForm.actions";
+import { reaction } from 'mobx';
+import React, { useEffect } from 'react';
+import { FB, FBDialogState } from '..';
+import FBPOApprovalMatrixState from './FBPOApprovalMatrix.state';
+import { FBPOApprovalMatrixFieldProps, POApprovalMatrix } from './FBPOApprovalMatrix.types';
+import FBPOApprovalMatrixForm from './form/FBPOApprovalMatrixForm';
+import FBPOApprovalMatrixFormActions from './form/FBPOApprovalMatrixForm.actions';
 
 export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>
@@ -14,7 +14,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     handleAdd,
     poamState,
     dialogState,
-    name = "",
+    name = '',
     handleRevert,
     disabled,
     isInputOwner,
@@ -91,7 +91,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     handleAdd = () => {
       dialogState?.config({
         open: true,
-        title: "form.builder.add.item",
+        title: 'form.builder.add.item',
         content: <FBPOApprovalMatrixForm initialValues={{ threshold: 0 }}
           signatureStages={[1, 2, 3]} {...{ disabled }} />,
         actions: <FBPOApprovalMatrixFormActions />,
@@ -119,6 +119,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     });
   };
 
-  Comp.displayName = "withFBPOApprovalMatrix";
+  Comp.displayName = 'withFBPOApprovalMatrix';
   return Comp;
 };

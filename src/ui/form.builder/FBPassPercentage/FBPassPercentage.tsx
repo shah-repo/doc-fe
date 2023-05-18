@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBInputProps, FBTextField } from "..";
-import { styles } from "../styles/FBEditorCheckbox.styles";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBInputProps, FBTextField } from '..';
+import { styles } from '../styles/FBEditorCheckbox.styles';
 
 const FBPassPercentage: React.FunctionComponent<FBInputProps> = ({
   name,
@@ -14,7 +14,7 @@ const FBPassPercentage: React.FunctionComponent<FBInputProps> = ({
       {...{ name }}
       type="passpercentage"
       name={`${name}`}
-      boxProps={{ display: "flex", flexDirection: "column" }}
+      boxProps={{ display: 'flex', flexDirection: 'column' }}
       gutter={false}
     >
       <FBTextField

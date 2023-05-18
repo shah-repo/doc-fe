@@ -1,5 +1,5 @@
-import React from "react";
-import { FB, FBButtonProps } from "..";
+import React from 'react';
+import { FB, FBButtonProps } from '..';
 
 export const withFBSubmitButton = <T extends FBButtonProps>(
   Component: React.FunctionComponent<T>,

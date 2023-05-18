@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import { isEmpty, size } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Box } from '@material-ui/core';
+import { isEmpty, size } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   FBConditionalWrapper,
   FBFieldName,
@@ -13,8 +13,8 @@ import {
   FBProcedureItemConfig,
   FBProcedureItemLocale,
   FBSection, FBText,
-} from "..";
-import { withFBPartsItem } from "./FBPartsItem.wrap";
+} from '..';
+import { withFBPartsItem } from './FBPartsItem.wrap';
 
 const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
   getItem,
@@ -45,9 +45,9 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
                   to={getItemUrl?.(item.title) as string}
                   target="_blank"
                   style={{
-                    textDecoration: "none",
-                    color: "initial",
-                    fontWeight: "bold",
+                    textDecoration: 'none',
+                    color: 'initial',
+                    fontWeight: 'bold',
                   }}
                 >
                   {child}
@@ -63,16 +63,16 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
                     values={{
                       title: getItem?.(item.title),
                       lot: getLot?.(item.partLot),
-                      quantity: item.quantity || "form.builder.none",
+                      quantity: item.quantity || 'form.builder.none',
                       unit: item.unit,
                     }}
                     boxProps={{
-                      bgcolor: FBPartItemStatusBg[(item.status || "none")],
-                      borderColor: FBPartItemStatusBorder[(item.status || "none")],
+                      bgcolor: FBPartItemStatusBg[(item.status || 'none')],
+                      borderColor: FBPartItemStatusBorder[(item.status || 'none')],
                       border: 1,
                       borderRadius: 4,
                       padding: 1,
-                      fontWeight: "bold",
+                      fontWeight: 'bold',
                       mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
                     }}
                   />

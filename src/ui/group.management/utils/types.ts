@@ -1,10 +1,10 @@
-import { COMPANY_DEFAULT_STATE } from "../../../state/ducks/company/reducers";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
+import { COMPANY_DEFAULT_STATE } from '../../../state/ducks/company/reducers';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
 
 export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
-  id: "",
-  name: "",
+  id: '',
+  name: '',
   permissions: [],
   defaultForNewUsers: true,
   tags: null,
@@ -16,25 +16,25 @@ export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
 };
 
 export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{
-  id: "",
+  id: '',
   active: true,
   groups: [],
   user: {
     avatar: null,
-    id: "",
-    email: "",
-    name: "",
-    initialColor: "",
+    id: '',
+    email: '',
+    name: '',
+    initialColor: '',
   },
 }];
 
 export const DEFAULT_GROUP: GroupRequestBody = {
-  name: "",
+  name: '',
   permissions: [],
   defaultForNewUsers: false,
   isOfficial: false,
   tags: [],
   employees: [],
   parents: [],
-  id: "",
+  id: '',
 };

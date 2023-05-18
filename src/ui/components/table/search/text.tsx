@@ -1,21 +1,21 @@
-import { OutlinedInputProps } from "@material-ui/core/OutlinedInput";
-import React from "react";
-import { searchQueryString } from "./helpers";
-import { StyledSearchTextField } from "./styles";
-import { TableSearchFieldProps } from "./types";
+import { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
+import React from 'react';
+import { searchQueryString } from './helpers';
+import { StyledSearchTextField } from './styles';
+import { TableSearchFieldProps } from './types';
 
 type Props = Partial<TableSearchFieldProps>;
 
 export const TableSearchTextField: React.FunctionComponent<Props> = ({
-  dataKey = "",
+  dataKey = '',
   searchValueGetter,
   queryGetter,
   defaultValue,
 }) => {
-  const [value, setValue] = React.useState<string | number>(defaultValue || "");
+  const [value, setValue] = React.useState<string | number>(defaultValue || '');
 
   React.useEffect(() => {
-    (!value || !defaultValue) && setValue(defaultValue || "");
+    (!value || !defaultValue) && setValue(defaultValue || '');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
@@ -37,9 +37,9 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
       onClick={(e) => e.stopPropagation()}
       margin="normal"
       InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
-      inputProps={{ "data-lpignore": true }}
+      inputProps={{ 'data-lpignore': true }}
     />
   );
 };
 
-TableSearchTextField.displayName = "TableSearchTextField";
+TableSearchTextField.displayName = 'TableSearchTextField';

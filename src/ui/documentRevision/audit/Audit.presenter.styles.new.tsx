@@ -1,33 +1,33 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     details: {
-      overflowY: "auto",
-      maxHeight: "50vw",
+      overflowY: 'auto',
+      maxHeight: '50vw',
     },
     noPaddingMargin: {
-      margin: "0px",
-      padding: "0px",
+      margin: '0px',
+      padding: '0px',
     },
     auditListItem: {
-      margin: "0px",
-      padding: "0px",
-      marginBottom: "15px",
+      margin: '0px',
+      padding: '0px',
+      marginBottom: '15px',
     },
     changeContainer: {
       boxShadow: `inset 0px 1px 0px -1px ${Colors.gray_goose}, inset 0px -1px 0px 0px ${Colors.gray_goose}`,
       padding: theme.spacing(1.875),
     },
     auditValue: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      wordBreak: "break-word",
+      fontSize: '14px',
+      fontFamily: 'Sora',
+      wordBreak: 'break-word',
       color: Colors.almost_black,
     },
     auditKey: {
-      fontSize: "12px",
+      fontSize: '12px',
       color: Colors.font_gray,
     },
     owner: {

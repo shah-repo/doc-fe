@@ -1,10 +1,10 @@
-import { makeStyles } from "@material-ui/core";
-import { loadMoreStyles } from "../../Dashboard.styles";
+import { makeStyles } from '@material-ui/core';
+import { loadMoreStyles } from '../../Dashboard.styles';
 
 export default makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    overflow: "auto",
+    overflow: 'auto',
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0, 0, 1),
   },

@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from "react";
-import { FB } from "..";
-import useMqttSubscription from "../../hooks/useMqttSubscription";
+import React, { useCallback, useMemo } from 'react';
+import { FB } from '..';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 const FBInlinePendingApprovalSocket: React.FunctionComponent<{}> = () => {
   const { workspaceState } = FB.useStores();

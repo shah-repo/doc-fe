@@ -1,29 +1,29 @@
-import { Avatar, Box, Grid, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
-import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
-import { approvalsActions } from "../../../../../state/ducks/approvals";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { dashboardTodoActions } from "../../../../../state/ducks/dashboard.new/todo";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useDialog from "../../../../hooks/useDialog";
-import DocId from "../../common/DocId/presenter";
-import DocTitle from "../../common/DocTitle/presenter";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import ApproveDialogueContainer from "./POApprovalDialogContainer";
-import useStyles from "./taskApproval.styles";
-import DismissAction from "../../common/DismissAction";
+import { Avatar, Box, Grid, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
+import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
+import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
+import { approvalsActions } from '../../../../../state/ducks/approvals';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
+import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
+import DocId from '../../common/DocId/presenter';
+import DocTitle from '../../common/DocTitle/presenter';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import ApproveDialogueContainer from './POApprovalDialogContainer';
+import useStyles from './taskApproval.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string;
@@ -126,7 +126,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     rejectDialogAsync.start(
       applyTransition,
       approvalId,
-      "reject",
+      'reject',
       rejectDialogAsync,
       null
     );
@@ -194,13 +194,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <DocId
-                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docId={docId}
                   />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
-                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />

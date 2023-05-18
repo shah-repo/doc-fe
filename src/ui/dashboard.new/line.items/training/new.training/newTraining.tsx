@@ -1,32 +1,32 @@
-import { Box, Grid, Link, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
-import { size } from "lodash";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
-import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
-import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
-import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
-import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { trainingActions } from "../../../../../state/ducks/dashboard.new/training";
-import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
-import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
-import Text from "../../../../components/Text";
-import { TRAINING_URL } from "../../../../constants/urls";
-import { CompletedOnDateOptions } from "../../../../document.revision/utils/types";
-import gridConfiguration from "../../../../training/grid/column.definition";
-import { TRAINING_TABLE_NAME } from "../../../../training/grid/container";
-import { DateFields } from "../../../../training/kendo/types";
-import { Translation } from "../../../../translations/types";
-import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
-import { HoverStyleChip } from "../../common/HoverStyleChip";
-import { NormalStyleChip } from "../../common/NormalStyleChip";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import useStyles from "./newTraining.styles";
+import { Box, Grid, Link, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import { size } from 'lodash';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as OverdueIcon } from '../../../../../assets/images/overdue_status.svg';
+import { ReactComponent as OverdueWhiteIcon } from '../../../../../assets/images/overdue_status_white.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as TrainingIcon } from '../../../../../assets/images/training.svg';
+import { ReactComponent as WarningIcon } from '../../../../../assets/images/warning_status.svg';
+import { ReactComponent as WarningWhiteIcon } from '../../../../../assets/images/warning_status_white.svg';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { trainingActions } from '../../../../../state/ducks/dashboard.new/training';
+import { TrainingStatus } from '../../../../../state/ducks/dashboard/types';
+import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
+import Text from '../../../../components/Text';
+import { TRAINING_URL } from '../../../../constants/urls';
+import { CompletedOnDateOptions } from '../../../../document.revision/utils/types';
+import gridConfiguration from '../../../../training/grid/column.definition';
+import { TRAINING_TABLE_NAME } from '../../../../training/grid/container';
+import { DateFields } from '../../../../training/kendo/types';
+import { Translation } from '../../../../translations/types';
+import TrainingEmailModal from '../../../modal.popups/email/TrainingEmailModal';
+import { HoverStyleChip } from '../../common/HoverStyleChip';
+import { NormalStyleChip } from '../../common/NormalStyleChip';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import useStyles from './newTraining.styles';
 
 interface Props {
   id: string;
@@ -71,7 +71,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const count = size(pendingTrainees);
-  const translationField = count > 1 ? "training.users.counts" : "training.users.count";
+  const translationField = count > 1 ? 'training.users.counts' : 'training.users.count';
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
   };
@@ -103,39 +103,39 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const pendingTraineesNames = pendingTrainees
     .map((trainee) => trainee.userName)
-    .join(", ");
+    .join(', ');
   const setTrainingSearchCriteria = () => {
     let filterDate = {};
     if (trainingStatus === TrainingStatus.OVERDUE) {
       filterDate = {
-        operator: "eq",
+        operator: 'eq',
         value: CompletedOnDateOptions.OVERDUE,
         field: DateFields.DUE_ON,
       };
     } else {
       filterDate = {
-        operator: "eq",
+        operator: 'eq',
         value: CompletedOnDateOptions.NEXT_WEEK,
         field: DateFields.DUE_ON,
       };
     }
     const filterKendoConfig = {
       filter: {
-        logic: "and",
+        logic: 'and',
         filters: [
           {
-            field: "documentRevision.name",
-            operator: "eq",
+            field: 'documentRevision.name',
+            operator: 'eq',
             value: docRevName,
           },
           {
-            field: "documentRevision.displayRevision",
-            operator: "eq",
+            field: 'documentRevision.displayRevision',
+            operator: 'eq',
             value: docRevVersion,
           },
           {
-            field: "trainingPlan.document.docId",
-            operator: "eq",
+            field: 'trainingPlan.document.docId',
+            operator: 'eq',
             value: docId,
           },
           {
@@ -145,8 +145,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       },
       sort: [
         {
-          field: "trId",
-          dir: "asc",
+          field: 'trId',
+          dir: 'asc',
         },
       ],
       skip: 0,
@@ -156,7 +156,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
-          apiError: "",
+          apiError: '',
           scrollToIndex: 0,
           forceUpdate: false,
           queryDict: {

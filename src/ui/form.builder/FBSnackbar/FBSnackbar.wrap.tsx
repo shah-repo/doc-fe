@@ -1,6 +1,6 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBSnackbarProps } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBSnackbarProps } from '..';
 
 export const withFBSnackbar = <T extends FBSnackbarProps>(
   Component: React.FunctionComponent<T>,

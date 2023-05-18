@@ -6,6 +6,7 @@ export type FBApprovalMatrixProps =
 & {
   handleSave?: (data: FBApprovalMatrixItem[]) => void
   data?: FBApprovalMatrixFieldData
+  withoutStatus?: boolean
 };
 
 export enum FBApprovalMatrixRoleTitles {

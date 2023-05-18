@@ -1,6 +1,6 @@
-import React from "react";
-import useDialog from "../../hooks/useDialog";
-import AddEmployeePresenter from "./presenter";
+import React from 'react';
+import useDialog from '../../hooks/useDialog';
+import AddEmployeePresenter from './presenter';
 
 interface Props {
   addGroup?: () => void;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Box, Chip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
@@ -60,6 +61,12 @@ const schema: Array<ColumnDefinition<EditableRole>> = [
     },
   },
 ];
+=======
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBApprovalMatrixRolesProps, FBApprovalRole, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTextField } from '..';
+import { withFBApprovalMatrixRoles } from './FBApprovalMatrixRoles.wrap';
+>>>>>>> develop
 
 const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps> = ({
   onClick,

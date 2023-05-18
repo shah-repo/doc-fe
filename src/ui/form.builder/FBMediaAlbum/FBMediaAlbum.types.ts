@@ -1,7 +1,7 @@
-import { BoxProps } from "@material-ui/core";
-import { FBMediaAlbumFieldProps, FBMediaAlbumState, FBProviderProps, FBWorkspaceMode } from "..";
+import { BoxProps } from '@material-ui/core';
+import { FBMediaAlbumFieldProps, FBMediaAlbumState, FBProviderProps, FBWorkspaceMode } from '..';
 
-export type FBMediaAlbumMode = "carousel" | "gallery";
+export type FBMediaAlbumMode = 'carousel' | 'gallery';
 
 export interface FBMediaProps {
   id: string;
@@ -13,17 +13,17 @@ export interface FBMediaProps {
 }
 
 export type FBMediaAlbumProps =
-  & Pick<BoxProps, "height" | "width">
-  & Pick<FBProviderProps, "formState">
+  & Pick<BoxProps, 'height' | 'width'>
+  & Pick<FBProviderProps, 'formState'>
   & Pick<FBMediaAlbumFieldProps,
-  | "collection"
-  | "removeMedia"
-  | "setMediaFieldMode"
-  | "loading"
-  | "name"
-  | "onFileUploadChange"
-  | "actionsDisabled"
-  | "autosave"
+  | 'collection'
+  | 'removeMedia'
+  | 'setMediaFieldMode'
+  | 'loading'
+  | 'name'
+  | 'onFileUploadChange'
+  | 'actionsDisabled'
+  | 'autosave'
   >
   & {
     onClick?: () => void;

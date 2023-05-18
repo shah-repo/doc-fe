@@ -1,9 +1,9 @@
-import { at, filter, get, map, some } from "lodash";
-import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from "..";
-import { DocumentGroupOptionsType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { checkDocumentGroupOptions, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
-import { FBInputType } from "../FBInput/FBInput.types";
-import { FBEditorPropertiesDefaultValue } from "./FBEditorProperties.helper";
+import { at, filter, get, map, some } from 'lodash';
+import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from '..';
+import { DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { checkDocumentGroupOptions, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
+import { FBInputType } from '../FBInput/FBInput.types';
+import { FBEditorPropertiesDefaultValue } from './FBEditorProperties.helper';
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
@@ -21,7 +21,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     type && (options = FBData.editorPropertiesByType(type));
 
     const { document: docRev, externalState } = workspaceState || {};
-    const docTypeId = docRev?.document.documentType.id || "";
+    const docTypeId = docRev?.document.documentType.id || '';
     const documentTypesById = externalState?.documentType?.byId;
     const docGroupOptions = documentTypesById?.[docTypeId]?.groupOptions;
     const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) =>
@@ -33,12 +33,12 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
         checkDocumentGroupOptions(k, type.groupOptions));
       const isDocumentInGroup = checkDocumentGroupOptions(k, docGroupOptions);
       if (!(isDocumentForm && isOutputInGroup) && !isDocumentInGroup) {
-        options = filter(options, (option) => !v.includes(get(option, "value"))) as FBOption[];
+        options = filter(options, (option) => !v.includes(get(option, 'value'))) as FBOption[];
       }
     });
 
     options = map(options as FBOption[], (option) => {
-      const isOptionDeleteDisabled = option.value === "deleteDisabled";
+      const isOptionDeleteDisabled = option.value === 'deleteDisabled';
       const { deleteDisabled, deleteInFormDisabled } = inputProps || {};
       return ({
         ...option,
@@ -48,11 +48,11 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     }) as FBOption[];
 
     if (workspaceState?.isLHRProductionBuild) {
-      options = filter(options, (option) => option.value === "includeNotes") as FBOption[];
+      options = filter(options, (option) => option.value === 'includeNotes') as FBOption[];
     }
 
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const [valueName, checked] = at(ev.target, ["value", "checked"]);
+      const [valueName, checked] = at(ev.target, ['value', 'checked']);
       // *NOTE: Mobile support until mobile switches to editor props
       formState?.setFieldValue(valueName, checked);
     };
@@ -61,7 +61,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     // reviseDisabled, outputDisabled ...
     // Refactoring will require predefined schemes migration as well
     // This is a hack for default checked props
-    const defaultChecked = FBEditorPropertiesDefaultValue(type as FBInputType, docGroupOptions)[type ?? ""];
+    const defaultChecked = FBEditorPropertiesDefaultValue(type as FBInputType, docGroupOptions)[type ?? ''];
     map(defaultChecked, (key) => {
       formState?.setFieldValue(key, true);
     });

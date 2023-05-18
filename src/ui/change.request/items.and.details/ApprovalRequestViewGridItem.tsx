@@ -1,21 +1,21 @@
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import cx from "classnames";
-import React, { useEffect, useState } from "react";
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { RELATED_PARTS_ROOT_URL } from "../../../state/ducks/relatedParts/constants";
-import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
-import { FBAutocompleteAsyncOption } from "../../form.builder";
-import { FBEndpoint } from "../../form.builder/defaults/FBEndpoint";
-import FBRequest from "../../form.builder/FBApi/FBApi.request";
-import useStyles from "./ApprovalRequestGrid.styles";
-import { generateDocTitleText } from "./helpers";
-import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import cx from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
+import { FBAutocompleteAsyncOption } from '../../form.builder';
+import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
+import FBRequest from '../../form.builder/FBApi/FBApi.request';
+import useStyles from './ApprovalRequestGrid.styles';
+import { generateDocTitleText } from './helpers';
+import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
 
-import { Link } from "react-router-dom";
-import { documentVersionPath } from "../../document.revision/utils/paths";
+import { Link } from 'react-router-dom';
+import { documentVersionPath } from '../../document.revision/utils/paths';
 
-import InfoIcon from "@material-ui/icons/Info";
+import InfoIcon from '@material-ui/icons/Info';
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -107,7 +107,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         <div className={classes.cellOne}>
           {
             docRelatedParts.length > 0 &&
-            <span className={cx(classes.iconClass, "iconClass")} onClick={toggleItem}>
+            <span className={cx(classes.iconClass, 'iconClass')} onClick={toggleItem}>
               <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
             </span>
           }

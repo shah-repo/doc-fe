@@ -34,6 +34,7 @@ const ActionCell: CellComponent<FBPurchaseOrderItem, Props> = ({
       data-cy={isReceivable ? 'create-lot' : 'remove'}
       dataIndex={dataIndex}
       dataItem={dataItem}
+      onClick={null}
     >
       {isDeleteAllowed && (
         <Tooltip

@@ -1,12 +1,12 @@
-import React from "react";
-import { FBTextField, FBTextFieldProps } from "..";
-import { styles } from "../styles/FBAutocomplete.styles";
+import React from 'react';
+import { FBTextField, FBTextFieldProps } from '..';
+import { styles } from '../styles/FBAutocomplete.styles';
 
 const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
-  label = "form.builder.options",
-  name = "options",
-  placeholder = "form.builder.options.placeholder",
-  rules = "required",
+  label = 'form.builder.options',
+  name = 'options',
+  placeholder = 'form.builder.options.placeholder',
+  rules = 'required',
   className,
 }) => (
   <FBTextField
@@ -15,7 +15,7 @@ const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
     multiline
     boxProps={{ mb: 3.125 }}
     labelProps={styles.labelProps}
-    FBProps={{ inputType: "editoroptions" }}
+    FBProps={{ inputType: 'editoroptions' }}
   />
 );
 

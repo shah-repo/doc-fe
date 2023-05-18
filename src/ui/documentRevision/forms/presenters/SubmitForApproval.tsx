@@ -1,24 +1,24 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from "@material-ui/core";
-import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
-import React from "react";
-import { useIntl } from "react-intl";
-import { useDispatch } from "react-redux";
-import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../../components/notifications";
-import Text from "../../../components/Text";
-import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
-import FBStore from "../../../form.builder/FBStore/FBStore";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
-import { styles } from "./FinalizeAndRelease.styles";
+import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from '@material-ui/core';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
+import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from '../../../form.builder';
+import FBStore from '../../../form.builder/FBStore/FBStore';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/checkDocumentGroup';
+import { styles } from './FinalizeAndRelease.styles';
 
 interface Props {
   docRevId: string;
@@ -49,7 +49,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
-  const label = isTypeMpiOutput ? "record.complete.step" : "record.submit.for.approval";
+  const label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
   const releaseAsync = useAsync({
     onError: (error) => {
       toastError(error as string);
@@ -71,12 +71,12 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   const releaseRecord = () => {
     if (!hasBuildType && isLhrDoc) {
-      return toastError(intl.formatMessage({ id: "form.builder.lhr.build.type.error.message" }));
+      return toastError(intl.formatMessage({ id: 'form.builder.lhr.build.type.error.message' }));
     }
     releaseAsync.start(
       applyTransition,
       docRevId,
-      "in_review",
+      'in_review',
       releaseAsync,
     );
   };
@@ -108,13 +108,13 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-button"
           data-cy="ApproveAndRelease-button"
         >
-          <Text message={isObsolete ? "common.void" : label} />
+          <Text message={isObsolete ? 'common.void' : label} />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
           <StyledMenuListItemText
             onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
-            primary={ <Text message={isObsolete ? "common.void" : label} />}
+            primary={ <Text message={isObsolete ? 'common.void' : label} />}
           />
         </StyledMenuListItem>
       ) : (
@@ -125,7 +125,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-button"
           data-cy="ApproveAndRelease-button"
         >
-          <Text message={isObsolete ? "common.void" : label} />
+          <Text message={isObsolete ? 'common.void' : label} />
         </Button>
       )}
       <Dialog

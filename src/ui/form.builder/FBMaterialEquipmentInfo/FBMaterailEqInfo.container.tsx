@@ -1,11 +1,11 @@
-import { useObserver } from "mobx-react";
-import React, { useEffect, useState } from "react";
-import { FBMaterailEqInfoState } from "..";
-import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentLHRT, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
-import FB from "../helpers/FB";
-import { MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
-import { calculateDataDiff } from "./FBMaterailEqInfo.utils";
-import FBMaterialEqInfoPresenter from "./FBMaterialEqInfo.presenter";
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+import { FBMaterailEqInfoState } from '..';
+import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentLHRT, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
+import FB from '../helpers/FB';
+import { MaterialEqContainerProps } from './FBMaterailEqInfo.types';
+import { calculateDataDiff } from './FBMaterailEqInfo.utils';
+import FBMaterialEqInfoPresenter from './FBMaterialEqInfo.presenter';
 
 const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
   documentRevision,
@@ -23,7 +23,7 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
     itemsState.loading,
   ]));
 
-  const isObsolete = Boolean(documentRevision?.displayStatus?.includes("Obsolete"));
+  const isObsolete = Boolean(documentRevision?.displayStatus?.includes('Obsolete'));
   const isLHRT = checkIsDocumentLHRT(documentRevision?.document?.documentType?.groupOptions);
   const isMPI = checkIsDocumentMPI(documentRevision?.document?.documentType?.groupOptions);
   const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);

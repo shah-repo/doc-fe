@@ -1,4 +1,4 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, Theme } from '@material-ui/core';
 
 export default (theme: Theme) =>
   createStyles({
@@ -8,7 +8,7 @@ export default (theme: Theme) =>
       minWidth: 150,
     },
     progressAttached: {
-      position: "absolute",
+      position: 'absolute',
       left: 10,
       right: 10,
       bottom: 10,

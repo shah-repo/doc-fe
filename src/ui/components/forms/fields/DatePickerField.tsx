@@ -1,13 +1,13 @@
-import MomentUtils from "@date-io/moment";
-import { TextField } from "@material-ui/core";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import moment from "moment";
-import * as React from "react";
-import { useEffect } from "react";
-import { TypographyProps } from "../../../../state/ducks/common/types";
-import { useFormContext } from "../FormContext";
-import Field, { FieldOwnProps } from "./Field";
+import MomentUtils from '@date-io/moment';
+import { TextField } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import moment from 'moment';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { TypographyProps } from '../../../../state/ducks/common/types';
+import { useFormContext } from '../FormContext';
+import Field, { FieldOwnProps } from './Field';
 
 type DatePickerPropsWithFormik = FieldOwnProps & FormikFieldProps &
 Partial<TypographyProps>;
@@ -55,7 +55,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
           label=""
           onChange={handleDateChange}
           KeyboardButtonProps={{
-            "aria-label": "change date",
+            'aria-label': 'change date',
           }}
           TextFieldComponent={(props) => <TextField {...props} disabled={true} />}
         />

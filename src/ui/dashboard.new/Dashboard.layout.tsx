@@ -1,10 +1,10 @@
-import { Box, Grid } from "@material-ui/core";
-import React from "react";
-import { GroupTag } from "../../state/ducks/auth/types";
-import useGetHasTag from "../hooks/useGetHasTag";
-import useStyles from "./Dashboard.styles";
-import Tabs from "./tabs/Tabs";
-import TrainingStats from "./training.stats/TrainingStats";
+import { Box, Grid } from '@material-ui/core';
+import React from 'react';
+import { GroupTag } from '../../state/ducks/auth/types';
+import useGetHasTag from '../hooks/useGetHasTag';
+import useStyles from './Dashboard.styles';
+import Tabs from './tabs/Tabs';
+import TrainingStats from './training.stats/TrainingStats';
 
 const DashboardLayout: React.FC = () => {
   const classes = useStyles();

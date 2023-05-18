@@ -1,12 +1,12 @@
-import { apiAction, apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENTS_TO_REVIEW_URL, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
-import { AccessRequestBody, Document, DocumentEditRequestBody, DocumentListAction, DocumentProposedId, DocumentProposedIdSetAction, DocumentSetAction, DocumentsToReviewListAction, DocumentTransition, DocumentTransitionRequestBody, DocumentTransitionResponse } from "./types";
+import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENTS_TO_REVIEW_URL, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from './constants';
+import { AccessRequestBody, Document, DocumentEditRequestBody, DocumentListAction, DocumentProposedId, DocumentProposedIdSetAction, DocumentSetAction, DocumentsToReviewListAction, DocumentTransition, DocumentTransitionRequestBody, DocumentTransitionResponse } from './types';
 
 
 const getDocumentById = (id: string, handlers: Handlers<any>): ApiAction<any, any> => apiActionWithCallbacks({
   url: `${DOCUMENTS_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   handlers,
 });
 
@@ -32,7 +32,7 @@ const documentProposedIdSet = (docId: string): DocumentProposedIdSetAction => ({
 
 const loadList = (): ApiAction<Document[]> => apiAction({
   url: DOCUMENTS_ROOT_URL,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENTS_LIST_ASYNC,
   onSuccess: (documents, dispatch) => {
     dispatch(documentsList(documents));
@@ -41,7 +41,7 @@ const loadList = (): ApiAction<Document[]> => apiAction({
 
 const loadReviewList = (): ApiAction<Document[]> => apiAction({
   url: DOCUMENTS_TO_REVIEW_URL,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENTS_TO_REVIEW_LIST_ASYNC,
   onSuccess: (documents, dispatch) => {
     dispatch(documentsToReviewList(documents));
@@ -50,7 +50,7 @@ const loadReviewList = (): ApiAction<Document[]> => apiAction({
 
 const load = (id: string): ApiAction<Document> => apiAction({
   url: `${DOCUMENTS_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENT_GET_ASYNC,
   onSuccess: (document, dispatch) => {
     dispatch(documentSet(document));
@@ -59,11 +59,11 @@ const load = (id: string): ApiAction<Document> => apiAction({
 
 const loadDocumentProposedId = (documentTypeId: string): ApiAction<DocumentProposedId> => apiAction({
   url: DOCUMENT_PROPOSED_DOC_ID,
-  method: "get",
+  method: 'get',
   params: { documentTypeId },
   asyncType: DOCUMENT_PROPOSED_DOC_ID_ASYNC,
   onSuccess: (documentProposedId, dispatch) => {
-    dispatch(documentProposedIdSet(documentProposedId.docId || ""));
+    dispatch(documentProposedIdSet(documentProposedId.docId || ''));
   },
 });
 
@@ -81,7 +81,7 @@ const setDocumentProposedId = (docId: string): DocumentProposedIdSetAction => ({
 const create = (body: DocumentEditRequestBody, handlers: Handlers<Document>):
 ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
   url: DOCUMENTS_ROOT_URL,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (document, dispatch) => {
     dispatch(documentSet(document));
@@ -92,7 +92,7 @@ ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
 const save = (id: string, body: DocumentEditRequestBody, handlers: Handlers<Document>):
 ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENTS_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (document, dispatch) => {
     dispatch(documentSet(document));
@@ -107,7 +107,7 @@ const applyTransition = (
   handlers: Handlers<DocumentTransitionResponse>,
 ): ApiAction<DocumentTransitionResponse, DocumentTransitionRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENTS_ROOT_URL}/${id}/${transition}`,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
@@ -121,7 +121,7 @@ const sendEmailAccessRequest = (
   handlers: Handlers,
 ): ApiAction<AccessRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENTS_ROOT_URL}/${id}/request_access`,
-  method: "post",
+  method: 'post',
   data: body,
   handlers,
 });
