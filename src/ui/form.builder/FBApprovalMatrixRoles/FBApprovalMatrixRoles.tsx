@@ -1,10 +1,18 @@
 import { Box, Chip } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/ClearRounded';
+import DoneIcon from '@material-ui/icons/DoneRounded';
+import cx from 'classnames';
+import { kebabCase } from 'lodash';
 import React from 'react';
 import { FBApprovalMatrixRolesProps, FBApprovalRole, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBMapWrapper, FBProvider, FBTextField } from '..';
+import { translate } from '../../../common/intl';
+import { Autocomplete, Button, TextField } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridRowClickEvent } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import Text from '../../components/Text';
-import { Autocomplete, Button, TextField } from '../../components/forms/fields-next';
+import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import useStyles from '../FBApprovalMatrix/components/Grid/styles';
+import { GridProps } from '../FBApprovalMatrix/components/Grid/types';
 import { withFBApprovalMatrixRoles } from './FBApprovalMatrixRoles.wrap';
 
 export const MODE_FIELD = '_mode';
@@ -61,8 +69,82 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
   name,
 }) => {
   const [editedItem, setEditedItem] = React.useState<FBApprovalRole | null>(null);
+  const classes = useStyles();
 
   const editItem = ({ dataItem }: DataGridRowClickEvent<FBApprovalRole>) => setEditedItem(dataItem);
+
+  const handleItemDiscard: React.MouseEventHandler = () => {
+    console.log('handleItemDiscard');
+  };
+
+  const handleItemSave: React.MouseEventHandler = () => {
+    console.log('handleItemSave');
+  };
+
+  const rowRender: GridProps<T>['rowRender'] = (row, props) => {
+    const { dataItem } = props;
+
+    const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+    const isActive = Boolean(dataItem?.docType?.active);
+    const dataCy = `row-${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
+
+    if (!isUpdating) {
+      return React.cloneElement(
+        row,
+        {
+          ...row.props,
+          ['data-cy' as string]: dataCy,
+          className: cx(row.props.className, { [classes.inactive]: !isActive }),
+        },
+      );
+    }
+
+    const actions = (
+      <td className={classes.actionsTd}>
+        <div className={classes.line} />
+        <div className={classes.actions}>
+          <StyleTooltip
+            title={translate('common.discard')}
+            placement="top"
+            arrow
+          >
+            <Button
+              data-cy="action-discard"
+              className={classes.actionButton}
+              variant="outlined"
+              onClick={handleItemDiscard}
+            >
+              <ClearIcon className={classes.iconButton} />
+            </Button>
+          </StyleTooltip>
+          <StyleTooltip
+            title={translate('common.save')}
+            placement="top"
+            arrow
+          >
+            <Button
+              data-cy="action-save"
+              className={classes.actionButton}
+              variant="outlined"
+              onClick={handleItemSave}
+            >
+              <DoneIcon className={classes.iconButton} />
+            </Button>
+          </StyleTooltip>
+        </div>
+      </td>
+    );
+
+    return React.cloneElement(
+      row,
+      {
+        ...row.props,
+        className: cx(row.props.className, classes.updating),
+      },
+      row.props.children,
+      actions,
+    );
+  };
 
   const data = approvalRoles.map((role) => ({
     ...role,
@@ -78,6 +160,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
           <KendoDataGrid
             schema={schema}
             data={data}
+            rowRender={rowRender}
             style={disabled ? undefined : {
               borderBottomLeftRadius: 0,
               borderBottomRightRadius: 0,
