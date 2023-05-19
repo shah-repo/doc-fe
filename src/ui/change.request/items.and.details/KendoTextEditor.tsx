@@ -4,6 +4,7 @@ import { TextAreaBlurEvent } from '@progress/kendo-react-inputs/dist/npm/textare
 import { Field, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
 import { FB } from '../../form.builder';
 import { FBInputProps } from '../../form.builder/FBInput/FBInput.types';
@@ -24,6 +25,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
 }) => {
   const { formState } = FB.useStores();
   const formik = useFormikContext();
+  const intl = useIntl();
   defaultValue = defaultValue ?? formState?.getFieldValue(name);
   const [textEditorValue, setTextEditorValue] = useState<string>(defaultValue);
   const classes = styles();
@@ -35,7 +37,6 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
     formState?.setFieldValue(name, updatedValue);
     setTextEditorValue(updatedValue);
   };
-  console.log('Formstate errors:', name);
 
   return (
     <Field
@@ -53,7 +54,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
             rows={4}
           />
           {!textEditorValue && <span className={classes.error}>
-            <p>{translate(label)} is a required</p>
+            <p>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</p>
           </span>}
         </div>
       </FieldWrapper>)}
