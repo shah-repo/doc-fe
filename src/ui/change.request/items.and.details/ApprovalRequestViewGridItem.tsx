@@ -94,6 +94,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     setExpanded(!isExpanded);
   };
 
+  const getRenderChildrenElement = (data) => {
+    return <p className={classes.truncate}>{data}</p>;
+  };
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -121,10 +125,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={descriptionOfChange} />
+          <Tooltip showTooltip={true} data={descriptionOfChange} childrenElement={getRenderChildrenElement(justificationOfChange)} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={justificationOfChange} />
+          <Tooltip showTooltip={true} data={justificationOfChange} childrenElement={getRenderChildrenElement(justificationOfChange)} />
         </div>
       </div>
       {

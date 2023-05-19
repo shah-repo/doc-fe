@@ -4,24 +4,20 @@ import { TextAreaBlurEvent } from '@progress/kendo-react-inputs/dist/npm/textare
 import { Field, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { translate } from '../../../common/intl';
 import { FB } from '../../form.builder';
 import { FBInputProps } from '../../form.builder/FBInput/FBInput.types';
+import styles from './KendoTextEditor.styles';
 
 type KendoTextEditorProps =
 & FBInputProps
 & {
-  editorReference?: HTMLInputElement
-  formValue?: string
+  name: string
+  label: string
   defaultValue?: string
-  masked?: boolean
-  isPreview?: boolean
-  shouldNotAutosaveOnBlur?: boolean
 };
 
 const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
-  isPreview,
-  formValue = '',
-  disabled,
   name = 'justificationOfChange',
   label,
   defaultValue,
@@ -30,16 +26,16 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const formik = useFormikContext();
   defaultValue = defaultValue ?? formState?.getFieldValue(name);
   const [textEditorValue, setTextEditorValue] = useState<string>(defaultValue);
+  const classes = styles();
 
   const onBlur = (evt: TextAreaBlurEvent) => {
     if (!name) { return; }
-    const updatedValue = evt?.target?.element?.current?.value;
-    if (updatedValue) {
-      formik.setFieldValue(name, updatedValue);
+    const updatedValue = evt?.target?.element?.current?.value ?? '';
+    formik.setFieldValue(name, updatedValue);
     formState?.setFieldValue(name, updatedValue);
     setTextEditorValue(updatedValue);
-    }
   };
+  console.log('Formstate errors:', name);
 
   return (
     <Field
@@ -47,6 +43,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
       type="textfield"
       name={name}
       label={label}
+      required={true}
       component={(() => <FieldWrapper>
         <div className="k-form-field-wrap">
           <TextArea
@@ -55,6 +52,9 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
             style={{ width: '100%' }}
             rows={4}
           />
+          {!textEditorValue && <span className={classes.error}>
+            <p>{translate(label)} is a required</p>
+          </span>}
         </div>
       </FieldWrapper>)}
       defaultVal={textEditorValue}
