@@ -124,7 +124,10 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
     const isInactive = dataItem?.docType?.active === false;
-    const dataCy = `row-${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
+
+    const cyLabel = kebabCase(dataItem?.docType?.name?.toLowerCase())
+      || (dataItem[MODE_FIELD] === Mode.add ? 'new' : 'empty');
+    const dataCy = `row-${cyLabel}`;
 
     if (!isUpdating) {
       return React.cloneElement(

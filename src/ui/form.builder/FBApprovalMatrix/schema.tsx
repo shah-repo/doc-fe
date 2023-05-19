@@ -5,10 +5,7 @@ import StatusCellTemplate from './components/StatusCellTemplate';
 import InputCellTemplate from './components/InputCellTemplate';
 import BooleanFilter from './components/BooleanFilter';
 import InputFilter from './components/InputFilter';
-import {
-  FBApprovalMatrixRoleTitles,
-  FBDocTypeGroup,
-} from './types';
+import { FBApprovalMatrixRoleTitles } from './types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import {
   FBApprovalMatrixFieldData,
@@ -20,11 +17,12 @@ import { translate } from '../../../common/intl';
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
 import { DATA_ITEM_KEY, TEXT_FIELD } from './components/Grid';
+import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { CATEGORY_OPTIONS } from './constants';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
   withoutStatus?: boolean
-  documentTypeCategories?: string[]
   cellARHeaderClassName: string
   cellARClassName: string
   clearRightBorderClassName: string
@@ -32,13 +30,13 @@ interface Options {
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const {
-    data, withoutStatus, documentTypeCategories = [],
+    data, withoutStatus,
     cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
   } = options;
   const { approvalRoles = [] } = data ?? {};
 
-  const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
-  const categoryOptions = documentTypeCategories.map((category) => ({ value: category, text: category }));
+  const internalTypeOptions = Object.keys(GroupWithGroupOptions).map((value) => ({ value, text: value }));
+  const categoryOptions = CATEGORY_OPTIONS.map((category) => ({ value: category, text: category }));
 
   const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
