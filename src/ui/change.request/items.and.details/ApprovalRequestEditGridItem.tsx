@@ -80,8 +80,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rows={1}
             /> */}
             <KendoTextEditor
-              name="descriptionOfChange"
-              label="form.builder.description.of.change"
+              name="justificationOfChange"
+              label="form.builder.justification.of.change"
               placeholder="form.builder.enter"
               rules="required"
             />

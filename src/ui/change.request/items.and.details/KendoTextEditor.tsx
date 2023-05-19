@@ -26,16 +26,9 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   label,
   defaultValue,
 }) => {
-  // const formattedFormValue = formValue?.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, '<p><br></p>');
-  // const classes = styles();
-  /* <div className={classes.marginBStyle}
-            style={{ width: '100%', height: '100%' }}
-            dangerouslySetInnerHTML={{ __html: formattedFormValue }}
-          /> */
-  console.log('MDF', name);
   const { formState } = FB.useStores();
   const formik = useFormikContext();
-  defaultValue = defaultValue || formState?.getFieldValue(name);
+  defaultValue = defaultValue ?? formState?.getFieldValue(name);
   const [textEditorValue, setTextEditorValue] = useState<string>(defaultValue);
 
   const onBlur = (evt: TextAreaBlurEvent) => {
