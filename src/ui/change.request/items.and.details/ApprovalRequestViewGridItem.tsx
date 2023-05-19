@@ -125,7 +125,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={descriptionOfChange} childrenElement={getRenderChildrenElement(justificationOfChange)} />
+          <Tooltip showTooltip={true} data={descriptionOfChange} childrenElement={getRenderChildrenElement(descriptionOfChange)} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip showTooltip={true} data={justificationOfChange} childrenElement={getRenderChildrenElement(justificationOfChange)} />
