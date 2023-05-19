@@ -7,7 +7,8 @@ import { withFBApprovalMatrix } from './wrap';
 import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
 import { translate } from '../../../common/intl';
 import { IconButton } from '../../components/forms/fields-next';
-import FullscreenIcon from '@material-ui/icons/FullscreenRounded';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
@@ -78,7 +79,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           data-cy="button-fullscreen"
           onClick={handleFullscreenClick}
         >
-          <FullscreenIcon />
+          <FontAwesomeIcon icon={solid('expand')} />
         </IconButton>
       </StyleTooltip>
       {renderTable()}
