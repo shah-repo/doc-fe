@@ -4,8 +4,6 @@ import { GridProps } from './components/Grid/types';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
-import { useSelector } from 'react-redux';
-import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
 import { translate } from '../../../common/intl';
 import { IconButton } from '../../components/forms/fields-next';
@@ -19,12 +17,9 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
-  const documentTypeCategories = useSelector(documentTypeSelectors.getDocumentTypeCategoryList);
-
   const schema = createSchema({
     data,
     withoutStatus,
-    documentTypeCategories,
     clearRightBorderClassName: classes.clearRightBorder,
     cellARClassName: classes.cellAR,
     cellARHeaderClassName: classes.cellARHeader,
