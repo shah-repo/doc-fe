@@ -49,7 +49,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
           <TextArea
             defaultValue={textEditorValue}
             onBlur={onBlur}
-            style={{ width: '100%' }}
+            className={classes.textArea}
             rows={4}
           />
           {!textEditorValue && <span className={classes.error}>

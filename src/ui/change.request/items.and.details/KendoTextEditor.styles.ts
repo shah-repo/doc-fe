@@ -18,5 +18,12 @@ export default makeStyles(() =>
       'line-clamp': 4,
       '-webkit-box-orient': 'vertical',
     },
+    textArea: {
+      width: '100%',
+      '&:hover, &:focus, &:active': {
+        outline: 'none',
+        border: `1px solid ${Colors.statusDraft}`,
+      },
+    },
   }),
 );
