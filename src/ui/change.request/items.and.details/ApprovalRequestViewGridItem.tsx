@@ -1,10 +1,14 @@
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
+import Tooltip from '../../components/common/kendo/Tooltip';
+import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
@@ -12,16 +16,11 @@ import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
 
-import { Link } from 'react-router-dom';
-import { documentVersionPath } from '../../document.revision/utils/paths';
-
-import InfoIcon from '@material-ui/icons/Info';
-
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
-  entry: ApprovalRequestGridItem;
-  editItem: () => void;
-  handleRemove: (docRevId: string) => void;
-  viewItemActionsVisible: boolean;
+  entry: ApprovalRequestGridItem
+  editItem: () => void
+  handleRemove: (docRevId: string) => void
+  viewItemActionsVisible: boolean
 }> = ({
   entry,
   editItem,
@@ -36,8 +35,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
-  const [docRelatedParts, setDocRelatedParts] =
-    useState<{revId: string; titleText: string; documentId: string; revisionChangeType?: RevisionChangeType}[]>([]);
+  const [docRelatedParts, setDocRelatedParts]
+    = useState<Array<{revId: string, titleText: string, documentId: string, revisionChangeType?: RevisionChangeType}>>([]);
   const [isExpanded, setExpanded] = useState(false);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
@@ -45,7 +44,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     url: FBEndpoint.FetchAutocompleteValue,
     values: { id: docRevId, optionId: FBAutocompleteAsyncOption.DRAFTdocumentRevisions },
   });
-
 
   const getRelatedParts = async (documentRevisionId, displayRevision) => {
     // get the related parts for this document.
@@ -67,7 +65,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       setDocRelatedParts(childrenDetails);
     }
   };
-
 
   const getDocumentDetails = async () => {
     if (!documentId) {
@@ -106,9 +103,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
           {
-            docRelatedParts.length > 0 &&
-            <span className={cx(classes.iconClass, 'iconClass')} onClick={toggleItem}>
-              <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
+            docRelatedParts.length > 0
+            && <span className={cx(classes.iconClass, 'iconClass')} onClick={toggleItem}>
+              <ChevronRightIcon fontSize="small" className={classes.showMoreIcon} />
             </span>
           }
           { docRevDocumentId && <Link
@@ -124,16 +121,16 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <span>{descriptionOfChange}</span>
+          <Tooltip showTooltip={true} data={descriptionOfChange} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <span>{justificationOfChange}</span>
+          <Tooltip showTooltip={true} data={justificationOfChange} />
         </div>
       </div>
       {
-        docRelatedParts.length > 0 && isExpanded &&
-        <div className={cx(classes.moreDetails, classes.fullWidth)}>
-          <hr className={classes.separator}/>
+        docRelatedParts.length > 0 && isExpanded
+        && <div className={cx(classes.moreDetails, classes.fullWidth)}>
+          <hr className={classes.separator} />
           <h4 className={classes.moreDetailsHeader}>Related Parts</h4>
           <ul className={classes.docList}>
             {

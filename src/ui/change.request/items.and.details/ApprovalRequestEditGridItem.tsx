@@ -5,19 +5,20 @@ import cx from 'classnames';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from '../../form.builder';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
+import KendoTextEditor from './KendoTextEditor';
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
-  disabledOptions: string[];
-  formState: FBFormState;
-  addRevisionToChangeRequest: () => void;
-  resetAndCancelEdit?: () => void;
-  showAutoComplete? : boolean;
-  titleText?: string;
-  handleRemove?: (docRevId: string) => void;
-  entry?: ApprovalRequestGridItem;
+  disabledOptions: string[]
+  formState: FBFormState
+  addRevisionToChangeRequest: () => void
+  resetAndCancelEdit?: () => void
+  showAutoComplete?: boolean
+  titleText?: string
+  handleRemove?: (docRevId: string) => void
+  entry?: ApprovalRequestGridItem
 }> = ({
   disabledOptions,
   formState,
@@ -38,8 +39,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
         <div className={cx(classes.itemRow, classes.editItemRow)}>
           <div className={cx(classes.cellOne, classes.hiddenLegend)}>
-            { showAutoComplete &&
-              <FBAutocompleteAsync
+            { showAutoComplete
+              && <FBAutocompleteAsync
                 name="proposedDocumentRevision"
                 label="form.builder.document"
                 placeholder="form.builder.select"
@@ -54,35 +55,48 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <FBTextField
+            {/* <FBTextField
               name="descriptionOfChange"
               label="form.builder.description.of.change"
               placeholder="form.builder.enter"
               rules="required"
               multiline={true}
               rows={1}
+            /> */}
+            <KendoTextEditor
+              name="descriptionOfChange"
+              label="form.builder.description.of.change"
+              placeholder="form.builder.enter"
+              rules="required"
             />
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <FBTextField
+            {/* <FBTextField
               name="justificationOfChange"
               label="form.builder.justification.of.change"
               placeholder="form.builder.enter"
               rules="required"
               multiline={true}
               rows={1}
+            /> */}
+            <KendoTextEditor
+              name="descriptionOfChange"
+              label="form.builder.description.of.change"
+              placeholder="form.builder.enter"
+              rules="required"
             />
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
           { showDeleteButton && <Button className={classes.actionButton}>
             <DeleteIcon className={classes.iconButton}
-              onClick={() =>  {
+              onClick={() => {
                 resetAndCancelEdit?.();
-                handleRemove?.(entry?.docRevId as string); }}/>
+                handleRemove?.(entry?.docRevId as string);
+              }} />
           </Button> }
           <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
-            <ClearIcon className={classes.iconButton}/>
+            <ClearIcon className={classes.iconButton} />
           </Button>
           <Button data-cy="doneRecord"
             className={cx(classes.actionButton, classes.actionButtonDone)} onClick = {addRevisionToChangeRequest}>
