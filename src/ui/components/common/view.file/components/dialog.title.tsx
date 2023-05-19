@@ -1,9 +1,9 @@
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import React from "react";
-import { Attachment } from "../../../../../state/ducks/attachments/types";
-import { styles } from "../utils/styles";
-import { ViewFileTitleProps } from "../utils/types";
-import ViewFileTitleControls from "./dialog.controls";
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import React from 'react';
+import { Attachment } from '../../../../../state/ducks/attachments/types';
+import { styles } from '../utils/styles';
+import { ViewFileTitleProps } from '../utils/types';
+import ViewFileTitleControls from './dialog.controls';
 
 const ViewFileTitle: React.FunctionComponent<ViewFileTitleProps> = ({
   attachment,

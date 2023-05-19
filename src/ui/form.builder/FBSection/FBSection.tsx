@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBSectionProps, FBText } from "..";
-import Colors from "../../layout/theme/utils/colors";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBSectionProps, FBText } from '..';
+import Colors from '../../layout/theme/utils/colors';
 
 const FBSection: React.FunctionComponent<FBSectionProps> = ({
   label,
@@ -33,8 +33,8 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
         <FBText
           locale={label as string}
           boxProps={{
-            component: "span",
-            style: { float: "left" },
+            component: 'span',
+            style: { float: 'left' },
           }}
           {...{ loading }}
         />

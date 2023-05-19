@@ -1,5 +1,5 @@
-import { ApplicationState } from "../../../reducers";
-import { AsyncState } from "../../../types";
+import { ApplicationState } from '../../../reducers';
+import { AsyncState } from '../../../types';
 
 const myFeedsList = (state: ApplicationState) =>
   state.dashboardNew.myFeeds.myFeedsList;

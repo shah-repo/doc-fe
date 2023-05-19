@@ -1,18 +1,18 @@
-import { MenuItem } from "@material-ui/core";
-import cx from "classnames";
-import { template } from "lodash";
-import React from "react";
-import { Link } from "react-router-dom";
-import useStyles from "./HelpCenterExternalLink.styles";
+import { MenuItem } from '@material-ui/core';
+import cx from 'classnames';
+import { template } from 'lodash';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import useStyles from './HelpCenterExternalLink.styles';
 
 const getCurrentEnvName = (position = 2) => {
-  const hostParts = window?.location?.host.split(".").reverse();
+  const hostParts = window?.location?.host.split('.').reverse();
   return hostParts[position];
 };
 
 const envUrl = (url: string) => {
   const envName = getCurrentEnvName();
-  const env = envName ? `${envName}.` : "";
+  const env = envName ? `${envName}.` : '';
   return template(url, { interpolate: /\{(.+?)\}/g })({ env });
 };
 

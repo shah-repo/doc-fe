@@ -1,21 +1,21 @@
-import { Typography } from "@material-ui/core";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import * as React from "react";
-import Select, { components, createFilter, StylesConfig, Theme } from "react-select";
-import { SelectComponentsProps } from "react-select/base";
-import { ValueType } from "react-select/src/types";
-import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
-import { TypographyProps } from "../../../../../state/ducks/common/types";
-import Text from "../../../../components/Text";
-import { styles as FBAutoCompleteStyles } from "../../../../form.builder/styles/FBAutocomplete.styles";
-import { Colors } from "../../../../layout/theme-next";
-import { useFormContext } from "../../FormContext";
-import Field, { FieldOwnProps } from "../Field";
-import { InputField } from "../Input.styles";
-import { OptionType } from "./types";
+import { Typography } from '@material-ui/core';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import * as React from 'react';
+import Select, { components, createFilter, StylesConfig, Theme } from 'react-select';
+import { SelectComponentsProps } from 'react-select/base';
+import { ValueType } from 'react-select/src/types';
+import { ReactComponent as DeleteIcon } from '../../../../../assets/images/circle-remove.svg';
+import { TypographyProps } from '../../../../../state/ducks/common/types';
+import Text from '../../../../components/Text';
+import { styles as FBAutoCompleteStyles } from '../../../../form.builder/styles/FBAutocomplete.styles';
+import { Colors } from '../../../../layout/theme-next';
+import { useFormContext } from '../../FormContext';
+import Field, { FieldOwnProps } from '../Field';
+import { InputField } from '../Input.styles';
+import { OptionType } from './types';
 
 interface AutocompleteOwnProps extends FieldOwnProps {
-  autocompleteProps: Omit<SelectComponentsProps, "onChange">;
+  autocompleteProps: Omit<SelectComponentsProps, 'onChange'>;
   options: OptionType[];
   onClick?: (value: any) => void;
   onChange?: (value: ValueType<OptionType>) => void;
@@ -30,22 +30,22 @@ export const selectStyles: StylesConfig = {
   }),
   multiValueRemove: (base) => ({
     ...base,
-    "&:hover": {
-      background: "transparent",
-      cursor: "pointer",
+    '&:hover': {
+      background: 'transparent',
+      cursor: 'pointer',
     },
   }),
   control: (base, state) => ({
     ...base,
-    "minHeight": "40px",
-    "boxShadow": "none",
-    "&:hover": {
+    'minHeight': '40px',
+    'boxShadow': 'none',
+    '&:hover': {
       background: !state.isFocused ? Colors.primaryHighlight : Colors.white,
     },
   }),
   placeholder: (base) => ({
     ...base,
-    letterSpacing: "normal",
+    letterSpacing: 'normal',
     color: Colors.textDisabled,
   }),
   menu: (provided) => ({
@@ -112,8 +112,8 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
       <Select
         {...fieldProps.field}
         {...autocompleteProps}
-        menuPlacement={portal ? "top" : "auto"}
-        menuPortalTarget={portal ? document.querySelector("body") : null}
+        menuPlacement={portal ? 'top' : 'auto'}
+        menuPortalTarget={portal ? document.querySelector('body') : null}
         options={options}
         onChange={onChange}
         styles={selectStyles}

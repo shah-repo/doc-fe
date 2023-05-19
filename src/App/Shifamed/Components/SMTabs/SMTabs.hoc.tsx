@@ -1,5 +1,5 @@
-import React from "react";
-import { DocumentRevisionFormState, SM, SMProvider, SMTabsHOCProps, SMTabsState } from "../../..";
+import React from 'react';
+import { DocumentRevisionFormState, SM, SMProvider, SMTabsHOCProps, SMTabsState } from '../../..';
 
 export const withSMTabs = <T extends SMTabsHOCProps>(
   Component: React.FunctionComponent<T>,
@@ -20,6 +20,6 @@ export const withSMTabs = <T extends SMTabsHOCProps>(
     );
   };
 
-  Comp.displayName = "withSMTabs";
+  Comp.displayName = 'withSMTabs';
   return Comp;
 };

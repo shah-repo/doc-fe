@@ -1,16 +1,16 @@
-import { Box, Button, Icon, Typography } from "@material-ui/core";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import { Form, Formik } from "formik";
-import { isEmpty } from "lodash";
-import React, { useState } from "react";
-import { ReactComponent as CloseIcon } from "../../../../assets/images/close_delete.svg";
-import { AsyncState } from "../../../../state/types";
-import { FormContext } from "../../../components/forms/FormContext";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import Text from "../../../components/Text";
-import { Translation } from "../../../translations/types";
-import styles from "./EditRemoveAddFields.styles";
+import { Box, Button, Icon, Typography } from '@material-ui/core';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import { Form, Formik } from 'formik';
+import { isEmpty } from 'lodash';
+import React, { useState } from 'react';
+import { ReactComponent as CloseIcon } from '../../../../assets/images/close_delete.svg';
+import { AsyncState } from '../../../../state/types';
+import { FormContext } from '../../../components/forms/FormContext';
+import FormMessage from '../../../components/forms/FormMessage';
+import FormProgress from '../../../components/forms/FormProgress';
+import Text from '../../../components/Text';
+import { Translation } from '../../../translations/types';
+import styles from './EditRemoveAddFields.styles';
 
 
 interface OwnProps {
@@ -59,13 +59,13 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   };
 
   const handleAdd = () => {
-    saveValues(values.concat([""]));
+    saveValues(values.concat(['']));
   };
 
   const handleOpenEdit = () => {
     toggleAdd(true);
     if (isEmpty(values)) {
-      saveValues(values.concat([""]));
+      saveValues(values.concat(['']));
     }
   };
 
@@ -153,7 +153,7 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
             className={classes.addButton}
           >
             {(isAdding || isEmpty(values)) &&
-              <Icon style={{ marginRight: "10px" }}>
+              <Icon style={{ marginRight: '10px' }}>
                 <AddCircleOutlineOutlinedIcon />
               </Icon>
             }

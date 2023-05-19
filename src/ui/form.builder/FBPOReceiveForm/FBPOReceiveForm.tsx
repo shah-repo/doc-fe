@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBForm, FBPOReceiveFormProps, FBTextField } from "..";
-import { FormContext } from "../../components/forms/FormContext";
-import { withFBPOReceiveForm } from "./FBPOReceiveForm.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBForm, FBPOReceiveFormProps, FBTextField } from '..';
+import { FormContext } from '../../components/forms/FormContext';
+import { withFBPOReceiveForm } from './FBPOReceiveForm.wrap';
 
 
 const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
@@ -40,7 +40,7 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
       <Box display="flex" justifyContent="space-between">
         <Box width="100%" marginRight="10px">
           <FBTextField
-            inputProps={{ type: "number", min: "0" }}
+            inputProps={{ type: 'number', min: '0' }}
             defaultValue={item?.received}
             label="form.builder.quantity.received"
             name="received"

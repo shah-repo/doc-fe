@@ -1,12 +1,12 @@
-import { action, observable, set } from "mobx";
-import { FBSchemaProps } from "..";
+import { action, observable, set } from 'mobx';
+import { FBSchemaProps } from '..';
 
 class FBSchemaSelectState {
   @observable public show = false;
   @observable public schema: FBSchemaProps[] | undefined;
 
   @action public setSchema = (schema: FBSchemaProps[]) => {
-    set(this, "schema", schema);
+    set(this, 'schema', schema);
   };
 }
 

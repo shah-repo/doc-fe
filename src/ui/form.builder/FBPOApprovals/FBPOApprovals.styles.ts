@@ -1,11 +1,11 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 export default makeStyles((theme) => ({
   list: {
     background: Colors.white,
     border: `1px solid ${Colors.mild_wind_blue}`,
-    boxSizing: "border-box",
+    boxSizing: 'border-box',
     borderRadius: 4,
     marginTop: theme.spacing(1.25),
   },
@@ -33,7 +33,7 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(1.25, 1.25, 1.25, 1),
   },
   stateListItem: {
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   avatar: {
     width: 45,
@@ -47,21 +47,21 @@ export default makeStyles((theme) => ({
   stateInfo: {
     fontSize: 12,
     lineHeight: 1.7,
-    textAlign: "right",
+    textAlign: 'right',
     color: Colors.font_gray,
   },
   dateText: {
     color: Colors.font_gray,
   },
   stateText: {
-    fontWeight: "bold",
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
+    fontWeight: 'bold',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     color: Colors.almost_black,
   },
   nameText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 1.5,
     color: Colors.almost_black,
@@ -70,7 +70,7 @@ export default makeStyles((theme) => ({
     fontSize: 14,
     lineHeight: 1.5,
     color: Colors.font_gray,
-    overflowWrap: "anywhere",
+    overflowWrap: 'anywhere',
   },
   successIcon: {
     width: 14,
@@ -82,9 +82,9 @@ export default makeStyles((theme) => ({
     margin: theme.spacing(0, 0, 0, 1),
   },
   poRejectButton: {
-    "color": Colors.navy,
-    "backgroundColor": "transparent",
-    "&:hover": {
+    'color': Colors.navy,
+    'backgroundColor': 'transparent',
+    '&:hover': {
       backgroundColor: Colors.sky_blue,
     },
   },

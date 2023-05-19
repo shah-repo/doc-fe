@@ -1,9 +1,9 @@
-import { ListItem, withStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import { ListItem, withStyles } from '@material-ui/core';
+import Colors from '../../../layout/theme/utils/colors';
 
 const styles = () => ({
   root: {
-    "&:hover": {
+    '&:hover': {
       backgroundColor: Colors.sky_blue,
     },
   },

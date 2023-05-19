@@ -1,4 +1,4 @@
-import { Nullable, User } from "../common/types";
+import { Nullable, User } from '../common/types';
 
 export interface PasswordType {
   password: string;

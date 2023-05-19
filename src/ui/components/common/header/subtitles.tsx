@@ -1,19 +1,19 @@
-import { Link } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { concat, uniqBy } from "lodash";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { Link } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { concat, uniqBy } from 'lodash';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../../documentRevision/helpers/checkDocumentGroup';
 
-const LHR_SUBTITLE_PRECALC_KEY = "lshs_subtitle";
+const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
 
 const LABEL_LENGTH = 50;
 
 const styles = makeStyles({
   link: {
-    textDecoration: "none",
-    fontSize: "14px",
+    textDecoration: 'none',
+    fontSize: '14px',
   },
 });
 
@@ -41,7 +41,7 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
   const subtitle =
     uniqBy(
       concat(documentRevision?.smartReferencesTo, documentRevision?.document.smartReferencesTo),
-      "id"
+      'id'
     )
     ?.find((ref) => ref?.active && ref?.type === SmartReferenceType.HiddenPiInstance)
     ?.toDocRev

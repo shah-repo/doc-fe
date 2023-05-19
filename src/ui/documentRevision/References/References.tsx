@@ -1,22 +1,22 @@
-import { Box, Typography } from "@material-ui/core";
-import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { DocumentRevisionFooterNew } from "../../../App";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import ReferencedByContainer from "../../document.revision/summary/referencedBy.container.new";
-import ReferenceToContainer from "../../document.revision/summary/referenceTo.container.new";
-import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
-import { isOperator } from "../DocumentRevisionDisplay.container";
-import AvailableReferencesField from "../forms/presenters/AvailableReferences.new";
-import { toDocumentRevisionFormValues } from "../forms/transform";
-import { DocumentRevisionFormValues } from "../forms/types";
-import { isOwner } from "../helpers/documentRevisionPermissions";
-import UserAvatarListItem from "../Sidebar/common/UserAvatarListItem";
-import { styles } from "./References.styles";
-import { ReferencesProps } from "./types";
+import { Box, Typography } from '@material-ui/core';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { DocumentRevisionFooterNew } from '../../../App';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { authSelectors } from '../../../state/ducks/auth';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../components/Text';
+import ReferencedByContainer from '../../document.revision/summary/referencedBy.container.new';
+import ReferenceToContainer from '../../document.revision/summary/referenceTo.container.new';
+import useGetAvailableReferences from '../../hooks/useGetAvailableReferences';
+import { isOperator } from '../DocumentRevisionDisplay.container';
+import AvailableReferencesField from '../forms/presenters/AvailableReferences.new';
+import { toDocumentRevisionFormValues } from '../forms/transform';
+import { DocumentRevisionFormValues } from '../forms/types';
+import { isOwner } from '../helpers/documentRevisionPermissions';
+import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
+import { styles } from './References.styles';
+import { ReferencesProps } from './types';
 
 const References = ({
   selectedDocument,

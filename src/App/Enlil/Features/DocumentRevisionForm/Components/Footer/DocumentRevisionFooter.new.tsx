@@ -1,10 +1,10 @@
-import { Box, Typography } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React from "react";
-import { DocumentRevisionFooterProps, SMText } from "../../../../..";
-import { getFormattedDateString, MomentFormats } from "../../../../../../common/utils/date";
-import { styles } from "./DocumentRevisionFooter.new.styles";
-import { withDocumentRevisionFooterWrap } from "./DocumentRevisionFooter.wrap";
+import { Box, Typography } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { DocumentRevisionFooterProps, SMText } from '../../../../..';
+import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import { styles } from './DocumentRevisionFooter.new.styles';
+import { withDocumentRevisionFooterWrap } from './DocumentRevisionFooter.wrap';
 
 const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterProps> = ({
   _documentRevisionFooterState,
@@ -15,7 +15,7 @@ const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterP
       {() => (
         <Box
           pt={2.5}
-          display={_documentRevisionFooterState?.hidden ? "none" : "block"}
+          display={_documentRevisionFooterState?.hidden ? 'none' : 'block'}
         >
           <Typography className={classes.releaseDate}>
             <SMText label="output.info" />

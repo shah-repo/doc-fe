@@ -1,15 +1,15 @@
-import { useFormikContext } from "formik";
-import { filter, isEmpty, isEqual, map, omit } from "lodash";
-import React, { useContext } from "react";
-import { useSelector } from "react-redux";
-import { SM } from "../../../App";
-import { companySelectors } from "../../../state/ducks/company";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
-import { FBAutocompleteAsyncOption } from "../../form.builder";
-import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../form.builder/FBInput/FBInput.wrap";
-import { SubmitFormRelation } from "./FormContext.types";
+import { useFormikContext } from 'formik';
+import { filter, isEmpty, isEqual, map, omit } from 'lodash';
+import React, { useContext } from 'react';
+import { useSelector } from 'react-redux';
+import { SM } from '../../../App';
+import { companySelectors } from '../../../state/ducks/company';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, ReferenceToEditRequest } from '../../../state/ducks/documentRevisions/types';
+import { FBAutocompleteAsyncOption } from '../../form.builder';
+import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../form.builder/FBInput/FBInput.wrap';
+import { SubmitFormRelation } from './FormContext.types';
 
 export const FormContext = React.createContext({ submitOnChange: false });
 
@@ -30,28 +30,28 @@ export const useFormContext = () => {
   function setFBValue() {
     const values = formik.values as any;
     const workspaceSchema = _documentRevisionFormState?.schema;
-    const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
     switch (_formState?.mode) {
-      case "design":
-        formik.setFieldValue("formTemplate", {
+      case 'design':
+        formik.setFieldValue('formTemplate', {
           outputDocumentTypes: (values.outputDocumentTypes || [])
             .map((outputDoc) => ({ id: outputDoc.value }) ),
           schema,
         });
         break;
-      case "form":
-      case "formDesign":
-        formik.setFieldValue("formDocument", {
+      case 'form':
+      case 'formDesign':
+        formik.setFieldValue('formDocument', {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", omit(_formState.getValues(),
+        formik.setFieldValue('formInput', omit(_formState.getValues(),
           Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })));
-        if (_formState.mode === "formDesign" && isOutputSchema()) {
-          formik.setFieldValue("schema", schema);
+        if (_formState.mode === 'formDesign' && isOutputSchema()) {
+          formik.setFieldValue('schema', schema);
         }
         break;
       default:
-        formik.setFieldValue("formTemplate", undefined);
+        formik.setFieldValue('formTemplate', undefined);
     }
   }
 
@@ -60,13 +60,13 @@ export const useFormContext = () => {
     const { type, name, prevValue, nextValue } = relation;
     let prevDocument: DocumentRevision | undefined;
     let nextDocument: DocumentRevision | undefined;
-    if (relation.type === "poreceive") {
+    if (relation.type === 'poreceive') {
       if (prevValue) {
         prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
       }
       nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
     }
-    if (relation.type === "autocomplete" && relation.name === "lot_part") {
+    if (relation.type === 'autocomplete' && relation.name === 'lot_part') {
       prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.availableParts, prevValue);
       nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.availableParts, nextValue);
     }
@@ -88,7 +88,7 @@ export const useFormContext = () => {
       if (!isEmpty(refWithoutPrevValue)) {
         refValues = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
       }
-      formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      formik.setFieldValue('referenceTo', [...refValues, { id: nextValueId }]);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       _documentRevisionFormState.referenceValue = [...refValues, { id: nextValueId! }];
       return;
@@ -109,11 +109,11 @@ export const useFormContext = () => {
       refValues = filter(refValues, (ref) => ref.id !== prevValueId);
     }
     if (nextValueId) {
-      formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      formik.setFieldValue('referenceTo', [...refValues, { id: nextValueId }]);
       _documentRevisionFormState.referenceValue = [...refValues, { id: nextValueId }];
       return;
     }
-    formik.setFieldValue("referenceTo", refValues);
+    formik.setFieldValue('referenceTo', refValues);
   }
 
   const submitForm = (relation?: SubmitFormRelation) => {
@@ -126,7 +126,7 @@ export const useFormContext = () => {
         setFBValue();
       }
       if (relation) {
-        if (relation.type === "poreceive" || (relation.type === "autocomplete" && relation.name === "lot_part")) {
+        if (relation.type === 'poreceive' || (relation.type === 'autocomplete' && relation.name === 'lot_part')) {
           setReferences(relation);
         }
       }

@@ -1,16 +1,16 @@
-import { createStyles, Theme } from "@material-ui/core";
-import { CSSProperties } from "react";
-import Colors from "../../../layout/theme/utils/colors";
+import { createStyles, Theme } from '@material-ui/core';
+import { CSSProperties } from 'react';
+import Colors from '../../../layout/theme/utils/colors';
 
 export const lineItemStyles = (theme: Theme) => createStyles({
   inline: {
-    display: "inline",
+    display: 'inline',
   },
   link: {
-    "color": Colors.black,
-    "textDecoration": "none",
-    "&:hover": {
-      textDecoration: "underline",
+    'color': Colors.black,
+    'textDecoration': 'none',
+    '&:hover': {
+      textDecoration: 'underline',
     },
   },
   linkText: {
@@ -27,7 +27,7 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     fontSize: 12,
     color: Colors.white,
     fontWeight: 600,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   gridContainer: {
     paddingLeft: 16,
@@ -35,30 +35,30 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
   nested: {
     flexGrow: 1,
-    width: "auto",
+    width: 'auto',
     marginLeft: theme.spacing(4),
     paddingLeft: theme.spacing(3),
     borderLeft: `1px solid ${Colors.light_gray_blue}`,
-    cursor: "unset",
+    cursor: 'unset',
   },
   collapsedList: {
     backgroundColor: Colors.sky_blue,
   },
   listItem: {
     paddingLeft: 1,
-    cursor: "unset",
+    cursor: 'unset',
   },
   icon: {
     width: 15,
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   actionIcons: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: theme.spacing(0, 1.25),
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 0,
     bottom: 0,
@@ -71,10 +71,10 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     paddingTop: theme.spacing(.25),
   },
   cursorPointer: {
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   buttoncursor: {
-    cursor: "unset",
+    cursor: 'unset',
   },
   margin5: {
     marginRight: 5,
@@ -83,10 +83,10 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     marginRight: 7,
   },
   typography: {
-    "fontSize": 14,
-    "fontWeight": 400,
-    "& > p": { margin: 0 },
-    "letterSpacing": 0,
+    'fontSize': 14,
+    'fontWeight': 400,
+    '& > p': { margin: 0 },
+    'letterSpacing': 0,
   },
   typographyBold: {
     fontSize: 14,
@@ -98,40 +98,40 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     fontWeight: 700,
   },
   typographyStatus: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 1.1,
     letterSpacing: 0,
   },
   typographyAssigned: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 13,
     color: Colors.font_gray,
     letterSpacing: 0,
   },
   timestampContainer: {
-    fontWeight: "normal",
+    fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 1.85,
     letterSpacing: 0,
     color: Colors.font_gray,
   },
   truncateText: {
-    textOverflow: "ellipsis",
-    overflow: "hidden",
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   customTooltipWidth: {
     maxWidth: 500,
   },
   viewTooltipText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 1.25,
   },
   grayDot: {
     width: 4,
     height: 4,
-    position: "relative",
+    position: 'relative',
     background: Colors.font_gray,
   },
 });
@@ -140,7 +140,7 @@ export const grayDotStyles = (theme: Theme, additional?: CSSProperties ) => crea
   grayDot: {
     width: 4,
     height: 4,
-    position: "relative",
+    position: 'relative',
     background: Colors.font_gray,
     ...additional,
   },

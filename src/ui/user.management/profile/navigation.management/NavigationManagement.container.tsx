@@ -1,14 +1,14 @@
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { companyActions, companySelectors } from "../../../../state/ducks/company";
-import { Company } from "../../../../state/ducks/company/types";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useGetHasTag from "../../../hooks/useGetHasTag";
-import { toNavigationBodyValues, toNavigationIntialValues } from "../../utils/transform";
-import NavigationManagementPresenter from "./NavigationManagement.presenter";
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { companyActions, companySelectors } from '../../../../state/ducks/company';
+import { Company } from '../../../../state/ducks/company/types';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useGetHasTag from '../../../hooks/useGetHasTag';
+import { toNavigationBodyValues, toNavigationIntialValues } from '../../utils/transform';
+import NavigationManagementPresenter from './NavigationManagement.presenter';
 
 const NavigationManagementContainer: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();

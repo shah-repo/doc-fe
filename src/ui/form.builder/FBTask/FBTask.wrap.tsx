@@ -1,8 +1,8 @@
-import { filter, union } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBDialogState, FBTaskFormDescription, FBTaskProps, FBTaskState } from "..";
-import { FBTaskItem } from "./FBTask.types";
+import { filter, union } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBDialogState, FBTaskFormDescription, FBTaskProps, FBTaskState } from '..';
+import { FBTaskItem } from './FBTask.types';
 
 export const withFBTask = <T extends FBTaskProps>(
   Component: React.FunctionComponent<T>,
@@ -26,7 +26,7 @@ export const withFBTask = <T extends FBTaskProps>(
       document: { tasks: docTasks = [] } = {},
     } = workspaceState || {};
     const formValue: FBTaskItem[] = filter(union(crTasks, docTasks), (task) =>
-      task.fieldId === name && task.status !== "ABANDONED");
+      task.fieldId === name && task.status !== 'ABANDONED');
     taskState = FB.useRef(FBTaskState, formValue);
     dialogState = FB.useRef(FBDialogState);
     disabled = loading || disabled;
@@ -35,8 +35,8 @@ export const withFBTask = <T extends FBTaskProps>(
       taskState?.handleAddTask(Boolean(crId));
       const initialValues = taskState?.getTask(id);
       const title = initialValues ?
-        "form.builder.edit.implementation.task" :
-        "form.builder.add.implementation.task";
+        'form.builder.edit.implementation.task' :
+        'form.builder.add.implementation.task';
 
       dialogState?.config({
         open: Boolean(crId),
@@ -68,6 +68,6 @@ export const withFBTask = <T extends FBTaskProps>(
     });
   };
 
-  Comp.displayName = "withFBTask";
+  Comp.displayName = 'withFBTask';
   return Comp;
 };

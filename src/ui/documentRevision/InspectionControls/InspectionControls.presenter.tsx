@@ -1,14 +1,14 @@
-import { Button } from "@material-ui/core";
-import React from "react";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as FaiIcon } from "../../../assets/images/fai.svg";
-import Text from "../../components/Text";
-import { InspectionControlsPresenterProps } from "./InspectionControls.types";
-import InspectionDialog from "./InspectionDialog/InspectionDialog";
+import { Button } from '@material-ui/core';
+import React from 'react';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as FaiIcon } from '../../../assets/images/fai.svg';
+import Text from '../../components/Text';
+import { InspectionControlsPresenterProps } from './InspectionControls.types';
+import InspectionDialog from './InspectionDialog/InspectionDialog';
 
 /** Buttons for creating an inspection record - presenter.
  * @param onButtonClick Action executed when user clicks on FAI or Inspection button.
@@ -32,7 +32,7 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
       return (<StyledMenuListItem disabled={disabled} button alignItems="flex-start" onClick={onButtonClick}>
         <StyledMenuListIcon><FaiIcon/></StyledMenuListIcon>
         <StyledMenuListItemText
-          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          data-cy={'PreviewControlsContainer-inspection-FAI'}
           primary={<Text translation="document.revision.fai" />}
         />
       </StyledMenuListItem>
@@ -40,11 +40,11 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
     }
     return (<StyledButton
       color="primary"
-      data-cy={`PreviewControlsContainer-inspection-FAI`}
+      data-cy={'PreviewControlsContainer-inspection-FAI'}
       onClick={onButtonClick}
       {...{ disabled }}
     >
-      <Text translation={"document.revision.fai"} />
+      <Text translation={'document.revision.fai'} />
     </StyledButton>);
   };
 
@@ -56,11 +56,11 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
         <Button
           variant="outlined"
           color="secondary"
-          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          data-cy={'PreviewControlsContainer-inspection-FAI'}
           onClick={onButtonClick}
           {...{ disabled }}
         >
-          <Text translation={"document.revision.fai"} />
+          <Text translation={'document.revision.fai'} />
         </Button>
       )}
       <InspectionDialog { ...(props) } />

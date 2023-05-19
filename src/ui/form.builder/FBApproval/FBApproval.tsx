@@ -1,13 +1,13 @@
-import { Box } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ErrorIcon from "@material-ui/icons/Error";
-import { isEmpty } from "lodash";
-import React from "react";
-import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket, FBFieldName, FBInlineApprovalRole, FBInput, FBProvider, FBText } from "..";
-import { Employee } from "../../../state/ducks/company/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBApproval } from "./FBApproval.wrap";
+import { Box } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket, FBFieldName, FBInlineApprovalRole, FBInput, FBProvider, FBText } from '..';
+import { Employee } from '../../../state/ducks/company/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBApproval } from './FBApproval.wrap';
 
 const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   approvalState,

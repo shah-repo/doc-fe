@@ -1,7 +1,7 @@
-import { apiAction } from "../../factories";
-import { ApiAction } from "../../types";
-import { DASHBOARD_ROOT_URL, PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from "./constants";
-import { PendingAction, PendingActionsListAction, PendingActionsRemoveAction } from "./types";
+import { apiAction } from '../../factories';
+import { ApiAction } from '../../types';
+import { DASHBOARD_ROOT_URL, PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from './constants';
+import { PendingAction, PendingActionsListAction, PendingActionsRemoveAction } from './types';
 
 const pendingActionsList = (pendingActions: PendingAction[]): PendingActionsListAction => ({
   type: PENDING_ACTIONS_LIST,
@@ -10,7 +10,7 @@ const pendingActionsList = (pendingActions: PendingAction[]): PendingActionsList
 
 const loadPendingActionsList = (): ApiAction<PendingAction[]> => apiAction({
   url: `${DASHBOARD_ROOT_URL}`,
-  method: "get",
+  method: 'get',
   asyncType: PENDING_ACTIONS_LIST_ASYNC,
   onSuccess: (pendingActions, dispatch) => {
     dispatch(pendingActionsList(pendingActions));

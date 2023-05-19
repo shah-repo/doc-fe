@@ -1,13 +1,13 @@
-import { combineReducers } from "redux";
-import asyncReducer from "../../reducers/asyncReducer";
-import { SUPPLIER_SURVEY, SUPPLIER_SURVEY_ASYNC } from "./constants";
-import { SupplierSurveyAction, SupplierSurveyForm, SupplierSurveyState } from "./types";
+import { combineReducers } from 'redux';
+import asyncReducer from '../../reducers/asyncReducer';
+import { SUPPLIER_SURVEY, SUPPLIER_SURVEY_ASYNC } from './constants';
+import { SupplierSurveyAction, SupplierSurveyForm, SupplierSurveyState } from './types';
 
 export const SUPPLIER_SURVEY_DEFAULT_STATE: SupplierSurveyForm = {
-  createdAt: "",
-  updatedAt: "",
-  id: "",
-  token: "",
+  createdAt: '',
+  updatedAt: '',
+  id: '',
+  token: '',
   surveyFormDocumentRevision: {},
   surveySubmission: null,
 };

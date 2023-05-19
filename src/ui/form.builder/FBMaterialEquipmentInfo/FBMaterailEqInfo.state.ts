@@ -1,7 +1,7 @@
-import { computed } from "mobx";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import { MaterialAndEquipment } from "./FBMaterailEqInfo.types";
+import { computed } from 'mobx';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import { MaterialAndEquipment } from './FBMaterailEqInfo.types';
 
 class FBMaterailEqInfoState {
   private currentApi = new FBRequest<MaterialAndEquipment, null>(FBEndpoint.MaterialAndEquipment);
@@ -19,14 +19,14 @@ class FBMaterailEqInfoState {
 
   public fetchParentItems(id: string) {
     this.parentApi.set({
-      method: "get",
+      method: 'get',
       urlValues: { id },
     });
   }
 
   public fetchCurrentItems(id: string) {
     this.currentApi.set({
-      method: "get",
+      method: 'get',
       urlValues: { id },
     });
   }

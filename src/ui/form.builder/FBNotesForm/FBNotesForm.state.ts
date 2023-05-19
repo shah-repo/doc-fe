@@ -1,8 +1,8 @@
-import { union } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBNote, FBNoteByDocument, FBNoteItem } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { union } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { FBNote, FBNoteByDocument, FBNoteItem } from '..';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBNoteByDocument> {
   @observable public notes?: FBNoteItem[];
@@ -14,17 +14,17 @@ class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBN
   }
 
   @action public setNotes = (notes?: FBNoteItem[]) => {
-    set(this, "notes", notes);
+    set(this, 'notes', notes);
   };
 
   @action public setfiles = (files?: any[]) => {
-    set(this, "files", files);
+    set(this, 'files', files);
   };
 
   public onSuccess() {
     if (!this.data) { return; }
     switch (this.method) {
-      case "get": {
+      case 'get': {
         const fetchedData = this.data as FBNoteItem[];
         const data = fetchedData?.sort(function(a, b) {
           return (a.createdAt < b.createdAt) ? -1 : ((a.createdAt > b.createdAt) ? 1 : 0);
@@ -32,7 +32,7 @@ class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBN
         this.setNotes(data);
         break;
       }
-      case "post": {
+      case 'post': {
         this.setNotes(union(this.notes || [], [this.data as FBNoteItem]));
         break;
       }

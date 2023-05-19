@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { InputFieldType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { required, validator } from "../../components/forms/fields/validators";
-import { UIConfig } from "./types";
+import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { InputFieldType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { required, validator } from '../../components/forms/fields/validators';
+import { UIConfig } from './types';
 
 const useDescription = (
-  documentTypeId = "",
+  documentTypeId = '',
   isQms = false,
 ): UIConfig => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
@@ -13,7 +13,7 @@ const useDescription = (
 
   const config = documentType?.fieldsConfig?.[InputFieldType.DESCRIPTION];
   const isVisible = config?.visible ?? true;
-  const label = config?.label ?? "common.description";
+  const label = config?.label ?? 'common.description';
   const validation = config?.required ?? true ? validators : undefined;
   const tooltipConfig = {
     labelName: InputFieldType.DESCRIPTION,

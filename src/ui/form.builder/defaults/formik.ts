@@ -1,10 +1,10 @@
-import { Dictionary } from "lodash";
+import { Dictionary } from 'lodash';
 
 export const FBFormValues: Dictionary<any> = {
-  select: "",
-  checkbox: "",
-  radio: "",
-  textfield: "",
-  radiogroup: "",
-  texteditor: "",
+  select: '',
+  checkbox: '',
+  radio: '',
+  textfield: '',
+  radiogroup: '',
+  texteditor: '',
 };

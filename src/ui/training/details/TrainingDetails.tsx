@@ -1,12 +1,12 @@
-import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import React from "react";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { TrainingRecordQuery } from "../../../state/ducks/training/types";
-import Text from "../../components/Text";
-import { DialogHandler } from "../../hooks/useDialog";
-import ExportTrainingRecordToEmail from "../export.email/ExportTrainingRecordToEmail";
-import { styles } from "./styles";
+import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import React from 'react';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { TrainingRecordQuery } from '../../../state/ducks/training/types';
+import Text from '../../components/Text';
+import { DialogHandler } from '../../hooks/useDialog';
+import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
+import { styles } from './styles';
 
 interface Props {
   dialog: DialogHandler;
@@ -27,7 +27,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
         </IconButton>
         <DialogTitle>
           <Typography className={classes.dialogTitle}>
-            <Text translation={"common.training.record"}/>
+            <Text translation={'common.training.record'}/>
           </Typography>
         </DialogTitle>
         <DialogContent>

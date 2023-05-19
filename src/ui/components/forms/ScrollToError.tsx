@@ -1,5 +1,5 @@
-import { FormikErrors } from "formik";
-import React, { useEffect } from "react";
+import { FormikErrors } from 'formik';
+import React, { useEffect } from 'react';
 
 interface Props {
   errors: FormikErrors<any>;
@@ -17,7 +17,7 @@ const ScrollToError: React.FunctionComponent<Props> = ({
       const selector = `[id="field-${keys[0]}"]`;
       const errorElement = document.querySelector(selector) as HTMLElement;
 
-      errorElement && errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorElement && errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [errors, isSubmitting, isValidating]);
 

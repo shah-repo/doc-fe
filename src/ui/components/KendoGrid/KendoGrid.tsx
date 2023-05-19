@@ -1,12 +1,10 @@
-import { Grid } from "@material-ui/core";
-import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
+import { Grid } from '@material-ui/core';
+import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import {
   setExpandedState,
   setGroupIds,
-} from "@progress/kendo-react-data-tools";
+} from '@progress/kendo-react-data-tools';
 import {
-  Grid as KendoTable,
-  GridColumn as KendoColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -14,31 +12,32 @@ import {
   GridFilterCellProps,
   GridNoRecords,
   GridToolbar,
-} from "@progress/kendo-react-grid";
-import { cloneDeep, find, findIndex, map, set } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch } from "react-redux";
-import { AutoSizer, Size } from "react-virtualized";
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
-import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
-import { AsyncStatus, dropDownOptions } from "../../async.tasks/grid/helper";
-import { changeRequestStatusOption } from "../../change.request/utils/helpers";
-import { ColumnMenu } from "../../document.revision/grid/cell.templates/ColumnMenu";
-import { CompletedDateFilterTemplate } from "../../document.revision/grid/filter.template/CompletedDateFilterTemplate";
-import { DocumentTypeFilterTemplate } from "../../document.revision/grid/filter.template/DocumentTypeFilterTemplate";
-import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.template/DueOnDateFilterTemplate";
-import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
-import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
-import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
-import useDidMount from "../../hooks/useDidMount";
-import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
-import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
-import ColumnHeader from "../common/kendo/ColumnHeader";
-import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
+  GridColumn as KendoColumn,
+} from '@progress/kendo-react-grid';
+import { cloneDeep, find, findIndex, map, set } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { AutoSizer, Size } from 'react-virtualized';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
+import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
+import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
+import { changeRequestStatusOption } from '../../change.request/utils/helpers';
+import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
+import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
+import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
+import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
+import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
+import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
+import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
+import useDidMount from '../../hooks/useDidMount';
+import { DropdownFilterTemplate } from '../common/kendo.column.templates/DropdownFilterTemplate';
+import { RenderCustomCell } from '../common/kendo.column.templates/RenderCellTemplate';
+import ColumnHeader from '../common/kendo/ColumnHeader';
+import ColumnShowHideMenu from '../common/kendo/ColumnShowHideMenu';
 import {
   DisplayText,
   hideColumnTitleOnResize,
@@ -47,15 +46,15 @@ import {
   pagerSettings,
   setColumnWidth,
   TranslatedText,
-} from "../common/kendo/helpers";
-import NoDataFound from "../common/kendo/NoDataFound";
-import { KendoColumn as KendoColumnProps } from "../common/kendo/types";
-import KendoGlobalization from "../KendoGlobalization";
-import { toastError } from "../notifications";
-import ClearFilters from "../table/ClearFilters";
-import { DataLoader } from "./DataLoader";
-import { KendoGridFilterCell, KendoGridProps } from "./interfaces";
-import KendoGridStyles from "./KendoGrid.styles";
+} from '../common/kendo/helpers';
+import NoDataFound from '../common/kendo/NoDataFound';
+import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
+import { toastError } from '../notifications';
+import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
+import ClearFilters from '../table/ClearFilters';
+import { DataLoader } from './DataLoader';
+import { KendoGridFilterCell, KendoGridProps } from './interfaces';
+import KendoGridStyles from './KendoGrid.styles';
 
 export function KendoGrid<T extends any>({
   tableName,
@@ -116,15 +115,15 @@ export function KendoGrid<T extends any>({
       const updatedFilters = map(updatedDataState.filter.filters, (filterObject: FilterDescriptor) => {
         if (
           [
-            "startswith",
-            "endswith",
-            "contains",
-            "doesnotcontain",
-            "isempty",
-            "isnotempty",
+            'startswith',
+            'endswith',
+            'contains',
+            'doesnotcontain',
+            'isempty',
+            'isnotempty',
           ].includes(filterObject.operator as string)
         ) {
-          filterObject.value = filterObject.value || "";
+          filterObject.value = filterObject.value || '';
         }
         return filterObject;
       });
@@ -163,10 +162,10 @@ export function KendoGrid<T extends any>({
     <DropdownFilterTemplate
       {...props}
       data={[
-        { value: true, text: getTranslatedText("common.active") },
-        { value: false, text: getTranslatedText("common.inactive") },
+        { value: true, text: getTranslatedText('common.active') },
+        { value: false, text: getTranslatedText('common.inactive') },
       ]}
-      defaultItem={{ value: "", text: getTranslatedText("common.all") }}
+      defaultItem={{ value: '', text: getTranslatedText('common.all') }}
     />
   );
 
@@ -231,7 +230,7 @@ export function KendoGrid<T extends any>({
   const StateFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
-      data={map(changeRequestStatusOption(), "value") as ChangeRequestStatus[]}
+      data={map(changeRequestStatusOption(), 'value') as ChangeRequestStatus[]}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
       })}
@@ -307,7 +306,7 @@ export function KendoGrid<T extends any>({
                   showTooltip: column.showTooltip,
                   tooltipField: column.tooltipField,
                 },
-                column.cell || ""
+                column.cell || ''
               ); }
             }
             filterCell={
@@ -330,7 +329,7 @@ export function KendoGrid<T extends any>({
         )
     );
   const clearFilter = () => {
-    set(dataState, "filter.filters", []);
+    set(dataState, 'filter.filters', []);
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -358,7 +357,7 @@ export function KendoGrid<T extends any>({
   const onColumnShowHide = ({ field }) => {
     const isGrouped = findIndex(dataState.group, { field });
     if (isGrouped > -1) {
-      toastError(getTranslatedText("common.no.hide"));
+      toastError(getTranslatedText('common.no.hide'));
       return;
     }
     const dataColumns = map(columns, (column) => {
@@ -421,61 +420,61 @@ export function KendoGrid<T extends any>({
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
-      <KendoGlobalization>
-        <KendoTable
-          style={{ width: `${width}px` }}
-          className={classes.grid}
-          filterable={true}
-          sortable={true}
-          pageable={pagerSettings}
-          groupable={true}
-          reorderable={true}
-          resizable={true}
-          {...dataState}
-          data={result}
-          total={records.total}
-          onDataStateChange={dataStateChange}
-          onExpandChange={onExpandChange}
-          expandField="expanded"
-          onColumnResize={onColumnResize}
-          onColumnReorder={onColumnReorder}
-        >
-          <GridToolbar>
-            <Grid container>
-              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
-                <ClearFilters {...{ clearFilter }} />
-              </Grid>
-              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-                <ColumnShowHideMenu
-                  columnDefinition={columns}
-                  onChange={onColumnShowHide}
-                />
-              </Grid>
+      <StyledKendoGrid
+        style={{ width: `${width}px` }}
+        rowHeight={40}
+        className={classes.grid}
+        filterable={true}
+        sortable={true}
+        pageable={pagerSettings}
+        groupable={true}
+        reorderable={true}
+        resizable={true}
+        {...dataState}
+        data={result}
+        total={records.total}
+        onDataStateChange={dataStateChange}
+        onExpandChange={onExpandChange}
+        expandField="expanded"
+        onColumnResize={onColumnResize}
+        onColumnReorder={onColumnReorder}
+        onRowClick={onRowClick}
+      >
+        <GridToolbar>
+          <Grid container>
+            <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
+              <ClearFilters {...{ clearFilter }} />
             </Grid>
-          </GridToolbar>
-          {renderKendoColumns(width)}
-          <GridNoRecords>{noDataMessage}</GridNoRecords>
-        </KendoTable>
+            <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
+              <ColumnShowHideMenu
+                columnDefinition={columns}
+                onChange={onColumnShowHide}
+              />
+            </Grid>
+          </Grid>
+        </GridToolbar>
+        {renderKendoColumns(width)}
+        <GridNoRecords>{noDataMessage}</GridNoRecords>
+      </StyledKendoGrid>
 
-        {dataState && (
-          <DataLoader
-            dataState={dataState}
-            onDataReceived={dataReceived}
-            schema={schema}
-            tableName={tableName}
-            queryUrl={queryUrl}
-            defaultPayloadData={defaultPayloadData}
-            documentTypeCategory={documentTypeCategory}
-            tableCriteria={tableCriteria}
-          />
-        )}
-      </KendoGlobalization>
+      {dataState && (
+        <DataLoader
+          dataState={dataState}
+          onDataReceived={dataReceived}
+          schema={schema}
+          tableName={tableName}
+          queryUrl={queryUrl}
+          defaultPayloadData={defaultPayloadData}
+          documentTypeCategory={documentTypeCategory}
+          tableCriteria={tableCriteria}
+        />
+      )}
     </>
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
     <div className={classes.kendoGridContainer}>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+      <div style={{ color: 'red' }}>{tableCriteria.apiError}</div>
       {renderBody()}
     </div>
   );

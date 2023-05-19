@@ -1,14 +1,14 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import { Link } from "react-router-dom";
-import Text from "../../../../../../ui/components/Text";
-import { HelpCenterItems, HelpCenterItemType, HelpCenterModuleData } from "../../HelpCenter.types";
-import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
-import HelpCenterOutLink from "../HelpCenterOutLink/HelpCenterOutLink";
-import HelpCenterHowToItem from "./components/HelpCenterHowToItem/HelpCenterHowToItem";
-import HelpCenterVideoItem from "./components/HelpCenterVideoItem/HelpCenterVideoItem";
-import HelpCenterWorkflowItem from "./components/HelpCenterWorkflowItem/HelpCenterWorkflowItem";
-import useStyles from "./HelpCenterList.styles";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Text from '../../../../../../ui/components/Text';
+import { HelpCenterItems, HelpCenterItemType, HelpCenterModuleData } from '../../HelpCenter.types';
+import HelpCenterExternalLink from '../HelpCenterExternalLink/HelpCenterExternalLink';
+import HelpCenterOutLink from '../HelpCenterOutLink/HelpCenterOutLink';
+import HelpCenterHowToItem from './components/HelpCenterHowToItem/HelpCenterHowToItem';
+import HelpCenterVideoItem from './components/HelpCenterVideoItem/HelpCenterVideoItem';
+import HelpCenterWorkflowItem from './components/HelpCenterWorkflowItem/HelpCenterWorkflowItem';
+import useStyles from './HelpCenterList.styles';
 
 const items = {
   [HelpCenterItemType.Video]: HelpCenterVideoItem,

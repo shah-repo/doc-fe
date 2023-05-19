@@ -1,6 +1,6 @@
-import React from "react";
-import { Redirect, Switch as ReactSwitch } from "react-router-dom";
-import { HOME_URL } from "../constants/urls";
+import React from 'react';
+import { Redirect, Switch as ReactSwitch } from 'react-router-dom';
+import { HOME_URL } from '../constants/urls';
 
 const Switch: React.FunctionComponent = ({ children }) => (
   <ReactSwitch>

@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { companyActions } from "../../../state/ducks/company";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useMqttSubscription from "../../hooks/useMqttSubscription";
+import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { companyActions } from '../../../state/ducks/company';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 
 const EmployeeListSockets: React.FunctionComponent = () => {
@@ -23,9 +23,9 @@ const EmployeeListSockets: React.FunctionComponent = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useMqttSubscription(`+/employee/+/created`, callback);
-  useMqttSubscription(`+/employee/+/updated`, callback);
-  useMqttSubscription(`+/employee/+/deleted`, callback);
+  useMqttSubscription('+/employee/+/created', callback);
+  useMqttSubscription('+/employee/+/updated', callback);
+  useMqttSubscription('+/employee/+/deleted', callback);
 
   return null;
 };

@@ -1,15 +1,15 @@
-import React from "react";
-import { useIntl } from "react-intl";
-import { connect } from "react-redux";
-import { Link, Redirect, RouteComponentProps } from "react-router-dom";
-import { logo } from "../../common/utils/helpers";
-import { authSelectors } from "../../state/ducks/auth";
-import { Employee } from "../../state/ducks/company/types";
-import { ApplicationState } from "../../state/reducers";
-import { toastInfo, toastSuccess } from "../components/notifications";
-import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from "../constants/urls";
-import LoginPresenter from "./Login.presenter";
-import SwitchCompanyContainer from "./SwitchCompany/SwitchCompany.container";
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
+import { logo } from '../../common/utils/helpers';
+import { authSelectors } from '../../state/ducks/auth';
+import { Employee } from '../../state/ducks/company/types';
+import { ApplicationState } from '../../state/reducers';
+import { toastInfo, toastSuccess } from '../components/notifications';
+import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from '../constants/urls';
+import LoginPresenter from './Login.presenter';
+import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -20,7 +20,7 @@ interface StateProps {
   isScheduledForDeletion: boolean;
 }
 
-export type LoginContainerProps = StateProps & Pick<RouteComponentProps, "location">;
+export type LoginContainerProps = StateProps & Pick<RouteComponentProps, 'location'>;
 
 const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
   const { from } = props.location.state || { from: { pathname: HOME_URL } };
@@ -44,7 +44,7 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
     props.isScheduledForDeletion &&
     toastSuccess(
       <div>
-        {intl.formatMessage({ id: "toast.notification.deletion" })}
+        {intl.formatMessage({ id: 'toast.notification.deletion' })}
         <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
       </div>,
       { autoClose: 15000 });

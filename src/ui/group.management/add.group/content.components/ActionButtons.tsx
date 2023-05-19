@@ -1,8 +1,8 @@
-import { Button, Grid } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React from "react";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
-import Text from "../../../components/Text";
+import { Button, Grid } from '@material-ui/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { GroupRequestBody } from '../../../../state/ducks/groupManagement/types';
+import Text from '../../../components/Text';
 
 interface Props {
   handleReset: () => void;
@@ -36,7 +36,7 @@ const ActionButtons: React.FunctionComponent<Props> = ({
     </Button>
   );
   return (
-    <Grid item={true} style={{ textAlign: "right" }}>
+    <Grid item={true} style={{ textAlign: 'right' }}>
       {isCreateMode && resetButtonRenderer()}
       {submitButtonRenderer()}
     </Grid>

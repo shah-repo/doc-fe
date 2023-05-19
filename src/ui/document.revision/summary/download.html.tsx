@@ -1,48 +1,49 @@
-import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog } from "@material-ui/core";
-import React from "react";
-import { useIntl } from "react-intl";
-import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as DownloadHTMLIcon } from "../../../assets/images/download_html.svg";
-import { attachmentsActions } from "../../../state/ducks/attachments";
-import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
-import { PDF } from "../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../state/types";
-import AsyncButton from "../../components/AsyncButton";
-import ViewFileContent from "../../components/common/view.file/components/dialog.content";
-import { styles } from "../../components/common/view.file/utils/styles";
-import { toastError } from "../../components/notifications";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog } from '@material-ui/core';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as DownloadHTMLIcon } from '../../../assets/images/download_html.svg';
+import { attachmentsActions } from '../../../state/ducks/attachments';
+import { AttachmentDownloadResponse } from '../../../state/ducks/attachments/types';
+import { PDF } from '../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../state/types';
+import AsyncButton from '../../components/AsyncButton';
+import Text from '../../components/Text';
+import ViewFileContent from '../../components/common/view.file/components/dialog.content';
+import { styles } from '../../components/common/view.file/utils/styles';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
 
 interface Props {
-  pdf?: PDF;
-  renderAsButton?: boolean;
-  isPO?: boolean;
+  pdf?: PDF
+  renderAsButton?: boolean
+  isPO?: boolean
+  docRevId?: string
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
-  pdf, renderAsButton, isPO,
+  pdf, renderAsButton, isPO, docRevId,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const dialog = useDialog();
-  const [URL, setURL] = React.useState<string>("");
+  const [URL, setURL] = React.useState<string>('');
   const classes = styles({ isPDF: true });
 
-  const action = useActionCreator(attachmentsActions.getAssetUrl);
+  const action = useActionCreator(isPO ? attachmentsActions.getPOUrl : attachmentsActions.getAssetUrl);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
-      setURL(downloadInfo?.url || "");
+      setURL(downloadInfo?.url || '');
       dialog.open();
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: "document.revision.download.pdf.error" }));
+      toastError(intl.formatMessage({ id: 'document.revision.download.pdf.error' }));
     },
   });
 
@@ -51,7 +52,7 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
   }
 
   const handleClick = () => {
-    async.start(action, pdf.s3Url, async);
+    async.start(action, pdf.s3Url, docRevId, async);
   };
 
   let button: React.ReactElement | null = null;
@@ -64,13 +65,13 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
       : (
         <StyledMenuListItem disabled={isActive} button alignItems="flex-start" onClick={handleClick}>
           <StyledMenuListIcon>
-            {isPO ?
-              <FontAwesomeIcon icon={regular("file-lines")} className={classes.icon}/>
-              : <DownloadHTMLIcon/>}
+            {isPO
+              ? <FontAwesomeIcon icon={regular('file-lines')} className={classes.icon} />
+              : <DownloadHTMLIcon />}
           </StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="downloadHtml"
-            primary={<Text translation={ isPO ?  "common.view.pdf" : "common.download.html"} />}
+            primary={<Text translation={ isPO ? 'common.view.pdf' : 'common.download.html'} />}
           />
         </StyledMenuListItem>
       );
@@ -96,13 +97,13 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
         classes={{
           paper: classes.paper,
         }}
-        maxWidth={"lg"}
+        maxWidth="lg"
         fullWidth={true}
       >
         <ViewFileContent
           asyncState={async.asyncState}
           url={URL}
-          type={"PDF"}
+          type="PDF"
           handleClose={dialog.close}
         />
       </Dialog>

@@ -1,16 +1,16 @@
-import Button, { ButtonProps } from "@material-ui/core/Button";
-import React from "react";
-import { SM } from "../../../../App";
-import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
-import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest/types";
-import { AsyncStatus } from "../../../../state/types";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import SubmitButton from "../../../components/forms/SubmitButton";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
+import Button, { ButtonProps } from '@material-ui/core/Button';
+import React from 'react';
+import { SM } from '../../../../App';
+import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { changeRequestsActions } from '../../../../state/ducks/changeRequest';
+import { ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
+import { AsyncStatus } from '../../../../state/types';
+import FormMessage from '../../../components/forms/FormMessage';
+import FormProgress from '../../../components/forms/FormProgress';
+import SubmitButton from '../../../components/forms/SubmitButton';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
 
 interface Props {
   transition: ChangeRequestTransition;
@@ -38,7 +38,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
         async.start(
           applyTransition,
           changeRequestId,
-          { password: "" },
+          { password: '' },
           transition,
           async,
         );

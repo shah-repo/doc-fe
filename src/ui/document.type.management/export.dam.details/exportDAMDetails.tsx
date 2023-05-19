@@ -1,12 +1,12 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { DialogHandler } from "../../hooks/useDialog";
-import { styles } from "./exportDAMDetails.styles";
+import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { ReactComponent as ExportIcon } from '../../../assets/images/icon_export_data.svg';
+import { documentTypeActions } from '../../../state/ducks/documentRevisions/documentType';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { DialogHandler } from '../../hooks/useDialog';
+import { styles } from './exportDAMDetails.styles';
 
 interface Props {
   dialog: DialogHandler;
@@ -16,15 +16,15 @@ const ExportDAMDetails: React.FunctionComponent<Props> = ({
   dialog,
 }) => {
   const classes = styles();
-  const [fileName, saveFileName] = useState("template");
+  const [fileName, saveFileName] = useState('template');
 
   const loadAction = useActionCreator(documentTypeActions.getApprovalMatrixNco);
   const async = useAsync({
     onSuccess: (response) => {
       const jsonData = JSON.stringify(response);
       const dataStr = `data:text/json;charset=utf-8, ${encodeURIComponent(jsonData)}`;
-      const anchor = document.createElement("a");
-      anchor.style.display = "none";
+      const anchor = document.createElement('a');
+      anchor.style.display = 'none';
       document.body.appendChild(anchor);
       anchor.download = `${fileName}.json`;
       anchor.href = dataStr;
@@ -35,7 +35,7 @@ const ExportDAMDetails: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (dialog.isOpen) {
-      saveFileName("");
+      saveFileName('');
     }
   }, [dialog.isOpen]);
 
@@ -56,7 +56,7 @@ const ExportDAMDetails: React.FunctionComponent<Props> = ({
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"
-          PaperProps={{ id: "exportListDialog" }}
+          PaperProps={{ id: 'exportListDialog' }}
         >
           <DialogContent>
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">

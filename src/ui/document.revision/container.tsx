@@ -1,26 +1,26 @@
-import queryString from "query-string";
-import React from "react";
-import { connect } from "react-redux";
-import { Route } from "react-router-dom";
+import queryString from 'query-string';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 import {
   documentRevisionsActions,
   documentRevisionsSelectors,
-} from "../../state/ducks/documentRevisions";
-import { ApplicationState } from "../../state/reducers";
-import Switch from "../app/Switch";
+} from '../../state/ducks/documentRevisions';
+import { ApplicationState } from '../../state/reducers';
+import Switch from '../app/Switch';
 import {
   DOCUMENT_REVISION_DETAILS_URL,
   DOCUMENT_REVISION_NEW_VERSION_URL,
   DOCUMENT_REVISION_OUTPUT_URL,
   DOCUMENT_REVISION_VERSION_URL,
-} from "../constants/urls";
-import DocumentRevisionManagerContainer from "../documentRevision/DocumentRevisionsManager.container";
+} from '../constants/urls';
+import DocumentRevisionManagerContainer from '../documentRevision/DocumentRevisionsManager.container';
 import {
   ContainerDispatchProps,
   ContainerOwnProps,
   ContainerProps,
   ContainerStateProps,
-} from "./utils/types";
+} from './utils/types';
 
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;

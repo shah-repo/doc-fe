@@ -1,9 +1,9 @@
-import { InputAdornment } from "@material-ui/core";
-import React from "react";
-import { FBConditionalWrapper, FBEditor, FBEditorProps, FBTextField } from "..";
-import Text from "../../components/Text";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import { InputAdornment } from '@material-ui/core';
+import React from 'react';
+import { FBConditionalWrapper, FBEditor, FBEditorProps, FBTextField } from '..';
+import Text from '../../components/Text';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
   children,

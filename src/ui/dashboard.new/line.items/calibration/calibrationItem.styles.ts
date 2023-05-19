@@ -1,6 +1,6 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
-import { grayDotStyles, lineItemStyles } from "../common/styles";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../../layout/theme/utils/colors';
+import { grayDotStyles, lineItemStyles } from '../common/styles';
 
 export default makeStyles((theme) => ({
   ...lineItemStyles(theme),
@@ -10,7 +10,7 @@ export default makeStyles((theme) => ({
     marginRight: 5,
   }),
   dueOn: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 13,
     lineHeight: 1.25,
     color: Colors.font_gray,

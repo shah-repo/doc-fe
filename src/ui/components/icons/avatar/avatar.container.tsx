@@ -1,7 +1,7 @@
-import React from "react";
-import { Nullable } from "../../../../state/ducks/common/types";
-import AvatarPresenter from "./avatar.presenter";
-import { getInitalsFromName } from "./helpers";
+import React from 'react';
+import { Nullable } from '../../../../state/ducks/common/types';
+import AvatarPresenter from './avatar.presenter';
+import { getInitalsFromName } from './helpers';
 
 interface OwnProps {
   avatar: string | null;

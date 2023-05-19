@@ -1,14 +1,14 @@
-import { get, some, sortBy } from "lodash";
-import { createSelector } from "reselect";
-import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
-import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
-import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
-import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { ApplicationState } from "../../reducers";
-import { AsyncState } from "../../types";
-import { Audit, AuditGroupType } from "../audit/types";
-import { DocumentRevisionStatus } from "./types";
+import { get, some, sortBy } from 'lodash';
+import { createSelector } from 'reselect';
+import { stripTags, stripTagsFromObject } from '../../../common/utils/helpers';
+import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
+import { DocumentRevisionFormValues } from '../../../ui/documentRevision/forms/types';
+import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from '../../../ui/documentRevision/helpers/documentRevisionStatus';
+import { ApplicationState } from '../../reducers';
+import { AsyncState } from '../../types';
+import { Audit, AuditGroupType } from '../audit/types';
+import { DocumentRevisionStatus } from './types';
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -33,7 +33,7 @@ const getDocumentRevision = (
 const getDocument = (state: ApplicationState, documentId: string) =>
   documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
-  get(documentsById(state)[documentId], "documentRevisions", []);
+  get(documentsById(state)[documentId], 'documentRevisions', []);
 
 const getAudit = (
   state: ApplicationState,
@@ -41,7 +41,7 @@ const getAudit = (
 ): AuditGroupType => auditsByCRId(state)[documentRevisionId];
 
 const getDocId = (state: ApplicationState, documentId: string) =>
-  get(documentsById(state)[documentId], "docId", "");
+  get(documentsById(state)[documentId], 'docId', '');
 
 const makeGetDocumentRevisions = () => createSelector(
   getDocumentRevisions,
@@ -125,7 +125,7 @@ const makeGetAudit = () => createSelector(
   (audits: AuditGroupType = {}) => {
     Object.keys(audits).forEach((groupId) => {
       audits[groupId].forEach((audit: Audit) => {
-        if (audit.field === "description") {
+        if (audit.field === 'description') {
           const html = audit.nextValue as string;
           audit.nextValue = stripTags(html).substring(0, 30);
         }

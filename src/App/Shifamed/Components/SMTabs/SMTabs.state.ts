@@ -1,7 +1,7 @@
-import { observable, action } from "mobx";
+import { observable, action } from 'mobx';
 
 export default class SMTabsState {
-  @observable public activeTabId = "";
+  @observable public activeTabId = '';
 
   @observable public isTabActive = (id: string) => this.activeTabId.toLowerCase() === id.toLowerCase();
 

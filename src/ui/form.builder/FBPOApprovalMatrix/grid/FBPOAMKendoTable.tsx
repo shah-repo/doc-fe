@@ -1,6 +1,6 @@
 import { process, State } from '@progress/kendo-data-query';
 import { setGroupIds } from '@progress/kendo-react-data-tools';
-import { Grid as KendoGrid, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from '@progress/kendo-react-grid';
+import { GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridDataStateChangeEvent, GridFilterCellProps, GridNoRecords } from '@progress/kendo-react-grid';
 import { find, findIndex, map, sortBy, startCase } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -12,7 +12,7 @@ import ColumnHeader from '../../../components/common/kendo/ColumnHeader';
 import { setColumnWidth } from '../../../components/common/kendo/helpers';
 import NoDataFound from '../../../components/common/kendo/NoDataFound';
 import { CustomGridCellProps, KendoColumn } from '../../../components/common/kendo/types';
-import KendoGlobalization from '../../../components/KendoGlobalization';
+import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import { POApprovalMatrixLevel, Signature } from '../FBPOApprovalMatrix.types';
 import { InputFilterCellTemplate } from './cell.template/InputFilterCellTemplate';
 import { SignatureCellTemplate } from './cell.template/SignatureCellTemplate';
@@ -111,7 +111,7 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
         {...column}
         title={startCase(getTranslatedText(column.title))}
         minResizableWidth={200}
-        cell={(props) => RenderCustomCell({ ...props, cellRowClick: isDocumentReleased ? null : onRowClick }, column.field)}
+        cell={(props) => RenderCustomCell({ ...props }, column.field)}
         filterCell={InputFilter}
         headerCell={
           column.title ? (props) => <ColumnHeader {...props} /> : undefined
@@ -139,30 +139,26 @@ const FBPOAMKendoTable: React.FunctionComponent<KendoTableProps> = ({
 
   const tableRenderer = ({ width }: Size) => (
     <>
-      <KendoGlobalization>
-        <KendoGrid
-          className={classes.root}
-          style={{ width: `${width}px` }}
-          data={resultState.data}
-          total={resultState.total}
-          pageable={false}
-          sortable={false}
-          filterable={true}
-          reorderable={false}
-          groupable={false}
-          onDataStateChange={onDataStateChange}
-          {...dataState}
-          expandField="expanded"
-          onColumnReorder={columnReorder}
-        >
-          {columnRenderer(width)}
-          <GridNoRecords>{ !resultState.total && <NoDataFound />}</GridNoRecords>
-        </KendoGrid>
-      </KendoGlobalization>
+      <StyledKendoGrid
+        className={classes.root}
+        style={{ width: `${width}px` }}
+        rowHeight={40}
+        data={resultState.data}
+        total={resultState.total}
+        filterable
+        onDataStateChange={onDataStateChange}
+        {...dataState}
+        expandField="expanded"
+        onColumnReorder={columnReorder}
+        onRowClick={isDocumentReleased ? undefined : onRowClick}
+      >
+        {columnRenderer(width)}
+        <GridNoRecords>{ !resultState.total && <NoDataFound />}</GridNoRecords>
+      </StyledKendoGrid>
     </>
   );
 
-  return (<AutoSizer style={{ height: 'auto' }}>{tableRenderer}</AutoSizer>);
+  return (<AutoSizer disableHeight>{tableRenderer}</AutoSizer>);
 };
 
 export default FBPOAMKendoTable;

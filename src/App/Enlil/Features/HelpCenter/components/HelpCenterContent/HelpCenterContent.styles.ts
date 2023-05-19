@@ -1,15 +1,15 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
   root: {
-    pointerEvents: "none",
+    pointerEvents: 'none',
   },
   container: {
-    justifyContent: "flex-end",
-    alignItems: "flex-start",
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
   },
   paper: {
-    pointerEvents: "auto",
+    pointerEvents: 'auto',
     maxWidth: theme.spacing(40),
   },
   close: {

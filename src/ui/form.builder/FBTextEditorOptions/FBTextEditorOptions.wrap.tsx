@@ -1,6 +1,6 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBTextEditorOptionsProps, FBTextEditorOptionsState } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBTextEditorOptionsProps, FBTextEditorOptionsState } from '..';
 
 /*
   This comp imitates select box for FBTextEditor predefined options for editor
@@ -53,6 +53,6 @@ export const withFBTextEditorOptions = <T extends FBTextEditorOptionsProps>(
     });
   };
 
-  Comp.displayName = "withFBTextEditorOptions";
+  Comp.displayName = 'withFBTextEditorOptions';
   return Comp;
 };

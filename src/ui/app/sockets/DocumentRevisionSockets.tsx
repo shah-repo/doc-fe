@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
-import FBEQMaintenanceState from "../../form.builder/FBEQMaintenance/FBEQMaintenance.state";
-import useMqttSubscription from "../../hooks/useMqttSubscription";
+import React, { useCallback } from 'react';
+import FBEQMaintenanceState from '../../form.builder/FBEQMaintenance/FBEQMaintenance.state';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface DocumentRevisionSocketProps {
   docRevId: string;
@@ -16,7 +16,7 @@ const DocumentRevSocket: React.FunctionComponent<
     eqMaintenanceState?.getMaintenanceHistory(docRevId);
   }, []);
 
-  useMqttSubscription(`+/document_revisions/+/release`, loadData);
+  useMqttSubscription('+/document_revisions/+/release', loadData);
   return null;
 };
 

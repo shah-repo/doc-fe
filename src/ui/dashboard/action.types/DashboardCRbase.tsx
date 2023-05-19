@@ -1,7 +1,7 @@
-import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
-import { Link } from "react-router-dom";
-import ChangeRequestTransitionDialogContainer from "../../change.request/dialogs/ChangeRequestTransitionDialog.container";
+import { Box, createStyles, Grid, makeStyles, Theme } from '@material-ui/core';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import ChangeRequestTransitionDialogContainer from '../../change.request/dialogs/ChangeRequestTransitionDialog.container';
 
 interface Props {
   title: string;
@@ -13,14 +13,14 @@ interface Props {
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     containerWrap: {
-      paddingLeft: "42px",
-      marginTop: "15px",
-      marginBottom: "15px",
+      paddingLeft: '42px',
+      marginTop: '15px',
+      marginBottom: '15px',
     },
 
     itemWrap: {
-      display: "flex",
-      justifyContent: "flex-end",
+      display: 'flex',
+      justifyContent: 'flex-end',
     },
   }));
 
@@ -32,7 +32,7 @@ const DashboardCRBase: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const linkRenderer = () => (
-    <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
+    <Link to={url} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Box data-cy="pendingActionsAR">
         <Box
           color="primary.main"

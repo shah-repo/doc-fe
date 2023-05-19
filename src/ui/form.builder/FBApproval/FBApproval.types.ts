@@ -1,6 +1,6 @@
-import { FBApprovalState, FBInputProps } from "..";
-import { Employee } from "../../../state/ducks/company/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
+import { FBApprovalState, FBInputProps } from '..';
+import { Employee } from '../../../state/ducks/company/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
 
 export interface FBApprovalConfig {
   label?: string;
@@ -11,19 +11,19 @@ export interface FBApprovalConfig {
 
 export type FBApprovalProps =
 & Pick<FBInputProps,
-| "name"
-| "label"
-| "type"
-| "index"
-| "approvers"
-| "approverGroups"
-| "approvalRoles"
-| "disabled"
-| "approveIsBlocking"
-| "reviseDisabled"
-| "editorProperties"
-| "autosave"
-| "gutter"
+| 'name'
+| 'label'
+| 'type'
+| 'index'
+| 'approvers'
+| 'approverGroups'
+| 'approvalRoles'
+| 'disabled'
+| 'approveIsBlocking'
+| 'reviseDisabled'
+| 'editorProperties'
+| 'autosave'
+| 'gutter'
 > & {
   onApprove?: (approver?: FBInlineApproverType) => () => void;
   approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
@@ -37,8 +37,8 @@ export type FBApprovalProps =
 };
 
 export enum FBApprovalStatus {
-  Pending = "| Pending approval",
-  Approved = "| Approved"
+  Pending = '| Pending approval',
+  Approved = '| Approved'
 }
 
 export interface FBApprovalValue {
@@ -73,4 +73,4 @@ export interface FBInlineApprovalRole {
 }
 
 export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;
-export type FBApprovalSocketProps = Pick<FBApprovalProps, "name">;
+export type FBApprovalSocketProps = Pick<FBApprovalProps, 'name'>;

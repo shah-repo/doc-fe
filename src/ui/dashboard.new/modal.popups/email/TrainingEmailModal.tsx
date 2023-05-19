@@ -9,26 +9,26 @@ import {
   ListItemText,
   Modal,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import { useIntl } from "react-intl";
-import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
-import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
-import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
-import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
+} from '@material-ui/core';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { ReactComponent as ExpandIcon } from '../../../../assets/images/arrow_down.svg';
+import { ReactComponent as CollapseIcon } from '../../../../assets/images/arrow_up.svg';
+import { ReactComponent as EmailSuccessIcon } from '../../../../assets/images/email_success.svg';
+import { ReactComponent as ModelCloseIcon } from '../../../../assets/images/model_close.svg';
 import {
   getFormattedDateString,
   MomentFormats,
-} from "../../../../common/utils/date";
-import { Nullable } from "../../../../state/ducks/common/types";
-import { emailAllActions } from "../../../../state/ducks/email.all";
-import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
-import { toastError } from "../../../components/notifications";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { StyledListItem } from "./StyledListItem";
-import { styles } from "./TrainingEmailModal.styles";
+} from '../../../../common/utils/date';
+import { Nullable } from '../../../../state/ducks/common/types';
+import { emailAllActions } from '../../../../state/ducks/email.all';
+import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
+import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { StyledListItem } from './StyledListItem';
+import { styles } from './TrainingEmailModal.styles';
 
 interface TrainingEmailModalProps {
   id: string;
@@ -79,7 +79,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
       handleApiAlertModelOpen();
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: "common.falied.email" }));
+      toastError(intl.formatMessage({ id: 'common.falied.email' }));
     },
   });
 
@@ -191,12 +191,12 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     noWrap
                   >
                     {isOverDue && (
-                      <span style={{ textTransform: "uppercase" }}>
+                      <span style={{ textTransform: 'uppercase' }}>
                         <Text translation="common.overdue" />
                       </span>
                     )}
                     {!isOverDue && <Text translation="common.duein7days" />}
-                    {` `}({pendingTrainees?.length || 0})
+                    {' '}({pendingTrainees?.length || 0})
                   </Typography>
                 </Grid>
                 {emailSuccess ? (

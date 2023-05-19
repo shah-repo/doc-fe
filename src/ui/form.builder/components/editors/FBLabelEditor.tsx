@@ -1,7 +1,7 @@
-import React from "react";
-import { omitReviseDisabledOption } from "../../defaults/editor";
-import FBTextField from "../inputs/FBTextField";
-import FBAdditionsEditor from "./FBAdditionsEditor";
+import React from 'react';
+import { omitReviseDisabledOption } from '../../defaults/editor';
+import FBTextField from '../inputs/FBTextField';
+import FBAdditionsEditor from './FBAdditionsEditor';
 
 interface FBLabelEditorProps {
   defaultValue?: string;
@@ -10,7 +10,7 @@ interface FBLabelEditorProps {
 }
 const FBLabelEditor: React.FunctionComponent<FBLabelEditorProps> = ({
   standalone = true,
-  type = "",
+  type = '',
   ...props
 }) => (
   <>

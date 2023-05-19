@@ -1,13 +1,12 @@
-import { Box } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React from "react";
-import { FormattedNumber } from "react-intl";
-import { FBPurchaseOrderActionsProps, FBSubmitButton } from "..";
-import AlertDialog from "../../app/alert.dialog/AlertDialog";
-import Text from "../../components/Text";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
-import { withFBPurchaseOrderActions } from "./FBPurchaseOrderActions.wrap";
-
+import { Box } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { FormattedNumber } from 'react-intl';
+import { FBPurchaseOrderActionsProps, FBSubmitButton } from '..';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import Text from '../../components/Text';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
+import { withFBPurchaseOrderActions } from './FBPurchaseOrderActions.wrap';
 
 const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProps> = ({
   onAddClick,
@@ -36,7 +35,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
       <Box display="flex" flexDirection="row-reverse" mx={2}>
         <FBSubmitButton
           variant="outlined"
-          label={isEdit ? "common.update" : "common.add"}
+          label={isEdit ? 'common.update' : 'common.add'}
           onClick={onAddClick}
           autoFocus
         />
@@ -46,13 +45,12 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
           onClick={onCancelClick}
         />
       </Box>
-      {dialog && onAlertNotificationConfirm &&
-      <AlertDialog
+      {dialog && onAlertNotificationConfirm
+      && <AlertDialog
         confirmAction={onAlertNotificationConfirm}
         cancelAction={onAlertNotificationCancel}
         confirmLabel="common.yes.proceed"
-        message={isEdit ? "documentRevision.po.notification.alert.update"
-          : "documentRevision.po.notification.alert.add"}
+        message="documentRevision.po.notification.alert.update"
         {...{ dialog }}
       />}
     </>

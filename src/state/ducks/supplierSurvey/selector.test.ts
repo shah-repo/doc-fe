@@ -1,12 +1,12 @@
 
-import { cloneDeep } from "lodash";
-import { ApplicationState } from "../../reducers";
-import { getAsyncState } from "../../tests/factories";
-import initialStoreState from "../../tests/helpers/initialStoreState";
-import selectors from "./selectors";
-import { getSurveyFormDocumentRevision } from "./tests/factories";
+import { cloneDeep } from 'lodash';
+import { ApplicationState } from '../../reducers';
+import { getAsyncState } from '../../tests/factories';
+import initialStoreState from '../../tests/helpers/initialStoreState';
+import selectors from './selectors';
+import { getSurveyFormDocumentRevision } from './tests/factories';
 
-describe("supplier survey selectors tests", () => {
+describe('supplier survey selectors tests', () => {
   let state: ApplicationState;
 
   const supplierSurveyForm = getSurveyFormDocumentRevision();
@@ -17,11 +17,11 @@ describe("supplier survey selectors tests", () => {
     state.supplierSurvey.loadSupplierSurveyAsyncInfo = getAsyncState();
   });
 
-  it("supplierSurvey", () => {
+  it('supplierSurvey', () => {
     expect(selectors.supplierSurvey(state)).toEqual(supplierSurveyForm);
   });
 
-  it("getLoadSupplierSurveyListAsyncInfo", () => {
+  it('getLoadSupplierSurveyListAsyncInfo', () => {
     const asyncInfo = state.supplierSurvey.loadSupplierSurveyAsyncInfo;
     expect(selectors.getLoadSupplierSurveyListAsyncInfo(state)).toBe(asyncInfo);
   });

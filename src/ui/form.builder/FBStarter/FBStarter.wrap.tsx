@@ -1,6 +1,6 @@
-import React from "react";
-import { FB, FBControlPicker, FBStarterProps } from "..";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
+import React from 'react';
+import { FB, FBControlPicker, FBStarterProps } from '..';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
 
 export const withFBStarter = <T extends FBStarterProps>(
   Component: React.FunctionComponent<T>,
@@ -16,19 +16,19 @@ export const withFBStarter = <T extends FBStarterProps>(
 
     onClick = (index?: number) => {
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
-      _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId || "");
+      _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId || '');
       if (leftPanelState) {
         leftPanelState.setIndex(index || 0);
         leftPanelState.config({
           open: true,
           showLeftPanelEditor: false,
-          maxWidth: "sm",
+          maxWidth: 'sm',
           content: <FBControlPicker {...{ index }} />,
         });
       } else {
       dialogState?.config({
         open: true,
-        maxWidth: "sm",
+        maxWidth: 'sm',
         content: <FBControlPicker {...{ index }} />,
       });
       }

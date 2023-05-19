@@ -1,5 +1,5 @@
-import { EditorState } from "draft-js";
-import { action, observable, set } from "mobx";
+import { EditorState } from 'draft-js';
+import { action, observable, set } from 'mobx';
 
 class FBTextEditorState {
   // MARK: @observables
@@ -17,15 +17,15 @@ class FBTextEditorState {
 
   // MARK: @actions
   @action public setEditorState = (editorState?: EditorState) => {
-    set(this, "editorState", editorState);
+    set(this, 'editorState', editorState);
   };
 
   @action public setMasked = (masked?: boolean) =>
-    set(this, "masked", masked);
+    set(this, 'masked', masked);
 
   // MARK: @helpers
   public setPreserveFocus = (state: boolean) =>
-    set(this, "preserveFocus", state);
+    set(this, 'preserveFocus', state);
 }
 
 export default FBTextEditorState;

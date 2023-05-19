@@ -1,13 +1,13 @@
-import { useFormikContext } from "formik";
-import { cloneDeep, get } from "lodash";
-import React, { useCallback, useEffect } from "react";
-import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
-import { checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
-import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
+import { useFormikContext } from 'formik';
+import { cloneDeep, get } from 'lodash';
+import React, { useCallback, useEffect } from 'react';
+import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
+import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
+import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
   Component: React.FunctionComponent<T>,
@@ -38,8 +38,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const { document: { outputRevision = false } = {} } = workspaceState || {};
 
     const getDAMPayload = useCallback((damData) => ({
-      [FBDAMFields.DAM]: damData?.["approvalMatrix"],
-      [FBDAMFields.DAR]: damData?.["approvalRoles"],
+      [FBDAMFields.DAM]: damData?.['approvalMatrix'],
+      [FBDAMFields.DAR]: damData?.['approvalRoles'],
     }), []);
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
@@ -64,8 +64,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       () => approvalMatrixState?.data,
       (data) => {
         if (_documentRevisionFormState?.documentType?.group === FBDocTypeGroup.DAM) {
-          formik.setFieldValue("formInput", getDAMPayload(data));
-          _formState?.setValue("formInput", getDAMPayload(data));
+          formik.setFieldValue('formInput', getDAMPayload(data));
+          _formState?.setValue('formInput', getDAMPayload(data));
           formik.submitForm();
         }
       }
@@ -87,12 +87,12 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
         if (!_documentRevisionFormState) { return; }
         _documentRevisionFormState.setDocumentRevision(documentRevision);
         // Set the FB schema
-        let schema = get(documentRevision, "formTemplate.schema");
+        let schema = get(documentRevision, 'formTemplate.schema');
         if (!schema) {
-          schema = get(documentRevision, "schema");
+          schema = get(documentRevision, 'schema');
         }
         if (!schema) {
-          schema = get(documentRevision, "formDocument.formTemplate.schema");
+          schema = get(documentRevision, 'formDocument.formTemplate.schema');
         }
         _documentRevisionFormState.formSchema = schema;
       },
@@ -101,7 +101,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     SM.reaction(
       () => _formState?.mode,
-      (mode) => _documentRevisionFormState?.setFormMode(mode || "none"),
+      (mode) => _documentRevisionFormState?.setFormMode(mode || 'none'),
       { fireImmediately: true }
     );
 
@@ -113,12 +113,12 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     SM.reaction(
       () => _documentRevisionFormState?.formSchema,
       (schema) => {
-        if (_formState?.mode === "design") {
-          _formState?.setValue("formTemplate.schema", schema);
+        if (_formState?.mode === 'design') {
+          _formState?.setValue('formTemplate.schema', schema);
           return;
         }
-        if (_formState?.mode === "formDesign" && _documentRevisionFormState?.isOutputSchema) {
-          _formState?.setValue("schema", schema);
+        if (_formState?.mode === 'formDesign' && _documentRevisionFormState?.isOutputSchema) {
+          _formState?.setValue('schema', schema);
         }
       }
     );
@@ -152,6 +152,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     );
   };
 
-  Comp.displayName = "withDocumentRevisionFormWrap";
+  Comp.displayName = 'withDocumentRevisionFormWrap';
   return (props: T) => Comp(props);
 };

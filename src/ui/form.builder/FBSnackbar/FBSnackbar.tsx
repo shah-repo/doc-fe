@@ -1,7 +1,7 @@
-import { Snackbar } from "@material-ui/core";
-import React from "react";
-import { FBSnackbarProps } from "..";
-import { withFBSnackbar } from "./FBSnackbar.wrap";
+import { Snackbar } from '@material-ui/core';
+import React from 'react';
+import { FBSnackbarProps } from '..';
+import { withFBSnackbar } from './FBSnackbar.wrap';
 
 const FBSnackbar: React.FunctionComponent<FBSnackbarProps> = ({
   onClose,

@@ -1,9 +1,9 @@
-import { Grid, Portal } from "@material-ui/core";
-import { hasIn, isString } from "lodash";
-import React from "react";
-import { FBDialogProps } from "../../../../../../../ui/form.builder";
-import { withFBLeftPanel } from "../../../../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.wrap";
-import useStyles from "./LeftPanelFormEditor.styles";
+import { Grid, Portal } from '@material-ui/core';
+import { hasIn, isString } from 'lodash';
+import React from 'react';
+import { FBDialogProps } from '../../../../../../../ui/form.builder';
+import { withFBLeftPanel } from '../../../../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.wrap';
+import useStyles from './LeftPanelFormEditor.styles';
 
 const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
   handleActionsRef,
@@ -25,7 +25,7 @@ const LeftPanelFormEditor: React.FunctionComponent<FBDialogProps> = ({
         {content && portalTitle && portalAction && (
           <content.type {...content.props}>
             {content.props.children}
-            {!isString(title) && !hasIn(title, "locale") && (
+            {!isString(title) && !hasIn(title, 'locale') && (
               <Portal container={portalTitle}>
                 {title}
               </Portal>

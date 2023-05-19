@@ -1,13 +1,13 @@
-import React from "react";
-import { FBApprovalMatrixFieldProps, FBApprovalMatrixRoles, FBInput, FBProvider } from "..";
-import { withFBApprovalMatrixField } from "./FBApprovalMatrixField.wrap";
+import React from 'react';
+import { FBApprovalMatrixFieldProps, FBApprovalMatrixRoles, FBInput, FBProvider } from '..';
+import { withFBApprovalMatrixField } from './FBApprovalMatrixField.wrap';
 
 const FBApprovalMatrixFieldRoles: React.FunctionComponent<FBApprovalMatrixFieldProps> = ({
   handleAdd,
   approvalMatrixFieldState,
   disabled,
   autosave,
-  name = "dar-built-in",
+  name = 'dar-built-in',
   mode,
   workspaceMode,
 }) =>  (

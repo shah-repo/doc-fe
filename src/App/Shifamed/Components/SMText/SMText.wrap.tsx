@@ -1,7 +1,7 @@
-import { map } from "lodash";
-import React, { useMemo } from "react";
-import { useIntl } from "react-intl";
-import { SMTextLocaleProps, SMTextProps } from "./SMText.types";
+import { map } from 'lodash';
+import React, { useMemo } from 'react';
+import { useIntl } from 'react-intl';
+import { SMTextLocaleProps, SMTextProps } from './SMText.types';
 
 export const withSMText = <T extends SMTextProps>(
   Component: React.FunctionComponent<T>,
@@ -26,6 +26,6 @@ export const withSMText = <T extends SMTextProps>(
       label,
     });
   };
-  Comp.displayName = "withFBNotes";
+  Comp.displayName = 'withFBNotes';
   return Comp;
 };

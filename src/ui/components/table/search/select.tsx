@@ -1,16 +1,16 @@
-import { FormControl, InputBase, MenuItem, Select } from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
-import React from "react";
-import { SelectOption } from "../../forms/fields/Select";
-import Text from "../../Text";
-import { searchQueryString } from "./helpers";
-import { selectStyles } from "./styles";
-import { TableSearchFieldProps } from "./types";
+import { FormControl, InputBase, MenuItem, Select } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import React from 'react';
+import { SelectOption } from '../../forms/fields/Select';
+import Text from '../../Text';
+import { searchQueryString } from './helpers';
+import { selectStyles } from './styles';
+import { TableSearchFieldProps } from './types';
 
 type Props = Partial<TableSearchFieldProps>;
 
 export const TableSearchSelectField: React.FunctionComponent<Props> = ({
-  dataKey = "",
+  dataKey = '',
   selectOptions = [],
   searchValueGetter,
   queryGetter,
@@ -34,7 +34,7 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
     <FormControl variant="filled" className={classes.root}>
       <InputLabel htmlFor="search-select-field" />
       <Select
-        value={defaultValue || ""}
+        value={defaultValue || ''}
         onChange={handleChange}
         input={<InputBase name={dataKey} id={dataKey} className={classes.input} />}
       >

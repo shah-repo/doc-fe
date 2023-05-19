@@ -4,26 +4,26 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
-import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
-import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
-import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
-import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
-import { ReactComponent as TrainingIcon } from "../../../assets/images/training.svg";
+} from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as FMIcon } from '../../../assets/images/FM.svg';
+import { ReactComponent as MPIIcon } from '../../../assets/images/MPI.svg';
+import { ReactComponent as ApprovalIcon } from '../../../assets/images/pending_approval.svg';
+import { ReactComponent as POIcon } from '../../../assets/images/PO.svg';
+import { ReactComponent as SOPIcon } from '../../../assets/images/SOP.svg';
+import { ReactComponent as TrainingIcon } from '../../../assets/images/training.svg';
 import {
   RecentItems,
-} from "../../../state/ducks/dashboard.new/recents/types";
-import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
-import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
-import ApprovalTitle from "../line.items/common/ApprovalTitle/presenter";
-import DocId from "../line.items/common/DocId/presenter";
-import { StyledListItem } from "../line.items/common/StyledListItem";
+} from '../../../state/ducks/dashboard.new/recents/types';
+import { changeRequestEditPath } from '../../../ui/change.request/utils/paths';
+import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
+import ApprovalTitle from '../line.items/common/ApprovalTitle/presenter';
+import DocId from '../line.items/common/DocId/presenter';
+import { StyledListItem } from '../line.items/common/StyledListItem';
 import {
   DocTypeGroups,
-} from "../line.items/common/types";
-import { styles } from "./Recents.item.styles";
+} from '../line.items/common/types';
+import { styles } from './Recents.item.styles';
 
 const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   itemId,
@@ -76,7 +76,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                 <DocId url={changeRequestEditPath(itemId)}  docId={docId}/>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <DocId url={documentVersionPath(docRevId || "", itemId)}  docId={docId}/>
+                <DocId url={documentVersionPath(docRevId || '', itemId)}  docId={docId}/>
               )}
             </Grid>
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -84,7 +84,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                 <ApprovalTitle url={changeRequestEditPath(itemId)} title={docTitle}/>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <ApprovalTitle url={documentVersionPath(docRevId || "", itemId)} title={docTitle}/>
+                <ApprovalTitle url={documentVersionPath(docRevId || '', itemId)} title={docTitle}/>
               )}
             </Grid>
             <Grid

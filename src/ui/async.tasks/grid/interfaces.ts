@@ -1,9 +1,9 @@
-import { EffectiveDateFormValues, PasswordFormValues } from "../../change.request/form/types";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { TablePanelStateProps } from "../../components/table/types";
-import { Async } from "../../hooks/useAsync";
-import { DialogHandler } from "../../hooks/useDialog";
-import { TimeTravelProps } from "../types";
+import { EffectiveDateFormValues, PasswordFormValues } from '../../change.request/form/types';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { TablePanelStateProps } from '../../components/table/types';
+import { Async } from '../../hooks/useAsync';
+import { DialogHandler } from '../../hooks/useDialog';
+import { TimeTravelProps } from '../types';
 
 export interface KendoPresenterProps {
   tableName: string;

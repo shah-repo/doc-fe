@@ -1,7 +1,7 @@
-import { Backdrop, Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { FBButton, FBHelloSignProps, FBInput } from "..";
-import { withFBHelloSign } from "./FBHelloSign.wrap";
+import { Backdrop, Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { FBButton, FBHelloSignProps, FBInput } from '..';
+import { withFBHelloSign } from './FBHelloSign.wrap';
 
 const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
   onClick,
@@ -14,7 +14,7 @@ const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
 }) => (
   <>
     {waitOverlay && (
-      <Backdrop style={{ zIndex: 1550, color: "#fff" }} open={true}>
+      <Backdrop style={{ zIndex: 1550, color: '#fff' }} open={true}>
         <Box display="flex" flexDirection="row" pr={1}>
           <CircularProgress size={20} />
           <Box marginLeft={1} >{loadingMessage}</Box>

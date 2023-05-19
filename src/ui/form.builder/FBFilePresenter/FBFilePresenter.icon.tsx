@@ -1,10 +1,10 @@
-import { Box, CircularProgress, IconButton } from "@material-ui/core";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import { isEmpty } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FBAttachmentIcon, FBContextMenu, FBFilePresenterModeProps, FBText, FBTooltip } from "..";
-import Colors from "../../layout/theme/utils/colors";
+import { Box, CircularProgress, IconButton } from '@material-ui/core';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import { isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FBAttachmentIcon, FBContextMenu, FBFilePresenterModeProps, FBText, FBTooltip } from '..';
+import Colors from '../../layout/theme/utils/colors';
 
 const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = ({
   filePresenterState,
@@ -31,8 +31,8 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
     boxProps={{
       p: 2,
       borderRadius: 4,
-      bgcolor: filePresenterState?.toolsVisible ? "white" : "transparent",
-      width: { xs: "100%", sm: "100%", md: "50%", lg: "50%", xl: "30%" },
+      bgcolor: filePresenterState?.toolsVisible ? 'white' : 'transparent',
+      width: { xs: '100%', sm: '100%', md: '50%', lg: '50%', xl: '30%' },
       onMouseOver,
       onMouseLeave,
       ...boxProps,
@@ -63,13 +63,13 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
           {fileSize} {fileExtension}
         </Box>
       </Box>
-      <Box visibility={(!disabled && filePresenterState?.toolsVisible) ? "visible" : "hidden"}>
+      <Box visibility={(!disabled && filePresenterState?.toolsVisible) ? 'visible' : 'hidden'}>
         <IconButton
-          data-cy={"remove-" + fileName}
+          data-cy={'remove-' + fileName}
           size="small"
           style={{
             borderRadius: 5,
-            padding: "6px",
+            padding: '6px',
             color: Colors.medium_red,
             background: Colors.light_red,
           }}
@@ -83,7 +83,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
     {!omitDescription && (
       <Box mt={1} fontSize={12.5}>
         {isEmpty(fileDescription) && (
-          <FBText boxProps={{ fontStyle: "italic" }} locale="form.builder.no.description" />
+          <FBText boxProps={{ fontStyle: 'italic' }} locale="form.builder.no.description" />
         )}
         {!isEmpty(fileDescription) && fileDescription}
       </Box>

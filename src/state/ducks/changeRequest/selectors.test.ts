@@ -1,12 +1,12 @@
-import { cloneDeep } from "lodash";
-import { ApplicationState } from "../../reducers";
-import { getAsyncState } from "../../tests/factories";
-import initialStoreState from "../../tests/helpers/initialStoreState";
-import selectors from "./selectors";
-import { getApprover, getAudit, getChangeRequest } from "./tests/factories";
-import { ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState } from "./types";
+import { cloneDeep } from 'lodash';
+import { ApplicationState } from '../../reducers';
+import { getAsyncState } from '../../tests/factories';
+import initialStoreState from '../../tests/helpers/initialStoreState';
+import selectors from './selectors';
+import { getApprover, getAudit, getChangeRequest } from './tests/factories';
+import { ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState } from './types';
 
-describe("change requests selectors tests", () => {
+describe('change requests selectors tests', () => {
   let state: ApplicationState;
   const changeRequests = [getChangeRequest(), getChangeRequest()];
   const approvers = [getApprover(), getApprover()];
@@ -38,11 +38,11 @@ describe("change requests selectors tests", () => {
     state.changeRequests.loadAuditAsyncInfo = getAsyncState();
   });
 
-  it("getChangeRequestsList", () => {
+  it('getChangeRequestsList', () => {
     expect(selectors.getChangeRequestsList(state)).toEqual(changeRequests);
   });
 
-  it("getApproversListForAssessmentForm", () => {
+  it('getApproversListForAssessmentForm', () => {
     const expectedResult = [
       { value: approvers[0].id, label: approvers[0].user.name },
       { value: approvers[1].id, label: approvers[1].user.name },
@@ -50,23 +50,23 @@ describe("change requests selectors tests", () => {
     expect(selectors.getApproversListForAssessmentForm(state)).toEqual(expectedResult);
   });
 
-  it("getChangeRequest", () => {
+  it('getChangeRequest', () => {
     expect(selectors.getChangeRequest(state, changeRequests[0].id)).toEqual(changeRequests[0]);
   });
 
-  it("getLoadAsyncState", () => {
+  it('getLoadAsyncState', () => {
     expect(selectors.getLoadAsyncState(state)).toBe(state.changeRequests.loadAsyncInfo);
   });
 
-  it("getLoadListAsyncState", () => {
+  it('getLoadListAsyncState', () => {
     expect(selectors.getLoadListAsyncState(state)).toBe(state.changeRequests.loadListAsyncInfo);
   });
 
-  it("getLoadApproversAsyncState", () => {
+  it('getLoadApproversAsyncState', () => {
     expect(selectors.getLoadApproversAsyncState(state)).toBe(state.changeRequests.loadApproversAsyncInfo);
   });
 
-  it("getLoadAuditAsyncState", () => {
+  it('getLoadAuditAsyncState', () => {
     expect(selectors.getLoadAuditAsyncState(state)).toBe(state.changeRequests.loadAuditAsyncInfo);
   });
 });

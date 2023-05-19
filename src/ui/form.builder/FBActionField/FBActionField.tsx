@@ -1,7 +1,7 @@
-import React from "react";
-import { FBActionFieldProps, FBActionOptionProps, FBButton, FBDialog, FBMapWrapper, FBProvider } from "..";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { withFBActionField } from "./FBActionField.wrap";
+import React from 'react';
+import { FBActionFieldProps, FBActionOptionProps, FBButton, FBDialog, FBMapWrapper, FBProvider } from '..';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { withFBActionField } from './FBActionField.wrap';
 
 const FBActionField: React.FunctionComponent<FBActionFieldProps> = ({
   handleAction,

@@ -1,7 +1,5 @@
 import {
   FBApprovalMatrixFieldState,
-  FBApprovalMatrixState,
-  FBApprovalMatrixTableState,
   FBApprovalsState,
   FBApproversState,
   FBBookmarkState,
@@ -39,10 +37,10 @@ import {
   FBTextEditorState,
   FBTextFieldWithRangeState,
   FBWorkspaceState,
-} from "..";
-import FBLeftPanelState from "../FBLeftPanel/FBLeftPanel.state";
-import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
-import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
+} from '..';
+import FBLeftPanelState from '../FBLeftPanel/FBLeftPanel.state';
+import FBLHRBuildState from '../FBLHRBuild/FBLHRBuild.state';
+import FBMPIProcedureSelectState from '../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
 
 
 export interface FBProviderProps {
@@ -57,7 +55,6 @@ export interface FBProviderProps {
   fieldWrapperState?: FBFieldWrapperState;
   editorState?: FBEditorState;
   fileUploadState?: FBFileUploadState;
-  amState?: FBApprovalMatrixState;
   docRevState?: FBDocumentRevisionsState;
   poamState?: FBPOApprovalMatrixState;
   snackbarState?: FBSnackbarState;
@@ -65,7 +62,6 @@ export interface FBProviderProps {
   poReceiveState?: FBPOReceiveState;
   purchaseOrderState?: FBPurchaseOrderState;
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
-  approvalMatrixTableState?: FBApprovalMatrixTableState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
   approvalsState?: FBApprovalsState;

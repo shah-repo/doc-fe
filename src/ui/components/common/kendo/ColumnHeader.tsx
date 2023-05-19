@@ -1,9 +1,9 @@
 import {
   GridColumnMenuWrapper,
   GridHeaderCellProps,
-} from "@progress/kendo-react-grid";
-import React from "react";
-import Tooltip from "./Tooltip";
+} from '@progress/kendo-react-grid';
+import React from 'react';
+import Tooltip from './Tooltip';
 
 const HeaderTooltip: React.FunctionComponent<GridHeaderCellProps> = ({
   title,

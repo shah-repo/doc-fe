@@ -1,12 +1,12 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import { styles } from "../../documentRevision/References/References.styles";
-import UserAvatarListItem from "../../documentRevision/Sidebar/common/UserAvatarListItem";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../components/Text';
+import DocumentRevisionOutputInfo from '../../documentRevision/formBuilder/DocumentRevisionOutputInfo';
+import { styles } from '../../documentRevision/References/References.styles';
+import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatarListItem';
 
 interface OwnProps {
   chosenForm?: FBDocumentRevisionProps | undefined;

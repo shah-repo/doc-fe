@@ -1,4 +1,4 @@
-import { ConditionalWrapperProps } from "./types";
+import { ConditionalWrapperProps } from './types';
 
 const ConditionalWrapper = ({
   condition,

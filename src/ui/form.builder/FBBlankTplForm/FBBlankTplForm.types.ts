@@ -1,3 +1,3 @@
-import { FBFileUploadProps } from "..";
+import { FBFileUploadProps } from '..';
 
 export type FBBlankTplFormProps = FBFileUploadProps;

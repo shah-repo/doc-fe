@@ -1,11 +1,11 @@
-import { Box } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import React from "react";
-import { FBButton, FBFieldBottomBarProps } from "..";
-import { SM } from "../../../App";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
-import { withFBStarter } from "../FBStarter/FBStarter.wrap";
-import useStyles from "./FBFieldBottomBar.styles";
+import { Box } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import React from 'react';
+import { FBButton, FBFieldBottomBarProps } from '..';
+import { SM } from '../../../App';
+import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
+import { withFBStarter } from '../FBStarter/FBStarter.wrap';
+import useStyles from './FBFieldBottomBar.styles';
 
 const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   visibility,
@@ -24,9 +24,9 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
     <Box visibility={visibility} className={classes.root}>
       <FBButton
         label={
-          (_tabsState?.isTabActive("specification") && isEQ)
-            ? "form.builder.addEquiSpec"
-            : "form.builder.add.field"
+          (_tabsState?.isTabActive('specification') && isEQ)
+            ? 'form.builder.addEquiSpec'
+            : 'form.builder.add.field'
         }
         dataCy="form.builder.add.field"
         size="medium"

@@ -1,6 +1,6 @@
-import React from "react";
-import { ReactComponent as CloseIcon } from "../../../../assets/images/model_close.svg";
-import { StyleTooltip } from "./StyleTooltip";
+import React from 'react';
+import { ReactComponent as CloseIcon } from '../../../../assets/images/model_close.svg';
+import { StyleTooltip } from './StyleTooltip';
 
 interface Props {
   classes: any;

@@ -1,10 +1,10 @@
-import { Box, Tooltip, Typography } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import Text from "../../components/Text";
-import ConditionalWrapper from "./ConditionalWrapper";
-import { CustomLabelTooltipProps } from "./types";
+import { Box, Tooltip, Typography } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
+import Text from '../../components/Text';
+import ConditionalWrapper from './ConditionalWrapper';
+import { CustomLabelTooltipProps } from './types';
 
 const CustomLabelTooltip: React.FunctionComponent<CustomLabelTooltipProps> = ({
   tooltipConfig,

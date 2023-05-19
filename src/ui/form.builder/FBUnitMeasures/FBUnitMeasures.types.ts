@@ -1,5 +1,5 @@
-import { FBInputProps } from "..";
+import { FBInputProps } from '..';
 
 export type FBUnitMeasuresProps =
-& Pick<FBInputProps, "name" | "label" | "disabled" | "index">;
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'index'>;
 

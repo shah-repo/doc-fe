@@ -1,24 +1,24 @@
-import { makeStyles } from "@material-ui/core";
-import { Colors } from "../../layout/theme-next";
+import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   root: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     paddingTop: theme.spacing(1),
   },
   tabs: {
     flexGrow: 1,
-    overflow: "auto",
+    overflow: 'auto',
   },
   tabItemIcon: {
-    "& path": {
+    '& path': {
       fill: Colors.textGray,
     },
   },
   tabItemIconActive: {
-    "& path": {
+    '& path': {
       fill: Colors.textBlack,
     },
   },

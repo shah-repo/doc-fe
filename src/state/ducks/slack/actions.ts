@@ -1,6 +1,6 @@
-import { apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { URL_OAUTH_TYPES } from "./constants";
+import { apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { URL_OAUTH_TYPES } from './constants';
 
 const postSlackCode = (
   url: URL_OAUTH_TYPES,
@@ -9,7 +9,7 @@ const postSlackCode = (
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `${url}`,
-    method: "get",
+    method: 'get',
     params,
     handlers,
   });

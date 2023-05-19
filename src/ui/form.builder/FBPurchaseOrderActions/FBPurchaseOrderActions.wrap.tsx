@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from '..';
 import { SM } from '../../../App';
 import { MomentFormats } from '../../../common/utils/date';
+import { getPOIndexDbInstance } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
@@ -71,10 +72,14 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const UpdatedAmount = tax + parseFloat(allItems.shippingCost) + UpdatedLineItemsTotalObj.subTotal;
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (o1.limit + o1.threshold) >= totalAmount);
-        if ((isEdit && topApprovals?.length
-           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold))
-        || !isEdit) {
+        if (isEdit && topApprovals?.length
+           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
+        ) {
           return dialog?.open();
+        }
+        if (!isEdit && onAlertNotificationConfirm) {
+          onAlertNotificationConfirm();
+          return;
         }
       }
       purchaseOrderState.setItem(values);
@@ -92,8 +97,20 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     };
 
     const async = useAsync<DocumentRevision>({
-      onSuccess: (createdDocumentRevision?: DocumentRevision) => {
+      onSuccess: async (createdDocumentRevision?: DocumentRevision) => {
         if (createdDocumentRevision) {
+          dialog?.close();
+          try {
+            const prevPODoc = await getPOIndexDbInstance().toArray();
+            if (prevPODoc.length) {
+              await workspaceState?.updateDocRevById(getLatestDocRevData() as DocumentRevision, createdDocumentRevision.id);
+              await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+            }
+          } catch (e) {
+            console.error(e);
+          }
+          FBDataStore.setRefreshData(undefined);
+          await getPOIndexDbInstance().clear();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -101,8 +118,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         }
       },
     });
-
-    onAlertNotificationConfirm = () => {
+    const getLatestDocRevData = () => {
       const newLineItemvalues = formState?.getValues() as FBPurchaseOrderItem;
       const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
       if (values?.formInput) {
@@ -160,13 +176,21 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
             values.formInput[PO_ITEMS_COMPONENT_NAME][key] = undefined;
           }
         });
-        const promise = async.start(createDocAction, toNewVersionRequestBody(values), async);
-        promise?.then(() => {
-          FBDataStore?.setRefreshData({
-            ...values,
-          });
-        });
       }
+      return cloneDeep(toNewVersionRequestBody(values));
+    };
+    onAlertNotificationConfirm = async () => {
+      const latestDocRevData = getLatestDocRevData();
+      try {
+        const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];
+        if (latestDocRevData && prevPODoc.length) {
+          latestDocRevData.formInput = prevPODoc[0]?.formInput;
+          latestDocRevData.description = prevPODoc[0]?.description;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      async.start(createDocAction, latestDocRevData, async);
     };
 
     return Component({

@@ -1,10 +1,10 @@
-import { FBFormProps, FBInputProps, FBProcedureItemType, FBProviderProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { FBFormProps, FBInputProps, FBProcedureItemType, FBProviderProps } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
 export type FBMPIProcedureSelectProps =
-& Pick<FBInputProps, "name">
-& Pick<FBFormProps, "children" | "initialValues">
-& Pick<FBProviderProps, "formState" | "mpiProcedureSelectState">
+& Pick<FBInputProps, 'name'>
+& Pick<FBFormProps, 'children' | 'initialValues'>
+& Pick<FBProviderProps, 'formState' | 'mpiProcedureSelectState'>
 & {
   type: FBProcedureItemType;
   unitDisabled?: boolean;
@@ -18,7 +18,7 @@ export interface FBMPIProcedureSelectValue {
   fieldId: string;
   forPreselected: { id: string };
   usedOverride: Partial<DocumentRevision> | string;
-  type: FBProcedureItemType | "MATERIAL" | "EQUIPMENT";
+  type: FBProcedureItemType | 'MATERIAL' | 'EQUIPMENT';
   overrideDocId?: string;
   refId?: string;
   materialId?: string;
@@ -31,12 +31,12 @@ export interface FBMPIProcedureSelectValue {
 }
 
 export enum EQStatus {
-  NoInfo = "No Info",
-  Inactive = "Inactive",
-  Retired = "Retired",
-  Active = "Active",
-  ActiveCalibrated = "Active Calibrated",
-  ActiveNoCalRequired = "Active No Cal Required",
+  NoInfo = 'No Info',
+  Inactive = 'Inactive',
+  Retired = 'Retired',
+  Active = 'Active',
+  ActiveCalibrated = 'Active Calibrated',
+  ActiveNoCalRequired = 'Active No Cal Required',
 }
 
 export interface FBSelectedEQ {

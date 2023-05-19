@@ -1,9 +1,9 @@
-import { Box, Chip, Grid, Typography } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { Employee } from "../../../state/ducks/company/types";
-import Text from "../../components/Text";
-import styles from "./styles";
+import { Box, Chip, Grid, Typography } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Employee } from '../../../state/ducks/company/types';
+import Text from '../../components/Text';
+import styles from './styles';
 
 interface OwnProps {
   groupName: string;
@@ -38,7 +38,7 @@ const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   const membersRenderer = (employees: Employee[]) => (
     <Box width={700} mt={5}>
       <Typography variant="h4">
-        <Text translation={"common.members"} />
+        <Text translation={'common.members'} />
       </Typography>
       <Box mt={2}>
         {memberChipRenderer(employees)}
@@ -48,8 +48,8 @@ const GroupsDisplayContent: React.FunctionComponent<Props> = ({
 
   const groupNameRenderer = () => (
     <Box width={700}>
-      <Typography variant="h4" style={{ marginBottom: "16px" }} >
-        <Text translation={"common.group.name"} />
+      <Typography variant="h4" style={{ marginBottom: '16px' }} >
+        <Text translation={'common.group.name'} />
       </Typography>
       <Text message={groupName} />
     </Box>

@@ -1,11 +1,11 @@
-import { ContentState } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
-import { get, isArray, isEmpty, isObject, isString, map } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from "..";
-import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
+import { ContentState } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+import { get, isArray, isEmpty, isObject, isString, map } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from '..';
+import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
@@ -14,7 +14,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     getOptionLabel,
     refresh,
     autocompleteAsyncState,
-    optionValueType = "key",
+    optionValueType = 'key',
     shouldReloadOnInit = false,
     labelPrefixRoot,
     selectedOptions,
@@ -41,8 +41,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       urlValues,
     });
     const {
-      valueKey: optionValueKey = "value",
-      labelKey: optionLabelKey = "text",
+      valueKey: optionValueKey = 'value',
+      labelKey: optionLabelKey = 'text',
     } = autocompleteAsyncState?.optionConfig || {
       valueKey: props.optionValueKey,
       labelKey: props.optionLabelKey,
@@ -67,7 +67,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     }
 
     useObserver(() => {
-      forceNewRender = formState?.getInputState(name || "")?.forceRender;
+      forceNewRender = formState?.getInputState(name || '')?.forceRender;
       if (!optionId) {
         return;
       }
@@ -106,7 +106,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       (data) => {
         const { id } = data || {};
         FBAutocompleteAsyncStore.add(optionId as string, id, data);
-        formState?.getInputState(name || "")?.setRender();
+        formState?.getInputState(name || '')?.setRender();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -124,7 +124,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      formState?.getInputState(name ?? "")?.setRender();
+      formState?.getInputState(name ?? '')?.setRender();
     }, [formState, name, optionId, options]);
 
     !getOptionLabel && (getOptionLabel = (option) => {
@@ -138,43 +138,43 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         if (isArray(option)) {
           const undefinedOptions = option.filter((e) => isString(e));
           undefinedOptions.map((opt) => {
-            if (!opt || !isString(opt) || opt === "Void") {
+            if (!opt || !isString(opt) || opt === 'Void') {
               // eslint-disable-next-line array-callback-return
               return;
             }
             return autocompleteAsyncState?.fetchAutocompleteOption(opt, optionId);
           }
           );
-          return "";
+          return '';
         }
-        if (!option || !isString(option) || option === "Void") {
+        if (!option || !isString(option) || option === 'Void') {
           return;
         }
         autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
-        return "";
+        return '';
       }
       if (!get(option, optionValueKey)) {
-        return "";
+        return '';
       }
       const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
-      let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : '';
       if (withoutPrefixRoot) {
-        optionLabel = "";
+        optionLabel = '';
       }
       if (includeRevision) {
         const revision = get(option, includeRevision);
         optionLabel = labelPrefixRoot ?
-          `${get(option, labelPrefixRoot)} - rev ${revision} - ` : "";
+          `${get(option, labelPrefixRoot)} - rev ${revision} - ` : '';
         if (withoutLabelKey && labelPrefixRoot) {
           return `${get(option, labelPrefixRoot)} - rev ${revision}`;
         }
       }
-      const description = htmlToPlainText(get(option, optionLabelKey, ""));
+      const description = htmlToPlainText(get(option, optionLabelKey, ''));
       return `${optionLabel}${description}`;
     });
 
     function htmlToPlainText(value?: string): string {
-      if (!value) { return ""; }
+      if (!value) { return ''; }
       const contentBlock = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       return contentState.getPlainText();

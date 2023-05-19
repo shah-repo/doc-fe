@@ -1,10 +1,10 @@
 export const SUPPORTED_VIDEO_FILES = [
-  "mkv",
-  "m4v",
-  "mp4",
-  "ogg",
-  "ogv",
-  "webm",
+  'mkv',
+  'm4v',
+  'mp4',
+  'ogg',
+  'ogv',
+  'webm',
   // not supported
   // "mpeg",
   // "flv",
@@ -17,24 +17,24 @@ export const SUPPORTED_VIDEO_FILES = [
   // "mts",
 ];
 export const SUPPORTED_IMAGE_FILES = [
-  "apng",
-  "bmp",
-  "gif",
-  "ico",
-  "cur",
-  "jpg",
-  "jpeg",
-  "jfif",
-  "pjpeg",
-  "pjp",
-  "png",
-  "svg",
-  "webp",
+  'apng',
+  'bmp',
+  'gif',
+  'ico',
+  'cur',
+  'jpg',
+  'jpeg',
+  'jfif',
+  'pjpeg',
+  'pjp',
+  'png',
+  'svg',
+  'webp',
 ];
 
-export const PDF = "pdf";
-export const IMAGE = "image";
-export const VIDEO = "video";
+export const PDF = 'pdf';
+export const IMAGE = 'image';
+export const VIDEO = 'video';
 
 export const VIEWABLE_FILES = [
   ...SUPPORTED_IMAGE_FILES,
@@ -43,8 +43,8 @@ export const VIEWABLE_FILES = [
 ];
 
 export const WATERMARK_FILES = [
-  "txt",
-  "doc",
-  "docx",
-  "pdf",
+  'txt',
+  'doc',
+  'docx',
+  'pdf',
 ];

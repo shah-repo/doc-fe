@@ -1,4 +1,4 @@
-import { FBActionFieldState, FBDialogState, FBInputProps, FBSchemaProps } from "..";
+import { FBActionFieldState, FBDialogState, FBInputProps, FBSchemaProps } from '..';
 
 export interface FBActionOptionProps {
   name?: string;
@@ -10,7 +10,7 @@ export interface FBActionOptionProps {
 }
 
 export type FBActionFieldProps =
-& Pick<FBInputProps, "name" | "actions" | "disabled"> & {
+& Pick<FBInputProps, 'name' | 'actions' | 'disabled'> & {
   handleAction?: (option: FBActionOptionProps) => any;
   options?: FBActionOptionProps[];
   dialogState?: FBDialogState;

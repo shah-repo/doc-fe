@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { IotService } from "../../common/utils/iot/iotService";
-import { authActions, authSelectors } from "../../state/ducks/auth";
-import { tableSearchActions } from "../../state/ducks/tableSearch";
-import { LOGIN_URL } from "../constants/urls";
-import FBStore from "../form.builder/stores/ui/FBStore";
-import NavigationProfilePresenter from "./NavigationProfile.presenter";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { IotService } from '../../common/utils/iot/iotService';
+import { authActions, authSelectors } from '../../state/ducks/auth';
+import { tableSearchActions } from '../../state/ducks/tableSearch';
+import { LOGIN_URL } from '../constants/urls';
+import FBStore from '../form.builder/stores/ui/FBStore';
+import NavigationProfilePresenter from './NavigationProfile.presenter';
 
 type Props = RouteComponentProps;
 

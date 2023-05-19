@@ -1,19 +1,19 @@
-import { isEqual } from "lodash";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { areValidCredentials } from "../../common/utils/iot/iotService";
-import Config from "../../config";
-import { authActions, authSelectors } from "../../state/ducks/auth";
-import { setIotCreds } from "../../state/ducks/auth/actions";
-import { changeRequestsActions } from "../../state/ducks/changeRequest";
-import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
-import { GroupWithGroupOptions } from "../../state/ducks/documentRevisions/documentType/types";
-import { pageDetailsActions } from "../../state/ducks/pageDetails";
-import { userManagementActions } from "../../state/ducks/userManagement";
-import { toastError } from "../components/notifications";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
+import { isEqual } from 'lodash';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { areValidCredentials } from '../../common/utils/iot/iotService';
+import Config from '../../config';
+import { authActions, authSelectors } from '../../state/ducks/auth';
+import { setIotCreds } from '../../state/ducks/auth/actions';
+import { changeRequestsActions } from '../../state/ducks/changeRequest';
+import { documentTypeActions } from '../../state/ducks/documentRevisions/documentType';
+import { GroupWithGroupOptions } from '../../state/ducks/documentRevisions/documentType/types';
+import { pageDetailsActions } from '../../state/ducks/pageDetails';
+import { userManagementActions } from '../../state/ducks/userManagement';
+import { toastError } from '../components/notifications';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
 
 const DataFetcherContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -49,8 +49,8 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     onSuccess: (response) => {
       if (!isEqual(response, GroupWithGroupOptions)) {
         // eslint-disable-next-line no-console
-        console.log(intl.formatMessage({ id: "common.document.type.mismatch" }));
-        if (!Config.isProduction) { toastError(intl.formatMessage({ id: "common.document.type.mismatch" })); }
+        console.log(intl.formatMessage({ id: 'common.document.type.mismatch' }));
+        if (!Config.isProduction) { toastError(intl.formatMessage({ id: 'common.document.type.mismatch' })); }
       }
     },
   });

@@ -1,9 +1,10 @@
-import { apiAction, apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { Audit, AuditActionPayload } from "../audit/types";
-import { dashboardActions } from "../dashboard";
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_ROOT_URL, CHANGE_REQUEST_SET } from "./constants";
-import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestAvailableApproversResponse, ChangeRequestEditRequestBody, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction, ChangeRequestTransition, ChangeRequestTransitionRequestBody, ChangeRequestTransitionResponse } from "./types";
+import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { Audit, AuditActionPayload } from '../audit/types';
+import { dashboardActions } from '../dashboard';
+import { ExportToEmailRequest } from '../documentRevisions/types';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_ROOT_URL, CHANGE_REQUEST_SET } from './constants';
+import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestAvailableApproversResponse, ChangeRequestEditRequestBody, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction, ChangeRequestTransition, ChangeRequestTransitionRequestBody, ChangeRequestTransitionResponse } from './types';
 
 const changeRequestsList = (changeRequests: ChangeRequest[]): ChangeRequestListAction => ({
   type: CHANGE_REQUEST_LIST,
@@ -15,9 +16,9 @@ const changeRequestSet = (changeRequest: ChangeRequest): ChangeRequestSetAction 
   payload: changeRequest,
 });
 
-const loadList = (searchTerms = ""): ApiAction<ChangeRequest[]> => apiAction({
+const loadList = (searchTerms = ''): ApiAction<ChangeRequest[]> => apiAction({
   url: `${CHANGE_REQUEST_ROOT_URL}${searchTerms}`,
-  method: "get",
+  method: 'get',
   asyncType: CHANGE_REQUEST_LIST_ASYNC,
   onSuccess: (changeRequests, dispatch) => {
     dispatch(changeRequestsList(changeRequests));
@@ -27,14 +28,14 @@ const loadList = (searchTerms = ""): ApiAction<ChangeRequest[]> => apiAction({
 const loadListWithCallback = (params: any, handlers: Handlers): ApiAction<ChangeRequest[]> =>
   apiActionWithCallbacks({
     url: `${CHANGE_REQUEST_ROOT_URL}`,
-    method: "get",
+    method: 'get',
     params,
     handlers,
   });
 
 const load = (id: string): ApiAction<ChangeRequest> => apiAction({
   url: `${CHANGE_REQUEST_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   asyncType: CHANGE_REQUEST_GET_ASYNC,
   onSuccess: (changeRequest, dispatch) => {
     dispatch(changeRequestSet(changeRequest));
@@ -44,7 +45,7 @@ const load = (id: string): ApiAction<ChangeRequest> => apiAction({
 const draftApprovalRequestsList = (handlers: Handlers): ApiAction<ChangeRequest> =>
   apiActionWithCallbacks({
     url: `${CHANGE_REQUEST_ROOT_URL}/my_draft_approval_requests`,
-    method: "get",
+    method: 'get',
     handlers,
   });
 
@@ -57,7 +58,7 @@ const availableApproversList = (
 
 const loadAvailableApprovers = (): ApiAction<ChangeRequestAvailableApproversResponse> => apiAction({
   url: `${CHANGE_REQUEST_ROOT_URL}/available_approvers`,
-  method: "get",
+  method: 'get',
   asyncType: CHANGE_REQUEST_GET_APPROVERS_ASYNC,
   onSuccess: (approvers, dispatch) => {
     dispatch(availableApproversList(approvers.optionalApprovers));
@@ -67,7 +68,7 @@ const loadAvailableApprovers = (): ApiAction<ChangeRequestAvailableApproversResp
 const create = (body: ChangeRequestEditRequestBody, handlers: Handlers<ChangeRequest>):
 ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks({
   url: CHANGE_REQUEST_ROOT_URL,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (changeRequest, dispatch) => {
     dispatch(changeRequestSet(changeRequest));
@@ -78,7 +79,7 @@ ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks
 const save = (id: string, body: ChangeRequestEditRequestBody, handlers: Handlers<ChangeRequest>):
 ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks({
   url: `${CHANGE_REQUEST_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (changeRequest, dispatch) => {
     dispatch(changeRequestSet(changeRequest));
@@ -93,13 +94,13 @@ const applyTransition = (
   handlers: Handlers<ChangeRequestTransitionResponse>,
 ): ApiAction<ChangeRequestTransitionResponse, ChangeRequestTransitionRequestBody> => apiActionWithCallbacks({
   url: `${CHANGE_REQUEST_ROOT_URL}/${id}/${transition}`,
-  method: "post",
+  method: 'post',
   data: body,
   password: body.password,
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
-    if (transition === "reject" || transition === "approve") {
-      dispatch( dashboardActions.loadPendingActionsList());
+    if (transition === 'reject' || transition === 'approve') {
+      dispatch(dashboardActions.loadPendingActionsList());
     }
   },
   handlers,
@@ -112,7 +113,7 @@ const auditSet = (audit: AuditActionPayload): ChangeRequestAuditSetAction => ({
 
 const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
   url: `${CHANGE_REQUEST_ROOT_URL}/${id}/audit`,
-  method: "get",
+  method: 'get',
   asyncType: CHANGE_REQUEST_GET_AUDIT_ASYNC,
   onSuccess: (audit, dispatch) => {
     dispatch(auditSet({
@@ -125,7 +126,7 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 const closeTask = (changeRequestId: string, taskId: string, body: any, handlers: Handlers):
 ApiAction => apiActionWithCallbacks({
   url: `${CHANGE_REQUEST_ROOT_URL}/task/${taskId}/done`,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (d, dispatch) => {
     dispatch(load(changeRequestId));
@@ -135,11 +136,13 @@ ApiAction => apiActionWithCallbacks({
 
 const exportAR = (
   id: string,
+  body: ExportToEmailRequest,
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `/export/change_request/${id}/email`,
-    method: "post",
+    method: 'post',
+    data: body,
     handlers,
   });
 

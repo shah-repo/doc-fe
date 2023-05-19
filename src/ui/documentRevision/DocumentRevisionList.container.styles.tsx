@@ -1,10 +1,10 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      width: "100%",
+      width: '100%',
     },
     linkContainer: {
       borderBottom: `1px solid ${theme.palette.text.hint}`,
@@ -13,7 +13,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     linkTitle: {
       color: theme.palette.text.primary,
-      textDecoration: "none",
+      textDecoration: 'none',
       fontWeight: theme.typography.fontWeightBold,
     },
     activeLinkTitle: {
@@ -21,16 +21,16 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightBold,
     },
     linkBody: {
-      textDecoration: "none",
+      textDecoration: 'none',
       color: theme.palette.text.primary,
-      lineHeight: "25px",
+      lineHeight: '25px',
     },
     selected: {
       background: Colors.background_blue,
     },
     details: {
-      "&.MuiExpansionPanelDetails-root": {
-        display: "block",
+      '&.MuiExpansionPanelDetails-root': {
+        display: 'block',
       },
     },
   }),

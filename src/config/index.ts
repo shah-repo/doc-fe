@@ -1,26 +1,26 @@
-import queryString from "query-string";
-import { SM_APP_CONFIG } from "../common/constants";
-import { LOGIN_WITH_CODE_URL } from "../ui/constants/urls";
-import { ThemeEnv } from "../ui/layout/theme/utils/types";
+import queryString from 'query-string';
+import { SM_APP_CONFIG } from '../common/constants';
+import { LOGIN_WITH_CODE_URL } from '../ui/constants/urls';
+import { ThemeEnv } from '../ui/layout/theme/utils/types';
 
 const DEFAULTS = {
-  API_ENDPOINT: "/",
+  API_ENDPOINT: '/',
   WORKER_API_ENDPOINT: null,
-  REFRESH_TOKEN_VALIDITY_DAYS: "30",
-  SIGNUP_DOMAIN_URL: "/",
-  FRONTEND_URL: "/",
-  AWS_COGNITO_CLIENT_ID: "default",
+  REFRESH_TOKEN_VALIDITY_DAYS: '30',
+  SIGNUP_DOMAIN_URL: '/',
+  FRONTEND_URL: '/',
+  AWS_COGNITO_CLIENT_ID: 'default',
   THEME: ThemeEnv.DEV_THEME,
-  VALIDATORS_S3_FOLDER_NAME: "",
-  AWS_BUCKET_PUBLIC: "",
-  AWS_REGION: "",
-  HELLOSIGN_TEST_MODE: "",
-  HELLOSIGN_CLIENT_ID: "",
-  ENV_NAME: "",
-  DATADOG_APPLICATION_ID: "",
-  DATADOG_CLIENT_TOKEN: "",
+  VALIDATORS_S3_FOLDER_NAME: '',
+  AWS_BUCKET_PUBLIC: '',
+  AWS_REGION: '',
+  HELLOSIGN_TEST_MODE: '',
+  HELLOSIGN_CLIENT_ID: '',
+  ENV_NAME: '',
+  DATADOG_APPLICATION_ID: '',
+  DATADOG_CLIENT_TOKEN: '',
   DATADOG_ENABLED: false,
-  DATADOG_SAMPLE_RATE: "0",
+  DATADOG_SAMPLE_RATE: '0',
   CONSOLE_TOAST: false,
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
 };
@@ -29,7 +29,7 @@ const DEFAULTS = {
 type ConfigKey = keyof typeof DEFAULTS;
 
 class Config {
-  private static PREFIX = "REACT_APP";
+  private static PREFIX = 'REACT_APP';
 
   private static get(name: ConfigKey): string {
     return SM_APP_CONFIG[`${this.PREFIX}_${name}`] || DEFAULTS[name];
@@ -40,41 +40,41 @@ class Config {
   }
 
   public static get ApiEndpoint() {
-    return `${this.get("API_ENDPOINT")}/v1`;
+    return `${this.get('API_ENDPOINT')}/v1`;
   }
 
   public static get WorkerApiEndpoint() {
-    const apiEndpoint = this.get("WORKER_API_ENDPOINT");
+    const apiEndpoint = this.get('WORKER_API_ENDPOINT');
     if (!apiEndpoint) {
       return null;
     }
-    return `${this.get("WORKER_API_ENDPOINT")}/v1`;
+    return `${this.get('WORKER_API_ENDPOINT')}/v1`;
   }
 
   public static get RefreshTokenValidityInDays() {
-    return this.getNumber("REFRESH_TOKEN_VALIDITY_DAYS");
+    return this.getNumber('REFRESH_TOKEN_VALIDITY_DAYS');
   }
 
   public static get SignUpDomainUrl(): string {
-    return this.get("SIGNUP_DOMAIN_URL");
+    return this.get('SIGNUP_DOMAIN_URL');
   }
 
   public static get FrontendUrl() {
-    return this.get("FRONTEND_URL");
+    return this.get('FRONTEND_URL');
   }
 
   public static get PublicUrl() {
-    const url = this.get("API_ENDPOINT");
+    const url = this.get('API_ENDPOINT');
     return url.substring(0, url.length - 4);
   }
 
   public static get AwsCognitoClientId() {
-    return this.get("AWS_COGNITO_CLIENT_ID");
+    return this.get('AWS_COGNITO_CLIENT_ID');
   }
 
   public static get SignUpUrl(): string {
     const params = queryString.stringify({
-      response_type: "code",
+      response_type: 'code',
       client_id: this.AwsCognitoClientId,
       redirect_uri: `${this.FrontendUrl}${LOGIN_WITH_CODE_URL}`,
     });
@@ -83,7 +83,7 @@ class Config {
   }
 
   public static get Theme() {
-    return this.get("THEME");
+    return this.get('THEME');
   }
 
   public static get SlackCompanyUri(): string {
@@ -95,55 +95,55 @@ class Config {
   }
 
   public static get HelloSignTestMode(): string {
-    return this.get("HELLOSIGN_TEST_MODE");
+    return this.get('HELLOSIGN_TEST_MODE');
   }
 
   public static get HelloSignClientId(): string {
-    return this.get("HELLOSIGN_CLIENT_ID");
+    return this.get('HELLOSIGN_CLIENT_ID');
   }
 
   public static get DatadogApplicationId(): string {
-    return this.get("DATADOG_APPLICATION_ID");
+    return this.get('DATADOG_APPLICATION_ID');
   }
 
   public static get DatadogClientToken(): string {
-    return this.get("DATADOG_CLIENT_TOKEN");
+    return this.get('DATADOG_CLIENT_TOKEN');
   }
 
   public static get DatadogEnabled(): boolean {
-    return this.get("DATADOG_ENABLED") === "true";
+    return this.get('DATADOG_ENABLED') === 'true';
   }
 
   public static get DatadogSampleRate() {
-    return this.getNumber("DATADOG_SAMPLE_RATE");
+    return this.getNumber('DATADOG_SAMPLE_RATE');
   }
 
   public static get EnvironmentName(): string {
-    return this.get("ENV_NAME");
+    return this.get('ENV_NAME');
   }
 
   public static get isSandbox(): boolean {
-    return this.get("ENV_NAME") === "SANDBOX";
+    return this.get('ENV_NAME') === 'SANDBOX';
   }
 
   public static get isProduction(): boolean {
-    return this.get("ENV_NAME") === "PRODUCTION";
+    return this.get('ENV_NAME') === 'PRODUCTION';
   }
 
   public static get isDemo(): boolean {
-    return this.get("ENV_NAME") === "DEMO";
+    return this.get('ENV_NAME') === 'DEMO';
   }
 
   public static get isDev(): boolean {
-    return this.get("ENV_NAME") === "DEVELOP";
+    return this.get('ENV_NAME') === 'DEVELOP';
   }
 
   public static get consoleToastsEnabled(): boolean {
-    return this.get("CONSOLE_TOAST") === "true";
+    return this.get('CONSOLE_TOAST') === 'true';
   }
 
   public static get docTypeManagementEditDisabled(): boolean {
-    return this.get("PREVENT_DOC_TYPE_MANAGEMENT_EDIT") === "true";
+    return this.get('PREVENT_DOC_TYPE_MANAGEMENT_EDIT') === 'true';
   }
 }
 

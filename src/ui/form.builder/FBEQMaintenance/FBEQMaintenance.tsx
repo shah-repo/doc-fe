@@ -1,11 +1,11 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { isEmpty } from "lodash";
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
-import DocumentRevisionSockets from "../../app/sockets/DocumentRevisionSockets";
-import styles from "./FBEQMaintenance.styles";
-import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
+import { Box, CircularProgress } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from '..';
+import DocumentRevisionSockets from '../../app/sockets/DocumentRevisionSockets';
+import styles from './FBEQMaintenance.styles';
+import { withFBEQMaintenance } from './FBEQMaintenance.wrap';
 
 const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   handleAdd,
@@ -39,7 +39,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           <FBButton
             variant="text"
             startIcon={isNewPMLoading ? <CircularProgress size={14} color="inherit" /> : <AddCircleIcon />}
-            label={isTypePM ? "form.builder.new.pm" : "form.builder.new.calibration"}
+            label={isTypePM ? 'form.builder.new.pm' : 'form.builder.new.calibration'}
             className={classes.EQButton }
             onClick={handleAdd}
             disabled={isNewPMDisabled}
@@ -47,14 +47,14 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         </Box>
       </FBSection>
       <FBRadioGroup
-        label={isTypePM ? "form.builder.pm.required" : "form.builder.calibration.required"}
+        label={isTypePM ? 'form.builder.pm.required' : 'form.builder.calibration.required'}
         name={`${name}.requirements`}
         options={FBData.yesNoOptions}
         rules="required"
         {...{ disabled }}
       />
       <FBAutocompleteAsync
-        label={isTypePM ? "form.builder.preventative.maintenance.form" : "form.builder.calibration.form"}
+        label={isTypePM ? 'form.builder.preventative.maintenance.form' : 'form.builder.calibration.form'}
         optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
         filterOptions={preventativeFormOptions}
         name={`${name}.preventativeForm`}
@@ -65,7 +65,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       />
       <FBQuantityField
         name={`${name}.frequency`}
-        label={isTypePM ? "form.builder.maintenance.frequency" : "form.builder.calibration.frequency"}
+        label={isTypePM ? 'form.builder.maintenance.frequency' : 'form.builder.calibration.frequency'}
         validationMode="visibility"
         rules={`required_if:${name}.requirements,Yes`}
         withState
@@ -90,15 +90,15 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       {complianceDueDate &&
       <Box mb={3} data-cy="maintenance.status">
         <FBText
-          boxProps={{ display: "inline-flex" }}
-          locale={isTypePM ? "form.builder.pm" : "form.builder.cal"}
+          boxProps={{ display: 'inline-flex' }}
+          locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
         />
         &nbsp;
         {complianceStatus}
         <span> - </span>
         <FBText
-          boxProps={{ display: "inline-flex" }}
-          locale={"common.due.date"}
+          boxProps={{ display: 'inline-flex' }}
+          locale={'common.due.date'}
         />
         <span>: </span>
         {complianceDueDate}

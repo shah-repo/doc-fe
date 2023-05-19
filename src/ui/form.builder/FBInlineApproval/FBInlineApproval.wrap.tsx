@@ -1,15 +1,15 @@
-import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBDialogState, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { store } from "../../../state/store";
-import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBDataStore from "../FBStore/FBDataStore";
-import { FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
+import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBDialogState, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from '..';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { store } from '../../../state/store';
+import { FBDataStoreApprovalKeys } from '../../documentRevision/forms/types';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import FBDataStore from '../FBStore/FBDataStore';
+import { FBRequestApprovalTransitionBody } from './FBInlineApproval.types';
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
@@ -25,7 +25,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     approvals,
     disabled,
     options,
-    name = "",
+    name = '',
     loading,
     onApproveClick,
     ...props
@@ -48,7 +48,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       changeRequest?.owner?.user?.id
     );
 
-    isPreview = workspaceState?.mode === "preview";
+    isPreview = workspaceState?.mode === 'preview';
     const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
 
     const authUser = store.getState().auth.user;
@@ -61,11 +61,11 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     const shouldShowRequestAllApprovals = isOwner && !isEmpty(inlineApprovalState.getApprovals);
     dialogState = FB.useRef(FBDialogState);
-    const shouldShowApprovals = document?.status === "DRAFT" || document?.status === "IN_REVIEW";
+    const shouldShowApprovals = document?.status === 'DRAFT' || document?.status === 'IN_REVIEW';
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
-        title: "form.builder.password.prompt",
+        title: 'form.builder.password.prompt',
         open: true,
         content: (
           <FBApprovalPasswordForm
@@ -111,9 +111,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // Form sync
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("fb-ia-" + name)?.value,
+      () => formState?.inputState.get('fb-ia-' + name)?.value,
       (fieldValue: string[]) => {
-        const formValue: string[] = map(inlineApprovalState?.getApprovals, "approver.id");
+        const formValue: string[] = map(inlineApprovalState?.getApprovals, 'approver.id');
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
       }
@@ -121,7 +121,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ), []);
 
     // Init
-    const fieldValue = map(inlineApprovalState?.getApprovals, "approver.id");
+    const fieldValue = map(inlineApprovalState?.getApprovals, 'approver.id');
     formState?.setFieldValue(`fb-ia-${name}`, fieldValue);
 
     // On add approver
@@ -140,7 +140,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         if (!data) { return; }
         const value = Array.from(map(approvers as string[], (i) => data.get(i)));
-        concatOptions(value, "Approvers");
+        concatOptions(value, 'Approvers');
       }, {
         fireImmediately: true,
       },
@@ -178,7 +178,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     function concatOptions(approvers: FBEmployee[], listGroup: string) {
       const approversList = approvers.filter((employee) => employee.active);
       let options = map(approversList, (o) => ({ ...o, listGroup }));
-      options = sortBy(unionBy(inlineApprovalState?.options || [], options, "id"), "listGroup");
+      options = sortBy(unionBy(inlineApprovalState?.options || [], options, 'id'), 'listGroup');
       inlineApprovalState?.setOptions(options as FBInlineApprovalOptions[]);
     }
 
@@ -186,7 +186,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!approval) { return; }
       return [approval].flat().map((app) => {
         const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== app?.approver?.id);
-        inlineApprovalState?.setApprovals(unionBy(stateApprovals, [app], "id"));
+        inlineApprovalState?.setApprovals(unionBy(stateApprovals, [app], 'id'));
         return app;
       });
     }
@@ -195,7 +195,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!id) { return; }
       map(ids, (approver) => inlineApprovalState?.approvalBody({
         assigned: { id: approver },
-        type: "SECTION",
+        type: 'SECTION',
         fieldId: name,
         partOf: { id },
       }, () => {
@@ -209,7 +209,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!ids) { return; }
       map(ids, (approver) => {
         const approval = find(inlineApprovalState?.getApprovals, (a) => a.approver?.id === approver);
-        inlineApprovalState?.approvalTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+        inlineApprovalState?.approvalTransition('abandon', (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
         });
@@ -219,9 +219,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     function requestAllApprovals(id?: string) {
       if (!id) { return; }
       const body = {
-        docRev: pick(workspaceState?.document, "id"),
+        docRev: pick(workspaceState?.document, 'id'),
       } as FBRequestApprovalTransitionBody;
-      inlineApprovalState?.requestApprovalTransition("pending_by_field", id, body, () => {
+      inlineApprovalState?.requestApprovalTransition('pending_by_field', id, body, () => {
         const id  = workspaceState?.id;
         if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       });
@@ -235,7 +235,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
-        title: "form.builder.password.prompt",
+        title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
       });
@@ -254,8 +254,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
       disabled = loading
         || !(isOutput && Boolean(id))
-        || document?.status === "RELEASED"
-        || document?.status === "VOIDED"
+        || document?.status === 'RELEASED'
+        || document?.status === 'VOIDED'
         || document?.revisionStage !== 1;
     });
 
@@ -264,8 +264,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       docVersion > 1 &&
       isEmpty(inlineApprovalState.getApprovals) &&
       Boolean(formState?.getFieldValue(name))
-    ) ? some(fieldApprovals, (approval) => approval.status === "APPROVED") || !fieldApprovals.length
-      : !isUndefined(find(approvals, { status: "APPROVED" }));
+    ) ? some(fieldApprovals, (approval) => approval.status === 'APPROVED') || !fieldApprovals.length
+      : !isUndefined(find(approvals, { status: 'APPROVED' }));
 
 
     return Component({
@@ -288,6 +288,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     });
   };
 
-  Comp.displayName = "withFBInlineApproval";
+  Comp.displayName = 'withFBInlineApproval';
   return Comp;
 };

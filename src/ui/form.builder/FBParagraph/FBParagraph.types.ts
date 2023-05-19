@@ -1,3 +1,3 @@
-import { FBInputProps } from "../types/common";
+import { FBInputProps } from '../types/common';
 
-export type FBParagraphProps = Pick<FBInputProps, "paragraph" | "gutter">;
+export type FBParagraphProps = Pick<FBInputProps, 'paragraph' | 'gutter'>;

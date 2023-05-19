@@ -1,9 +1,9 @@
-import { Box, Button, Grid, TextField } from "@material-ui/core";
-import moment from "moment";
-import React from "react";
-import { MomentFormats } from "../../../../common/utils/date";
-import Text from "../../../components/Text";
-import { styles } from "./password.expiration.email.specific.form.styles";
+import { Box, Button, Grid, TextField } from '@material-ui/core';
+import moment from 'moment';
+import React from 'react';
+import { MomentFormats } from '../../../../common/utils/date';
+import Text from '../../../components/Text';
+import { styles } from './password.expiration.email.specific.form.styles';
 
 interface Props {
   handlePasswordExpirationEmailSpecificFormSubmit: ( { processedAtTimestamp, userEmails } ) => void;
@@ -18,7 +18,7 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
   const [processedAtTimestamp, setProcessedAtTimestamp] = React.useState(
     getUtcFormattedString(defaultDate)
   );
-  const [userEmails, setUserEmails] = React.useState("");
+  const [userEmails, setUserEmails] = React.useState('');
   const handlePasswordUpdatedDateChange = (event: any) => {
     setProcessedAtTimestamp(getUtcFormattedString(event?.target?.value));
   };
@@ -60,7 +60,7 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
             handlePasswordExpirationEmailSpecificFormSubmit({ ...{ processedAtTimestamp, userEmails } });
           }}
         >
-          <Text translation={"common.submit"} />
+          <Text translation={'common.submit'} />
         </Button>
       </Box>
     </Box>

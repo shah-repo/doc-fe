@@ -1,14 +1,14 @@
-import { Box, Tooltip } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { CellMeasurer, Column, SortIndicator, TableCellProps as ColumnProps, TableHeaderProps } from "react-virtualized";
-import Text from "../../Text";
-import { TableSearchSelectField } from "../search/select";
-import { TableSearchTextField } from "../search/text";
-import TableColumnAction from "./action";
-import { StyledCellLink, StyledTableCell, StyledTableHeader } from "./styles";
-import { InnerTableColumnProps, TableCellProps, TableColumnProps } from "./types";
+import { Box, Tooltip } from '@material-ui/core';
+import Link from '@material-ui/core/Link';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { CellMeasurer, Column, SortIndicator, TableCellProps as ColumnProps, TableHeaderProps } from 'react-virtualized';
+import Text from '../../Text';
+import { TableSearchSelectField } from '../search/select';
+import { TableSearchTextField } from '../search/text';
+import TableColumnAction from './action';
+import { StyledCellLink, StyledTableCell, StyledTableHeader } from './styles';
+import { InnerTableColumnProps, TableCellProps, TableColumnProps } from './types';
 
 type Props<T> = TableColumnProps<T>;
 type InnerProps = InnerTableColumnProps;
@@ -32,7 +32,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   measurerCache.clearAll();
   const cellWhiteSpace = () =>
-    measurerCache.hasFixedHeight() ? "nowrap" : "initial";
+    measurerCache.hasFixedHeight() ? 'nowrap' : 'initial';
 
   const handleClick = ({ rowData }: TableCellProps<T>) => (
     e: React.MouseEvent,
@@ -56,7 +56,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     const ActionColumn = TableColumnAction<T>();
     return (
       <ActionColumn
-        key={"action-" + actionType}
+        key={'action-' + actionType}
         actionType={actionType}
         rowData={rowData}
         onSelect={onSelect}
@@ -66,13 +66,13 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const cellTypeRenderer = ({ cellData, rowData }: ColumnProps) => {
     let type = cellType;
-    if (typeof cellType === "function") {
+    if (typeof cellType === 'function') {
       type = (cellType)(rowData);
     }
     switch (type) {
-      case "LINK":
+      case 'LINK':
         return cellLinkType({ cellData, rowData });
-      case "ACTION":
+      case 'ACTION':
         return cellActionType({ cellData, rowData });
       default:
         return cellData;
@@ -87,7 +87,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       columnIndex={columnIndex}
       parent={parent}
     >
-      <div style={{ whiteSpace: cellWhiteSpace(), padding: "5px 0" }}>
+      <div style={{ whiteSpace: cellWhiteSpace(), padding: '5px 0' }}>
         {cellTypeRenderer(other)}
       </div>
     </CellMeasurer>
@@ -95,11 +95,11 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const searchFieldRenderer = () => {
     if (omitSearch === true) {
-      return <Box style={{ background: "transparent", height: 62 }} />;
+      return <Box style={{ background: 'transparent', height: 62 }} />;
     }
-    const searchType = searchOptions ? searchOptions.searchType : "text";
+    const searchType = searchOptions ? searchOptions.searchType : 'text';
     switch (searchType) {
-      case "select":
+      case 'select':
         return (
           <TableSearchSelectField
             dataKey={key}
@@ -144,13 +144,13 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const tooltipRenderer = (columnProps: ColumnProps) => {
     const { rowData } = columnProps;
-    let tooltipValue: string = rowData[tooltipKey] || "";
-    if (typeof tooltipKey === "function") {
+    let tooltipValue: string = rowData[tooltipKey] || '';
+    if (typeof tooltipKey === 'function') {
       tooltipValue = (tooltipKey)(rowData);
     }
 
     return (
-      <Tooltip disableHoverListener={!tooltipKey} title={tooltipValue || ""}>
+      <Tooltip disableHoverListener={!tooltipKey} title={tooltipValue || ''}>
         <div>{cellMeasurer(columnProps)}</div>
       </Tooltip>
     );

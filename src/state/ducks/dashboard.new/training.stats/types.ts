@@ -1,15 +1,15 @@
-import { Nullable } from "../../common/types";
-import { TRAINING_STATS_CHART, TRAINING_STATS_LIST } from "./constants";
+import { Nullable } from '../../common/types';
+import { TRAINING_STATS_CHART, TRAINING_STATS_LIST } from './constants';
 
 export enum TrainingStatusTypes {
-  OVERDUE = "OVERDUE",
-  DUE = "DUE",
+  OVERDUE = 'OVERDUE',
+  DUE = 'DUE',
 }
 
 export enum TrainingStatusChartLabelTypes {
-  OVERDUE = "Overdue",
-  DUE = "Due in 7 Days",
-  TOTAL_OUTSTANDING = "Total Outstanding",
+  OVERDUE = 'Overdue',
+  DUE = 'Due in 7 Days',
+  TOTAL_OUTSTANDING = 'Total Outstanding',
 }
 
 interface User {

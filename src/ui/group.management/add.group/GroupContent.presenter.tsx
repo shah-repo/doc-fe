@@ -1,15 +1,15 @@
-import { Grid } from "@material-ui/core";
-import React from "react";
-import { Permission } from "../../../state/ducks/auth/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { AsyncActionPayload } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import ActionButtons from "./content.components/ActionButtons";
-import JoinedGroups from "./content.components/JoinedGroups";
-import ParentGroups from "./content.components/ParentGroups";
-import Permissions from "./content.components/Permissions";
-import SharedContent from "./content.components/SharedContent";
+import { Grid } from '@material-ui/core';
+import React from 'react';
+import { Permission } from '../../../state/ducks/auth/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { AsyncActionPayload } from '../../../state/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import ActionButtons from './content.components/ActionButtons';
+import JoinedGroups from './content.components/JoinedGroups';
+import ParentGroups from './content.components/ParentGroups';
+import Permissions from './content.components/Permissions';
+import SharedContent from './content.components/SharedContent';
 
 interface Props {
   employees: GetEmployeeResponse[];
@@ -44,7 +44,7 @@ const GroupContentPresenter: React.FunctionComponent<Props> = ({
   handleReset,
   handleSubmit,
 }) => {
-  const { id = "" } = group;
+  const { id = '' } = group;
   return (
     <Grid
       container={true}

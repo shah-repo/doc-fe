@@ -1,4 +1,4 @@
-import { FBButtonProps, FBHelloSignState, FBInputProps } from "..";
+import { FBButtonProps, FBHelloSignState, FBInputProps } from '..';
 
 export interface FBHelloSignPayload {
   documentRevision: {
@@ -7,8 +7,8 @@ export interface FBHelloSignPayload {
 }
 
 export type FBHelloSignProps =
-& Pick<FBInputProps, "name" | "label" | "disabled">
-& Pick<FBButtonProps, "onClick">
+& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
+& Pick<FBButtonProps, 'onClick'>
 & {
   helloSignState?: FBHelloSignState;
   buttonLabel?: string;

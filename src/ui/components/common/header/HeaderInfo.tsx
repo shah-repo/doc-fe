@@ -1,30 +1,30 @@
-import { Chip, Grid, Link, Typography } from "@material-ui/core";
-import classNames from "classnames";
-import React from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as ArrowIcon } from "../../../../assets/images/breadcrumb_arrow.svg";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { companySelectors } from "../../../../state/ducks/company";
-import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, RelatedParentPartDetails, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../../../state/reducers";
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
-import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
-import { documentPreviewPath } from "../../../document.revision/utils/paths";
-import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
-import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
-import useGetHasTag from "../../../hooks/useGetHasTag";
-import Text from "../../Text";
-import { styles } from "./HeaderInfo.styles";
-import { FormHeaderStatusClassMapping } from "./Helpers";
-import { StyledBreadcrumb } from "./StyledBreadcrumb";
+import { Chip, Grid, Link, Typography } from '@material-ui/core';
+import classNames from 'classnames';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as ArrowIcon } from '../../../../assets/images/breadcrumb_arrow.svg';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { companySelectors } from '../../../../state/ducks/company';
+import { STATUS_TYPES_LABEL } from '../../../../state/ducks/dashboard.new/my.feeds/types';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus, RelatedParentPartDetails, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../state/reducers';
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from '../../../constants/urls';
+import { DocCategories, DocTypeGroups } from '../../../dashboard.new/line.items/common/types';
+import { documentPreviewPath } from '../../../document.revision/utils/paths';
+import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from '../../../documentRevision/helpers/documentRevisionStatus';
+import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
+import { useDocumentStatus, useTitle } from '../../../hooks/docCustomization/useCustomization';
+import useGetHasTag from '../../../hooks/useGetHasTag';
+import Text from '../../Text';
+import { styles } from './HeaderInfo.styles';
+import { FormHeaderStatusClassMapping } from './Helpers';
+import { StyledBreadcrumb } from './StyledBreadcrumb';
 
 interface Props {
   status: string;
@@ -56,6 +56,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
 
   const intl = useIntl();
+  const { _documentRevisionFormState } = SM.useStores();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
   const { isVisible: isTitleVisible } = useTitle(documentTypeId);
   const isStatusReleased = isDocumentRevisionInStatus(
@@ -64,49 +65,49 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   );
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
-    documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+    documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ''));
   const isPO = checkIsDocumentPO(documentType?.groupOptions);
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
       state,
-      documentType?.pageDetails?.category || ""
+      documentType?.pageDetails?.category || ''
     )
   );
   const isEquipmentDocument = checkIsDocumentEquipment(documentType?.groupOptions);
   const getRoute = () => {
     let title;
     if (SM.isNewCRLayout) {
-      title = intl.formatMessage({ id: "page.table.title.changeRequest" });
+      title = intl.formatMessage({ id: 'page.table.title.changeRequest' });
     } else if (isTypeMpiOutput) {
       title = DocTypeGroups.LHR;
     } else if (isEquipmentDocument) {
-      title = intl.formatMessage({ id: "form.builder.equipment" });
+      title = intl.formatMessage({ id: 'form.builder.equipment' });
     } else if (documentTypeAcronym) {
       title = documentTypeAcronym;
     }
     else if (SM.isNewLayout) {
-      title = intl.formatMessage({ id: "navigation.document.list" });
+      title = intl.formatMessage({ id: 'navigation.document.list' });
     }
     return title;
   };
   const title = navigationDetails?.label || getRoute();
   let url = `${DOCUMENT_REVISION_LIST_URL}`;
-  let iconLink = "/navigation_icons/document.svg";
-  if (navigationDetails.type === "CATEGORY") {
+  let iconLink = '/navigation_icons/document.svg';
+  if (navigationDetails.type === 'CATEGORY') {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
-    iconLink = navigationDetails?.icon || "";
+    iconLink = navigationDetails?.icon || '';
   }
   if (isEquipmentDocument) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
-    iconLink = "/navigation_icons/microscope.svg";
+    iconLink = '/navigation_icons/microscope.svg';
   }
   if (SM.isNewCRLayout || documentTypeAcronym) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
-    iconLink = "/navigation_icons/change-order.svg";
+    iconLink = '/navigation_icons/change-order.svg';
   } else if (isTypeMpiOutput) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
-    iconLink = "/navigation_icons/lhr_icon.svg";
+    iconLink = '/navigation_icons/lhr_icon.svg';
   }
   const classes = styles({ iconLink });
 
@@ -187,6 +188,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   if (isPO && isStatusReleased) {
     if (isUserAdminEnforce && SM.isNewVersion) {
       headerInfoStatus = STATUS_TYPES_LABEL.EDIT;
+      _documentRevisionFormState?.setDirty(true);
     } else {
       headerInfoStatus = STATUS_TYPES_LABEL.APPROVED;
     }
@@ -259,7 +261,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       id="HeaderInfo-subtitle"
                       component="p"
                       className={classes.subTitleLink}
-                      style={{ display: "inline-flex" }}
+                      style={{ display: 'inline-flex' }}
                     >
                       {!isTypeMpiOutput && <span className={classes.spaceLinePadding}> - </span>}
                       {subtitle}
@@ -291,7 +293,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       size="small"
                       className={`${classes.chip} ${
                         classes[
-                          FormHeaderStatusClassMapping[displayStatus || status || label || ""]
+                          FormHeaderStatusClassMapping[displayStatus || status || label || '']
                         ]
                       }`}
                       label={headerInfoStatus}

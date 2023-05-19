@@ -1,8 +1,8 @@
-import { TextField } from "@material-ui/core";
-import { GridCellProps } from "@progress/kendo-react-grid";
-import React from "react";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import { enterUserInfo } from "../column.definition";
+import { TextField } from '@material-ui/core';
+import { GridCellProps } from '@progress/kendo-react-grid';
+import React from 'react';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import { enterUserInfo } from '../column.definition';
 
 export const EmailCell = ({
   dataItem,
@@ -17,7 +17,7 @@ export const EmailCell = ({
     enterUserInfo.email = target?.value;
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 

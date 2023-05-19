@@ -1,13 +1,13 @@
-import { isEmpty, union } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalRole } from "..";
-import { Audit } from "../../../state/ducks/audit/types";
-import { Employee } from "../../../state/ducks/company/types";
-import { Document } from "../../../state/ducks/documentRevisions/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { isEmpty, union } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalRole } from '..';
+import { Audit } from '../../../state/ducks/audit/types';
+import { Employee } from '../../../state/ducks/company/types';
+import { Document } from '../../../state/ducks/documentRevisions/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
@@ -56,7 +56,7 @@ class FBApprovalState {
     this.getDocumentApi.set({
       url: FBEndpoint.Document,
       urlValues: { id },
-      method: "get",
+      method: 'get',
     });
   };
 
@@ -86,15 +86,15 @@ class FBApprovalState {
   }
 
   @action public setAuditData(data: Audit[]) {
-    set(this, "auditData", data);
+    set(this, 'auditData', data);
   }
 
   @action public addApprover = (value: FBApprovalValue) => {
-    set(this, "hasApproved", union(this.hasApproved, [value]));
+    set(this, 'hasApproved', union(this.hasApproved, [value]));
   };
 
   @action public setApprovers = (approvers: FBApprovalValue[]) => {
-    set(this, "hasApproved", approvers);
+    set(this, 'hasApproved', approvers);
   };
 }
 

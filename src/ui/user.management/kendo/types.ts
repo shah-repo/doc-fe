@@ -1,5 +1,5 @@
-import { KendoPanelProps } from "../../components/common/kendo/types";
-import { TableColumnActionType } from "../../components/table/column/types";
+import { KendoPanelProps } from '../../components/common/kendo/types';
+import { TableColumnActionType } from '../../components/table/column/types';
 
 type GridRowSelection<T> = (
   props: GridRowSelectionProps<T>

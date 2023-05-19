@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import { upperCase } from "lodash";
-import React from "react";
-import { FBIcon, FBIconProps } from "../..";
+import { Box } from '@material-ui/core';
+import { upperCase } from 'lodash';
+import React from 'react';
+import { FBIcon, FBIconProps } from '../..';
 
-const FBAttachmentIcon: React.FunctionComponent<Omit<FBIconProps, "icon">> = ({
+const FBAttachmentIcon: React.FunctionComponent<Omit<FBIconProps, 'icon'>> = ({
   text,
   ...props
 }) => (

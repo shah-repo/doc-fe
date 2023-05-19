@@ -1,6 +1,6 @@
-import { Attachment } from "../../../../../state/ducks/attachments/types";
-import { AsyncState } from "../../../../../state/types";
-import { Password } from "../../../password/types";
+import { Attachment } from '../../../../../state/ducks/attachments/types';
+import { AsyncState } from '../../../../../state/types';
+import { Password } from '../../../password/types';
 
 export interface ViewFileContainerProps {
   attachments: Attachment[];

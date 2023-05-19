@@ -1,18 +1,18 @@
-import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
-import { get, map } from "lodash";
-import React from "react";
-import Text from "../../../components/Text";
-import { withOptions } from "../../hocs/common/withOptions";
-import FBStore from "../../stores/ui/FBStore";
-import { FBCheckGroupProps } from "../../types/inputs/check";
-import FBInput from "../common/FBInput";
+import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
+import { get, map } from 'lodash';
+import React from 'react';
+import Text from '../../../components/Text';
+import { withOptions } from '../../hocs/common/withOptions';
+import FBStore from '../../stores/ui/FBStore';
+import { FBCheckGroupProps } from '../../types/inputs/check';
+import FBInput from '../common/FBInput';
 
 const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   row = true,
-  type = "checkboxgroup",
+  type = 'checkboxgroup',
   options,
-  optionValueKey = "value",
-  optionLabelKey = "text",
+  optionValueKey = 'value',
+  optionLabelKey = 'text',
   form,
   ...props
 }) => (

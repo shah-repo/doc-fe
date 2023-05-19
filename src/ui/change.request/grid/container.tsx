@@ -1,21 +1,21 @@
-import { GridRowClickEvent } from "@progress/kendo-react-grid";
-import { isEmpty } from "lodash";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router-dom";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { authSelectors } from "../../../state/ducks/auth";
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { getSchemaFromColumns } from "../../common/utils/helpers";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { DataStateProps } from "../../components/KendoGrid/interfaces";
-import { canEditChangeRequest } from "../utils/helpers";
-import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
-import gridConfiguration from "./column.definition";
-import { DocumentListPresenter } from "./presenter";
+import { GridRowClickEvent } from '@progress/kendo-react-grid';
+import { isEmpty } from 'lodash';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { authSelectors } from '../../../state/ducks/auth';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { getSchemaFromColumns } from '../../common/utils/helpers';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { canEditChangeRequest } from '../utils/helpers';
+import { changeRequestEditPath, changeRequestPreviewPath } from '../utils/paths';
+import gridConfiguration from './column.definition';
+import { DocumentListPresenter } from './presenter';
 
-export const CR_TABLE_NAME = "changeRequests";
+export const CR_TABLE_NAME = 'changeRequests';
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const schema = getSchemaFromColumns(gridConfiguration.columns);
@@ -32,7 +32,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          apiError: "",
+          apiError: '',
           queryDict: {
             dataState,
           },
@@ -51,11 +51,11 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     ) {
       const dataState: DataStateProps = {
         filter: {
-          logic: "and",
+          logic: 'and',
           filters: [
             {
-              field: "state",
-              operator: "eq",
+              field: 'state',
+              operator: 'eq',
               value: ChangeRequestStatus.InReview,
             },
           ],

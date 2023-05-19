@@ -1,14 +1,14 @@
-import { DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
-import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
-import { GridCellProps } from "@progress/kendo-react-grid";
-import { orderBy } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import { enumToOptions, translatedOptions } from "../../transform";
+import { DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
+import { DropDownList } from '@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList';
+import { GridCellProps } from '@progress/kendo-react-grid';
+import { orderBy } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from '../../../../state/ducks/documentRevisions/documentType/types';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
+import { enumToOptions, translatedOptions } from '../../transform';
 
 
 const getDSByType = (type: typeof GroupTag | typeof DOC_TYPE_GROUP) =>
@@ -46,23 +46,23 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
   ];
   const result: ResultProps = {
     dataSource: [],
-    operator: "eq",
+    operator: 'eq',
   };
   switch (field) {
-    case "defaultRevStage":
-      result.dataSource = orderBy(revisionStageOptions, "text");
+    case 'defaultRevStage':
+      result.dataSource = orderBy(revisionStageOptions, 'text');
       return result;
-    case "hiddenForCreationForUsersWithoutTags":
-      result.dataSource = orderBy(getDSByType(GroupTag), "text");
+    case 'hiddenForCreationForUsersWithoutTags':
+      result.dataSource = orderBy(getDSByType(GroupTag), 'text');
       return result;
-    case "hiddenForCreationForUsersWithoutTagsFormatted":
-      result.dataSource = orderBy(getDSByType(GroupTag), "text");
-      result.operator = "contains";
+    case 'hiddenForCreationForUsersWithoutTagsFormatted':
+      result.dataSource = orderBy(getDSByType(GroupTag), 'text');
+      result.operator = 'contains';
       return result;
-    case "group":
-      result.dataSource = orderBy(getDSByType(DOC_TYPE_GROUP), "text");
+    case 'group':
+      result.dataSource = orderBy(getDSByType(DOC_TYPE_GROUP), 'text');
       return result;
-    case "active":
+    case 'active':
       result.dataSource = statusOptions;
       return result;
     default:
@@ -77,7 +77,7 @@ export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProps> =
   onChange,
 }) => {
   const intl = useIntl();
-  const path = field || "";
+  const path = field || '';
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const localizedData: ResultProps = getDropDownDataSource(path);
   const isEdit = dataItem.inEdit;
@@ -93,13 +93,13 @@ export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProps> =
     }
   };
 
-  const dataValue = dataItem[path] === null ? "" : dataItem[path];
-  if (rowType === "groupHeader") {
+  const dataValue = dataItem[path] === null ? '' : dataItem[path];
+  if (rowType === 'groupHeader') {
     return null;
   }
   const defaultItem = {
     text: getTranslatedText(TranslatedText[DisplayText.SELECT_ITEM]),
-    value: "",
+    value: '',
   };
   return (
     <td>
