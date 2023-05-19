@@ -1,15 +1,14 @@
 import React from 'react';
-import Grid, { Mode, MODE_FIELD } from './components/Grid';
+import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import useStyles from './components/Grid/styles';
 import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
-import { useSelector } from 'react-redux';
-import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
 import { translate } from '../../../common/intl';
 import { IconButton } from '../../components/forms/fields-next';
-import FullscreenIcon from '@material-ui/icons/FullscreenRounded';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
@@ -19,12 +18,9 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
-  const documentTypeCategories = useSelector(documentTypeSelectors.getDocumentTypeCategoryList);
-
   const schema = createSchema({
     data,
     withoutStatus,
-    documentTypeCategories,
     clearRightBorderClassName: classes.clearRightBorder,
     cellARClassName: classes.cellAR,
     cellARHeaderClassName: classes.cellARHeader,
@@ -47,7 +43,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-    [MODE_FIELD]: Mode.add,
   };
 
   const renderTable = () => (
@@ -84,7 +79,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           data-cy="button-fullscreen"
           onClick={handleFullscreenClick}
         >
-          <FullscreenIcon />
+          <FontAwesomeIcon icon={solid('expand')} />
         </IconButton>
       </StyleTooltip>
       {renderTable()}
