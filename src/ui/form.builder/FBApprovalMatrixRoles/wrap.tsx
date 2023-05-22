@@ -8,8 +8,8 @@ import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { FBApprovalMatrixRolesProps } from './types';
 
 export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
-  Component: React.FunctionComponent<T>,
-): React.FunctionComponent<T> => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     approvalRoles,
     name,
