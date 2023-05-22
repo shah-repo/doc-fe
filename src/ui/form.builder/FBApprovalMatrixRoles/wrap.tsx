@@ -22,7 +22,11 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       name: group.label,
     }));
 
-    const existingRoles = useObserver(() => formState?.getFieldValue(FBDAMFields.DAR) as FBApprovalRole[] ?? []);
+    const existingRoles = useObserver(
+      () => (
+        formState?.getFieldValue(FBDAMFields.DAR) ?? []
+      ) as FBApprovalRole[],
+    );
 
     approvalRoles = existingRoles.map((role) => {
       const foundGroups = role.groups.map(({ id }) => {
