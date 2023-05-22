@@ -39,8 +39,8 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
           {...panelProps}
         >
           <AutoSizer onResize={handleResize}>
-            {({ width, height }) => (
-              <SMBox width={width} height={height}>
+            {(size) => (
+              <SMBox {...size}>
                 {children}
               </SMBox>
             )}
