@@ -6,7 +6,7 @@ import { DocumentRevision } from '../../../../state/ducks/documentRevisions/type
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -60,16 +60,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
 
-    SM.reaction(
-      () => approvalMatrixState?.data,
-      (data) => {
-        if (_documentRevisionFormState?.documentType?.group === FBDocTypeGroup.DAM) {
-          formik.setFieldValue('formInput', getDAMPayload(data));
-          _formState?.setValue('formInput', getDAMPayload(data));
-          formik.submitForm();
-        }
-      }
-    );
     useEffect(() => {
       if (!document?.id) { return; }
       const releasedDocument = (document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status));
