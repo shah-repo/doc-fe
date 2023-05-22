@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { cloneDeep, each, findIndex, get, size } from 'lodash';
+import { cloneDeep, each, findIndex, get, isNil, size } from 'lodash';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -65,7 +65,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
         const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
         let tax = 0;
-        if (previousItems?.length && UpdatedLineItemsTotalObj.forTax) {
+        if (previousItems?.length && UpdatedLineItemsTotalObj.forTax && !isNil(allItems.taxRate)) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
         }
 
@@ -152,7 +152,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
 
         let tax = 0;
-        if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
+        if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax && !isNil(allItems.taxRate)) {
           tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
         }
         const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || '0') : 0;

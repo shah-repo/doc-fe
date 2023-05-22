@@ -1,4 +1,4 @@
-import { Dictionary, filter, isEmpty, isNumber, isUndefined, reduce, size, template, toNumber, union } from 'lodash';
+import { Dictionary, filter, isEmpty, isNil, isNumber, isUndefined, reduce, size, template, toNumber, union } from 'lodash';
 import { action, observable, set } from 'mobx';
 import moment from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
@@ -29,11 +29,11 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public partApi = new FBRequest<DocumentRevision, null>();
 
   public getPartsVersion = () => {
-    const parts = this.value.items.filter( (item) => item.partNumber);
+    const parts = this.value.items.filter((item) => item.partNumber);
     this.fetchPartDocument(parts);
   };
 
-  private fetchPartDocument = (parts: FBPurchaseOrderItem[]) => {
+  private readonly fetchPartDocument = (parts: FBPurchaseOrderItem[]) => {
     if (isUndefined(parts) || parts.length === 0) {
       return;
     }
@@ -50,7 +50,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       if (error) {
         this.partApi.onError(error);
       } else {
-        this.value.items = this.value.items.map( (item) => {
+        this.value.items = this.value.items.map((item) => {
           if (item.partNumber === part.partNumber) {
             item.status = data?.status;
           }
@@ -62,7 +62,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.fetchPartDocument(parts);
   };
 
-  public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
+  public constructor ({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
     super();
     if (!initialValues || isEmpty(initialValues)) {
       return;
@@ -187,7 +187,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const lineItemsLength = this.value.items.length;
     const taxRate = lineItemsLength ? this.value.taxRate : TAX_RATE;
     let tax = 0;
-    if (lineItemsLength && sum.forTax) {
+    if (lineItemsLength && sum.forTax && !isNil(this.value.taxRate)) {
       tax = sum.forTax * this.value.taxRate / 100;
     }
 
@@ -220,7 +220,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.reCalculateValue();
   };
 
-  public onSuccess() {
+  public onSuccess () {
     super.onSuccess();
     const items = reduce(this.value.items, (reduced: FBPurchaseOrderItem[], item) => {
       if (!item.partNumber) {
@@ -239,14 +239,14 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.value.items = items;
   }
 
-  private fetchReceivedItems = (documentId: string) => {
+  private readonly fetchReceivedItems = (documentId: string) => {
     const urlTpl = template(FBEndpoint.ReceivedItemsQuantity);
     const url = urlTpl({ documentId });
     this.setUrl(url);
     this.fetch();
   };
 
-  private formatCost = (value: any, fixedDecimal?: number) => {
+  private readonly formatCost = (value: any, fixedDecimal?: number) => {
     const val = Number(value || 0);
     if (val === 0) {
       return val.toFixed(2);
@@ -254,9 +254,9 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return val.toFixed(fixedDecimal || 2);
   };
 
-  private formatDate = (date) => date ? moment(date).format('MM/DD/YYYY') : '';
+  private readonly formatDate = (date) => date ? moment(date).format('MM/DD/YYYY') : '';
 
-  private addItem = (item: FBPurchaseOrderItem) => {
+  private readonly addItem = (item: FBPurchaseOrderItem) => {
     this.value.items = union(this.value.items, [{
       ...item,
       id: FB.uniqid,
@@ -267,7 +267,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }]);
   };
 
-  private updateItem = (item: FBPurchaseOrderItem) => {
+  private readonly updateItem = (item: FBPurchaseOrderItem) => {
     this.value.items[item.index] = {
       ...item,
       totalAmount: this.itemTotalAmount.toFixed(2),
