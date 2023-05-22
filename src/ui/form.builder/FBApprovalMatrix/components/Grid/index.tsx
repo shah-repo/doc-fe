@@ -28,6 +28,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     disabled, onSave,
     defaultNewValue,
     withoutStatus,
+    size,
     ...restProps
   } = props;
   const classes = useStyles();
@@ -200,6 +201,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   return (
     <>
       <KendoDataGrid
+        style={size && { height: size?.height - (withButton ? 155 : 120) }}
         className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
         data={data}
         schema={schema}

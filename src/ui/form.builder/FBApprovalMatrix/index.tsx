@@ -10,11 +10,12 @@ import { IconButton } from '../../components/forms/fields-next';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import { Size } from 'react-virtualized';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  const { data, handleSave, disabled, withoutStatus } = props;
+  const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
@@ -45,7 +46,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     ) as FBApprovalRolesStages,
   };
 
-  const renderTable = () => (
+  const renderTable = (size?: Size) => (
     <GridTable
       data={approvalMatrix}
       schema={schema}
@@ -53,6 +54,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       defaultNewValue={defaultNewValue}
       onSave={handleSave}
       withoutStatus={withoutStatus}
+      size={size}
     />
   );
 
@@ -82,7 +84,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           <FontAwesomeIcon icon={solid('expand')} />
         </IconButton>
       </StyleTooltip>
-      {renderTable()}
+      {renderTable(size)}
     </FBProvider>
   );
 };
