@@ -55,14 +55,6 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {/* <FBTextField
-              name="descriptionOfChange"
-              label="form.builder.description.of.change"
-              placeholder="form.builder.enter"
-              rules="required"
-              multiline={true}
-              rows={1}
-            /> */}
             <KendoTextEditor
               name="descriptionOfChange"
               label="form.builder.description.of.change"
@@ -71,14 +63,6 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             />
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {/* <FBTextField
-              name="justificationOfChange"
-              label="form.builder.justification.of.change"
-              placeholder="form.builder.enter"
-              rules="required"
-              multiline={true}
-              rows={1}
-            /> */}
             <KendoTextEditor
               name="justificationOfChange"
               label="form.builder.justification.of.change"
