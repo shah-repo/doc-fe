@@ -1,4 +1,5 @@
 import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldProps, FBApprovalMatrixItem, FBInputProps } from '..';
+import { Size } from 'react-virtualized';
 
 export type FBApprovalMatrixProps =
 & Pick<FBInputProps, 'disabled' | 'name' | 'isInputOwner'>
@@ -7,6 +8,7 @@ export type FBApprovalMatrixProps =
   handleSave?: (data: FBApprovalMatrixItem[]) => void
   data?: FBApprovalMatrixFieldData
   withoutStatus?: boolean
+  size?: Size
 };
 
 export enum FBApprovalMatrixRoleTitles {

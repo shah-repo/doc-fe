@@ -5,6 +5,7 @@ import { GridItem, GridProps } from './types';
 import cx from 'classnames';
 import useStyles from './styles';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { Box } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
@@ -68,8 +69,9 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       }
 
       // @todo: use Grid API
-      const element = document.querySelector('.k-virtual-content');
-      element && (element.scrollTop = element.scrollHeight);
+      const nodes = document.querySelectorAll('.k-virtual-content');
+      const grid = nodes && nodes[nodes.length - 1];
+      grid && (grid.scrollTop = grid.scrollHeight);
     },
     [isAdding],
   );
@@ -142,8 +144,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const actions = (
       <td className={classes.actionsTd}>
-        <div className={classes.line} />
-        <div className={classes.actions}>
+        <Box className={classes.line} />
+        <Box className={classes.actions}>
           <StyleTooltip
             title={translate('common.discard')}
             placement="top"
@@ -172,7 +174,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
               <DoneIcon className={classes.iconButton} />
             </Button>
           </StyleTooltip>
-        </div>
+        </Box>
       </td>
     );
 
@@ -199,19 +201,22 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   return (
     <>
-      <KendoDataGrid
-        className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
-        data={data}
-        schema={schema}
-        rowRender={rowRender}
-        onRowClick={!disabled ? handleRowClick : undefined}
-        onDataStateChange={handleDataStateChange}
-        defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
-        filterable
-        fullWidth
-        hasBoxScrollbars
-        {...restProps}
-      />
+      <Box className={classes.gridContainer}>
+        <KendoDataGrid
+          className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
+          data={data}
+          schema={schema}
+          rowRender={rowRender}
+          onRowClick={!disabled ? handleRowClick : undefined}
+          onDataStateChange={handleDataStateChange}
+          defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
+          filterable
+          fullWidth
+          fullHeight
+          hasBoxScrollbars
+          {...restProps}
+        />
+      </Box>
       {withButton && (
         <Button
           data-cy="button-add"
