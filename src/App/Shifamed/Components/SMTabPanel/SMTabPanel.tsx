@@ -4,6 +4,7 @@ import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { SMBox, SMTabPanelProps } from '../../..';
 import useStyles from './SMTabPanel.styles';
 import { withSMTabPanelWrap } from './SMTabPanel.wrap';
+import { debounce } from 'lodash';
 
 const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   _tabsState,
@@ -16,9 +17,12 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   const active = _tabsState?.isTabActive(tabId);
 
   const handleResize: AutoSizerProps['onResize'] = useCallback(
-    (size) => {
-      _tabsState?.setContentSize(size);
-    },
+    debounce(
+      (size) => {
+        _tabsState?.setContentSize(size);
+      },
+      300,
+    ),
     [_tabsState],
   );
 
