@@ -1,1 +1,1 @@
-export const TAX_RATE = 9.25;
+export const TAX_RATE = 9.375;
