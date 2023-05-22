@@ -4,6 +4,7 @@ import { isEmpty, get, set, has } from 'lodash';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
 import { FBApprovalMatrixProps } from './types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>,
@@ -16,9 +17,11 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     isInputOwner,
     data,
     withoutStatus,
+    size,
     ...props
   }: T) => {
     const { approvalMatrixFieldState, workspaceState } = FB.useStores();
+    const { _tabsState } = SM.useStores();
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled
@@ -65,6 +68,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       };
     });
 
+    size = useObserver(() => _tabsState?.contentSize);
+
     return Component({
       ...(props as T),
       handleSave,
@@ -73,6 +78,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       mode,
       data,
       withoutStatus,
+      size,
     });
   };
 
