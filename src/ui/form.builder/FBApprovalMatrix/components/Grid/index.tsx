@@ -5,6 +5,7 @@ import { GridItem, GridProps } from './types';
 import cx from 'classnames';
 import useStyles from './styles';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { Box } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
@@ -142,8 +143,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const actions = (
       <td className={classes.actionsTd}>
-        <div className={classes.line} />
-        <div className={classes.actions}>
+        <Box className={classes.line} />
+        <Box className={classes.actions}>
           <StyleTooltip
             title={translate('common.discard')}
             placement="top"
@@ -172,7 +173,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
               <DoneIcon className={classes.iconButton} />
             </Button>
           </StyleTooltip>
-        </div>
+        </Box>
       </td>
     );
 
@@ -199,7 +200,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   return (
     <>
-      <div className={classes.gridContainer}>
+      <Box className={classes.gridContainer}>
         <KendoDataGrid
           className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
           data={data}
@@ -214,7 +215,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
           hasBoxScrollbars
           {...restProps}
         />
-      </div>
+      </Box>
       {withButton && (
         <Button
           data-cy="button-add"
