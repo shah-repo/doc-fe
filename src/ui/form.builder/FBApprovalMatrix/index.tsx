@@ -1,7 +1,7 @@
 import React from 'react';
+import { Box } from '@material-ui/core';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
-import useStyles from './components/Grid/styles';
 import createSchema from './schema';
 import { withFBApprovalMatrix } from './wrap';
 import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
@@ -10,7 +10,8 @@ import { IconButton } from '../../components/forms/fields-next';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
-import { Size } from 'react-virtualized';
+import useStyles from './styles';
+import cx from 'classnames';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
@@ -46,7 +47,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     ) as FBApprovalRolesStages,
   };
 
-  const renderTable = (size?: Size) => (
+  const renderTable = () => (
     <GridTable
       data={approvalMatrix}
       schema={schema}
@@ -54,7 +55,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       defaultNewValue={defaultNewValue}
       onSave={handleSave}
       withoutStatus={withoutStatus}
-      size={size}
     />
   );
 
@@ -62,7 +62,11 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const handleFullscreenClick = () => {
     dialogState.config({
       title: 'tabId.matrixdetails',
-      content: renderTable(),
+      content: (
+        <Box className={cx(classes.container, classes.fullScreen)}>
+          {renderTable()}
+        </Box>
+      ),
       open: true,
     });
   };
@@ -70,21 +74,26 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   return (
     <FBProvider dialogState={dialogState}>
       <FBDialog fullscreen />
-      <StyleTooltip
-        title={translate('form.builder.fullscreen.mode')}
-        placement="top"
-        arrow
+      <Box
+        className={classes.container}
+        {...size && { height: size.height - 80 }}
       >
-        <IconButton
-          className={classes.buttonFullscreen}
-          kind="ghost"
-          data-cy="button-fullscreen"
-          onClick={handleFullscreenClick}
+        <StyleTooltip
+          title={translate('form.builder.fullscreen.mode')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={solid('expand')} />
-        </IconButton>
-      </StyleTooltip>
-      {renderTable(size)}
+          <IconButton
+            className={classes.buttonFullscreen}
+            kind="ghost"
+            data-cy="button-fullscreen"
+            onClick={handleFullscreenClick}
+          >
+            <FontAwesomeIcon icon={solid('expand')} />
+          </IconButton>
+        </StyleTooltip>
+        {renderTable()}
+      </Box>
     </FBProvider>
   );
 };

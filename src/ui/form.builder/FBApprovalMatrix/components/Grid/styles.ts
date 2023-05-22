@@ -34,6 +34,9 @@ export default makeStyles((theme) => {
     discard: {
       position: 'relative',
     },
+    gridContainer: {
+      flexGrow: 1,
+    },
     grid: {
       '& .k-column-title': {
         fontSize: 12,
@@ -57,21 +60,6 @@ export default makeStyles((theme) => {
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
       borderBottom: 'none',
-    },
-    cellARHeader: {
-      '& .k-link': {
-        justifyContent: 'center',
-      },
-      '& .k-column-title': {
-        whiteSpace: 'normal',
-        textAlign: 'center',
-      },
-    },
-    cellAR: {
-      textAlign: 'center !important' as 'center',
-    },
-    clearRightBorder: {
-      borderRight: 'none !important',
     },
     buttonAdd: {
       width: '100%',
@@ -122,9 +110,6 @@ export default makeStyles((theme) => {
       top: 0,
       right: 0,
       zIndex: 3,
-    },
-    buttonFullscreen: {
-      marginLeft: 'auto',
     },
   };
 });
