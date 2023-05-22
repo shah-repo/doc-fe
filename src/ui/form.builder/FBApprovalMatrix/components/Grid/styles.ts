@@ -35,9 +35,6 @@ export default makeStyles((theme) => {
       position: 'relative',
     },
     grid: {
-      '& .k-grid-container': {
-        maxHeight: 300, // @todo
-      },
       '& .k-column-title': {
         fontSize: 12,
         textTransform: 'uppercase',

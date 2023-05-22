@@ -1,5 +1,6 @@
 import { Observer } from 'mobx-react';
 import React from 'react';
+import { AutoSizer } from 'react-virtualized';
 import { SMBox, SMTabPanelProps } from '../../..';
 import useStyles from './SMTabPanel.styles';
 import { withSMTabPanelWrap } from './SMTabPanel.wrap';
@@ -26,7 +27,13 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
           className={classes.content}
           {...panelProps}
         >
-          {children}
+          <AutoSizer onResize={console.log}>
+            {({ width, height }) => (
+              <SMBox width={width} height={height}>
+                {children}
+              </SMBox>
+            )}
+          </AutoSizer>
         </SMBox>
       )}
     </Observer>
