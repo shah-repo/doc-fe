@@ -1,4 +1,3 @@
-import { FieldWrapper } from '@progress/kendo-react-form';
 import { TextArea } from '@progress/kendo-react-inputs';
 import { TextAreaBlurEvent } from '@progress/kendo-react-inputs/dist/npm/textarea/interfaces/TextAreaBlurEvent';
 import { Field, useFormikContext } from 'formik';
@@ -26,7 +25,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const { formState } = FB.useStores();
   const formik = useFormikContext();
   const intl = useIntl();
-  defaultValue = defaultValue ?? formState?.getFieldValue(name);
+  defaultValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const [textEditorValue, setTextEditorValue] = useState<string>(defaultValue);
   const classes = styles();
 
@@ -41,23 +40,21 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   return (
     <Field
       id={name}
-      type="textfield"
+      type="textarea"
       name={name}
       label={label}
       required={true}
-      component={(() => <FieldWrapper>
-        <div className="k-form-field-wrap">
-          <TextArea
-            defaultValue={textEditorValue}
-            onBlur={onBlur}
-            className={classes.textArea}
-            rows={4}
-          />
-          {!textEditorValue && <span className={classes.error}>
-            <p>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</p>
-          </span>}
-        </div>
-      </FieldWrapper>)}
+      component={(() => <>
+        <TextArea
+          defaultValue={textEditorValue}
+          onBlur={onBlur}
+          className={classes.textArea}
+          rows={4}
+        />
+        {!textEditorValue && <span className={classes.error}>
+          <p>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</p>
+        </span>}
+      </>)}
       defaultVal={textEditorValue}
     />);
 };

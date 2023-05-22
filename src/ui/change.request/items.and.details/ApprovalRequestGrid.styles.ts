@@ -278,6 +278,7 @@ export default makeStyles((theme) =>
     truncate: {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      whiteSpace: 'pre-line',
       display: '-webkit-box',
       '-webkit-line-clamp': 4,
       'line-clamp': 4,

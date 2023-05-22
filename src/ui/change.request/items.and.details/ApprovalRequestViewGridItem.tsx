@@ -1,3 +1,4 @@
+import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
@@ -94,8 +95,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     setExpanded(!isExpanded);
   };
 
-  const getRenderChildrenElement = (data) => {
-    return <p className={classes.truncate}>{data}</p>;
+  const getTableElementData = (data) => {
+    return <Typography component="p" className={`${classes.truncate}`}>{data}</Typography>;
   };
 
   return (
@@ -125,10 +126,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={descriptionOfChange} childrenElement={getRenderChildrenElement(descriptionOfChange)} />
+          <Tooltip showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange)} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={justificationOfChange} childrenElement={getRenderChildrenElement(justificationOfChange)} />
+          <Tooltip showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange)} />
         </div>
       </div>
       {
