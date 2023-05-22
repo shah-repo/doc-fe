@@ -69,8 +69,9 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       }
 
       // @todo: use Grid API
-      const element = document.querySelector('.k-virtual-content');
-      element && (element.scrollTop = element.scrollHeight);
+      const nodes = document.querySelectorAll('.k-virtual-content');
+      const grid = nodes && nodes[nodes.length - 1];
+      grid && (grid.scrollTop = grid.scrollHeight);
     },
     [isAdding],
   );
