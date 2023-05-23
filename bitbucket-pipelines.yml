@@ -2,7 +2,6 @@ clone:
   depth: 10
 
 definitions:
-  services:
   caches:
   steps:
     - step: &COMMON
