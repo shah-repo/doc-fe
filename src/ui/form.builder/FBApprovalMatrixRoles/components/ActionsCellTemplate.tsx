@@ -18,8 +18,8 @@ const ActionsCell: React.FC<Props> = ({ dataItem, onConfirm, onDiscard }) => {
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const ref = useCallback((node: HTMLDivElement) => {
-    if (node !== null) {
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
       requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
     }
   }, []);
