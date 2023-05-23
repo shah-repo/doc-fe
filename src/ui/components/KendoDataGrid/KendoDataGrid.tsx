@@ -9,6 +9,15 @@ import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
 import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
 
+const DEFAULT_DATA_STATE: State = {
+  filter: {
+    logic: 'and',
+    filters: [],
+  },
+};
+
+const FIELD_SEPARATOR = '/';
+
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick, ...props }) => {
   const onCellClick = (e: GridRowClickEvent) => {
     onClick?.({
@@ -65,7 +74,7 @@ function processSchema<T> (schema: Array<ColumnDefinition<T>>): Array<ColumnDefi
   return schema.map((column) => {
     const field = column.field ?? `custom-${column.id}`;
     const shouldUseCustomCell = column.cell ?? column.template;
-    const uniqueFieldName = `${field.toString()}/${uniqueId()}`;
+    const uniqueFieldName = [field.toString(), FIELD_SEPARATOR, uniqueId()].join('');
 
     return {
       ...column,
@@ -85,7 +94,7 @@ const CellWrapper = (props: GridCellProps) => {
   );
 
   const column = allColumns.find(({ field }) => field === props.field);
-  const field = props.field.split('/')[0];
+  const field = props.field.split(FIELD_SEPARATOR)[0];
 
   invariant(column, `Column with field ${props.field} not found`);
 
@@ -132,13 +141,6 @@ const renderColumns = (
       </GridColumn>
     );
   });
-};
-
-const DEFAULT_DATA_STATE: State = {
-  filter: {
-    logic: 'and',
-    filters: [],
-  },
 };
 
 function KendoDataGrid<T> ({
