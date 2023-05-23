@@ -8,7 +8,8 @@ import { IconButtonProps } from './IconButton.types';
 
 const IconButton: React.FC<IconButtonProps> = React.forwardRef(({
   kind = 'primary',
-  size = 16,
+  iconSize = 16,
+  size = 'medium',
   variant,
   color,
   children,
@@ -24,7 +25,7 @@ const IconButton: React.FC<IconButtonProps> = React.forwardRef(({
       destructive: ['text', 'default'],
     },
   );
-  const classes = useStyles({ size });
+  const classes = useStyles({ iconSize, size });
   const isSquare = kind && ['form', 'action', 'destructive'].includes(kind);
   const isBoxed = kind === 'action';
   const isSimple = kind === 'simple';

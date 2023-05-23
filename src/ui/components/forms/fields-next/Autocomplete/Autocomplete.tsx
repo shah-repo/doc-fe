@@ -1,16 +1,17 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { InputBaseProps, InputProps, useFormControl } from '@material-ui/core';
+import { useFormControl } from '@material-ui/core';
 import formControlState from '@material-ui/core/FormControl/formControlState';
 import MuiAutocomplete from '@material-ui/lab/Autocomplete';
+import cx from 'classnames';
 import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { TextField } from '..';
 import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './Autocomplete.styles';
-import { AutocompleteProps } from './Autocomplete.types';
+import { AutocompleteInputProps, AutocompleteProps } from './Autocomplete.types';
 
-const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }> = ({
+const AutocompleteControl: React.FC<AutocompleteInputProps> = ({
   autoFocus = false,
   defaultValue,
   disabled,
@@ -24,6 +25,7 @@ const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }>
   onChange,
   onFocus,
   placeholder,
+  size,
   value,
   error,
 }) => (
@@ -43,6 +45,7 @@ const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }>
     onFocus={onFocus}
     placeholder={placeholder}
     inputProps={inputProps}
+    size={size}
     {...InputProps}
   />
 );
@@ -53,6 +56,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   onBlur,
   placeholder,
   inputProps,
+  size,
   ChipProps = { size: 'small' },
   ...props
 }) => {
@@ -64,6 +68,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     states: ['disabled', 'error'],
   });
   const [blurEvent, setBlurEvent] = useState<React.FocusEvent<HTMLUnknownElement>>();
+
+  const isSmall = size === 'small';
 
   useEffect(() => {
     if (blurEvent && onBlur) {
@@ -79,9 +85,12 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       {...props}
       disabled={controlState.disabled}
       classes={{
-        ...omit(baseClasses, 'disabled'),
+        ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall'),
         ...classes,
+        inputRoot: cx(baseClasses.inputRoot, { [baseClasses.sizeSmall]: isSmall }),
+        option: cx(baseClasses.option, { [baseClasses.optionSmall]: isSmall }),
       }}
+      size={size}
       popupIcon={<FontAwesomeIcon icon={solid('angle-down')} />}
       onBlur={(event) => {
         event.persist();
@@ -94,6 +103,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
             ...params.InputProps,
             ...inputProps,
           }}
+          size={size}
           name={name}
           error={controlState.error}
           disabled={controlState.disabled}
