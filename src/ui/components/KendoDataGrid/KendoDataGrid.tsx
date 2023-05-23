@@ -1,7 +1,7 @@
 import { State, process } from '@progress/kendo-data-query';
 import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import invariant from 'invariant';
-import { flatMapDeep, kebabCase } from 'lodash';
+import { flatMapDeep, kebabCase, uniqueId } from 'lodash';
 import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
@@ -61,6 +61,19 @@ const GridContext = React.createContext<{
   onRowClick: undefined,
 });
 
+function processSchema<T> (schema: Array<ColumnDefinition<T>>): Array<ColumnDefinition<T>> {
+  return schema.map((column) => {
+    const field = column.field ?? `custom-${column.id}`;
+    const shouldUseCustomCell = column.cell ?? column.template;
+    const uniqueFieldName = `${field.toString()}/${uniqueId()}`;
+
+    return {
+      ...column,
+      field: shouldUseCustomCell ? uniqueFieldName : field,
+    };
+  });
+}
+
 const CellWrapper = (props: GridCellProps) => {
   const { columns, onRowClick } = useContext(GridContext);
 
@@ -72,6 +85,7 @@ const CellWrapper = (props: GridCellProps) => {
   );
 
   const column = allColumns.find(({ field }) => field === props.field);
+  const field = props.field.split('/')[0];
 
   invariant(column, `Column with field ${props.field} not found`);
 
@@ -82,7 +96,7 @@ const CellWrapper = (props: GridCellProps) => {
     <CustomGridCell
       {...props}
       column={column}
-      field={props.field ?? ''}
+      field={field}
       onClick={onRowClick}
     />
   );
@@ -94,17 +108,15 @@ const renderColumns = (
   calculateColumWidth?: WidthCalculator,
 ) => {
   return columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
-    const field = column.field ?? `custom-${column.id}`;
     const shouldUseCustomCell = column.cell ?? column.template;
 
     return (
       <GridColumn
         {...column}
         key={column.id}
-        field={field}
         title={translate(column.title)}
         cell={shouldUseCustomCell ? CellWrapper : undefined}
-        headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
+        headerCell={(props) => <CustomHeaderCell {...props} column={column} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'
@@ -152,7 +164,7 @@ function KendoDataGrid<T> ({
 }: DataGridProps<T>): React.ReactElement {
   const gridRef = ref ?? useRef<Grid>();
   const gridContainerRef = containerRef ?? useRef<HTMLDivElement>(null);
-  const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
+  const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(processSchema(schema));
   const [dataState, setDataState] = useState<State>({
     ...defaultDataState,
     ...filter && { filter },
@@ -160,8 +172,10 @@ function KendoDataGrid<T> ({
     ...sort && { sort },
   });
 
+  console.log(columnsSchema);
+
   useEffect(() => {
-    setColumnsSchema(schema);
+    setColumnsSchema(processSchema(schema));
   }, [schema]);
 
   useEffect(() => {

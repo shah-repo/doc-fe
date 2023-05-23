@@ -55,14 +55,13 @@ export interface DataGridProps<T> extends StyledKendoGridProps {
   defaultDataState?: State
 }
 
-export interface CustomGridCellProps extends Omit<GridCellProps, 'field'> {
+export interface CustomGridCellProps extends GridCellProps {
   field: string
   dataItem: unknown
   column: GenericColumnDefinition
   onClick?: GridProps['onRowClick']
 }
-export interface CustomGridHeaderCellProps extends Omit<GridHeaderCellProps, 'field'> {
-  field: string
+export interface CustomGridHeaderCellProps extends GridHeaderCellProps {
   column: GenericColumnDefinition
 }
 
