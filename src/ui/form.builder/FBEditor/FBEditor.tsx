@@ -7,7 +7,7 @@ import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 import { withFBEditor } from './FBEditor.wrap';
 
-export const styles = {
+const styles = {
   labelProps: {
     marginBottom: 10,
     fontWeight: 600,
