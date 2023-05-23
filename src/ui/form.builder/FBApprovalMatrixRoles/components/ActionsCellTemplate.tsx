@@ -1,7 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { translate } from '../../../../common/intl';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { IconButton } from '../../../components/forms/fields-next';
@@ -17,13 +17,12 @@ interface Props extends CellTemplateProps<EditableRole> {
 const ActionsCell: React.FC<Props> = ({ dataItem, onConfirm, onDiscard }) => {
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (ref.current && isEditMode) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const ref = useCallback((node: HTMLDivElement) => {
+    if (node !== null) {
+      requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
     }
-  }, [isEditMode]);
+  }, []);
 
   if (!isEditMode) {
     return null;
