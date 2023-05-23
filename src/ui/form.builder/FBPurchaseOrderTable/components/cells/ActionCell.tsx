@@ -27,7 +27,7 @@ const ActionCell: CellComponent<FBPurchaseOrderItem, Props> = ({
 }) => {
   const [ref, isHovered] = useHover<HTMLButtonElement>();
   const isDeleteAllowed = !isReceivable && !disabled;
-  const isCreateLOTAllowed = isReceivable && dataItem?.type === FBPurchaseOrderItemType.PRODUCT;
+  const isCreateLOTAllowed = isReceivable && dataItem.type === FBPurchaseOrderItemType.PRODUCT;
 
   return (
     <KendoDataGridCell
