@@ -1,5 +1,5 @@
 import { State } from '@progress/kendo-data-query';
-import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridHeaderCellProps, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
+import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridHeaderCellProps, GridItemChangeEvent, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import React, { ComponentType, ReactElement } from 'react';
 import { StyledKendoGridProps } from '../StyledKendoGrid/StyledKendoGrid.types';
 
@@ -7,7 +7,11 @@ export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
   dataItem: T
 }
 
-export interface CellTemplateProps<T> extends CustomGridCellProps {
+export interface DataGridItemChangeEvent<T> extends GridItemChangeEvent {
+  dataItem: T
+}
+
+export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
   field: string
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
@@ -53,8 +57,9 @@ export interface DataGridProps<T> extends StyledKendoGridProps {
 
 export interface CustomGridCellProps extends Omit<GridCellProps, 'field'> {
   field: string
+  dataItem: unknown
   column: GenericColumnDefinition
-  onClick: GridProps['onRowClick']
+  onClick?: GridProps['onRowClick']
 }
 export interface CustomGridHeaderCellProps extends Omit<GridHeaderCellProps, 'field'> {
   field: string

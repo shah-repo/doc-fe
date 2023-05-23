@@ -9,11 +9,11 @@ const baseInputStyles = (theme: Theme) => ({
   background: 'none',
   backgroundColor: Colors.white,
   borderRadius: theme.shape.borderRadius / 2,
-  border: `1px solid ${Colors.tableStroke}`,
+  border: `1px solid ${Colors.stroke}`,
 
   '&:hover': {
     backgroundColor: Colors.gray,
-    borderColor: Colors.tableStroke,
+    borderColor: Colors.stroke,
   },
   '&:focus': {
     boxShadow: 'none',

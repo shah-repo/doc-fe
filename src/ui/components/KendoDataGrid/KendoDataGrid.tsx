@@ -1,7 +1,8 @@
 import { State, process } from '@progress/kendo-data-query';
-import { Grid, GridCell, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
-import { kebabCase } from 'lodash';
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
+import invariant from 'invariant';
+import { flatMapDeep, kebabCase } from 'lodash';
+import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
@@ -12,7 +13,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
   const onCellClick = (e: GridRowClickEvent) => {
     onClick?.({
       ...e,
-      dataItem: props.dataItem as unknown,
+      dataItem: props.dataItem,
     });
   };
   return (
@@ -23,14 +24,15 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
           {...props}
           field={field}
           render={(element, props) => {
-            if (React.isValidElement(element) && column.template) {
+            if (React.isValidElement(element)) {
               return React.cloneElement(
                 element,
                 {
-                  ...element.props,
                   ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
                 },
-                column.template({ ...props, column, field, onClick: onCellClick }),
+                column.template
+                  ? column.template({ ...props, column, field, onClick: onCellClick })
+                  : undefined,
               );
             }
             return element;
@@ -51,14 +53,49 @@ function isGenericColumns (columns: GenericColumnDefinition['children']): column
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
+const GridContext = React.createContext<{
+  columns: GenericColumnDefinition[]
+  onRowClick?: GridProps['onRowClick']
+}>({
+  columns: [],
+  onRowClick: undefined,
+});
+
+const CellWrapper = (props: GridCellProps) => {
+  const { columns, onRowClick } = useContext(GridContext);
+
+  invariant(props.field, 'Field is required when using custom cell');
+
+  const allColumns = useMemo(
+    () => flatMapDeep(columns, (column) => (column?.children ? [column, ...column?.children] : [column])),
+    [columns],
+  );
+
+  const column = allColumns.find(({ field }) => field === props.field);
+
+  invariant(column, `Column with field ${props.field} not found`);
+
+  if (!column) {
+    return null;
+  }
+  return (
+    <CustomGridCell
+      {...props}
+      column={column}
+      field={props.field ?? ''}
+      onClick={onRowClick}
+    />
+  );
+};
+
 const renderColumns = (
   columns: GenericColumnDefinition[],
   gridWidth: number,
   calculateColumWidth?: WidthCalculator,
-  onRowClick?: GridProps['onRowClick'],
-) =>
-  columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
+) => {
+  return columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
     const field = column.field ?? `custom-${column.id}`;
+    const shouldUseCustomCell = column.cell ?? column.template;
 
     return (
       <GridColumn
@@ -66,7 +103,7 @@ const renderColumns = (
         key={column.id}
         field={field}
         title={translate(column.title)}
-        cell={(props) => <CustomGridCell {...props} column={column} field={field} onClick={onRowClick} />}
+        cell={shouldUseCustomCell ? CellWrapper : undefined}
         headerCell={(props) => <CustomHeaderCell {...props} column={column} field={field} />}
         resizable={column.resizable && !column.fitContent}
         width={
@@ -83,6 +120,7 @@ const renderColumns = (
       </GridColumn>
     );
   });
+};
 
 const DEFAULT_DATA_STATE: State = {
   filter: {
@@ -179,7 +217,12 @@ function KendoDataGrid<T> ({
       disableHeight={!fullHeight}
     >
       {({ width, height }) => (
-        <>
+        <GridContext.Provider
+          value={{
+            columns: columnsSchema as GenericColumnDefinition[],
+            onRowClick,
+          }}
+        >
           <StyledKendoGrid
             {...props}
             style={{
@@ -195,7 +238,7 @@ function KendoDataGrid<T> ({
             onRowClick={onRowClick}
             {...dataState}
           >
-            {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth, onRowClick)}
+            {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth)}
             {fallback && (
               <GridNoRecords>{fallback}</GridNoRecords>
             )}
@@ -203,7 +246,7 @@ function KendoDataGrid<T> ({
           {loading && (
             <Loader gridRef={gridContainerRef} />
           )}
-        </>
+        </GridContext.Provider>
       )}
     </AutoSizer>
   );
