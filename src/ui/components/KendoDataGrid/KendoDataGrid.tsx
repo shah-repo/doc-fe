@@ -172,8 +172,6 @@ function KendoDataGrid<T> ({
     ...sort && { sort },
   });
 
-  console.log(columnsSchema);
-
   useEffect(() => {
     setColumnsSchema(processSchema(schema));
   }, [schema]);
