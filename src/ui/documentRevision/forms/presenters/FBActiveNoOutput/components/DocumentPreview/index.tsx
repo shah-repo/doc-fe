@@ -26,14 +26,14 @@ import { DocumentRevisionFormValues } from '../../../../types';
 import styles from './styles';
 
 interface ContainerProps {
-  docRevId?: string;
-  formPreview?: boolean;
-  _tabsState?: SMTabsState;
-  _formState?: SMFormState;
+  docRevId?: string
+  formPreview?: boolean
+  _tabsState?: SMTabsState
+  _formState?: SMFormState
 }
 
 interface ComponentProps extends ContainerProps {
-  formik: FormikProps<DocumentRevisionFormValues>;
+  formik: FormikProps<DocumentRevisionFormValues>
 }
 
 const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
@@ -94,8 +94,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const mode = FBWorkspaceModeOptions.FORM;
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
-    ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
-    schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
+    ref.active && ref.type === SmartReferenceType.HiddenPiInstance
+    && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
 
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
 
@@ -110,8 +110,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
             filter(
               ro.slice(0, i + 1),
               (step) =>
-                !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
-            )
+                !step.deleted && includes(FBEditorState.pickStepIndex, step.type),
+            ),
           ),
         }),
       }));
@@ -125,7 +125,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = [ ...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.materialsandequipment',
       tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
       type: TabTypeOptions.TABS_MEQ,
@@ -194,13 +194,14 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                 tabs={tabConfig}
                 boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
                 panelProps={{ flex: 1 }}
+                isPreview
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
                   const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                   return (
-                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent} pr={.75}>
+                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent} pr={0.75}>
                       {tabType === TabTypeOptions.MIXED && <>
                         {!formPreview && <DocumentRevisionFormPresenter
                           {...formik}
@@ -221,8 +222,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {documentRevision && showTabContent &&
-                        <FBSchema
+                        {documentRevision && showTabContent
+                        && <FBSchema
                           {...{ schema }}
                           schemaState={previewWorkspaceState}
                           workspaceMode={mode}
