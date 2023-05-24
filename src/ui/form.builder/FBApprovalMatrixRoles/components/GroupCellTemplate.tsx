@@ -30,9 +30,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
 
   const placeholder = dataItem.groups.length === 0 ? translate('form.builder.approving.groups') : undefined;
 
-  const handleClick = () => {
-    onClick?.({ dataItem });
-  };
+  const handleClick = () => onClick?.({ dataItem });
 
   const handleChange = (event: ChangeEvent<unknown>, value: RoleGroup[]) => {
     onChange?.({

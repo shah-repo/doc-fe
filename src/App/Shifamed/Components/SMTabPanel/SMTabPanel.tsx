@@ -1,16 +1,17 @@
+import { debounce } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { useCallback } from 'react';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { SMBox, SMTabPanelProps } from '../../..';
 import useStyles from './SMTabPanel.styles';
 import { withSMTabPanelWrap } from './SMTabPanel.wrap';
-import { debounce } from 'lodash';
 
 const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   _tabsState,
   tabId,
   tabIndex,
   children,
+  isPreview,
   panelProps,
 }) => {
   const classes = useStyles();
@@ -38,7 +39,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
           className={classes.content}
           {...panelProps}
         >
-          <AutoSizer onResize={handleResize}>
+          <AutoSizer disableHeight={isPreview} onResize={handleResize}>
             {(size) => (
               <SMBox {...size}>
                 {children}

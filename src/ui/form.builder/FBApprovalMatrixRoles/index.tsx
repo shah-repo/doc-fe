@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
 import React from 'react';
@@ -91,7 +92,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   };
 
   return (
-    <>
+    <Box className={classes.root}>
       <KendoDataGrid<EditableRole>
         schema={schema}
         data={roles}
@@ -113,7 +114,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
           <Text message="form.builder.add.another.role" />
         </Button>
       )}
-    </>
+    </Box>
   );
 };
 

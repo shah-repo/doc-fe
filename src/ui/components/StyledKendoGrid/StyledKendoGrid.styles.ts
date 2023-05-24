@@ -11,6 +11,12 @@ const baseInputStyles = (theme: Theme) => ({
   borderRadius: theme.shape.borderRadius / 2,
   border: `1px solid ${Colors.stroke}`,
 
+  // TODO check and remove if needed after upgrading Kendo Grid
+  '&::selection': {
+    backgroundColor: 'highlight !important',
+    color: 'highlighttext !important',
+  },
+
   '&:hover': {
     backgroundColor: Colors.gray,
     borderColor: Colors.stroke,

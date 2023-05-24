@@ -11,22 +11,22 @@ type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, 'name' | 'disabled' | 'la
 export type FBPOApprovalMatrixFieldProps =
 & FBPOApprovalMatrixBasicProps
 & {
-  poamState: FBPOApprovalMatrixState;
-  dialogState?: FBDialogState;
-  handleAdd?: () => any;
-  handleRevert?: () => any;
+  poamState: FBPOApprovalMatrixState
+  dialogState?: FBDialogState
+  handleAdd?: () => any
+  handleRevert?: () => any
 };
 
 export type FBPOApprovalMatrixDialogProps =
 & FBPOApprovalMatrixBasicProps
 & {
-  isDialogOpen: boolean;
-  initialValues?: Dictionary<any>;
-  onSubmit: (item: any) => void;
-  closeDialog: () => void;
-  groupOptions: OptionType[];
-  employees: GetEmployeeResponse[];
-  signatureStages: number[];
+  isDialogOpen: boolean
+  initialValues?: Dictionary<any>
+  onSubmit: (item: any) => void
+  closeDialog: () => void
+  groupOptions: OptionType[]
+  employees: GetEmployeeResponse[]
+  signatureStages: number[]
 };
 
 export type FBPOApprovalMatrixFormProps =
@@ -38,47 +38,42 @@ export type FBPOApprovalMatrixTableProps =
 & Pick<FBPOApprovalMatrixDialogProps, 'onSubmit' |
 'closeDialog' | 'isDialogOpen' | 'initialValues' | 'groupOptions' | 'employees' | 'signatureStages'>
 & {
-  approvalLevels?: POApprovalMatrixLevel[];
-  handleEdit: (index: number, item: POApprovalMatrixLevel) => void;
-  disableFilter: boolean;
-  isDocumentReleased: boolean;
-  groups?: Map<string, Group>;
-  employees?: Map<string, Employee>;
+  approvalLevels?: POApprovalMatrixLevel[]
+  handleEdit: (index: number, item: POApprovalMatrixLevel) => void
+  disableFilter: boolean
+  isDocumentReleased: boolean
+  groups?: Map<string, Group>
+  employees?: Map<string, Employee>
 };
 
 export interface POApprovalMatrix {
-  approvalLevels: POApprovalMatrixLevel[];
+  approvalLevels: POApprovalMatrixLevel[]
 }
 
 export interface POApprovalMatrixLevel {
-  id: string;
-  name: string;
-  limit: number;
-  threshold: number;
-  signatures: Signature[] | {
-    signatureStage1?: string[];
-    signatureStage2?: string[];
-    signatureStage3?: string[];
-  };
+  id: string
+  name: string
+  limit: number
+  threshold: number
+  signatures: Signature[]
 }
 
 export interface Signature {
-  id: string;
-  signatureStage: number;
-  groups: Group[];
-  employees: Employee[];
+  id: string
+  signatureStage: number
+  groups: Group[]
+  employees: Employee[]
 }
 
 export type FBPOApprovalMatrixFormActionsProps =
 & {
-  handleAdd?: ButtonProps['onClick'];
-  handleCancel?: ButtonProps['onClick'];
+  handleAdd?: ButtonProps['onClick']
+  handleCancel?: ButtonProps['onClick']
 };
 
 export interface FBPOApprovalMatrixConstructor {
-  formState?: FBFormState;
-  approvalLevels?: POApprovalMatrixLevel[];
-  outputRevision?: boolean;
-  isOutput?: boolean;
+  formState?: FBFormState
+  approvalLevels?: POApprovalMatrixLevel[]
+  outputRevision?: boolean
+  isOutput?: boolean
 }
-
