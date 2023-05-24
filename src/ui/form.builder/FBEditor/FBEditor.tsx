@@ -48,6 +48,7 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
           label="form.builder.select.tab"
         >
           <Autocomplete
+            blurOnSelect
             key={`fb-editor-auto-${type}-${index}`}
             options={tabConfig}
             onChange={handleTabSelection}
