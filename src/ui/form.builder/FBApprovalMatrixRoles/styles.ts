@@ -1,7 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
-export default makeStyles((theme) => ({
+export default makeStyles(theme => ({
+  root: {
+    marginBottom: theme.spacing(2),
+  },
   grid: {
     '& .k-column-title': {
       fontSize: 12,
@@ -23,8 +26,8 @@ export default makeStyles((theme) => ({
       overflowY: 'visible',
     },
     '& td': {
-      height: 48,
-      padding: `${theme.spacing(1, 1.5)} !important`,
+      height: 42,
+      padding: `${theme.spacing(0.5, 1.5)} !important`,
     },
   },
   gridWithButton: {
