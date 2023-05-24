@@ -10,7 +10,7 @@ export const buildSignatureStages = (
   [signature.signatureStage]: buildSignature(signature, groups, employees),
 }), {});
 
-export const buildSignature = (
+const buildSignature = (
   signature: Signature,
   groups: FBPOAMKendoTableProps['groups'] = new Map(),
   employees: FBPOAMKendoTableProps['employees'] = new Map(),
