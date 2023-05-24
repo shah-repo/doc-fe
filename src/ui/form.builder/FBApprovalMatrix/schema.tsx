@@ -16,7 +16,7 @@ import DropdownFilter from './components/DropdownFilter';
 import { translate } from '../../../common/intl';
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
-import { DATA_ITEM_KEY, TEXT_FIELD } from './components/Grid';
+import { optionMapper } from './components/Grid';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { CATEGORY_OPTIONS } from './constants';
 
@@ -33,20 +33,30 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     data, withoutStatus,
     cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
   } = options;
-  const { approvalRoles = [] } = data ?? {};
+  const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
-  const internalTypeOptions = Object.keys(GroupWithGroupOptions).map((value) => ({ value, text: value }));
-  const categoryOptions = CATEGORY_OPTIONS.map((category) => ({ value: category, text: category }));
+  const internalTypeOptions = Object.keys(GroupWithGroupOptions).map(v => optionMapper(v));
+
+  // Add unknown Categories to Filter from data.
+  const categoryFilterOptions = [...CATEGORY_OPTIONS];
+  approvalMatrix
+    .map(item => item.docType.category)
+    .filter(Boolean)
+    .forEach((value) => {
+      if (!categoryFilterOptions.find(item => item.value === value)) {
+        categoryFilterOptions.push(optionMapper(value));
+      }
+    });
 
   const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
       disabled={withoutStatus}
       data={[
-        { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.active') },
-        { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.inactive') },
+        optionMapper(true, translate('common.active')),
+        optionMapper(false, translate('common.inactive')),
       ]}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      defaultItem={optionMapper('', translate('common.all'))}
     />
   );
 
@@ -54,7 +64,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownFilter
       {...props}
       data={internalTypeOptions}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      defaultItem={optionMapper('', translate('common.all'))}
     />
   );
 
@@ -68,16 +78,15 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   const CategoryFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
-      data={categoryOptions}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      data={categoryFilterOptions}
+      defaultItem={optionMapper('', translate('common.all'))}
     />
   );
 
   const CategoryCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
     <DropdownCellTemplate
       {...props}
-      data={categoryOptions}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: '-' }}
+      data={CATEGORY_OPTIONS}
     />
   );
 
