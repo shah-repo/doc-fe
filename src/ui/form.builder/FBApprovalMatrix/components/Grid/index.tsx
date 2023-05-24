@@ -49,7 +49,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       dataState.filter.filters = dataState.filter.filters
         .filter((item) => {
           if ('value' in item) {
-            return item.value !== '';
+            return item.value !== undefined;
           }
 
           return true;

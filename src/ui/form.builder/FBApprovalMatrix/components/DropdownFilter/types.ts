@@ -2,7 +2,7 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 
 interface Item {
   text: string
-  value: string | boolean
+  value: string | boolean | undefined
 }
 
 export interface DropdownFilterCellProps extends GridFilterCellProps {
