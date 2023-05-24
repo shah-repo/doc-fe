@@ -11,6 +11,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   tabId,
   tabIndex,
   children,
+  isPreview,
   panelProps,
 }) => {
   const classes = useStyles();
@@ -38,7 +39,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
           className={classes.content}
           {...panelProps}
         >
-          <AutoSizer disableHeight onResize={handleResize}>
+          <AutoSizer disableHeight={isPreview} onResize={handleResize}>
             {(size) => (
               <SMBox {...size}>
                 {children}

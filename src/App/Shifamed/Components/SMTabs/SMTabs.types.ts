@@ -5,9 +5,10 @@ import { TabInfo } from '../../../../state/ducks/documentRevisions/documentType/
 export type SMTabsHOCProps = Pick<SMProviderProps, '_tabsState' | '_documentRevisionFormState'>;
 
 export type SMTabsProps = SMTabsHOCProps & {
-  onChange?: TabsTypeMap['props']['onChange'];
-  tabs: TabInfo[];
-  children: React.ReactNode;
-  boxProps?: SMBoxProps;
-  panelProps?: SMBoxProps;
+  onChange?: TabsTypeMap['props']['onChange']
+  tabs: TabInfo[]
+  children: React.ReactNode
+  boxProps?: SMBoxProps
+  panelProps?: SMBoxProps
+  isPreview?: boolean
 };
