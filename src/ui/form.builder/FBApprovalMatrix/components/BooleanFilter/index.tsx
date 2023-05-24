@@ -12,7 +12,7 @@ const BooleanFilter: React.FC<GridFilterCellProps> = (props) => {
         { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.true') },
         { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.false') },
       ]}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      defaultItem={{ [DATA_ITEM_KEY]: undefined, [TEXT_FIELD]: translate('common.all') }}
     />
   );
 };

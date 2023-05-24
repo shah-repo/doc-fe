@@ -56,7 +56,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
         optionMapper(true, translate('common.active')),
         optionMapper(false, translate('common.inactive')),
       ]}
-      defaultItem={optionMapper('', translate('common.all'))}
+      defaultItem={optionMapper(undefined, translate('common.all'))}
     />
   );
 
@@ -64,7 +64,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownFilter
       {...props}
       data={internalTypeOptions}
-      defaultItem={optionMapper('', translate('common.all'))}
+      defaultItem={optionMapper(undefined, translate('common.all'))}
     />
   );
 
@@ -79,7 +79,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownFilter
       {...props}
       data={categoryFilterOptions}
-      defaultItem={optionMapper('', translate('common.all'))}
+      defaultItem={optionMapper(undefined, translate('common.all'))}
     />
   );
 

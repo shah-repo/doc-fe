@@ -7,7 +7,7 @@ import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
 const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   const {
     data,
-    value = '',
+    value,
     operator = 'eq',
     defaultItem,
     defaultValue,
