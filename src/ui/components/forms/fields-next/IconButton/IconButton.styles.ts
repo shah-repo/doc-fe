@@ -43,17 +43,10 @@ export default makeStyles((theme) => createStyles({
       background: Colors.hover,
     },
   }),
-  destructive: {
-    color: Colors.error,
-    '&:hover': {
-      color: Colors.error,
-      background: Colors.errorHighlight,
-    },
-  },
-  boxed: {
+  boxed: () => ({
     background: Colors.darkGray,
     borderRadius: theme.shape.borderRadius,
-  },
+  }),
   simple: ({ iconSize }: IconButtonStylesProps) => ({
     width: 'auto',
     height: 'auto',
@@ -61,6 +54,13 @@ export default makeStyles((theme) => createStyles({
     fontSize: iconSize,
     '& svg': {
       height: '1em',
+    },
+  }),
+  destructive: () => ({
+    color: Colors.error,
+    '&:hover': {
+      color: Colors.error,
+      background: Colors.errorHighlight,
     },
   }),
 }));
