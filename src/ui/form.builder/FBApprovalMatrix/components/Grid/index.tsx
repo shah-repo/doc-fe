@@ -43,8 +43,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     [originData],
   );
 
-  // fix rerendering and category filter
-
   const handleDataStateChange: GridProps<T>['onDataStateChange'] = ({ dataState }) => {
     // Remove empty filters.
     if (dataState.filter?.filters) {
