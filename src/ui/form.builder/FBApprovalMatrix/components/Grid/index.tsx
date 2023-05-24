@@ -43,7 +43,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     [originData],
   );
 
-  // Refactor optionMapper, fix rerendering
+  // fix rerendering and category filter
 
   const handleDataStateChange: GridProps<T>['onDataStateChange'] = ({ dataState }) => {
     // Remove empty filters.

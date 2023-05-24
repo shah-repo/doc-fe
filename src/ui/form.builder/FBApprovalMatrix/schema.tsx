@@ -16,7 +16,7 @@ import DropdownFilter from './components/DropdownFilter';
 import { translate } from '../../../common/intl';
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
-import { optionMapper } from './components/Grid';
+import { createOption } from './components/Grid';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { CATEGORY_OPTIONS } from './constants';
 
@@ -35,7 +35,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   } = options;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
-  const internalTypeOptions = Object.keys(GroupWithGroupOptions).map(v => optionMapper(v));
+  const internalTypeOptions = Object.keys(GroupWithGroupOptions).map(v => createOption(v));
 
   // Add unknown Categories to Filter from data.
   const categoryFilterOptions = [...CATEGORY_OPTIONS];
@@ -44,7 +44,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     .filter(Boolean)
     .forEach((value) => {
       if (!categoryFilterOptions.find(item => item.value === value)) {
-        categoryFilterOptions.push(optionMapper(value));
+        categoryFilterOptions.push(createOption(value));
       }
     });
 
@@ -53,10 +53,10 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       {...props}
       disabled={withoutStatus}
       data={[
-        optionMapper(true, translate('common.active')),
-        optionMapper(false, translate('common.inactive')),
+        createOption(true, translate('common.active')),
+        createOption(false, translate('common.inactive')),
       ]}
-      defaultItem={optionMapper(undefined, translate('common.all'))}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
@@ -64,7 +64,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownFilter
       {...props}
       data={internalTypeOptions}
-      defaultItem={optionMapper(undefined, translate('common.all'))}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
@@ -79,7 +79,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownFilter
       {...props}
       data={categoryFilterOptions}
-      defaultItem={optionMapper(undefined, translate('common.all'))}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 

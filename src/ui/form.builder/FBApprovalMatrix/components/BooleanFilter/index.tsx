@@ -2,17 +2,17 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import DropdownFilter from '../DropdownFilter';
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
-import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
+import { createOption } from '../Grid';
 
 const BooleanFilter: React.FC<GridFilterCellProps> = (props) => {
   return (
     <DropdownFilter
       {...props}
       data={[
-        { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.true') },
-        { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.false') },
+        createOption(true, translate('common.true')),
+        createOption(false, translate('common.false')),
       ]}
-      defaultItem={{ [DATA_ITEM_KEY]: undefined, [TEXT_FIELD]: translate('common.all') }}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 };
