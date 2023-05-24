@@ -48,7 +48,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       }
       setIndex(index);
       const stages = map(signatureStages, (signatureStage) =>
-        find(item.signatures as Signature[], { signatureStage }) || { signatureStage });
+        find(item.signatures, { signatureStage }) || { signatureStage });
       item = {
         ...item,
         signatures: sortBy(stages, 'signatureStage') as Signature[],
