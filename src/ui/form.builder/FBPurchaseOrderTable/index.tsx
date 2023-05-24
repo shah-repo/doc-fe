@@ -39,6 +39,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   name = '',
   isReceivable,
   isPOAddAction,
+  isPOEditState,
   dialog,
 }) => {
   const classes = useStyles();
@@ -156,9 +157,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           cancelAction={onAlertNotificationCancel}
           confirmLabel="common.yes.proceed"
           message={
-            isPOAddAction
-              ? 'documentRevision.po.notification.alert.add'
-              : 'documentRevision.po.notification.alert.remove'
+            isPOEditState
+              ? 'documentRevision.po.notification.alert.update'
+              : isPOAddAction
+                ? 'documentRevision.po.notification.alert.add'
+                : 'documentRevision.po.notification.alert.remove'
           }
         />
       )}

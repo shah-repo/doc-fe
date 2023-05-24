@@ -1,10 +1,10 @@
 import { useFormikContext } from 'formik';
-import { cloneDeep, compact, each, first, get, omit } from 'lodash';
+import { cloneDeep, compact, each, first, get, isNil, omit } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FB, FBPurchaseOrderValue } from '..';
+import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue } from '..';
 import { SM } from '../../../App';
 import { getPOIndexDbInstance } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
@@ -47,7 +47,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     dialog,
     ...props
   }: T) => {
-    const { purchaseOrderState, formState, workspaceState } = FB.useStores();
+    const { purchaseOrderState, formState, workspaceState, poApprovalsState } = FB.useStores();
     const { document, id, isOutput } = workspaceState || {};
     const formik = useFormikContext();
     const history = useHistory();
@@ -63,10 +63,57 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
       && SM.isNewVersion;
+    const updatedValues = useRef({ shippingCost: '0', tax: '0', taxRate: '0' });
 
-    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev, 6));
-    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
-    handleShippingCostChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setShippingCost(getDecimalValue(ev));
+    const isTotalAmountUnderThreshold = (shippingCost, tax, taxRate) => {
+      if (isPOEditState) {
+        const allItems = purchaseOrderState?.calculateCost();
+        const totalAmount = parseFloat(allItems?.totalAmount ?? '0');
+        let UpdatedAmount = parseFloat(allItems?.subTotal ?? '0');
+        if (shippingCost) {
+          UpdatedAmount += parseFloat(allItems?.tax ?? '0') + parseFloat(shippingCost);
+        } else if (tax) {
+          UpdatedAmount += parseFloat(tax ?? '0') + parseFloat(allItems?.shippingCost ?? '0');
+        } else if (taxRate) {
+          const sum = getPOLineItemsTotalAndForTaxAmount(allItems?.items as FBPurchaseOrderItem[]);
+          let tax = 0;
+          if (allItems?.items.length && sum.forTax && !isNil(taxRate)) {
+            tax = sum.forTax * parseFloat(taxRate ?? '0') / 100;
+          }
+          UpdatedAmount += tax + parseFloat(allItems?.shippingCost ?? '0');
+        }
+        const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
+          (o1.limit + o1.threshold) >= totalAmount);
+        if (topApprovals?.length
+         && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
+        ) {
+          updatedValues.current = { ...{ shippingCost, tax, taxRate } };
+           dialog?.open();
+           return false;
+        } else {
+          return true;
+        }
+      }
+    };
+
+    handleTaxChange = (ev: React.ChangeEvent<any>) => {
+      if (!isTotalAmountUnderThreshold(null, getDecimalValue(ev, 6), null)) {
+        return;
+      }
+      purchaseOrderState?.setTax(getDecimalValue(ev, 6));
+    };
+    handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
+      if (!isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, 6))) {
+        return;
+      }
+      purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
+    };
+    handleShippingCostChange = (ev: React.ChangeEvent<any>) => {
+      if (!isTotalAmountUnderThreshold(getDecimalValue(ev), null, null)) {
+        return;
+      }
+      purchaseOrderState?.setShippingCost(getDecimalValue(ev));
+    };
 
     const getDecimalValue = (ev: React.ChangeEvent<any>, fixedDecimal?: number) => {
       const { target: { value = 0 } = {} } = ev || {};
@@ -79,6 +126,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
+
+    useEffect(() => {
+      if (workspaceState?.id) {
+        poApprovalsState?.fetchApprovalsThreshold();
+      }
+    }, [poApprovalsState, workspaceState]);
 
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
 
@@ -125,6 +178,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     onAlertNotificationCancel = () => {
       setIsPOAddAction(false);
+      updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0' };
       dialog?.close();
     };
 
@@ -135,6 +189,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         return;
       }
       handleItem?.();
+    };
+
+    const getShippingCost = (shippingCost): number => {
+      return (isPOEditState && updatedValues.current?.shippingCost)
+        ? parseFloat(updatedValues.current?.shippingCost)
+        : Number(shippingCost || '0');
     };
 
     const getLatestDocRevData = (deleteLineItem) => {
@@ -149,11 +209,21 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       const previousLineItemsLength = previousItems?.length;
       const UpdatedLineItemsTotalObj = getPOLineItemsTotalAndForTaxAmount(previousItems);
+      let taxRate = allItems.taxRate;
       let tax = 0;
-      if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
+      if (isPOEditState && updatedValues.current?.tax) {
+        tax = parseFloat(updatedValues.current?.tax);
+        taxRate = purchaseOrderState?.getTaxRateByTax(updatedValues.current?.tax) as number;
+      } else if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax) {
         tax = UpdatedLineItemsTotalObj.forTax * allItems.taxRate / 100;
       }
-      const shippingCost = previousLineItemsLength ? parseFloat(allItems.shippingCost || '0') : 0;
+      if (isPOEditState && updatedValues.current?.taxRate) {
+        taxRate = Number(updatedValues.current?.taxRate);
+        if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax && !isNil(updatedValues.current?.taxRate)) {
+          tax = UpdatedLineItemsTotalObj.forTax * taxRate / 100;
+        }
+      }
+      const shippingCost = previousLineItemsLength ? getShippingCost(allItems.shippingCost) : 0;
       const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
       const totalInUSD = totalAmount * allItems.exchangeRate;
 
@@ -161,6 +231,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
         subTotal: formatCost(UpdatedLineItemsTotalObj.subTotal),
         tax: formatCost(tax, 6),
+        taxRate: taxRate,
         shippingCost: formatCost(shippingCost),
         totalAmount: formatCost(totalAmount),
         totalInUSD: formatCost(totalInUSD),
@@ -286,6 +357,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       name,
       isReceivable,
       isPOAddAction,
+      isPOEditState,
       handleItem,
       dialog,
     });

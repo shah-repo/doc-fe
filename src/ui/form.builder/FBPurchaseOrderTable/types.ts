@@ -19,6 +19,7 @@ export type FBPurchaseOrderTableProps =
     loading?: boolean
     isReceivable?: boolean
     isPOAddAction?: boolean
+    isPOEditState?: boolean
     dialog?: DialogHandler
   };
 
