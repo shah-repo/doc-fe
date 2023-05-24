@@ -1,4 +1,5 @@
 import { Box, Chip } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import useStyles from '../styles';
@@ -26,7 +27,12 @@ const GroupsCellTemplate: React.FC<Props> = ({
   return (
     <Box onClick={handleClick} className={classes.chips}>
       {allItems.map((item) => (
-        <Chip size="small" label={item.name} key={item.id} />
+        <Chip
+          size="small"
+          label={item.name}
+          key={item.id}
+          className={cx({ [classes.activeChip]: Boolean(onClick) })}
+        />
       ))}
     </Box>
   );

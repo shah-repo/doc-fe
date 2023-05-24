@@ -36,4 +36,7 @@ export default makeStyles(theme => ({
     flexWrap: 'wrap',
     gap: theme.spacing(0.75, 0.75),
   },
+  activeChip: {
+    cursor: 'pointer',
+  },
 }));
