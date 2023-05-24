@@ -1,4 +1,0 @@
-Document Id,Title,Description,Training Required,Owner,BLC text field,BLC Text Editor,BLC Date picker,BLC radio button group,BLC select field,BLC Checkbox group,,
-,,,,,,,,,,option1,option2,option3
-TDT-00002,First bulk document,description of first bulk document,No,,first bulk document,first bulk document,10/22/2021,option2,option2,Yes,No,No
-TDT-00005,Second bulk document,description for second bulk document,Yes,enlil.testmail+cy2@gmail.com,second bulk document,second bulk document,05/08/1995,option1,option1,No,Yes,No
