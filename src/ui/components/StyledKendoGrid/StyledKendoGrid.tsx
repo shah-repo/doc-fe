@@ -60,10 +60,7 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
 
   const renderRow: GridProps['rowRender'] = (row, rowProps) => {
     const rowElement = onRowClick
-      ? React.cloneElement(row, {
-        ...row.props,
-        className: cx(row.props.className, 'k-clickable-row'),
-      })
+      ? React.cloneElement(row, { className: cx(row.props.className, 'k-clickable-row') })
       : row;
 
     return props.rowRender?.(rowElement, rowProps) ?? rowElement;

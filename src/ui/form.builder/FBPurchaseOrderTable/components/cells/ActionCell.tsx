@@ -2,12 +2,12 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import React, { MouseEventHandler } from 'react';
+import { Button, IconButton } from '../../../../components/forms/fields-next';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import KendoDataGridCell from '../../../../components/KendoDataGrid/KendoDataGridCell';
 import Text from '../../../../components/Text';
-import { Button, IconButton } from '../../../../components/forms/fields-next';
 import useHover from '../../../../hooks/useHover';
-import { FBPurchaseOrderItem, FBPurchaseOrderProps } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
+import { FBPurchaseOrderItem, FBPurchaseOrderItemType, FBPurchaseOrderProps } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
 
 interface Props {
   onDelete: (index: number) => MouseEventHandler
@@ -27,6 +27,7 @@ const ActionCell: CellComponent<FBPurchaseOrderItem, Props> = ({
 }) => {
   const [ref, isHovered] = useHover<HTMLButtonElement>();
   const isDeleteAllowed = !isReceivable && !disabled;
+  const isCreateLOTAllowed = isReceivable && dataItem.type === FBPurchaseOrderItemType.PRODUCT;
 
   return (
     <KendoDataGridCell
@@ -50,7 +51,7 @@ const ActionCell: CellComponent<FBPurchaseOrderItem, Props> = ({
           </IconButton>
         </Tooltip>
       )}
-      {isReceivable && (
+      {isCreateLOTAllowed && (
         <Button
           kind="outlined"
           size="small"

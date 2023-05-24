@@ -35,7 +35,7 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
     sizeSmall: {
       minHeight: 30,
       fontSize: 12,
-      padding: theme.spacing(1, 2),
+      padding: theme.spacing(0.75, 2),
     },
     startIcon: {
       marginLeft: 0,
