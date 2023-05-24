@@ -1,8 +1,9 @@
-import { Box, TextField, Typography } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Box } from '@material-ui/core';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
 import { capitalize } from 'lodash';
 import React from 'react';
 import { FBCheckbox, FBEditorProperties, FBEditorProps, FBEditorState, FBEditorValidation, FBForm, FBProvider } from '..';
+import { Autocomplete, FormField } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 import { withFBEditor } from './FBEditor.wrap';
@@ -43,21 +44,18 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
   <FBProvider {...{ editorState }}>
     <FBForm initialValues={inputProps} {...{ formState }}>
       <Box hidden={mode === 'validation'}>
-        <Typography variant="h5" style={styles.labelProps}>
-          <Text translation="form.builder.select.tab" />
-        </Typography>
-        <Autocomplete
-          key={`fb-editor-auto-${type}-${index}`}
-          options={tabConfig?.filter(value => value.tabId !== activeTabId)}
-          onChange={handleTabSelection}
-          filterSelectedOptions={true}
-          value={capitalize(activeTabId)}
-          renderOption={(option) => (<Text translation={option.labelId} />)}
-          renderInput={(params) => <TextField {...params}
-            fullWidth
-            InputProps={{ ...params.InputProps, disableUnderline: true }} /> }
-          style={styles.containerProps}
-        />
+        <FormField
+          label="form.builder.select.tab"
+        >
+          <Autocomplete
+            key={`fb-editor-auto-${type}-${index}`}
+            options={tabConfig}
+            onChange={handleTabSelection}
+            value={capitalize(activeTabId)}
+            renderOption={(option) => (<Text translation={option.labelId} />)}
+            style={{ marginBottom: '15px' }}
+          />
+        </FormField>
       </Box>
       <Box hidden={mode === 'validation'}>
         {children}
