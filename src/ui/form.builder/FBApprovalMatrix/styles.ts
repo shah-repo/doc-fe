@@ -1,13 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 
 export default makeStyles(() => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  fullScreen: {
-    height: '100%',
-  },
   buttonFullscreen: {
     marginLeft: 'auto',
   },
