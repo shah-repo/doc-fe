@@ -34,10 +34,10 @@ export default makeStyles((theme) => {
     discard: {
       position: 'relative',
     },
-    gridContainer: {
-      flexGrow: 1,
-    },
     grid: {
+      '& .k-grid-container': {
+        maxHeight: 300, // @todo
+      },
       '& .k-column-title': {
         fontSize: 12,
         textTransform: 'uppercase',

@@ -194,7 +194,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                 tabs={tabConfig}
                 boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
                 panelProps={{ flex: 1 }}
-                isPreview
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;

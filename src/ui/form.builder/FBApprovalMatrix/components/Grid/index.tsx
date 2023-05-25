@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { set, kebabCase, cloneDeep } from 'lodash';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { GridItem, GridProps } from './types';
@@ -12,8 +12,6 @@ import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from '.';
 import { translate } from '../../../../../common/intl';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-
-// @todo: correct row borders style
 
 function normalizeData <T> (data: T[]): T[] {
   return cloneDeep(data).map(dataItem => {
@@ -61,23 +59,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   const isAdding = data.some((dataItem) => dataItem[MODE_FIELD] === Mode.add);
 
-  // Scroll down on add.
-  useEffect(
-    () => {
-      if (!isAdding) {
-        return;
-      }
-
-      // @todo: use Grid API
-      const nodes = document.querySelectorAll('.k-virtual-content');
-      const grid = nodes && nodes[nodes.length - 1];
-      grid && (grid.scrollTop = grid.scrollHeight);
-    },
-    [isAdding],
-  );
-
-  const handleAdd: React.MouseEventHandler = (event) => {
-    handleItemDiscard(event);
+  const handleAdd: React.MouseEventHandler = () => {
+    handleItemDiscard();
 
     const newItem = {
       ...defaultNewValue,
@@ -88,6 +71,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   };
 
   const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem: clickedDataItem }) => {
+    handleItemDiscard();
     setPrevDataItem(cloneDeep(clickedDataItem));
     setData((data) => data.map((dataItem) => {
       return set(dataItem, MODE_FIELD, dataItem.id === clickedDataItem.id ? Mode.edit : Mode.show);
@@ -106,7 +90,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     setPrevDataItem(undefined);
   };
 
-  const handleItemDiscard: React.MouseEventHandler = () => {
+  const handleItemDiscard = (): void => {
     setData((data) => data
       .filter((dataItem) => dataItem[MODE_FIELD] !== Mode.add)
       .map((dataItem) => {
@@ -120,6 +104,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     setPrevDataItem(undefined);
   };
+
+  const scrollToRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      requestAnimationFrame(() => node.scrollIntoView({ behavior: 'auto', block: 'nearest' }));
+    }
+  }, []);
 
   const rowRender: GridProps<T>['rowRender'] = (row, props) => {
     const { dataItem } = props;
@@ -135,7 +125,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       return React.cloneElement(
         row,
         {
-          ...row.props,
           ['data-cy' as string]: dataCy,
           className: cx(row.props.className, { [classes.inactive]: isInactive }),
         },
@@ -145,7 +134,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     const actions = (
       <td className={classes.actionsTd}>
         <Box className={classes.line} />
-        <Box className={classes.actions}>
+        <div className={classes.actions} ref={scrollToRef}>
           <StyleTooltip
             title={translate('common.discard')}
             placement="top"
@@ -174,14 +163,13 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
               <DoneIcon className={classes.iconButton} />
             </Button>
           </StyleTooltip>
-        </Box>
+        </div>
       </td>
     );
 
     return React.cloneElement(
       row,
       {
-        ...row.props,
         ['data-cy' as string]: dataCy,
         className: cx(row.props.className, classes.updating),
       },
@@ -201,22 +189,19 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   return (
     <>
-      <Box className={classes.gridContainer}>
-        <KendoDataGrid
-          className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
-          data={data}
-          schema={schema}
-          rowRender={rowRender}
-          onRowClick={!disabled ? handleRowClick : undefined}
-          onDataStateChange={handleDataStateChange}
-          defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
-          filterable
-          fullWidth
-          fullHeight
-          hasBoxScrollbars
-          {...restProps}
-        />
-      </Box>
+      <KendoDataGrid
+        className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
+        data={data}
+        schema={schema}
+        rowRender={rowRender}
+        onRowClick={!disabled ? handleRowClick : undefined}
+        onDataStateChange={handleDataStateChange}
+        defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
+        filterable
+        fullWidth
+        hasBoxScrollbars
+        {...restProps}
+      />
       {withButton && (
         <Button
           data-cy="button-add"

@@ -7,5 +7,4 @@ export type SMTabPanelProps =
   tabIndex?: number
   children: SMFormProps['children']
   panelProps?: SMBoxProps
-  isPreview?: boolean
 };
