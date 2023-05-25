@@ -201,22 +201,19 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   return (
     <>
-      <Box className={classes.gridContainer}>
-        <KendoDataGrid
-          className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
-          data={data}
-          schema={schema}
-          rowRender={rowRender}
-          onRowClick={!disabled ? handleRowClick : undefined}
-          onDataStateChange={handleDataStateChange}
-          defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
-          filterable
-          fullWidth
-          fullHeight
-          hasBoxScrollbars
-          {...restProps}
-        />
-      </Box>
+      <KendoDataGrid
+        className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
+        data={data}
+        schema={schema}
+        rowRender={rowRender}
+        onRowClick={!disabled ? handleRowClick : undefined}
+        onDataStateChange={handleDataStateChange}
+        defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
+        filterable
+        fullWidth
+        hasBoxScrollbars
+        {...restProps}
+      />
       {withButton && (
         <Button
           data-cy="button-add"
