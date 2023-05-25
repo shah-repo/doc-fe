@@ -4,7 +4,7 @@ import { FB, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from '..';
 import predefinedValidators from '../data/predefinedValidators.json';
 
 export const withFBEditorValidation = <T extends FBEditorValidationProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     schemaState,
@@ -24,6 +24,11 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       if (!value) {
         formState?.omitFieldValue(name + '.value');
         formState?.omitFieldValue(name + '.name');
+        formState?.removeFieldRules(name + '.name');
+      } else {
+        const schemaSelectItemName = schemaState?.getSchemaItem(name + '.name');
+        formState?.setFieldRules(name + '.name', schemaSelectItemName?.rules);
+        formState?.setFieldFinalValidationRules(name + '.name', schemaSelectItemName?.rules);
       }
       formState?.getInputState(`${name}.name`)?.setHidden(!value);
       const schemaSelectItem = schemaState?.getSchemaItem(name + '.value');
