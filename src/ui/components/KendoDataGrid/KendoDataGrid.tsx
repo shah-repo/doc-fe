@@ -1,7 +1,7 @@
 import { State, process } from '@progress/kendo-data-query';
 import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import invariant from 'invariant';
-import { flatMapDeep, kebabCase, uniqueId } from 'lodash';
+import { flatMapDeep, kebabCase } from 'lodash';
 import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
@@ -15,8 +15,6 @@ const DEFAULT_DATA_STATE: State = {
     filters: [],
   },
 };
-
-const FIELD_SEPARATOR = '/';
 
 const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick, ...props }) => {
   const onCellClick = (e: GridRowClickEvent) => {
@@ -73,12 +71,10 @@ const GridContext = React.createContext<{
 function processSchema<T> (schema: Array<ColumnDefinition<T>>): Array<ColumnDefinition<T>> {
   return schema.map((column) => {
     const field = column.field ?? `custom-${column.id}`;
-    const shouldUseCustomCell = column.cell ?? column.template;
-    const uniqueFieldName = [field.toString(), FIELD_SEPARATOR, uniqueId()].join('');
 
     return {
       ...column,
-      field: shouldUseCustomCell ? uniqueFieldName : field,
+      field,
     };
   });
 }
@@ -94,7 +90,6 @@ const CellWrapper = (props: GridCellProps) => {
   );
 
   const column = allColumns.find(({ field }) => field === props.field);
-  const field = props.field.split(FIELD_SEPARATOR)[0];
 
   invariant(column, `Column with field ${props.field} not found`);
 
@@ -105,7 +100,7 @@ const CellWrapper = (props: GridCellProps) => {
     <CustomGridCell
       {...props}
       column={column}
-      field={field}
+      field={props.field}
       onClick={onRowClick}
     />
   );

@@ -25,10 +25,7 @@ export REACT_APP_THEME="DEV_THEME"
 export NODE_ENV="production"
 export REACT_APP_DATADOG_APPLICATION_ID="fake"
 export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
-export REACT_APP_DATADOG_ENABLED="false"
-export REACT_APP_DATADOG_SAMPLE_RATE="0"
 export REACT_APP_CONSOLE_TOAST="false"
-export REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT="false"
 
 docker build \
   -f docker/cypress_web.Dockerfile \
@@ -44,10 +41,7 @@ docker build \
   --build-arg PORT \
   --build-arg REACT_APP_THEME \
   --build-arg NODE_ENV \
-  --build-arg REACT_APP_DATADOG_ENABLED \
   --build-arg REACT_APP_DATADOG_APPLICATION_ID \
   --build-arg REACT_APP_DATADOG_CLIENT_TOKEN \
-  --build-arg REACT_APP_DATADOG_SAMPLE_RATE \
   --build-arg REACT_APP_CONSOLE_TOAST \
-  --build-arg REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT \
    .

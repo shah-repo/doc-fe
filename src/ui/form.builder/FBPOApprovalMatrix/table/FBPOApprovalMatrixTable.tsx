@@ -1,14 +1,14 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
 import { FBInput } from '../..';
-import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from '../FBPOApprovalMatrix.types';
+import { FBPOApprovalMatrixTableProps } from '../FBPOApprovalMatrix.types';
 import FBPOApprovalMatrixDialog from '../form/FBPOApprovalMatrixDialog';
-import FBPOAMKendoTable from '../grid/FBPOAMKendoTable';
+import FBPOAMKendoTable from '../grid';
 import { withFBPOApprovalMatrixTable } from './FBPOApprovalMatrixTable.wrap';
 
 const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTableProps> = ({
   disabled,
-  approvalLevels,
+  approvalLevels = [],
   employees,
   groups,
   handleEdit,
@@ -23,31 +23,34 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   groupOptions,
 }) => (
   <Box>
-    <FBPOAMKendoTable {...{
-      approvalLevels: approvalLevels as POApprovalMatrixLevel[],
-      employees,
-      groups,
-      handleEdit,
-      disableFilter,
-      isDocumentReleased,
-    }} />
-    {
-      !isDocumentReleased && isDialogOpen
-        && <FBInput>
-          <FBPOApprovalMatrixDialog
-            {...{
-              isDialogOpen,
-              closeDialog,
-              initialValues,
-              onSubmit,
-              name,
-              groupOptions,
-              employees,
-              signatureStages,
-            }}
-          />
-        </FBInput>
-    }
+    <FBPOAMKendoTable
+      {...{
+        approvalLevels,
+        signatureStages,
+        employees,
+        groups,
+        handleEdit,
+        disableFilter,
+        isDocumentReleased,
+        disabled,
+      }}
+    />
+    {!isDocumentReleased && isDialogOpen && (
+      <FBInput>
+        <FBPOApprovalMatrixDialog
+          {...{
+            isDialogOpen,
+            closeDialog,
+            initialValues,
+            onSubmit,
+            name,
+            groupOptions,
+            employees,
+            signatureStages,
+          }}
+        />
+      </FBInput>
+    )}
   </Box>
 );
 

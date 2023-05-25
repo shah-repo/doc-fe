@@ -34,7 +34,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
   };
 
   if (!canBeModified) {
-    return value || '-';
+    return valueItem?.[TEXT_FIELD] ?? '-';
   }
 
   return (

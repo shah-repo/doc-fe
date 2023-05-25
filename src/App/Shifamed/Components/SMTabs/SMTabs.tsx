@@ -12,7 +12,6 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   children,
   boxProps,
   panelProps,
-  isPreview,
 }) => {
   const classes = useStyles();
 
@@ -49,7 +48,6 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
                 tabId={tabs?.[index]?.tabId}
                 tabIndex={index}
                 panelProps={panelProps}
-                isPreview ={isPreview}
               >
                 {child}
               </SMTabPanel>
