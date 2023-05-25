@@ -13,8 +13,6 @@ import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from '.';
 import { translate } from '../../../../../common/intl';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 
-// @todo: correct row borders style
-
 function normalizeData <T> (data: T[]): T[] {
   return cloneDeep(data).map(dataItem => {
     dataItem[MODE_FIELD] = Mode.show;
@@ -61,8 +59,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   const isAdding = data.some((dataItem) => dataItem[MODE_FIELD] === Mode.add);
 
-  const handleAdd: React.MouseEventHandler = (event) => {
-    handleItemDiscard(event);
+  const handleAdd: React.MouseEventHandler = () => {
+    handleItemDiscard();
 
     const newItem = {
       ...defaultNewValue,
@@ -73,6 +71,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   };
 
   const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem: clickedDataItem }) => {
+    handleItemDiscard();
     setPrevDataItem(cloneDeep(clickedDataItem));
     setData((data) => data.map((dataItem) => {
       return set(dataItem, MODE_FIELD, dataItem.id === clickedDataItem.id ? Mode.edit : Mode.show);
@@ -91,7 +90,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     setPrevDataItem(undefined);
   };
 
-  const handleItemDiscard: React.MouseEventHandler = () => {
+  const handleItemDiscard = (): void => {
     setData((data) => data
       .filter((dataItem) => dataItem[MODE_FIELD] !== Mode.add)
       .map((dataItem) => {
