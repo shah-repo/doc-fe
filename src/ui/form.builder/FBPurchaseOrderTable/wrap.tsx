@@ -51,8 +51,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const { document, id, isOutput } = workspaceState || {};
     const formik = useFormikContext();
     const history = useHistory();
-    const [selectedItemIndex, setSelectedItemIndex] = useState<number>(0);
+    const [selectedItemIndex, setSelectedItemIndex] = useState<number>(-1);
     const [isPOAddAction, setIsPOAddAction] = useState<boolean>(false);
+    const [isPORemoveAction, setIsPORemoveAction] = useState<boolean>(false);
     const createDocAction = useActionCreator(documentRevisionsActions.create);
 
     const outputId = isOutput ? id : undefined;
@@ -178,6 +179,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     onAlertNotificationCancel = () => {
       setIsPOAddAction(false);
+      setIsPORemoveAction(false);
+      setSelectedItemIndex(-1);
       updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0' };
       dialog?.close();
     };
@@ -204,7 +207,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       const allItems = values?.formInput[PO_ITEMS_COMPONENT_NAME] as FBPurchaseOrderValue;
       const previousItems = cloneDeep(allItems?.items);
-      if (deleteLineItem) {
+      if (deleteLineItem && selectedItemIndex >= 0) {
         delete previousItems[selectedItemIndex];
       }
       const previousLineItemsLength = previousItems?.length;
@@ -252,6 +255,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       e.stopPropagation();
       setSelectedItemIndex(index);
       if (isPOEditState) {
+        setIsPORemoveAction(true);
         dialog?.open();
         return;
       }
@@ -357,7 +361,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       name,
       isReceivable,
       isPOAddAction,
-      isPOEditState,
+      isPORemoveAction,
       handleItem,
       dialog,
     });
