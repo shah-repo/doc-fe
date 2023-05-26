@@ -22,6 +22,8 @@ export default makeStyles(theme => ({
     '& td': {
       padding: `${theme.spacing(1, 1.5)} !important`,
     },
+  },
+  gridPreview: {
     '& .k-grid-norecords': {
       display: 'none',
     },
