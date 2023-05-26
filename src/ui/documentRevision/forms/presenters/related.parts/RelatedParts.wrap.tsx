@@ -8,7 +8,7 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
-import { toastSuccess } from '../../../../components/notifications';
+import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
@@ -19,16 +19,16 @@ import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
 
 interface Props {
-  viewOnly: boolean;
-  documentRevision: DocumentRevision;
-  relatedPartsStatus?: RELATED_PARTS_STATUS;
+  viewOnly: boolean
+  documentRevision: DocumentRevision
+  relatedPartsStatus?: RELATED_PARTS_STATUS
 }
 
 const SuccessMsg: React.FunctionComponent<{
-  docId: string;
-  documentRevisionId: string;
-  documentId: string;
-  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  docId: string
+  documentRevisionId: string
+  documentId: string
+  viewRelatedPart: (docRevId: string, documentId: string) => void
 }> = ({
   docId,
   documentRevisionId,
@@ -42,17 +42,17 @@ const SuccessMsg: React.FunctionComponent<{
   return (
     <>
       <Typography variant="body1">
-        <Text translation="relatedParts.created.modal.success.msg"/>
+        <Text translation="relatedParts.created.modal.success.msg" />
       </Typography>
       <div className={classes.successMessage}>
         <Typography variant="subtitle1">
-          <Text translation="relatedParts.created.modal.msg.part.before"/> <b>{docId}</b> &nbsp;
-          <Text translation="relatedParts.created.modal.msg.part.after"/>
+          <Text translation="relatedParts.created.modal.msg.part.before" /> <b>{docId}</b> &nbsp;
+          <Text translation="relatedParts.created.modal.msg.part.after" />
         </Typography>
         <Link onClick={viewFromModal}
           tabIndex={0} className={classes.normalFontWeight}
           variant="subtitle1" color="textSecondary">
-          <Text translation="relatedParts.created.modal.view"/>
+          <Text translation="relatedParts.created.modal.view" />
         </Link>
       </div>
     </>
@@ -64,7 +64,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   relatedPartsStatus,
   viewOnly,
 }) => {
-
   const dispatch = useDispatch();
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
@@ -87,7 +86,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
         // Show a toast
         showSuccessToast(createdRelatedPart as RelatedPartsListItem, viewRelatedPart);
-
       } else if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
         // populate the list with the new added part
         relatedPartsState.addNewRelatedPart(createdRelatedPart);
@@ -101,22 +99,28 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const showSuccessToast = (
     relatedPartAdded: RelatedPartsListItem,
     viewRelatedPart: (docRevId: string, documentId: string) => void) => {
-
     if (relatedPartAdded) {
       toastSuccess(<SuccessMsg docId={`${relatedPartAdded.rootDocId}-${relatedPartAdded.suffixNumber}`}
         viewRelatedPart={viewRelatedPart} documentRevisionId={relatedPartAdded.documentRevisionId}
-        documentId={relatedPartAdded.documentId}/>, {
+        documentId={relatedPartAdded.documentId} />, {
         closeButton: false,
       });
     }
   };
-
 
   const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
   const parentChoiceAsync = useAsync<any>({
     onSuccess: (data) => {
       if (data) {
         setParentPartStatus(data.relatedStatus);
+        dispatch(documentRevisionsActions.reload(documentRevision.id));
+      }
+    },
+    onError: (errMsg) => {
+      if (errMsg) {
+        const { msg, oldSelection } = JSON.parse(errMsg);
+        toastError(msg);
+        setParentPartStatus(oldSelection);
         dispatch(documentRevisionsActions.reload(documentRevision.id));
       }
     },
@@ -214,8 +218,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       relatedPartDetails?.name, createPartAsync);
   };
 
-
-  const parentPartStatusChanged = (value) => {
+  const parentPartStatusChanged = (value, oldSelection?) => {
     // Make an API call to persist the parent row.
     if (value && documentRevision.documentId) {
       parentChoiceAsync.start(createParentPartChoiceAction, {
@@ -223,6 +226,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         documentRevisionId: documentRevision.id,
         rootDocId: documentRevision.document?.docId,
         relatedStatus: value,
+        oldSelection,
       }, parentChoiceAsync);
     }
   };
@@ -250,7 +254,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   ));
 };
 
-
 const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
   documentRevision,
   relatedPartsStatus,
@@ -262,6 +265,5 @@ const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
     relatedPartsStatus = {relatedPartsStatus}
   />
 );
-
 
 export default RelatedPartsWrapper;

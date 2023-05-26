@@ -23,6 +23,9 @@ const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody, async) => a
   onSuccess (data) {
     async.successHandler?.callback(data);
   },
+  onFailure (error, dispatch) {
+    async.errorHandler?.callback(JSON.stringify({ msg: error, oldSelection: body.oldSelection }));
+  },
 });
 
 const fetchAllRelatedParts
