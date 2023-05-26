@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -331,6 +331,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.po-items-built-in.items.received':
       case 'formInput.po-items-built-in.items.serviceId':
       case 'formInput.po-items-built-in.items.formattedDate':
+      case 'formInput.po-items-built-in.items.partNumberTitle':
       case 'formInput.po-items-built-in.items.description':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

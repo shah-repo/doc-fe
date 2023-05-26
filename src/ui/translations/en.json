@@ -207,6 +207,7 @@
   "documentRevision.audit.formInput.po-items-built-in.items.order.NUMBER_EDITED": "Line Item Order Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.partNumberDocId.STRING_EDITED": "Line Item Part Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.supplierPartNumber.STRING_EDITED": "Line Item Supplier Part Number Updated",
+  "documentRevision.audit.formInput.po-items-built-in.items.partNumberTitle.STRING_EDITED": "Line Item Description Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.glCode.STRING_EDITED": "Line Item GL code Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.glCode.STRING_DELETED": "Line Item GL code Deleted",
   "documentRevision.audit.formInput.po-items-built-in.items.description.STRING_EDITED": "Line Item Description Updated",
