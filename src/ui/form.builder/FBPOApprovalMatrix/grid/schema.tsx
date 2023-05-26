@@ -13,18 +13,15 @@ interface Options {
 
 export default function createSchema ({
   signatureStages,
-  disableFilter,
   onRowClick,
 }: Options): Array<ColumnDefinition<POApprovalMatrixLevelItem>> {
-  const Filter = disableFilter ? undefined : InputFilter;
-
   const schema: Array<ColumnDefinition<POApprovalMatrixLevelItem>> = [
     {
       id: 'name',
       field: 'name',
       locked: true,
       title: 'form.builder.poam.level.name',
-      filterCell: Filter,
+      filterCell: InputFilter,
       template: NameCellTemplate,
       width: 150,
     },
@@ -32,14 +29,14 @@ export default function createSchema ({
       id: 'limit',
       field: 'limit',
       title: 'form.builder.poam.limit',
-      filterCell: Filter,
+      filterCell: InputFilter,
       width: 120,
     },
     {
       id: 'threshold',
       field: 'threshold',
       title: 'form.builder.field.threshold',
-      filterCell: Filter,
+      filterCell: InputFilter,
       width: 120,
     },
   ];
@@ -49,7 +46,7 @@ export default function createSchema ({
       id: `signature-${stage}`,
       field: `signatureStages.${stage}.list`,
       title: `form.builder.poam.signature${stage}`,
-      filterCell: Filter,
+      filterCell: InputFilter,
       template: (props) => (
         <GroupCellTemplate
           {...props}
