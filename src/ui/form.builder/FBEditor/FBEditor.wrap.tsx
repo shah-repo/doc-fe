@@ -41,8 +41,15 @@ export const withFBEditor = <T extends FBEditorProps>(
 
     tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
 
+    useEffect(() => {
+      if (tabConfig) {
+        const selectedTab = tabConfig.filter(val => val.tabId === activeTabId)[0];
+        setActiveTabId(selectedTab?.labelId);
+      }
+    }, [tabConfig]);
+
     const handleTabSelection = (event: React.FormEvent<HTMLSelectElement>, value) => {
-      setActiveTabId(value?.tabId);
+      setActiveTabId(value?.labelId ?? value?.tabId);
       localStorage.setItem('tabId', value?.tabId);
     };
 
