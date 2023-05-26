@@ -1,4 +1,4 @@
-import { Box, Chip } from '@material-ui/core';
+import { Box, Chip, CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -18,6 +18,11 @@ const GroupsCellTemplate: React.FC<Props> = ({
   const classes = useStyles();
 
   const handleClick = () => onClick?.({ dataItem });
+  const stageData = dataItem.signatureStages[stage];
+
+  if (!stageData) {
+    return null;
+  }
 
   const allItems = [
     ...dataItem.signatureStages[stage].groups,
@@ -29,7 +34,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
       {allItems.map((item) => (
         <Chip
           size="small"
-          label={item.name}
+          label={item.name === '' ? <CircularProgress size={12} /> : item.name}
           key={item.id}
           className={cx({ [classes.activeChip]: Boolean(onClick) })}
         />
