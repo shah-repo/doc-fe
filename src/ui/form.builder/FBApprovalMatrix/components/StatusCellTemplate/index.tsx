@@ -2,7 +2,7 @@ import React from 'react';
 import { get, set } from 'lodash';
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
 import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY } from '../Grid';
+import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY, createOption } from '../Grid';
 import Status from './components/Status';
 import { translate } from '../../../../../common/intl';
 
@@ -15,8 +15,8 @@ const StatusCellTemplate: CellTemplate = (props) => {
   const value = get(dataItem, path);
 
   const data = [
-    { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.active') },
-    { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.inactive') },
+    createOption(true, translate('common.active')),
+    createOption(false, translate('common.inactive')),
   ];
 
   const valueItem = data.find((item) => item[DATA_ITEM_KEY] === value);

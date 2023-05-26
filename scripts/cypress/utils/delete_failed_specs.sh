@@ -5,10 +5,6 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
   exit 1
 fi
 
-if [[ -z "${CYPRESS_JSON_REPORTS_FOLDER}" ]]; then
-  echo "CYPRESS_JSON_REPORTS_FOLDER not set, exiting"
-  exit 1
-fi
 
 if [[ -z "${REPORT_TITLE}" ]]; then
   echo "REPORT_TITLE not set, exiting"
@@ -35,14 +31,8 @@ if [[ -z "${COMPOSE_PROJECT_NAME}" ]]; then
   exit 1
 fi
 
-SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep cypress_dashboard_mongo)
-
-if [[ -z "${SORRY_CYPRESS_DASBOARD_CONTAINER_NAME}" ]]; then
-  echo "SORRY_CYPRESS_DASBOARD_CONTAINER_NAME not set, exiting"
-  exit 1
-fi
-
-MOCHAWESOME_FILES=($(find $CYPRESS_JSON_REPORTS_FOLDER -name "$REPORT_TITLE*"))
+SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"_enlil_cypress_dashboard_mongo_1"
+MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name "$REPORT_TITLE*"))
 
 for i in "${MOCHAWESOME_FILES[@]}"
 do
@@ -65,8 +55,7 @@ do
         db = new Mongo().getDB(\"sorry-cypress\");
         var run = db.getCollection('runs').find({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}).limit(1).toArray();
 
-        db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.claimedAt\": null}});
-        db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.completedAt\": null}});
+        db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.claimed\": false}});
         db.getCollection('instances').deleteOne({runId: run[0].runId, spec: specFile});"
       
     echo $SCRIPT | docker exec -i $SORRY_CYPRESS_DASBOARD_CONTAINER_NAME bash -c mongo  1> /dev/null
