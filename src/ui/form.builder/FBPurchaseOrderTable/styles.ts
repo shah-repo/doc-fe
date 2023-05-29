@@ -75,9 +75,11 @@ export default makeStyles((theme) => ({
     textAlign: 'right',
   },
   calculationSelect: {
-    width: '-webkit-fill-available',
-    "@supports (width: '-moz-available')": {
+    '@supports (width: -moz-available)': {
       width: '-moz-available',
+    },
+    '@supports (width: -webkit-fill-available)': {
+      width: '-webkit-fill-available',
     },
     padding: `${theme.spacing(0.5, 4, 0.5, 0.25)} !important`,
   },
