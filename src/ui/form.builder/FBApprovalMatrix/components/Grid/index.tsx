@@ -194,6 +194,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         data={data}
         schema={schema}
         rowRender={rowRender}
+        dataItemKey="id"
         onRowClick={!disabled ? handleRowClick : undefined}
         onDataStateChange={handleDataStateChange}
         defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
