@@ -76,6 +76,9 @@ export default makeStyles((theme) => ({
   },
   calculationSelect: {
     width: '-webkit-fill-available',
+    "@supports (width: '-moz-available')": {
+      width: '-moz-available',
+    },
     padding: `${theme.spacing(0.5, 4, 0.5, 0.25)} !important`,
   },
   calculationTax: {
