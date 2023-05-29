@@ -91,7 +91,7 @@ export default makeStyles((theme) => {
       minHeight: '25px !important',
       backgroundColor: Colors.white,
       borderRadius: '6px !important',
-      padding: '4.8px !important',
+      padding: `${theme.spacing(0.6)} !important`,
       border: 'none !important',
     },
     iconButton: {
