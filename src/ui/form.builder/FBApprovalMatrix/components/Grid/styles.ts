@@ -73,34 +73,6 @@ export default makeStyles((theme) => {
       right: 0,
       padding: '0 !important',
     },
-    actions: {
-      width: 60,
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: theme.spacing(1.25),
-      backgroundColor: Colors.primaryLight,
-      borderBottomLeftRadius: 4,
-      borderBottomRightRadius: 4,
-      position: 'absolute',
-      zIndex: 3,
-      right: 0,
-      top: '100%',
-    },
-    actionButton: {
-      minWidth: '25px !important',
-      minHeight: '25px !important',
-      backgroundColor: Colors.white,
-      borderRadius: '6px !important',
-      padding: `${theme.spacing(0.6)} !important`,
-      border: 'none !important',
-    },
-    iconButton: {
-      fontSize: '16px !important',
-      color: Colors.textGray,
-      '&:hover': {
-        color: Colors.primary,
-      },
-    },
     // @todo: make via borderRight.
     line: {
       width: 1,
