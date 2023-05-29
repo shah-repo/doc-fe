@@ -87,15 +87,15 @@ export default makeStyles((theme) => {
       top: '100%',
     },
     actionButton: {
-      minWidth: 25,
-      minHeight: 25,
+      minWidth: '25px !important',
+      minHeight: '25px !important',
       backgroundColor: Colors.white,
-      borderRadius: 6,
-      padding: theme.spacing(0.6),
+      borderRadius: '6px !important',
+      padding: '4.8px !important',
       border: 'none !important',
     },
     iconButton: {
-      fontSize: 16,
+      fontSize: '16px !important',
       color: Colors.textGray,
       '&:hover': {
         color: Colors.primary,
