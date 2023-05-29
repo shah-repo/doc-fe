@@ -98,19 +98,19 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
-      if (!isTotalAmountUnderThreshold(null, getDecimalValue(ev, 6), null)) {
+      if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, 6), null)) {
         return;
       }
       purchaseOrderState?.setTax(getDecimalValue(ev, 6));
     };
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
-      if (!isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, 6))) {
+      if (isPOEditState && !isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, 6))) {
         return;
       }
       purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
     };
     handleShippingCostChange = (ev: React.ChangeEvent<any>) => {
-      if (!isTotalAmountUnderThreshold(getDecimalValue(ev), null, null)) {
+      if (isPOEditState && !isTotalAmountUnderThreshold(getDecimalValue(ev), null, null)) {
         return;
       }
       purchaseOrderState?.setShippingCost(getDecimalValue(ev));

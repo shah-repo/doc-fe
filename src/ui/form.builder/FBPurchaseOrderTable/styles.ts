@@ -75,6 +75,7 @@ export default makeStyles((theme) => ({
     textAlign: 'right',
   },
   calculationSelect: {
+    width: '-webkit-fill-available',
     padding: `${theme.spacing(0.5, 4, 0.5, 0.25)} !important`,
   },
   calculationTax: {
