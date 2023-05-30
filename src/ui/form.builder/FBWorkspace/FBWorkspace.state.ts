@@ -38,95 +38,93 @@ class FBWorkspaceState extends FBSchemaState {
 
   public omitAutosave = false;
 
-  public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
+  public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
     this.schema = schema || [];
     this.mode = mode || 'none';
     this.autosave = autosave;
   }
 
-  public get auth(): FBWorkspaceExternalState['auth'] | undefined {
+  public get auth (): FBWorkspaceExternalState['auth'] | undefined {
     return this.externalState?.auth;
   }
 
-  public get currentUser(): UserState | undefined {
+  public get currentUser (): UserState | undefined {
     return this.auth?.user;
   }
 
-  public get userTags(): GroupTag[] | undefined {
+  public get userTags (): GroupTag[] | undefined {
     return this.auth?.groups.tags;
   }
 
-  public get company(): FBWorkspaceExternalState['company'] | undefined {
+  public get company (): FBWorkspaceExternalState['company'] | undefined {
     return this.externalState?.company;
   }
 
-  public get id(): string | undefined {
+  public get id (): string | undefined {
     return this.document?.id || this.changeRequest?.id;
   }
 
-  public get documentId(): string | undefined {
+  public get documentId (): string | undefined {
     return this.document?.document?.id;
   }
 
-  public get documentStatus(): DocumentRevisionStatus {
+  public get documentStatus (): DocumentRevisionStatus {
     return this.document?.status || DocumentRevisionStatus.Draft;
   }
 
-  public get changeRequestStatus(): ChangeRequestStatus {
+  public get changeRequestStatus (): ChangeRequestStatus {
     return this.changeRequest?.state || ChangeRequestStatus.Draft;
   }
 
-  public get isReleased(): boolean {
+  public get isReleased (): boolean {
     return this.document?.status === DocumentRevisionStatus.Released;
   }
 
-  public get isDraft(): boolean {
+  public get isDraft (): boolean {
     return this.document?.status === DocumentRevisionStatus.Draft;
   }
 
-  public get isPendingChange(): boolean {
+  public get isPendingChange (): boolean {
     return this.document?.status === DocumentRevisionStatus.PendingChange;
   }
 
-  public get isDeprecated(): boolean {
+  public get isDeprecated (): boolean {
     return this.document?.status === DocumentRevisionStatus.Deprecated;
   }
 
-  public get isOutput(): boolean {
+  public get isOutput (): boolean {
     const { id } = this.document?.formDocument || {};
     return !isEmpty(id);
   }
 
-  public get isLHRProductionBuild(): boolean {
+  public get isLHRProductionBuild (): boolean {
     return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
-      toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
   }
 
-  public get isChangeRequest(): boolean {
+  public get isChangeRequest (): boolean {
     return !isEmpty(this.changeRequest);
   }
 
-  public get isOutputSchema(): boolean {
+  public get isOutputSchema (): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
   }
 
-  public get isRevised(): boolean | undefined {
+  public get isRevised (): boolean | undefined {
     const { version = 0, revision = 0, outputRevision = false } = this.document || {};
     return ((version > 1) && (revision > 1)) || outputRevision;
   }
 
-
-  @computed public get active(): boolean {
+  @computed public get active (): boolean {
     return this.mode !== 'none';
   }
 
-  @computed public get isStarter() {
+  @computed public get isStarter () {
     return (
-      (this.mode === 'design' || this.mode === 'formDesign') &&
-      !size(this.schema?.filter((item) => !item.deleted))
+      (this.mode === 'design' || this.mode === 'formDesign')
+      && !size(this.schema?.filter((item) => !item.deleted))
     );
   }
 
@@ -164,7 +162,7 @@ class FBWorkspaceState extends FBSchemaState {
     return this.mode === mode;
   };
 
-  @action public getIsInputOwner = ( name: string ): boolean => {
+  @action public getIsInputOwner = (name: string): boolean => {
     const {
       document,
       externalState: { auth: { user: { employeeId = '' } = {} } = {} } = {},
@@ -249,7 +247,6 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   public undoPO = (prevDocumentRevision?: DocumentRevision) => {
-
     this.loadAudit = false;
     this.loading = true;
     this.omitAutosave = true;
@@ -257,6 +254,7 @@ class FBWorkspaceState extends FBSchemaState {
     const body = {
       formInput: prevDocumentRevision?.formInput,
       description: prevDocumentRevision?.description,
+      attachments: prevDocumentRevision?.attachments,
     };
     const { id } = this;
 
