@@ -28,12 +28,6 @@ export default makeStyles((theme) => {
         backgroundColor: `${Colors.darkGray} !important`,
       },
     },
-    save: {
-      position: 'relative',
-    },
-    discard: {
-      position: 'relative',
-    },
     grid: {
       '& .k-grid-container': {
         maxHeight: 300, // @todo
