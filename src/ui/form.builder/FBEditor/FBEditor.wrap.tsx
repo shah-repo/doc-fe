@@ -40,9 +40,9 @@ export const withFBEditor = <T extends FBEditorProps>(
       const docTypeGroup = get(documentRevision?.document.documentType, 'group', DOC_TYPE_GROUP.OTHER);
       const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], 'group');
       const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-
       tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
     }
+
     useEffect(() => {
       if (tabConfig) {
         const selectedTab = tabConfig.filter(val => val.tabId === activeTabId)[0];
