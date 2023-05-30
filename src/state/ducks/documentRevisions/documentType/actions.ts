@@ -1,9 +1,9 @@
 import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from '../../../../ui/form.builder/FBApprovalMatrix/constants';
-import { ApprovalMatrix } from '../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types';
 import { apiAction, apiActionWithCallbacks } from '../../../factories';
 import { ApiAction, Handlers } from '../../../types';
 import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST, TAB_CONFIGURATION_LIST_ASYNC, TAB_CONFIGURATION_URL } from './constants';
 import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction, TabConfiguration, TabConfigurationListAction } from './types';
+import { FBApprovalMatrixFieldData } from '../../../../ui/form.builder';
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({
   type: DOCUMENT_TYPE_LIST,
@@ -80,13 +80,13 @@ const getDocTypeByGroup = (
     handlers,
   });
 
-const getApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+const getApprovalMatrix = (handlers: Handlers): ApiAction<FBApprovalMatrixFieldData> => apiActionWithCallbacks({
   url: APPROVAL_MATRIX_URL,
   method: 'get',
   handlers,
 });
 
-const getPOApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+const getPOApprovalMatrix = (handlers: Handlers): ApiAction<FBApprovalMatrixFieldData> => apiActionWithCallbacks({
   url: PO_APPROVAL_MATRIX_URL,
   method: 'get',
   handlers,

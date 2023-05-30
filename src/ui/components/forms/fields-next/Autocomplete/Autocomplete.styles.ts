@@ -3,7 +3,7 @@ import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   inputRoot: {
-    padding: theme.spacing(0, 7, 0, .75),
+    padding: theme.spacing(0, 7, 0, 0.75),
   },
   root: {
     ...theme.overrides?.MuiInputBase?.input,
@@ -17,8 +17,8 @@ export default makeStyles((theme) => ({
     },
   },
   input: {
-    'border': 'none',
-    'background': 'none',
+    border: 'none',
+    background: 'none',
     '&:hover': {
       background: 'none',
     },
@@ -32,19 +32,22 @@ export default makeStyles((theme) => ({
       paddingLeft: theme.spacing(1.25),
     },
   },
+  sizeSmall: {
+    padding: theme.spacing(0, 7.5, 0, 0.25),
+  },
   popupIndicator: {
-    'fontSize': 14,
-    'color': Colors.textGray,
-    'padding': theme.spacing(.5),
-    'margin': 0,
-    'height': 28,
+    fontSize: 14,
+    color: Colors.textGray,
+    padding: theme.spacing(0.5),
+    margin: 0,
+    height: 28,
 
     '&:hover': {
       color: Colors.textBlack,
     },
   },
   clearIndicator: {
-    'margin': 0,
+    margin: 0,
     '&:hover': {
       color: Colors.textBlack,
     },
@@ -64,9 +67,17 @@ export default makeStyles((theme) => ({
   option: {
     ...theme.overrides?.MuiMenuItem?.root,
   },
+  optionSmall: {
+    ...theme.overrides?.MuiMenuItem?.dense,
+    ...theme.overrides?.MuiMenuItem?.gutters,
+  },
   tag: {
-    margin: theme.spacing(.75, .75, .75, 0),
+    margin: theme.spacing(0.75, 0.75, 0.75, 0),
     minWidth: 48,
+  },
+  tagSizeSmall: {
+    margin: theme.spacing(0.25, 0.25, 0.25, 0),
+    height: 24,
   },
   disabled: {
     color: Colors.textGray,

@@ -5,10 +5,7 @@ import StatusCellTemplate from './components/StatusCellTemplate';
 import InputCellTemplate from './components/InputCellTemplate';
 import BooleanFilter from './components/BooleanFilter';
 import InputFilter from './components/InputFilter';
-import {
-  FBApprovalMatrixRoleTitles,
-  FBDocTypeGroup,
-} from './types';
+import { FBApprovalMatrixRoleTitles } from './types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import {
   FBApprovalMatrixFieldData,
@@ -19,12 +16,13 @@ import DropdownFilter from './components/DropdownFilter';
 import { translate } from '../../../common/intl';
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
-import { DATA_ITEM_KEY, TEXT_FIELD } from './components/Grid';
+import { createOption } from './components/Grid';
+import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { CATEGORY_OPTIONS } from './constants';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
   withoutStatus?: boolean
-  documentTypeCategories?: string[]
   cellARHeaderClassName: string
   cellARClassName: string
   clearRightBorderClassName: string
@@ -32,23 +30,33 @@ interface Options {
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const {
-    data, withoutStatus, documentTypeCategories = [],
+    data, withoutStatus,
     cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
   } = options;
-  const { approvalRoles = [] } = data ?? {};
+  const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
-  const internalTypeOptions = Object.keys(FBDocTypeGroup).map((value) => ({ value, text: value }));
-  const categoryOptions = documentTypeCategories.map((category) => ({ value: category, text: category }));
+  const internalTypeOptions = Object.keys(GroupWithGroupOptions).map(v => createOption(v));
+
+  // Add unknown Categories to Filter from data.
+  const categoryFilterOptions = [...CATEGORY_OPTIONS];
+  approvalMatrix
+    .map(item => item.docType.category)
+    .filter(Boolean)
+    .forEach((value) => {
+      if (!categoryFilterOptions.find(item => item.value === value)) {
+        categoryFilterOptions.push(createOption(value));
+      }
+    });
 
   const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
       disabled={withoutStatus}
       data={[
-        { [DATA_ITEM_KEY]: true, [TEXT_FIELD]: translate('common.active') },
-        { [DATA_ITEM_KEY]: false, [TEXT_FIELD]: translate('common.inactive') },
+        createOption(true, translate('common.active')),
+        createOption(false, translate('common.inactive')),
       ]}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
@@ -56,7 +64,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownFilter
       {...props}
       data={internalTypeOptions}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
@@ -70,16 +78,15 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   const CategoryFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
-      data={categoryOptions}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: translate('common.all') }}
+      data={categoryFilterOptions}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
   const CategoryCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
     <DropdownCellTemplate
       {...props}
-      data={categoryOptions}
-      defaultItem={{ [DATA_ITEM_KEY]: '', [TEXT_FIELD]: '-' }}
+      data={CATEGORY_OPTIONS}
     />
   );
 

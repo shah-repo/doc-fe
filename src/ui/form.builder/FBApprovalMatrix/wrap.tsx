@@ -4,6 +4,7 @@ import { isEmpty, get, set, has } from 'lodash';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
 import { FBApprovalMatrixProps } from './types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { v4 as generateUuid } from 'uuid';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>,
@@ -25,17 +26,14 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       || (workspaceState && !['design', 'form'].includes(workspaceState.mode));
 
     handleSave = (data: FBApprovalMatrixItem[]) => {
-      const approvalMatrix = data.map((e) => {
-        const categoryTrim = e?.docType.category?.trim();
-        return {
-          ...e,
-          docType: {
-            ...e?.docType,
-            acronym: e?.docType.acronym?.toUpperCase(),
-            category: categoryTrim ?? '',
-          },
-        };
-      });
+      const approvalMatrix = data.map(({ id, docType, ...restItem }) => ({
+        id: id ?? generateUuid(),
+        docType: {
+          ...docType,
+          acronym: docType.acronym.toUpperCase(),
+        },
+        ...restItem,
+      }));
 
       if (isEmpty(approvalMatrix)) { return; }
 

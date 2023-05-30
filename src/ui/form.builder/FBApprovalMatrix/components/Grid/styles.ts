@@ -61,21 +61,6 @@ export default makeStyles((theme) => {
       borderBottomRightRadius: 0,
       borderBottom: 'none',
     },
-    cellARHeader: {
-      '& .k-link': {
-        justifyContent: 'center',
-      },
-      '& .k-column-title': {
-        whiteSpace: 'normal',
-        textAlign: 'center',
-      },
-    },
-    cellAR: {
-      textAlign: 'center !important' as 'center',
-    },
-    clearRightBorder: {
-      borderRight: 'none !important',
-    },
     buttonAdd: {
       width: '100%',
       borderTopLeftRadius: 0,
@@ -125,9 +110,6 @@ export default makeStyles((theme) => {
       top: 0,
       right: 0,
       zIndex: 3,
-    },
-    buttonFullscreen: {
-      marginLeft: 'auto',
     },
   };
 });

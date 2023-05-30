@@ -63,7 +63,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
           optionValueType="id"
           defaultValue={[]}
         />
-      </Box>) )}
+      </Box>))}
     {children}
   </FBForm>
 );

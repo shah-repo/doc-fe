@@ -405,6 +405,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           id={documentRevision.id}
           renderHTMLDefined={isRenderHTMLDefined}
           showDownloadButton={false}
+          isPO={isPO}
         />
       )}
       {buttons.includes(PreviewControlButtons.RedlineButton) && (

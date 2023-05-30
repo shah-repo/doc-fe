@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { set, kebabCase, cloneDeep } from 'lodash';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { GridItem, GridProps } from './types';
 import cx from 'classnames';
 import useStyles from './styles';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { Box } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/ClearRounded';
 import DoneIcon from '@material-ui/icons/DoneRounded';
 import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from '.';
 import { translate } from '../../../../../common/intl';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-
-// @todo: correct row borders style
 
 function normalizeData <T> (data: T[]): T[] {
   return cloneDeep(data).map(dataItem => {
@@ -48,7 +47,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       dataState.filter.filters = dataState.filter.filters
         .filter((item) => {
           if ('value' in item) {
-            return item.value !== '';
+            return item.value !== undefined;
           }
 
           return true;
@@ -60,22 +59,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   const isAdding = data.some((dataItem) => dataItem[MODE_FIELD] === Mode.add);
 
-  // Scroll down on add.
-  useEffect(
-    () => {
-      if (!isAdding) {
-        return;
-      }
-
-      // @todo: use Grid API
-      const element = document.querySelector('.k-virtual-content');
-      element && (element.scrollTop = element.scrollHeight);
-    },
-    [isAdding],
-  );
-
-  const handleAdd: React.MouseEventHandler = (event) => {
-    handleItemDiscard(event);
+  const handleAdd: React.MouseEventHandler = () => {
+    handleItemDiscard();
 
     const newItem = {
       ...defaultNewValue,
@@ -86,6 +71,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   };
 
   const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem: clickedDataItem }) => {
+    handleItemDiscard();
     setPrevDataItem(cloneDeep(clickedDataItem));
     setData((data) => data.map((dataItem) => {
       return set(dataItem, MODE_FIELD, dataItem.id === clickedDataItem.id ? Mode.edit : Mode.show);
@@ -104,7 +90,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     setPrevDataItem(undefined);
   };
 
-  const handleItemDiscard: React.MouseEventHandler = () => {
+  const handleItemDiscard = (): void => {
     setData((data) => data
       .filter((dataItem) => dataItem[MODE_FIELD] !== Mode.add)
       .map((dataItem) => {
@@ -119,18 +105,26 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     setPrevDataItem(undefined);
   };
 
+  const scrollToRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      requestAnimationFrame(() => node.scrollIntoView({ behavior: 'auto', block: 'nearest' }));
+    }
+  }, []);
+
   const rowRender: GridProps<T>['rowRender'] = (row, props) => {
     const { dataItem } = props;
 
     const isUpdating = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
     const isInactive = dataItem?.docType?.active === false;
-    const dataCy = `row-${kebabCase(dataItem?.docType?.name?.toLowerCase())}`;
+
+    const cyLabel = kebabCase(dataItem?.docType?.name?.toLowerCase())
+      || (dataItem[MODE_FIELD] === Mode.add ? 'new' : 'empty');
+    const dataCy = `row-${cyLabel}`;
 
     if (!isUpdating) {
       return React.cloneElement(
         row,
         {
-          ...row.props,
           ['data-cy' as string]: dataCy,
           className: cx(row.props.className, { [classes.inactive]: isInactive }),
         },
@@ -139,8 +133,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const actions = (
       <td className={classes.actionsTd}>
-        <div className={classes.line} />
-        <div className={classes.actions}>
+        <Box className={classes.line} />
+        <div className={classes.actions} ref={scrollToRef}>
           <StyleTooltip
             title={translate('common.discard')}
             placement="top"
@@ -176,7 +170,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     return React.cloneElement(
       row,
       {
-        ...row.props,
         ['data-cy' as string]: dataCy,
         className: cx(row.props.className, classes.updating),
       },
@@ -201,6 +194,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         data={data}
         schema={schema}
         rowRender={rowRender}
+        dataItemKey="id"
         onRowClick={!disabled ? handleRowClick : undefined}
         onDataStateChange={handleDataStateChange}
         defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
