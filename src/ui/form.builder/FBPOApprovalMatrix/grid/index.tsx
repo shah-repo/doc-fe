@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { find, findIndex } from 'lodash';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
-import { POApprovalMatrixLevel } from '../FBPOApprovalMatrix.types';
+import NoDataFound from '../../../components/common/kendo/NoDataFound';
 import createSchema from './schema';
 import useStyles from './styles';
 import { FBPOAMKendoTableProps, POApprovalMatrixLevelItem, RowClickEvent } from './types';
@@ -21,13 +21,16 @@ const FBPOAMKendoTable: React.FC<FBPOAMKendoTableProps> = ({
 }) => {
   const classes = useStyles();
 
-  const onRowClick = ({ dataItem }: RowClickEvent) => {
+  const onRowClick = useCallback(({ dataItem }: RowClickEvent) => {
     const { id } = dataItem;
     const index = findIndex(approvalLevels, { id });
     const item = find(approvalLevels, { id });
-    handleEdit(index, item as POApprovalMatrixLevel);
-  };
+    if (item) {
+      handleEdit(index, item);
+    }
+  }, [approvalLevels, handleEdit]);
 
+  const isActive = !disabled;
   const clickHandler = isDocumentReleased ? undefined : onRowClick;
 
   const schema = createSchema({
@@ -41,18 +44,17 @@ const FBPOAMKendoTable: React.FC<FBPOAMKendoTableProps> = ({
     signatureStages: buildSignatureStages(level, employees, groups),
   })), [approvalLevels, groups, employees]);
 
-  const isActive = !disabled;
-
   return (
     <Box className={classes.root}>
       <KendoDataGrid<POApprovalMatrixLevelItem>
         fullWidth
-        filterable
+        filterable={!disableFilter}
         hasBoxScrollbars
         schema={schema}
         data={data}
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        onRowClick={isDocumentReleased ? undefined : clickHandler}
+        fallback={<NoDataFound />}
+        className={cx(classes.grid, { [classes.gridWithButton]: isActive, [classes.gridPreview]: disableFilter })}
+        onRowClick={clickHandler}
       />
     </Box>
   );
