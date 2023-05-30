@@ -5,7 +5,7 @@ export enum RELATED_PARTS_STATUS {
   RELATED_TOGETHER = 'related_together',
   PARENT_NO = 'parent_no',
   PARENT_SEPARATE = 'parent_separate',
-  PARENT_TOGETHER = 'parent_together'
+  PARENT_TOGETHER = 'parent_together',
 }
 
 export enum COLOR_TYPES {
@@ -13,42 +13,43 @@ export enum COLOR_TYPES {
   SECONDARY = 'secondary',
   DISABLED = 'disabled',
   INHERIT ='inherit',
-  ERROR ='ERROR'
+  ERROR ='ERROR',
 }
 
 export interface RelatedPartsChoiceRequestBody {
-  documentId: string;
-  documentRevisionId: string;
-  rootDocId: string;
-  relatedPartsStatus: RELATED_PARTS_STATUS;
+  documentId: string
+  documentRevisionId: string
+  rootDocId: string
+  relatedPartsStatus: RELATED_PARTS_STATUS
+  oldSelection?: string
 }
 
 export interface RelatedPartsListItem {
-  documentId: string;
-  rootDocId: string;
-  suffixNumber?: string;
-  suffixName?: string;
-  documentRevisionId: string;
-  name: string;
-  status: DocumentRevisionStatus;
-  relatedStatus?: RELATED_PARTS_STATUS;
-  version?: number;
-  revision?: number;
-  displayRevision?: string;
-  revisionChangeType?: RevisionChangeType;
+  documentId: string
+  rootDocId: string
+  suffixNumber?: string
+  suffixName?: string
+  documentRevisionId: string
+  name: string
+  status: DocumentRevisionStatus
+  relatedStatus?: RELATED_PARTS_STATUS
+  version?: number
+  revision?: number
+  displayRevision?: string
+  revisionChangeType?: RevisionChangeType
 }
 
 export interface ListItemEdited {
-  docRevId: string;
-  docId?: string;
-  name?: string;
-  version?: number;
+  docRevId: string
+  docId?: string
+  name?: string
+  version?: number
 }
 
 export interface ListItemUpdateData {
-  name?: string;
-  revisionChangeType?: RevisionChangeType;
-  suffixNumber?: string;
-  suffixName?: string;
-  rootDocId?: string;
+  name?: string
+  revisionChangeType?: RevisionChangeType
+  suffixNumber?: string
+  suffixName?: string
+  rootDocId?: string
 }

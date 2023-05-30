@@ -1486,7 +1486,7 @@
   "relatedParts.void.alert": "Are you sure you want to void this document?",
   "relatedParts.void.bringBack": "Are you sure you want to un-void this document?",
   "relatedSubPart.dialog.title": "Quick View",
-  "relatedParts.confirm.message": "If you select {currentOption}, {previous} will be deleted",
+  "relatedParts.confirm.message": "Are you sure, you want to switch to \"{currentOption}\" ?\n\n  All subParts related to the previous option \"{previous}\" will be deleted.",
   "relatedParts.confirm.selection": "Confirm Switch",
   "releaseButton.option.expressAR": "Express AR",
   "releaseButton.option.newAR": "New AR",

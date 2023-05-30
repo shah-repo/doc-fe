@@ -28,12 +28,6 @@ export default makeStyles((theme) => {
         backgroundColor: `${Colors.darkGray} !important`,
       },
     },
-    save: {
-      position: 'relative',
-    },
-    discard: {
-      position: 'relative',
-    },
     grid: {
       '& .k-grid-container': {
         maxHeight: 300, // @todo
@@ -72,34 +66,6 @@ export default makeStyles((theme) => {
       position: 'sticky',
       right: 0,
       padding: '0 !important',
-    },
-    actions: {
-      width: 60,
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: theme.spacing(1.25),
-      backgroundColor: Colors.primaryLight,
-      borderBottomLeftRadius: 4,
-      borderBottomRightRadius: 4,
-      position: 'absolute',
-      zIndex: 3,
-      right: 0,
-      top: '100%',
-    },
-    actionButton: {
-      minWidth: 25,
-      minHeight: 25,
-      backgroundColor: Colors.white,
-      borderRadius: 6,
-      padding: theme.spacing(0.6),
-      border: 'none !important',
-    },
-    iconButton: {
-      fontSize: 16,
-      color: Colors.textGray,
-      '&:hover': {
-        color: Colors.primary,
-      },
     },
     // @todo: make via borderRight.
     line: {

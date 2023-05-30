@@ -31,7 +31,7 @@ import RelatedPartsTableHeader from './RelatedPartsTableHeader';
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS
-  parentStatusChanged: (value: string) => void
+  parentStatusChanged: (value: string, oldSelection?: string) => void
   relatedPartsState: RelatedPartsState
   documentRevision: DocumentRevision
 }> = ({
@@ -55,13 +55,17 @@ const ParentPartSelector: React.FunctionComponent<{
     if (newOption !== selectedOption) {
       setPreviousOption(selectedOption);
       setSelectedOption(newOption);
-      setShowConfirmDialog(true);
+      if (selectedOption !== RELATED_PARTS_STATUS.PARENT_NO) {
+        setShowConfirmDialog(true);
+      } else {
+        parentStatusChanged(newOption);
+      }
     }
   };
 
   const handleConfirm = (confirmedOption) => {
     setShowConfirmDialog(false);
-    parentStatusChanged(confirmedOption);
+    parentStatusChanged(confirmedOption, previousOption);
   };
 
   const handleCancel = () => {
