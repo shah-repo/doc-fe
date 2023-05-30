@@ -1,7 +1,7 @@
 import { TextArea } from '@progress/kendo-react-inputs';
 import { TextAreaBlurEvent } from '@progress/kendo-react-inputs/dist/npm/textarea/interfaces/TextAreaBlurEvent';
-import { Field, useFormikContext } from 'formik';
-import React, { useState } from 'react';
+import { Field, FieldProps, useFormikContext } from 'formik';
+import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
@@ -26,7 +26,6 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const formik = useFormikContext();
   const intl = useIntl();
   defaultValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
-  const [textEditorValue, setTextEditorValue] = useState<string>(defaultValue);
   const classes = styles();
 
   const onBlur = (evt: TextAreaBlurEvent) => {
@@ -34,7 +33,21 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
     const updatedValue = evt?.target?.element?.current?.value ?? '';
     formik.setFieldValue(name, updatedValue);
     formState?.setFieldValue(name, updatedValue);
-    setTextEditorValue(updatedValue);
+  };
+
+  const textEditorRenderComponent = ({ field }: FieldProps) => {
+    const defaultVal = (field?.value ?? defaultValue) as string;
+    return (<>
+      <TextArea
+        defaultValue={defaultVal}
+        onBlur={onBlur}
+        className={classes.textArea}
+        rows={4}
+      />
+      {!defaultVal && <span className={classes.error}>
+        <p>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</p>
+      </span>}
+    </>);
   };
 
   return (
@@ -43,19 +56,9 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
       type="textarea"
       name={name}
       label={label}
-      required={true}
-      component={(() => <>
-        <TextArea
-          defaultValue={textEditorValue}
-          onBlur={onBlur}
-          className={classes.textArea}
-          rows={4}
-        />
-        {!textEditorValue && <span className={classes.error}>
-          <p>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</p>
-        </span>}
-      </>)}
-      defaultVal={textEditorValue}
+      required
+      component={textEditorRenderComponent}
+      defaultVal={defaultValue as string}
     />);
 };
 
