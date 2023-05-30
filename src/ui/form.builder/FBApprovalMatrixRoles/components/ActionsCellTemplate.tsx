@@ -5,13 +5,11 @@ import Actions, { ActionsProps } from './Actions';
 
 interface Props extends CellTemplateProps<EditableRole>, ActionsProps<EditableRole> {}
 
-const ActionsCell: React.FC<Props> = (props) => {
-  return (
-    <Actions
-      scrollBehavior="smooth"
-      {...props}
-    />
-  );
-};
+const ActionsCell: React.FC<Props> = (props) => (
+  <Actions
+    scrollBehavior="smooth"
+    {...props}
+  />
+);
 
 export default ActionsCell;

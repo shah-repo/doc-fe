@@ -9,9 +9,9 @@ import useStyles from '../styles';
 
 export interface ActionsProps<T> {
   dataItem: T
-  scrollBehavior?: ScrollBehavior
   onConfirm: () => void
   onDiscard: () => void
+  scrollBehavior?: ScrollBehavior
 }
 
 export default function Actions <T> (props: ActionsProps<T>): React.ReactElement | null {
