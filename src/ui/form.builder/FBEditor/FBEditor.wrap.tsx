@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { FB, FBEditorProps, FBEditorState } from '..';
 import { SM } from '../../../App';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
@@ -33,14 +33,16 @@ export const withFBEditor = <T extends FBEditorProps>(
 
     editorState = editorState || FB.useRef<FBEditorState>(FBEditorState);
     isFormOutput = workspaceState?.mode === 'formDesign';
-    const documentRevision
-    = workspaceState?.externalState?.documentRevisions?.byId[workspaceState?.document?.id ?? ''] as DocumentRevision;
-    const docTypeGroup = get(documentRevision?.document.documentType, 'group', DOC_TYPE_GROUP.OTHER);
-    const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], 'group');
-    const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
-    tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+    if (workspaceState?.document?.id) {
+      const documentRevision
+    = workspaceState?.externalState?.documentRevisions?.byId[workspaceState?.document?.id] as DocumentRevision;
+      const docTypeGroup = get(documentRevision?.document.documentType, 'group', DOC_TYPE_GROUP.OTHER);
+      const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], 'group');
+      const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
+      tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+    }
     useEffect(() => {
       if (tabConfig) {
         const selectedTab = tabConfig.filter(val => val.tabId === activeTabId)[0];
@@ -48,7 +50,7 @@ export const withFBEditor = <T extends FBEditorProps>(
       }
     }, [tabConfig]);
 
-    const handleTabSelection = (event: React.FormEvent<HTMLSelectElement>, value) => {
+    const handleTabSelection = (event: React.FormEvent<HTMLSelectElement>, value: TabInfo) => {
       setActiveTabId(value?.labelId ?? value?.tabId);
       localStorage.setItem('tabId', value?.tabId);
     };

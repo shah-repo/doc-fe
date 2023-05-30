@@ -20,7 +20,7 @@ export type FBEditorProps =
   standalone?: boolean
   isFormOutput?: boolean
   tabConfig?: TabInfo[]
-  handleTabSelection?: (event: React.ChangeEvent<{}>, value: any) => void
+  handleTabSelection?: (event: React.ChangeEvent<{}>, value: TabInfo) => void
   activeTabId?: string
 };
 
