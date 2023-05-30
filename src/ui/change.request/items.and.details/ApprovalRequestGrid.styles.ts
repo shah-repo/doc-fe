@@ -276,6 +276,9 @@ export default makeStyles((theme) =>
       },
     },
     truncate: {
+      fontFamily: 'Sora',
+      fontWeight: 400,
+      fontSize: 14,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'pre-line',

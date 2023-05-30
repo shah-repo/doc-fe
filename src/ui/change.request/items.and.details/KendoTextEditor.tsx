@@ -1,5 +1,4 @@
-import { TextArea } from '@progress/kendo-react-inputs';
-import { TextAreaBlurEvent } from '@progress/kendo-react-inputs/dist/npm/textarea/interfaces/TextAreaBlurEvent';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -28,25 +27,25 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   defaultValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const classes = styles();
 
-  const onBlur = (evt: TextAreaBlurEvent) => {
+  const onBlur = (evt) => {
     if (!name) { return; }
-    const updatedValue = evt?.target?.element?.current?.value ?? '';
+    const updatedValue = (evt?.currentTarget?.value ?? '') as string;
     formik.setFieldValue(name, updatedValue);
     formState?.setFieldValue(name, updatedValue);
   };
 
   const textEditorRenderComponent = ({ field }: FieldProps) => {
-    const defaultVal = (field?.value ?? defaultValue) as string;
+    const defaultVal = (defaultValue ?? field?.value) as string;
     return (<>
-      <TextArea
+      <TextareaAutosize
         defaultValue={defaultVal}
         onBlur={onBlur}
         className={classes.textArea}
-        rows={4}
+        rowsMax={4}
       />
-      {!defaultVal && <span className={classes.error}>
-        <p>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</p>
-      </span>}
+      {!defaultVal && <p className={classes.error}>
+        <span>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</span>
+      </p>}
     </>);
   };
 
