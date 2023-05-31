@@ -27,11 +27,12 @@ const FBInputBaseField: React.FunctionComponent<FBInputBaseFieldProps> = ({
     {mode === 'preview' && (
       <Box>{defaultValue}</Box>
     )}
-    { mode !== 'preview'
-      && <InputBase
+    {mode !== 'preview' && (
+      <InputBase
         {...{ placeholder, style, rows, multiline, rowsMax }}
         inputProps={{ 'aria-label': 'naked' }}
-      />}
+      />
+    )}
   </FBInput>
 );
 

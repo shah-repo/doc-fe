@@ -26,7 +26,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   ...props
 }) => {
   const classes = FBTextFieldStyles({ rows, customHeight });
-  className = className || classes.textfield;
+  className = className ?? classes.textfield;
   return (
     <FBInput {...props} {...{ error, defaultValue }}
       type={inputType} labelProps={FBFontStyle.labelProps}>
@@ -35,11 +35,11 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
       )}
       {mode !== 'preview' && (
         <TextField
-          data-cy={dataCy || props.name}
+          data-cy={dataCy ?? props.name}
           label=""
           variant="outlined"
-          onBlur={(ev) => onBlur?.(ev)}
-          onFocus={(ev) => onFocus?.(ev)}
+          onBlur={onBlur}
+          onFocus={onFocus}
           inputProps={{
             ...inputProps,
             ...(type === 'number') && {
