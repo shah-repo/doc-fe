@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { set, kebabCase, cloneDeep } from 'lodash';
-import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { GridItem, GridProps } from './types';
 import cx from 'classnames';
-import useStyles from './styles';
-import { withThemeNext } from '../../../../layout/theme-next';
-import { Box } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/ClearRounded';
-import DoneIcon from '@material-ui/icons/DoneRounded';
-import { Button } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD, DEFAULT_DATA_STATE } from '.';
+import { cloneDeep, kebabCase, set } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { DEFAULT_DATA_STATE, Mode, MODE_FIELD } from '.';
 import { translate } from '../../../../../common/intl';
-import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { Button } from '../../../../components/forms/fields-next';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { withThemeNext } from '../../../../layout/theme-next';
+import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
+import useStyles from './styles';
+import { GridItem, GridProps } from './types';
 
 function normalizeData <T> (data: T[]): T[] {
   return cloneDeep(data).map(dataItem => {
@@ -78,7 +75,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     }));
   };
 
-  const handleItemSave: React.MouseEventHandler = () => {
+  const handleItemSave = (): void => {
     setData((data) => {
       const newData = data.map((dataItem) => set(dataItem, MODE_FIELD, Mode.show));
 
@@ -105,12 +102,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     setPrevDataItem(undefined);
   };
 
-  const scrollToRef = useCallback((node: HTMLDivElement | null) => {
-    if (node) {
-      requestAnimationFrame(() => node.scrollIntoView({ behavior: 'auto', block: 'nearest' }));
-    }
-  }, []);
-
   const rowRender: GridProps<T>['rowRender'] = (row, props) => {
     const { dataItem } = props;
 
@@ -133,37 +124,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const actions = (
       <td className={classes.actionsTd}>
-        <Box className={classes.line} />
-        <div className={classes.actions} ref={scrollToRef}>
-          <StyleTooltip
-            title={translate('common.discard')}
-            placement="top"
-            arrow
-          >
-            <Button
-              data-cy="action-discard"
-              className={classes.actionButton}
-              variant="outlined"
-              onClick={handleItemDiscard}
-            >
-              <ClearIcon className={classes.iconButton} />
-            </Button>
-          </StyleTooltip>
-          <StyleTooltip
-            title={translate('common.save')}
-            placement="top"
-            arrow
-          >
-            <Button
-              data-cy="action-save"
-              className={classes.actionButton}
-              variant="outlined"
-              onClick={handleItemSave}
-            >
-              <DoneIcon className={classes.iconButton} />
-            </Button>
-          </StyleTooltip>
-        </div>
+        <div className={classes.line} />
+        <Actions
+          dataItem={dataItem}
+          onConfirm={handleItemSave}
+          onDiscard={handleItemDiscard}
+        />
       </td>
     );
 
