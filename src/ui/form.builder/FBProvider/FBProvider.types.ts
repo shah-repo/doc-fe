@@ -11,7 +11,6 @@ import {
   FBEditorCustomControlState,
   FBEditorState,
   FBEQMaintenanceState,
-  FBFieldWrapperState,
   FBFilePresenterState,
   FBFilesPresenterState,
   FBFileUploadState,
@@ -45,12 +44,10 @@ export interface FBProviderProps {
   workspaceState?: FBWorkspaceState
   dialogState?: FBDialogState
   leftPanelState?: FBLeftPanelState
-  fieldWrapper?: FBFieldWrapperState
   filePresenterState?: FBFilePresenterState
   mediaAlbumState?: FBMediaAlbumState
   formState?: FBFormState
   schemaState?: FBSchemaState
-  fieldWrapperState?: FBFieldWrapperState
   editorState?: FBEditorState
   fileUploadState?: FBFileUploadState
   docRevState?: FBDocumentRevisionsState
