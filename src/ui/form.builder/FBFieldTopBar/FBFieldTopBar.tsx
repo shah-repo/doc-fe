@@ -1,3 +1,4 @@
+import { useSortable } from '@dnd-kit/sortable';
 import { Box, Grid } from '@material-ui/core';
 import CodeIcon from '@material-ui/icons/Code';
 import React from 'react';
@@ -12,16 +13,18 @@ import { withFBFieldTopBar } from './FBFieldTopBar.wrap';
 const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
   editSchemaItem,
   removeSchemaItem,
-  markDownSchemaItem,
-  inputProps: { deleteDisabled } = {},
+  toggleItemMarkdown,
+  inputProps = {},
 }) => {
   const classes = useStyles();
+  const { deleteDisabled, name = '' } = inputProps;
+  const { listeners } = useSortable({ id: name });
 
   return (
     <Box className={classes.root}>
       <Grid container className={classes.tools}>
-        <DragHandleIcon className="drag-handle" />
-        <CodeIcon onClick={markDownSchemaItem} />
+        <DragHandleIcon className={classes.dragIcon} {...listeners} data-cy="delete-schema-item" />
+        <CodeIcon onClick={toggleItemMarkdown} data-cy="view-schema-item-markdown" />
         <EditIcon onClick={editSchemaItem} data-cy="edit-schema-item" />
         <RemoveIcon
           fill={deleteDisabled ? Colors.hint_gray : 'none'}
