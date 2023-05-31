@@ -6,7 +6,7 @@ import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { withThemeNext } from '../../../../layout/theme-next';
-import ActionsCellTemplate from '../../../FBApprovalMatrixRoles/components/ActionsCellTemplate';
+import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
 import useStyles from './styles';
 import { GridItem, GridProps } from './types';
 
@@ -75,7 +75,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     }));
   };
 
-  const handleItemSave: React.MouseEventHandler = () => {
+  const handleItemSave = (): void => {
     setData((data) => {
       const newData = data.map((dataItem) => set(dataItem, MODE_FIELD, Mode.show));
 
@@ -124,8 +124,9 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     const actions = (
       <td className={classes.actionsTd}>
-        <ActionsCellTemplate
-          {...props}
+        <div className={classes.line} />
+        <Actions
+          dataItem={dataItem}
           onConfirm={handleItemSave}
           onDiscard={handleItemDiscard}
         />

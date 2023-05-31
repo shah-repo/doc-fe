@@ -64,6 +64,8 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
   },
   calculationField: {
+    display: 'flex',
+    justifyContent: 'flex-end',
     width: 160,
   },
   calculationTotal: {
