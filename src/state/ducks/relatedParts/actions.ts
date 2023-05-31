@@ -3,7 +3,7 @@ import { documentRevisionsActions } from '../documentRevisions';
 import { DOCUMENT_REVISION_ROOT_URL } from '../documentRevisions/constants';
 import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from '../documentRevisions/types';
 import { RELATED_PARTS_ROOT_URL } from './constants';
-import { RelatedPartsChoiceRequestBody, RelatedPartsListItem } from './types';
+import { RelatedPartsChoiceRequestBody, RelatedPartsListItem, RELATED_PARTS_STATUS } from './types';
 
 const createRelatedPart
   = (parentDocumentId: string, parentDocumentRevisionId: string, body: DocumentRevisionEditRequestBody,
@@ -25,6 +25,17 @@ const parentPartChoiceAction = (body: RelatedPartsChoiceRequestBody, async) => a
   },
   onFailure (error, dispatch) {
     async.errorHandler?.callback(JSON.stringify({ msg: error, oldSelection: body.oldSelection }));
+  },
+});
+
+const subPartStatusCheck = (parentDocumentRevisionId: string, newOption: RELATED_PARTS_STATUS, async) => apiAction({
+  url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentRevisionId}/checkSubPartReleased`,
+  method: 'get',
+  onSuccess () {
+    async.successHandler?.callback(newOption);
+  },
+  onFailure (error) {
+    async.errorHandler?.callback(error);
   },
 });
 
@@ -95,6 +106,7 @@ const updateRelatedPart = (docRevId: string, data, async) => apiAction({
 export default {
   createRelatedPart,
   parentPartChoiceAction,
+  subPartStatusCheck,
   fetchAllRelatedParts,
   voidRelatedPart,
   removeRelatedPart,
