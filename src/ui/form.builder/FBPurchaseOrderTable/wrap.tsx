@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { cloneDeep, compact, each, first, get, isNil, omit } from 'lodash';
+import { cloneDeep, compact, each, first, get, isNil, omit, template } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -19,6 +19,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
 import FBDataStore from '../FBStore/FBDataStore';
@@ -64,12 +65,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
       && SM.isNewVersion;
-    const updatedValues = useRef({ shippingCost: '0', tax: '0', taxRate: '0' });
+    const updatedValues = useRef({ shippingCost: '0', tax: '0', taxRate: '0', currency: 'USD', exchangeRate: 1 });
 
-    const isTotalAmountUnderThreshold = (shippingCost, tax, taxRate) => {
+    const isTotalAmountUnderThreshold = (shippingCost, tax, taxRate, exchangeRate?, currency?) => {
       if (isPOEditState) {
         const allItems = purchaseOrderState?.calculateCost();
-        const totalAmount = parseFloat(allItems?.totalAmount ?? '0');
+        const totalAmount = parseFloat(allItems?.totalInUSD ?? '0');
         let UpdatedAmount = parseFloat(allItems?.subTotal ?? '0');
         if (shippingCost) {
           UpdatedAmount += parseFloat(allItems?.tax ?? '0') + parseFloat(shippingCost);
@@ -83,12 +84,15 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           }
           UpdatedAmount += tax + parseFloat(allItems?.shippingCost ?? '0');
         }
+        if (!isNil(exchangeRate)) {
+          UpdatedAmount = parseFloat(allItems?.totalAmount ?? '0') * exchangeRate;
+        }
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (o1.limit + o1.threshold) >= totalAmount);
         if (topApprovals?.length
          && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
         ) {
-          updatedValues.current = { ...{ shippingCost, tax, taxRate } };
+          updatedValues.current = { ...{ shippingCost, tax, taxRate, exchangeRate: exchangeRate ?? allItems?.exchangeRate, currency: currency ?? allItems?.currency } };
            dialog?.open();
            return false;
         } else {
@@ -134,7 +138,19 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
     }, [poApprovalsState, workspaceState]);
 
-    handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
+    handleCurrencyChange = async (ev, currency) => {
+      const selectedCurrency = currency.props.value;
+      if (isPOEditState) {
+        const urlTpl = template(FBEndpoint.Currency);
+        const url = urlTpl({ symboName: selectedCurrency });
+        purchaseOrderState?.exchangeRate.setUrl(url);
+        const data = await purchaseOrderState?.exchangeRate?.fetch();
+        if (!isTotalAmountUnderThreshold(null, null, null, data?.rate, selectedCurrency)) {
+          return;
+        }
+      }
+      purchaseOrderState?.setCurrency(selectedCurrency);
+    };
 
     const async = useAsync<DocumentRevision>({
       onSuccess: async (createdDocumentRevision?) => {
@@ -181,7 +197,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       setIsPOAddAction(false);
       setIsPORemoveAction(false);
       setSelectedItemIndex(-1);
-      updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0' };
+      updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0', currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
       dialog?.close();
     };
 
@@ -228,7 +244,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       const shippingCost = previousLineItemsLength ? getShippingCost(allItems.shippingCost) : 0;
       const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
-      const totalInUSD = totalAmount * allItems.exchangeRate;
+      const totalInUSD = totalAmount * updatedValues.current?.exchangeRate ?? allItems.exchangeRate;
 
       values.formInput[PO_ITEMS_COMPONENT_NAME] = {
         ...values?.formInput[PO_ITEMS_COMPONENT_NAME],
@@ -237,6 +253,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         taxRate: taxRate,
         shippingCost: formatCost(shippingCost),
         totalAmount: formatCost(totalAmount),
+        currency: updatedValues.current?.currency,
+        exchangeRate: updatedValues.current?.exchangeRate,
         totalInUSD: formatCost(totalInUSD),
       };
 
