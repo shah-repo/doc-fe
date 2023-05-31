@@ -84,7 +84,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           }
           UpdatedAmount += tax + parseFloat(allItems?.shippingCost ?? '0');
         }
-        if (!isNil(exchangeRate)) {
+        if (isNil(exchangeRate)) {
+          UpdatedAmount = UpdatedAmount * (allItems?.exchangeRate ?? 1);
+        } else {
           UpdatedAmount = parseFloat(allItems?.totalAmount ?? '0') * exchangeRate;
         }
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
