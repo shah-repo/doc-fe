@@ -119,16 +119,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }];
   }
 
-  SM.reaction(
-    () => _formState?.isDirty,
-    (isDirty: boolean | undefined) => {
-      dirty = isDirty || false;
-    },
-  );
-
   useObserver(() => {
     if (formValues.values.id || formValues.values.document?.documentType?.id) {
-      dirty = _formState?.isDirty || _documentRevisionFormState?.isDirty || false;
+      dirty = _documentRevisionFormState?.isDirty || false;
     }
   });
 
