@@ -1,18 +1,19 @@
-import { Box } from '@material-ui/core';
+import { Box, Divider } from '@material-ui/core';
 import React from 'react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
 import { FBFieldMarkDownProps } from '..';
 import { withFBFieldMarkDown } from './FBFieldMarkDown.wrap';
 
 const FBFormMarkDown: React.FunctionComponent<FBFieldMarkDownProps> = ({
   source = '',
-  mt,
+  ...props
 }) => (
-  <Box {...{ mt }}>
-    <SyntaxHighlighter language="javascript" style={docco}>
-      {source}
-    </SyntaxHighlighter>
+  <Box {...props} my={2}>
+    <Divider />
+    <Box px={2}>
+      <code>
+        <pre>{source}</pre>
+      </code>
+    </Box>
   </Box>
 );
 
