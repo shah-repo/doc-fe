@@ -51,7 +51,9 @@ const ParentPartSelector: React.FunctionComponent<{
   const classes = useStyles();
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner?.user.email === email : true;
-  const disabled = documentRevision?.version > 1 || documentRevision.status !== 'DRAFT' || !isOwner;
+  const disabled = documentRevision?.version > 1
+    || ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)
+    || !isOwner;
 
   const subPartStatusCheckAction = useActionCreator(relatedPartsActions.subPartStatusCheck);
   const subPartStatusCheckAsync = useAsync({
