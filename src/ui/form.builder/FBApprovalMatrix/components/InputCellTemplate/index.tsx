@@ -30,12 +30,14 @@ const InputCellTemplate: CellTemplate = (props) => {
   );
 
   if (!canBeModified) {
-    return (<OverflowTooltip
-      arrow
-      placement="top"
-      title={value}
-    > {value || '-'}
-    </OverflowTooltip>);
+    return (
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={value ?? ''}
+      >
+        {value || '-'}
+      </OverflowTooltip>);
   }
 
   return (

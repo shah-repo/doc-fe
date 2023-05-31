@@ -3,7 +3,6 @@ import { get, set } from 'lodash';
 import React from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
-
 import { DATA_ITEM_KEY, Mode, MODE_FIELD, TEXT_FIELD } from '../Grid';
 
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
@@ -25,7 +24,6 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
     const newValue = event.target.value[DATA_ITEM_KEY];
-    console.log('--handleChange--');
 
     onChange?.({
       dataIndex,
@@ -37,12 +35,14 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
   };
 
   if (!canBeModified) {
-    return (<OverflowTooltip
-      arrow
-      placement="top"
-      title={valueItem?.[TEXT_FIELD]}
-    > {valueItem?.[TEXT_FIELD] ?? '-'}
-    </OverflowTooltip>);
+    return (
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={valueItem?.[TEXT_FIELD] ?? ''}
+      >
+        {valueItem?.[TEXT_FIELD] ?? '-'}
+      </OverflowTooltip>);
   }
 
   return (
