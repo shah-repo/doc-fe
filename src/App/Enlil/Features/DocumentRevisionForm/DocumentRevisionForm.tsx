@@ -1,14 +1,16 @@
 import { Box } from '@material-ui/core';
 import { filter, get, includes, map, size } from 'lodash';
-import { Observer } from 'mobx-react';
+import { Observer, useObserver } from 'mobx-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
+import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
+import { GroupTag } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
+import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../ui/document.revision/form/attachments';
 import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisplay.container';
@@ -16,9 +18,11 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
 import FBTrainingInfoContainer from '../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
@@ -56,11 +60,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   mode,
   workspaceState,
   isCreateUrl,
+  dirty = false,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isPO = checkIsDocumentPO(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -72,6 +78,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = React.useContext(isOperator);
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -111,6 +119,19 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }];
   }
 
+  SM.reaction(
+    () => _formState?.isDirty,
+    (isDirty: boolean | undefined) => {
+      dirty = isDirty || false;
+    },
+  );
+
+  useObserver(() => {
+    if (formValues.values.id || formValues.values.document?.documentType?.id) {
+      dirty = _formState?.isDirty || _documentRevisionFormState?.isDirty || false;
+    }
+  });
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
@@ -124,6 +145,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         />
       }
     >
+      <PromptIfDirty
+        dirty={dirty}
+        doNotPrompt={doNotPrompt}
+        setDoNotPrompt={setDoNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
+        {...{ isPOEditState }}
+      />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
@@ -185,7 +213,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   proposedDocId,
                                   setDocId,
                                   doNotPrompt,
-                                  setDoNotPrompt,
                                   onDirtyFlagChange,
                                   documentTypesById,
                                   canChangeOwnerShip,
