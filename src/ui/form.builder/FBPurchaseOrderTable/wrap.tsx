@@ -140,7 +140,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     handleCurrencyChange = async (ev, currency) => {
       const selectedCurrency = currency.props.value;
-      if (isPOEditState) {
+      if (isPOEditState && purchaseOrderState) {
         const urlTpl = template(FBEndpoint.Currency);
         const url = urlTpl({ symboName: selectedCurrency });
         purchaseOrderState?.exchangeRate.setUrl(url);
@@ -199,6 +199,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       setSelectedItemIndex(-1);
       updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0', currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
       dialog?.close();
+      if (purchaseOrderState) {
+        purchaseOrderState.rerenderCurrency = !purchaseOrderState?.rerenderCurrency;
+      }
     };
 
     const onAddLineItemClick = () => {
