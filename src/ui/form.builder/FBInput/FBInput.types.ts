@@ -250,6 +250,11 @@ export const FBAutosave: FBInputType[] = [
   'texteditor',
 ];
 
+export const SectionTypeField: FBInputType[] = [
+  'section',
+  'subsection',
+];
+
 export const BlockTypeField: FBInputType[] = [
   'section',
   'approvals',
