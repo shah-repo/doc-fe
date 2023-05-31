@@ -18,10 +18,14 @@ import { useObserver } from 'mobx-react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { authSelectors } from '../../../../../state/ducks/auth';
+import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Dialog from '../../../../components/dialogs';
+import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionStatus';
 import useStyles from './RelatedPart.styles';
@@ -49,18 +53,42 @@ const ParentPartSelector: React.FunctionComponent<{
   const isOwner = documentRevision?.owner ? documentRevision?.owner?.user.email === email : true;
   const disabled = documentRevision?.version > 1 || documentRevision.status !== 'DRAFT' || !isOwner;
 
+  const subPartStatusCheckAction = useActionCreator(relatedPartsActions.subPartStatusCheck);
+  const subPartStatusCheckAsync = useAsync({
+    onSuccess: (newOption) => {
+      switchRadioSelection(newOption);
+      setShowConfirmDialog(true);
+    },
+    onError: (errMsg) => {
+      if (errMsg) {
+        toastError(errMsg);
+        setSelectedOption(previousOption);
+      }
+    },
+  });
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newOption: RELATED_PARTS_STATUS = event.target.value as RELATED_PARTS_STATUS;
 
     if (newOption !== selectedOption) {
-      setPreviousOption(selectedOption);
-      setSelectedOption(newOption);
       if (selectedOption !== RELATED_PARTS_STATUS.PARENT_NO) {
-        setShowConfirmDialog(true);
+        if (selectedOption === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
+          subPartStatusCheckAsync.start(subPartStatusCheckAction,
+            documentRevision.id, newOption, subPartStatusCheckAsync);
+        } else {
+          switchRadioSelection(newOption);
+          setShowConfirmDialog(true);
+        }
       } else {
+        switchRadioSelection(newOption);
         parentStatusChanged(newOption);
       }
     }
+  };
+
+  const switchRadioSelection = (newOption) => {
+    setPreviousOption(selectedOption);
+    setSelectedOption(newOption);
   };
 
   const handleConfirm = (confirmedOption) => {
