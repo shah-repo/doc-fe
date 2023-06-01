@@ -16,16 +16,25 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
   @observable public mode: FBApprovalMatrixFieldMode = 'none';
   public url = FBEndpoint.ApprovalMatrix;
 
-  public constructor({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
+  public constructor ({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
     super();
-    if (!isOutput) { return; }
-    const isFormEmpty = isEmpty(formValue) || !(formValue && Boolean(
-      Object.values(formValue).find((dataKeys) => !isEmpty(dataKeys))
-    ));
+
+    if (!isOutput) {
+      return;
+    }
+
+    const isFormEmpty = isEmpty(formValue)
+      || !(formValue && Boolean(
+        Object.values(formValue).find((dataKeys) => !isEmpty(dataKeys))
+      ))
+      || !formValue?.[FBDAMFields.DAM]
+      || !formValue?.[FBDAMFields.DAR];
+
     if (isFormEmpty || outputRevision) {
       this.fetch();
       return;
     }
+
     this.data = formValue;
   }
 
@@ -43,7 +52,7 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
       case 'matrix':
         return (
           this.data.approvalMatrix
-          ?? this.data[FBDAMFields.DAM].approvalMatrix
+          ?? this.data[FBDAMFields.DAM]?.approvalMatrix
           ?? this.data[FBDAMFields.DAM]
           ?? []
         ) as DataType<T>[];
