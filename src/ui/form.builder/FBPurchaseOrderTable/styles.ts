@@ -64,8 +64,7 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
   },
   calculationField: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    textAlign: 'right',
     width: 160,
   },
   calculationTotal: {
@@ -87,6 +86,7 @@ export default makeStyles((theme) => ({
   },
   calculationTax: {
     display: 'flex',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     gap: `${theme.spacing(0.5)}px`,
   },
