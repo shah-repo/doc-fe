@@ -16,7 +16,6 @@ export const CATEGORY_OPTIONS = [
   createOption('EB'),
   createOption('Lhr'),
   createOption('Lot'),
-  createOption('Training Records'),
   createOption('Training Curriculums'),
   createOption('Hidden'),
 ];
