@@ -1,8 +1,9 @@
-import React from 'react';
-import { get, set } from 'lodash';
-import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY } from '../Grid';
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
+import { get, set } from 'lodash';
+import React from 'react';
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { DATA_ITEM_KEY, Mode, MODE_FIELD, TEXT_FIELD } from '../Grid';
 
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   data: any[]
@@ -34,7 +35,14 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
   };
 
   if (!canBeModified) {
-    return valueItem?.[TEXT_FIELD] ?? '-';
+    return (
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={valueItem?.[TEXT_FIELD] ?? ''}
+      >
+        {valueItem?.[TEXT_FIELD] ?? '-'}
+      </OverflowTooltip>);
   }
 
   return (
