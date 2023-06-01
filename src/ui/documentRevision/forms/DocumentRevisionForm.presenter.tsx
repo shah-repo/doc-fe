@@ -7,8 +7,6 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { authSelectors } from '../../../state/ducks/auth';
-import { GroupTag } from '../../../state/ducks/auth/types';
-import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
@@ -20,8 +18,6 @@ import AttachmentsField from '../../document.revision/form/attachments';
 import BuildsContainer from '../../document.revision/summary/builds.container';
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from '../../form.builder';
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../hooks/docCustomization/useCustomization';
-import useActionCreator from '../../hooks/useActionCreator';
-import useGetHasTag from '../../hooks/useGetHasTag';
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
 import { isOperator } from '../DocumentRevisionDisplay.container';
@@ -53,7 +49,6 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   mode: FBWorkspaceMode
   doNotPrompt?: boolean
   onDirtyFlagChange?: (dirty: boolean) => void
-  setDoNotPrompt?: (value: boolean) => void
   isPreview?: boolean
 }
 
@@ -77,7 +72,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   redlineActive,
   mode,
   doNotPrompt,
-  setDoNotPrompt,
   onDirtyFlagChange,
   isPreview,
 }) => {
@@ -133,9 +127,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
   const isDCO = (documentRevision?.document?.documentType?.documentTypeName === 'Document Change Order');
-  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
-  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -237,9 +228,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <PromptIfDirty
           dirty={dirty}
           doNotPrompt={doNotPrompt}
-          setDoNotPrompt={setDoNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
-          {...{ isPOEditState, setDocumentRevision }}
         />
         <Grid container spacing={3}>
           {!isDCO && (<>{isVisible && <Grid item xs={6}>
