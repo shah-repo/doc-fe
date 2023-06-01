@@ -23,6 +23,10 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
     .value();
   fields.forEach((field) => {
     set(schemaObjFieldsObj, field.toString(), true);
+    // To show po amount requires currncy value
+    if (field.toString() === 'precalc.po_amount') {
+      set(schemaObjFieldsObj, 'precalc.po_currency', true);
+    }
   });
   return [schemaObjFieldsObj];
 };
