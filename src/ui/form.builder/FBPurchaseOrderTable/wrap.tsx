@@ -24,6 +24,7 @@ import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
+import { TAX_RATE } from '../helpers/constants';
 import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
 
@@ -65,7 +66,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
       && SM.isNewVersion;
-    const updatedValues = useRef({ shippingCost: '0', tax: '0', taxRate: '0', currency: 'USD', exchangeRate: 1 });
+    const updatedValues = useRef({ shippingCost: '0', tax: '0', taxRate: TAX_RATE, currency: 'USD', exchangeRate: 1 });
 
     const isTotalAmountUnderThreshold = (shippingCost, tax, taxRate, exchangeRate?, currency?) => {
       if (isPOEditState) {
@@ -207,7 +208,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     const initializeUpdatedValues = () => {
-      updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0', currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
+      updatedValues.current = { shippingCost: purchaseOrderState?.value?.shippingCost ?? '0', tax: purchaseOrderState?.value?.tax ?? '0', taxRate: purchaseOrderState?.value?.taxRate ?? TAX_RATE, currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
     };
 
     const onAddLineItemClick = () => {
@@ -250,6 +251,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         taxRate = Number(updatedValues.current?.taxRate);
         if (previousLineItemsLength && UpdatedLineItemsTotalObj.forTax && !isNil(updatedValues.current?.taxRate)) {
           tax = UpdatedLineItemsTotalObj.forTax * taxRate / 100;
+        } else if (UpdatedLineItemsTotalObj.forTax === 0) {
+          tax = 0;
         }
       }
       const shippingCost = previousLineItemsLength ? getShippingCost(allItems.shippingCost) : 0;
