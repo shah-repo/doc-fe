@@ -152,6 +152,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
+    } else if (upDateField === 'precalc.po_amount') {
+      dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     }
