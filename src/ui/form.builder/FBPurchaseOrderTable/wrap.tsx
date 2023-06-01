@@ -199,15 +199,20 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       setIsPOAddAction(false);
       setIsPORemoveAction(false);
       setSelectedItemIndex(-1);
-      updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0', currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
+      initializeUpdatedValues();
       dialog?.close();
       if (purchaseOrderState) {
         purchaseOrderState.rerenderCurrency = !purchaseOrderState?.rerenderCurrency;
       }
     };
 
+    const initializeUpdatedValues = () => {
+      updatedValues.current = { shippingCost: '0', tax: '0', taxRate: '0', currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
+    };
+
     const onAddLineItemClick = () => {
       if (isPOEditState) {
+        initializeUpdatedValues();
         setIsPOAddAction(true);
         dialog?.open();
         return;
@@ -278,6 +283,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       e.stopPropagation();
       setSelectedItemIndex(index);
       if (isPOEditState) {
+        initializeUpdatedValues();
         setIsPORemoveAction(true);
         dialog?.open();
         return;
