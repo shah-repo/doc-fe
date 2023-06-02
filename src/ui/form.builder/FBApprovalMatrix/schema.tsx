@@ -1,24 +1,24 @@
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import cx from 'classnames';
+import { get, isArray, kebabCase } from 'lodash';
 import React from 'react';
-import CheckboxCellTemplate from './components/CheckboxCellTemplate';
-import DropdownCellTemplate from './components/DropdownCellTemplate';
-import StatusCellTemplate from './components/StatusCellTemplate';
-import InputCellTemplate from './components/InputCellTemplate';
-import BooleanFilter from './components/BooleanFilter';
-import InputFilter from './components/InputFilter';
-import { FBApprovalMatrixRoleTitles } from './types';
+import { translate } from '../../../common/intl';
+import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import {
   FBApprovalMatrixFieldData,
   FBApprovalMatrixItem,
 } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
-import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import BooleanFilter from './components/BooleanFilter';
+import CheckboxCellTemplate from './components/CheckboxCellTemplate';
+import DropdownCellTemplate from './components/DropdownCellTemplate';
 import DropdownFilter from './components/DropdownFilter';
-import { translate } from '../../../common/intl';
-import cx from 'classnames';
-import { kebabCase } from 'lodash';
 import { createOption } from './components/Grid';
-import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import InputCellTemplate from './components/InputCellTemplate';
+import InputFilter from './components/InputFilter';
+import StatusCellTemplate from './components/StatusCellTemplate';
 import { CATEGORY_OPTIONS } from './constants';
+import { FBApprovalMatrixRoleTitles } from './types';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
@@ -168,12 +168,18 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   ];
 
   if (approvalRoles) {
+    let finalApprovalRoles = approvalRoles;
+
+    if (!isArray(approvalRoles)) {
+      finalApprovalRoles = get(approvalRoles, 'approvalRoles');
+    }
+
     for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoleTitles)) {
       schema.push({
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
-        children: approvalRoles.map((role, index, arr) => ({
+        children: finalApprovalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),
           title: role.name,
           field: `approvalRoles.${headKey}.${role.index}`,
