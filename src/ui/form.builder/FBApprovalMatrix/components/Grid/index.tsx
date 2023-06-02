@@ -29,13 +29,35 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const classes = useStyles();
 
   const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
-  const [prevDataItem, setPrevDataItem] = useState<GridItem<T>>();
+  const [activeItem, setActiveItem] = useState<GridItem<T>>();
 
   useEffect(
     () => {
       setData(normalizeData(originData));
     },
     [originData],
+  );
+
+  useEffect(
+    () => {
+      setData((prevState) => {
+        const data = prevState
+          .filter((dataItem) => dataItem?.[MODE_FIELD] !== Mode.add)
+          .map((dataItem) => {
+            if (activeItem && dataItem.id === activeItem.id) {
+              return set(dataItem, MODE_FIELD, dataItem.id ? Mode.edit : Mode.add);
+            }
+            return set(dataItem, MODE_FIELD, Mode.show);
+          });
+
+        if (activeItem?.[MODE_FIELD] === Mode.add) {
+          return [...data, activeItem];
+        }
+
+        return data;
+      });
+    },
+    [activeItem],
   );
 
   const handleDataStateChange: GridProps<T>['onDataStateChange'] = ({ dataState }) => {
@@ -57,49 +79,44 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const isAdding = data.some((dataItem) => dataItem[MODE_FIELD] === Mode.add);
 
   const handleAdd: React.MouseEventHandler = () => {
-    handleItemDiscard();
-
     const newItem = {
       ...defaultNewValue,
       [MODE_FIELD]: Mode.add,
     } as GridItem<T>;
 
-    setData((data) => [...data, newItem]);
+    setActiveItem(newItem);
   };
 
-  const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem: clickedDataItem }) => {
-    handleItemDiscard();
-    setPrevDataItem(cloneDeep(clickedDataItem));
-    setData((data) => data.map((dataItem) => {
-      return set(dataItem, MODE_FIELD, dataItem.id === clickedDataItem.id ? Mode.edit : Mode.show);
-    }));
+  const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem }) => {
+    setActiveItem(dataItem);
   };
 
   const handleItemSave = (): void => {
     setData((data) => {
-      const newData = data.map((dataItem) => set(dataItem, MODE_FIELD, Mode.show));
+      const newData = data.map((dataItem) => {
+        if (activeItem && dataItem.id === activeItem.id) {
+          return activeItem;
+        }
+
+        return dataItem;
+      });
 
       onSave?.(newData);
 
       return newData;
     });
 
-    setPrevDataItem(undefined);
+    setActiveItem(undefined);
   };
 
-  const handleItemDiscard = (): void => {
-    setData((data) => data
-      .filter((dataItem) => dataItem[MODE_FIELD] !== Mode.add)
-      .map((dataItem) => {
-        if (prevDataItem && dataItem.id === prevDataItem.id) {
-          return prevDataItem;
-        }
+  const handleItemDiscard = () => setActiveItem(undefined);
 
-        return set(dataItem, MODE_FIELD, Mode.show);
-      }),
-    );
+  const handleItemChange: GridProps<T>['onItemChange'] = ({ field, value }) => {
+    if (!field) {
+      return;
+    }
 
-    setPrevDataItem(undefined);
+    setActiveItem((oldValue) => oldValue && set(cloneDeep(oldValue), field, value));
   };
 
   const rowRender: GridProps<T>['rowRender'] = (row, props) => {
@@ -163,6 +180,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         dataItemKey="id"
         onRowClick={!disabled ? handleRowClick : undefined}
         onDataStateChange={handleDataStateChange}
+        onItemChange={handleItemChange}
         defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
         filterable
         fullWidth
