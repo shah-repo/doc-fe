@@ -8,10 +8,11 @@ import { DATA_ITEM_KEY, Mode, MODE_FIELD, TEXT_FIELD } from '../Grid';
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   data: any[]
   defaultItem?: any
+  emptyLabel?: string
 }
 
 const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) => {
-  const { data, dataItem, defaultItem, field, dataIndex, column, onChange } = props;
+  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange } = props;
   const { editable } = column;
 
   const mode = dataItem[MODE_FIELD];
@@ -35,13 +36,15 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
   };
 
   if (!canBeModified) {
+    const label = valueItem?.[TEXT_FIELD] ?? emptyLabel;
+
     return (
       <OverflowTooltip
         arrow
         placement="top"
-        title={valueItem?.[TEXT_FIELD] ?? ''}
+        title={label}
       >
-        {valueItem?.[TEXT_FIELD] ?? '-'}
+        {label}
       </OverflowTooltip>);
   }
 
