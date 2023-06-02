@@ -35,6 +35,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     ...props
   }: T) => {
     const { purchaseOrderState, dialogState, formState, workspaceState, poApprovalsState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     const history = useHistory();
     const createDocAction = useActionCreator(documentRevisionsActions.create);
 
@@ -180,6 +181,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       return cloneDeep(toNewVersionRequestBody(values));
     };
     onAlertNotificationConfirm = async () => {
+      _documentRevisionFormState?.setDoNotPrompt(true);
       const latestDocRevData = getLatestDocRevData();
       try {
         const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];

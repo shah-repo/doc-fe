@@ -50,6 +50,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
     const { purchaseOrderState, formState, workspaceState, poApprovalsState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     const { document, id, isOutput } = workspaceState || {};
     const formik = useFormikContext();
     const history = useHistory();
@@ -157,6 +158,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     const async = useAsync<DocumentRevision>({
       onSuccess: async (createdDocumentRevision?) => {
+        _documentRevisionFormState?.setDoNotPrompt(true);
         if (createdDocumentRevision) {
           dialog?.close();
           try {
