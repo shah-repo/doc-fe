@@ -1,6 +1,6 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { get, isArray, kebabCase } from 'lodash';
+import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -169,18 +169,12 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   ];
 
   if (approvalRoles) {
-    let finalApprovalRoles = approvalRoles;
-
-    if (!isArray(approvalRoles)) {
-      finalApprovalRoles = get(approvalRoles, 'approvalRoles');
-    }
-
     for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoleTitles)) {
       schema.push({
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
-        children: finalApprovalRoles.map((role, index, arr) => ({
+        children: approvalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),
           title: role.name,
           field: `approvalRoles.${headKey}.${role.index}`,
