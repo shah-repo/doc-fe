@@ -22,7 +22,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     data: originData,
     schema,
     disabled, onSave,
-    defaultNewValue,
+    generateNewItem,
     withoutStatus,
     ...restProps
   } = props;
@@ -80,7 +80,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   const handleAdd: React.MouseEventHandler = () => {
     const newItem = {
-      ...defaultNewValue,
+      ...generateNewItem?.(),
       [MODE_FIELD]: Mode.add,
     } as GridItem<T>;
 
@@ -88,23 +88,22 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   };
 
   const handleRowClick: GridProps<T>['onRowClick'] = ({ dataItem }) => {
-    setActiveItem(dataItem);
+    if (activeItem?.id !== dataItem.id) {
+      setActiveItem(cloneDeep(dataItem));
+    }
   };
 
   const handleItemSave = (): void => {
-    setData((data) => {
-      const newData = data.map((dataItem) => {
-        if (activeItem && dataItem.id === activeItem.id) {
-          return activeItem;
-        }
+    const newData = data.map((dataItem) => {
+      if (activeItem && dataItem.id === activeItem.id) {
+        return set(activeItem, MODE_FIELD, Mode.show);
+      }
 
-        return dataItem;
-      });
-
-      onSave?.(newData);
-
-      return newData;
+      return dataItem;
     });
+
+    setData(newData);
+    onSave?.(newData);
 
     setActiveItem(undefined);
   };
@@ -112,11 +111,13 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const handleItemDiscard = () => setActiveItem(undefined);
 
   const handleItemChange: GridProps<T>['onItemChange'] = ({ field, value }) => {
-    if (!field) {
+    if (!activeItem || !field) {
       return;
     }
 
-    setActiveItem((oldValue) => oldValue && set(cloneDeep(oldValue), field, value));
+    setActiveItem(
+      set(activeItem, field, value),
+    );
   };
 
   const rowRender: GridProps<T>['rowRender'] = (row, props) => {
