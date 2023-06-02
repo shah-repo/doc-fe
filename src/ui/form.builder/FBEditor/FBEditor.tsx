@@ -17,7 +17,7 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
   mode,
   tabConfig,
   handleTabSelection,
-  activeTabId,
+  activeTabLabelId,
 }) => (
   <FBProvider {...{ editorState }}>
     <FBForm initialValues={inputProps} {...{ formState }}>
@@ -31,7 +31,7 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
             key={`fb-editor-auto-${type}-${index}`}
             options={tabConfig}
             onChange={handleTabSelection}
-            value={translate(activeTabId)}
+            value={translate(activeTabLabelId)}
             renderOption={(option) => (<Text translation={option.labelId} />)}
             inputProps={{ style: { paddingTop: '10px' } }}
           />

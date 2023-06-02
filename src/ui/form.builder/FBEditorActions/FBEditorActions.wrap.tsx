@@ -10,8 +10,8 @@ import { withFBValidation } from '../FBValidation/FBValidation.wrap';
 import { Rules } from './constants';
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     handleAdd,
     handleCancel,
@@ -22,7 +22,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     type,
     ...props
   }: T) => {
-    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelState, editorState } = FB.useStores();
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
 
@@ -82,7 +82,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         defaultValue,
         editorConfig,
       } = formValues;
-      const selectedTab = localStorage.getItem('tabId');
 
       // If schema item type is unique and we have already added it into scheme
       const isUnique = (
@@ -135,7 +134,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ['ON_STATE_TO_IN_REVIEW'],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId: selectedTab ?? _tabsState?.activeTabId,
+        tabId: editorState?.tabId ?? _tabsState?.activeTabId,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 

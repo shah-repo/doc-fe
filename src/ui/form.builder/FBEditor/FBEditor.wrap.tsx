@@ -11,8 +11,8 @@ import { ApplicationState } from '../../../state/reducers';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 
 export const withFBEditor = <T extends FBEditorProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     editorState,
     isFormOutput,
@@ -23,11 +23,11 @@ export const withFBEditor = <T extends FBEditorProps>(
     const { workspaceState } = FB.useStores();
     const { _tabsState } = SM.useStores();
 
-    const [activeTabId, setActiveTabId] = useState(_tabsState?.activeTabId);
+    const [activeTabLabelId, setActiveTabLabelId] = useState(_tabsState?.activeTabId);
 
     useEffect(() => {
       if (_tabsState) {
-        localStorage.setItem('tabId', _tabsState?.activeTabId);
+        editorState?.setTabId(_tabsState?.activeTabId);
       }
     }, [_tabsState]);
 
@@ -45,14 +45,14 @@ export const withFBEditor = <T extends FBEditorProps>(
 
     useEffect(() => {
       if (tabConfig) {
-        const selectedTab = tabConfig.filter(val => val.tabId === activeTabId)[0];
-        setActiveTabId(selectedTab?.labelId);
+        const selectedTab = tabConfig.filter(val => val.tabId === activeTabLabelId)[0];
+        setActiveTabLabelId(selectedTab?.labelId);
       }
     }, [tabConfig]);
 
     const handleTabSelection = (event: React.FormEvent<HTMLSelectElement>, value: TabInfo) => {
-      setActiveTabId(value?.labelId ?? value?.tabId);
-      localStorage.setItem('tabId', value?.tabId);
+      setActiveTabLabelId(value?.labelId ?? value?.tabId);
+      editorState?.setTabId(value?.tabId);
     };
 
     useObserver(() => {
@@ -66,7 +66,7 @@ export const withFBEditor = <T extends FBEditorProps>(
       mode,
       tabConfig,
       handleTabSelection,
-      activeTabId,
+      activeTabLabelId,
     });
   };
 

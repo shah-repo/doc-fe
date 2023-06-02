@@ -21,9 +21,9 @@ export type FBEditorProps =
   isFormOutput?: boolean
   tabConfig?: TabInfo[]
   handleTabSelection?: (event: React.ChangeEvent<{}>, value: TabInfo) => void
-  activeTabId?: string
+  activeTabLabelId?: string
 };
 
 export interface FBEditorHelperProps {
-  openEditor?: (props?: Partial<FBInputProps>) => any
+  openEditor?: (props?: Partial<FBInputProps>) => void
 }
