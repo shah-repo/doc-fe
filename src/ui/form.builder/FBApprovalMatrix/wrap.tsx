@@ -1,10 +1,10 @@
-import React from 'react';
+import { get, isArray, isEmpty, isUndefined, set } from 'lodash';
 import { useObserver } from 'mobx-react';
-import { isEmpty, set, get, isUndefined } from 'lodash';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
-import { FBApprovalMatrixProps } from './types';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import React from 'react';
 import { v4 as generateUuid } from 'uuid';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { FBApprovalMatrixProps } from './types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>,
@@ -45,10 +45,14 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     const { status } = document ?? {};
 
     useObserver(() => {
-      const approvalRoles = get(formInput, FBDAMFields.DAR)
+      let approvalRoles = get(formInput, FBDAMFields.DAR)
         ?? get(formInput, 'approvalRoles')
         ?? approvalMatrixFieldState?.getCurrentData('roles')
         ?? [];
+
+      if (!isArray(approvalRoles)) {
+        approvalRoles = get(approvalRoles, 'approvalRoles');
+      }
 
       const approvalMatrix = get(formInput, FBDAMFields.DAM)
         ?? get(formInput, 'approvalMatrix')
