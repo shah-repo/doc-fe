@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, get, isArray } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
@@ -22,11 +22,15 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       name: group.label,
     }));
 
-    const existingRoles = useObserver(
+    let existingRoles = useObserver(
       () => (
         formState?.getFieldValue(FBDAMFields.DAR) ?? []
       ) as FBApprovalRole[],
     );
+
+    if (!isArray(existingRoles)) {
+      existingRoles = get(existingRoles, 'approvalRoles');
+    }
 
     approvalRoles = existingRoles.map((role) => {
       const foundGroups = role.groups.map(({ id }) => {
