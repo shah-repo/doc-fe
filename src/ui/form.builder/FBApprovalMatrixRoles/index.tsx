@@ -2,11 +2,13 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import Text from '../../components/Text';
 import { Button } from '../../components/forms/fields-next';
-import { MODE_FIELD, Mode, SEARCHABLE_GROUPS_FIELD } from './constants';
+import { toastError } from '../../components/notifications';
+import { ERROR_FIELD, ErrorField, MODE_FIELD, Mode, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
@@ -36,8 +38,33 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   const discardRole = () => setEditedRole(undefined);
 
+  const setFieldError = (field: ErrorField) => setEditedRole(prev => {
+    if (!prev) {
+      return prev;
+    }
+    return {
+      ...prev,
+      [ERROR_FIELD]: field,
+    };
+  });
+
+  const isRoleValid = (role: EditableRole) => {
+    if (role.name === '') {
+      toastError(translate('form.builder.approvalRoles.error.empty'));
+      setFieldError(ErrorField.name);
+      return false;
+    }
+
+    if (role[MODE_FIELD] === Mode.add && approvalRoles.some(({ name }) => name === role.name)) {
+      toastError(translate('form.builder.approvalRoles.error.exists', { name: role.name }));
+      setFieldError(ErrorField.name);
+      return false;
+    }
+    return true;
+  };
+
   const saveRole = () => {
-    if (!editedRole) {
+    if (!editedRole || !isRoleValid(editedRole)) {
       return;
     }
     const roleToSave = omit(editedRole, MODE_FIELD, SEARCHABLE_GROUPS_FIELD);
@@ -51,7 +78,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       return;
     }
     setEditedRole({
-      ...editedRole,
+      ...omit(editedRole, ERROR_FIELD),
       [event.field]: event.value as unknown,
     });
   };

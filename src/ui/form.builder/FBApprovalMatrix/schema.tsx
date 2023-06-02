@@ -17,7 +17,7 @@ import { createOption } from './components/Grid';
 import InputCellTemplate from './components/InputCellTemplate';
 import InputFilter from './components/InputFilter';
 import StatusCellTemplate from './components/StatusCellTemplate';
-import { CATEGORY_OPTIONS } from './constants';
+import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL } from './constants';
 import { FBApprovalMatrixRoleTitles } from './types';
 
 interface Options {
@@ -86,6 +86,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   const CategoryCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
     <DropdownCellTemplate
       {...props}
+      emptyLabel={DEFAULT_CATEGORY_LABEL}
       data={CATEGORY_OPTIONS}
     />
   );
