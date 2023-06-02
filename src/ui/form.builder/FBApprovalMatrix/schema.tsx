@@ -18,7 +18,7 @@ import cx from 'classnames';
 import { kebabCase } from 'lodash';
 import { createOption } from './components/Grid';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
-import { CATEGORY_OPTIONS } from './constants';
+import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL } from './constants';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
@@ -86,6 +86,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   const CategoryCellTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
     <DropdownCellTemplate
       {...props}
+      emptyLabel={DEFAULT_CATEGORY_LABEL}
       data={CATEGORY_OPTIONS}
     />
   );
