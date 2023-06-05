@@ -5,6 +5,13 @@ export default makeStyles((theme) => {
   const cellVerticalPadding = theme.spacing(1.25);
   const cellHorizontalPadding = theme.spacing(2);
 
+  const getHeightsForFullScreenAndNormalModes = (withButton: boolean, isFullScreenEnabled: boolean) => {
+    if (isFullScreenEnabled) {
+      return withButton ? 'calc(100vh - 242px)' : 'calc(100vh - 205px)';
+    }
+    return withButton ? 'calc(100vh - 520px)' : 'calc(100vh - 557px)';
+  };
+
   return {
     updating: {
       position: 'relative',
@@ -30,7 +37,7 @@ export default makeStyles((theme) => {
     },
     grid: {
       '& .k-grid-container': {
-        maxHeight: 300, // @todo
+        height: ({ withButton, isFullScreenEnabled }) => getHeightsForFullScreenAndNormalModes(withButton, isFullScreenEnabled),
       },
       '& .k-column-title': {
         fontSize: 12,

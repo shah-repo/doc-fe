@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDialog, FBDialogState, FBDocTypeGroup, FBProvider } from '..';
+import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
@@ -20,6 +21,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled, withoutStatus } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
+  const { _tabsState } = SM.useStores();
 
   const schema = createSchema({
     data,
@@ -53,9 +55,10 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
   });
 
-  const renderTable = () => (
+  const renderTable = (isFullScreenEnabled: boolean) => (
     <GridTable
       data={approvalMatrix}
+      isFullScreenEnabled={isFullScreenEnabled}
       schema={schema}
       disabled={disabled}
       generateNewItem={generateNewItem}
@@ -68,7 +71,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const handleFullscreenClick = () => {
     dialogState.config({
       title: 'tabId.matrixdetails',
-      content: renderTable(),
+      content: renderTable(true),
       open: true,
     });
   };
@@ -90,7 +93,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           <FontAwesomeIcon icon={solid('expand')} />
         </IconButton>
       </StyleTooltip>
-      {renderTable()}
+      {renderTable(false)}
     </FBProvider>
   );
 };

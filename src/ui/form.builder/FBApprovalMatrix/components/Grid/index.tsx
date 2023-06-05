@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import { cloneDeep, kebabCase, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { AutoSizer } from 'react-virtualized';
 import { DEFAULT_DATA_STATE, Mode, MODE_FIELD } from '.';
 import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
@@ -24,9 +25,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     disabled, onSave,
     generateNewItem,
     withoutStatus,
+    isFullScreenEnabled,
     ...restProps
   } = props;
-  const classes = useStyles();
+
+  const withButton = !disabled;
+  const classes = useStyles({ withButton, isFullScreenEnabled });
 
   const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
@@ -169,37 +173,40 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     });
   }, []);
 
-  const withButton = !disabled;
-
   return (
-    <>
-      <KendoDataGrid
-        className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
-        data={data}
-        schema={schema}
-        rowRender={rowRender}
-        dataItemKey="id"
-        onRowClick={!disabled ? handleRowClick : undefined}
-        onDataStateChange={handleDataStateChange}
-        onItemChange={handleItemChange}
-        defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
-        filterable
-        fullWidth
-        hasBoxScrollbars
-        {...restProps}
-      />
-      {withButton && (
-        <Button
-          data-cy="button-add"
-          className={classes.buttonAdd}
-          kind="add"
-          disabled={isAdding}
-          onClick={handleAdd}
-        >
-          {translate('form.builder.am.add')}
-        </Button>
-      )}
-    </>
+    <AutoSizer disableHeight>
+      {({ width }) => (
+        <>
+          <KendoDataGrid
+            className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
+            style={{ width: width }}
+            data={data}
+            schema={schema}
+            rowRender={rowRender}
+            dataItemKey="id"
+            onRowClick={!disabled ? handleRowClick : undefined}
+            onDataStateChange={handleDataStateChange}
+            onItemChange={handleItemChange}
+            defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
+            filterable
+            fullWidth
+            hasBoxScrollbars
+            {...restProps}
+          />
+          {withButton && (
+            <Button
+              data-cy="button-add"
+              style={{ width: width }}
+              className={classes.buttonAdd}
+              kind="add"
+              disabled={isAdding}
+              onClick={handleAdd}
+            >
+              {translate('form.builder.am.add')}
+            </Button>
+          )}
+        </>
+      )}</AutoSizer>
   );
 }
 
