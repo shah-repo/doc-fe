@@ -163,7 +163,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         dataItemKey="id"
         onRowClick={!disabled ? handleRowClick : undefined}
         onDataStateChange={handleDataStateChange}
-        defaultDataState={!withoutStatus ? DEFAULT_DATA_STATE : undefined}
+        defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
         filterable
         fullWidth
         hasBoxScrollbars

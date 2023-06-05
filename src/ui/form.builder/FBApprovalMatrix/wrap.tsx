@@ -1,10 +1,10 @@
-import React from 'react';
+import { get, isArray, isEmpty, isUndefined, set } from 'lodash';
 import { useObserver } from 'mobx-react';
-import { isEmpty, get, set, has } from 'lodash';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
-import { FBApprovalMatrixProps } from './types';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import React from 'react';
 import { v4 as generateUuid } from 'uuid';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { FBApprovalMatrixProps } from './types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>,
@@ -43,20 +43,31 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     const { document, formInput } = workspaceState ?? {};
     const { status } = document ?? {};
-    const approvalRoles = get(formInput, FBDAMFields.DAR, []);
-    const formInputDAM = get(formInput, FBDAMFields.DAM, []);
-    const isDAMInNewFormat = has(formInputDAM, 'approvalMatrix');
-    const approvalMatrix = isDAMInNewFormat ? formInputDAM.approvalMatrix : formInputDAM;
 
-    // Clear statuses for deprecated documents.
-    withoutStatus = status === DocumentRevisionStatus.Deprecated;
+    useObserver(() => {
+      let approvalRoles = get(formInput, FBDAMFields.DAR)
+        ?? get(formInput, 'approvalRoles')
+        ?? approvalMatrixFieldState?.getCurrentData('roles')
+        ?? [];
 
-    data = useObserver(() => {
+      if (!isArray(approvalRoles)) {
+        approvalRoles = get(approvalRoles, 'approvalRoles');
+      }
+
+      const approvalMatrix = get(formInput, FBDAMFields.DAM)
+        ?? get(formInput, 'approvalMatrix')
+        ?? approvalMatrixFieldState?.getCurrentData('matrix')
+        ?? [];
+
+      // Clear statuses for deprecated documents and items without active status.
+      withoutStatus = status === DocumentRevisionStatus.Deprecated
+        || approvalMatrix.some(item => isUndefined(get(item, 'docType.active', undefined)));
+
       const matrix = withoutStatus
         ? (approvalMatrix ?? []).map(item => set(item, 'docType.active', undefined))
         : approvalMatrix;
 
-      return {
+      data = {
         ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
         approvalMatrix: matrix,
         approvalRoles,

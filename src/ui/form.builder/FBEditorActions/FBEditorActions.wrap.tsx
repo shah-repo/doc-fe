@@ -10,8 +10,8 @@ import { withFBValidation } from '../FBValidation/FBValidation.wrap';
 import { Rules } from './constants';
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
-  Component: React.FunctionComponent<T>
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     handleAdd,
     handleCancel,
@@ -22,8 +22,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     type,
     ...props
   }: T) => {
-
-    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelState, editorState } = FB.useStores();
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
 
@@ -34,7 +33,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       index = size(workspaceState?.getSchema());
     }
 
-    function additionalSchema() {
+    function additionalSchema () {
       if (!type) { return; }
       let additionalSchema = FBData.additionalSchema(type);
 
@@ -42,8 +41,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       additionalSchema = filter(additionalSchema, (schemaItem) => {
         const { type, uniqueSchemaItem } = schemaItem;
         const isUnique = (
-          Boolean(uniqueSchemaItem) &&
-          (workspaceState?.getItemsByType(type).length || 0) > 0
+          Boolean(uniqueSchemaItem)
+          && (workspaceState?.getItemsByType(type).length || 0) > 0
         );
         return !isUnique;
       });
@@ -55,13 +54,13 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       }
     }
 
-    function handleAddOutput(formValues: FBSchemaProps) {
+    function handleAddOutput (formValues: FBSchemaProps) {
       const { name } = formValues;
       parentFormState?.setFieldValue(name, formValues, true);
       dialogState?.closeDialog();
     }
 
-    function setDefaultValue(formValues?: Dictionary<any>): Dictionary<any> {
+    function setDefaultValue (formValues?: Dictionary<any>): Dictionary<any> {
       return {
         ...COMMON_INITIAL_VALUES,
         ...formValues,
@@ -86,8 +85,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
       // If schema item type is unique and we have already added it into scheme
       const isUnique = (
-        uniqueSchemaItem &&
-        (workspaceState?.getItemsByType(type).length || 0) > 0
+        uniqueSchemaItem
+        && (workspaceState?.getItemsByType(type).length || 0) > 0
       );
       let formRules = rules;
       if (validators) {
@@ -104,7 +103,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       if (type === 'procedure' && workspaceState?.isOutput) {
         formValues.editorProperties = ['copyableValue'];
       }
-      if (type === 'mpiprocedure'  && (!editorConfig || isEmpty(editorConfig))) {
+      if (type === 'mpiprocedure' && (!editorConfig || isEmpty(editorConfig))) {
         formValues.editorConfig = {
           attachments: [],
           description: '',
@@ -135,16 +134,16 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ['ON_STATE_TO_IN_REVIEW'],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId,
+        tabId: editorState?.tabId ?? _tabsState?.activeTabId,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 
       dialogState?.closeDialog();
       leftPanelState?.HideLeftPanel();
       if (
-        _tabsState?.isTabActive(TabTypeOptions.TABS_MEQ) &&
-        workspaceState?.autosave &&
-        tabId !== _tabsState?.activeTabId
+        _tabsState?.isTabActive(TabTypeOptions.TABS_MEQ)
+        && workspaceState?.autosave
+        && tabId !== _tabsState?.activeTabId
       ) {
         workspaceState?.saveDocRev(formState?.getValues());
       }

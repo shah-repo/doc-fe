@@ -59,7 +59,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
       if (isPOEditState) {
         const allItems = purchaseOrderState.calculateCost() as FBPurchaseOrderCalculation;
-        const totalAmount = parseFloat(allItems.totalAmount);
+        const totalAmount = parseFloat(allItems.totalInUSD);
         const previousItems = cloneDeep(get(allItems, 'items')) as FBPurchaseOrderItem[];
         previousItems[values?.index] = values;
 
@@ -73,7 +73,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (o1.limit + o1.threshold) >= totalAmount);
         if (isEdit && topApprovals?.length
-           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
+           && (UpdatedAmount * allItems.exchangeRate) > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
         ) {
           return dialog?.open();
         }

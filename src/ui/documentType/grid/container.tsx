@@ -65,8 +65,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   });
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
 
-  const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns
-    .filter((c) => c.showOnWeb)
+  const columns: Array<TableColumnProps<DocumentRevision>> = pageDetailColumns
+    .filter((c) => c.showOnWeb && !(c.valuePath === 'precalc.po_currency'))
     .map(
       (column: PageDetailsColumn) => {
         const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria);
@@ -78,7 +78,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
         };
       },
     );
-  const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
+  const staticColumns: Array<TableColumnProps<DocumentRevision>> = getStaticColumns(
     isByCategory,
     categoryName,
     documentType,
@@ -92,10 +92,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
-
   const setSearchStatus = (
     dataState: DataStateProps,
-    columns: KendoColumn[]
+    columns: KendoColumn[],
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -106,8 +105,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
           },
           columnConfig: JSON.stringify(columns),
         },
-        TABLE_NAME
-      )
+        TABLE_NAME,
+      ),
     );
   };
 
@@ -126,7 +125,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       };
       setSearchStatus(
         dataState,
-        kendoColumnDef as KendoColumn[]
+        kendoColumnDef as KendoColumn[],
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,13 +145,15 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellGroupable = false;
     } else if (columnDetails.searchOptions?.ownerTemplate) {
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
-    }  else if (columnDetails.searchOptions?.poStatusTemplate) {
+    } else if (columnDetails.searchOptions?.poStatusTemplate) {
       filterCellTemplate = KendoGridFilterCell.PO_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
     } else if (columnDetails.searchOptions?.statusTemplate) {
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
+    } else if (upDateField === 'precalc.po_amount') {
+      dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     }

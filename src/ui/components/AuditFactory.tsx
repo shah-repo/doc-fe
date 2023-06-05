@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -280,6 +280,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.separate"
+            />
+          );
+        } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_NO) {
+          returnValue = (
+            <Text
+              dataCy={`${dataCy}-basepart-status`}
+              translation="relatedParts.parentPart.answer.no"
             />
           );
         }
