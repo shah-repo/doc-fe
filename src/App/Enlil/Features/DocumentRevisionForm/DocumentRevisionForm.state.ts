@@ -8,7 +8,6 @@ import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form
 import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
-
   // MARK: @config
   public scrollOffset = 0;
   public formMode: FBWorkspaceMode = 'none';
@@ -60,40 +59,42 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @observable public viewMore = false;
 
+  @observable public doNotPrompt = false;
+
   // MARK: @api
 
   // MARK: @constructor
 
   // MARK: @computed
-  @computed public get id(): string | undefined {
+  @computed public get id (): string | undefined {
     return this.documentRevision?.id;
   }
 
-  @computed public get documentTypeId(): string {
+  @computed public get documentTypeId (): string {
     return this.documentType?.id || '';
   }
 
-  @computed public get documentTypeAcronym(): string {
+  @computed public get documentTypeAcronym (): string {
     return this.documentType?.documentTypeAcronym || '';
   }
 
-  @computed public get documentType(): Partial<DocumentType> | undefined {
+  @computed public get documentType (): Partial<DocumentType> | undefined {
     return this.documentRevision?.document?.documentType;
   }
 
-  @computed public get documentId(): string | undefined {
+  @computed public get documentId (): string | undefined {
     return this.documentRevision?.document.id;
   }
 
-  @computed public get docId(): string | undefined {
+  @computed public get docId (): string | undefined {
     return this.documentRevision?.document.docId;
   }
 
-  @computed public get document(): DocumentRevisionDocument | undefined {
+  @computed public get document (): DocumentRevisionDocument | undefined {
     return this.documentRevision?.document;
   }
 
-  @computed public get schema(): FBSchemaProps[] {
+  @computed public get schema (): FBSchemaProps[] {
     return this.formSchema;
   }
 
@@ -130,6 +131,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'viewMore', !flag);
   };
 
+  @action public setDoNotPrompt = (doNotPrompt: boolean) => {
+    set(this, 'doNotPrompt', doNotPrompt);
+  };
+
   @action public setCreateDocumentDisabled = (disabled?: boolean) => {
     set(this, 'createDocumentDisabled', disabled || false);
   };
@@ -164,6 +169,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @action public setTabIdForSchemaAddition = (tabName: string) => {
     set(this, 'selectedTabIdForSchemaAddition', tabName);
   };
+
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
     this.documentRevision = documentRevision;
@@ -196,7 +202,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     }, []);
   };
 
-  public get isOutputSchema(): boolean {
+  public get isOutputSchema (): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
   }
@@ -227,5 +233,4 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
       this.loading = false;
     });
   };
-
 }

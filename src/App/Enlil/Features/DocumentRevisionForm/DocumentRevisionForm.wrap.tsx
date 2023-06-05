@@ -1,5 +1,6 @@
 import { useFormikContext } from 'formik';
 import { cloneDeep, get } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useCallback, useEffect } from 'react';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
@@ -19,6 +20,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     autosaveEnabled,
     isCreateUrl,
     documentRevision,
+    doNotPrompt,
+    setDoNotPrompt,
     ...props
   }: T) => {
     const formik = useFormikContext();
@@ -38,8 +41,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const { document: { outputRevision = false } = {} } = workspaceState || {};
 
     const getDAMPayload = useCallback((damData) => ({
-      [FBDAMFields.DAM]: damData?.['approvalMatrix'],
-      [FBDAMFields.DAR]: damData?.['approvalRoles'],
+      [FBDAMFields.DAM]: damData?.approvalMatrix,
+      [FBDAMFields.DAR]: damData?.approvalRoles,
     }), []);
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
@@ -86,18 +89,18 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
         }
         _documentRevisionFormState.formSchema = schema;
       },
-      { fireImmediately: true }
+      { fireImmediately: true },
     );
 
     SM.reaction(
       () => _formState?.mode,
       (mode) => _documentRevisionFormState?.setFormMode(mode || 'none'),
-      { fireImmediately: true }
+      { fireImmediately: true },
     );
 
     SM.reaction(
       () => _documentRevisionFormState?.loading,
-      (loading) => _formState?.setLoading(loading)
+      (loading) => _formState?.setLoading(loading),
     );
 
     SM.reaction(
@@ -110,17 +113,27 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
         if (_formState?.mode === 'formDesign' && _documentRevisionFormState?.isOutputSchema) {
           _formState?.setValue('schema', schema);
         }
-      }
+      },
     );
     // MARK: @helpers
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onScroll = () => {};
 
+    useObserver(() => {
+      if (_documentRevisionFormState?.doNotPrompt) {
+        setDoNotPrompt?.(true);
+      }
+    });
+
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
         <FBProvider {...{
-          leftPanelState, editorState, formState, workspaceState, poApprovalsState,
+          leftPanelState,
+          editorState,
+          formState,
+          workspaceState,
+          poApprovalsState,
           approvalMatrixFieldState: approvalMatrixState,
         }}>
           <Component
@@ -135,6 +148,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               schema: _documentRevisionFormState?.schema || documentRevision?.schema,
               workspaceState,
               isCreateUrl,
+              doNotPrompt,
+              setDoNotPrompt,
             }}
           />
         </FBProvider>
