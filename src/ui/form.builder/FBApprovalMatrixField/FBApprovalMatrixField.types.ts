@@ -19,6 +19,7 @@ export interface FBApprovalRole {
 }
 
 interface FBApprovalMatrixDocType {
+  updatedCategory?: string
   id?: string
   acronym: string
   name: string
