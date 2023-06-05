@@ -1,5 +1,5 @@
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
-import { get, set } from 'lodash';
+import { get } from 'lodash';
 import React from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
@@ -24,14 +24,12 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
-    const newValue = event.target.value[DATA_ITEM_KEY];
-
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem as Record<string, unknown>, path, newValue),
+      dataItem,
       syntheticEvent: event.syntheticEvent,
       field,
-      value: newValue,
+      value: event.target.value[DATA_ITEM_KEY],
     });
   };
 
