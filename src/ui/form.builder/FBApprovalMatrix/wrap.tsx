@@ -4,6 +4,7 @@ import React from 'react';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { DEFAULT_CATEGORY_LABEL } from './constants';
 import { FBApprovalMatrixProps } from './types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
@@ -26,14 +27,19 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       || (workspaceState && !['design', 'form'].includes(workspaceState.mode));
 
     handleSave = (data: FBApprovalMatrixItem[]) => {
-      const approvalMatrix = data.map(({ id, docType, ...restItem }) => ({
-        id: id ?? generateUuid(),
-        docType: {
-          ...omit(docType, 'updatedCategory'),
-          acronym: docType.acronym.toUpperCase(),
-        },
-        ...restItem,
-      }));
+      const approvalMatrix = data.map(({ id, docType, ...restItem }) => {
+        if (docType.updatedCategory !== DEFAULT_CATEGORY_LABEL) {
+          set(docType, 'category', docType.updatedCategory);
+        }
+        return ({
+          id: id ?? generateUuid(),
+          docType: {
+            ...omit(docType, 'updatedCategory'),
+            acronym: docType.acronym.toUpperCase(),
+          },
+          ...restItem,
+        });
+      });
 
       if (isEmpty(approvalMatrix)) { return; }
 
