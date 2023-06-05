@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as generateUuid } from 'uuid';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import createSchema from './schema';
@@ -26,7 +27,8 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     cellARHeaderClassName: classes.cellARHeader,
   });
 
-  const defaultNewValue: GridProps<FBApprovalMatrixItem>['defaultNewValue'] = {
+  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
+    id: generateUuid() as string,
     docType: {
       name: '',
       group: FBDocTypeGroup.OTHER,
@@ -43,14 +45,14 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-  };
+  });
 
   const renderTable = () => (
     <GridTable
       data={approvalMatrix}
       schema={schema}
       disabled={disabled}
-      defaultNewValue={defaultNewValue}
+      generateNewItem={generateNewItem}
       onSave={handleSave}
       withoutStatus={withoutStatus}
     />
