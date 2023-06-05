@@ -159,7 +159,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     {
       id: 'category',
       title: 'form.builder.am.category',
-      field: 'docType.category',
+      field: 'docType.updatedCategory',
       filterable: true,
       editable: false,
       filterCell: CategoryFilter,

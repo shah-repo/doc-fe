@@ -1,22 +1,24 @@
-import React from 'react';
-import { v4 as generateUuid } from 'uuid';
-import Grid from './components/Grid';
-import { GridProps } from './components/Grid/types';
-import createSchema from './schema';
-import { withFBApprovalMatrix } from './wrap';
-import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
-import { translate } from '../../../common/intl';
-import { IconButton } from '../../components/forms/fields-next';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isEmpty, map } from 'lodash';
+import React from 'react';
+import { v4 as generateUuid } from 'uuid';
+import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDialog, FBDialogState, FBDocTypeGroup, FBProvider } from '..';
+import { translate } from '../../../common/intl';
+import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import Grid from './components/Grid';
+import { GridProps } from './components/Grid/types';
+import { DEFAULT_CATEGORY_LABEL } from './constants';
+import createSchema from './schema';
 import useStyles from './styles';
+import { withFBApprovalMatrix } from './wrap';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled, withoutStatus } = props;
-  const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
+  let { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
   const schema = createSchema({
@@ -45,6 +47,10 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
+  });
+  approvalMatrix = map(approvalMatrix, (am) => {
+    am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
+    return am;
   });
 
   const renderTable = () => (

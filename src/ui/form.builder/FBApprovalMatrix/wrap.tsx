@@ -1,4 +1,4 @@
-import { get, isArray, isEmpty, isUndefined, set } from 'lodash';
+import { get, isArray, isEmpty, isUndefined, omit, set } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
@@ -29,7 +29,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       const approvalMatrix = data.map(({ id, docType, ...restItem }) => ({
         id: id ?? generateUuid(),
         docType: {
-          ...docType,
+          ...omit(docType, 'updatedCategory'),
           acronym: docType.acronym.toUpperCase(),
         },
         ...restItem,
