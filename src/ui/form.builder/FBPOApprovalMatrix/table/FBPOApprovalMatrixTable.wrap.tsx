@@ -54,7 +54,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
         ...item,
         signatures: deepClone(stages) as Signature[],
       };
-      // signatures: sortBy(stages, 'signatureStage') as Signature[],
       dialogState?.config({
         open: true,
         title: 'form.builder.add.item',
