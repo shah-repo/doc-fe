@@ -18,7 +18,7 @@ import { withFBApprovalMatrix } from './wrap';
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  const { data, handleSave, disabled, withoutStatus } = props;
+  const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
   const { _tabsState } = SM.useStores();
@@ -55,9 +55,26 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
   });
 
+  const getTableStyles = (isFullScreenEnabled) => {
+    if (isFullScreenEnabled) {
+      // Full screen mode with and without Add button
+      return disabled ? { height: 'calc(100vh - 126px)' } : { height: 'calc(100vh - 164px)' };
+    }
+    if (size?.height && !isFullScreenEnabled) {
+      if (disabled) {
+      // Without Add button
+        return { height: size?.height - 110 };
+      }
+      // With Add button
+      return { height: size?.height - 148 };
+    }
+    return {};
+  };
+
   const renderTable = (isFullScreenEnabled: boolean) => (
     <GridTable
       data={approvalMatrix}
+      style={getTableStyles(isFullScreenEnabled)}
       isFullScreenEnabled={isFullScreenEnabled}
       schema={schema}
       disabled={disabled}
