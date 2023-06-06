@@ -1,3 +1,4 @@
+import { deepClone } from '@datadog/browser-core';
 import { find, map, sortBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useState } from 'react';
@@ -48,11 +49,12 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       }
       setIndex(index);
       const stages = map(signatureStages, (signatureStage) =>
-        find(item.signatures, { signatureStage }) || { signatureStage });
+        find(item.signatures, { signatureStage }) ?? { signatureStage });
       item = {
         ...item,
-        signatures: sortBy(stages, 'signatureStage') as Signature[],
+        signatures: deepClone(stages) as Signature[],
       };
+      // signatures: sortBy(stages, 'signatureStage') as Signature[],
       dialogState?.config({
         open: true,
         title: 'form.builder.add.item',
