@@ -19,4 +19,11 @@ export default makeStyles(() => ({
   cellAR: {
     textAlign: 'center !important' as 'center',
   },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  fullScreen: {
+    height: '100%',
+  },
 }));

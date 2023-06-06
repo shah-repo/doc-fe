@@ -1,4 +1,4 @@
-import { find, map, sortBy } from 'lodash';
+import { cloneDeep, find, map, sortBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -48,10 +48,10 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       }
       setIndex(index);
       const stages = map(signatureStages, (signatureStage) =>
-        find(item.signatures, { signatureStage }) || { signatureStage });
+        find(item.signatures, { signatureStage }) ?? { signatureStage });
       item = {
         ...item,
-        signatures: sortBy(stages, 'signatureStage') as Signature[],
+        signatures: sortBy(cloneDeep(stages), 'signatureStage') as Signature[],
       };
       dialogState?.config({
         open: true,
