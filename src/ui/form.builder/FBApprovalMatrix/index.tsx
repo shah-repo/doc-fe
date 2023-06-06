@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDialog, FBDialogState, FBDocTypeGroup, FBProvider } from '..';
-import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
@@ -14,6 +13,8 @@ import { DEFAULT_CATEGORY_LABEL } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { withFBApprovalMatrix } from './wrap';
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
@@ -21,7 +22,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
-  const { _tabsState } = SM.useStores();
 
   const schema = createSchema({
     data,
@@ -55,26 +55,9 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
   });
 
-  const getTableStyles = (isFullScreenEnabled) => {
-    if (isFullScreenEnabled) {
-      // Full screen mode with and without Add button
-      return disabled ? { height: 'calc(100vh - 126px)' } : { height: 'calc(100vh - 164px)' };
-    }
-    if (size?.height && !isFullScreenEnabled) {
-      if (disabled) {
-      // Without Add button
-        return { height: size?.height - 110 };
-      }
-      // With Add button
-      return { height: size?.height - 148 };
-    }
-    return {};
-  };
-
-  const renderTable = (isFullScreenEnabled: boolean) => (
+  const renderTable = () => (
     <GridTable
       data={approvalMatrix}
-      style={getTableStyles(isFullScreenEnabled)}
       schema={schema}
       disabled={disabled}
       generateNewItem={generateNewItem}
@@ -87,7 +70,11 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const handleFullscreenClick = () => {
     dialogState.config({
       title: 'tabId.matrixdetails',
-      content: renderTable(true),
+      content: (
+        <Box className={cx(classes.container, classes.fullScreen)}>
+          {renderTable()}
+        </Box>
+      ),
       open: true,
     });
   };
@@ -95,21 +82,26 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   return (
     <FBProvider dialogState={dialogState}>
       <FBDialog fullscreen />
-      <StyleTooltip
-        title={translate('form.builder.fullscreen.mode')}
-        placement="top"
-        arrow
+      <Box
+        className={classes.container}
+        {...size && { height: size.height - 80 }}
       >
-        <IconButton
-          className={classes.buttonFullscreen}
-          kind="ghost"
-          data-cy="button-fullscreen"
-          onClick={handleFullscreenClick}
+        <StyleTooltip
+          title={translate('form.builder.fullscreen.mode')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={solid('expand')} />
-        </IconButton>
-      </StyleTooltip>
-      {renderTable(false)}
+          <IconButton
+            className={classes.buttonFullscreen}
+            kind="ghost"
+            data-cy="button-fullscreen"
+            onClick={handleFullscreenClick}
+          >
+            <FontAwesomeIcon icon={solid('expand')} />
+          </IconButton>
+        </StyleTooltip>
+        {renderTable()}
+      </Box>
     </FBProvider>
   );
 };

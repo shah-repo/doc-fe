@@ -82,6 +82,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
         approvalRoles,
       };
     });
+
     size = useObserver(() => _tabsState?.contentSize);
 
     return Component({

@@ -28,6 +28,9 @@ export default makeStyles((theme) => {
         backgroundColor: `${Colors.darkGray} !important`,
       },
     },
+    gridContainer: {
+      flexGrow: 1,
+    },
     grid: {
       '& .k-column-title': {
         fontSize: 12,
