@@ -1,5 +1,4 @@
-import { deepClone } from '@datadog/browser-core';
-import { find, map, sortBy } from 'lodash';
+import { cloneDeep, find, map, sortBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -52,7 +51,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
         find(item.signatures, { signatureStage }) ?? { signatureStage });
       item = {
         ...item,
-        signatures: deepClone(stages) as Signature[],
+        signatures: cloneDeep(stages) as Signature[],
       };
       dialogState?.config({
         open: true,
