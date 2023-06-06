@@ -51,7 +51,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
         find(item.signatures, { signatureStage }) ?? { signatureStage });
       item = {
         ...item,
-        signatures: cloneDeep(stages) as Signature[],
+        signatures: sortBy(cloneDeep(stages)) as Signature[],
       };
       dialogState?.config({
         open: true,
