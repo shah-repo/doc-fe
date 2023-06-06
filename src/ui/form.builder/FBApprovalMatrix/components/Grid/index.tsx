@@ -24,12 +24,9 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     disabled, onSave,
     generateNewItem,
     withoutStatus,
-    isFullScreenEnabled,
     ...restProps
   } = props;
-
-  const withButton = !disabled;
-  const classes = useStyles({ withButton, isFullScreenEnabled });
+  const classes = useStyles();
 
   const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
@@ -171,6 +168,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       element.setAttribute('rowspan', '2');
     });
   }, []);
+
+  const withButton = !disabled;
 
   return (
     <>

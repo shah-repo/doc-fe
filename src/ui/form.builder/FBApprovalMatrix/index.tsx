@@ -75,7 +75,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     <GridTable
       data={approvalMatrix}
       style={getTableStyles(isFullScreenEnabled)}
-      isFullScreenEnabled={isFullScreenEnabled}
       schema={schema}
       disabled={disabled}
       generateNewItem={generateNewItem}
