@@ -1,3 +1,4 @@
+import { Size } from 'react-virtualized';
 import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldProps, FBApprovalMatrixItem, FBInputProps } from '..';
 
 export type FBApprovalMatrixProps =
@@ -7,6 +8,7 @@ export type FBApprovalMatrixProps =
   handleSave?: (data: FBApprovalMatrixItem[]) => void
   data?: FBApprovalMatrixFieldData
   withoutStatus?: boolean
+  size?: Size
 };
 
 export enum FBApprovalMatrixRoleTitles {
