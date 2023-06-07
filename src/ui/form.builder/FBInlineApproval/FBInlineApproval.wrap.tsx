@@ -30,7 +30,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     onApproveClick,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const dispatch = useDispatch();
@@ -44,8 +43,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     } = workspaceState || {};
     const docApprovals = FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals;
     const userId = (
-      document?.owner?.user?.id ||
-      changeRequest?.owner?.user?.id
+      document?.owner?.user?.id
+      || changeRequest?.owner?.user?.id
     );
 
     isPreview = workspaceState?.mode === 'preview';
@@ -85,7 +84,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         }
         const fieldApprovals = filter(data, { fieldId: name });
         inlineApprovalState?.setApprovals(fieldApprovals);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -95,7 +94,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -105,7 +104,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -116,7 +115,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         const formValue: string[] = map(inlineApprovalState?.getApprovals, 'approver.id');
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -130,7 +129,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -175,14 +174,14 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ), []);
 
     // MARK: @helpers
-    function concatOptions(approvers: FBEmployee[], listGroup: string) {
+    function concatOptions (approvers: FBEmployee[], listGroup: string) {
       const approversList = approvers.filter((employee) => employee.active);
       let options = map(approversList, (o) => ({ ...o, listGroup }));
       options = sortBy(unionBy(inlineApprovalState?.options || [], options, 'id'), 'listGroup');
       inlineApprovalState?.setOptions(options as FBInlineApprovalOptions[]);
     }
 
-    function concatApprovals(approval?: FBInlineApprovalBody | FBInlineApprovalBody[]) {
+    function concatApprovals (approval?: FBInlineApprovalBody | FBInlineApprovalBody[]) {
       if (!approval) { return; }
       return [approval].flat().map((app) => {
         const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== app?.approver?.id);
@@ -191,7 +190,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       });
     }
 
-    function addApprover(ids?: string[]) {
+    function addApprover (ids?: string[]) {
       if (!id) { return; }
       map(ids, (approver) => inlineApprovalState?.approvalBody({
         assigned: { id: approver },
@@ -199,30 +198,34 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         fieldId: name,
         partOf: { id },
       }, () => {
-        const { id } = workspaceState || {};
-        if (!id) { return; }
-        dispatch(documentRevisionsActions.loadAudit(id));
+        afterCallIsComplete();
       }));
     }
 
-    function removeApprover(ids?: string[]) {
+    function removeApprover (ids?: string[]) {
       if (!ids) { return; }
       map(ids, (approver) => {
         const approval = find(inlineApprovalState?.getApprovals, (a) => a.approver?.id === approver);
         inlineApprovalState?.approvalTransition('abandon', (approval as FBInlineApprovalBody)?.id, undefined, () => {
-          const id  = workspaceState?.id;
-          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          afterCallIsComplete();
         });
       });
     }
 
-    function requestAllApprovals(id?: string) {
+    function afterCallIsComplete () {
+      const { id } = workspaceState || {};
+      if (!id) { return; }
+      workspaceState?.saveDocRev(formState?.getValues());
+      dispatch(documentRevisionsActions.loadAudit(id));
+    }
+
+    function requestAllApprovals (id?: string) {
       if (!id) { return; }
       const body = {
         docRev: pick(workspaceState?.document, 'id'),
       } as FBRequestApprovalTransitionBody;
       inlineApprovalState?.requestApprovalTransition('pending_by_field', id, body, () => {
-        const id  = workspaceState?.id;
+        const id = workspaceState?.id;
         if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       });
     }
@@ -247,9 +250,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals = inlineApprovalState?.getApprovals;
 
       loading = (
-        inlineApprovalState?.approvalApi.loading ||
-        inlineApprovalState?.transitionApi.loading ||
-        inlineApprovalState?.documentApi.loading
+        inlineApprovalState?.approvalApi.loading
+        || inlineApprovalState?.transitionApi.loading
+        || inlineApprovalState?.documentApi.loading
       );
 
       disabled = loading
@@ -261,12 +264,11 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @final config
     isApproved = (
-      docVersion > 1 &&
-      isEmpty(inlineApprovalState.getApprovals) &&
-      Boolean(formState?.getFieldValue(name))
+      docVersion > 1
+      && isEmpty(inlineApprovalState.getApprovals)
+      && Boolean(formState?.getFieldValue(name))
     ) ? some(fieldApprovals, (approval) => approval.status === 'APPROVED') || !fieldApprovals.length
       : !isUndefined(find(approvals, { status: 'APPROVED' }));
-
 
     return Component({
       ...(props as T),

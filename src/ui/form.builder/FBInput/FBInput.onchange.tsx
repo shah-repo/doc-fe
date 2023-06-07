@@ -14,16 +14,16 @@ const showDecimalToastError = throttle((name, intl) => {
   toastError(
     intl.formatMessage(
       { id: 'document.revision.quantity.decimals.error' },
-      { name }
+      { name },
     ),
     {
       autoClose: DECIMAL_TOAST_TIMEOUT,
-    }
+    },
   );
 }, DECIMAL_TOAST_TIMEOUT, { trailing: false });
 
 export const withFBOnChange = <T extends FBInputProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     setTranform,
@@ -38,11 +38,10 @@ export const withFBOnChange = <T extends FBInputProps>(
     hidden,
     ...props
   }: T) => {
-
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const inputValue =
-    formState?.getFieldValue(name) ||
-    formState?.getInputState(name || '')?.value;
+    const inputValue
+    = formState?.getFieldValue(name)
+    || formState?.getInputState(name || '')?.value;
     const intl = useIntl();
 
     inputState = FB.useRef<FBInputState>(FBInputState, {
@@ -67,7 +66,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     };
 
-    function setValue(formValue: any, state = false) {
+    function setValue (formValue: any, state = false) {
       if (!name || workspaceState?.isPreview) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
@@ -88,7 +87,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     }
 
-    function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
+    function checkboxGroupValue (ev: React.ChangeEvent<HTMLInputElement>) {
       const [valueName, checked] = at(ev.target, ['value', 'checked']);
       const checkedValue = formState?.getFieldValue(name, []);
       const groupValue: string[] = checked
@@ -99,13 +98,13 @@ export const withFBOnChange = <T extends FBInputProps>(
       setValue(groupValue);
     }
 
-    function checkValue(ev: React.ChangeEvent<HTMLInputElement>) {
+    function checkValue (ev: React.ChangeEvent<HTMLInputElement>) {
       const value = get(ev.target, 'checked');
       contextValue(value);
       setValue(value);
     }
 
-    function contextValue(value: boolean | string | string[] | undefined = '') {
+    function contextValue (value: boolean | string | string[] | undefined = '') {
       if (!editorProperties || isEmpty(editorProperties)) {
         return;
       }
@@ -131,7 +130,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       inputState?.setIncludeContext(value);
     }
 
-    function autocompleteValue(value: any) {
+    function autocompleteValue (value: any) {
       const { optionValueType = 'key', optionValueKey = 'id', multiple } = props;
       if (!value) {
         return setValue(multiple ? [] : '');
@@ -141,42 +140,42 @@ export const withFBOnChange = <T extends FBInputProps>(
         key: () => multiple
           ? map(value, (v) => v[optionValueKey])
           : value[optionValueKey],
-        id: () =>  multiple
+        id: () => multiple
           ? map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
           : { [optionValueKey]: value[optionValueKey] },
       };
       setValue(simpleValue[optionValueType](), false);
     }
 
-    function stringValue(value: string) {
+    function stringValue (value: string) {
       setValue(value);
     }
 
-    function dateValue(value: string) {
+    function dateValue (value: string) {
       stringValue((value as unknown as Date).toISOString());
       inputState && inputState.setValue(value);
     }
 
-    const onChange = ((ev: React.ChangeEvent<any> | any, value: any) => {
+    const onChange = (ev: React.ChangeEvent<any> | any, value: any) => {
       if (!formState) {
         return;
       }
       // TODO: Remove this. Check how to handle validator required with without double onchange
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
-      function isSingleCheck() {
+      function isSingleCheck () {
         return checkValue(ev);
       }
 
-      function isGroupCheck() {
+      function isGroupCheck () {
         contextValue(get(ev.target, 'value'));
         isDefault();
       }
 
-      function getFieldName(name: string) {
+      function getFieldName (name: string) {
         return intl.formatMessage({ id: `form.builder.${name.split('-').slice(1).join('.')}` });
       }
 
-      function isDefault() {
+      function isDefault () {
         const { type, name } = ev.target;
         let { value } = ev.target;
         if (type === 'number' && value !== '') {
@@ -199,26 +198,26 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       const changedValue = {
-        checkboxgroup() { return checkboxGroupValue(ev); },
-        checkbox() { return isSingleCheck(); },
-        radio() { return isSingleCheck(); },
-        autocomplete() { return autocompleteValue(value); },
-        texteditor() { return; },
-        datepicker() { return dateValue(ev as string); },
-        radiogroup() { return isGroupCheck(); },
-        select() { return isGroupCheck(); },
-        default() { return isDefault(); },
+        checkboxgroup () { return checkboxGroupValue(ev); },
+        checkbox () { return isSingleCheck(); },
+        radio () { return isSingleCheck(); },
+        autocomplete () { return autocompleteValue(value); },
+        // texteditor () { },
+        datepicker () { return dateValue(ev as string); },
+        radiogroup () { return isGroupCheck(); },
+        select () { return isGroupCheck(); },
+        default () { return isDefault(); },
       };
 
       (changedValue[type || ''] || changedValue.default)();
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
 
-      if (type === 'autocomplete' &&
-      schemaState?.getSchemaItem(name?.replace('fb-ia-', ''))?.type === 'inlineapproval') {
-        workspaceState?.saveDocRev(formState.getValues());
-      }
-    });
+      // if (type === 'autocomplete' &&
+      // schemaState?.getSchemaItem(name?.replace('fb-ia-', ''))?.type === 'inlineapproval') {
+      //   workspaceState?.saveDocRev(formState.getValues());
+      // }
+    };
 
     const onBlur = (ev) => {
       if (ev?.target?.type === 'number' && ev?.target.step === '.01') {
