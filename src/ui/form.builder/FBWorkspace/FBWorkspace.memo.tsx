@@ -4,10 +4,10 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from '..';
 import { ReactComponent as AddIcon } from '../../../assets/images/formBuilder/add_icon.svg';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import {
-  DocumentGroupType,
   DOC_TYPE_GROUP,
+  DocumentGroupType,
 } from '../../../state/ducks/documentRevisions/documentType/types';
 import SummaryInfo from '../../common/summary/SummaryInfo';
 import Text from '../../components/Text';
@@ -17,6 +17,7 @@ import { isDocumentRevisionReleased } from '../../documentRevision/helpers/docum
 import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
 import Colors from '../../layout/theme/utils/colors';
+import FBLotTransactions from '../FBLotTransactions';
 
 const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   isStarter,
@@ -40,17 +41,17 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
         validationMode: 'default',
         applicableValidationSchema: true,
       },
-      index
+      index,
     );
   };
   const docTypeGroup = get(
     workspaceState?.document?.document?.documentType,
     'group',
-    'OTHER'
+    'OTHER',
   );
   const outputTypeGroup = get(
     workspaceState?.document?.formTemplate?.outputDocumentTypes[0],
-    'group'
+    'group',
   );
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
@@ -64,14 +65,14 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
         <Text translation="document.revision.release.details" />
       </Typography>
       <SummaryInfo
-        label={'record.released.by'}
+        label="record.released.by"
         value={documentInfo?.owner?.user.name || ''}
-        dataCy={'releasedBy'}
+        dataCy="releasedBy"
       />
       <SummaryInfo
-        label={'document.revision.released.date'}
+        label="document.revision.released.date"
         value={getFormattedDateString(documentInfo?.releasedAt, MomentFormats.MonthDateYear)}
-        dataCy={'releasedDate'}
+        dataCy="releasedDate"
       />
     </Box>
   );
@@ -81,6 +82,10 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       {() => (
         <Box>
           <FBWorkspaceSocket />
+          {/* DEV code dont not commit! */}
+          {[DOC_TYPE_GROUP.LOT].includes(group as DOC_TYPE_GROUP) && (
+            <FBLotTransactions name="lot_transactions" />
+          )}
           {size(schema) > 0 && (
             <FBSchema
               {...{ schema }}
@@ -88,11 +93,11 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
               workspaceMode={mode}
             />
           )}
-          {isRecord && isInlineApproval && isFirstAlphaReleased && _tabsState?.isTabActive('overview') &&
-        isDocumentRevisionReleased(workspaceState?.document?.status) && renderReleaseDetails()}
-          {_tabsState?.isTabActive('details') &&
-            workspaceState?.mode === 'design' &&
-            [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
+          {isRecord && isInlineApproval && isFirstAlphaReleased && _tabsState?.isTabActive('overview')
+        && isDocumentRevisionReleased(workspaceState?.document?.status) && renderReleaseDetails()}
+          {_tabsState?.isTabActive('details')
+            && workspaceState?.mode === 'design'
+            && [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
               <Button
                 variant="outlined"
                 startIcon={<AddIcon />}
@@ -110,7 +115,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 <Text translation="form.builder.add.step" />
               </Button>
             )}
-          { isStarter && <FBStarter index={size(schema)} />}
+          {isStarter && <FBStarter index={size(schema)} />}
           {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}
@@ -120,5 +125,5 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
 export default React.memo(
   FBWorkspaceMemo,
   (prev: FBWorkspaceProps, next: FBWorkspaceProps) =>
-    prev.mode === next.mode && isEqual(prev.schema, next.schema)
+    prev.mode === next.mode && isEqual(prev.schema, next.schema),
 );
