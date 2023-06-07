@@ -133,15 +133,16 @@ export enum TabTypeOptions {
   TABS_MEQ = 'MEQ',
   DYNAMIC = 'DYNAMIC',
   TRAINING = 'TRAINING',
+  BOM = 'BOM',
   MIXED = 'MIXED',
   ITEMS = 'ITEMS',
 }
 
 export enum CATEGORY {
-  WORKORDER_CATEGORY = 'Work Order'
+  WORKORDER_CATEGORY = 'Work Order',
 }
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
-export const GroupWithGroupOptions =  {
+export const GroupWithGroupOptions = {
   FORM: [
     DOC_TYPE_GROUP_OPTION.FORM,
     DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT,
@@ -392,102 +393,102 @@ export const GroupWithGroupOptions =  {
 };
 
 interface PageDetailsConfig {
-  helpModule?: HelpModule;
+  helpModule?: HelpModule
 }
 
 export interface PageDetailsColumn {
-  label: Translation;
-  sourcePath: string;
-  valuePath: string;
-  showOnWeb: boolean;
-  showOnAndroid: boolean;
+  label: Translation
+  sourcePath: string
+  valuePath: string
+  showOnWeb: boolean
+  showOnAndroid: boolean
 }
 
 export interface PageDetails {
-  id: string;
-  addNewBtnLabel: string;
-  columns: PageDetailsColumn[];
-  config: PageDetailsConfig;
-  category: string;
-  exportList: boolean;
+  id: string
+  addNewBtnLabel: string
+  columns: PageDetailsColumn[]
+  config: PageDetailsConfig
+  category: string
+  exportList: boolean
 }
 
 export interface DocumentType {
-  hiddenForCreationForUsersWithoutTagsFormatted?: string;
-  id: string;
-  documentTypeAcronym: string;
-  documentTypeName: string;
-  group: DocumentGroupType;
-  groupOptions?: DocumentGroupOptionsType[];
-  pageDetails?: Nullable<PageDetails>;
-  isQms: boolean;
-  defaultTraining: boolean;
-  schema?: FBSchemaProps[];
-  fieldsConfig?: FieldConfig;
-  defaultRevStage?: string;
-  hiddenForCreationForUsersWithoutTags?: GroupTag[];
-  privateNumberPool?: boolean;
-  canRedLine?: boolean;
-  needsSignature?: boolean;
-  startingNumber?: string;
-  category?: string;
-  active?: boolean;
-  equipmentEnforceProd?: boolean;
+  hiddenForCreationForUsersWithoutTagsFormatted?: string
+  id: string
+  documentTypeAcronym: string
+  documentTypeName: string
+  group: DocumentGroupType
+  groupOptions?: DocumentGroupOptionsType[]
+  pageDetails?: Nullable<PageDetails>
+  isQms: boolean
+  defaultTraining: boolean
+  schema?: FBSchemaProps[]
+  fieldsConfig?: FieldConfig
+  defaultRevStage?: string
+  hiddenForCreationForUsersWithoutTags?: GroupTag[]
+  privateNumberPool?: boolean
+  canRedLine?: boolean
+  needsSignature?: boolean
+  startingNumber?: string
+  category?: string
+  active?: boolean
+  equipmentEnforceProd?: boolean
 }
 
 interface DocumentForms {
-  id: string;
-  docId?: string;
-  documentType?: DocumentType;
+  id: string
+  docId?: string
+  documentType?: DocumentType
 }
 
 export interface DocumentTypeByIdForm {
-  name: string;
-  id: string;
-  document: DocumentForms;
-  formInput?: Record<string, any>;
-  formTemplate?: FBFormTemplateProps;
+  name: string
+  id: string
+  document: DocumentForms
+  formInput?: Record<string, any>
+  formTemplate?: FBFormTemplateProps
 }
 
 export interface DocumentTypeById {
-  documentType: DocumentType;
-  forms: DocumentTypeByIdForm[];
+  documentType: DocumentType
+  forms: DocumentTypeByIdForm[]
 }
 
 export interface DocumentTypeByIdAction {
-  type: typeof DOCUMENT_TYPE_BY_ID;
-  payload: DocumentTypeById;
+  type: typeof DOCUMENT_TYPE_BY_ID
+  payload: DocumentTypeById
 }
 
 export interface TabConfigurationListAction {
-  type: typeof TAB_CONFIGURATION_LIST;
-  payload: TabConfiguration[];
+  type: typeof TAB_CONFIGURATION_LIST
+  payload: TabConfiguration[]
 }
 
 export interface DocumentTypeListAction {
-  type: typeof DOCUMENT_TYPE_LIST;
-  payload: DocumentType[];
+  type: typeof DOCUMENT_TYPE_LIST
+  payload: DocumentType[]
 }
 
 export interface DocumentTypeByCategoryAction {
-  type: typeof SET_DOCUMENT_TYPES_BY_CATEGORY;
-  payload: DocumentType[];
+  type: typeof SET_DOCUMENT_TYPES_BY_CATEGORY
+  payload: DocumentType[]
 }
 
 export interface DocumentTypeByIdState {
-  [key: string]: DocumentType;
+  [key: string]: DocumentType
 }
 
-type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'MEQ' | 'ITEMS';
+type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS';
 
 export interface TabInfo {
-  labelId: string;
-  tabId: string;
-  type: TabType;
+  labelId: string
+  tabId: string
+  type: TabType
 }
 
 export interface TabConfiguration {
-  [key: string]: TabInfo[];
+  [key: string]: TabInfo[]
 }
 
 export type DocRevByIdState = DocumentTypeById;
@@ -501,20 +502,19 @@ export type TabConfigurationState = TabConfiguration[];
 type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 
 interface IFieldConfigItem {
-  visible: boolean;
-  required?: boolean;
-  label?: string;
-  tooltipConfig?: TooltipLabelConfig;
+  visible: boolean
+  required?: boolean
+  label?: string
+  tooltipConfig?: TooltipLabelConfig
 }
 
 export interface TooltipLabelConfig {
-  labelName: string;
-  defaultLabel?: string;
-  overriddenLabel: string;
-  visibilityFlag?: string;
-  requiredFlag?: string;
+  labelName: string
+  defaultLabel?: string
+  overriddenLabel: string
+  visibilityFlag?: string
+  requiredFlag?: string
 }
-
 
 // Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts
 export enum InputFieldType{
@@ -571,11 +571,11 @@ export enum DisplayFieldType{
 export type FieldType = InputFieldType | DisplayFieldType;
 
 export interface DocRevQueryParam {
-  offset: number;
-  limit: number;
-  searchText: Nullable<string>;
-  fields: 'name,document.docId';
-  status: DocumentRevisionStatus[];
+  offset: number
+  limit: number
+  searchText: Nullable<string>
+  fields: 'name,document.docId'
+  status: DocumentRevisionStatus[]
 }
 
 export enum tabIdByInternalType {

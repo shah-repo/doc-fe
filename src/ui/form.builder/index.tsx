@@ -29,6 +29,7 @@ export { default as FBAutocompleteAsync } from './FBAutocompleteAsync/FBAutocomp
 export { default as FBAutocompleteAsyncState } from './FBAutocompleteAsync/FBAutocompleteAsync.state';
 export * from './FBAutocompleteAsync/FBAutocompleteAsync.types';
 export * from './FBBlankTplForm/FBBlankTplForm.types';
+export { default as FBBOM } from './FBBOM';
 export { default as FBBookmarkState } from './FBBookmark/FBBookmark.state';
 export * from './FBBookmark/FBBookmark.types';
 export { default as FBButton } from './FBButton/FBButton';
@@ -41,6 +42,10 @@ export * from './FBConditionalWrapper/FBConditionalWrapper.types';
 export { default as FBContextMenu } from './FBContextMenu/FBContextMenu';
 export { default as FBContextMenuState } from './FBContextMenu/FBContextMenu.state';
 export * from './FBContextMenu/FBContextMenu.types';
+// TODO check why FBControlPicker need to be exported last-one
+export { default as FBControlPicker } from './FBControlPicker/FBControlPicker';
+export { default as FBControlPickerState } from './FBControlPicker/FBControlPicker.state';
+export * from './FBControlPicker/FBControlPicker.types';
 export { default as FBData } from './FBData/FBData';
 export { default as FBDatePicker } from './FBDatePicker/FBDatePicker';
 export { default as FBDatePickerState } from './FBDatePicker/FBDatePicker.state';
@@ -275,7 +280,3 @@ export * from './FBWorkspaceTplActions/FBWorkspaceTplActions.types';
 export * from './FBZIPUpload/FBZIPUpload.types';
 export { default as FB } from './helpers/FB';
 export * from './helpers/FBFieldName';
-// TODO check why FBControlPicker need to be exported last-one
-export { default as FBControlPicker } from './FBControlPicker/FBControlPicker';
-export { default as FBControlPickerState } from './FBControlPicker/FBControlPicker.state';
-export * from './FBControlPicker/FBControlPicker.types';
