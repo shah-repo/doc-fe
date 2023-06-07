@@ -202,7 +202,6 @@ export const withFBOnChange = <T extends FBInputProps>(
         checkbox () { return isSingleCheck(); },
         radio () { return isSingleCheck(); },
         autocomplete () { return autocompleteValue(value); },
-        // texteditor () { },
         datepicker () { return dateValue(ev as string); },
         radiogroup () { return isGroupCheck(); },
         select () { return isGroupCheck(); },
@@ -212,11 +211,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       (changedValue[type || ''] || changedValue.default)();
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
-
-      // if (type === 'autocomplete' &&
-      // schemaState?.getSchemaItem(name?.replace('fb-ia-', ''))?.type === 'inlineapproval') {
-      //   workspaceState?.saveDocRev(formState.getValues());
-      // }
     };
 
     const onBlur = (ev) => {
