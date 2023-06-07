@@ -25,7 +25,6 @@ const DEFAULTS = {
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
 };
 
-
 type ConfigKey = keyof typeof DEFAULTS;
 
 class Config {

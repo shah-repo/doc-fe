@@ -10,14 +10,14 @@ import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
-  disabledOptions: string[];
-  formState: FBFormState;
-  addRevisionToChangeRequest: () => void;
-  resetAndCancelEdit?: () => void;
-  showAutoComplete? : boolean;
-  titleText?: string;
-  handleRemove?: (docRevId: string) => void;
-  entry?: ApprovalRequestGridItem;
+  disabledOptions: string[]
+  formState: FBFormState
+  addRevisionToChangeRequest: () => void
+  resetAndCancelEdit?: () => void
+  showAutoComplete? : boolean
+  titleText?: string
+  handleRemove?: (docRevId: string) => void
+  entry?: ApprovalRequestGridItem
 }> = ({
   disabledOptions,
   formState,
@@ -38,8 +38,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
         <div className={cx(classes.itemRow, classes.editItemRow)}>
           <div className={cx(classes.cellOne, classes.hiddenLegend)}>
-            { showAutoComplete &&
-              <FBAutocompleteAsync
+            { showAutoComplete
+              && <FBAutocompleteAsync
                 name="proposedDocumentRevision"
                 label="form.builder.document"
                 placeholder="form.builder.select"
@@ -79,10 +79,10 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             <DeleteIcon className={classes.iconButton}
               onClick={() =>  {
                 resetAndCancelEdit?.();
-                handleRemove?.(entry?.docRevId as string); }}/>
+                handleRemove?.(entry?.docRevId as string); }} />
           </Button> }
           <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
-            <ClearIcon className={classes.iconButton}/>
+            <ClearIcon className={classes.iconButton} />
           </Button>
           <Button data-cy="doneRecord"
             className={cx(classes.actionButton, classes.actionButtonDone)} onClick = {addRevisionToChangeRequest}>

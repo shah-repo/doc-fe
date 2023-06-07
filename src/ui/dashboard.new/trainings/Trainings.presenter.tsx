@@ -14,10 +14,10 @@ import NewTraining from '../line.items/training/new.training/newTraining';
 import NoPendingActions from '../NoPendingActions';
 
 interface Props {
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
-  onLoadMoreData: () => void;
-  overallLimit: number;
+  pinLineItem: (id: string) => void
+  unPinLineItem: (id: string) => void
+  onLoadMoreData: () => void
+  overallLimit: number
 }
 
 const TrainingsLineItemPresenter: React.FC<Props> = ({
@@ -55,7 +55,7 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
                   pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   pendingTrainees={pendingAction.pendingTrainees}
                   hoverItemId={hoverItemId}

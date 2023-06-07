@@ -17,20 +17,20 @@ import styles from './TransitionDialog.styles';
 import { PasswordFormValues, Transition } from './types';
 
 interface TransitionDialogProps {
-  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
-  openDialog: () => void;
-  asyncState: AsyncState;
-  buttonProps?: ButtonProps;
-  transition: Transition;
-  label: string;
-  transitionDialog: DialogHandler;
-  effectiveDateDialog?: DialogHandler;
+  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
+  openDialog: () => void
+  asyncState: AsyncState
+  buttonProps?: ButtonProps
+  transition: Transition
+  label: string
+  transitionDialog: DialogHandler
+  effectiveDateDialog?: DialogHandler
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;
 
-const TransitionDialog: React.FunctionComponent<Props> =
-  ({
+const TransitionDialog: React.FunctionComponent<Props>
+  = ({
     classes,
     onSubmit,
     openDialog,
@@ -83,9 +83,9 @@ const TransitionDialog: React.FunctionComponent<Props> =
               effectiveDateDialog.close();
               transitionDialog.open();
             }}
-            message={'transition.action.effective.date.message'}
-            confirmLabel={'common.true'}
-            cancelLabel={'common.false'}
+            message="transition.action.effective.date.message"
+            confirmLabel="common.true"
+            cancelLabel="common.false"
           />
         )}
         <Dialog

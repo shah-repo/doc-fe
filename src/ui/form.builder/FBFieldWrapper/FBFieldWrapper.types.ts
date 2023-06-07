@@ -5,12 +5,12 @@ export type FBFieldWrapperProps =
   & Pick<FBFormProps, 'children'>
   & Pick<BoxProps, 'onMouseOver' | 'onMouseLeave' | 'mt' | 'mb'>
   & {
-    fieldWrapperState?: FBFieldWrapperState;
-    toolsVisible?: FBVisibilityType;
-    addToolVisible?: FBVisibilityType;
-    markDownVisible?: boolean;
-    inputProps?: Partial<FBInputProps>;
-    showSchemaFields?: boolean;
-    isDragged?: boolean;
-    position: number;
+    fieldWrapperState?: FBFieldWrapperState
+    toolsVisible?: FBVisibilityType
+    addToolVisible?: FBVisibilityType
+    markDownVisible?: boolean
+    inputProps?: Partial<FBInputProps>
+    showSchemaFields?: boolean
+    isDragged?: boolean
+    position: number
   };

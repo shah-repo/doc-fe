@@ -8,11 +8,11 @@ import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from './ExportListDialog.styles';
 
 interface Props {
-  dialog: DialogHandler;
-  headers?: HeaderTableType[];
-  data: any[];
-  useKeysAsHeaders?: boolean;
-  customFileName: string;
+  dialog: DialogHandler
+  headers?: HeaderTableType[]
+  data: any[]
+  useKeysAsHeaders?: boolean
+  customFileName: string
 }
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
@@ -49,8 +49,8 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        dialog.isOpen &&
-        <Dialog
+        dialog.isOpen
+        && <Dialog
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"

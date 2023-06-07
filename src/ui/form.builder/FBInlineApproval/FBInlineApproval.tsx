@@ -38,13 +38,12 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       borderTop={0}
       borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
     >
-      {isApproved ?
-        (<>
+      {isApproved
+        ? (<>
           <CheckCircleIcon style={{ color: Colors.light_green }} />
           <FBText locale="form.builder.approved" />
         </>)
-        :
-        (<>
+        :        (<>
           <ErrorIcon style={{ color: Colors.latest_red_varient }} />
           <Box ml={1} width="100%" display="flex" mt={0.3}>
             <FBText
@@ -95,9 +94,9 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   flexDirection="row"
                   alignItems="center"
                 >
-                  {<Box fontWeight="bold">{
+                  <Box fontWeight="bold">{
                     isApproved ? approval.approverName :  approval.approver?.user.name
-                  }</Box>}
+                  }</Box>
                   {approval.status && approval.approverGroup && (
                     <Box>&nbsp;| {approval.approverGroup?.join(', ')}</Box>
                   )}
@@ -120,8 +119,8 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                 <Box mt={1}>
                   { isApproved ? approval.approverEmail : approval.approver?.user.email }
                 </Box>
-                {shouldShowRequestAllApprovals &&
-                  <Box flexGrow={1} textAlign="right">
+                {shouldShowRequestAllApprovals
+                  && <Box flexGrow={1} textAlign="right">
                     <FBButton
                       style={{ margin: 0 }}
                       label="form.builder.request.approval"
@@ -137,7 +136,6 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
         </FBMapWrapper>
       </Box>
     )}</>;
-
 
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   dialogState,
@@ -155,10 +153,10 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   return (
     <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
       <FBDialog />
-      <FBInlinePendingApprovalSocket/>
+      <FBInlinePendingApprovalSocket />
       <FBInlineApprovalSocket {...{ name }} />
       <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
-        <FBInlineApprovalChild {...props} {...{ name }}/>
+        <FBInlineApprovalChild {...props} {...{ name }} />
       </FBInput>
     </FBProvider>
   );

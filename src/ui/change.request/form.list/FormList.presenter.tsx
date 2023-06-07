@@ -12,14 +12,14 @@ import FormListHeader from './dialog/FormListHeader';
 import { styles } from './FormList.styles';
 
 interface Props {
-  templateOptions: TemplateOption[];
-  dialog: DialogHandler;
-  handleCreateButton(): void;
-  handleTemplateSelection: (option: TemplateOption) => void;
-  headers: HeaderTableType[];
-  data: any[];
-  exportDialog: DialogHandler;
-  isGrouped: boolean;
+  templateOptions: TemplateOption[]
+  dialog: DialogHandler
+  handleCreateButton(): void
+  handleTemplateSelection: (option: TemplateOption) => void
+  headers: HeaderTableType[]
+  data: any[]
+  exportDialog: DialogHandler
+  isGrouped: boolean
 }
 
 const FormListPresenter: React.FunctionComponent<Props> = ({
@@ -58,7 +58,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           />
           <Button
             id="ChangeRequest-create"
-            data-cy={'change.request.create'}
+            data-cy="change.request.create"
             onClick={handleCreateButton}
             className={classes.createButton}
           >

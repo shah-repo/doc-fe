@@ -18,10 +18,10 @@ import { FBTooltip } from '../../form.builder';
 import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
-  changeRequest: ChangeRequest;
-  setOpen: (value: boolean) => void;
-  isDrawerOpen: boolean;
-  fromEdit?: boolean;
+  changeRequest: ChangeRequest
+  setOpen: (value: boolean) => void
+  isDrawerOpen: boolean
+  fromEdit?: boolean
 }
 
 const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
@@ -62,8 +62,8 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: 'document.revision.history',
         }),
-        component: changeRequest ?
-          <ChangeRequestAuditContainer changeRequest={changeRequest} isDrawerOpen={isDrawerOpen} />
+        component: changeRequest
+          ? <ChangeRequestAuditContainer changeRequest={changeRequest} isDrawerOpen={isDrawerOpen} />
           : null,
       },
     }, {

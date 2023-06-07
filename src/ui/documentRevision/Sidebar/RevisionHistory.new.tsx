@@ -21,8 +21,8 @@ import Colors from '../../layout/theme/utils/colors';
 import styles from './styles.new';
 
 interface SidebarPresenterProps {
-  documentId: string;
-  changeRequests: ChangeRequest[];
+  documentId: string
+  changeRequests: ChangeRequest[]
 }
 
 const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ documentId, changeRequests }) => {
@@ -106,7 +106,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
                 </Box>
                 <Box color={Colors.almost_black} fontSize={14}>
                   {changeRequest.formInput.documentRevisions.map(
-                    (e) => e.descriptionOfChange
+                    (e) => e.descriptionOfChange,
                   )}
                 </Box>
               </Box>
@@ -116,7 +116,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
                 </Box>
                 <Box color={Colors.almost_black} fontSize={14}>
                   {changeRequest.formInput?.documentRevisions.map(
-                      (e) => e.justificationOfChange
+                      (e) => e.justificationOfChange,
                     )}
                 </Box>
               </Box>

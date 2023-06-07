@@ -8,7 +8,7 @@ import { isTranslation } from '../../translations/types';
 import FBFieldOutputWrapper from '../FBFieldOutputWrapper/FBFieldOutputWrapper';
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     workspaceMode,
@@ -82,8 +82,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
         const { disabled, outputDisabled } = schemaItem || {};
         const reviseDisabled = schemaItem.editorProperties?.includes('reviseDisabled');
-        if (schemaItem.deleted || schemaItem.hidden ||
-        ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
+        if (schemaItem.deleted || schemaItem.hidden
+        || ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
         && !_documentRevisionFormState?.leftPanelOpen))
         ) { return; }
 
@@ -98,11 +98,11 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
                   !step.deleted && includes(FBEditorState.pickStepIndex, step.type))),
               },
               disabled: (
-                disabled ||
-                isPreviewOrFormPreview ||
-                isApproved({ ...schemaItem, index }) ||
-                (reviseDisabled && outputRevision) ||
-                (outputDisabled && isOutput && !isEmpty(id))
+                disabled
+                || isPreviewOrFormPreview
+                || isApproved({ ...schemaItem, index })
+                || (reviseDisabled && outputRevision)
+                || (outputDisabled && isOutput && !isEmpty(id))
               ),
               index,
             })}

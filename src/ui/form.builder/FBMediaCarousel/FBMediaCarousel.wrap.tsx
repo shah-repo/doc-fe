@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { FB, FBAttachment, FBMediaCarouselProps, FBMediaCarouselState } from '..';
 
 export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     removeMedia,
@@ -31,7 +31,6 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     function setPreviewType() {
       previewType = mediaAlbumState?.previewType(collection[activeStep || 0]);

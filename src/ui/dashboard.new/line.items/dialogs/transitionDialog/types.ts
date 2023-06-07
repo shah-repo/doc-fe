@@ -1,5 +1,5 @@
 export interface PasswordFormValues {
-  password: string;
+  password: string
 }
 export type Transition =
   | 'approve'

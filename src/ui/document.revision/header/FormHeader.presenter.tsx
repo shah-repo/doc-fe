@@ -20,8 +20,8 @@ import { getVersionNumber } from '../utils/helpers';
 import useStyles from './FormHeader.styles';
 
 interface Props {
-  isCreateDocumentDisabled: boolean;
-  setDoNotPrompt?: (value: boolean) => void;
+  isCreateDocumentDisabled: boolean
+  setDoNotPrompt?: (value: boolean) => void
 }
 
 const FormHeaderPresenter: React.FunctionComponent<Props> = ({
@@ -39,15 +39,15 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
     asyncSecurityState.status === AsyncStatus.Active
     || asyncState.status === AsyncStatus.Active
       || workspaceState?.documentRevApi.loading
-      || _documentRevisionFormState?.loading)
+      || _documentRevisionFormState?.loading),
   );
 
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const classes = useStyles(isCreateUrl);
   return (
     <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
-      {documentRevision &&
-      <HeaderInfo
+      {documentRevision
+      && <HeaderInfo
         revisionStage={documentRevision.revisionStage}
         groupOptions={documentRevision.document.documentType.groupOptions}
         isInlineApproval={isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)

@@ -8,7 +8,7 @@ import useMenu from '../../../../hooks/useMenu';
 
 export enum ARActions {
   NEW = 'new',
-  EXISTING = 'existing'
+  EXISTING = 'existing',
 }
 
 const options = [
@@ -25,9 +25,9 @@ const options = [
 ];
 
 const SplitReleaseButton: React.FunctionComponent<{
-  className?: string;
-  disableExpessAR?: boolean;
-  onClick: (value?: ARActions) => void;
+  className?: string
+  disableExpessAR?: boolean
+  onClick: (value?: ARActions) => void
 }> = ({
   className,
   disableExpessAR,

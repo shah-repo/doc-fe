@@ -275,6 +275,5 @@ export default makeStyles((theme) =>
         textDecoration: 'underline',
       },
     },
-  })
+  }),
 );
-

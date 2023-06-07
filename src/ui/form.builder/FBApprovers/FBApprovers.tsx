@@ -46,7 +46,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       </Box>
       <Box flexBasis="100%" >
         {changeRequestApprovals && changeRequestApprovals.length > 0
-      && <Approvers dataProp={changeRequestApprovals}/>
+      && <Approvers dataProp={changeRequestApprovals} />
         }
       </Box>
     </Box>

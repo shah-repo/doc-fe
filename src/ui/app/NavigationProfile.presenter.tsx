@@ -17,15 +17,15 @@ import UserAvatar from './UserMenu/UserAvatar';
 import UserMenu from './UserMenu/UserMenu.container';
 
 interface Props extends WithStyles<typeof styles> {
-  email: string;
-  name: string;
-  closeUserProfile: () => void;
-  showUserProfile: boolean;
-  avatar: Nullable<string>;
-  initialColor: string;
-  handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  anchorEl: Nullable<HTMLElement>;
-  handleCloseMenu: () => void;
+  email: string
+  name: string
+  closeUserProfile: () => void
+  showUserProfile: boolean
+  avatar: Nullable<string>
+  initialColor: string
+  handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
+  anchorEl: Nullable<HTMLElement>
+  handleCloseMenu: () => void
 }
 
 const NavigationProfilePresenter: React.FunctionComponent<Props> = ({

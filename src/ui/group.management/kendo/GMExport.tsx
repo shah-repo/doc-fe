@@ -10,9 +10,9 @@ import { styles } from '../../documentType/list/styles';
 import useDialog from '../../hooks/useDialog';
 
 interface Props {
-  gridData: any[];
-  columns: any[];
-  isGrouped: boolean;
+  gridData: any[]
+  columns: any[]
+  isGrouped: boolean
 }
 const GMExport: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();

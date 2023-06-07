@@ -18,8 +18,8 @@ import { styles } from './ColumnShowHideMenu.styles';
 import { KendoColumn } from './types';
 
 interface Props {
-  columnDefinition: KendoColumn[];
-  onChange: (colum: KendoColumn) => void;
+  columnDefinition: KendoColumn[]
+  onChange: (colum: KendoColumn) => void
 }
 
 const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
@@ -45,7 +45,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
         placement="top"
         arrow
       >
-        <IconButton onClick={handleClick} data-cy={'manageColumnsBtn'}>
+        <IconButton onClick={handleClick} data-cy="manageColumnsBtn">
           <ViewGridIcon />
         </IconButton>
       </StyleTooltip>
@@ -84,7 +84,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
                 </Typography>
               }
             />
-            <Box flexGrow={1} mr={5}></Box>
+            <Box flexGrow={1} mr={5} />
             {item.show ? (
               <SolidIcon
                 onClick={() => {

@@ -7,7 +7,7 @@ import { ReactComponent as MoreVerticalIcon } from '../../../../assets/images/mo
 import { styles } from './Menu.styles';
 
 interface Props {
-  children: any;
+  children: any
 }
 
 const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {

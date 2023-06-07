@@ -13,10 +13,10 @@ import { LoginFormValues } from '../types';
 import VerificationEmailPage from './VerificationEmailPage';
 
 interface Props {
-  signMessage: Translation;
-  signLabel: Translation;
-  route: string;
-  title: Translation;
+  signMessage: Translation
+  signLabel: Translation
+  route: string
+  title: Translation
 }
 
 const SignupFormContainer: React.FunctionComponent<Props> = ({
@@ -56,7 +56,7 @@ const SignupFormContainer: React.FunctionComponent<Props> = ({
       signLabel={signLabel}
       title={title}
       logo={logo}
-      buttonLabel={'signup.submit'}
+      buttonLabel="signup.submit"
     />
   );
 
@@ -67,16 +67,16 @@ const SignupFormContainer: React.FunctionComponent<Props> = ({
 
   return (
     <div>
-      {signupSuccess &&
-        <VerificationEmailPage
+      {signupSuccess
+        && <VerificationEmailPage
           email={signupEmail}
-          message={'signup.verification.message'}
+          message="signup.verification.message"
           logo={logo}
           isForgotPassword={false}
         />}
       {
-        !signupSuccess &&
-        <FormContext.Provider value={{ submitOnChange: false }}>
+        !signupSuccess
+        && <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
             initialValues={initialValues}
             onSubmit={handleVerificationState}

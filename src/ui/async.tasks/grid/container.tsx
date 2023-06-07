@@ -39,7 +39,7 @@ const AsyncTasksContainer: React.FunctionComponent<
   const setSearchStatus = (
     dataState: DataStateProps,
     columns: KendoColumn[],
-    forceUpdate
+    forceUpdate,
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -52,8 +52,8 @@ const AsyncTasksContainer: React.FunctionComponent<
           },
           columnConfig: JSON.stringify(columns),
         },
-        TABLE_NAME
-      )
+        TABLE_NAME,
+      ),
     );
   };
 
@@ -170,7 +170,7 @@ const AsyncTasksContainer: React.FunctionComponent<
         JSON.stringify({
           taskType: type,
           timeTravel: values,
-        })
+        }),
       );
     }
     openApproveDialog();
@@ -181,7 +181,7 @@ const AsyncTasksContainer: React.FunctionComponent<
         JSON.stringify({
           taskType: type,
           timeTravel: values,
-        })
+        }),
       );
     }
     openApproveDialog();
@@ -192,7 +192,7 @@ const AsyncTasksContainer: React.FunctionComponent<
       async.start(
         executeSessionTimeTravelAsyncTask,
         { ...updatedPayload, ...values },
-        async
+        async,
       );
     } else {
       async.start(executeAsyncTask, { ...updatedPayload, ...values }, async);

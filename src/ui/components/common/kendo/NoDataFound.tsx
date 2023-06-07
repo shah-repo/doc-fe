@@ -7,7 +7,7 @@ const NoDataFound: React.FunctionComponent = () => {
   const classes = styles();
   return (
     <Typography className={classes.font}>
-      <Text translation="table.no.results.found"></Text>
+      <Text translation="table.no.results.found" />
     </Typography>
   );
 };

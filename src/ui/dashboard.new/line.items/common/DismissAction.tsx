@@ -3,8 +3,8 @@ import { ReactComponent as CloseIcon } from '../../../../assets/images/model_clo
 import { StyleTooltip } from './StyleTooltip';
 
 interface Props {
-  classes: any;
-  onClick: () => void;
+  classes: any
+  onClick: () => void
 }
 
 const DismissAction: React.FC<Props> = (props) => {

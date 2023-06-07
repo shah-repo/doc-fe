@@ -54,5 +54,5 @@ export const styles = makeStyles(() =>
     legend: {
       marginLeft: '13px',
     },
-  })
+  }),
 );

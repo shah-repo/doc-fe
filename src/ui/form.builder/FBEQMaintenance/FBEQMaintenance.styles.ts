@@ -8,5 +8,5 @@ export default makeStyles(() =>
       color: `${Colors.textGray} !important`,
       backgroundColor: 'transparent !important',
     },
-  })
+  }),
 );

@@ -74,7 +74,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
       ) : (
         <div className={classes.topButton}>
           {dropDownValue}
-          <span className={`${classes.dot} ${classes[formattedValue]}`}></span>
+          <span className={`${classes.dot} ${classes[formattedValue]}`} />
           <Tooltip customClass={classes.value} data={formattedValue} />
         </div>
       )}

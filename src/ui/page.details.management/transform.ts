@@ -18,4 +18,3 @@ export const toPageDetailsBodyValues = (values: PageDetailsCategoryValues): Omit
     helpModule: values.helpModule,
   },
 });
-

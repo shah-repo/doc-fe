@@ -6,7 +6,7 @@ import { useFormContext } from '../FormContext';
 import Field, { FieldOwnProps } from './Field';
 
 interface RadioGroupOwnProps extends FieldOwnProps {
-  radioGroupProps?: MuiRadioGroupProps;
+  radioGroupProps?: MuiRadioGroupProps
 }
 
 type RadioGroupPropsWithFormik = RadioGroupOwnProps & FormikFieldProps;
@@ -36,7 +36,7 @@ const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
 
 type RadioGroupFieldProps = RadioGroupOwnProps & FieldConfig;
 
-const RadioGroupField: React.FunctionComponent<RadioGroupFieldProps> =
-(props) => <FormikField component={RadioGroup} {...props} />;
+const RadioGroupField: React.FunctionComponent<RadioGroupFieldProps>
+= (props) => <FormikField component={RadioGroup} {...props} />;
 
 export default RadioGroupField;

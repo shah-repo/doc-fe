@@ -348,7 +348,7 @@ class FBFormState extends FBSchemaState {
 
   public lockField = (
     body: Partial<FBLockBody>,
-    fieldName: string
+    fieldName: string,
   ) => {
     // if (!this.includeLocking) { return; }
     // if (this.locked?.get(fieldName)?.locked) { return; }

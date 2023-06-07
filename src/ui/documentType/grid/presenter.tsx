@@ -39,7 +39,7 @@ export function DocumentTypePresenter({
       moment(
         tableCriteria.queryDict?.[column.searchOptions?.dataKey || ''],
         moment.ISO_8601,
-        true
+        true,
       ).isValid()
     ) {
       return {
@@ -65,7 +65,7 @@ export function DocumentTypePresenter({
       documentTypeId: documentType.id,
     };
   const handleExportData = (
-    dataToBeExported: TableDataProps<DocumentRevision>
+    dataToBeExported: TableDataProps<DocumentRevision>,
   ) => {
     let copyDate = cloneDeep(dataToBeExported);
     copyDate = map(copyDate, (record: any) => {

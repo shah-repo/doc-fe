@@ -19,8 +19,8 @@ export type FBInputBaseFieldProps =
     | 'rowsMax'
   >
   & {
-    dataCy?: string;
+    dataCy?: string
     FBProps?: {
-      inputType?: FBInputType;
-    };
+      inputType?: FBInputType
+    }
   };

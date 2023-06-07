@@ -6,7 +6,7 @@ import { FBEditorOptionsProps } from '../FBEditorOptions/FBEditorOptions.types';
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptionsProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     openEditor,
@@ -76,7 +76,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
         leftPanelState.config({
           open: true,
           showLeftPanelEditor: true,
-          title: <FBEditorTitle type={type} onFBEditorClose={onFBEditorClose} underValidation={underValidation}/>,
+          title: <FBEditorTitle type={type} onFBEditorClose={onFBEditorClose} underValidation={underValidation} />,
           maxWidth: 'sm',
           content: editorForm,
           actions: (

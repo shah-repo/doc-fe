@@ -133,7 +133,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       </Box>
 
       {children}
-    </ FBForm>
+    </FBForm>
   );
 };
 

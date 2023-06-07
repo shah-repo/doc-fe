@@ -84,5 +84,5 @@ export default makeStyles((theme: Theme) =>
       textDecoration: 'none',
       fontWeight: theme.typography.fontWeightBold,
     },
-  })
+  }),
 );

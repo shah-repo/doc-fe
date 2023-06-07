@@ -20,8 +20,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   children,
 }) => {
   const classes = FBButtonStyles();
-  const revisionMode =
-    partType === PartType.DocumentRevision || (!partType && partTypeDefaultValue === PartType.DocumentRevision);
+  const revisionMode
+    = partType === PartType.DocumentRevision || (!partType && partTypeDefaultValue === PartType.DocumentRevision);
 
   return (
     <FBProvider {...{ dialogState, ebPartState }}>

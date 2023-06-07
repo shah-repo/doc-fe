@@ -157,11 +157,11 @@ class FormBuilderStore {
   @action public getValidationAttribute = () => {
     const attributes: Dictionary<string> = {};
     map(this.getSchema(), (schemaItem) => {
-      attributes[schemaItem.name || ''] =
-          (schemaItem.label as string) ||
-          schemaItem.placeholder ||
-          schemaItem.name ||
-          '';
+      attributes[schemaItem.name || '']
+          = (schemaItem.label as string)
+          || schemaItem.placeholder
+          || schemaItem.name
+          || '';
     });
     return attributes;
   };

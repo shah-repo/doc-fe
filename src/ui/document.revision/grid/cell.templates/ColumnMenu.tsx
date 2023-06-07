@@ -13,10 +13,9 @@ import { DisplayText, TranslatedText } from '../../../components/common/kendo/he
 import { KendoColumn } from '../../../components/common/kendo/types';
 import { toastError } from '../../../components/notifications';
 
-
 interface CustomColumnMenuProps extends GridColumnMenuProps {
-  columns: KendoColumn[];
-  tableName: string;
+  columns: KendoColumn[]
+  tableName: string
 }
 
 export const ColumnMenu = (props: CustomColumnMenuProps) => {
@@ -49,8 +48,8 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
             ...tableCriteria,
             columnConfig,
           },
-          props.tableName
-        )
+          props.tableName,
+        ),
       );
     }
     if (props.onCloseMenu) {
@@ -59,7 +58,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   };
   const columnDef = find(columns, { field: props.column.field });
   const [columnLock, setColumnLock] = useState<KendoColumn[]>(
-    props.columns
+    props.columns,
   );
   const handleColumnLockToggle = (field) => {
     columnLock.forEach((c, i) => {
@@ -77,8 +76,8 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
             ...tableCriteria,
             columnConfig,
           },
-          props.tableName
-        )
+          props.tableName,
+        ),
       );
     }
     if (props.onCloseMenu) {

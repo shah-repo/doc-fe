@@ -59,7 +59,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         content: (
           <FBPurchaseOrderForm initialValues={item} />
         ),
-        actions: <FBPurchaseOrderActions isEdit={Boolean(item)}/>,
+        actions: <FBPurchaseOrderActions isEdit={Boolean(item)} />,
       });
     });
 
@@ -87,8 +87,8 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
       const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
         formInput: receivedItemsInput,
-        referenceTo: hasNoReference ?
-          [{
+        referenceTo: hasNoReference
+          ? [{
             id: poReceiveState?.data?.document.id,
           }] as Id[] : undefined,
       });
@@ -104,7 +104,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       || workspaceState?.loading
       || purchaseOrderState?.loading
       || poReceiveState?.loading
-      || _documentRevisionFormState?.loading)
+      || _documentRevisionFormState?.loading),
     );
 
     return Component({
@@ -125,5 +125,3 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
   return (props: T) => Comp(props);
 };
-
-

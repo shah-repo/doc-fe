@@ -9,7 +9,7 @@ describe( 'DocumentInfo tests', () => {
   };
 
   const getWrapper = (props: Partial<Props> = {}) => shallow(
-    <DocumentInfo {...defaultProps} {...props}/>,
+    <DocumentInfo {...defaultProps} {...props} />,
   );
 
   it('Renders correctly', () => {

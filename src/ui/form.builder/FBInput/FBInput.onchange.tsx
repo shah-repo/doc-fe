@@ -14,16 +14,16 @@ const showDecimalToastError = throttle((name, intl) => {
   toastError(
     intl.formatMessage(
       { id: 'document.revision.quantity.decimals.error' },
-      { name }
+      { name },
     ),
     {
       autoClose: DECIMAL_TOAST_TIMEOUT,
-    }
+    },
   );
 }, DECIMAL_TOAST_TIMEOUT, { trailing: false });
 
 export const withFBOnChange = <T extends FBInputProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     setTranform,
@@ -40,9 +40,9 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const inputValue =
-    formState?.getFieldValue(name) ||
-    formState?.getInputState(name || '')?.value;
+    const inputValue
+    = formState?.getFieldValue(name)
+    || formState?.getInputState(name || '')?.value;
     const intl = useIntl();
 
     inputState = FB.useRef<FBInputState>(FBInputState, {
@@ -214,8 +214,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
 
-      if (type === 'autocomplete' &&
-      schemaState?.getSchemaItem(name?.replace('fb-ia-', ''))?.type === 'inlineapproval') {
+      if (type === 'autocomplete'
+      && schemaState?.getSchemaItem(name?.replace('fb-ia-', ''))?.type === 'inlineapproval') {
         workspaceState?.saveDocRev(formState.getValues());
       }
     });

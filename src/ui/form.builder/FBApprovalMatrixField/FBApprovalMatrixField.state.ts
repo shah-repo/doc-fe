@@ -25,7 +25,7 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
 
     const isFormEmpty = isEmpty(formValue)
       || !(formValue && Boolean(
-        Object.values(formValue).find((dataKeys) => !isEmpty(dataKeys))
+        Object.values(formValue).find((dataKeys) => !isEmpty(dataKeys)),
       ))
       || !formValue?.[FBDAMFields.DAM]
       || !formValue?.[FBDAMFields.DAR];
@@ -110,4 +110,3 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
 }
 
 export default FBApprovalMatrixFieldState;
-

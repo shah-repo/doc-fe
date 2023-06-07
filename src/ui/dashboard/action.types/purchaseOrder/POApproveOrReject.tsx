@@ -13,7 +13,7 @@ import useDialog from '../../../hooks/useDialog';
 import { DocumentRevisionApprovalDialog } from '../DocumentRevisionApprovalDialog';
 
 interface Props {
-  approvalId: string;
+  approvalId: string
 }
 
 const POApproveOrReject: React.FunctionComponent<Props> = ({
@@ -53,7 +53,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
             data-cy="transition-reject"
             onClick={alertDialog.open}
           >
-            <Text translation="transition.action.reject"/>
+            <Text translation="transition.action.reject" />
           </Button>
           <Button
             variant="outlined"
@@ -62,7 +62,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
             data-cy="transition-approve"
             onClick={() => passwordDialog.open()}
           >
-            <Text translation="transition.action.approve"/>
+            <Text translation="transition.action.approve" />
           </Button>
         </Grid>
       </Box>

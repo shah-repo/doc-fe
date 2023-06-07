@@ -11,15 +11,15 @@ import TransitionDialog from '../../dashboard.new/line.items/dialogs/transitionD
 import { DialogHandler } from '../../hooks/useDialog';
 
 interface Props {
-  transition: ChangeRequestTransition;
-  buttonProps?: ButtonProps;
-  asyncState: AsyncState;
-  arId?: string;
-  title?: string;
-  label: string;
-  transitionDialog: DialogHandler;
-  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues ) => void;
-  onSuccess?: () => void;
+  transition: ChangeRequestTransition
+  buttonProps?: ButtonProps
+  asyncState: AsyncState
+  arId?: string
+  title?: string
+  label: string
+  transitionDialog: DialogHandler
+  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues ) => void
+  onSuccess?: () => void
 }
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   arId,

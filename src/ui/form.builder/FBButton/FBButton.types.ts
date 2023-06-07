@@ -19,10 +19,9 @@ export type FBButtonProps =
     | 'endIcon'
   >
   & {
-    dataCy?: string;
-    isHover?: boolean;
-    showNewButton?: boolean;
-    className? : string;
-    newVariant?: boolean;
+    dataCy?: string
+    isHover?: boolean
+    showNewButton?: boolean
+    className? : string
+    newVariant?: boolean
   };
-

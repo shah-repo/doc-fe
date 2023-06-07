@@ -4,7 +4,7 @@ import { DocumentCloneType } from '../../../../../../ui/documentRevision/Clone.c
 export type DocumentRevisionFormHeaderProps =
 & Pick<SMProviderProps, '_documentRevisionFormState'>
 & {
-  isDisabledInput?: boolean;
-  type?: DocumentCloneType;
-  documentTypeId?: string;
+  isDisabledInput?: boolean
+  type?: DocumentCloneType
+  documentTypeId?: string
 };

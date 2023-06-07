@@ -3,7 +3,7 @@ import { FBMEQItemStatus, GenericItem, MaterialAndEquipment } from './FBMaterail
 
 const getItemStatus = (
   childItem?: GenericItem,
-  parentItem?: GenericItem
+  parentItem?: GenericItem,
 ): FBMEQItemStatus => {
   if (isEqual(childItem, parentItem)) {
     return FBMEQItemStatus.None;
@@ -23,7 +23,7 @@ const calculateSectionDiff = <K extends (GenericItem)[]>(childItems: K, parentIt
   const allItems = unionWith(
     childItems,
     parentItems,
-    (value, other) => isEqual(normalizeItem(value), normalizeItem(other))
+    (value, other) => isEqual(normalizeItem(value), normalizeItem(other)),
   );
 
   return allItems.map((item) => {

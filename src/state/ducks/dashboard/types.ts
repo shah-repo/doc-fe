@@ -37,24 +37,24 @@ export enum TransitionTypes {
 }
 
 export interface PendingAction {
-  type: PendingActionType;
-  userId: string;
-  changeReq?: ChangeRequest;
-  trainingRecord?: TrainingRecord;
-  documentRevision?: DocumentRevision;
-  docRev?: DocumentRevision;
-  approval?: Approval;
-  docRevAttachments?: Attachment[];
+  type: PendingActionType
+  userId: string
+  changeReq?: ChangeRequest
+  trainingRecord?: TrainingRecord
+  documentRevision?: DocumentRevision
+  docRev?: DocumentRevision
+  approval?: Approval
+  docRevAttachments?: Attachment[]
 }
 
 export interface PendingActionsListAction {
-  type: typeof PENDING_ACTIONS_LIST;
-  payload: PendingAction[];
+  type: typeof PENDING_ACTIONS_LIST
+  payload: PendingAction[]
 }
 
 export interface PendingActionsRemoveAction {
-  type: typeof PENDING_ACTIONS_REMOVE;
-  payload: number;
+  type: typeof PENDING_ACTIONS_REMOVE
+  payload: number
 }
 
 export type PendingActionsState = PendingAction[];

@@ -70,7 +70,7 @@ class FBInlineApprovalState {
 
   public approvalBody = (
     body: Partial<FBInlineApprovalBody>,
-    callback?: () => any
+    callback?: () => any,
   ) => {
     this.approvalApi.set({
       url: FBEndpoint.Approvals,
@@ -91,7 +91,7 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
@@ -113,7 +113,7 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id: string,
     body: FBRequestApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => this.requestApprovalApi.set({
     body,
     url: FBEndpoint.ApprovalsTransition,

@@ -37,4 +37,3 @@ export const styles = makeStyles((theme) =>
       color: Colors.navy,
     },
   }));
-

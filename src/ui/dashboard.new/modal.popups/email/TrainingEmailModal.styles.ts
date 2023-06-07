@@ -179,5 +179,5 @@ export const styles = makeStyles((theme: Theme) =>
       right: '7px',
       top: '7px',
     },
-  })
+  }),
 );

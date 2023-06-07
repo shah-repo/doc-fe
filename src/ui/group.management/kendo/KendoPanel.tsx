@@ -67,14 +67,14 @@ import { PermissionsCell } from './cell.template/PermissionsCell';
 import { TagsCell } from './cell.template/TagsCell';
 
 interface GroupManagementProps {
-  onSelect;
-  refreshTable: boolean;
-  canCreateGroups: boolean;
+  onSelect
+  refreshTable: boolean
+  canCreateGroups: boolean
 }
 
 let call: CancelTokenSource;
 
-export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
+export function KendoPanel<T extends {id: string, inEdit?: boolean | string}>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -95,7 +95,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
-    gridConfiguration.columns
+    gridConfiguration.columns,
   );
   const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
@@ -104,8 +104,8 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           ...tableCriteria,
           columnConfig: JSON.stringify(dataColumns),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const processWithGroups = (data: Partial<LoadCompanyGroup>[], dataState: State) => {
@@ -201,12 +201,12 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           columnConfig: JSON.stringify(gridConfiguration.columns),
           queryDict: {},
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const setKendoFilterStatus = (
-    tableCriteria: Partial<TablePanelStateProps>
+    tableCriteria: Partial<TablePanelStateProps>,
   ): void => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -214,8 +214,8 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           ...tableCriteria,
           queryDict: {},
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const [isLoading, setIsLoading] = useState(false);
@@ -224,11 +224,11 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const [dataState, setDataState] = useState<State>(initialDataState); // Kendo Grid Data State
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(gridData, initialDataState)
+    processWithGroups(gridData, initialDataState),
   );
   // EMPLOYEES
   const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
-    DEFAULT_ACTIVE_EMPLOYEES
+    DEFAULT_ACTIVE_EMPLOYEES,
   );
   const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
   const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
@@ -241,7 +241,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       asyncGetActiveEmployees.start(
         getEmployeeAction,
         { active: true },
-        asyncGetActiveEmployees
+        asyncGetActiveEmployees,
       );
     }
   }, [didMount]);
@@ -302,8 +302,8 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           kendoConfig: JSON.stringify(initialDataState),
           columnConfig: JSON.stringify(columnDefinitions),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
     apiClient
       .request(requestConfig)
@@ -369,8 +369,8 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
               kendoConfig: JSON.stringify(initialDataState),
               columnConfig: JSON.stringify(columnDefinitions),
             },
-            tableName
-          )
+            tableName,
+          ),
         );
       });
   };
@@ -390,7 +390,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         setNoDataMessage(<NoDataFound />);
       }
     },
-    [gridData]
+    [gridData],
   );
   const onExpandChange = useCallback(
     ({ dataItem, value }: GridExpandChangeEvent) => {
@@ -402,7 +402,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         setCollapsedState(newCollapsedIds);
       }
     },
-    [collapsedState]
+    [collapsedState],
   );
   const clearFilter = () => setSearchStatus(false);
 
@@ -462,7 +462,6 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     'formattedTags': tagCell,
     '': commandCell,
   };
-
 
   const columnRenderer = (gridWidth: number) => (
     sortBy(columnDefinitions, ['orderIndex']).map((column, idx) => (
@@ -576,7 +575,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         {columnRenderer(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
       </StyledKendoGrid>
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
     </>
   );
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
@@ -591,7 +590,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           <Grid item>
             <Box display="flex">
               <GMExport gridData={dataState.group?.length ? flatMap(map(result, 'items')) : result}
-                columns={columnDefinitions} isGrouped={(dataState?.group || []).length > 0}/>
+                columns={columnDefinitions} isGrouped={(dataState?.group || []).length > 0} />
               {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
             </Box>
           </Grid>

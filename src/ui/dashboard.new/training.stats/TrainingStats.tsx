@@ -16,11 +16,11 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
 
   // Training Chart
   const loadTrainingStatsChart = useActionCreator(
-    trainingStatsActions.loadTrainingStatsChart
+    trainingStatsActions.loadTrainingStatsChart,
   );
 
   const loadTrainingStatsChartAsyncInfo = useSelector(
-    trainingStatsSelectors.getLoadTrainingStatsChartAsyncInfo
+    trainingStatsSelectors.getLoadTrainingStatsChartAsyncInfo,
   );
 
   const [tabValue, setTabValue] = React.useState(0);

@@ -5,8 +5,8 @@ import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from '../FormList.styles';
 
 interface Props {
-  dialog: DialogHandler;
-  confirm: () => void;
+  dialog: DialogHandler
+  confirm: () => void
 }
 const FormListActions: React.FunctionComponent<Props> = ({ dialog, confirm }) => {
   const classes = styles();

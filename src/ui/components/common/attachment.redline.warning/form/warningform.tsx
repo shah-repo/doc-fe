@@ -9,10 +9,10 @@ import Text from '../../../Text';
 import styles from './warningform.styles';
 
 interface RedlineWarningFormProps extends WithStyles<typeof styles> {
-  asyncState: AsyncState;
-  cancel: () => void;
-  translationText: Translation;
-  translationButtonText: string;
+  asyncState: AsyncState
+  cancel: () => void
+  translationText: Translation
+  translationButtonText: string
 }
 
 const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
@@ -20,9 +20,9 @@ const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
 }) => (
   <Form className={classes.form}>
     <Box className = {classes.Box}>
-      <WarningRoundedIcon fontSize="large" className={classes.icon}/>
+      <WarningRoundedIcon fontSize="large" className={classes.icon} />
       <h2 className={classes.h4}>Alert!</h2>
-      <Text translation={translationText}/>
+      <Text translation={translationText} />
       <Box>
         <SubmitButton
           id="passwordConfirm"

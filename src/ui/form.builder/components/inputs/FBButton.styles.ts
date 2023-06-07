@@ -21,5 +21,5 @@ export default makeStyles(() =>
         color: Colors.white,
       },
     },
-  })
+  }),
 );

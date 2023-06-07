@@ -40,14 +40,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
-  const smartReferencesFrom =
-  documentRevision?.smartReferencesFrom?.filter(
+  const smartReferencesFrom
+  = documentRevision?.smartReferencesFrom?.filter(
       (ref) =>
-        ref.active &&
-        ref.type === SmartReferenceType.HiddenPiInstance &&
-        schema
+        ref.active
+        && ref.type === SmartReferenceType.HiddenPiInstance
+        && schema
           ?.map((el) => el.name)
-          .filter((el) => el?.includes(ref.metadata.fieldId))
+          .filter((el) => el?.includes(ref.metadata.fieldId)),
     );
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
@@ -82,8 +82,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           filter(
             ro.slice(0, i + 1),
             (step) =>
-              !step.deleted && includes(FBEditorState.pickStepIndex, step.type)
-          )
+              !step.deleted && includes(FBEditorState.pickStepIndex, step.type),
+          ),
         ),
       }),
     }));
@@ -120,7 +120,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           ),
         }}
       >
-        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
+        {documentRevision && <LHRBanner documentRevision={documentRevision} />}
         <Observer>
           {() => (
             <SMTemplate
@@ -156,8 +156,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               document={documentRevision}
                               initialValues={documentRevision.formInput}
                               schema={schema}
-                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                              mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions)
+                                ? FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                             />
                             }
                           </>}
@@ -172,13 +172,13 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                     enableReinitialize={true}
                                   >
                                     <>
-                                      <FBSection name={'fb-po-section-po-items-built-in'}
+                                      <FBSection name="fb-po-section-po-items-built-in"
                                         label="form.builder.po.details" />
                                       <Attachment
                                         isAttachmentEmpty={isAttachmentEmpty}
                                         docRevId={documentRevision.id}
                                         containsRedline={false}
-                                        label={'Supporting Documents'}
+                                        label="Supporting Documents"
                                         docRevStatus={documentRevision.status}
                                         {...{ isDownloadAllVisible }}
                                       />
@@ -190,14 +190,14 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 document={documentRevision}
                                 initialValues={documentRevision.formInput}
                                 schema={schema}
-                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                                  FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                                mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions)
+                                  ? FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                               />
                             </>
                           )}
-                          {tabType === TabTypeOptions.TABS_MEQ &&
-                          !isPO && documentRevision.status !== DocumentRevisionStatus.Voided &&
-                          <FBMaterialEqInfoContainer
+                          {tabType === TabTypeOptions.TABS_MEQ
+                          && !isPO && documentRevision.status !== DocumentRevisionStatus.Voided
+                          && <FBMaterialEqInfoContainer
                             documentRevision={documentRevision}
                             inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                           />

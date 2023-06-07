@@ -86,7 +86,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
           if (workspaceState?.mode !== 'preview') {
             fileUploadState?.addFile(data);
           }
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

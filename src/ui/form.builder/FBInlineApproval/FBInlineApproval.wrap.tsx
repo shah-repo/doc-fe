@@ -44,8 +44,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     } = workspaceState || {};
     const docApprovals = FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals;
     const userId = (
-      document?.owner?.user?.id ||
-      changeRequest?.owner?.user?.id
+      document?.owner?.user?.id
+      || changeRequest?.owner?.user?.id
     );
 
     isPreview = workspaceState?.mode === 'preview';
@@ -85,7 +85,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         }
         const fieldApprovals = filter(data, { fieldId: name });
         inlineApprovalState?.setApprovals(fieldApprovals);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -95,7 +95,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -105,7 +105,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -116,7 +116,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         const formValue: string[] = map(inlineApprovalState?.getApprovals, 'approver.id');
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -130,7 +130,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -247,9 +247,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals = inlineApprovalState?.getApprovals;
 
       loading = (
-        inlineApprovalState?.approvalApi.loading ||
-        inlineApprovalState?.transitionApi.loading ||
-        inlineApprovalState?.documentApi.loading
+        inlineApprovalState?.approvalApi.loading
+        || inlineApprovalState?.transitionApi.loading
+        || inlineApprovalState?.documentApi.loading
       );
 
       disabled = loading
@@ -261,12 +261,11 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @final config
     isApproved = (
-      docVersion > 1 &&
-      isEmpty(inlineApprovalState.getApprovals) &&
-      Boolean(formState?.getFieldValue(name))
+      docVersion > 1
+      && isEmpty(inlineApprovalState.getApprovals)
+      && Boolean(formState?.getFieldValue(name))
     ) ? some(fieldApprovals, (approval) => approval.status === 'APPROVED') || !fieldApprovals.length
       : !isUndefined(find(approvals, { status: 'APPROVED' }));
-
 
     return Component({
       ...(props as T),

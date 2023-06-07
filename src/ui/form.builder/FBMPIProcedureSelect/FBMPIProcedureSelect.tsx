@@ -33,8 +33,8 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 name="usedOverride"
                 options={mpiProcedureSelectState?.lotsApi.data
                   ?.filter((option) =>
-                    !isDocumentRevisionInDraft(option.status) &&
-                    checkIsDocumentLot(option.document.documentType.groupOptions))
+                    !isDocumentRevisionInDraft(option.status)
+                    && checkIsDocumentLot(option.document.documentType.groupOptions))
                 }
                 loading={mpiProcedureSelectState?.lotsApi.loading}
                 optionValueKey="id"
@@ -69,30 +69,30 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
             onChange={() => onChange?.()}
           />
           {selectedEQ && <>
-            {selectedEQ.status &&
-            <Box mb={3} fontWeight={'bold'}>
+            {selectedEQ.status
+            && <Box mb={3} fontWeight="bold">
               <Typography style={{ color: Colors.font_gray, fontWeight: 'bold'  }}>
-                <Text message="common.status"/>:
+                <Text message="common.status" />:
               </Typography>
               {selectedEQ?.status}
             </Box>
             }
-            {selectedEQ.calDate &&
-            <Box mb={3}>
+            {selectedEQ.calDate
+            && <Box mb={3}>
               <Typography style={{ color: Colors.font_gray, fontWeight: 'bold' }}>
-                <Text message="form.builder.calibration"/>:
+                <Text message="form.builder.calibration" />:
               </Typography>
-              <Text message="common.next"/>: <Box component={'span'} fontWeight={'bold'}>
+              <Text message="common.next" />: <Box component="span" fontWeight="bold">
                 {getFormattedDateString(selectedEQ.calDate, MomentFormats.BriefDate)}
               </Box>
             </Box>
             }
-            {selectedEQ.pmDate &&
-            <Box>
+            {selectedEQ.pmDate
+            && <Box>
               <Typography style={{ color: Colors.font_gray, fontWeight: 'bold' }}>
-                <Text message="form.builder.preventative.maintenance"/>:
+                <Text message="form.builder.preventative.maintenance" />:
               </Typography>
-              <Text message="common.next"/>: <Box component={'span'} fontWeight={'bold'}>
+              <Text message="common.next" />: <Box component="span" fontWeight="bold">
                 {getFormattedDateString(selectedEQ.pmDate, MomentFormats.BriefDate)}
               </Box>
             </Box>

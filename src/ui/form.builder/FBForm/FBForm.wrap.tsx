@@ -29,8 +29,8 @@ export const withFBForm = <T extends FBFormProps>(
       workspaceState,
     }));
 
-    const isReceivableType =
-        checkIsDocumentReceivable(_documentRevisionFormState?.document?.documentType?.groupOptions);
+    const isReceivableType
+        = checkIsDocumentReceivable(_documentRevisionFormState?.document?.documentType?.groupOptions);
     if (!(isReceivableType && has(initialValues, 'po-items-built-in'))) {
       FBFormStateContext = React.createContext<any>(formState?.getValues());
     }

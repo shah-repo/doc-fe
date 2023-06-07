@@ -3,7 +3,7 @@ import { FB, FBRequestApprovalProps } from '..';
 import { withFBEditorHelper } from '../FBEditor/FBEditor.helper';
 
 export const withFBRequestApproval = <T extends FBRequestApprovalProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({

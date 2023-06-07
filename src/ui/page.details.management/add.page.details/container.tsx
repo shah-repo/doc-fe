@@ -12,7 +12,7 @@ import { toPageDetailsBodyValues } from '../transform';
 import { PageDetailsCategory, PageDetailsCategoryValues } from '../types';
 
 interface Props {
-  dialog: DialogHandler;
+  dialog: DialogHandler
 }
 
 export const PageDetailsForm: React.FunctionComponent<Props> = ({
@@ -48,7 +48,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
   const render = (props: FormikProps<PageDetailsCategory>) => (
     <PageDetailsFormPresenter
       handleTransition={dialog.close}
-      transitionLabel={'common.close'}
+      transitionLabel="common.close"
       {...props}
     />
   );
@@ -60,7 +60,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
       maxWidth="md"
     >
       <DialogTitle>
-        <Text translation={'common.add.document.type'} />
+        <Text translation="common.add.document.type" />
       </DialogTitle>
       <DialogContent>
         <Formik

@@ -13,8 +13,8 @@ import StyledSubmitButton from '../../forms/StyledSubmitButton';
 import styles from './EffectiveDateForm.styles';
 
 interface EffectiveDateFormProps extends WithStyles<typeof styles> {
-  asyncState: AsyncState;
-  cancel: () => void;
+  asyncState: AsyncState
+  cancel: () => void
 }
 
 const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ cancel, classes, asyncState }) => (

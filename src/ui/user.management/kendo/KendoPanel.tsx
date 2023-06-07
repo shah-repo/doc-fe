@@ -77,7 +77,7 @@ export function KendoPanel<T>({
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
-    gridConfiguration.columns
+    gridConfiguration.columns,
   );
   const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
@@ -86,8 +86,8 @@ export function KendoPanel<T>({
           ...tableCriteria,
           columnConfig: JSON.stringify(dataColumns),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const processWithGroups = (data: Partial<GetEmployeeResponse>[], dataState: State) => {
@@ -189,8 +189,8 @@ export function KendoPanel<T>({
           columnConfig: JSON.stringify(gridConfiguration.columns),
           queryDict: {},
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const setKendoFilterStatus = (
@@ -203,8 +203,8 @@ export function KendoPanel<T>({
           kendoConfig,
           queryDict: {},
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const [isLoading, setIsLoading] = useState(false);
@@ -213,7 +213,7 @@ export function KendoPanel<T>({
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(gridData, initialDataState)
+    processWithGroups(gridData, initialDataState),
   );
   useEffect(() => {
     if (rerender) {
@@ -260,8 +260,8 @@ export function KendoPanel<T>({
           kendoConfig: JSON.stringify(initialDataState),
           columnConfig: JSON.stringify(columnDefinitions),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
     apiClient
       .request(requestConfig)
@@ -324,8 +324,8 @@ export function KendoPanel<T>({
               kendoConfig: JSON.stringify(initialDataState),
               columnConfig: JSON.stringify(columnDefinitions),
             },
-            tableName
-          )
+            tableName,
+          ),
         );
       }).finally(() => {
         setUpdatedGridData(undefined);
@@ -348,7 +348,7 @@ export function KendoPanel<T>({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [gridData]
+    [gridData],
   );
   const onExpandChange = useCallback(
     ({ value, dataItem }: GridExpandChangeEvent) => {
@@ -360,7 +360,7 @@ export function KendoPanel<T>({
         setCollapsedState(newCollapsedIds);
       }
     },
-    [collapsedState]
+    [collapsedState],
   );
   const clearFilter = () => setSearchStatus(false);
 
@@ -530,7 +530,7 @@ export function KendoPanel<T>({
         {columnRenderer(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
       </StyledKendoGrid>
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
     </>
   );
   const getExportData = (data) => {
@@ -550,7 +550,7 @@ export function KendoPanel<T>({
           <Grid item>
             <Box display="flex">
               <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
-                columns={columnDefinitions} isGrouped={(dataState.group || []).length > 0}/>
+                columns={columnDefinitions} isGrouped={(dataState.group || []).length > 0} />
               <AddEmployeeContainer addGroup={addNew} />
             </Box>
           </Grid>

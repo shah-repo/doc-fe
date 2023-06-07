@@ -43,9 +43,9 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
     newValue,
     newOperator,
   }: {
-    event: Parameters<GridFilterCellProps['onChange']>[0]['syntheticEvent'];
-    newValue?: GridFilterCellProps['value'];
-    newOperator?: GridFilterCellProps['operator'];
+    event: Parameters<GridFilterCellProps['onChange']>[0]['syntheticEvent']
+    newValue?: GridFilterCellProps['value']
+    newOperator?: GridFilterCellProps['operator']
   }) => {
     onChange({
       value: newValue ?? value,
