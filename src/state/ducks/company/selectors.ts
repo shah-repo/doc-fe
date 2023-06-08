@@ -56,6 +56,10 @@ const getNavigationDetails = (state: ApplicationState, category: string) => {
   return { label: menuItem?.label, icon: menuItem?.icon, path: menuItem?.path, type: menuItem?.type };
 };
 
+const getActiveLocations = (state: ApplicationState) =>
+  chain(state.company.companyMine.locations)
+    .filter({ active: true });
+
 const getActiveEmployees = (state: ApplicationState) =>
   chain(state.company.companyMine.employees)
     .filter({ active: true })
@@ -84,4 +88,5 @@ export default {
   getNavigationDetails,
   getActiveEmployees,
   getAllEmployees,
+  getActiveLocations,
 };
