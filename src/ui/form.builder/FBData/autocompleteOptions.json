@@ -334,5 +334,10 @@
     "includeRevision": "displayRevision",
     "root": "",
     "hidden": false
+  },
+  {
+    "id": "43",
+    "label": "Company Locations",
+    "hidden": false
   }
 ]
