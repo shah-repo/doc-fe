@@ -1,4 +1,5 @@
 import { cloneDeep, get } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
@@ -18,6 +19,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     autosaveEnabled,
     isCreateUrl,
     documentRevision,
+    doNotPrompt,
+    setDoNotPrompt,
     ...props
   }: T) => {
     // MARK: @config
@@ -110,10 +113,20 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onScroll = () => {};
 
+    useObserver(() => {
+      if (_documentRevisionFormState?.doNotPrompt) {
+        setDoNotPrompt?.(true);
+      }
+    });
+
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
         <FBProvider {...{
-          leftPanelState, editorState, formState, workspaceState, poApprovalsState,
+          leftPanelState,
+          editorState,
+          formState,
+          workspaceState,
+          poApprovalsState,
           approvalMatrixFieldState: approvalMatrixState,
         }}>
           <Component
@@ -128,6 +141,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               schema: _documentRevisionFormState?.schema || documentRevision?.schema,
               workspaceState,
               isCreateUrl,
+              doNotPrompt,
+              setDoNotPrompt,
             }}
           />
         </FBProvider>

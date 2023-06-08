@@ -1,9 +1,11 @@
-import { get, isArray, isEmpty, isUndefined, set } from 'lodash';
+import { get, isArray, isEmpty, isUndefined, omit, set } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
+import { SM } from '../../../App';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { DEFAULT_CATEGORY_LABEL } from './constants';
 import { FBApprovalMatrixProps } from './types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
@@ -17,23 +19,30 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     isInputOwner,
     data,
     withoutStatus,
+    size,
     ...props
   }: T) => {
     const { approvalMatrixFieldState, workspaceState } = FB.useStores();
+    const { _tabsState } = SM.useStores();
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled
       || (workspaceState && !['design', 'form'].includes(workspaceState.mode));
 
     handleSave = (data: FBApprovalMatrixItem[]) => {
-      const approvalMatrix = data.map(({ id, docType, ...restItem }) => ({
-        id: id ?? generateUuid(),
-        docType: {
-          ...docType,
-          acronym: docType.acronym.toUpperCase(),
-        },
-        ...restItem,
-      }));
+      const approvalMatrix = data.map(({ id, docType, ...restItem }) => {
+        if (docType.updatedCategory !== DEFAULT_CATEGORY_LABEL) {
+          set(docType, 'category', docType.updatedCategory);
+        }
+        return ({
+          id: id ?? generateUuid(),
+          docType: {
+            ...omit(docType, 'updatedCategory'),
+            acronym: docType.acronym.toUpperCase(),
+          },
+          ...restItem,
+        });
+      });
 
       if (isEmpty(approvalMatrix)) { return; }
 
@@ -74,6 +83,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       };
     });
 
+    size = useObserver(() => _tabsState?.contentSize);
+
     return Component({
       ...(props as T),
       handleSave,
@@ -82,6 +93,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       mode,
       data,
       withoutStatus,
+      size,
     });
   };
 

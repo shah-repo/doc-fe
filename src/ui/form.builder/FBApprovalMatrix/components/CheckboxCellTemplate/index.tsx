@@ -1,5 +1,5 @@
 import React from 'react';
-import { get, set } from 'lodash';
+import { get } from 'lodash';
 import { Checkbox, CheckboxProps } from '@progress/kendo-react-inputs';
 import { MODE_FIELD, Mode } from '../Grid';
 import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -15,14 +15,12 @@ const CheckboxCellTemplate: CellTemplate = (props) => {
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const handleChange: CheckboxProps['onChange'] = (event) => {
-    const newValue = event.value;
-
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem as Record<string, unknown>, path, newValue),
+      dataItem,
       syntheticEvent: event.syntheticEvent,
       field,
-      value: newValue,
+      value: event.value,
     });
   };
 

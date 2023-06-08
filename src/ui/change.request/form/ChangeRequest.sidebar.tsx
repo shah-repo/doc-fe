@@ -30,7 +30,6 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
   setOpen,
   fromEdit,
 }) => {
-
   const intl = useIntl();
 
   const [tab, setTab] = useState(0);
@@ -105,6 +104,7 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
             }
           >
             <IconButton
+              data-cy="sidebar-toggle-icon"
               onClick={() => setOpen(!isDrawerOpen)}
               className={`${classes.iconButtonNew} ${!isDrawerOpen ? 'maximize' : ''}`}
             >

@@ -77,6 +77,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                 }
               >
                 <IconButton
+                  data-cy="sidebar-toggle-icon"
                   onClick={handleRightPanelToggle}
                   className={cx(classes.iconButtonNew, { maximize: !_documentRevisionSidebarState?.open })}
                 >

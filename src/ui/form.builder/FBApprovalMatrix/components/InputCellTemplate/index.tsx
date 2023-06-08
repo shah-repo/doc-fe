@@ -1,5 +1,5 @@
 import { Input, InputProps } from '@progress/kendo-react-inputs';
-import { debounce, get, set } from 'lodash';
+import { debounce, get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -20,7 +20,7 @@ const InputCellTemplate: CellTemplate = (props) => {
     (event) => {
       onChange?.({
         dataIndex,
-        dataItem: set(dataItem as Record<string, unknown>, path, event.value),
+        dataItem,
         syntheticEvent: event.syntheticEvent,
         field,
         value: event.value,
