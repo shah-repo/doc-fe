@@ -1,11 +1,11 @@
 import {
   extendDataItem, filterBy,
-  mapTree, orderBy, TreeListDataStateChangeEvent, TreeListExpandChangeEvent,
+  mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent,
 } from '@progress/kendo-react-treelist';
 import * as React from 'react';
-import { expandField, subItemsField } from './constants';
+import { columns, expandField, subItemsField } from './constants';
 import employees from './data';
-import { DataState, Employee } from './interface';
+import { DataState, Employee, FBBOMProps } from './interface';
 
 interface AppState {
   data: Employee[]
@@ -13,7 +13,7 @@ interface AppState {
   expanded: number[]
 }
 
-const App = () => {
+const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   const [state, setState] = React.useState<AppState>({
     data: [...employees],
     dataState: {
@@ -39,7 +39,7 @@ const App = () => {
     });
   };
 
-  const addExpandField = (dataTree: Employee) => {
+  const addExpandField = (dataTree: Employee[]) => {
     const expanded: number[] = state.expanded;
     return mapTree(dataTree, subItemsField, (item) =>
       extendDataItem(item, subItemsField, {
@@ -50,31 +50,32 @@ const App = () => {
 
   const processData = () => {
     const { data, dataState } = state;
-    const filteredData: Employee[] = filterBy(
+    const filteredData = dataState.filter && filterBy(
       data,
       dataState.filter,
       subItemsField,
     );
-    const sortedData: Employee[] = orderBy(
+    const sortedData = dataState.sort && filteredData && orderBy(
       filteredData,
       dataState.sort,
       subItemsField,
     );
-    return addExpandField(sortedData);
+    return addExpandField(sortedData as Employee[]);
   };
 
   return (
-    <h1>i am</h1>
-    // <TreeList
-    //   style={{ maxHeight: '510px', overflow: 'auto' }}
-    //   expandField={expandField}
-    //   subItemsField={subItemsField}
-    //   onExpandChange={onExpandChange}
-    //   sortable={{ mode: 'multiple' }}
-    //   {...state.dataState}
-    //   data={processData()}
-    //   onDataStateChange={handleDataStateChange}
-    //   columns={columns}
-    // />
+    <TreeList
+      style={{ maxHeight: '510px', overflow: 'auto' }}
+      expandField={expandField}
+      subItemsField={subItemsField}
+      onExpandChange={onExpandChange}
+      sortable={{ mode: 'multiple' }}
+      {...state.dataState}
+      data={processData()}
+      onDataStateChange={handleDataStateChange}
+      columns={columns}
+    />
   );
 };
+
+export default FBBOMTreeList;

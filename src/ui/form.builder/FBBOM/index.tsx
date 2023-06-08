@@ -1,6 +1,11 @@
 import React from 'react';
+import FBBOMTreeList from './components/treelist';
 
-const FBBOM: React.FunctionComponent = () => (<>BOM Container
-</>);
+const FBBOM: React.FunctionComponent = () => {
+  return (
+    <>
+      <FBBOMTreeList />
+    </>);
+};
 
 export default FBBOM;
