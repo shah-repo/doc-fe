@@ -1,5 +1,7 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
@@ -13,8 +15,6 @@ import { DEFAULT_CATEGORY_LABEL } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { withFBApprovalMatrix } from './wrap';
-import { Box } from '@material-ui/core';
-import cx from 'classnames';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
@@ -32,7 +32,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   });
 
   const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
-    id: generateUuid() as string,
+    id: generateUuid(),
     docType: {
       name: '',
       group: FBDocTypeGroup.OTHER,
