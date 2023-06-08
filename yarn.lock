@@ -2352,6 +2352,13 @@
   dependencies:
     tslib "^1.7.0"
 
+"@progress/kendo-draggable-common@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-draggable-common/-/kendo-draggable-common-0.2.3.tgz#b4603d73239a85d13b467f11204db6f54e831c6f"
+  integrity sha512-e1FraFsT7zwevswzZlQYL//K+fzmRUvkr/4emp51dzkARLDtGd95BtPNSoXYRG5xYHeueKBS75hzVwQI6Dm3Dg==
+  dependencies:
+    tslib "^1.7.0"
+
 "@progress/kendo-draggable-common@dev":
   version "0.2.0-dev.202111240934"
   resolved "https://registry.yarnpkg.com/@progress/kendo-draggable-common/-/kendo-draggable-common-0.2.0-dev.202111240934.tgz#9bca8714b0293baa4decb2a74a16a1eb120a7a7d"
@@ -2402,6 +2409,14 @@
   integrity sha512-oLaSedtLpv7YfxECWRkUT+2jXmPxyuZAflQFWD0AfTZu+8KVFLSnqGmxwgBP50Jth/SfhGFXe0ccmIV9mn1N0g==
   dependencies:
     "@progress/kendo-draggable-common" dev
+    prop-types "^15.6.0"
+
+"@progress/kendo-react-common@5.14.0":
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-common/-/kendo-react-common-5.14.0.tgz#b97f37fc221c4f92646d5aa7ac5cbb48bd74cda4"
+  integrity sha512-IiffARzPEEDWob2LW+xzndTNMsYWtigVBYimZV2iIztNquFPxY+akrnrH2f0LsJUy20Qn4+3iFCJ+0B3j+4z9w==
+  dependencies:
+    "@progress/kendo-draggable-common" "^0.2.3"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-data-tools@^4.13.0":
@@ -2503,6 +2518,14 @@
     "@progress/kendo-react-common" "4.13.0"
     prop-types "^15.6.0"
 
+"@progress/kendo-react-treelist@^5.14.0":
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-treelist/-/kendo-react-treelist-5.14.0.tgz#84a3fc5de3c80ff9fe6ed852cc7a4872fdefc69b"
+  integrity sha512-TW0YDQ8ub7n6a30KigVkzUGl93qVBl1fjyqFEnTZbDb9lw6Gr391a/fSmYN3LGJmndnvJDa0iUL546WnJJ+Fww==
+  dependencies:
+    "@progress/kendo-react-common" "5.14.0"
+    prop-types "^15.6.0"
+
 "@progress/kendo-react-treeview@^4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@progress/kendo-react-treeview/-/kendo-react-treeview-4.13.0.tgz#de70712239900c40008292d829e3836d85257406"
@@ -2510,6 +2533,11 @@
   dependencies:
     "@progress/kendo-react-common" "4.13.0"
     prop-types "^15.6.0"
+
+"@progress/kendo-svg-icons@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-svg-icons/-/kendo-svg-icons-1.5.0.tgz#39b1df823745cd9e52e8292edc5b7d457711fb51"
+  integrity sha512-mEMDFemkBGqDfjiXzouHTjlw75V6Lgk3RygG1ZeojzBItj/FsiwCBqv3sM72GSAKNTwkFh6YI5+zM1Kiovwh6g==
 
 "@progress/pako-esm@^1.0.1":
   version "1.0.1"

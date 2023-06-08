@@ -63,19 +63,16 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     return addExpandField(sortedData as Employee[]);
   };
 
-  return (
-    <TreeList
-      style={{ maxHeight: '510px', overflow: 'auto' }}
-      expandField={expandField}
-      subItemsField={subItemsField}
-      onExpandChange={onExpandChange}
-      sortable={{ mode: 'multiple' }}
-      {...state.dataState}
-      data={processData()}
-      onDataStateChange={handleDataStateChange}
-      columns={columns}
-    />
-  );
+  return <TreeList
+    expandField={expandField}
+    subItemsField={subItemsField}
+    onExpandChange={onExpandChange}
+    sortable={{ mode: 'multiple' }}
+    {...state.dataState}
+    data={processData()}
+    onDataStateChange={handleDataStateChange}
+    columns={columns}
+  />;
 };
 
 export default FBBOMTreeList;
