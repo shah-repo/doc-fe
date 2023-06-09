@@ -23,7 +23,7 @@ export interface LotTransfer {
   type: LotTransferType
   from: string // location id
   to?: string // location id
-  build?: string // eb or lhr id
+  build?: { id: string, docId: string } // eb or lhr
   quantity: number
   date: Date
   by: string // employee id

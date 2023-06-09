@@ -28,7 +28,7 @@ const TRANSACTIONS: LotTransfer[] = [
     type: LotTransferType.Allocate,
     from: 'loc_1',
     to: 'loc_2',
-    build: '315d5432-e89a-458b-8d97-5c354e61ab6a',
+    build: { id: '315d5432-e89a-458b-8d97-5c354e61ab6a', docId: 'EB-00349' },
     quantity: 12,
     date: new Date(),
     by: '43d2119f-795f-49ff-bb2d-faad728fd6f5',
