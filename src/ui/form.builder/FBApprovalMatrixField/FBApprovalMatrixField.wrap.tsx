@@ -16,12 +16,11 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
   }: T) => {
 
     const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
-    const { document: { outputRevision = false } = {}, isOutput } = workspaceState || {};
-    const formValue = formState?.getFieldValue(name);
+    const { document: { outputRevision = false } = {}, formInput, isOutput } = workspaceState || {};
 
     const approvalMatrixState = !approvalMatrixFieldState ? (
       FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-        formValue: { [type as string]: cloneDeep(formValue) },
+        formValue: cloneDeep(formInput),
         outputRevision,
         isOutput,
       })) : approvalMatrixFieldState;
