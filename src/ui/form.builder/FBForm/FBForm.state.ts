@@ -34,7 +34,7 @@ class FBFormState extends FBSchemaState {
   @observable public locked = new Map<string, FBLockValue>();
   @observable public approvalMap = {};
 
-  public constructor({
+  public constructor ({
     schema,
     initialValues = {},
     workspaceMode, workspaceState,
@@ -51,11 +51,11 @@ class FBFormState extends FBSchemaState {
     this.workspaceState = workspaceState;
   }
 
-  @computed public get Validator(): any {
+  @computed public get Validator (): any {
     return lodashGet(window, 'EnlilRemoteValidators.validator');
   }
 
-  public get shouldValidate(): boolean {
+  public get shouldValidate (): boolean {
     return !FBWorkspaceSkipValidationModes.some((mode) => this.workspaceMode === mode);
   }
 
@@ -105,7 +105,7 @@ class FBFormState extends FBSchemaState {
     return lodashGet(this.values, fieldName);
   };
 
-  private setValidationValue = (fieldName: string, value: any) => {
+  private readonly setValidationValue = (fieldName: string, value: any) => {
     if (isBoolean(value)) {
       // validatorjs doesn't validate boolean values
       value = `${value}`;
@@ -145,6 +145,7 @@ class FBFormState extends FBSchemaState {
   @action public setApprovalMap = (approvals) => {
     set(this, 'approvalMap', { ...this.approvalMap, ...approvals });
   };
+
   @action public setRules = (rules: Dictionary<string>) =>
     set(this.rules, rules);
 
@@ -247,7 +248,7 @@ class FBFormState extends FBSchemaState {
       });
   };
 
-  private parseRules = (rules: Dictionary<string>, values: Dictionary<string>): Dictionary<string> => {
+  private readonly parseRules = (rules: Dictionary<string>, values: Dictionary<string>): Dictionary<string> => {
     const parsedRules = {};
     map(rules, (value, key) => {
       if (!isString(value)) { return; }
@@ -292,7 +293,7 @@ class FBFormState extends FBSchemaState {
   public registerValidator = (validator: any) => {
     this.Validator.registerAsyncImplicit(
       'required_if_in',
-      function(val: string[], req: string[], attribute: string, passes) {
+      function (val: string[], req: string[], attribute: string, passes) {
         const reqs = req?.[1];
         const reqName = req?.[0] || '';
         let inputValue = lodashGet(validator.input, reqName);
@@ -301,8 +302,7 @@ class FBFormState extends FBSchemaState {
         const diff = inputValue && inputValue.filter((inputVal) => {
           try {
             return values(JSON.parse(reqs)).includes(inputVal);
-          }
-          catch {
+          } catch {
             return reqs.includes(inputVal);
           }
         });
@@ -320,22 +320,21 @@ class FBFormState extends FBSchemaState {
       });
     this.Validator.registerAsyncImplicit(
       'required_if',
-      function(val: string[], req: string[], attribute: string, passes) {
+      function (val: string[], req: string[], attribute: string, passes) {
         const reqs = req?.[1];
         const reqName = req?.[0] || '';
         const inputValue = lodashGet(validator.input, reqName);
         const { messages: { attributeNames } } = validator;
-        if (!inputValue) {  return passes(); }
-        if (!val)
-        { return passes(
-          false,
+        if (!inputValue) { return passes(); }
+        if (!val && reqs === inputValue) {
+          return passes(
+            false,
           `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} is 
-          ${attributeNames[reqs]}`); }
+          ${attributeNames[reqs] ?? reqs}`);
+        }
 
         return passes();
-
       });
-
   };
 
   public setFieldAutosave = (name?: string) => {
@@ -348,7 +347,7 @@ class FBFormState extends FBSchemaState {
 
   public lockField = (
     body: Partial<FBLockBody>,
-    fieldName: string
+    fieldName: string,
   ) => {
     // if (!this.includeLocking) { return; }
     // if (this.locked?.get(fieldName)?.locked) { return; }
