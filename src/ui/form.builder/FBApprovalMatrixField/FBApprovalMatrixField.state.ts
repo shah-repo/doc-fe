@@ -38,27 +38,31 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     this.data = formValue;
   }
 
-  public getCurrentData = <T extends DataKey>(type: T): DataType<T>[] => {
-    if (!this.data) {
-      return [];
+  public extractData = <T extends DataKey>(data: FBApprovalMatrixFieldData | undefined, type: T): Array<DataType<T>> | undefined => {
+    if (!data) {
+      return undefined;
     }
+
     switch (type) {
       case 'roles':
         return (
-          this.data.approvalRoles
-          ?? this.data[FBDAMFields.DAR]
-          ?? []
-        ) as DataType<T>[];
+          data.approvalRoles
+          ?? data[FBDAMFields.DAR]?.approvalRoles
+          ?? data[FBDAMFields.DAR]
+        ) as Array<DataType<T>>;
       case 'matrix':
         return (
-          this.data.approvalMatrix
-          ?? this.data[FBDAMFields.DAM]?.approvalMatrix
-          ?? this.data[FBDAMFields.DAM]
-          ?? []
-        ) as DataType<T>[];
+          data.approvalMatrix
+          ?? data[FBDAMFields.DAM]?.approvalMatrix
+          ?? data[FBDAMFields.DAM]
+        ) as Array<DataType<T>>;
       default:
-        return [];
+        return undefined;
     }
+  };
+
+  public getCurrentData = <T extends DataKey>(type: T): Array<DataType<T>> | undefined => {
+    return this.extractData(this.data, type);
   };
 
   @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
@@ -77,20 +81,20 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
   @action public setApprovalRoles = (approvalRoles?: FBApprovalRole[]) => {
     set(this, 'data', {
       approvalRoles,
-      approvalMatrix: this.getCurrentData('matrix'),
+      approvalMatrix: this.getCurrentData('matrix') ?? [],
     });
   };
 
   @action public setApprovalMatrix = (approvalMatrix?: FBApprovalMatrixItem[]) => {
     set(this, 'data', {
-      approvalRoles: this.getCurrentData('roles'),
+      approvalRoles: this.getCurrentData('roles') ?? [],
       approvalMatrix,
     });
   };
 
   @action public addApprovalRole = (role: FBApprovalRole) => {
-    const defaultApprovalRoles: FBApprovalRole[] = this.getCurrentData('roles');
-    const defaultApprovalMatrix: FBApprovalMatrixItem[] = this.getCurrentData('matrix');
+    const defaultApprovalRoles: FBApprovalRole[] = this.getCurrentData('roles') ?? [];
+    const defaultApprovalMatrix: FBApprovalMatrixItem[] = this.getCurrentData('matrix') ?? [];
     const approvalRoles = union(defaultApprovalRoles, [{
       ...role,
       id: generateUuid(),
