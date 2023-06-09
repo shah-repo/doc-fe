@@ -1,8 +1,8 @@
-import { get, isArray, isEmpty, isUndefined, omit, set } from 'lodash';
+import { get, isEmpty, isUndefined, omit, set } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBDAMFields } from '..';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem } from '..';
 import { SM } from '../../../App';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { DEFAULT_CATEGORY_LABEL } from './constants';
@@ -54,18 +54,12 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     const { status } = document ?? {};
 
     useObserver(() => {
-      let approvalRoles = get(formInput, FBDAMFields.DAR)
-        ?? get(formInput, 'approvalRoles')
-        ?? approvalMatrixFieldState?.getCurrentData('roles')
+      const approvalRoles = approvalMatrixFieldState?.getCurrentData('roles')
+        ?? approvalMatrixFieldState?.extractData(formInput as FBApprovalMatrixFieldData, 'roles')
         ?? [];
 
-      if (!isArray(approvalRoles)) {
-        approvalRoles = get(approvalRoles, 'approvalRoles');
-      }
-
-      const approvalMatrix = get(formInput, FBDAMFields.DAM)
-        ?? get(formInput, 'approvalMatrix')
-        ?? approvalMatrixFieldState?.getCurrentData('matrix')
+      const approvalMatrix = approvalMatrixFieldState?.getCurrentData('matrix')
+        ?? approvalMatrixFieldState?.extractData(formInput as FBApprovalMatrixFieldData, 'matrix')
         ?? [];
 
       // Clear statuses for deprecated documents and items without active status.
