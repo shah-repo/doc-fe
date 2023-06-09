@@ -1,6 +1,7 @@
 import { FBInputProps } from '..';
+import { Employee } from '../../../state/ducks/company/types';
 
-export interface Location {
+export interface CompanyLocation {
   id: string
   name: string
 }
@@ -9,7 +10,8 @@ export type FBLotTransactionsProps =
 & Pick<FBInputProps, 'name' | 'disabled'>
 & {
   transactions?: LotTransfer[]
-  locations?: Location[]
+  locations?: CompanyLocation[]
+  employees?: Employee[]
   addLotTransaction?: (transaction: LotTransfer) => void
 };
 
@@ -27,5 +29,5 @@ export interface LotTransfer {
   quantity: number
   date: Date
   by: string // employee id
-  comment?: string
+  comments?: string
 }

@@ -1,6 +1,6 @@
-import { Location, LotTransfer, LotTransferType } from './types';
+import { CompanyLocation, LotTransfer, LotTransferType } from './types';
 
-const LOCATIONS: Location[] = [
+const LOCATIONS: CompanyLocation[] = [
   {
     id: 'loc_1',
     name: 'Storage (bin 1)',
@@ -32,7 +32,7 @@ const TRANSACTIONS: LotTransfer[] = [
     quantity: 12,
     date: new Date(),
     by: '43d2119f-795f-49ff-bb2d-faad728fd6f5',
-    comment: 'Allocated to cleanroom 1',
+    comments: 'Allocated to cleanroom 1',
   },
   {
     type: LotTransferType.Return,
@@ -45,4 +45,4 @@ const TRANSACTIONS: LotTransfer[] = [
 ];
 
 export const getLotTransactions = (): LotTransfer[] => TRANSACTIONS;
-export const getLocations = (): Location[] => LOCATIONS;
+export const getLocations = (): CompanyLocation[] => LOCATIONS;
