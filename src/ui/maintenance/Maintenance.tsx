@@ -1,6 +1,6 @@
-import React from "react";
-import Text from "../components/Text";
-import { styles } from "./Maintenance.styles";
+import React from 'react';
+import Text from '../components/Text';
+import { styles } from './Maintenance.styles';
 
 const Maintenance: React.FunctionComponent = () => {
   const classes = styles();
@@ -15,7 +15,7 @@ const Maintenance: React.FunctionComponent = () => {
       <div className={classes.base}>
         <img src="/maintenance.svg" alt="Maintenance" className={classes.image} />
       </div>
-      <div className={classes.base} style={{ textAlign: "center", whiteSpace: "pre-line" }}>
+      <div className={classes.base} style={{ textAlign: 'center', whiteSpace: 'pre-line' }}>
         <h1 className={classes.title}>
           <Text translation="maintenance.title" />
         </h1>

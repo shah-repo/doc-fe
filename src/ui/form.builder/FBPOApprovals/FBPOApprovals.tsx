@@ -1,20 +1,23 @@
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import cx from "classnames";
-import { orderBy } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
-import { ReactComponent as EmailSuccessIcon } from "../../../assets/images/email_success.svg";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../../ui/components/Text";
-import { getInitalsFromName } from "../../components/icons/avatar/helpers";
-import Colors from "../../layout/theme/utils/colors";
-import ApprovalsBlock from "./ApprovalsBlock";
-import useStyles from "./FBPOApprovals.styles";
-import { FBPOApprovalsProps } from "./FBPOApprovals.types";
-import { withFBPOApprovals } from "./FBPOApprovals.wrap";
+import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import cx from 'classnames';
+import { orderBy } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from '..';
+import { ReactComponent as EmailSuccessIcon } from '../../../assets/images/email_success.svg';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../../ui/components/Text';
+import { getInitalsFromName } from '../../components/icons/avatar/helpers';
+import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import Colors from '../../layout/theme/utils/colors';
+import ApprovalsBlock from './ApprovalsBlock';
+import useStyles from './FBPOApprovals.styles';
+import { FBPOApprovalsProps } from './FBPOApprovals.types';
+import { withFBPOApprovals } from './FBPOApprovals.wrap';
 
 const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   renderOption,
@@ -52,6 +55,11 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
 
   const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
   const intl = useIntl();
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+  disabled =
+    isDocumentRevisionReleased(documentStatus) && isUserAdminEnforce
+      ? isUserAdminEnforce
+      : disabled;
 
   return  (
     <FBProvider {...{ dialogState }}>
@@ -77,11 +85,11 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
             {...{ disabled, renderOption, loading, disabledOptions }}
           />
           <Box display="flex" flexWrap="wrap" my={2}>
-            <FBMapWrapper<FBRequiredApprover[]> collection={orderBy(groups, "documentStage")}>
+            <FBMapWrapper<FBRequiredApprover[]> collection={orderBy(groups, 'documentStage')}>
               {(group: FBRequiredApprover) => (
-                <Box display="flex" data-cy={ isIncluded?.(group) ? "check-circle-primary" : "check-circle-disabled" }
+                <Box display="flex" data-cy={ isIncluded?.(group) ? 'check-circle-primary' : 'check-circle-disabled' }
                   key={`fb-po-approvals-group-${group.id}`} mr={2.5}>
-                  <CheckCircleIcon style = {{ color: isIncluded?.(group) ? Colors.green_blue : "disabled" }} />
+                  <CheckCircleIcon style = {{ color: isIncluded?.(group) ? Colors.green_blue : 'disabled' }} />
                   <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
                 </Box>
               )}
@@ -94,12 +102,12 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
               {(approvals, status) => {
 
                 const poStatusText = pendingStates.includes(status)
-                  ? "common.pending.approval"
-                  : "APPROVED";
+                  ? 'common.pending.approval'
+                  : 'APPROVED';
 
                 const poStatusHeaderText = pendingStates.includes(status)
-                  ? "common.pending"
-                  : "APPROVED";
+                  ? 'common.pending'
+                  : 'APPROVED';
 
                 const poStatusHeaderTextMessage = intl.formatMessage({
                   id: poStatusHeaderText,
@@ -171,13 +179,13 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                           label="common.reject"
                                           size="small"
                                           className={cx(classes.poButton, classes.poRejectButton)}
-                                          onClick={() => approvalTransition("reject", approval.id)}
+                                          onClick={() => approvalTransition('reject', approval.id)}
                                         />
                                         <FBButton
                                           label="form.builder.request.approve"
                                           size="small"
                                           className={classes.poButton}
-                                          onClick={() => onApproveClick?.(approval.id || "")}
+                                          onClick={() => onApproveClick?.(approval.id || '')}
                                         />
                                       </Box>
                                     )

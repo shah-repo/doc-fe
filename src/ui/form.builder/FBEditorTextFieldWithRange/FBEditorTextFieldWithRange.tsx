@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBCheckbox, FBData, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassPercentage, FBRange, FBSelect, FBTextField } from "..";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { styles } from "../styles/FBEditorCheckbox.styles";
-import { withFBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBCheckbox, FBData, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassPercentage, FBRange, FBSelect, FBTextField } from '..';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { styles } from '../styles/FBEditorCheckbox.styles';
+import { withFBEditorTextFieldWithRange } from './FBEditorTextFieldWithRange.wrap';
 
 const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithRangeProps> = ({
   formState,
@@ -69,7 +69,7 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           <FBSelect
             name="editorConfig.pass.type"
             style={{ height: 47 }}
-            boxProps={{ minWidth: "27%", ml: 2 }}
+            boxProps={{ minWidth: '27%', ml: 2 }}
             options={FBData.passTypeOptions}
             gutter={false}
             withState

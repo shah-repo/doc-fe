@@ -1,23 +1,23 @@
-import { Box, BoxProps, ClickAwayListener } from "@material-ui/core";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import * as React from "react";
-import { useState } from "react";
-import { useIntl } from "react-intl";
-import { createFilter } from "react-select";
-import { SelectComponentsProps } from "react-select/base";
-import CreatableSelect, { CreatableProps } from "react-select/creatable";
-import { ActionMeta, ValueType } from "react-select/src/types";
-import { SM } from "../../../../../App";
-import { TypographyProps } from "../../../../../state/ducks/common/types";
-import Colors from "../../../../layout/theme/utils/colors";
-import { useFormContext } from "../../FormContext";
-import Field, { FieldOwnProps } from "../Field";
-import { selectStyles } from "./Autocomplete";
-import { OptionType } from "./types";
+import { Box, BoxProps, ClickAwayListener } from '@material-ui/core';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import * as React from 'react';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { createFilter } from 'react-select';
+import { SelectComponentsProps } from 'react-select/base';
+import AsyncCreatableSelect, { Props as AsyncCreatableSelectProps } from 'react-select/async-creatable';
+import { ActionMeta, ValueType } from 'react-select/src/types';
+import { SM } from '../../../../../App';
+import { TypographyProps } from '../../../../../state/ducks/common/types';
+import Colors from '../../../../layout/theme/utils/colors';
+import { useFormContext } from '../../FormContext';
+import Field, { FieldOwnProps } from '../Field';
+import { selectStyles, selectTheme } from './Autocomplete';
+import { OptionType } from './types';
 
 interface AutocompleteOwnProps extends FieldOwnProps {
-  creatableProps: SelectComponentsProps & CreatableProps<any>;
-  options: OptionType[];
+  creatableProps: SelectComponentsProps & AsyncCreatableSelectProps<any>;
+  options?: OptionType[];
   isDisabled?: boolean;
   placeholder?: string;
   labelProps?: BoxProps;
@@ -51,8 +51,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     field: { name },
   } = fieldProps;
   const onChange = (value: ValueType<OptionType>, action: ActionMeta) => {
-    if (action.action === "clear") {
-      setInputValue("");
+    if (action.action === 'clear') {
+      setInputValue('');
     }
     else {
       setInputValue((value as any)?.value);
@@ -93,7 +93,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   };
 
   const intl = useIntl();
-  const titlePlaceholder = intl.formatMessage({ id: "form.builder.enter.title" });
+  const titlePlaceholder = intl.formatMessage({ id: 'form.builder.enter.title' });
 
   return (
     <Field {...fieldProps} label={undefined} labelProps={labelProps}>
@@ -117,7 +117,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           onClick={() => { setShowOnlyText(false); }}
         >{inputValue || titlePlaceholder}
         </Box>}
-          {!showOnlyText && <CreatableSelect
+          {!showOnlyText && <AsyncCreatableSelect
             inputValue={inputValue}
             value={value}
             styles={{
@@ -125,28 +125,29 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
               input: (base) => ({
                 ...base,
                 input: {
-                  opacity: "1 !important",
+                  opacity: '1 !important',
                   fontWeight: 600,
-                  fontFamily: "Sora",
+                  fontFamily: 'Sora',
                   color: Colors.almost_black,
                   fontSize: 19,
-                  letterSpacing: "normal",
+                  letterSpacing: 'normal',
                 },
               }),
               control: (base) => ({
                 ...base,
-                fontSize: "19px",
+                fontSize: '19px',
                 fontWeight: 600,
-                lineHeight: "24px",
-                minHeight: "32px",
-                boxShadow: "none",
-                maxWidth: document.getElementById("doc-header-title")?.offsetWidth,
+                lineHeight: '24px',
+                minHeight: '32px',
+                boxShadow: 'none',
+                maxWidth: document.getElementById('doc-header-title')?.offsetWidth,
               }),
               menu: (provided) => ({
                 ...provided,
                 zIndex: 5,
               }),
             }}
+            theme={selectTheme}
             autoFocus={true}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}

@@ -1,24 +1,24 @@
-import { filterBy } from "@progress/kendo-data-query";
+import { filterBy } from '@progress/kendo-data-query';
 import {
   MultiSelect,
   MultiSelectChangeEvent,
   MultiSelectFilterChangeEvent,
-} from "@progress/kendo-react-dropdowns";
-import { GridCellProps } from "@progress/kendo-react-grid";
-import { filter, map } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
+} from '@progress/kendo-react-dropdowns';
+import { GridCellProps } from '@progress/kendo-react-grid';
+import { filter, map } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   Group,
   GroupTag,
   GroupType,
   Permission,
-} from "../../../../state/ducks/auth/types";
-import { Nullable } from "../../../../state/ducks/common/types";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
-import { AddUserManage } from "../types";
-import { styles } from "./styles";
+} from '../../../../state/ducks/auth/types';
+import { Nullable } from '../../../../state/ducks/common/types';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
+import { AddUserManage } from '../types';
+import { styles } from './styles';
 
 interface GroupOptions {
   label: string;
@@ -51,7 +51,7 @@ export const GroupsCell = ({
   const [data, setData] = React.useState<GroupOptions[]>([]);
 
   React.useEffect(() => {
-    const upDatedGroupIds = map(updatedGridData?.groups, "id");
+    const upDatedGroupIds = map(updatedGridData?.groups, 'id');
     const selectedGroups = filter(groupOptions, (o) => upDatedGroupIds.includes(o.value));
     setData(groupOptions);
     if (selectedGroups.length) {
@@ -64,7 +64,7 @@ export const GroupsCell = ({
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
     dataItem.groups = target.value.map((item) => ({
-      id: item.value || "",
+      id: item.value || '',
     }));
     setResult(target.value);
   };
@@ -75,7 +75,7 @@ export const GroupsCell = ({
     setData(newData);
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 
@@ -99,7 +99,7 @@ export const GroupsCell = ({
           defaultValue={defaultGroups}
         />
       ) : (
-        <ExpandableTemplate items={dataItem.groups.split(",")} dataId={`${dataItem.id}-${columnIndex}`} />
+        <ExpandableTemplate items={dataItem.groups.split(',')} dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );

@@ -1,13 +1,13 @@
 
-import { Box, Button, ClickAwayListener } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React, { useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
-import { useIntl } from "react-intl";
-import { SMTextEditorProps } from "../../..";
-import Colors from "../../../../ui/layout/theme/utils/colors";
-import { editorStyles, SMEditorStyles } from "./SMTextEditor.styles";
-import { withSMTextEditor } from "./SMTextEditor.wrap";
+import { Box, Button, ClickAwayListener } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React, { useState } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import { useIntl } from 'react-intl';
+import { SMTextEditorProps } from '../../..';
+import Colors from '../../../../ui/layout/theme/utils/colors';
+import { editorStyles, SMEditorStyles } from './SMTextEditor.styles';
+import { withSMTextEditor } from './SMTextEditor.wrap';
 
 
 const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
@@ -33,9 +33,9 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const classes = SMEditorStyles();
   const intl = useIntl();
   const [hover, setHover] = useState(false);
-  const descriptionPlaceholder = intl.formatMessage({ id: "form.builder.enter.description" });
-  const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
-  const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
+  const descriptionPlaceholder = intl.formatMessage({ id: 'form.builder.enter.description' });
+  const viewMore = intl.formatMessage({ id: 'document.revision.view.more' });
+  const viewLess = intl.formatMessage({ id: 'document.revision.view.less' });
   const toggleEditMode = () => {
     _textEditorState?.togglePreviewMode();
     _documentRevisionFormState?.toggleDescriptionFocused();
@@ -70,7 +70,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
       <Observer>
         {() => (
           <Box
-            bgcolor={hover && _textEditorState?.previewMode ? Colors.whitest_grey : "transparent"}
+            bgcolor={hover && _textEditorState?.previewMode ? Colors.whitest_grey : 'transparent'}
             borderRadius={4}
             paddingTop={_textEditorState?.previewMode ? 0.5 : 0}
             paddingBottom={_textEditorState?.previewMode ? 0.5 : 0}
@@ -81,14 +81,14 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
-                bgcolor={hover ? Colors.whitest_grey : "transparent"}
-                style={{ display: "grid" }}
+                bgcolor={hover ? Colors.whitest_grey : 'transparent'}
+                style={{ display: 'grid' }}
               >
                 <Box
-                  style={{ gridArea: "1/1" }}
+                  style={{ gridArea: '1/1' }}
                   borderRadius={4}
                   data-cy={name}
-                  bgcolor={_textEditorState?.previewMode ? "transparent" : Colors.white}
+                  bgcolor={_textEditorState?.previewMode ? 'transparent' : Colors.white}
                 >
                   <Observer>
                     {() => (
@@ -98,7 +98,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         {...{ onBlur, editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
                         toolbar={{
-                          options: ["inline", "colorPicker", "list", "textAlign", "link", "remove", "history"],
+                          options: ['inline', 'colorPicker', 'list', 'textAlign', 'link', 'remove', 'history'],
                         }}
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}

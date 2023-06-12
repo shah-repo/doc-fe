@@ -1,6 +1,6 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import Text from "../Text";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import Text from '../Text';
 
 interface OwnProps {
   numberOfRecords: number;
@@ -16,7 +16,7 @@ export const DocumentInfo: React.FunctionComponent<Props> = ({
         :&nbsp;
     <span
       data-testid="numberOfRecords"
-      style={{ fontWeight: "bold" }}
+      style={{ fontWeight: 'bold' }}
       data-cy="numberOfDocuments"
     >
       {numberOfRecords}

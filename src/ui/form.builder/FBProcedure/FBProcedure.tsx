@@ -1,15 +1,15 @@
-import { Box } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import React, { useState } from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor, FBTooltip } from "..";
-import { ReactComponent as OutlinedCloneIcon } from "../../../assets/images/clone.svg";
-import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_dark.svg";
-import Colors from "../../layout/theme/utils/colors";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { styles } from "./FBProcedure.style";
-import { withFBProcedure } from "./FBProcedure.wrap";
+import { Box } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import React, { useState } from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor, FBTooltip } from '..';
+import { ReactComponent as OutlinedCloneIcon } from '../../../assets/images/clone.svg';
+import { ReactComponent as CloneIcon } from '../../../assets/images/formBuilder/clone_dark.svg';
+import Colors from '../../layout/theme/utils/colors';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { styles } from './FBProcedure.style';
+import { withFBProcedure } from './FBProcedure.wrap';
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   onKeyDown,
@@ -34,7 +34,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
       {!isOutput && (
         <FBLabel
           label={{
-            locale: "form.builder.step.number",
+            locale: 'form.builder.step.number',
             values: { number: stepIndex },
           }}
           labelProps={FBFontStyle.labelProps}
@@ -57,14 +57,14 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                         data-cy="form.builder.clone.step"
                         onClick={() => handleAdd?.(true)}
                         {...{ disabled }}
-                        style={{ marginLeft: "15px", cursor: "pointer" }}
+                        style={{ marginLeft: '15px', cursor: 'pointer' }}
                       />
                       :
                       <OutlinedCloneIcon
                         data-cy="form.builder.clone.step"
                         onClick={() => handleAdd?.(true)}
                         {...{ disabled }}
-                        style={{ marginLeft: "15px", cursor: "pointer" }}
+                        style={{ marginLeft: '15px', cursor: 'pointer' }}
                       />
                     }
                   </FBTooltip>
@@ -73,13 +73,13 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                   onMouseLeave={() => setIsHoverAddIcon(false)}>
                   <FBTooltip title="form.builder.add">
                     { isAddIconHover ?
-                      <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
+                      <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
                         data-cy="form.builder.add.step"
                         onClick={() => handleAdd?.()}
                         {...{ disabled }}
                       />
                       :
-                      <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: "17px", height: "17px" }}
+                      <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                         data-cy="form.builder.add.step"
                         onClick={() => handleAdd?.()}
                         {...{ disabled }}
@@ -94,7 +94,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
               name={`${name}.description`}
               gutter={false}
               label={{
-                locale: "form.builder.step.number",
+                locale: 'form.builder.step.number',
                 values: { number: stepIndex },
               }}
               autosave={false}

@@ -1,22 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isNull, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
-import { autorun, reaction } from "mobx";
-import { useLocalStore } from "mobx-react";
-import React, { cloneElement, useEffect } from "react";
-import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
-import { isTranslation } from "../../translations/types";
-import { FBClasses } from "../defaults/layout";
-import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { withFBOnChange } from "./FBInput.onchange";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isNull, isString, isUndefined, last, map, size, union, uniqWith } from 'lodash';
+import { autorun, reaction } from 'mobx';
+import { useLocalStore } from 'mobx-react';
+import React, { cloneElement, useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
+import { useFormContext } from '../../components/forms/FormContext';
+import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isTranslation } from '../../translations/types';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
+import { FBClasses } from '../defaults/layout';
+import { withFBOnChange } from './FBInput.onchange';
 
 // Initial values only some of the fields have
 export const INDIVIDUAL_INITIAL_VALUES = {
-  placeholder: "",
+  placeholder: '',
   options: [],
   actions: [],
-  paragraph: "",
+  paragraph: '',
 };
 
 // Initial values all the fields share
@@ -27,16 +29,16 @@ export const COMMON_INITIAL_VALUES = {
   rulesObject: {},
   deleted: false,
   deleteInFormDisabled: false,
-  validationMode: "default",
-  validationAttribute: "",
-  rules: "",
+  validationMode: 'default',
+  validationAttribute: '',
+  rules: '',
   applicableOn: [],
   applicableValidationSchema: true,
   editorProperties: [],
 };
 
 export const withFBInput = <T extends FBInputProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     setTranform,
@@ -44,7 +46,7 @@ export const withFBInput = <T extends FBInputProps>(
     onChange,
     onBlur,
     inputState,
-    name = "",
+    name = '',
     children,
     disabled,
     defaultValue,
@@ -89,11 +91,11 @@ export const withFBInput = <T extends FBInputProps>(
     }));
 
     useEffect(() => {
-      includeNotes =
-      (includeNotes || editorProperties?.includes("includeNotes")) &&
-      isOutput &&
-      type !== "blanktplform" &&
-      !workspaceState?.isLHRProductionBuild;
+      includeNotes
+      = (includeNotes || editorProperties?.includes('includeNotes'))
+      && isOutput
+      && type !== 'blanktplform'
+      && !workspaceState?.isLHRProductionBuild;
       inputState?.setIncludeNotes(includeNotes || false);
     }, []);
 
@@ -137,29 +139,29 @@ export const withFBInput = <T extends FBInputProps>(
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.validationValues, name);
 
-    if (validationMode === "visibility" || validationMode === "disabled") {
+    if (validationMode === 'visibility' || validationMode === 'disabled') {
       map(get(formState?.validatorRules, name), (rule) => {
-        const { value = "" } = rule || {};
-        const isValueObj = value?.includes("{") || value?.includes("}");
-        const fieldName: string = first(value.split(",")) || "";
-        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value?.split(","));
+        const { value = '' } = rule || {};
+        const isValueObj = value?.includes('{') || value?.includes('}');
+        const fieldName: string = first(value.split(',')) || '';
+        let fieldValue = value?.substring(value?.indexOf(',') + 1, value?.length) || last(value?.split(','));
 
         if (!fieldName || !formState) {
           return;
         }
 
-        if (!isValueObj && fieldValue.includes(",")) {
-          fieldValue = fieldValue.split(",");
+        if (!isValueObj && fieldValue.includes(',')) {
+          fieldValue = fieldValue.split(',');
         }
         const validationRules = formState.validationRelatedRules[fieldName] || [];
 
         formState.validationRelatedRules[fieldName] = uniqWith(
           union([{ name, value: fieldValue }], validationRules),
-          isEqual
+          isEqual,
         );
 
-        isFieldUnderValidation = ["required_if_in", "required_if"].includes(rule?.name) &&
-          formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
+        isFieldUnderValidation = ['required_if_in', 'required_if'].includes(rule?.name)
+          && formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
 
         let convertedFieldValue;
         try {
@@ -168,21 +170,35 @@ export const withFBInput = <T extends FBInputProps>(
           convertedFieldValue = fieldValue;
         }
         const formStateFieldValue = formState?.getFieldValue(fieldName);
-
-        if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
-          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue) && !isNull(formStateFieldValue)) {
-            showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
-              String(formStateFieldValue) === String(fieldValue);
+        const optionId = find(formState?.workspaceState?.schema, { name: fieldName })?.optionId;
+        if (optionId) {
+          const optionIdString = optionId.toString();
+          if (FBAutocompleteAsyncStore.data.get(optionIdString)) {
+            const arr = Array.from(FBAutocompleteAsyncStore.data.get(optionIdString).values());
+            const originalVal: any = find(arr, { id: formStateFieldValue });
+            let validationString = `${originalVal?.document?.docId} - rev ${originalVal?.displayRevision}`;
+            if (originalVal?.name) {
+              validationString += ` - ${originalVal.name}`;
+            } else if (originalVal?.description) {
+              validationString += ` - ${originalVal.description.replaceAll(/<\/?p>/gi, '')}`;
+            }
+          formState?.setValidationAttributeName(formStateFieldValue, validationString);
           }
-        } else if (typeof convertedFieldValue === "object") {
+        }
+        if (typeof convertedFieldValue === 'string' || typeof convertedFieldValue === 'number') {
+          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue) && !isNull(formStateFieldValue)) {
+            showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue)
+              : String(formStateFieldValue) === String(fieldValue);
+          }
+        } else if (typeof convertedFieldValue === 'object') {
           let intermediateFlag;
           for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
             if (Array.isArray(formState?.getFieldValue(fieldName))) {
               if (isUndefined(intermediateFlag)) {
                 intermediateFlag = false;
               }
-              const flag = !isUndefined(fieldValueEntry) &&
-              formState?.getFieldValue(fieldName).includes(fieldValueEntry);
+              const flag = !isUndefined(fieldValueEntry)
+              && formState?.getFieldValue(fieldName).includes(fieldValueEntry);
               if (flag) {
                 intermediateFlag = flag;
               }
@@ -191,7 +207,6 @@ export const withFBInput = <T extends FBInputProps>(
           if (!isUndefined(intermediateFlag)) {
             showValidationField = intermediateFlag;
           }
-
         }
       });
     }
@@ -199,13 +214,13 @@ export const withFBInput = <T extends FBInputProps>(
     if (isChangeRequest || isOutput || formState?.shouldValidate) {
       let isUnderMode = (
         !feedbackDetails.helperText && (
-          isUndefined(validationValue) ||
-          validationValue === "" ||
-          (isArray(validationValue) && size(validationValue) === 0)
+          isUndefined(validationValue)
+          || validationValue === ''
+          || (isArray(validationValue) && size(validationValue) === 0)
         )
       );
 
-      if (validationMode === "visibility") {
+      if (validationMode === 'visibility') {
         if (isFieldUnderValidation && !isUndefined(showValidationField)) {
           isUnderMode = !showValidationField;
         }
@@ -217,13 +232,13 @@ export const withFBInput = <T extends FBInputProps>(
           workspaceState?.deleteHiddenFieldByRules(name);
         }
       }
-      (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
+      (!disabled && validationMode === 'disabled') && (disabled = isUnderMode);
     }
 
-    function setDefaultValue(): any {
+    function setDefaultValue (): any {
       if (!formState) { return; }
       const value = {
-        editoroptions() {
+        editoroptions () {
           const options: FBOption[] | undefined = formState?.getFieldValue(name, undefined, omitFormValue);
           if (isString(options)) {
             return;
@@ -231,26 +246,28 @@ export const withFBInput = <T extends FBInputProps>(
           const value = optionsToString?.(options);
           return value;
         },
-        autocompleteasync() { return; },
-        autocomplete() { return; },
-        datepicker() {
-          return inputState && (inputState.value = formState.getFieldValue(name, undefined, omitFormValue) || "");
+        // eslint-disable-next-line no-useless-return
+        autocompleteasync () { return; },
+        // eslint-disable-next-line no-useless-return
+        autocomplete () { return; },
+        datepicker () {
+          return inputState && (inputState.value = formState.getFieldValue(name, undefined, omitFormValue) || '');
         },
-        default() {
+        default () {
           isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
           return formState.getFieldValue(
             name,
             (isUndefined(defaultValue)) ? defaultChecked : defaultValue,
-            omitFormValue
+            omitFormValue,
           );
         },
       };
-      const transDefault = (value[type || ""] || value.default)();
+      const transDefault = (value[type || ''] || value.default)();
 
-      (name === "placeholder") && setSpecificDefaultValue(formState.initialValues, "placeholder");
-      (name === "options") && setSpecificDefaultValue(formState.initialValues, "options");
-      (name === "actions") && setSpecificDefaultValue(formState.initialValues, "actions");
-      (name === "paragraph") && setSpecificDefaultValue(formState.initialValues, "paragraph");
+      (name === 'placeholder') && setSpecificDefaultValue(formState.initialValues, 'placeholder');
+      (name === 'options') && setSpecificDefaultValue(formState.initialValues, 'options');
+      (name === 'actions') && setSpecificDefaultValue(formState.initialValues, 'actions');
+      (name === 'paragraph') && setSpecificDefaultValue(formState.initialValues, 'paragraph');
 
       if (isTranslation(transDefault)) {
         return intl.formatMessage({ id: transDefault });
@@ -260,7 +277,12 @@ export const withFBInput = <T extends FBInputProps>(
 
     const child = first(React.Children.toArray(children));
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
-    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
+    const { document } = workspaceState?.document || {};
+    const documentType = document?.documentType?.groupOptions;
+    const isNameMatching = name === 'lhr-end-quantity';
+    const isPreviewForLHR = Boolean(workspaceState?.isPreview && (checkIsDocumentLHR(documentType) || checkIsDocumentLHRT(documentType)));
+
+    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled || ((isPreviewForLHR) && isNameMatching);
 
     // Locked state
     const lockedData = formState?.locked.get(name);
@@ -274,13 +296,13 @@ export const withFBInput = <T extends FBInputProps>(
         name,
         disabled,
         onChange,
-        ...(type !== "textfield" && { onBlur }),
-        ...(withState && type !== "autocomplete" && { value }),
-        ...(type === "textfield" && { error }),
-        ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
-        ...(workspaceState?.mode === "preview"
-            && name !== "password"
-            && formState?.workspaceMode !== "form"
+        ...(type !== 'textfield' && { onBlur }),
+        ...(withState && type !== 'autocomplete' && { value }),
+        ...(type === 'textfield' && { error }),
+        ...(type !== 'datepicker' && type !== 'autocomplete' && !isBoolean(defaultValue) && { defaultValue }),
+        ...(workspaceState?.mode === 'preview'
+            && name !== 'password'
+            && formState?.workspaceMode !== 'form'
             && { className: FBClasses.inputPreview }),
         ...(!isInputOwner && { className: FBClasses.nonOwner }),
       });
@@ -309,7 +331,7 @@ export const withFBInput = <T extends FBInputProps>(
             return;
           }
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
-            if (type === "poreceive" || (type === "autocomplete" && name === "lot_part")) {
+            if (type === 'poreceive' || (type === 'autocomplete' && name === 'lot_part')) {
               submitForm({
                 type: type as FBInputType,
                 name,
@@ -330,7 +352,7 @@ export const withFBInput = <T extends FBInputProps>(
               submitForm();
             }
           }
-        }
+        },
       );
     }, []);
 
@@ -339,7 +361,7 @@ export const withFBInput = <T extends FBInputProps>(
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
       const schemaItem = find(
         workspaceState?.schema,
-        (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name))
+        (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name)),
       );
 
       if (schemaItem) {
@@ -348,18 +370,18 @@ export const withFBInput = <T extends FBInputProps>(
     }, [bookmarked]);
 
     useEffect(() => {
-      const lhrBuilds = workspaceState?.getItemsByType("lhrbuild");
+      const lhrBuilds = workspaceState?.getItemsByType('lhrbuild');
       map(lhrBuilds, (item) => {
         reaction(
-          () => workspaceState?.formInputSync.get(item.name || ""),
+          () => workspaceState?.formInputSync.get(item.name || ''),
           (value) => {
             if (!includeNotes) {
               inputState?.setIncludeNotes(false);
               return;
             }
-            inputState?.setIncludeNotes(value === FBLHRBuildOptions["R&D"]);
+            inputState?.setIncludeNotes(value === FBLHRBuildOptions['R&D']);
           },
-          { fireImmediately: true }
+          { fireImmediately: true },
         );
       });
     }, []);

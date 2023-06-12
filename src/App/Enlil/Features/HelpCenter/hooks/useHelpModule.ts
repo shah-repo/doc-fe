@@ -1,12 +1,12 @@
-import { useRef } from "react";
-import { useSelector } from "react-redux";
-import { useRouteMatch } from "react-router-dom";
-import { SM } from "../../../..";
-import { documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
-import { pageDetailsSelectors } from "../../../../../state/ducks/pageDetails";
-import { ApplicationState } from "../../../../../state/reducers";
-import * as URL from "../../../../../ui/constants/urls";
-import { HelpModule } from "../HelpCenter.types";
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import { SM } from '../../../..';
+import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
+import { pageDetailsSelectors } from '../../../../../state/ducks/pageDetails';
+import { ApplicationState } from '../../../../../state/reducers';
+import * as URL from '../../../../../ui/constants/urls';
+import { HelpModule } from '../HelpCenter.types';
 
 interface RouteChecker {
   module: HelpModule;

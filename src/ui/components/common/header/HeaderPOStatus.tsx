@@ -1,9 +1,9 @@
-import classNames from "classnames";
-import React from "react";
-import { POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
-import Text from "../../../../ui/components/Text";
-import useStyles from "./HeaderPOStatus.styles";
-import { StyledPOStatusButton } from "./HeaderPOStatusButton";
+import classNames from 'classnames';
+import React from 'react';
+import { POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
+import Text from '../../../../ui/components/Text';
+import useStyles from './HeaderPOStatus.styles';
+import { StyledPOStatusButton } from './HeaderPOStatusButton';
 
 interface Props {
   poStatus: POStatusType;

@@ -1,24 +1,20 @@
-
-import { differenceBy, filter, isEmpty, map } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceProps, FBWorkspaceState } from "..";
-import { SM } from "../../../App";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { store } from "../../../state/store";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
+import { differenceBy, filter, isEmpty, map } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceProps, FBWorkspaceState, FBWorkspaceModeOptions } from '..';
+import { SM } from '../../../App';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { store } from '../../../state/store';
+import { checkIsDocumentEquipment, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 
 // Disable missing translation message for the non translation cases.
-
-// eslint-disable-next-line
 const consoleError = console.error.bind(console);
-// eslint-disable-next-line
 console.error = (message, ...args) => {
   if (
-    typeof message === "string" &&
-    (message.startsWith("[React Intl] Cannot format message:") || message.startsWith("[React Intl] Missing message:"))
+    typeof message === 'string'
+    && (message.startsWith('[React Intl] Cannot format message:') || message.startsWith('[React Intl] Missing message:'))
   ) {
     return;
   }
@@ -37,22 +33,23 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     changeRequest,
     autosave = false,
     schema,
+    withoutBottomBar,
     ...props
   }: T) => {
-
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
+    const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
     const isStarterRequired = () => {
-      const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
-      return ["design", "formDesign"].includes(workspaceState?.mode as string)
-        && !_tabsState?.isTabActive("calpmhistory")
-        && !(isEquipmentDoc && _tabsState?.isTabActive("overview"));
+      const isEquipmentDoc = checkIsDocumentEquipment(groupOptions);
+      return ['design', 'formDesign'].includes(workspaceState?.mode as string)
+        && !_tabsState?.isTabActive('calpmhistory')
+        && !(isEquipmentDoc && _tabsState?.isTabActive('overview'));
     };
-    autosave = _formState?.autosave || false;
+    autosave = _formState?.autosave ?? false;
 
     if (isEmpty(workspaceState)) {
-      workspaceState =  FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+      workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
         schema,
         mode,
         autosave,
@@ -71,42 +68,42 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       () => workspaceState?.schema,
       (schema: FBSchemaProps[] | undefined) => {
         _documentRevisionFormState?.setFBSchema(schema);
-      }
+      },
     );
 
     SM.reaction(
       () => workspaceState?.mode,
       (mode: FBWorkspaceMode | undefined) => {
-        _formState?.setMode(mode || "none");
-      }
+        _formState?.setMode(mode ?? 'none');
+      },
     );
 
     SM.reaction(
       () => _formState?.mode,
       (mode?: FBWorkspaceMode) => {
-        workspaceState?.setMode(mode || "none");
-      }
+        workspaceState?.setMode(mode ?? 'none');
+      },
     );
 
     SM.reaction(
       () => _formState?.autosave,
       (autosave?: boolean) => {
-        workspaceState?.setAutosave(autosave || false);
-      }
+        workspaceState?.setAutosave(autosave ?? false);
+      },
     );
 
     SM.reaction(
       () => workspaceState?.isDirty,
       (isDirty: boolean | undefined) => {
-        _formState?.setDirty(isDirty || false);
-      }
+        _formState?.setDirty(isDirty ?? false);
+      },
     );
 
     SM.reaction(
       () => workspaceState?.loading,
       (loading: boolean | undefined) => {
         _formState?.setLoading(loading);
-      }
+      },
     );
 
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -114,6 +111,13 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState && (workspaceState.document = document);
     const { formInput = {} } = document ?? {};
     workspaceState && (workspaceState.formInput = formInput);
+
+    // Form options should remain disabled in output doc types, regardless of their state.
+    withoutBottomBar = ![
+      FBWorkspaceModeOptions.DESIGN,
+      FBWorkspaceModeOptions.FORMPREVIEW,
+    ].includes(workspaceState?.mode as FBWorkspaceModeOptions)
+      && !checkIsDocumentForm(groupOptions);
 
     React.useEffect(() => {
       map(formInput, (value, key) => {
@@ -128,19 +132,19 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
         () => workspaceState?.loadAudit,
         (state) => {
           if (!state) { return; }
-          const { id } = workspaceState || {};
+          const { id } = workspaceState ?? {};
           if (!id) { return; }
           dispatch(documentRevisionsActions.loadAudit(id));
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
-      const schemaDiff = differenceBy(workspaceState?.schema, schema || [], "name");
+      const schemaDiff = differenceBy(workspaceState?.schema, schema ?? [], 'name');
       const sections = filter(schemaDiff, (schemaItem) =>
         schemaItem.type && FBSectionTypes.includes(schemaItem.type));
-      bookmarkState?.removeBookmarks(map(sections, "name"));
+      bookmarkState?.removeBookmarks(map(sections, 'name'));
       workspaceState && (workspaceState.schema = schema);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [schema, workspaceState]);
@@ -167,7 +171,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     useEffect(() => reaction(
       () => workspaceState?.schema,
       () => {
-        const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
+        const canAddFBFields = workspaceState?.mode === 'design' || workspaceState?.mode === 'formDesign';
         if (!canAddFBFields) { return; }
         workspaceState?.saveDocRev();
       },
@@ -182,6 +186,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState,
       snackbarState,
       autosave,
+      withoutBottomBar,
       _tabsState,
       isStarterRequired,
     });

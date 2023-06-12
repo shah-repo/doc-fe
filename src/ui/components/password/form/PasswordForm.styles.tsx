@@ -1,4 +1,4 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, Theme } from '@material-ui/core';
 
 export default (theme: Theme) =>
   createStyles({
@@ -6,11 +6,11 @@ export default (theme: Theme) =>
       minWidth: 400,
     },
     submitButton: {
-      float: "right",
-      clear: "right",
+      float: 'right',
+      clear: 'right',
     },
     cancelButton: {
-      float: "right",
+      float: 'right',
       marginRight: theme.spacing(1),
     },
   });

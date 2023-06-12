@@ -1,15 +1,15 @@
-import { action, observable, set } from "mobx";
-import { FBVisibilityType } from "..";
+import { action, observable, set } from 'mobx';
+import { FBVisibilityType } from '..';
 
 class FBMediaCarouselState {
-  @observable public toolsVisibility: FBVisibilityType= "hidden";
+  @observable public toolsVisibility: FBVisibilityType= 'hidden';
 
   @action public setActiveStep = (step: number) => {
-    set(this, "activeStep", step);
+    set(this, 'activeStep', step);
   };
 
   @action public setToolsVisible = (state: boolean) => {
-    set(this, "toolsVisibility", state ? "visible" : "hidden");
+    set(this, 'toolsVisibility', state ? 'visible' : 'hidden');
   };
 }
 

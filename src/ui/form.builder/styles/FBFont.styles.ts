@@ -1,4 +1,4 @@
-import Colors from "../../layout/theme/utils/colors";
+import Colors from '../../layout/theme/utils/colors';
 
 
 export const FBFontStyle =  {
@@ -8,12 +8,12 @@ export const FBFontStyle =  {
     fontWeight: 600,
     fontSize: 12,
     color: Colors.almost_black,
-    lineHeight: "15px",
+    lineHeight: '15px',
   },
   labelMediumProps: {
     fontWeight: 600,
     fontSize: 14,
     color: Colors.almost_black,
-    lineHeight: "15px",
+    lineHeight: '15px',
   },
 };

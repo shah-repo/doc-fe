@@ -1,6 +1,6 @@
-import { map } from "lodash";
-import React from "react";
-import { FBMapWrapperProps } from "..";
+import { map } from 'lodash';
+import React from 'react';
+import { FBMapWrapperProps } from '..';
 
 const FBMapWrapper = <T extends any>({
   collection,

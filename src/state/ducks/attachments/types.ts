@@ -1,6 +1,6 @@
-import { Id, Nullable, User } from "../common/types";
-import { DocumentRevision } from "../documentRevisions/types";
-import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
+import { Id, Nullable, User } from '../common/types';
+import { DocumentRevision } from '../documentRevisions/types';
+import { ADD_WATERMARK, REMOVE_WATERMARK } from './constants';
 
 export interface Attachment {
   id: string;
@@ -25,14 +25,14 @@ export interface AttachmentDownloadResponse {
 export type AvatarS3linkResponse = AttachmentDownloadResponse;
 
 export enum AttachmentType {
-  Attached = "ATTACHED",
-  CleanCopy = "CLEAN_COPY",
+  Attached = 'ATTACHED',
+  CleanCopy = 'CLEAN_COPY',
 }
 
 export enum WatermarkRequestStatus {
-  Pending = "PENDING",
-  Failed = "FAILED",
-  Done = "DONE",
+  Pending = 'PENDING',
+  Failed = 'FAILED',
+  Done = 'DONE',
 }
 
 interface WatermarkRequester {

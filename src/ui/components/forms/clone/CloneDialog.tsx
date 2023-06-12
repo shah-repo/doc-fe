@@ -7,20 +7,20 @@ import {
   Radio,
   RadioGroup,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/modelClose.svg";
-import { ReactComponent as Active } from "../../../../assets/images/radioActive.svg";
-import { ReactComponent as InActive } from "../../../../assets/images/radioInActive.svg";
-import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import Text from "../../../components/Text";
-import { documentVersionPath } from "../../../document.revision/utils/paths";
-import FBStore from "../../../form.builder/FBStore/FBStore";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { styles } from "./CloneModal.styles";
+} from '@material-ui/core';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { ReactComponent as ModelCloseIcon } from '../../../../assets/images/modelClose.svg';
+import { ReactComponent as Active } from '../../../../assets/images/radioActive.svg';
+import { ReactComponent as InActive } from '../../../../assets/images/radioInActive.svg';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import Text from '../../../components/Text';
+import { documentVersionPath } from '../../../document.revision/utils/paths';
+import FBStore from '../../../form.builder/FBStore/FBStore';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { styles } from './CloneModal.styles';
 
 interface CloneModalProps {
   handleCloneModelClose: () => void;
@@ -32,7 +32,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   documentRevision,
 }) => {
   const classes = styles();
-  const [value, setValue] = React.useState("false");
+  const [value, setValue] = React.useState('false');
   const cloneEB = useActionCreator(documentRevisionsActions.cloneDoc);
   const history = useHistory();
 
@@ -52,7 +52,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   });
 
   const payload = {
-    decoupleEB: value === "true",
+    decoupleEB: value === 'true',
   };
 
   const cloneAction = () => {
@@ -104,7 +104,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
         </Typography>
         <RadioGroup value={value} onChange={handleChange}>
           <FormControlLabel
-            value={"false"}
+            value={'false'}
             control={
               <Radio
                 classes={{ root: classes.radio, checked: classes.checked }}
@@ -120,7 +120,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
             }
           />
           <FormControlLabel
-            value={"true"}
+            value={'true'}
             control={
               <Radio
                 classes={{ root: classes.radio, checked: classes.checked }}

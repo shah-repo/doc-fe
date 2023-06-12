@@ -1,14 +1,14 @@
-import { regular } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog as MuiDialog, DialogActions, DialogContent, DialogTitle, LinearProgress, Typography, useMediaQuery } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { themeNext, withThemeNext } from "../../layout/theme-next";
-import { Button, IconButton } from "../forms/fields-next";
-import { renderNode } from "../forms/fields-next/utils";
-import Text from "../Text";
-import useStyles from "./Dialog.styles";
-import { DialogActionsProps, DialogCloseReason, DialogProps } from "./Dialog.types";
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DialogActions, DialogContent, DialogTitle, LinearProgress, Dialog as MuiDialog, Typography, useMediaQuery } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { themeNext, withThemeNext } from '../../layout/theme-next';
+import Text from '../Text';
+import { Button, IconButton } from '../forms/fields-next';
+import { renderNode } from '../forms/fields-next/utils';
+import useStyles from './Dialog.styles';
+import { DialogActionsProps, DialogCloseReason, DialogProps } from './Dialog.types';
 
 const DefaultDialogActions: React.FC<DialogActionsProps> = ({
   confirmLabel,
@@ -20,7 +20,7 @@ const DefaultDialogActions: React.FC<DialogActionsProps> = ({
 }) => (
   <>
     {cancelLabel && (
-      <Button kind={cancelProps?.kind ?? "ghost"} {...cancelProps} onClick={onCancel}>
+      <Button kind={cancelProps?.kind ?? 'ghost'} {...cancelProps} onClick={onCancel}>
         {renderNode(cancelLabel)}
       </Button>
     )}
@@ -33,7 +33,7 @@ const DefaultDialogActions: React.FC<DialogActionsProps> = ({
 );
 
 const Dialog: React.FC<DialogProps> = ({
-  breakpoint = "xs",
+  breakpoint = 'xs',
   classes: dialogClasses,
   title,
   className,
@@ -76,8 +76,8 @@ const Dialog: React.FC<DialogProps> = ({
       }}
     >
       {!hideCloseButton && (
-        <IconButton kind="boxed" className={classes.close} onClick={handleClose(DialogCloseReason.CLOSE_CLICK)}>
-          <FontAwesomeIcon icon={regular("xmark")} />
+        <IconButton kind="action" className={classes.close} onClick={handleClose(DialogCloseReason.CLOSE_CLICK)}>
+          <FontAwesomeIcon icon={regular('xmark')} />
         </IconButton>
       )}
       {title && (
@@ -86,7 +86,7 @@ const Dialog: React.FC<DialogProps> = ({
           className={cx(titleProps?.className, classes.title, { [classes.titleWithClose]: !hideCloseButton })}
         >
           {
-            typeof title === "string"
+            typeof title === 'string'
               ? <Typography variant="caption"><Text message={title} /></Typography>
               : title
           }

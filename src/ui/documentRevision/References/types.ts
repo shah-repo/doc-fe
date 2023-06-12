@@ -1,4 +1,4 @@
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
 export interface ReferencesProps {
   selectedDocument?: DocumentRevision;

@@ -1,14 +1,14 @@
-import { Box, Button } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { FBButtonProps } from "../../types/button";
-import styles from "./FBButton.styles";
+import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../components/Text';
+import { FBButtonProps } from '../../types/button';
+import styles from './FBButton.styles';
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
-  label = "",
-  variant = "contained",
-  color = "secondary",
-  buttonType = "button",
+  label = '',
+  variant = 'contained',
+  color = 'secondary',
+  buttonType = 'button',
   ...props
 }) => {
   const classes = styles();

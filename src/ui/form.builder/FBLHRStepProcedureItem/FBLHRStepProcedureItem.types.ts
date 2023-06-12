@@ -1,4 +1,4 @@
-import { FBProcedureItemProps } from "..";
+import { FBProcedureItemProps } from '..';
 
 export type FBLHRStepProcedureItemProps =
 & FBProcedureItemProps

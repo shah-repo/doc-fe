@@ -1,11 +1,16 @@
-import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
-import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from "..";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isTranslation } from "../../translations/types";
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from '..';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentLHRT, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import { isTranslation } from '../../translations/types';
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
@@ -17,14 +22,14 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     filterOptions,
     debounceFilterInput,
     groupBy,
-    optionLabelKey = "text",
-    optionValueKey = "value",
-    optionValueType = "key",
+    optionLabelKey = 'text',
+    optionValueKey = 'value',
+    optionValueType = 'key',
     labelPrefixRoot,
     groupByKey,
     disabledOptions,
     placeholder,
-    name = "",
+    name = '',
     defaultValue,
     options,
     optionId,
@@ -41,8 +46,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
       !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
-    const multiple = editorProperties?.includes("multiple") || props.multiple;
-    const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
+    const multiple = editorProperties?.includes('multiple') || props.multiple;
+    const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
+    const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+    disabled =
+      PO_REQUESTOR_COMPONENT_NAME === name &&
+      isDocumentRevisionReleased(workspaceState?.documentStatus) &&
+      isUserAdminEnforce
+        ? isUserAdminEnforce
+        : disabled;
 
     const intl = useIntl();
 
@@ -53,6 +65,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       formState?.setApprovalMap({ [defaultValue?.id]: defaultValue?.approvals });
     }
     const schemaItem = find(workspaceState?.schema, (schemaItm) => schemaItm.name?.includes(name)) as FBSchemaProps;
+
+    const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
+    const isDocumentFM = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions);
+    isDocumentLHRT = checkIsDocumentLHRT(workspaceState?.document?.document.documentType.groupOptions);
+
+    if ((isDocumentMPI || isDocumentFM || isDocumentLHRT)
+    && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
+      disabled = true;
+    }
 
     useEffect(() => {
       setModifiedOptions(options);
@@ -103,7 +124,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       if (isTranslation(optionText)) {
         optionText = intl.formatMessage({ id: optionText });
       }
-      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : '';
       return `${optionLabel}${optionText}`;
     });
 
@@ -116,7 +137,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
-      const { target: { value = "" } = {} } = ev;
+      const { target: { value = '' } = {} } = ev;
       formState?.setFieldValue(name, value, withState, omitFormValue);
       formState?.validate();
     };
@@ -128,7 +149,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     const onFilterInputChange = (event, inputValue) => {
       if (inputValue && inputValue.length > 2) {
-        const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
+        const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || '';
         const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
         const updatedOptions = filterOptions(options, { inputValue });
         setModifiedOptions(updatedOptions);
@@ -140,7 +161,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     debounceFilterInput = debounce(onFilterInputChange, 1000);
 
     if (isUndefined(defaultValue)) {
-      defaultValue = "";
+      defaultValue = '';
     }
     return Component({
       ...(props as T),

@@ -1,11 +1,11 @@
-import { Box, Typography } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React from "react";
-import { Approval, ApprovalStatus, DataProps } from "../../../state/ducks/common/types";
-import SummaryField from "../../common/summary/base";
-import DateTime from "../../components/DateTime";
-import Text from "../../components/Text";
-import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
+import { Box, Typography } from '@material-ui/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { Approval, ApprovalStatus, DataProps } from '../../../state/ducks/common/types';
+import SummaryField from '../../common/summary/base';
+import DateTime from '../../components/DateTime';
+import Text from '../../components/Text';
+import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
 
 type Props = DataProps<Approval[]>;
 
@@ -29,11 +29,11 @@ const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
               }</Box>
             </Typography>
             <Typography id="statusdate" variant="h5" component="span">
-              {isApproved && approval.approverGroups ? ` | ${approval.approverGroups?.join(", ")}` : ``}
+              {isApproved && approval.approverGroups ? ` | ${approval.approverGroups?.join(', ')}` : ''}
               {` | ${status}`}
               {isApproved && reviewedAt && (
                 <span>
-                  {"| "}
+                  {'| '}
                   <DateTime value={reviewedAt} />
                 </span>
               )}

@@ -1,7 +1,7 @@
-import { apiAction } from "../../../factories";
-import { ApiAction } from "../../../types";
-import { DASHBOARD_RECENT_URL, RECENTS_LIST, RECENTS_LIST_ASYNC } from "./constants";
-import { RecentItems, RecentsListAction } from "./types";
+import { apiAction } from '../../../factories';
+import { ApiAction } from '../../../types';
+import { DASHBOARD_RECENT_URL, RECENTS_LIST, RECENTS_LIST_ASYNC } from './constants';
+import { RecentItems, RecentsListAction } from './types';
 
 const recentsList = (recents: RecentItems[]): RecentsListAction => ({
   type: RECENTS_LIST,
@@ -15,7 +15,7 @@ const loadRecentsList = (): ApiAction<RecentItems[]> => {
   };
   return apiAction({
     url: DASHBOARD_RECENT_URL,
-    method: "get",
+    method: 'get',
     params,
     asyncType: RECENTS_LIST_ASYNC,
     onSuccess: (recents, dispatch) => {

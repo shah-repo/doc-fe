@@ -1,9 +1,9 @@
-import { RouteComponentProps } from "react-router-dom";
-import { AuthProps } from "../../../state/ducks/auth/types";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { DataProps } from "../../../state/ducks/common/types";
-import { LoadAsyncState } from "../../../state/types";
+import { RouteComponentProps } from 'react-router-dom';
+import { AuthProps } from '../../../state/ducks/auth/types';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { DataProps } from '../../../state/ducks/common/types';
+import { LoadAsyncState } from '../../../state/types';
 
 // Container
 export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest> & AuthProps;

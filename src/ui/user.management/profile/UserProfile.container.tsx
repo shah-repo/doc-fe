@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getHasPermission } from "../../../common/utils/selectors";
-import Config from "../../../config";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { companySelectors } from "../../../state/ducks/company";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import UserProfilePresenter from "./UserProfile.presenter";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getHasPermission } from '../../../common/utils/selectors';
+import Config from '../../../config';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import { EmployeeEditRequestBody, GroupTag, Permission } from '../../../state/ducks/auth/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { userManagementActions } from '../../../state/ducks/userManagement';
+import { USER_SLACK_URL } from '../../../state/ducks/userManagement/constants';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import UserProfilePresenter from './UserProfile.presenter';
 
 interface Props {
   closeUserProfile: () => void;
@@ -43,7 +43,7 @@ const UserProfileContainer: React.FunctionComponent<Props> = ({
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);
-  const [previewAvatar, setPreviewAvatar] = useState("");
+  const [previewAvatar, setPreviewAvatar] = useState('');
 
   const onSubmit = (values: EmployeeEditRequestBody) => dispatch(authActions.editCurrentEmployee(values, async));
 

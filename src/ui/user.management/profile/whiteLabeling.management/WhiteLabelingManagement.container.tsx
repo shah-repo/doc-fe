@@ -1,15 +1,15 @@
-import { Formik, FormikProps } from "formik";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { companyActions, companySelectors } from "../../../../state/ducks/company";
-import { Company } from "../../../../state/ducks/company/types";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useGetHasTag from "../../../hooks/useGetHasTag";
-import { toWhiteLabelingBodyValues, toWhiteLabelingInitialValues } from "../../utils/transform";
-import WhiteLabelingManagementPresenter from "./WhiteLabelingManagement.presenter";
+import { Formik, FormikProps } from 'formik';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { attachmentsActions } from '../../../../state/ducks/attachments';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { companyActions, companySelectors } from '../../../../state/ducks/company';
+import { Company } from '../../../../state/ducks/company/types';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useGetHasTag from '../../../hooks/useGetHasTag';
+import { toWhiteLabelingBodyValues, toWhiteLabelingInitialValues } from '../../utils/transform';
+import WhiteLabelingManagementPresenter from './WhiteLabelingManagement.presenter';
 
 const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = () => {
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
       const url = data.url;
-      sets3link(url.substr(0, url.indexOf("?")));
+      sets3link(url.substr(0, url.indexOf('?')));
       if (!file) {
         return;
       }

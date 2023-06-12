@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import WarningIcon from "@material-ui/icons/Warning";
-import React from "react";
-import { FBOutOfRange, FBText, FBTextField, FBTextFieldWithRangeProps } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBTextFieldWithRange } from "./FBTextFieldWithRange.wrap";
+import { Box } from '@material-ui/core';
+import WarningIcon from '@material-ui/icons/Warning';
+import React from 'react';
+import { FBOutOfRange, FBText, FBTextField, FBTextFieldWithRangeProps } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBTextFieldWithRange } from './FBTextFieldWithRange.wrap';
 
 const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> = ({
   range,
@@ -29,7 +29,7 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
             mt: 0.2,
             pl: 0.5,
             color: Colors.error_red,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           }}
         />
       </Box>
@@ -44,28 +44,28 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
       }}
       withState
     />
-    <Box mt={1} style={{ color: "gray" }} display="flex">
+    <Box mt={1} style={{ color: 'gray' }} display="flex">
       {range && <FBText
         locale="form.builder.allowed.range"
         values={{
-          from: range.from || "N/A",
-          to: range.to || "N/A",
-          suffix: pass || aql || includeInFaiInspection ? <>,&nbsp;</> : "",
+          from: range.from || 'N/A',
+          to: range.to || 'N/A',
+          suffix: pass || aql || includeInFaiInspection ? <>,&nbsp;</> : '',
         }}
       />}
       {pass && <FBText
         locale="form.builder.expected.value"
         values={{
-          from: pass.from || "N/A",
-          to: pass.to || "N/A",
-          suffix: aql || includeInFaiInspection ? <>,&nbsp;</> : "",
+          from: pass.from || 'N/A',
+          to: pass.to || 'N/A',
+          suffix: aql || includeInFaiInspection ? <>,&nbsp;</> : '',
         }}
       />}
       {aql && <FBText
         locale="form.builder.aql.value"
         values={{
           value: aql,
-          suffix: includeInFaiInspection ? <>,&nbsp;</> : "",
+          suffix: includeInFaiInspection ? <>,&nbsp;</> : '',
         }}
       />}
       {includeInFaiInspection && (

@@ -1,5 +1,5 @@
-import React from "react";
-import { FBData, FBEditor, FBEditorLabel, FBEditorProps, FBRadioGroup } from "..";
+import React from 'react';
+import { FBData, FBEditor, FBEditorLabel, FBEditorProps, FBRadioGroup } from '..';
 
 const FBEditorEQMaintenance: React.FunctionComponent<FBEditorProps> = ({
   children,

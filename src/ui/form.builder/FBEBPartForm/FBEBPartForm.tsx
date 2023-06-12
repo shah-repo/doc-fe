@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEBPartFormProps, FBForm, FBTextEditor, FBTextField } from "..";
-import { withFBEBPartForm } from "./FBEBPartForm.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEBPartFormProps, FBForm, FBTextEditor, FBTextField } from '..';
+import { withFBEBPartForm } from './FBEBPartForm.wrap';
 
 const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
   children,

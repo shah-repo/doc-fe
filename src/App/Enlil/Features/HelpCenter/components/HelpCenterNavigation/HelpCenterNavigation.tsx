@@ -1,13 +1,13 @@
-import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as FAQsIcon } from "../../../../../../assets/images/faqs.svg";
-import { ReactComponent as HelpIcon } from "../../../../../../assets/images/help.svg";
-import { ReactComponent as ReleaseNotesIcon } from "../../../../../../assets/images/release-notes.svg";
-import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
-import Text from "../../../../../../ui/components/Text";
-import staticLinks from "../../data/static-links";
-import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
-import useStyles from "./HelpCenterNavigation.styles";
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as FAQsIcon } from '../../../../../../assets/images/faqs.svg';
+import { ReactComponent as HelpIcon } from '../../../../../../assets/images/help.svg';
+import { ReactComponent as ReleaseNotesIcon } from '../../../../../../assets/images/release-notes.svg';
+import { ReactComponent as SendIcon } from '../../../../../../assets/images/send.svg';
+import Text from '../../../../../../ui/components/Text';
+import staticLinks from '../../data/static-links';
+import HelpCenterExternalLink from '../HelpCenterExternalLink/HelpCenterExternalLink';
+import useStyles from './HelpCenterNavigation.styles';
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -37,7 +37,7 @@ const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(
     )
   )
 );
-GuidesLink.displayName = "GuidesLink";
+GuidesLink.displayName = 'GuidesLink';
 
 const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleCloseMenu, handleOpenContent }) => {
   const classes = useStyles();
@@ -52,12 +52,12 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleClose
       onClose={handleCloseMenu}
       getContentAnchorEl={null}
       anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "right",
+        vertical: 'bottom',
+        horizontal: 'right',
       }}
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       data-cy="help-center.navigation"
     >

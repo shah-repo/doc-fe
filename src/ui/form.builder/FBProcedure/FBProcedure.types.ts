@@ -1,18 +1,18 @@
-import { FBInputProps, FBMediaProps, FBProcedureItemConfig, FBProviderProps } from "..";
+import { FBInputProps, FBMediaProps, FBProcedureItemConfig, FBProviderProps } from '..';
 
 export type FBProcedureProps =
 & Pick<FBInputProps,
-| "name"
-| "gutter"
-| "stepIndex"
-| "index"
-| "disabled"
-| "loading"
-| "autosave"
-| "isInputOwner"
-| "autoFocus"
-| "autoScrollTo">
-& Pick<FBProviderProps, "procedureState" | "workspaceState">
+| 'name'
+| 'gutter'
+| 'stepIndex'
+| 'index'
+| 'disabled'
+| 'loading'
+| 'autosave'
+| 'isInputOwner'
+| 'autoFocus'
+| 'autoScrollTo'>
+& Pick<FBProviderProps, 'procedureState' | 'workspaceState'>
 & {
   onKeyDown?: (e: KeyboardEvent) => void;
   handleAdd?: (isClone?: boolean, isFromKeys?: boolean) => void;
@@ -28,4 +28,4 @@ export interface FBProcedureValue {
   attachments?: FBMediaProps[];
 }
 
-export const FBProcedureOmitDiffKey: string[] = ["description", "attachments"];
+export const FBProcedureOmitDiffKey: string[] = ['description', 'attachments'];

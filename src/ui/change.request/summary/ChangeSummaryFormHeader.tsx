@@ -1,16 +1,16 @@
-import { Box } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
-import { useTitle } from "../../hooks/docCustomization/useCustomization";
-import useDescription from "../../hooks/docCustomization/useDescription";
+import { Box } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import CustomLabelTooltip from '../../hooks/docCustomization/CustomLabelTooltip';
+import { useTitle } from '../../hooks/docCustomization/useCustomization';
+import useDescription from '../../hooks/docCustomization/useDescription';
 
-import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
+import FormMessage from '../../components/forms/FormMessage';
+import FormProgress from '../../components/forms/FormProgress';
 
-import React from "react";
-import { AsyncState } from "../../../state/types";
-import SummaryField from "../../common/summary/NewBase";
-import SummaryFieldWithHtml from "../../common/summary/NewBaseWithHtml";
+import React from 'react';
+import { AsyncState } from '../../../state/types';
+import SummaryField from '../../common/summary/NewBase';
+import SummaryFieldWithHtml from '../../common/summary/NewBaseWithHtml';
 
 
 interface ChangeSummaryFormHeaderProps {

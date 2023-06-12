@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FB, FBPOReceiveCreateLotProps } from "..";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentTypeById, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import FBPOReceiveCreateLotState from "./FBPOReceiveCreateLot.state";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FB, FBPOReceiveCreateLotProps } from '..';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DocumentTypeById, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import FBPOReceiveCreateLotState from './FBPOReceiveCreateLot.state';
 
 export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
   Component: React.FunctionComponent<T>,
@@ -49,7 +49,7 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
     const categoryAsync = useAsync<DocumentType[]>();
 
     const getDocTypes = () => {
-      categoryAsync.start(getDocTypesByCategory, { category: "Lot" }, categoryAsync);
+      categoryAsync.start(getDocTypesByCategory, { category: 'Lot' }, categoryAsync);
     };
 
     const handleDocTypeSelection = (e, value) => {

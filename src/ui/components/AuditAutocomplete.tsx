@@ -1,10 +1,10 @@
-import { CircularProgress } from "@material-ui/core";
-import { get } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { Fragment } from "react";
-import { Audit } from "../../state/ducks/audit/types";
-import { FB, FBAutocompleteAsyncState } from "../form.builder";
-import FBAutocompleteAsyncStore from "../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { CircularProgress } from '@material-ui/core';
+import { get } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { Fragment } from 'react';
+import { Audit } from '../../state/ducks/audit/types';
+import { FB, FBAutocompleteAsyncState } from '../form.builder';
+import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 interface OwnProps {
   audit: Audit;
@@ -20,10 +20,10 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
 
   const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
   const { nextValue, previousValue } = audit;
-  let label = "";
-  const { optionId = "", multiple = false } = audit.fbSchemaItem || {};
+  let label = '';
+  const { optionId = '', multiple = false } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
-  if (!auditValue || auditValue === "undefined") {
+  if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
   }
 
@@ -34,11 +34,11 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
   autocompleteState?.setOptionId(optionId);
   const data = FBAutocompleteAsyncStore.data.get(optionId);
   if (data) {
-    const { labelKey = "text", labelPrefixRoot = "" } =
+    const { labelKey = 'text', labelPrefixRoot = '' } =
     autocompleteState?.optionConfig || {};
     if (!multiple) {
       const record = data.get(auditValue);
-      label = get(record, labelPrefixRoot, "") + " " + FB.stripTags(get(record, labelKey, ""));
+      label = get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));
     } else {
       let arrayValue: string[] = [];
       try {
@@ -48,9 +48,9 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
       }
       label = arrayValue.reduce((label, value) => {
         const record = data.get(value);
-        label += get(record, labelPrefixRoot, "") + " " + FB.stripTags(get(record, labelKey, ""));
+        label += get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));
         return label;
-      }, "");
+      }, '');
     }
   }
 

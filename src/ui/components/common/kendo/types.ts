@@ -1,25 +1,26 @@
-import { GroupDescriptor } from "@progress/kendo-data-query";
-import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
-import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSettings } from "@progress/kendo-react-grid";
-import { schema } from "normalizr";
-import { ComponentType } from "react";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
-import { DTMCellTemplates } from "../../../document.type.management/kendo/config";
-import { KendoGridFilterCell } from "../../KendoGrid/interfaces";
+import { GroupDescriptor } from '@progress/kendo-data-query';
+import { ColumnSortSettings } from '@progress/kendo-react-data-tools';
+import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSettings } from '@progress/kendo-react-grid';
+import { schema } from 'normalizr';
+import { ComponentType } from 'react';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DTMCellTemplates } from '../../../document.type.management/kendo/config';
+import { KendoGridFilterCell } from '../../KendoGrid/interfaces';
 
 interface KendoTableSearchQueryType {
   [key: string]: any;
 }
 
 export enum KendoCellTemplates {
-  ACTIVE="Active",
-  USER_AVATAR="UserAvatar",
-  STATUS="Status",
-  DATE_COMPLETED="DateCompleted",
-  DATE_INFO="DateInfo",
-  COMMON_CELL="CommonCell",
-  DOCUMENT_TYPE="DocumentTypeCellTemplate",
-  DURATION="DurationCell"
+  ACTIVE='Active',
+  USER_AVATAR='UserAvatar',
+  STATUS='Status',
+  DATE_COMPLETED='DateCompleted',
+  DATE_INFO='DateInfo',
+  COMMON_CELL='CommonCell',
+  PO_AMOUNT='POAmount',
+  DOCUMENT_TYPE='DocumentTypeCellTemplate',
+  DURATION='DurationCell'
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings;
@@ -28,7 +29,7 @@ export interface KendoColumn {
   show: boolean;
   showColumnMenu?: boolean;
   format?: string;
-  filter?: "boolean" | "numeric" | "text" | "date" ;
+  filter?: 'boolean' | 'numeric' | 'text' | 'date' ;
   groupable?: boolean;
   filterCell?: ComponentType<GridFilterCellProps> | KendoGridFilterCell | DTMCellTemplates;
   cell?: string;

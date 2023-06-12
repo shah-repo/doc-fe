@@ -1,12 +1,12 @@
 import {
   DropDownList,
   DropDownListChangeEvent,
-} from "@progress/kendo-react-dropdowns";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import { trainingCompletedOnDateOption } from "../../utils/helpers";
+} from '@progress/kendo-react-dropdowns';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
+import { trainingCompletedOnDateOption } from '../../utils/helpers';
 
 interface Props extends GridFilterCellProps {
   defaultItem: string;
@@ -23,8 +23,8 @@ export const CompletedDateFilterTemplate = ({
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     const isValueExists = hasValue(target.value);
     onChange({
-      value: isValueExists ? target.value : "",
-      operator: isValueExists ? "eq" : "",
+      value: isValueExists ? target.value : '',
+      operator: isValueExists ? 'eq' : '',
       syntheticEvent,
     });
   };
@@ -32,8 +32,8 @@ export const CompletedDateFilterTemplate = ({
   const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange({
-      value: "",
-      operator: "",
+      value: '',
+      operator: '',
       syntheticEvent: event,
     });
   };

@@ -1,8 +1,8 @@
-import { FieldConfig, FieldProps, FormikConfig } from "formik";
-import { Dictionary } from "lodash";
-import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { FieldConfig, FieldProps, FormikConfig } from 'formik';
+import { Dictionary } from 'lodash';
+import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 
-export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "initialValues"> {
+export interface FBFormikProps extends Omit<FormikConfig<any>, 'onSubmit' | 'initialValues'> {
   onSubmit?: (values: any) => void;
   initialValues?: any;
   formComponent?: Element;
@@ -10,7 +10,7 @@ export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "ini
 
 export type FBFormikFieldProps =
   & Partial<FieldProps>
-  & Pick<Partial<FieldConfig>, "validate">;
+  & Pick<Partial<FieldConfig>, 'validate'>;
 
 export interface FBDocumentFlowProps {
   id?: string;

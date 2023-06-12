@@ -1,78 +1,79 @@
-import { ButtonProps } from "@material-ui/core";
-import { Dictionary } from "lodash";
-import { FBDialogState, FBFormProps, FBFormState, FBInputProps, FBPOApprovalMatrixState } from "..";
-import { Group } from "../../../state/ducks/auth/types";
-import { Employee } from "../../../state/ducks/company/types";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { ButtonProps } from '@material-ui/core';
+import { Dictionary } from 'lodash';
+import { FBDialogState, FBFormProps, FBFormState, FBInputProps, FBPOApprovalMatrixState } from '..';
+import { Group } from '../../../state/ducks/auth/types';
+import { Employee } from '../../../state/ducks/company/types';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 
-type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;
+type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, 'name' | 'disabled' | 'label' | 'autosave' | 'isInputOwner'>;
 
 export type FBPOApprovalMatrixFieldProps =
 & FBPOApprovalMatrixBasicProps
 & {
-  poamState: FBPOApprovalMatrixState;
-  dialogState?: FBDialogState;
-  handleAdd?: () => any;
-  handleRevert?: () => any;
+  poamState: FBPOApprovalMatrixState
+  dialogState?: FBDialogState
+  handleAdd?: () => any
+  handleRevert?: () => any
 };
 
 export type FBPOApprovalMatrixDialogProps =
 & FBPOApprovalMatrixBasicProps
 & {
-  isDialogOpen: boolean;
-  initialValues?: Dictionary<any>;
-  onSubmit: (item: any) => void;
-  closeDialog: () => void;
-  groupOptions: OptionType[];
-  employees: GetEmployeeResponse[];
-  signatureStages: number[];
+  isDialogOpen: boolean
+  initialValues?: Dictionary<any>
+  onSubmit: (item: any) => void
+  closeDialog: () => void
+  groupOptions: OptionType[]
+  employees: GetEmployeeResponse[]
+  signatureStages: number[]
 };
 
 export type FBPOApprovalMatrixFormProps =
-& Pick<FBFormProps, "initialValues">
-& Pick<FBPOApprovalMatrixDialogProps, "signatureStages">;
+& Pick<FBFormProps, 'initialValues'>
+& Pick<FBPOApprovalMatrixDialogProps, 'signatureStages'>;
 
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps
-& Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
-"closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages">
+& Pick<FBPOApprovalMatrixDialogProps, 'onSubmit' |
+'closeDialog' | 'isDialogOpen' | 'initialValues' | 'groupOptions' | 'employees' | 'signatureStages'>
 & {
-  approvalLevels?: POApprovalMatrixLevel[];
-  handleEdit: (index: number, item: POApprovalMatrixLevel) => () => void;
-  isDocumentReleased: boolean;
-  groups?: Map<string, Group>;
-  employees?: Map<string, Employee>;
+  approvalLevels?: POApprovalMatrixLevel[]
+  handleEdit: (index: number, item: POApprovalMatrixLevel) => void
+  disableFilter: boolean
+  isDocumentReleased: boolean
+  groups?: Map<string, Group>
+  employees?: Map<string, Employee>
 };
 
 export interface POApprovalMatrix {
-  approvalLevels: POApprovalMatrixLevel[];
+  approvalLevels: POApprovalMatrixLevel[]
 }
 
 export interface POApprovalMatrixLevel {
-  id: string;
-  name: string;
-  limit: number;
-  signatures: Signature[];
+  id: string
+  name: string
+  limit: number
+  threshold: number
+  signatures: Signature[]
 }
 
 export interface Signature {
-  id: string;
-  signatureStage: number;
-  groups: Group[];
-  employees: Employee[];
+  id: string
+  signatureStage: number
+  groups: Group[]
+  employees: Employee[]
 }
 
 export type FBPOApprovalMatrixFormActionsProps =
 & {
-  handleAdd?: ButtonProps["onClick"];
-  handleCancel?: ButtonProps["onClick"];
+  handleAdd?: ButtonProps['onClick']
+  handleCancel?: ButtonProps['onClick']
 };
 
 export interface FBPOApprovalMatrixConstructor {
-  formState?: FBFormState;
-  approvalLevels?: POApprovalMatrixLevel[];
-  outputRevision?: boolean;
-  isOutput?: boolean;
+  formState?: FBFormState
+  approvalLevels?: POApprovalMatrixLevel[]
+  outputRevision?: boolean
+  isOutput?: boolean
 }
-

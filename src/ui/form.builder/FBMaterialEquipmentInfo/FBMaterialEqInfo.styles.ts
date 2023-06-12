@@ -1,6 +1,6 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
-import { FBMEQItemStatus } from "./FBMaterailEqInfo.types";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
+import { FBMEQItemStatus } from './FBMaterailEqInfo.types';
 
 const FBMEQItemStatusBorder: Record<FBMEQItemStatus, Colors> = {
   [FBMEQItemStatus.Removed]: Colors.opal_red,
@@ -36,26 +36,26 @@ export default makeStyles((theme) => ({
     borderRadius: theme.spacing(.5),
   },
   panelSummary: {
-    "flexDirection": "row-reverse",
-    "alignItems": "center",
-    "padding": 0,
-    "&.Mui-expanded": {
+    'flexDirection': 'row-reverse',
+    'alignItems': 'center',
+    'padding': 0,
+    '&.Mui-expanded': {
       minHeight: 0,
       color: Colors.navy,
     },
   },
   panelSummaryIcon: {
-    "color": Colors.almost_black,
-    "&.Mui-expanded": {
+    'color': Colors.almost_black,
+    '&.Mui-expanded': {
       color: Colors.navy,
-      transform: "rotate(90deg)",
+      transform: 'rotate(90deg)',
     },
   },
   panelSummaryContent: {
-    "justifyContent": "space-between",
-    "alignItems": "center",
-    "padding": theme.spacing(0, 2, 0, 1.25),
-    "&.Mui-expanded": {
+    'justifyContent': 'space-between',
+    'alignItems': 'center',
+    'padding': theme.spacing(0, 2, 0, 1.25),
+    '&.Mui-expanded': {
       margin: 0,
     },
   },
@@ -72,7 +72,7 @@ export default makeStyles((theme) => ({
     margin: theme.spacing(-2, 0, 0),
   },
   panelDetailsList: {
-    width: "100%",
+    width: '100%',
   },
   chip: {
     borderRadius: theme.spacing(.5),
@@ -83,7 +83,7 @@ export default makeStyles((theme) => ({
   },
   panelDetailsListItem: {
     padding: theme.spacing(.75, 1),
-    display: "block",
+    display: 'block',
   },
   diffSwitch: {
     marginBottom: theme.spacing(2),
@@ -100,36 +100,36 @@ export default makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   switchBase: {
-    "padding": 1,
-    "&.Mui-checked": {
-      "transform": `translateX(${theme.spacing(1)}px)`,
-      "color": Colors.white,
-      "& + .MuiSwitch-track": {
+    'padding': 1,
+    '&.Mui-checked': {
+      'transform': `translateX(${theme.spacing(1)}px)`,
+      'color': Colors.white,
+      '& + .MuiSwitch-track': {
         opacity: 1,
         backgroundColor: Colors.navy,
-        border: "none",
+        border: 'none',
       },
     },
   },
   switchThumb: {
     width: theme.spacing(2) - 2,
     height: theme.spacing(2) - 2,
-    boxShadow: "none",
+    boxShadow: 'none',
   },
   switchTrack: {
     borderRadius: theme.spacing(1),
     opacity: 1,
     backgroundColor: Colors.dawn,
-    transition: theme.transitions.create(["background-color", "border"]),
+    transition: theme.transitions.create(['background-color', 'border']),
   },
   switchChecked: {},
   expandButton: {
-    "color": Colors.navy,
-    "fontWeight": 400,
-    "padding": 0,
-    "margin": 0,
-    "&:hover": {
-      backgroundColor: "transparent",
+    'color': Colors.navy,
+    'fontWeight': 400,
+    'padding': 0,
+    'margin': 0,
+    '&:hover': {
+      backgroundColor: 'transparent',
     },
   },
   navTitle: {
@@ -138,18 +138,18 @@ export default makeStyles((theme) => ({
     margin: theme.spacing(.25, 0),
   },
   navItem: {
-    "borderRadius": theme.spacing(.5),
-    "padding": theme.spacing(1, 1.25),
-    "marginBottom": theme.spacing(.5),
-    "color": Colors.navy,
-    "fontSize": 12,
-    "&.Mui-selected": {
-      "backgroundColor": Colors.light_cream_blue,
-      "&:hover": {
+    'borderRadius': theme.spacing(.5),
+    'padding': theme.spacing(1, 1.25),
+    'marginBottom': theme.spacing(.5),
+    'color': Colors.navy,
+    'fontSize': 12,
+    '&.Mui-selected': {
+      'backgroundColor': Colors.light_cream_blue,
+      '&:hover': {
         backgroundColor: Colors.light_cream_blue,
       },
     },
-    "&:hover": {
+    '&:hover': {
       backgroundColor: Colors.light_cream_blue,
     },
   },

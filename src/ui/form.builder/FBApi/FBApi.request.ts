@@ -1,30 +1,30 @@
-import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
-import { action, observable, set } from "mobx";
-import { apiClient, FBRequestSet, FBRequestTemplateUrl } from "..";
-import { encodeString } from "../../../common/utils/helpers";
-import apiXClient from "../../../state/apiXClient";
-import { store } from "../../../state/store";
-import { ApiActionMethod } from "../../../state/types";
-import { toastError } from "../../components/notifications";
+import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { apiClient, FBRequestSet, FBRequestTemplateUrl } from '..';
+import { encodeString } from '../../../common/utils/helpers';
+import apiXClient from '../../../state/apiXClient';
+import { store } from '../../../state/store';
+import { ApiActionMethod } from '../../../state/types';
+import { toastError } from '../../components/notifications';
 
 export default class FBRequest<Data, Body> {
   @observable public data: Data | undefined;
   @observable public body: Body & { password?: string } | undefined;
   @observable public loading = false;
   public method?: ApiActionMethod;
-  public url = "";
-  public root = "";
+  public url = '';
+  public root = '';
   public includeAuthorization = true;
   public publicApi = false;
 
-  public constructor(url = "") {
+  public constructor(url = '') {
     this.url = url;
   }
 
   private setTemplateUrl = (config: Record<string, any> | FBRequestTemplateUrl) => {
     let url = this.url;
     let values = config;
-    if (has(config, "values")) {
+    if (has(config, 'values')) {
       url = config.url;
       values = config.values;
     }
@@ -37,33 +37,33 @@ export default class FBRequest<Data, Body> {
     if (!isString(url)) {
       return this.setTemplateUrl(url);
     }
-    set(this, "url", url);
+    set(this, 'url', url);
   };
 
   @action public setLoading = (state: boolean) => {
-    set(this, "loading", state);
+    set(this, 'loading', state);
   };
 
   @action public setData = (data: Data) => {
-    set(this, "data", data);
+    set(this, 'data', data);
   };
 
   @action public setBody = (body: Body) => {
-    set(this, "body", body);
+    set(this, 'body', body);
   };
 
   @action public setRoot = (root: string) => {
-    set(this, "root", root);
+    set(this, 'root', root);
   };
 
   @action public setPublicApi = (publicApi: boolean) => {
-    set(this, "publicApi", publicApi);
+    set(this, 'publicApi', publicApi);
   };
 
-  @action public fetch = () => this.start("get");
-  @action public post = () => this.start("post");
-  @action public patch = () => this.start("patch");
-  @action public delete = () => this.start("delete");
+  @action public fetch = () => this.start('get');
+  @action public post = () => this.start('post');
+  @action public patch = () => this.start('patch');
+  @action public delete = () => this.start('delete');
 
   @action public prepareData = (data: Data): Data | undefined => data;
 
@@ -84,10 +84,10 @@ export default class FBRequest<Data, Body> {
   public onError(error) {
     this.setLoading(false);
     let { message } = error;
-    if (isArray(message) && has(first(message), "message")) {
-      message = join(get(first(message), "message"), "\n");
+    if (isArray(message) && has(first(message), 'message')) {
+      message = join(get(first(message), 'message'), '\n');
     } else {
-      message = Array.isArray(message) ? message.join("; ") : message;
+      message = Array.isArray(message) ? message.join('; ') : message;
     }
     toastError(message);
   }
@@ -103,24 +103,24 @@ export default class FBRequest<Data, Body> {
     } : undefined;
 
     if (this.publicApi) {
-      apiXClient("", this.publicApi);
+      apiXClient('', this.publicApi);
     }
 
     switch (method) {
-      case "get":
-        this.method = "get";
+      case 'get':
+        this.method = 'get';
         promise = apiClient().get(this.url, this.body).promise;
         break;
-      case "post":
-        this.method = "post";
+      case 'post':
+        this.method = 'post';
         promise = apiClient().post(this.url, this.body, { headers }).promise;
         break;
-      case "patch":
-        this.method = "patch";
+      case 'patch':
+        this.method = 'patch';
         promise = apiClient().patch(this.url, this.body).promise;
         break;
-      case "delete":
-        this.method = "delete";
+      case 'delete':
+        this.method = 'delete';
         promise = apiClient().del(this.url, this.body).promise;
         break;
       default:

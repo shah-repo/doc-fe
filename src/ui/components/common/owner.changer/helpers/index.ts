@@ -1,6 +1,6 @@
 
-import { changeRequestsActions, changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
+import { changeRequestsActions, changeRequestsSelectors } from '../../../../../state/ducks/changeRequest';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 
 export const getUrlandActions = (requestType) => {
   const urlAction = {
@@ -8,7 +8,6 @@ export const getUrlandActions = (requestType) => {
       documentRevisionsActions.ownerChange,
       documentRevisionsSelectors.getDocumentRevision,
     ],
-    // eslint-disable-next-line @typescript-eslint/camelcase
     change_request: [
       changeRequestsActions.save,
       changeRequestsSelectors.getChangeRequest,

@@ -1,63 +1,63 @@
-import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
-import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBNoteItem, FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
-import { Attachment } from "../attachments/types";
-import { AuditActionPayload } from "../audit/types";
-import { Group } from "../auth/types";
-import { ChangeRequest } from "../changeRequest/types";
-import { Approval, Id, Nullable, Owner, User } from "../common/types";
-import { Employee } from "../company/types";
-import { RELATED_PARTS_STATUS } from "../relatedParts/types";
-import { TrainingRecord } from "../training/types";
-import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
+import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
+import { TableColumnActionType } from '../../../ui/components/table/column/types';
+import { FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
+import { Attachment } from '../attachments/types';
+import { AuditActionPayload } from '../audit/types';
+import { Group } from '../auth/types';
+import { ChangeRequest } from '../changeRequest/types';
+import { Approval, Id, Nullable, Owner, User } from '../common/types';
+import { Employee } from '../company/types';
+import { RELATED_PARTS_STATUS } from '../relatedParts/types';
+import { TrainingRecord } from '../training/types';
+import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from './constants';
+import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from './documentType/types';
 
 export enum DocumentRevisionStatus {
-  Draft = "DRAFT",
-  PendingChange = "PENDING_CHANGE",
-  InReview = "IN_REVIEW",
-  Released = "RELEASED",
-  Approved = "APPROVED",
-  Deprecated = "DEPRECATED",
-  Obsolete = "OBSOLETE",
-  Canceled = "CANCELED",
-  Voided = "VOIDED",
+  Draft = 'DRAFT',
+  PendingChange = 'PENDING_CHANGE',
+  InReview = 'IN_REVIEW',
+  Released = 'RELEASED',
+  Approved = 'APPROVED',
+  Deprecated = 'DEPRECATED',
+  Obsolete = 'OBSOLETE',
+  Canceled = 'CANCELED',
+  Voided = 'VOIDED',
 }
 
 export enum DocumentRevisionStatusDisplay {
-  Draft = "Draft",
-  PendingChange = "PendingChange",
-  InReview = "InReview",
-  Released = "Released",
-  Approved = "Approved",
-  Deprecated = "Deprecated",
-  Obsolete = "Obsolete",
-  Canceled = "Canceled",
-  Voided = "Voided",
+  Draft = 'Draft',
+  PendingChange = 'PendingChange',
+  InReview = 'InReview',
+  Released = 'Released',
+  Approved = 'Approved',
+  Deprecated = 'Deprecated',
+  Obsolete = 'Obsolete',
+  Canceled = 'Canceled',
+  Voided = 'Voided',
 }
 
 export enum POStatusType {
-  OPENED = "OPENED",
-  CLOSED = "CLOSED",
-  VOIDED = "VOIDED"
+  OPENED = 'OPENED',
+  CLOSED = 'CLOSED',
+  VOIDED = 'VOIDED'
 }
 
 export enum POStatusLabelMapping {
-  OPENED = "Open",
-  CLOSED = "Closed",
-  VOIDED = "Voided"
+  OPENED = 'Open',
+  CLOSED = 'Closed',
+  VOIDED = 'Voided'
 }
 
 export enum DocumentCategory {
-  PurchaseOrder = "Purchase Order",
+  PurchaseOrder = 'Purchase Order',
 }
 
 export enum RevisionChangeType {
-  NextRevision = "NEXT_REVISION",
-  NextRevisionStage = "NEXT_REVISION_STAGE",
-  Obsolete = "OBSOLETE",
-  AdministrativeChange = "ADMINISTRATIVE_CHANGE",
-  Void = "VOID",
+  NextRevision = 'NEXT_REVISION',
+  NextRevisionStage = 'NEXT_REVISION_STAGE',
+  Obsolete = 'OBSOLETE',
+  AdministrativeChange = 'ADMINISTRATIVE_CHANGE',
+  Void = 'VOID',
 }
 
 export interface DocumentRevisionDocument {
@@ -243,11 +243,11 @@ export interface SmartReference {
 }
 
 export enum SmartReferenceType {
-  HiddenPiInstance = "HIDDEN_PI_INSTANCE",
-  General = "GENERAL",
-  EquipmentReplacement = "EQUIPMENT_REPLACEMENT",
-  LotUsage = "LOT_USAGE",
-  LotSoruce = "LOT_SOURCE",
+  HiddenPiInstance = 'HIDDEN_PI_INSTANCE',
+  General = 'GENERAL',
+  EquipmentReplacement = 'EQUIPMENT_REPLACEMENT',
+  LotUsage = 'LOT_USAGE',
+  LotSoruce = 'LOT_SOURCE',
 }
 
 interface InputOwner {
@@ -256,9 +256,9 @@ interface InputOwner {
 
 
 export const RevisionStageOptions = [
-  { value: 1, text: "common.Numeric" },
-  { value: 2, text: "common.NumericAlpha" },
-  { value: 3, text: "common.Alpha" },
+  { value: 1, text: 'common.Numeric' },
+  { value: 2, text: 'common.NumericAlpha' },
+  { value: 3, text: 'common.Alpha' },
 ];
 
 export interface ReferenceToEditRequest {
@@ -276,6 +276,10 @@ export interface DocumentRevisionDocumentRequest {
   id?: string;
   documentType?: Partial<DocumentType>;
   securityList: SecurityListRequest;
+}
+
+export interface ExportToEmailRequest {
+  includeAuditLogs: boolean
 }
 
 export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps {
@@ -326,7 +330,7 @@ export interface DocumentByIdState {
 
 export type DocumentRevisionsAllIdsState = string[];
 
-export type DocumentRevisionTransition = "pending_submission";
+export type DocumentRevisionTransition = 'pending_submission';
 
 export interface DocumentRevisionTransitionRequestBody {
   password: string;

@@ -1,10 +1,10 @@
-import { Button } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import { FormikErrors } from "formik";
-import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../state/types";
-import Text from "../components/Text";
-import { Translation } from "../translations/types";
+import { Button } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import { FormikErrors } from 'formik';
+import * as React from 'react';
+import { AsyncState, AsyncStatus } from '../../state/types';
+import Text from '../components/Text';
+import { Translation } from '../translations/types';
 
 interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;

@@ -1,11 +1,11 @@
-import { Chip, Grid } from "@material-ui/core";
-import React from "react";
-import { POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
-import { KendoGridFilterCell } from "../../KendoGrid/interfaces";
-import { statusClassMapping } from "../kendo/helpers";
-import Tooltip from "../kendo/Tooltip";
-import { CustomGridCellProps } from "../kendo/types";
-import { styles } from "./Status.styles";
+import { Chip, Grid } from '@material-ui/core';
+import React from 'react';
+import { POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
+import { KendoGridFilterCell } from '../../KendoGrid/interfaces';
+import { statusClassMapping } from '../kendo/helpers';
+import Tooltip from '../kendo/Tooltip';
+import { CustomGridCellProps } from '../kendo/types';
+import { styles } from './Status.styles';
 
 export const Status = ({
   dataItem,
@@ -17,7 +17,7 @@ export const Status = ({
   cellRowClick,
 }: CustomGridCellProps) => {
   const classes = styles();
-  const status = dataItem[field || ""];
+  const status = dataItem[field || ''];
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });

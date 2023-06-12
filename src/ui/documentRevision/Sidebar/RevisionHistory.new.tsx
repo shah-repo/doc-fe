@@ -6,19 +6,19 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { AsyncStatus } from "../../../state/types";
-import { changeRequestEditPath } from "../../change.request/utils/paths";
-import DateTime from "../../components/DateTime";
-import Text from "../../components/Text";
-import { FBMapWrapper } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "./styles.new";
+} from '@material-ui/core';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { AsyncStatus } from '../../../state/types';
+import { changeRequestEditPath } from '../../change.request/utils/paths';
+import DateTime from '../../components/DateTime';
+import Text from '../../components/Text';
+import { FBMapWrapper } from '../../form.builder';
+import Colors from '../../layout/theme/utils/colors';
+import styles from './styles.new';
 
 interface SidebarPresenterProps {
   documentId: string;
@@ -38,7 +38,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
   return (
     <Box>
-      {loading && <LinearProgress style={{ width: "100%" }} />}
+      {loading && <LinearProgress style={{ width: '100%' }} />}
       <FBMapWrapper collection={changeRequests || []}>
         {(changeRequest, index) => {
           if (!changeRequest) {

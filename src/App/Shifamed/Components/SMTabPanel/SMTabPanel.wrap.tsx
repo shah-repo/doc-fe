@@ -1,5 +1,5 @@
-import React from "react";
-import { SM, SMTabPanelProps } from "../../..";
+import React from 'react';
+import { SM, SMTabPanelProps } from '../../..';
 
 export const withSMTabPanelWrap = <T extends SMTabPanelProps>(Component: React.FunctionComponent<T>) => {
   const Comp = (props: T) => {
@@ -13,7 +13,7 @@ export const withSMTabPanelWrap = <T extends SMTabPanelProps>(Component: React.F
     );
   };
 
-  Comp.displayName = "withSMTabPanelWrap";
+  Comp.displayName = 'withSMTabPanelWrap';
 
   return Comp;
 };

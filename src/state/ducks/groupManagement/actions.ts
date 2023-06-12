@@ -1,9 +1,9 @@
-import { apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { authActions } from "../auth";
-import { userManagementActions } from "../userManagement";
-import { GROUPS_URL } from "../userManagement/constants";
-import { GroupRequestBody } from "./types";
+import { apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { authActions } from '../auth';
+import { userManagementActions } from '../userManagement';
+import { GROUPS_URL } from '../userManagement/constants';
+import { GroupRequestBody } from './types';
 
 const createGroup = (
   body: GroupRequestBody,
@@ -11,7 +11,7 @@ const createGroup = (
 ): ApiAction<GroupRequestBody> =>
   apiActionWithCallbacks({
     url: GROUPS_URL,
-    method: "post",
+    method: 'post',
     data: body,
     onSuccess: ((res, dispatch) => {
       dispatch(userManagementActions.loadCompanyGroups());
@@ -26,7 +26,7 @@ const editGroup = (
 ): ApiAction<GroupRequestBody> =>
   apiActionWithCallbacks({
     url: `${GROUPS_URL}/${groupId}`,
-    method: "patch",
+    method: 'patch',
     data: body,
     onSuccess: ((res, dispatch) => {
       dispatch(userManagementActions.loadCompanyGroups());

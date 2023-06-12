@@ -1,12 +1,12 @@
-import { cloneDeep } from "lodash";
-import { ApplicationState } from "../../reducers";
-import { getAsyncState } from "../../tests/factories";
-import initialStoreState from "../../tests/helpers/initialStoreState";
-import selectors from "./selectors";
-import { getAudit, getDocument, getDocumentRevision } from "./tests/factories";
-import { DocumentByIdState, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState } from "./types";
+import { cloneDeep } from 'lodash';
+import { ApplicationState } from '../../reducers';
+import { getAsyncState } from '../../tests/factories';
+import initialStoreState from '../../tests/helpers/initialStoreState';
+import selectors from './selectors';
+import { getAudit, getDocument, getDocumentRevision } from './tests/factories';
+import { DocumentByIdState, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState } from './types';
 
-describe("document revision selectors tests", () => {
+describe('document revision selectors tests', () => {
   let state: ApplicationState;
   const documentRevisions = [getDocumentRevision(), getDocumentRevision()];
   const allIds: DocumentRevisionsAllIdsState = [documentRevisions[0].id, documentRevisions[1].id];
@@ -36,37 +36,37 @@ describe("document revision selectors tests", () => {
     state.documentRevisions.loadAuditAsyncInfo = getAsyncState();
   });
 
-  it("getDocumentRevisionsList", () => {
+  it('getDocumentRevisionsList', () => {
     expect(selectors.getDocumentRevisionsList(state)).toEqual(documentRevisions);
   });
 
-  it("getDocument", () => {
+  it('getDocument', () => {
     expect(selectors.getDocumentRevision(state, documentRevisions[0].id)).toEqual(documentRevisions[0]);
   });
 
-  it("getDocumentRevisions", () => {
+  it('getDocumentRevisions', () => {
     expect(selectors.getDocumentRevisions(state, documents[0].id)).toEqual(documents[0].documentRevisions);
   });
 
-  it("makeGetDocumentRevisions", () => {
+  it('makeGetDocumentRevisions', () => {
     const getDocumentRevisions = selectors.makeGetDocumentRevisions();
 
     expect(getDocumentRevisions(state, documents[1].id)).toEqual(documents[1].documentRevisions);
   });
 
-  it("getLoadAsyncState", () => {
+  it('getLoadAsyncState', () => {
     expect(selectors.getLoadAsyncState(state)).toBe(state.documentRevisions.loadAsyncInfo);
   });
 
-  it("getLoadListAsyncState", () => {
+  it('getLoadListAsyncState', () => {
     expect(selectors.getLoadListAsyncState(state)).toBe(state.documentRevisions.loadListAsyncInfo);
   });
 
-  it("getLoadDocumentAsyncState", () => {
+  it('getLoadDocumentAsyncState', () => {
     expect(selectors.getLoadDocumentAsyncState(state)).toBe(state.documentRevisions.loadDocumentAsyncInfo);
   });
 
-  it("getLoadAuditAsyncState", () => {
+  it('getLoadAuditAsyncState', () => {
     expect(selectors.getLoadAuditAsyncState(state)).toBe(state.documentRevisions.loadAuditAsyncInfo);
   });
 });

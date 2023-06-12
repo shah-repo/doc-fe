@@ -1,28 +1,28 @@
-import Colors from "../../../layout/theme/utils/colors";
+import Colors from '../../../layout/theme/utils/colors';
 
 const DoughnutChartOptions = {
   title: {
-    text: "",
-    subtext: "",
+    text: '',
+    subtext: '',
     textStyle: {
       color: Colors.black,
       fontSize: 59,
     },
     subtextStyle: {
-      color: "",
+      color: '',
       fontSize: 12,
     },
     itemGap: -20,
-    left: "center",
-    top: "center",
+    left: 'center',
+    top: 'center',
   },
   series: {
-    type: "gauge",
-    center: ["50%", "100%"],
+    type: 'gauge',
+    center: ['50%', '100%'],
     startAngle: 180,
     endAngle: 0,
     max: 0,
-    radius: "190%",
+    radius: '190%',
     anchor: {
       show: false,
     },
@@ -54,7 +54,7 @@ const DoughnutChartOptions = {
     data: [
       {
         value: 0,
-        name: "",
+        name: '',
         itemStyle: {
           color: Colors.latest_red_varient,
         },

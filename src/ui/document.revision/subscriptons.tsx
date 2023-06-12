@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo } from "react";
-import { appGlobals } from "../../appGlobals";
-import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
-import useMqttSubscription from "../hooks/useMqttSubscription";
+import React, { useCallback, useMemo } from 'react';
+import { appGlobals } from '../../appGlobals';
+import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
+import useMqttSubscription from '../hooks/useMqttSubscription';
 
 interface Props {
   documentRevision: DocumentRevision;

@@ -1,11 +1,11 @@
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import React, { useEffect, useState } from "react";
-import PrismaZoom from "react-prismazoom";
-import AsyncGate from "../../../AsyncGate";
-import Text from "../../../Text";
-import { IMAGE, PDF, SUPPORTED_IMAGE_FILES, SUPPORTED_VIDEO_FILES, VIDEO } from "../utils/constants";
-import { styles } from "../utils/styles";
-import { ViewFileContentProps } from "../utils/types";
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import React, { useEffect, useState } from 'react';
+import PrismaZoom from 'react-prismazoom';
+import AsyncGate from '../../../AsyncGate';
+import Text from '../../../Text';
+import { IMAGE, PDF, SUPPORTED_IMAGE_FILES, SUPPORTED_VIDEO_FILES, VIDEO } from '../utils/constants';
+import { styles } from '../utils/styles';
+import { ViewFileContentProps } from '../utils/types';
 
 const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   asyncState,
@@ -15,7 +15,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
 }) => {
   type = type.toLowerCase();
   const classes = styles();
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState('');
 
   useEffect(() => {
     if (SUPPORTED_VIDEO_FILES.includes(type)) {
@@ -52,7 +52,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   );
 
   const handleClick = (evt) => {
-    if (evt.target.tagName === "DIV") {
+    if (evt.target.tagName === 'DIV') {
       handleClose();
     }
   };

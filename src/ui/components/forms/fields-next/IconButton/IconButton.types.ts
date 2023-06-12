@@ -1,6 +1,6 @@
-import { BasicButtonKinds, ButtonProps } from "../Button/Button.types";
+import { BasicButtonKinds, ButtonProps } from '../Button/Button.types';
 
-export type IconButtonProps = Omit<ButtonProps, "kind" | "size"> & {
-  kind?: BasicButtonKinds | "square" | "boxed" | "simple";
-  size?: number;
+export type IconButtonProps = Omit<ButtonProps, 'kind'> & {
+  kind?: BasicButtonKinds | 'simple' | 'destructive' | 'form' | 'action'
+  iconSize?: number
 };

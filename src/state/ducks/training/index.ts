@@ -1,1 +1,1 @@
-export { default as trainingActions } from "./actions";
+export { default as trainingActions } from './actions';

@@ -24,7 +24,6 @@ fi
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 
 ./scripts/cypress/utils/generate_requirements_json_file.sh
-yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToGeneratedJson.ts
 
 echo "--| CI_BUILD_ID: $CI_BUILD_ID"
 echo "--| CYPRESS_SKIP_ON_RUN_FAILURE: $CYPRESS_SKIP_ON_RUN_FAILURE"
@@ -32,21 +31,20 @@ echo "--| CYPRESS_INTEGRATION_FOLDER: $CYPRESS_INTEGRATION_FOLDER"
 echo "--| CYPRESS_SCREENSHOT_OF_RUN_FAILURE: $CYPRESS_SCREENSHOT_OF_RUN_FAILURE"
 echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 echo "--| NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
-echo "--| CYPRESS_INCLUDE_TAGS: $CYPRESS_INCLUDE_TAGS"
 echo " "
+
 
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 
-function prepend() { while read line; do echo "Worker ${1} | $(date --iso-8601=seconds) | ${line}"; done; }
+function prepend() { while read line; do echo "${1}${line}"; done; }
 function runNode() { 
-  ./scripts/cypress/utils/run_node.sh 2>/dev/null | prepend "${1}" | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
+  ./scripts/cypress/utils/run_node.sh 2>/dev/null | prepend "Worker ${1} | " | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
  }
 
 for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
 do
   echo "Started worker: $i"
   # ./scripts/cypress/utils/run_node.sh  2>/dev/null || true  &
-  sleep 5
   runNode $i &
   pids[${i}]=$!
 done

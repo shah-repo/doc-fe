@@ -1,6 +1,6 @@
-import { TextField } from "@material-ui/core";
-import React from "react";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import { TextField } from '@material-ui/core';
+import React from 'react';
+import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface NameCellProps {
   dataItem: any;
@@ -19,13 +19,13 @@ export const NameCell = ({
   className,
   columnIndex,
 }: NameCellProps) => {
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState('');
   const updateNameField = ({ target }) => {
     setName(target?.value);
     dataItem.name = target?.value;
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 

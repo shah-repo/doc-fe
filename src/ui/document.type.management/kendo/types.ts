@@ -1,8 +1,8 @@
-import { GridCellProps } from "@progress/kendo-react-grid";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { Nullable } from "../../../state/ducks/common/types";
-import { DisplayFieldType, DocumentGroupOptionsType, InputFieldType, PageDetails, TooltipLabelConfig } from "../../../state/ducks/documentRevisions/documentType/types";
-import { FBSchemaProps } from "../../form.builder/FBSchema/FBSchema.types";
+import { GridCellProps } from '@progress/kendo-react-grid';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { Nullable } from '../../../state/ducks/common/types';
+import { DisplayFieldType, DocumentGroupOptionsType, InputFieldType, PageDetails, TooltipLabelConfig } from '../../../state/ducks/documentRevisions/documentType/types';
+import { FBSchemaProps } from '../../form.builder/FBSchema/FBSchema.types';
 
 interface IFieldConfigItem {
   visible: boolean;

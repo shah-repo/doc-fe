@@ -1,12 +1,12 @@
-import { Formik, FormikProps } from "formik";
-import * as React from "react";
-import * as Yup from "yup";
-import { logo } from "../../../common/utils/helpers";
-import { AsyncState } from "../../../state/types";
-import { confirmResetPasswordSchema, emailSchema, passwordSchema, requiredSchema } from "../../components/forms/fields/validators";
-import { FormContext } from "../../components/forms/FormContext";
-import { ResetPasswordValues } from "../types";
-import ResetPasswordPresenter from "./ResetPassword.presenter";
+import { Formik, FormikProps } from 'formik';
+import * as React from 'react';
+import * as Yup from 'yup';
+import { logo } from '../../../common/utils/helpers';
+import { AsyncState } from '../../../state/types';
+import { confirmResetPasswordSchema, emailSchema, passwordSchema, requiredSchema } from '../../components/forms/fields/validators';
+import { FormContext } from '../../components/forms/FormContext';
+import { ResetPasswordValues } from '../types';
+import ResetPasswordPresenter from './ResetPassword.presenter';
 
 interface Props {
   asyncState: AsyncState;
@@ -19,10 +19,10 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
 }) => {
 
   const initialValues: ResetPasswordValues = {
-    email: "",
-    currentPassword: "",
-    newPassword: "",
-    newPasswordConfirmation: "",
+    email: '',
+    currentPassword: '',
+    newPassword: '',
+    newPasswordConfirmation: '',
   };
 
   const render = (props: FormikProps<ResetPasswordValues>) => (

@@ -1,9 +1,9 @@
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { generateRevisionNumber } from '../../documentRevision/helpers/generateRevisionNumber';
 
 export const generateDocIdLabel = (docRev?: DocumentRevision) => {
   if (!docRev) {
-    return "N/A";
+    return 'N/A';
   }
   const { document: { docId } } = docRev;
   return `${docId} - ${docIdVersion(docRev)}`;

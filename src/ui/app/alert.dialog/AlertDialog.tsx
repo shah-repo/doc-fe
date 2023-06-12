@@ -1,10 +1,10 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as AlertIcon } from "../../../assets/images/alert.svg";
-import Text from "../../components/Text";
-import { DialogHandler } from "../../hooks/useDialog";
-import { Translation } from "../../translations/types";
-import { styles } from "./AlertDialog.styles";
+import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
+import Text from '../../components/Text';
+import { DialogHandler } from '../../hooks/useDialog';
+import { Translation } from '../../translations/types';
+import { styles } from './AlertDialog.styles';
 
 interface Props {
   confirmAction: (values?) => void;
@@ -28,8 +28,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
   message,
   confirmAction,
   cancelAction = dialog.close,
-  confirmLabel = "common.yes.im.sure",
-  cancelLabel = "common.cancel",
+  confirmLabel = 'common.yes.im.sure',
+  cancelLabel = 'common.cancel',
 }) => {
   const classes = styles();
   return (
@@ -40,7 +40,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"
-          PaperProps={{ id: "alertDialog" }}
+          PaperProps={{ id: 'alertDialog' }}
         >
           <DialogContent>
             <DialogContentText>
@@ -49,10 +49,10 @@ const AlertDialog: React.FunctionComponent<Props> = ({
                   <AlertIcon />
                 </Grid>
                 <Grid item >
-                  <Typography className={classes.alertTitle}>
+                  <Typography data-cy="dialog-header" className={classes.alertTitle}>
                     <Text translation="common.alert" />!
                   </Typography>
-                  <Typography className={classes.contentText}>
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text translation={message} />
                   </Typography>
                 </Grid>

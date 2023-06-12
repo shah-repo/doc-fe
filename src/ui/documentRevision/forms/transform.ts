@@ -1,13 +1,13 @@
-import { get, isEmpty, maxBy, pick } from "lodash";
-import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from "../../../state/ducks/documentRevisions/types";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
-import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
-import { getIsAdministrativeDefault } from "../helpers/revisionStage";
-import { DocumentRevisionFormValues } from "./types";
+import { get, isEmpty, maxBy, pick } from 'lodash';
+import { DocumentType, DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from '../../../state/ducks/documentRevisions/types';
+import FBDRStore from '../../form.builder/stores/ui/FBDRStore';
+import { DEFAULT_INITIAL_VALUES } from '../DocumentRevisionCreate.container';
+import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from '../helpers/checkDocumentGroup';
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../helpers/documentRevisionStatus';
+import { generateRevisionNumber } from '../helpers/generateRevisionNumber';
+import { getIsAdministrativeDefault } from '../helpers/revisionStage';
+import { DocumentRevisionFormValues } from './types';
 
 export const getLatesReferenceVersion = (reference: SmartReference[] | undefined) => {
   const removedCancelledReference = reference?.filter( (ref) =>
@@ -17,31 +17,31 @@ export const getLatesReferenceVersion = (reference: SmartReference[] | undefined
 };
 
 const getRevisionsInHighestStage = (revisions: DocumentRevision[]) => {
-  const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
+  const highestStage = maxBy(revisions, 'revisionStage')?.revisionStage;
   const revs = revisions.filter((rev) => rev.revisionStage === highestStage && !isDocumentRevisionCanceled(rev.status));
   return revs;
 };
 
 export const getHighestRevision = (revisions: DocumentRevision[]) => {
   const revs = getRevisionsInHighestStage(revisions);
-  return maxBy(revs, "revision");
+  return maxBy(revs, 'revision');
 };
 
 export const getHighestReleasedRevision = (revisions: DocumentRevision[]) => {
   const revs = getRevisionsInHighestStage(revisions).filter((rev) => isDocumentRevisionReleased(rev.status));
-  return maxBy(revs, "revision");
+  return maxBy(revs, 'revision');
 };
 
 const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
   revision.subRevision,
   revision.revisionChangeType,
-) : "";
+) : '';
 
 export const toDocumentRevisionFormValues = (
   documentRevision: DocumentRevision,
 ): DocumentRevisionFormValues => {
-  const parentEquipmentId = get(documentRevision, "parentEquipment.id");
+  const parentEquipmentId = get(documentRevision, 'parentEquipment.id');
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
     description: documentRevision.description,
@@ -63,17 +63,17 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
-    securityEmployees: get(documentRevision, "document.securityList.securityEmployees", [])
+    securityEmployees: get(documentRevision, 'document.securityList.securityEmployees', [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
-    securityGroups: get(documentRevision, "document.securityList.securityGroups", [])
+    securityGroups: get(documentRevision, 'document.securityList.securityGroups', [])
       .map((group) => ({ label: group.name, value: group.id })),
-    operators: get(documentRevision, "document.securityList.operators", [])
+    operators: get(documentRevision, 'document.securityList.operators', [])
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
     parentParts: documentRevision.parentParts?.map((parentPart) => ({ id: parentPart.id })),
     parentEquipment: parentEquipmentId ? { id: parentEquipmentId } : undefined,
-    equipmentSection: get(documentRevision.equipmentSection, ""),
+    equipmentSection: get(documentRevision.equipmentSection, ''),
     // there can currently be only one child part
     childrenParts: documentRevision.childrenParts,
 
@@ -81,7 +81,7 @@ export const toDocumentRevisionFormValues = (
   if (documentRevision.formTemplate) {
     values.formTemplate = {
       schema: documentRevision.formTemplate?.schema,
-      outputDocumentTypes: get(documentRevision, "formTemplate.outputDocumentTypes", [])
+      outputDocumentTypes: get(documentRevision, 'formTemplate.outputDocumentTypes', [])
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
   }
@@ -113,13 +113,13 @@ export const toDocumentRevisionEditRequestBody = (
 ): DocumentRevisionEditRequestBody => {
   const data = {
     ...pick(values, [
-      "formTemplate",
-      "formDocument",
-      "formInput",
-      "schema",
-      "parentParts",
-      "parentEquipment",
-      "equipmentSection",
+      'formTemplate',
+      'formDocument',
+      'formInput',
+      'schema',
+      'parentParts',
+      'parentEquipment',
+      'equipmentSection',
     ]),
     description: values.description,
     name: values.name,
@@ -135,7 +135,7 @@ export const toDocumentRevisionEditRequestBody = (
     revisionStage: Number(values.revisionStage),
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
-    renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, "") : values.renderHTML,
+    renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, '') : values.renderHTML,
   } as DocumentRevisionEditRequestBody;
   if (!values.document?.documentType?.isQms) {
     data.description = data.description || data.name;
@@ -154,24 +154,23 @@ export const toNewVersionRequestBody = (
       // new revision
       newValues.document = {
         ...newValues.document,
-        id: get(values, "document.id"),
+        id: get(values, 'document.id'),
       };
     } else {
       // new document
       newValues.document = {
         ...newValues.document,
-        id: get(values, "document.id"),
-        docId: get(values, "document.docId"),
+        id: get(values, 'document.id'),
+        docId: get(values, 'document.docId'),
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
           operators: (values.operators || []).map((operator) => ({ id: operator.value })),
         },
       };
-      newValues.document.documentType = { id: get(values, "document.documentType.id") };
-      const equipmentId = get(values, "parentEquipment.id");
+      newValues.document.documentType = { id: get(values, 'document.documentType.id') };
+      const equipmentId = get(values, 'parentEquipment.id');
       if (!isEmpty(equipmentId)) {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         newValues.formInput = { ...newValues.formInput, equipment_id: equipmentId };
       }
     }
@@ -208,7 +207,7 @@ export const toDocumentRevisionFormValuesForOutput = (
 ): DocumentRevisionFormValues => {
   const values = {
     ...((DEFAULT_INITIAL_VALUES() as unknown) as DocumentRevision),
-    id: "",
+    id: '',
     formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
     document: {

@@ -1,4 +1,4 @@
-import { DocumentRevisionFooterState, DocumentRevisionFormState, DocumentRevisionSidebarState, SMFormState, SMTabsState, SMTextEditorState } from "../../..";
+import { DocumentRevisionFooterState, DocumentRevisionFormState, DocumentRevisionSidebarState, SMFormState, SMTabsState, SMTextEditorState } from '../../..';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SMProviderProps {

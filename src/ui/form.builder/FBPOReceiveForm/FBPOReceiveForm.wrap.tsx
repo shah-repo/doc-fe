@@ -1,12 +1,12 @@
-import { first, isEmpty } from "lodash";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FB, FBPOReceiveFormProps } from "..";
-import { Id } from "../../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import FBDataStore from "../FBStore/FBDataStore";
-import FBPOReceiveFormState from "./FBPOReceiveForm.state";
+import { first, isEmpty } from 'lodash';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FB, FBPOReceiveFormProps } from '..';
+import { Id } from '../../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { userManagementSelectors } from '../../../state/ducks/userManagement';
+import FBDataStore from '../FBStore/FBDataStore';
+import FBPOReceiveFormState from './FBPOReceiveForm.state';
 
 
 export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
@@ -23,7 +23,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();
     const documentId = workspaceState?.documentId as string;
-    const name = first(workspaceState?.getItemsByType("poreceive"))?.name || "";
+    const name = first(workspaceState?.getItemsByType('poreceive'))?.name || '';
 
 
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(

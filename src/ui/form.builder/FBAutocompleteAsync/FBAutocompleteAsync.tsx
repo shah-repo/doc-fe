@@ -1,7 +1,7 @@
-import React from "react";
-import { FBAutocomplete, FBAutocompleteAsyncProps } from "..";
-import { styles } from "../styles/FBAutocomplete.styles";
-import { withFBAutocompleteAsync } from "./FBAutocompleteAsync.wrap";
+import React from 'react';
+import { FBAutocomplete, FBAutocompleteAsyncProps } from '..';
+import { styles } from '../styles/FBAutocomplete.styles';
+import { withFBAutocompleteAsync } from './FBAutocompleteAsync.wrap';
 
 const FBAutocompleteAsync: React.FunctionComponent<
   FBAutocompleteAsyncProps

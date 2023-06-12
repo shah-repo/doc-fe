@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
+import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../../../layout/theme/utils/colors';
 
 export default makeStyles((theme) =>
   createStyles({
@@ -7,47 +7,47 @@ export default makeStyles((theme) =>
       marginBottom: theme.spacing(2),
     },
     title: {
-      display: "flex",
+      display: 'flex',
       padding: theme.spacing(.5),
-      alignItems: "center",
+      alignItems: 'center',
     },
     fullWidth: {
-      width: "100%",
+      width: '100%',
     },
     btn: {
-      "&:hover": {
+      '&:hover': {
         background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, ${Colors.navy} 85.48%)`,
       },
     },
     disableRipple: {
-      "&:hover": {
-        backgroundColor: "transparent",
+      '&:hover': {
+        backgroundColor: 'transparent',
       },
     },
     fullLengthButton: {
-      "borderStyle": "dashed",
-      "borderColor": Colors.blue,
-      "width": "100%",
-      "margin": 0,
-      "borderRadius": theme.spacing(0, 0, .5, .5),
-      "color": Colors.navy,
-      "&:hover": {
-        backgroundColor: "transparent",
-        borderStyle: "solid",
+      'borderStyle': 'dashed',
+      'borderColor': Colors.blue,
+      'width': '100%',
+      'margin': 0,
+      'borderRadius': theme.spacing(0, 0, .5, .5),
+      'color': Colors.navy,
+      '&:hover': {
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
         borderColor: Colors.blue,
         color: Colors.navy,
       },
     },
     customTooltip: {
       backgroundColor: Colors.black,
-      whiteSpace: "pre-wrap",
+      whiteSpace: 'pre-wrap',
     },
     customArrow: {
       color: Colors.black,
     },
     titleHeading: {
       marginRight: theme.spacing(1.25),
-      display: "inline-block",
+      display: 'inline-block',
       fontWeight: 600,
       color: Colors.almost_black,
     },
@@ -60,103 +60,103 @@ export default makeStyles((theme) =>
     },
     OBS: {
       fontWeight: 600,
-      fontSize: "14px",
-      textTransform: "capitalize",
+      fontSize: '14px',
+      textTransform: 'capitalize',
       color: Colors.latest_red_varient,
     },
     buttonGroup: {
-      display: "flex",
-      alignItems: "center",
-      textAlign: "right",
-      fontSize: "12px",
-      cursor: "pointer",
+      display: 'flex',
+      alignItems: 'center',
+      textAlign: 'right',
+      fontSize: '12px',
+      cursor: 'pointer',
     },
     filterOptions: {
-      fontSize: "14px",
+      fontSize: '14px',
       marginLeft: theme.spacing(1.5),
     },
     dividerStyle: {
       margin: theme.spacing(0, 0, 1.5, 0),
     },
     editRowParentDiv: {
-      display: "flex",
-      width: "100%",
-      alignItems: "flex-start",
+      display: 'flex',
+      width: '100%',
+      alignItems: 'flex-start',
     },
     editRowParentNormal: {
-      border: "1px solid",
+      border: '1px solid',
       borderColor: Colors.cerulean,
     },
     editRowParentError: {
-      border: "1px solid",
+      border: '1px solid',
       borderColor: Colors.red,
     },
     labelError: {
       color: Colors.red,
     },
     editRowChildDivOne: {
-      width: "30%",
-      display: "grid",
-      gridTemplateColumns: "1fr 2fr",
-      justifyContent: "space-evenly",
+      width: '30%',
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr',
+      justifyContent: 'space-evenly',
       padding: theme.spacing(0, 1.5),
-      alignItems: "center",
+      alignItems: 'center',
       columnGap: theme.spacing(.5),
     },
     editRowChildDivTwo: {
-      width: "50%",
-      display: "grid",
-      gridTemplateColumns: "1fr 2fr",
-      justifyContent: "space-evenly",
+      width: '50%',
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr',
+      justifyContent: 'space-evenly',
       padding: theme.spacing(0, 1.5),
-      alignItems: "center",
+      alignItems: 'center',
     },
     gridCenterAlign: {
-      justifyContent: "space-between",
-      alignItems: "center",
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     normalFontWeight: {
-      fontWeight: "normal",
+      fontWeight: 'normal',
     },
     boldFontWeight: {
       fontWeight: 600,
     },
     actionButtonParentDiv: {
-      width: "100%",
-      position: "relative",
+      width: '100%',
+      position: 'relative',
       marginBottom: theme.spacing(.25),
     },
     actionButtonChildDiv: {
       backgroundColor: Colors.dodger_blue,
-      position: "absolute",
+      position: 'absolute',
       right: 0,
       borderRadius: theme.spacing(0, 0, .5, .5),
-      display: "flex",
-      justifyContent: "center",
+      display: 'flex',
+      justifyContent: 'center',
       zIndex: 21,
     },
     actionButton: {
       backgroundColor: Colors.white,
       padding: theme.spacing(.5),
-      minWidth: "auto",
+      minWidth: 'auto',
       border: theme.spacing(1),
     },
     iconButton: {
-      "fontSize": "16px",
-      "fill": Colors.black,
-      "&:hover": {
+      'fontSize': '16px',
+      'fill': Colors.black,
+      '&:hover': {
         fill: Colors.white,
       },
     },
     deleteIconButton: {
-      "fontSize": "16px",
-      "&:hover": {
+      'fontSize': '16px',
+      '&:hover': {
         fill: Colors.white,
       },
     },
     viewIcon: {
       marginTop: theme.spacing(.5),
-      cursor: "pointer",
+      cursor: 'pointer',
       color: Colors.raven,
     },
     viewIconHover: {
@@ -170,112 +170,113 @@ export default makeStyles((theme) =>
       borderRadius: 3,
     },
     defaultCursor: {
-      cursor: "default",
+      cursor: 'default',
     },
     tableHead: {
-      height: "40px",
-      display: "flex",
-      alignItems: "center",
+      height: '40px',
+      display: 'flex',
+      alignItems: 'center',
       backgroundColor: Colors.alice_blue,
       color: Colors.almost_black,
-      fontSize: "12px",
-      fontWeight: "bold",
+      fontSize: '12px',
+      fontWeight: 'bold',
     },
     tableCellOne: {
-      width: "30%",
+      width: '30%',
       borderRadius: theme.spacing(.5, 0, 0, 0),
       paddingLeft: theme.spacing(2),
     },
     tableCellTwo: {
-      width: "45%",
+      width: '45%',
     },
     tableCellThree: {
-      width: "15%",
-      position: "relative",
-      textAlign: "center",
+      width: '15%',
+      position: 'relative',
+      textAlign: 'center',
     },
     tableCellFour: {
-      width: "10%",
+      width: '10%',
       borderRadius: theme.spacing(0, .5, 0, 0),
     },
     verticalDivider: {
-      borderLeft: "2px solid white",
+      borderLeft: '2px solid white',
       paddingLeft: theme.spacing(1.25),
     },
     successMessage: {
-      width: "380px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
+      width: '380px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     textField: {
-      "padding": theme.spacing(1, .75),
-      "& .MuiInputBase-root": {
+      'padding': theme.spacing(1, .75),
+      '& .MuiInputBase-root': {
         marginTop: 0,
         padding: 0,
       },
-      "& .MuiOutlinedInput-input": {
+      '& .MuiOutlinedInput-input': {
         padding: theme.spacing(1.25),
         fontSize: 14,
-        fontWeight: "bold",
+        fontWeight: 'bold',
       },
-      "& .MuiFormHelperText-root": {
-        lineHeight: "1.15rem",
+      '& .MuiFormHelperText-root': {
+        lineHeight: '1.15rem',
         margin: theme.spacing(1, 0, 0, .5),
       },
     },
     smallText: {
-      fontSize: "12px",
+      fontSize: '12px',
     },
-    relatedPartViewRowTitleCell: {
-      "display": "-webkit-box",
-      "-webkit-line-clamp": 1,
-      "-webkit-box-orient": "vertical",
-      "overflow": "hidden",
+    relatedPartRowTitleCell: {
+      'display': '-webkit-box',
+      '-webkit-line-clamp': 1,
+      '-webkit-box-orient': 'vertical',
+      'overflow': 'hidden',
+      'word-break': 'break-word',
     },
     itemRow: {
-      "display": "flex",
-      "alignItems": "center",
-      "width": "100%",
-      "minHeight": "48px",
-      "borderBottom": `1px solid ${Colors.platinum_grey}`,
-      "&:last-child": {
-        borderBottom: "1px solid transparent",
+      'display': 'flex',
+      'alignItems': 'center',
+      'width': '100%',
+      'minHeight': '48px',
+      'borderBottom': `1px solid ${Colors.platinum_grey}`,
+      '&:last-child': {
+        borderBottom: '1px solid transparent',
       },
-      "cursor": "pointer",
-      "backgroundColor": Colors.white,
+      'cursor': 'pointer',
+      'backgroundColor': Colors.white,
     },
     relatedPartViewRowCell: {
       paddingLeft: theme.spacing(1.25),
     },
     relatedPartEyeRowCell: {
-      textAlign: "right",
+      textAlign: 'right',
       paddingRight: theme.spacing(1.25),
     },
     voidedBackground: {
       backgroundColor: Colors.light_red,
     },
     link: {
-      "textDecoration": "none",
-      "color": "inherit",
-      "&:hover": {
-        textDecoration: "underline",
+      'textDecoration': 'none',
+      'color': 'inherit',
+      '&:hover': {
+        textDecoration: 'underline',
       },
     },
     root: {
-      pointerEvents: "none",
+      pointerEvents: 'none',
     },
     paper: {
-      pointerEvents: "auto",
-      width: "80%",
-      maxWidth: "80%",
-      minHeight: "80vh",
+      pointerEvents: 'auto',
+      width: '80%',
+      maxWidth: '80%',
+      minHeight: '80vh',
     },
     close: {
       height: 24,
       width: 24,
       backgroundColor: Colors.athens_gray,
-      borderRadius: "6px",
+      borderRadius: '6px',
       margin: theme.spacing(0, 1.25),
     },
     content: {
@@ -287,31 +288,31 @@ export default makeStyles((theme) =>
     },
     heading: {
       fontWeight: 600,
-      fontSize: "14px",
+      fontSize: '14px',
       flex: 1,
       color: Colors.almost_black,
     },
     loader: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       left: 0,
-      width: "100%",
-      height: "100%",
+      width: '100%',
+      height: '100%',
       backgroundColor: Colors.background_white,
       opacity: 0.7,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       fontWeight: 600,
       zIndex: 1,
     },
     dialogTitleText: {
-      display: "flex",
-      justifyContent: "space-between",
+      display: 'flex',
+      justifyContent: 'space-between',
       color: Colors.almost_black,
     },
     dialogDiv: {
-      display: "flex",
+      display: 'flex',
       fontWeight: 600,
     },
   })

@@ -1,13 +1,13 @@
-import { Box, IconButton, Typography } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-import { isEmpty } from "lodash";
-import moment from "moment";
-import React from "react";
-import { FBFilesPresenter, FBFileUpload, FBForm, FBMapWrapper, FBNoteItem, FBNotesFormProps } from "..";
-import Text from "../../components/Text";
-import FBInputBaseField from "../FBInputBaseField/FBInputBaseField";
-import styles from "./FBNotesForm.styles";
-import { withFBNotesForm } from "./FBNotesForm.wrap";
+import { Box, IconButton, Typography } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
+import { isEmpty } from 'lodash';
+import moment from 'moment';
+import React from 'react';
+import { FBFilesPresenter, FBFileUpload, FBForm, FBMapWrapper, FBNoteItem, FBNotesFormProps } from '..';
+import Text from '../../components/Text';
+import FBInputBaseField from '../FBInputBaseField/FBInputBaseField';
+import styles from './FBNotesForm.styles';
+import { withFBNotesForm } from './FBNotesForm.wrap';
 
 const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
   handleNote,
@@ -23,26 +23,26 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
     <FBForm {...{ formState, notesFormState }}>
       <FBMapWrapper<FBNoteItem[] | undefined> collection={notes}>
         {(note: FBNoteItem, index) => {
-          const logo = !note?.avatar ? "/avatar_placeholder.svg" : note?.avatar;
+          const logo = !note?.avatar ? '/avatar_placeholder.svg' : note?.avatar;
           const lastNote = index === ((notes?.length as number) - 1);
           return (
             <Box pb={lastNote ? 7 : 3}>
               <Box display="flex" pb={1}>
                 <img className={classes.avatar} src={logo}  alt="UserProfile" />
                 <Box>
-                  <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+                  <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                     <Text message={note?.senderName} />
                   </Typography>
                   <Typography variant="subtitle2">
-                    <Text message={moment.utc(note?.createdAt).local().startOf("seconds").fromNow()} />
+                    <Text message={moment.utc(note?.createdAt).local().startOf('seconds').fromNow()} />
                   </Typography>
                 </Box>
               </Box>
-              <Box borderBottom={lastNote ? 0 : "1px solid lightgrey"} >
+              <Box borderBottom={lastNote ? 0 : '1px solid lightgrey'} >
                 {note?.description &&
                   <Typography
                     variant="subtitle1"
-                    style={{ marginBottom: 16, marginLeft: 64, overflowWrap: "anywhere" }}>
+                    style={{ marginBottom: 16, marginLeft: 64, overflowWrap: 'anywhere' }}>
                     <Text message={note?.description} />
                   </Typography>}
                 <Box marginLeft={8}>

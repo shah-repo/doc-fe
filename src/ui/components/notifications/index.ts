@@ -1,17 +1,17 @@
-import { ReactNode } from "react";
-import { Slide, toast as toastify, ToastOptions } from "react-toastify";
-import "./styles.css";
+import { ReactNode } from 'react';
+import { Slide, toast as toastify, ToastOptions } from 'react-toastify';
+import './styles.css';
 
 enum ToastType {
-  Error = "error",
-  Info = "info",
-  Warning = "warning",
-  Success = "success",
-  Default = "",
+  Error = 'error',
+  Info = 'info',
+  Warning = 'warning',
+  Success = 'success',
+  Default = '',
 }
 
 const TOAST_OPTIONS: ToastOptions = {
-  position: "top-center",
+  position: 'top-center',
   autoClose: 5000,
   hideProgressBar: true,
   closeOnClick: true,

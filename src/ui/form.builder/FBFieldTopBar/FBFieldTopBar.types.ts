@@ -1,4 +1,4 @@
-import { FBEditorHelperProps, FBInputProps } from "..";
+import { FBEditorHelperProps, FBInputProps } from '..';
 
 export type FBFieldTopBarProps =
   & FBEditorHelperProps

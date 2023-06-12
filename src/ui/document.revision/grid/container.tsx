@@ -1,25 +1,25 @@
-import { isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router-dom";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { CATEGORY, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { getSchemaFromColumns } from "../../common/utils/helpers";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { DataStateProps } from "../../components/KendoGrid/interfaces";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { canEditDocumentRevision, documentRevisionQueryStatus } from "../utils/helpers";
-import { documentEditPath, documentPreviewPath } from "../utils/paths";
-import gridConfiguration from "./column.definition";
-import { DocumentListPresenter } from "./presenter";
+import { isEmpty } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
+import { CATEGORY, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { getSchemaFromColumns } from '../../common/utils/helpers';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { canEditDocumentRevision, documentRevisionQueryStatus } from '../utils/helpers';
+import { documentEditPath, documentPreviewPath } from '../utils/paths';
+import gridConfiguration from './column.definition';
+import { DocumentListPresenter } from './presenter';
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
-  const TABLE_NAME = "documentRevisions";
+  const TABLE_NAME = 'documentRevisions';
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
   const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD, DOC_TYPE_GROUP_OPTION.PO];
@@ -59,7 +59,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          apiError: "",
+          apiError: '',
           queryDict: {
             dataState,
           },
@@ -74,12 +74,12 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     if (isEmpty(tableCriteria.queryDict)) {
       const dataState: DataStateProps = {
         filter: {
-          logic: "and",
+          logic: 'and',
           filters: [
             {
-              field: "displayStatus",
-              operator: "eq",
-              value: "Released" as DocumentRevisionStatus,
+              field: 'displayStatus',
+              operator: 'eq',
+              value: 'Released' as DocumentRevisionStatus,
             },
           ],
         },

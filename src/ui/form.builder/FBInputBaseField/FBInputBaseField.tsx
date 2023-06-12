@@ -1,13 +1,13 @@
-import { Box, InputBase } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBInputType } from "..";
-import { FBInputBaseFieldProps } from "./FBInputBaseField.types";
-import { withFBInputBaseField } from "./FBInputBaseField.wrap";
+import { Box, InputBase } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBInputType } from '..';
+import { FBInputBaseFieldProps } from './FBInputBaseField.types';
+import { withFBInputBaseField } from './FBInputBaseField.wrap';
 
 const FBInputBaseField: React.FunctionComponent<FBInputBaseFieldProps> = ({
   onBlur,
-  FBProps: { inputType = "textfield" } = {},
-  placeholder = "",
+  FBProps: { inputType = 'textfield' } = {},
+  placeholder = '',
   multiline,
   defaultValue,
   error,
@@ -24,13 +24,13 @@ const FBInputBaseField: React.FunctionComponent<FBInputBaseFieldProps> = ({
   ...props
 }) => (
   <FBInput {...props} {...{ error, defaultValue, gutter }} type={inputType as FBInputType}>
-    {mode === "preview" && (
+    {mode === 'preview' && (
       <Box>{defaultValue}</Box>
     )}
-    { mode !== "preview" &&
+    { mode !== 'preview' &&
       <InputBase
         {...{ placeholder, style, rows, multiline, rowsMax }}
-        inputProps={{ "aria-label": "naked" }}
+        inputProps={{ 'aria-label': 'naked' }}
       />}
   </FBInput>
 );

@@ -1,15 +1,15 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../../layout/theme/utils/colors';
 
 const CellStyles = makeStyles((theme) => ({
   topButton: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   dot: {
     height: theme.spacing(0.75),
     width: theme.spacing(0.75),
-    borderRadius: "50%",
+    borderRadius: '50%',
   },
   Active: {
     background: Colors.latest_green_varient,
@@ -22,7 +22,7 @@ const CellStyles = makeStyles((theme) => ({
   },
   schemaCancelBtn: {
     margin: 0,
-    boxShadow: "none",
+    boxShadow: 'none',
     borderRadius: 200,
     marginRight: theme.spacing(1.875),
     paddingRight: theme.spacing(2.5),
@@ -32,28 +32,28 @@ const CellStyles = makeStyles((theme) => ({
     color: Colors.navy,
     border: `1px solid ${Colors.gray}`,
     backgroundColor: Colors.white,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   schemaAddBtn: {
-    "fontWeight": 600,
-    "margin": 0,
-    "boxShadow": "none",
-    "borderRadius": 200,
-    "background": Colors.navy,
-    "color": Colors.white,
-    "paddingRight": theme.spacing(2.5),
-    "paddingLeft": theme.spacing(2.5),
-    "textTransform": "uppercase",
-    "&:hover": {
+    'fontWeight': 600,
+    'margin': 0,
+    'boxShadow': 'none',
+    'borderRadius': 200,
+    'background': Colors.navy,
+    'color': Colors.white,
+    'paddingRight': theme.spacing(2.5),
+    'paddingLeft': theme.spacing(2.5),
+    'textTransform': 'uppercase',
+    '&:hover': {
       background: Colors.navy,
     },
-    "&:disabled": {
+    '&:disabled': {
       opacity: .6,
       backgroundColor: Colors.navy,
     },
   },
   closeButton: {
-    position: "absolute",
+    position: 'absolute',
     right: 8,
     top: 3,
     color: theme.palette.grey[500],
@@ -68,10 +68,10 @@ const CellStyles = makeStyles((theme) => ({
     color: Colors.latest_red_varient,
   },
   iconButton: {
-    "&:hover": {
-      backgroundColor: "transparent",
+    '&:hover': {
+      backgroundColor: 'transparent',
     },
-    "padding": theme.spacing(0.625),
+    'padding': theme.spacing(0.625),
   },
 }));
 export default CellStyles;

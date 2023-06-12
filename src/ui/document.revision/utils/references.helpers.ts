@@ -1,7 +1,7 @@
-import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions/types";
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import { documentVersionPath } from "./paths";
-import { ReferenceSummary } from "./types";
+import { DocumentRevision, DocumentRevisionStatus, Reference } from '../../../state/ducks/documentRevisions/types';
+import { isDocumentRevisionDeprecated, isDocumentRevisionInStatus, isDocumentRevisionObsolete, isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import { documentVersionPath } from './paths';
+import { ReferenceSummary } from './types';
 
 const handleReferenceForDeprecated = (documentRevisions: DocumentRevision[], deprecatedAt: string) => {
   const docRevDeprecatedAfterThisDocument = documentRevisions.find((docRev) => {
@@ -72,8 +72,9 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
   {
     const { status } = docRev;
     const { id } = docRev.document;
+    const isRevisionObsolete = isDocumentRevisionObsolete(status) || isDocumentRevisionDeprecated(status);
 
-    if (!acc[id] || isDocumentRevisionReleased(status)) {
+    if ((!acc[id] || isDocumentRevisionReleased(status)) && !isRevisionObsolete) {
       acc[id] = docRev;
     }
 

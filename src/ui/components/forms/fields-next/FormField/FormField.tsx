@@ -1,10 +1,10 @@
-import { CircularProgress, FormControl, FormHelperText, InputLabel } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { withThemeNext } from "../../../../layout/theme-next";
-import { renderNode } from "../utils";
-import useStyles from "./FormField.styles";
-import { FormFieldProps } from "./FormField.types";
+import { CircularProgress, FormControl, FormHelperText, InputLabel } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { withThemeNext } from '../../../../layout/theme-next';
+import { renderNode } from '../utils';
+import useStyles from './FormField.styles';
+import { FormFieldProps } from './FormField.types';
 
 const FormField: React.FC<FormFieldProps> = ({
   prefix,

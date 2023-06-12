@@ -1,15 +1,16 @@
-import { AnyAction } from "redux";
-import { ThunkAction } from "redux-thunk";
-import { IotService } from "../../../common/utils/iot/iotService";
-import { ResetPasswordValues } from "../../../ui/users/types";
-import { apiAction, apiActionWithCallbacks } from "../../factories";
-import { ApplicationState } from "../../reducers";
-import { ApiAction, Handlers } from "../../types";
-import { companyActions } from "../company";
-import { Employee } from "../company/types";
-import { userManagementActions } from "../userManagement";
-import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
-import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from "./types";
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { IotService } from '../../../common/utils/iot/iotService';
+import { getPOIndexDbInstance } from '../../../indexDb';
+import { ResetPasswordValues } from '../../../ui/users/types';
+import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApplicationState } from '../../reducers';
+import { ApiAction, Handlers } from '../../types';
+import { companyActions } from '../company';
+import { Employee } from '../company/types';
+import { userManagementActions } from '../userManagement';
+import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
+import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from './types';
 
 const authSignup = (): SignupAction => ({
   type: SIGNUP_URL,
@@ -58,7 +59,7 @@ const editCurrentEmployee = (
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
     url: `${USERS_ME_URL}`,
-    method: "patch",
+    method: 'patch',
     data: body,
     onSuccess: (user, dispatch) => {
       dispatch(editUser(user));
@@ -73,7 +74,7 @@ const editSelectedEmployee = (
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
     url: `${USERS_URL}/${id}`,
-    method: "patch",
+    method: 'patch',
     data: body,
     onSuccess: (user, dispatch) => {
       dispatch(userManagementActions.editSelectedEmployeeUserInfo(user));
@@ -98,7 +99,7 @@ const login = (
 ): ApiAction<AuthResponse, LoginRequestBody> =>
   apiActionWithCallbacks({
     url: LOGIN_URL,
-    method: "post",
+    method: 'post',
     data: loginValues,
     includeAuthorization: false,
     onSuccess: onLoginSuccessCallback,
@@ -111,7 +112,7 @@ const signup = (
 ): ApiAction<AuthResponse, LoginRequestBody> =>
   apiActionWithCallbacks({
     url: SIGNUP_URL,
-    method: "post",
+    method: 'post',
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
@@ -126,7 +127,7 @@ const forgotPassword = (
 ): ApiAction<AuthResponse, ForgotPassword> =>
   apiActionWithCallbacks({
     url: FORGOT_PASSWORD_URL,
-    method: "post",
+    method: 'post',
     data: values,
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
@@ -141,7 +142,7 @@ const confirmNewPassword = (
 ): ApiAction<AuthResponse, ForgotPasswordConfirmation> =>
   apiActionWithCallbacks({
     url: CONFIRM_FORGOT_PASSWORD_URL,
-    method: "post",
+    method: 'post',
     data: confirmValues,
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
@@ -156,7 +157,7 @@ const newUserSetPassword = (
 ): ApiAction<AuthResponse, NewPasswordConfirmation> =>
   apiActionWithCallbacks({
     url: CONFIRM_SET_NEW_PASSWORD_URL,
-    method: "post",
+    method: 'post',
     data: confirmValues,
     includeAuthorization: false,
     onSuccess: onLoginSuccessCallback,
@@ -169,7 +170,7 @@ const resetPassword = (
 ): ApiAction<AuthResponse, ResetPasswordValues> =>
   apiActionWithCallbacks({
     url: CHANGE_PASSWORD_URL,
-    method: "post",
+    method: 'post',
     data: values,
     handlers,
     includeAuthorization: false,
@@ -181,7 +182,7 @@ const loginWithCode = (
 ): ApiAction<AuthResponse, LoginWithCodeRequestBody> =>
   apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
-    method: "post",
+    method: 'post',
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
@@ -199,7 +200,7 @@ const resendSignupEmail = (
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
     url: RESEND_SIGNUP_EMAIL_URL,
-    method: "post",
+    method: 'post',
     data: { email },
     handlers,
   });
@@ -210,7 +211,7 @@ const sendPasswordResetEmail = (
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
     url: SEND_PASSWORD_RESET_EMAIL,
-    method: "post",
+    method: 'post',
     data: { employeeId },
     handlers,
   });
@@ -221,11 +222,12 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
 ) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
-    method: "delete",
+    method: 'delete',
     onCompleted: () => {
       dispatch(logoutUser());
       const iotService = IotService.getInstance();
       iotService.unsubscribeAll();
+      getPOIndexDbInstance().clear();
     },
   });
 
@@ -236,7 +238,7 @@ const loadUserGroups = (): ApiAction<Group[]> =>
   apiAction({
     url: `${GROUPS_URL}`,
     asyncType: USER_GROUPS_GET_ASYNC,
-    method: "get",
+    method: 'get',
     onSuccess: (groups, dispatch) => {
       dispatch(userGroups(groups));
     },
@@ -245,7 +247,7 @@ const loadUserGroups = (): ApiAction<Group[]> =>
 const getIotCreds = (): ApiAction =>
   apiAction({
     url: AUTH_AWS_IOT_URL,
-    method: "get",
+    method: 'get',
     includeAuthorization: true,
     onSuccess: (iotCredentials, dispatch) => {
       dispatch(setCredentials(iotCredentials));
@@ -262,7 +264,7 @@ const pingServer = (): ApiAction =>
   apiAction({
     url: `${PING_SERVER_URL}`,
     asyncType: PING_SERVER_GET_ASYNC,
-    method: "get",
+    method: 'get',
     onFailure: (message, dispatch) => {
       dispatch(logoutUser());
     },
@@ -276,7 +278,7 @@ const selectEmployee = (employee: Employee): SelectEmployeeAction => ({
 const getSessionDetails = (employeeId: string) =>
   apiAction({
     url: SESSION_DETAILS_URL,
-    method: "get",
+    method: 'get',
     onSuccess: (data: any, dispatch) => {
       const employee = data.employees.find(
         (employee: any) => employee.id === employeeId,

@@ -1,8 +1,8 @@
-import React from "react";
-import { FBEditor, FBEditorOptions, FBEditorProps, FBTextField } from "..";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { editorOptionStyles } from "../styles/FBEditorOptions.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import React from 'react';
+import { FBEditor, FBEditorOptions, FBEditorProps, FBTextField } from '..';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { editorOptionStyles } from '../styles/FBEditorOptions.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorTextEditor: React.FunctionComponent<FBEditorProps> = ({
   children,

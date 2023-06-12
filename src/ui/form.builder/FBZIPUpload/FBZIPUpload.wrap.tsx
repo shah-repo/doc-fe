@@ -1,8 +1,8 @@
-import { isEmpty } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBFileUploadState, FBFZIPUploadProps, FBUnzipStatus } from "..";
+import { isEmpty } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBFileUploadState, FBFZIPUploadProps, FBUnzipStatus } from '..';
 
 export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
   Component: React.FunctionComponent<T>,
@@ -10,7 +10,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
   const Comp = ({
     fileUploadState,
     disabled,
-    name = "",
+    name = '',
     defaultValue,
     withState,
     files,
@@ -24,7 +24,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
-    const docRevisionId = workspaceState?.document?.id || "";
+    const docRevisionId = workspaceState?.document?.id || '';
 
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
     isInputOwner = workspaceState?.getIsInputOwner(name);

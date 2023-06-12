@@ -1,8 +1,8 @@
-import { CancelTokenSource } from "axios";
-import { Action, Dispatch } from "redux";
-import CallbackHandler from "../common/callbackHandler";
+import { CancelTokenSource } from 'axios';
+import { Action, Dispatch } from 'redux';
+import CallbackHandler from '../common/callbackHandler';
 
-export type ApiActionMethod = "get" | "post" | "put" | "patch" | "delete";
+export type ApiActionMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export interface ApiAction<Response = any, Body = any> extends Action {
   type: string;
@@ -27,10 +27,10 @@ interface ActionWithPayload<P> extends Action {
 }
 
 export enum AsyncStatus {
-  Idle = "IDLE",
-  Active = "ACTIVE",
-  Success = "SUCCESS",
-  Error = "ERROR",
+  Idle = 'IDLE',
+  Active = 'ACTIVE',
+  Success = 'SUCCESS',
+  Error = 'ERROR',
 }
 
 export interface AsyncActionPayload {

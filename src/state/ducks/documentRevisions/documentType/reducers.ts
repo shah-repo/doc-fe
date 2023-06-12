@@ -1,8 +1,8 @@
-import { keyBy, uniq } from "lodash";
-import { combineReducers } from "redux";
-import asyncReducer from "../../../reducers/asyncReducer";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST } from "./constants";
-import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction, TabConfigurationListAction, TabConfigurationState } from "./types";
+import { keyBy, uniq } from 'lodash';
+import { combineReducers } from 'redux';
+import asyncReducer from '../../../reducers/asyncReducer';
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST } from './constants';
+import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction, TabConfigurationListAction, TabConfigurationState } from './types';
 
 type DocumentTypeActions =  DocumentTypeListAction;
 
@@ -26,19 +26,19 @@ const allIds = (state: DocumentTypeAllIdsState = [], action: DocumentTypeActions
 
 const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   documentType: {
-    id: "",
-    documentTypeAcronym: "",
-    documentTypeName: "",
-    group: "OTHER",
+    id: '',
+    documentTypeAcronym: '',
+    documentTypeName: '',
+    group: 'OTHER',
     isQms: true,
     defaultTraining: false,
   },
   forms: [
     {
-      id: "",
-      name: "",
+      id: '',
+      name: '',
       document: {
-        id: "",
+        id: '',
       },
     },
   ],

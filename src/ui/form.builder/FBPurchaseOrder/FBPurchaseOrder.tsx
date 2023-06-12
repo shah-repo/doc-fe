@@ -1,10 +1,10 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable } from "..";
-import { FBButtonStyles } from "../styles/FBButton.styles";
-import { FBPurchaseOrderStyles } from "./FBPurchaseOrder.styles";
-import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable } from '..';
+import { FBButtonStyles } from '../styles/FBButton.styles';
+import { FBPurchaseOrderStyles } from './FBPurchaseOrder.styles';
+import { withFBPurchaseOrder } from './FBPurchaseOrder.wrap';
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
@@ -13,11 +13,12 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   purchaseOrderState,
   dialogState,
   gutter = true,
-  mode = "form",
+  mode = 'form',
   label,
   loading,
   disabled,
   isReceivable,
+  isReleased,
   name,
   isPO,
 }) => {
@@ -27,18 +28,19 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <FBInput {...{ name, disabled }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
-        {isReceivable && (
+        {isReceivable && !isReleased && (
           <FBButton
             color="primary"
             label="form.builder.receive"
             onClick={handleReceiveAll}
-            disabled={loading}
+            disabled={purchaseOrderState?.isAllItemsReceived ?? loading}
             className={cx(classes.button, classes.receiveAllBtn)}
           />
         )}
       </Box>
     </FBInput>
   </FBProvider>
-  ); };
+  );
+};
 
 export default withFBPurchaseOrder(FBPurchaseOrder);

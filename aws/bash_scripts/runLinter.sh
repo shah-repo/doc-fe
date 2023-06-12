@@ -10,7 +10,6 @@ mkdir -p ${TEST_RESULTS_DIR}
 
 pids=()
 CI=true yarn lint --format codeframe -o ${TEST_RESULTS_DIR}/eslint-results.txt & pids+=($!)
-CI=true yarn lint_cypress --format codeframe -o ${TEST_RESULTS_DIR}/eslint-results-cypress.txt & pids+=($!)
 
 error=false
 for pid in ${pids[*]}; do
@@ -19,7 +18,7 @@ for pid in ${pids[*]}; do
     fi
 done
 
-if $error; 
-then 
+if $error;
+then
   exit 1
 fi

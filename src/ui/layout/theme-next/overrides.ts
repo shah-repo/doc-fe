@@ -1,28 +1,41 @@
-import { Theme } from "@material-ui/core";
-import { fade } from "@material-ui/core/styles";
-import { Overrides } from "@material-ui/core/styles/overrides";
-import { MuiPickersOverrides } from "@material-ui/pickers/typings/overrides";
-import Colors from "./colors";
-import { GRADIENT, TRANSITON_BOUNCE } from "./consts";
+import { Theme } from '@material-ui/core';
+import { fade } from '@material-ui/core/styles';
+import { Overrides } from '@material-ui/core/styles/overrides';
+import { MuiPickersOverrides } from '@material-ui/pickers/typings/overrides';
+import Colors from './colors';
+import { GRADIENT, TRANSITON_BOUNCE } from './consts';
 
 const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
+  MuiCssBaseline: {
+    '@global': {
+      body: {
+        backgroundColor: Colors.white,
+        overflow: 'hidden',
+      },
+    },
+  },
   MuiIconButton: {
     root: {
-      "padding": theme.spacing(.5),
-      "fontSize": "1rem",
-      "&:hover": {
-        backgroundColor: "none",
+      padding: theme.spacing(0.5),
+      fontSize: '1rem',
+      '&:hover': {
+        backgroundColor: 'none',
       },
     },
   },
   MuiButton: {
     root: {
-      "minHeight": 36,
-      "borderRadius": 72,
-      "padding": theme.spacing(1.25, 2.5),
-      "&:hover": {
-        backgroundColor: "none",
+      minHeight: 36,
+      borderRadius: 72,
+      padding: theme.spacing(1.25, 2.5),
+      '&:hover': {
+        backgroundColor: 'none',
       },
+    },
+    sizeSmall: {
+      minHeight: 30,
+      fontSize: 12,
+      padding: theme.spacing(0.75, 2),
     },
     startIcon: {
       marginLeft: 0,
@@ -33,144 +46,144 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       marginRight: 0,
     },
     iconSizeMedium: {
-      "& *:first-child": {
+      '& *:first-child': {
         fontSize: 16,
       },
     },
     contained: {
-      "boxShadow": "none",
-      "&$disabled": {
+      boxShadow: 'none',
+      '&$disabled': {
         backgroundColor: Colors.buttonDisabled,
         color: Colors.white,
       },
     },
     containedPrimary: {
-      "backgroundColor": Colors.primary,
-      "color": Colors.white,
-      "&:hover": {
+      backgroundColor: Colors.primary,
+      color: Colors.white,
+      '&:hover': {
         backgroundColor: Colors.primaryDark,
       },
-      "&$disabled": {
+      '&$disabled': {
         backgroundColor: Colors.buttonDisabled,
         color: Colors.white,
       },
     },
     containedSecondary: {
-      "backgroundColor": Colors.primaryBg,
-      "color": Colors.primary,
-      "&:hover": {
+      backgroundColor: Colors.primaryBg,
+      color: Colors.primary,
+      '&:hover': {
         backgroundColor: Colors.secondaryLight,
       },
-      "&$disabled": {
+      '&$disabled': {
         backgroundColor: Colors.buttonDisabled,
         color: Colors.white,
       },
     },
     outlined: {
-      "backgroundColor": Colors.white,
-      "padding": theme.spacing(1.25, 2.5),
-      "&$disabled": {
-        border: "none",
+      backgroundColor: Colors.white,
+      padding: theme.spacing(1.25, 2.5),
+      '&$disabled': {
+        border: 'none',
       },
     },
     outlinedPrimary: {
-      "color": Colors.primary,
-      "borderColor": Colors.primary,
-      "&:hover": {
+      color: Colors.primary,
+      borderColor: Colors.primary,
+      '&:hover': {
         backgroundColor: Colors.primaryHighlight,
       },
-      "&$disabled": {
+      '&$disabled': {
         backgroundColor: Colors.buttonDisabled,
         color: Colors.white,
       },
     },
     outlinedSecondary: {
-      "color": Colors.primaryLight,
-      "backgroundColor": Colors.white,
-      "borderColor": Colors.primaryLight,
-      "borderStyle": "dashed",
-      "borderRadius": theme.shape.borderRadius / 2,
-      "textTransform": "uppercase",
-      "&:hover": {
+      color: Colors.primaryLight,
+      backgroundColor: Colors.white,
+      borderColor: Colors.primaryLight,
+      borderStyle: 'dashed',
+      borderRadius: theme.shape.borderRadius / 2,
+      textTransform: 'uppercase',
+      '&:hover': {
         backgroundColor: Colors.primaryHighlight,
         borderColor: Colors.primaryLight,
-        borderStyle: "dashed",
+        borderStyle: 'dashed',
       },
-      "&$disabled": {
+      '&$disabled': {
         color: Colors.textDisabled,
         borderColor: Colors.buttonDisabled,
-        borderStyle: "dashed",
+        borderStyle: 'dashed',
       },
     },
     text: {
-      "backgroundColor": "transparent",
-      "padding": theme.spacing(1.25, 2.5),
-      "&:hover": {
-        backgroundColor: "none",
+      backgroundColor: 'transparent',
+      padding: theme.spacing(1.25, 2.5),
+      '&:hover': {
+        backgroundColor: 'none',
       },
     },
     textPrimary: {
-      "color": Colors.primary,
-      "&:hover": {
+      color: Colors.primary,
+      '&:hover': {
         color: Colors.primaryDark,
-        backgroundColor: "transparent",
+        backgroundColor: 'transparent',
       },
-      "&$disabled": {
+      '&$disabled': {
         color: Colors.textDisabled,
       },
     },
     textSecondary: {
-      "backgroundColor": Colors.white,
-      "color": Colors.primary,
-      "&:hover": {
+      backgroundColor: Colors.white,
+      color: Colors.primary,
+      '&:hover': {
         backgroundColor: Colors.primaryHighlight,
       },
-      "&$disabled": {
+      '&$disabled': {
         color: Colors.textDisabled,
       },
     },
   },
   MuiButtonGroup: {
     root: {
-      boxShadow: "none",
+      boxShadow: 'none',
     },
     contained: {
-      boxShadow: "none",
+      boxShadow: 'none',
     },
     grouped: {
-      "minWidth": 36,
-      "&:not(:first-child)": {
-        borderLeft: "none",
+      minWidth: 36,
+      '&:not(:first-child)': {
+        borderLeft: 'none',
         marginLeft: 0,
       },
     },
     groupedContainedPrimary: {
-      "&:not(:last-child)": {
+      '&:not(:last-child)': {
         borderRightColor: Colors.whiteDimmed,
       },
     },
     groupedContainedSecondary: {
-      "&:not(:last-child)": {
+      '&:not(:last-child)': {
         borderRightColor: Colors.stroke,
       },
     },
     groupedTextPrimary: {
-      "&:not(:last-child)": {
-        borderRightColor: "transparent",
+      '&:not(:last-child)': {
+        borderRightColor: 'transparent',
       },
     },
     groupedTextSecondary: {
-      "&:not(:last-child)": {
+      '&:not(:last-child)': {
         borderRightColor: Colors.stroke,
       },
     },
     groupedOutlined: {
-      "&:not(:first-child)": {
+      '&:not(:first-child)': {
         marginLeft: 0,
       },
     },
     groupedOutlinedPrimary: {
-      "&:not(:last-child)": {
+      '&:not(:last-child)': {
         borderRightColor: Colors.primary,
       },
     },
@@ -178,39 +191,40 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
   MuiMenu: {
     paper: {
       outlineWidth: 1,
-      outlineStyle: "solid",
+      outlineStyle: 'solid',
       outlineColor: Colors.stroke,
       borderRadius: theme.shape.borderRadius / 2,
-      margin: theme.spacing(.5, 0),
+      margin: theme.spacing(0.5, 0),
     },
   },
   MuiDivider: {
     middle: {
-      marginTop: theme.spacing(.75),
-      marginBottom: theme.spacing(.75),
+      marginTop: theme.spacing(0.75),
+      marginBottom: theme.spacing(0.75),
       marginLeft: theme.spacing(1.25),
       marginRight: theme.spacing(1.25),
     },
   },
   MuiMenuItem: {
     root: {
-      "paddingTop": theme.spacing(1),
-      "paddingBottom": theme.spacing(1),
-      "minHeight": 48,
-      "&:last-child": {
-        borderBottom: "none",
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      minHeight: 48,
+      '&:last-child': {
+        borderBottom: 'none',
       },
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up('sm')]: {
         minHeight: 48,
       },
     },
     gutters: {
       paddingLeft: theme.spacing(1.5),
-      paddingRight: theme.spacing(3),
+      paddingRight: theme.spacing(1.5),
     },
     dense: {
-      paddingTop: theme.spacing(.25),
-      paddingBottom: theme.spacing(.25),
+      fontSize: '.875rem',
+      paddingTop: theme.spacing(0.5),
+      paddingBottom: theme.spacing(0.5),
       minHeight: 0,
     },
   },
@@ -218,15 +232,21 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
     root: {
       minWidth: 20,
       fontSize: 16,
-      marginRight: theme.spacing(1.75),
-      justifyContent: "center",
+      justifyContent: 'center',
+
+      '&:first-child': {
+        marginRight: theme.spacing(1.75),
+      },
+      '&:last-child': {
+        marginLeft: theme.spacing(1.75),
+      },
     },
   },
   MuiDialogTitle: {
     root: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       padding: theme.spacing(1.75, 2.5),
       minHeight: 58,
     },
@@ -255,26 +275,26 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
   MuiInputLabel: {
     root: {
       ...theme.typography.button,
-      "color": Colors.textBlack,
-      "&$disabled": {
+      color: Colors.textBlack,
+      '&$disabled': {
         color: Colors.textBlack,
       },
-      "&$error": {
+      '&$error': {
         color: Colors.textBlack,
       },
-      "&$focused": {
+      '&$focused': {
         color: Colors.textBlack,
       },
     },
     formControl: {
-      transform: "none",
-      position: "relative",
+      transform: 'none',
+      position: 'relative',
     },
     asterisk: {
       color: Colors.error,
     },
     shrink: {
-      transform: "none",
+      transform: 'none',
     },
   },
   MuiFormHelperText: {
@@ -284,72 +304,72 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
   },
   MuiInputBase: {
     root: {
-      "position": "relative",
-      "borderWidth": 1,
-      "borderStyle": "solid",
-      "borderColor": Colors.stroke,
-      "borderRadius": theme.shape.borderRadius / 2,
-      "backgroundColor": "white",
-      "&:hover": {
+      position: 'relative',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: Colors.stroke,
+      borderRadius: theme.shape.borderRadius / 2,
+      backgroundColor: 'white',
+      '&:hover': {
         backgroundColor: Colors.gray,
       },
-      "&:has(input:-webkit-autofill)": {
-        "backgroundColor": Colors.primaryHighlight,
-        "&:hover": {
+      '&:has(input:-webkit-autofill)': {
+        backgroundColor: Colors.primaryHighlight,
+        '&:hover': {
           backgroundColor: Colors.hover,
         },
       },
-      "&$focused": {
-        "borderColor": Colors.primaryLight,
-        "backgroundColor": Colors.white,
-        "&:hover": {
+      '&$focused': {
+        borderColor: Colors.primaryLight,
+        backgroundColor: Colors.white,
+        '&:hover': {
           backgroundColor: Colors.white,
         },
       },
-      "&$disabled": {
-        "backgroundColor": Colors.fieldDisabled,
-        "&:hover": {
+      '&$disabled': {
+        backgroundColor: Colors.fieldDisabled,
+        '&:hover': {
           backgroundColor: Colors.fieldDisabled,
         },
       },
-      "&$error": {
+      '&$error': {
         borderColor: Colors.error,
       },
     },
     input: {
-      "borderRadius": theme.shape.borderRadius / 2,
-      "backgroundColor": "transparent",
-      "height": 20,
-      "padding": theme.spacing(1.25, 2),
-      "fontSize": ".875rem",
-      "lineHeight": 1.5,
-      "color": Colors.textBlack,
-      "&::placeholder": {
+      borderRadius: theme.shape.borderRadius / 2,
+      backgroundColor: 'transparent',
+      height: 20,
+      padding: theme.spacing(1.25, 2),
+      fontSize: '.875rem',
+      lineHeight: 1.5,
+      color: Colors.textBlack,
+      '&::placeholder': {
         color: Colors.textDisabled,
         opacity: 1,
       },
-      "&:focus::placeholder": {
+      '&:focus::placeholder': {
         color: Colors.textDisabled,
       },
       // Hack to disable higlighting of autofilled inputs
-      "&:-webkit-autofill": {
-        transition: theme.transitions.create("background-color", { duration: "3600s", delay: "3600s" }),
+      '&:-webkit-autofill': {
+        transition: theme.transitions.create('background-color', { duration: '3600s', delay: '3600s' }),
       },
-      "&:-webkit-autofill:hover": {
-        transition: theme.transitions.create("background-color", { duration: "3600s", delay: "3600s" }),
+      '&:-webkit-autofill:hover': {
+        transition: theme.transitions.create('background-color', { duration: '3600s', delay: '3600s' }),
       },
-      "&:-webkit-autofill:focus": {
-        transition: theme.transitions.create("background-color", { duration: "3600s", delay: "3600s" }),
+      '&:-webkit-autofill:focus': {
+        transition: theme.transitions.create('background-color', { duration: '3600s', delay: '3600s' }),
       },
-      "&:-webkit-autofill:active": {
-        transition: theme.transitions.create("background-color", { duration: "3600s", delay: "3600s" }),
+      '&:-webkit-autofill:active': {
+        transition: theme.transitions.create('background-color', { duration: '3600s', delay: '3600s' }),
       },
-      "&$disabled": {
+      '&$disabled': {
         color: Colors.textGray,
       },
     },
     multiline: {
-      height: "auto",
+      height: 'auto',
       minHeight: 20,
       padding: theme.spacing(1.25, 2),
     },
@@ -360,22 +380,22 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       paddingLeft: 0,
     },
     formControl: {
-      "&::placeholder": {
+      '&::placeholder': {
         color: Colors.textDisabled,
         opacity: 1,
       },
-      "&:focus::placeholder": {
+      '&:focus::placeholder': {
         color: Colors.textDisabled,
       },
     },
   },
   MuiInputAdornment: {
     root: {
-      "color": Colors.textGray,
-      "fontSize": 14,
-      "gap": theme.spacing(1),
-      "padding": theme.spacing(0, 1.5),
-      "& > svg": {
+      color: Colors.textGray,
+      fontSize: 14,
+      gap: theme.spacing(1),
+      padding: theme.spacing(0, 1.5),
+      '& > svg': {
         fontSize: 16,
       },
     },
@@ -388,75 +408,120 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       marginLeft: 0,
     },
   },
+  MuiCheckbox: {
+    root: {
+      padding: 0,
+
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
   MuiLinearProgress: {
     barColorPrimary: {
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       background: GRADIENT,
+    },
+  },
+  MuiTooltip: {
+    tooltip: {
+      fontSize: 12,
+      background: Colors.textBlack,
+      borderRadius: theme.shape.borderRadius / 1.5,
+      padding: theme.spacing(0.75, 1.25),
+    },
+    tooltipPlacementBottom: {
+      margin: theme.spacing(1, 0),
+
+      [theme.breakpoints.up('sm')]: {
+        margin: theme.spacing(1, 0),
+      },
+    },
+    tooltipPlacementTop: {
+      margin: theme.spacing(1, 0),
+
+      [theme.breakpoints.up('sm')]: {
+        margin: theme.spacing(1, 0),
+      },
+    },
+    tooltipPlacementRight: {
+      margin: theme.spacing(0, 1),
+
+      [theme.breakpoints.up('sm')]: {
+        margin: theme.spacing(0, 1),
+      },
+    },
+    tooltipPlacementLeft: {
+      margin: theme.spacing(0, 1),
+
+      [theme.breakpoints.up('sm')]: {
+        margin: theme.spacing(0, 1),
+      },
     },
   },
   MuiChip: {
     root: {
       ...theme.typography.subtitle1,
-      "backgroundColor": Colors.primaryBg,
-      "padding": theme.spacing(.75),
-      "height": 30,
-      "color": Colors.textBlack,
-      "position": "relative",
-      "overflow": "hidden",
-      "borderRadius": theme.shape.borderRadius / 2,
+      backgroundColor: Colors.primaryBg,
+      padding: theme.spacing(0.75),
+      height: 30,
+      color: Colors.textBlack,
+      position: 'relative',
+      overflow: 'hidden',
+      borderRadius: theme.shape.borderRadius / 2,
 
-      "&:focus": {
+      '&:focus': {
         backgroundColor: Colors.primaryBg,
       },
 
-      "& .chip-delete": {
-        position: "absolute",
-        padding: theme.spacing(0, .75, 0, 2),
+      '& .chip-delete': {
+        position: 'absolute',
+        padding: theme.spacing(0, 0.75, 0, 2),
         top: 0,
         right: 0,
         bottom: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         opacity: 0,
-        cursor: "pointer",
-        transition: theme.transitions.create("opacity"),
+        cursor: 'pointer',
+        transition: theme.transitions.create('opacity'),
         background: `linear-gradient(to right, ${fade(Colors.primaryBg, 0)}, ${Colors.primaryBg} 30%)`,
       },
-      "& .chip-delete-icon": {
-        transform: "translate(150%, 0)",
-        transition: theme.transitions.create("transform", { easing: TRANSITON_BOUNCE }),
+      '& .chip-delete-icon': {
+        transform: 'translate(150%, 0)',
+        transition: theme.transitions.create('transform', { easing: TRANSITON_BOUNCE }),
       },
-      "&:hover .chip-delete": {
+      '&:hover .chip-delete': {
         opacity: 1,
       },
-      "&:hover .chip-delete-icon": {
-        transform: "translate(0, 0)",
+      '&:hover .chip-delete-icon': {
+        transform: 'translate(0, 0)',
       },
-      "&$disabled": {
+      '&$disabled': {
         opacity: 1,
         color: Colors.textDisabled,
       },
     },
     sizeSmall: {
       ...theme.typography.subtitle2,
-      "height": 28,
+      height: 28,
 
-      "&:hover": {
-        paddingRight: theme.spacing(.75),
+      '&:hover': {
+        paddingRight: theme.spacing(0.75),
       },
 
-      "& .chip-delete": {
+      '& .chip-delete': {
         left: 0,
         padding: 0,
         background: Colors.errorHighlight,
       },
-      "& .chip-delete-icon": {
-        transform: "translate(0, 150%)",
+      '& .chip-delete-icon': {
+        transform: 'translate(0, 150%)',
       },
     },
     deletable: {
-      "&:focus": {
+      '&:focus': {
         backgroundColor: Colors.primaryBg,
       },
     },
@@ -469,30 +534,30 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       paddingRight: 0,
     },
     deleteIcon: {
-      "margin": 0,
-      "width": "auto",
-      "height": "1em",
-      "fontSize": 14,
-      "color": Colors.error,
+      margin: 0,
+      width: 'auto',
+      height: '1em',
+      fontSize: 14,
+      color: Colors.error,
 
-      "&:hover": {
+      '&:hover': {
         color: Colors.error,
       },
     },
     deleteIconSmall: {
-      width: "auto",
-      height: "1em",
+      width: 'auto',
+      height: '1em',
       marginLeft: 0,
       marginRight: 0,
     },
   },
   MuiPickersDay: {
     day: {
-      "borderRadius": theme.shape.borderRadius,
-      "color": Colors.textBlack,
-      "fontSize": ".875rem",
+      borderRadius: theme.shape.borderRadius,
+      color: Colors.textBlack,
+      fontSize: '.875rem',
 
-      "&:hover": {
+      '&:hover': {
         backgroundColor: Colors.hover,
       },
     },
@@ -500,10 +565,10 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       color: Colors.textDisabled,
     },
     daySelected: {
-      "backgroundColor": Colors.primaryLight,
-      "color": Colors.white,
+      backgroundColor: Colors.primaryLight,
+      color: Colors.white,
 
-      "&:hover": {
+      '&:hover': {
         backgroundColor: Colors.primaryLight,
       },
     },
@@ -520,16 +585,16 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
     },
     dayLabel: {
       fontWeight: 400,
-      fontSize: ".75rem",
+      fontSize: '.75rem',
       color: Colors.textGray,
     },
     iconButton: {
-      "color": Colors.textGray,
-      "padding": theme.spacing(1),
-      "&$disabled": {
+      color: Colors.textGray,
+      padding: theme.spacing(1),
+      '&$disabled': {
         color: Colors.textDisabled,
       },
-      "&:hover": {
+      '&:hover': {
         color: Colors.textBlack,
       },
     },

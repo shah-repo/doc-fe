@@ -1,16 +1,17 @@
-import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputBaseProps, InputProps, useFormControl } from "@material-ui/core";
-import formControlState from "@material-ui/core/FormControl/formControlState";
-import MuiAutocomplete from "@material-ui/lab/Autocomplete";
-import { omit } from "lodash";
-import React, { useEffect, useState } from "react";
-import { TextField } from "..";
-import { withThemeNext } from "../../../../layout/theme-next";
-import useStyles from "./Autocomplete.styles";
-import { AutocompleteProps } from "./Autocomplete.types";
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useFormControl } from '@material-ui/core';
+import formControlState from '@material-ui/core/FormControl/formControlState';
+import MuiAutocomplete from '@material-ui/lab/Autocomplete';
+import cx from 'classnames';
+import { omit } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { TextField } from '..';
+import { withThemeNext } from '../../../../layout/theme-next';
+import useStyles from './Autocomplete.styles';
+import { AutocompleteInputProps, AutocompleteProps } from './Autocomplete.types';
 
-const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }> = ({
+const AutocompleteControl: React.FC<AutocompleteInputProps> = ({
   autoFocus = false,
   defaultValue,
   disabled,
@@ -24,47 +25,51 @@ const AutocompleteControl: React.FC<InputBaseProps & { InputProps: InputProps }>
   onChange,
   onFocus,
   placeholder,
+  size,
   value,
   error,
 }) => (
-  <>
-    <TextField
-      autoComplete="search-term"
-      autoFocus={autoFocus}
-      defaultValue={defaultValue}
-      multiline={multiline}
-      disabled={disabled}
-      error={error}
-      name={name}
-      type="search"
-      value={value}
-      id={id}
-      inputRef={inputRef}
-      onBlur={onBlur}
-      onChange={onChange}
-      onFocus={onFocus}
-      placeholder={placeholder}
-      inputProps={inputProps}
-      {...InputProps}
-    />
-  </>
+  <TextField
+    autoComplete="search-term"
+    autoFocus={autoFocus}
+    defaultValue={defaultValue}
+    multiline={multiline}
+    disabled={disabled}
+    error={error}
+    name={name}
+    value={value}
+    id={id}
+    inputRef={inputRef}
+    onBlur={onBlur}
+    onChange={onChange}
+    onFocus={onFocus}
+    placeholder={placeholder}
+    inputProps={inputProps}
+    size={size}
+    {...InputProps}
+  />
 );
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
   name,
+  classes,
   onBlur,
   placeholder,
-  ChipProps = { size: "small" },
+  inputProps,
+  size,
+  ChipProps = { size: 'small' },
   ...props
 }) => {
-  const classes = useStyles();
+  const baseClasses = useStyles();
   const muiFormControl = useFormControl();
   const controlState = formControlState({
     props,
     muiFormControl,
-    states: ["disabled", "error"],
+    states: ['disabled', 'error'],
   });
   const [blurEvent, setBlurEvent] = useState<React.FocusEvent<HTMLUnknownElement>>();
+
+  const isSmall = size === 'small';
 
   useEffect(() => {
     if (blurEvent && onBlur) {
@@ -79,8 +84,14 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     <MuiAutocomplete
       {...props}
       disabled={controlState.disabled}
-      classes={omit(classes, "disabled")}
-      popupIcon={<FontAwesomeIcon icon={solid("angle-down")} />}
+      classes={{
+        ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall'),
+        ...classes,
+        inputRoot: cx(baseClasses.inputRoot, { [baseClasses.sizeSmall]: isSmall }),
+        option: cx(baseClasses.option, { [baseClasses.optionSmall]: isSmall }),
+      }}
+      size={size}
+      popupIcon={<FontAwesomeIcon icon={solid('angle-down')} />}
       onBlur={(event) => {
         event.persist();
         setBlurEvent(event);
@@ -88,6 +99,11 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       renderInput={(params) => (
         <AutocompleteControl
           {...params}
+          InputProps={{
+            ...params.InputProps,
+            ...inputProps,
+          }}
+          size={size}
           name={name}
           error={controlState.error}
           disabled={controlState.disabled}

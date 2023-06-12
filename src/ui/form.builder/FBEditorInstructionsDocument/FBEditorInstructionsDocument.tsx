@@ -1,7 +1,7 @@
-import React from "react";
-import { FBAutocompleteAsync, FBEditor, FBEditorLabel, FBEditorProps } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { styles } from "../styles/FBAutocomplete.styles";
+import React from 'react';
+import { FBAutocompleteAsync, FBEditor, FBEditorLabel, FBEditorProps } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { styles } from '../styles/FBAutocomplete.styles';
 
 const FBEditorInstructionsDocument: React.FunctionComponent<FBEditorProps> = ({
   children,

@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import ErrorIcon from "@material-ui/icons/Error";
-import React from "react";
-import { FBOutOfRangeProps, FBText } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBOutOfRange } from "./FBOutOfRange.wrap";
+import { Box } from '@material-ui/core';
+import ErrorIcon from '@material-ui/icons/Error';
+import React from 'react';
+import { FBOutOfRangeProps, FBText } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBOutOfRange } from './FBOutOfRange.wrap';
 
 const FBOutOfRange: React.FunctionComponent<FBOutOfRangeProps> = () => (
   <Box display="inline-flex" alignItems="center" >
@@ -13,8 +13,8 @@ const FBOutOfRange: React.FunctionComponent<FBOutOfRangeProps> = () => (
       boxProps={{
         pl: 0.5,
         color: Colors.error_red,
-        fontWeight: "bold",
-        whiteSpace: "nowrap",
+        fontWeight: 'bold',
+        whiteSpace: 'nowrap',
       }}
     />
   </Box>

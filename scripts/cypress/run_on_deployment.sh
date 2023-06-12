@@ -2,7 +2,7 @@
 set -e
 
 PS3='Please select the environment:'
-options=("DEV" "DEMO" "SANDBOX" "PROD" "PROD2" "PROD3" "Quit")
+options=("DEV" "DEMO" "SANDBOX" "PROD" "Quit")
 select opt in "${options[@]}"
 do
     echo "Selected $opt"
@@ -11,8 +11,8 @@ do
             echo "Running tests on $opt"
             export CYPRESS_BE_URL="https://api.dev.enlil.io"
             export CYPRESS_FE_URL="https://dev.enlil.io"
-            export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
-            export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
+            export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+            export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
             ./scripts/cypress/run_in_parallel.sh
             break
             ;;
@@ -20,8 +20,8 @@ do
             echo "Running tests on $opt"
             export CYPRESS_BE_URL="https://api.demo.enlil.io"
             export CYPRESS_FE_URL="https://demo.enlil.io"
-            export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
-            export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
+            export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+            export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
             ./scripts/cypress/run_in_parallel.sh
             break
             ;;
@@ -36,24 +36,6 @@ do
             echo "Running tests on $opt"
             export CYPRESS_BE_URL="https://api.enlil.io"
             export CYPRESS_FE_URL="https://enlil.io"
-            ./scripts/cypress/run_in_parallel.sh
-            break
-            ;;
-        "PROD2")
-            echo "Running tests on $opt"
-            export CYPRESS_BE_URL="https://api.prod2.enlil.io"
-            export CYPRESS_FE_URL="https://prod2.enlil.io"
-            export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
-            export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
-            ./scripts/cypress/run_in_parallel.sh
-            break
-            ;;
-        "PROD3")
-            echo "Running tests on $opt"
-            export CYPRESS_BE_URL="https://api.prod3.enlil.io"
-            export CYPRESS_FE_URL="https://prod3.enlil.io"
-            export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
-            export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
             ./scripts/cypress/run_in_parallel.sh
             break
             ;;

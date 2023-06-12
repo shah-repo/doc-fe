@@ -1,16 +1,16 @@
-import { ButtonProps, Grid } from "@material-ui/core";
-import { useFormikContext } from "formik";
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest/types";
-import { AsyncState } from "../../../../state/types";
-import SubmitButton from "../../../components/forms/SubmitButton";
-import { FB } from "../../../form.builder";
-import { RouteParamsCreate } from "../../utils/types";
-import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
-import TransitionButton from "./TransitionButton";
+import { ButtonProps, Grid } from '@material-ui/core';
+import { useFormikContext } from 'formik';
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from '../../../../state/ducks/changeRequest/types';
+import { AsyncState } from '../../../../state/types';
+import SubmitButton from '../../../components/forms/SubmitButton';
+import { FB } from '../../../form.builder';
+import { RouteParamsCreate } from '../../utils/types';
+import AssessmentFormControlsContainer from './AssessmentFormControls.container';
+import TransitionButton from './TransitionButton';
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
@@ -33,16 +33,16 @@ const DocRevActions: React.FunctionComponent<Props> = ({
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
-      case "form":
+      case 'form':
         // formDocument and documentType fields should be set only once
         // and that is when we create CR, not on every save
         // because it sets dirty flag to true and prompts alert for unsaved changes
-        !changeRequest && formik.setFieldValue("formDocument", { id: formDocumentId });
-        !changeRequest && formik.setFieldValue("documentType", { id: documentTypeId });
-        formik.setFieldValue("formInput", formState?.getValues());
+        !changeRequest && formik.setFieldValue('formDocument', { id: formDocumentId });
+        !changeRequest && formik.setFieldValue('documentType', { id: documentTypeId });
+        formik.setFieldValue('formInput', formState?.getValues());
         break;
       default:
-        formik.setFieldValue("formTemplate", undefined);
+        formik.setFieldValue('formTemplate', undefined);
     }
   }
   const onFormClick = () => {
@@ -50,7 +50,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     formik.submitForm();
   };
 
-  const label = changeRequest ? "common.save" : "navigation.createChangeRequest";
+  const label = changeRequest ? 'common.save' : 'navigation.createChangeRequest';
 
   const renderTransitionButton = (
     isButtonShown: boolean,
@@ -84,7 +84,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         onClick={onFormClick}
         dataCy={label}
         label={label} />
-      {renderTransitionButton(canSendToReview, "in_review")}
+      {renderTransitionButton(canSendToReview, 'in_review')}
       <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown/>
     </Grid>
   );

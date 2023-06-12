@@ -1,6 +1,6 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { FBApprovalFieldProps, FBButton, FBInlineApproverType, FBMapWrapper } from "..";
+import { Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { FBApprovalFieldProps, FBButton, FBInlineApproverType, FBMapWrapper } from '..';
 
 const FBApprovalField = <T extends FBInlineApproverType>({
   approvalConfig,
@@ -36,7 +36,7 @@ const FBApprovalField = <T extends FBInlineApproverType>({
                     variant="outlined"
                     onClick={onApprove?.(approver)}
                     size="small"
-                    style={{ margin: "5px 0 0 10px" }}
+                    style={{ margin: '5px 0 0 10px' }}
                     {...{ disabled }}
                   />
                 )}

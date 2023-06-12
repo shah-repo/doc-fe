@@ -1,16 +1,16 @@
-import { Grid } from "@material-ui/core";
-import { cloneDeep, has, map } from "lodash";
-import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
-import { useIntl } from "react-intl";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
-import { TableDataProps } from "../../components/table/types";
-import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
-import { isTranslation } from "../../translations/types";
-import CreateDocumentByType from "../list/CreateDocumentByType";
-import { KendoPresenterProps } from "./interfaces";
+import { Grid } from '@material-ui/core';
+import { cloneDeep, has, map } from 'lodash';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import { TableDataProps } from '../../components/table/types';
+import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
+import { isTranslation } from '../../translations/types';
+import CreateDocumentByType from '../list/CreateDocumentByType';
+import { KendoPresenterProps } from './interfaces';
 
 export function DocumentTypePresenter({
   statuses,
@@ -37,13 +37,13 @@ export function DocumentTypePresenter({
   const headers = headerColumns.map((column) => {
     if (
       moment(
-        tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""],
+        tableCriteria.queryDict?.[column.searchOptions?.dataKey || ''],
         moment.ISO_8601,
         true
       ).isValid()
     ) {
       return {
-        label: column.label.split(" ").map((word) => word[0].toUpperCase() + word.substring(1)).join(" "),
+        label: column.label.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' '),
         key: column.key,
       };
     }
@@ -53,7 +53,7 @@ export function DocumentTypePresenter({
       : column.label;
 
     return {
-      label: columnLabel.split(" ").map((word) => word[0].toUpperCase() + word.substring(1)).join(" "),
+      label: columnLabel.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' '),
       key: column.key,
     };
   });
@@ -69,10 +69,9 @@ export function DocumentTypePresenter({
   ) => {
     let copyDate = cloneDeep(dataToBeExported);
     copyDate = map(copyDate, (record: any) => {
-      if (has(record, "precalc.lhr_end_accepted_quantity")) {
+      if (has(record, 'precalc.lhr_end_accepted_quantity')) {
         if (record.precalc.lhr_end_accepted_quantity === -1) {
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          record.precalc.lhr_end_accepted_quantity = "N/A";
+          record.precalc.lhr_end_accepted_quantity = 'N/A';
         }
       }
       return record;
@@ -103,7 +102,7 @@ export function DocumentTypePresenter({
           onRowClick={onRowClick}
           queryUrl={queryUrl}
           defaultPayloadData={{
-            documentTypeCategory: "Record",
+            documentTypeCategory: 'Record',
             status: documentRevisionQueryStatus(),
           }}
           documentTypeCategory={documentTypeCategory}

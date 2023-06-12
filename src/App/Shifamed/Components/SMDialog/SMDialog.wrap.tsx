@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { SMDialogAction, SMDialogProps } from "../../..";
-import { SMDialogContext } from "./SMDialog.hoc";
+import React, { useContext } from 'react';
+import { SMDialogAction, SMDialogProps } from '../../..';
+import { SMDialogContext } from './SMDialog.hoc';
 
 export const withSMDialogWrap = <T extends SMDialogProps>(
   Component: React.FunctionComponent<T>,
@@ -34,6 +34,6 @@ export const withSMDialogWrap = <T extends SMDialogProps>(
     );
   };
 
-  Comp.displayName = "withSMDialogWrap";
+  Comp.displayName = 'withSMDialogWrap';
   return Comp;
 };

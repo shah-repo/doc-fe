@@ -1,6 +1,6 @@
-import { FBAttachment } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { FBAttachment } from '..';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBFilesPresenterState {
 
@@ -9,7 +9,7 @@ class FBFilesPresenterState {
   public getFiles = (ids: string[]) => this.filesApi.set({
     url: FBEndpoint.AttachmentsByIds,
     urlValues: { ids },
-    method: "get",
+    method: 'get',
   });
 }
 

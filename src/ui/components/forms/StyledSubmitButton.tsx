@@ -1,12 +1,12 @@
-import { Button } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import { FormikErrors } from "formik";
-import { isEmpty } from "lodash";
-import * as React from "react";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { AsyncState, AsyncStatus } from "../../../state/types";
-import FBButtonStyles from "../../form.builder/FBButton/FBButton.styles";
-import Text from "../Text";
+import { Button } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import { FormikErrors } from 'formik';
+import { isEmpty } from 'lodash';
+import * as React from 'react';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { AsyncState, AsyncStatus } from '../../../state/types';
+import FBButtonStyles from '../../form.builder/FBButton/FBButton.styles';
+import Text from '../Text';
 
 interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;

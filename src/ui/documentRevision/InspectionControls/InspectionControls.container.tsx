@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../components/notifications/index";
-import { documentVersionPath } from "../../document.revision/utils/paths";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import { checkCanTypeCreateInspection, checkIsTypeFaiInspection } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
-import InspectionControlsPresenter from "./InspectionControls.presenter";
-import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, OutputDocumentTypes } from "./InspectionControls.types";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications/index';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import { checkCanTypeCreateInspection, checkIsTypeFaiInspection } from '../helpers/checkDocumentGroup';
+import { isDocumentRevisionInDraft } from '../helpers/documentRevisionStatus';
+import InspectionControlsPresenter from './InspectionControls.presenter';
+import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, OutputDocumentTypes } from './InspectionControls.types';
 
 /** Buttons for creating an inspection record - container.
  * @param documentRevision Document Revision that the inspection record will be created for.
@@ -97,7 +97,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
     const docTypeOptions: DocTypeOptionType[] = outputDocumentTypes
       .filter((type) => checkIsTypeFaiInspection(type.groupOptions))
       .map((type) => ({
-        label: type.documentTypeName || "",
+        label: type.documentTypeName || '',
         value: type.id,
         formId,
       }));

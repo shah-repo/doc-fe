@@ -1,16 +1,16 @@
-import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 
-import CloseIcon from "@material-ui/icons/Close";
-import { ReactComponent as NewTabIcon } from "../../../../../assets/images/new_tab.svg";
+import CloseIcon from '@material-ui/icons/Close';
+import { ReactComponent as NewTabIcon } from '../../../../../assets/images/new_tab.svg';
 
-import { DocumentRevisionSummary } from "../../../../../App";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
-import Text from "../../../../components/Text";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useStyles from "./RelatedPart.styles";
+import { DocumentRevisionSummary } from '../../../../../App';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
+import Text from '../../../../components/Text';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useStyles from './RelatedPart.styles';
 
 interface Props {
   documentId: string;
@@ -90,6 +90,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
             className={classes.close}
             size="small"
             onClick={onNewTabOpen}
+            data-cy="related-subpart-dialog-newtab"
           >
             <NewTabIcon />
           </IconButton>
@@ -97,6 +98,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
             className={classes.close}
             size="small"
             onClick={onDialogClose}
+            data-cy="related-subpart-dialog-close"
           >
             <CloseIcon />
           </IconButton></div>

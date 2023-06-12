@@ -1,12 +1,12 @@
-import { chain } from "lodash";
-import { pagerSettings } from "../../components/common/kendo/helpers";
-import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
-import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
+import { chain } from 'lodash';
+import { pagerSettings } from '../../components/common/kendo/helpers';
+import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 
 const columns: KendoColumn[] = [
   {
-    field: "taskType",
-    title: "async.task.type",
+    field: 'taskType',
+    title: 'async.task.type',
     show: true,
     groupable: true,
     locked: false,
@@ -16,8 +16,8 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.TASKTYPE,
   },
   {
-    field: "createdAt",
-    title: "async.tasks.timestamp",
+    field: 'createdAt',
+    title: 'async.tasks.timestamp',
     show: true,
     groupable: false,
     locked: false,
@@ -28,10 +28,10 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.ASYNC_CREATED_AT,
   },
   {
-    field: "duration",
-    title: "async.task.duration",
+    field: 'duration',
+    title: 'async.task.duration',
     show: true,
-    filter: "numeric",
+    filter: 'numeric',
     groupable: false,
     locked: false,
     orderIndex: 3,
@@ -40,8 +40,8 @@ const columns: KendoColumn[] = [
     cell: KendoCellTemplates.DURATION,
   },
   {
-    field: "nextTaskTypes",
-    title: "async.task.next.task.types",
+    field: 'nextTaskTypes',
+    title: 'async.task.next.task.types',
     show: true,
     filterable: false,
     groupable: false,
@@ -51,8 +51,8 @@ const columns: KendoColumn[] = [
     width: 15,
   },
   {
-    field: "status",
-    title: "async.task.status",
+    field: 'status',
+    title: 'async.task.status',
     show: true,
     groupable: true,
     locked: false,
@@ -62,23 +62,23 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.STATUS,
   },
   {
-    field: "employee.user.name",
-    title: "common.name",
+    field: 'employee.user.name',
+    title: 'common.name',
     show: true,
-    filter: "text",
+    filter: 'text',
     locked: false,
     width: 20,
     groupable: true,
     cell: KendoCellTemplates.USER_AVATAR,
     showColumnMenu: true,
     orderIndex: 6,
-    extraFields: ["owner.user.avatar", "owner.user.initialColor"],
+    extraFields: ['owner.user.avatar', 'owner.user.initialColor'],
   },
   {
-    field: "employee.user.email",
-    title: "common.email",
+    field: 'employee.user.email',
+    title: 'common.email',
     show: true,
-    filter: "text",
+    filter: 'text',
     groupable: true,
     locked: false,
     orderIndex: 7,
@@ -90,7 +90,7 @@ const columns: KendoColumn[] = [
 const gridConfiguration: KendoGridConfiguration = {
   groupableFields: chain(columns)
     .filter({ groupable: true })
-    .map("field")
+    .map('field')
     .value(),
   columns,
   pagerSettings,

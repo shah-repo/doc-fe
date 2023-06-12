@@ -1,5 +1,5 @@
-import { Tooltip, withStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import { Tooltip, withStyles } from '@material-ui/core';
+import Colors from '../../../layout/theme/utils/colors';
 
 const styles = () => ({
   arrow: {
@@ -7,10 +7,10 @@ const styles = () => ({
   },
   tooltip: {
     backgroundColor: Colors.black,
-    fontSize: "12px",
+    fontSize: '12px',
   },
   tooltipPlacementTop: {
-    margin: "8px 0",
+    margin: '8px 0',
   },
   // Need this because of material ui bug with tooltip zIndex
   // Tooltip displays over every other element on top of it

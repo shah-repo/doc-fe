@@ -1,12 +1,12 @@
-import { Box, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import Select, { components } from "react-select";
-import { ReactComponent as DeleteIcon } from "../../../../assets/images/circle-remove.svg";
-import { GroupType } from "../../../../state/ducks/auth/types";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import Text from "../../../components/Text";
+import { Box, Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import Select, { components } from 'react-select';
+import { ReactComponent as DeleteIcon } from '../../../../assets/images/circle-remove.svg';
+import { GroupType } from '../../../../state/ducks/auth/types';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import { selectStyles, selectTheme } from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import Text from '../../../components/Text';
 
 interface Props {
   parentGroups: any[];
@@ -32,7 +32,7 @@ const ParentGroups: React.FunctionComponent<Props> = ({
   return (
     <Grid>
       <Box width={700} mt={5}>
-        <Typography variant="h4" style={{ marginBottom: "16px" }}>
+        <Typography variant="h4" style={{ marginBottom: '16px' }}>
           <Text translation="common.parent.groups" />
         </Typography>
         <Select
@@ -43,6 +43,7 @@ const ParentGroups: React.FunctionComponent<Props> = ({
           value={parentGroups}
           components={{ MultiValueRemove }}
           styles={selectStyles}
+          theme={selectTheme}
         />
       </Box>
     </Grid>

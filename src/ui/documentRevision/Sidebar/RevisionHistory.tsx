@@ -1,13 +1,13 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { Link } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { changeRequestEditPath } from "../../change.request/utils/paths";
-import DateTime from "../../components/DateTime";
-import Text from "../../components/Text";
-import { FBMapWrapper } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "./styles";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { changeRequestEditPath } from '../../change.request/utils/paths';
+import DateTime from '../../components/DateTime';
+import Text from '../../components/Text';
+import { FBMapWrapper } from '../../form.builder';
+import Colors from '../../layout/theme/utils/colors';
+import styles from './styles';
 
 
 interface SidebarPresenterProps {
@@ -36,7 +36,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                     to={changeRequestEditPath(changeRequest.id)}
                     target="_blank"
                     id="ChangeRequestLink-docRev-linkButton"
-                    style={{ textDecoration: "none", color: Colors.medium_blue }}
+                    style={{ textDecoration: 'none', color: Colors.medium_blue }}
                   >
                     <span>{changeRequest.crId}</span>
                   </Link>

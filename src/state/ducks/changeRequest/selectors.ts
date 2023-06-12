@@ -1,10 +1,10 @@
 
-import { createSelector } from "reselect";
-import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
-import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
-import { ApplicationState } from "../../reducers";
-import { AsyncState } from "../../types";
-import { Audit, AuditGroupType } from "../audit/types";
+import { createSelector } from 'reselect';
+import { stripTags, stripTagsFromObject } from '../../../common/utils/helpers';
+import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
+import { ApplicationState } from '../../reducers';
+import { AsyncState } from '../../types';
+import { Audit, AuditGroupType } from '../audit/types';
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -64,13 +64,13 @@ const makeGetAudit = () => createSelector(
     Object.keys(audits).forEach((groupId) => {
       audits[groupId].map((audit: Audit) => {
         switch (audit.field) {
-          case "assessments.description":
-          case "justifications.description":
-          case "tasks.description":
-          case "description":
-          case "assessments.process.reasoning":
-          case "assessments.design.reasoning":
-          case "assessments.regulatory.reasoning": {
+          case 'assessments.description':
+          case 'justifications.description':
+          case 'tasks.description':
+          case 'description':
+          case 'assessments.process.reasoning':
+          case 'assessments.design.reasoning':
+          case 'assessments.regulatory.reasoning': {
             const html = audit.nextValue as string;
             audit.nextValue = stripTags(html).substring(0, 100);
             return audit;

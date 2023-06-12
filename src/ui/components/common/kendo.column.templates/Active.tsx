@@ -1,7 +1,7 @@
-import React from "react";
-import { get } from "lodash";
-import { CustomGridCellProps } from "../kendo/types";
-import Text from "../../Text";
+import React from 'react';
+import { get } from 'lodash';
+import { CustomGridCellProps } from '../kendo/types';
+import Text from '../../Text';
 
 export const Active = ({
   dataItem,
@@ -13,9 +13,9 @@ export const Active = ({
   columnIndex,
   cellRowClick,
 }: CustomGridCellProps) => {
-  const value = Boolean(get(dataItem, field || ""));
+  const value = Boolean(get(dataItem, field || ''));
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 
@@ -33,7 +33,7 @@ export const Active = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <Text translation={value ? "common.active" : "common.inactive"} />
+      <Text translation={value ? 'common.active' : 'common.inactive'} />
     </td>
   );
 };

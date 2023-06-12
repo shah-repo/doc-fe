@@ -1,6 +1,6 @@
-import { findLastIndex, orderBy } from "lodash";
-import moment from "moment";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { findLastIndex, orderBy } from 'lodash';
+import moment from 'moment';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
 
 export const shouldRedirectToLatestReleased = (
@@ -35,7 +35,7 @@ export const getDocRevIdToRedirect = (
   const sortedList = orderBy(
     filteredList,
     [({ releasedAt }) => releasedAt ? new Date(releasedAt) : new Date()],
-    "desc",
+    'desc',
   );
 
   return sortedList[0].id;

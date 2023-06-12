@@ -1,18 +1,18 @@
-import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
-import CachedIcon from "@material-ui/icons/Cached";
-import { RenderInputParams } from "@material-ui/lab/Autocomplete";
-import { get, includes } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
-import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
-import Text from "../../components/Text";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { withFBAutocomplete } from "./FBAutocomplete.wrap";
-import { StyledAutoComplete, StyledChip, StyledPopupAutoComplete } from "./StyledAutoComplete";
+import { Box, IconButton, Popper, TextField, Typography } from '@material-ui/core';
+import CachedIcon from '@material-ui/icons/Cached';
+import { RenderInputParams } from '@material-ui/lab/Autocomplete';
+import { get, includes } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { ApprovalStatus } from '../../../state/ducks/documents/types';
+import ListBoxComponent from '../../components/common/autocomplete/ListBoxComponent';
+import Text from '../../components/Text';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { withFBAutocomplete } from './FBAutocomplete.wrap';
+import { StyledAutoComplete, StyledChip, StyledPopupAutoComplete } from './StyledAutoComplete';
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -31,7 +31,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   modifiedOptions,
   defaultValue,
   includeQRScan,
-  optionLabelKey = "",
+  optionLabelKey = '',
   placeholder,
   disabled,
   loading,
@@ -39,7 +39,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   value,
   inputStyle = {},
   inputPropStyle = {},
-  inputPropStyleSize = "",
+  inputPropStyleSize = '',
   disabledOptions = [],
   disableBackspace = false,
   disableChipDelete = false,
@@ -74,50 +74,50 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         InputProps={{
           ...params.InputProps,
           ...{ style: { ...customStyles } },
-          ...(refresh) && { style: { paddingRight: "33px", ...inputPropStyle } },
-          ...(disabled && type === "lhrstep") && { endAdornment: null },
+          ...(refresh) && { style: { paddingRight: '33px', ...inputPropStyle } },
+          ...(disabled && type === 'lhrstep') && { endAdornment: null },
         }}
         inputProps={{
           ...params.inputProps,
-          "style": {
-            padding: "10.5px 0", ...inputStyle, marginRight: customStyles ?
-              "10px" : disabled  ? "28px" : "0px",
+          'style': {
+            padding: '10.5px 0', ...inputStyle, marginRight: customStyles ?
+              '10px' : disabled  ? '28px' : '0px',
             fontSize: 14,
           },
-          "data-cy": props.name,
+          'data-cy': props.name,
         }}
         size={inputPropStyleSize}
       />
     </Box>
-    {(refresh && type !== "lhrstep") && renderRefreshButton(refresh, disabled)}
-    {(refresh && type === "lhrstep" && !disabled) && renderRefreshButton(refresh, disabled)}
+    {(refresh && type !== 'lhrstep') && renderRefreshButton(refresh, disabled)}
+    {(refresh && type === 'lhrstep' && !disabled) && renderRefreshButton(refresh, disabled)}
   </Box>);
 
   const renderAutoCompleteTags = (value, getTagProps) => <FBMapWrapper<any[]> collection={value}>
     {(option, index) => {
       const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-        (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+        (e.approver.id === get(option, 'id')) && e.status === ApprovalStatus.Approved ) ? true : false;
       const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
 
       return (
         <StyledChip
           key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-          label={ <Box whiteSpace="normal" style={{ wordBreak: "break-word" }}>
+          label={ <Box whiteSpace="normal" style={{ wordBreak: 'break-word' }}>
             {getOptionLabel && getOptionLabel(option)} </Box> }
-          style={{ minHeight: "32px", height: "auto" }}
+          style={{ minHeight: '32px', height: 'auto' }}
           {...getTagProps({ index })}
-          disabled={props.name === "approvers" ? isAlreadyApproved : isOptionDisabled || disabled}
+          disabled={props.name === 'approvers' ? isAlreadyApproved : isOptionDisabled || disabled}
         />
       ); }}
   </FBMapWrapper>;
 
   const isShowErrorMsg = () => {
-    const outputDocumentType = get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], "label")
-    || get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], "group");
+    const outputDocumentType = get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'label')
+    || get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'group');
     const documentType = workspaceState?.document?.document?.documentType?.group;
     if (dialogState?.open && documentType === DOC_TYPE_GROUP.LHRT &&
-      (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === "Lot History Record")
-    && (props.name === "lhr-selected-part" || props.name === "lhrstep-built-in")) {
+      (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === 'Lot History Record')
+    && (props.name === 'lhr-selected-part' || props.name === 'lhrstep-built-in')) {
       return false; }
 
     if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
@@ -126,7 +126,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     return true;
   };
 
-  disabled = includes([ "fb-approvers-approvers", "form.builder.approvers"], props.name) &&
+  disabled = includes([ 'fb-approvers-approvers', 'form.builder.approvers'], props.name) &&
     includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
 
@@ -144,7 +144,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           {...props}
           {...{ multiple, defaultValue, loading, showErrorMsg: isShowErrorMsg() }}
           type="autocomplete"
-          disabled={props.name === "approvers" ? false : disabled}
+          disabled={props.name === 'approvers' ? false : disabled}
           labelProps={FBFontStyle.labelProps}
         >
           {/* hack for autocomplete, options are rendered after component is already shown */}

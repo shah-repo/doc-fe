@@ -1,16 +1,16 @@
-import { Box } from "@material-ui/core";
-import { compact, difference, isEmpty, isEqual, map, some } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect, useRef } from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
-import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { store } from "../../../state/store";
-import Colors from "../../layout/theme/utils/colors";
-import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
-import FBDataStore from "../FBStore/FBDataStore";
-import { usePoApprovals } from "./hooks";
+import { Box } from '@material-ui/core';
+import { compact, difference, isEmpty, isEqual, map, some } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useRef } from 'react';
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from '..';
+import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
+import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { store } from '../../../state/store';
+import Colors from '../../layout/theme/utils/colors';
+import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers';
+import FBDataStore from '../FBStore/FBDataStore';
+import { usePoApprovals } from './hooks';
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -20,7 +20,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded,
     approvalTransition,
     onApproveClick,
-    name = "",
+    name = '',
     loading,
     value,
     groups,
@@ -63,7 +63,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
       const requiredGroups: string[] = compact(
-        map(groups, (group) => includesApprover(group, option.id) ? group.name : "")
+        map(groups, (group) => includesApprover(group, option.id) ? group.name : '')
       );
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
@@ -71,7 +71,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           &nbsp;({option.user?.email})
           {!isEmpty(requiredGroups) && (
             <Box color={Colors.gray}>
-              &nbsp;{`- ${requiredGroups.sort().join(", ")}`}
+              &nbsp;{`- ${requiredGroups.sort().join(', ')}`}
             </Box>
           )}
         </Box>
@@ -85,7 +85,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
-        title: "form.builder.password.prompt",
+        title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
       });
@@ -109,11 +109,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (formValue) => {
-        if (typeof formValue !== "object") {
-          formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
+        if (typeof formValue !== 'object') {
+          formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, 'approver.id'), true);
           return formState?.getInputState(name)?.setRender();
         }
-        const stateValue = map(poApprovalsState?.activeApprovals, "approver.id");
+        const stateValue = map(poApprovalsState?.activeApprovals, 'approver.id');
 
         const employeesToBeAdded = difference(formValue, stateValue);
         const employeesToBeRemoved = difference(stateValue, formValue);
@@ -181,7 +181,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
+    formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, 'approver.id'), true);
 
     documentStatus = document?.status;
 
@@ -205,7 +205,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     });
   };
 
-  Comp.displayName = "withFBPOApprovals";
+  Comp.displayName = 'withFBPOApprovals';
   return Comp;
 };
 

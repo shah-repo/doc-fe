@@ -1,7 +1,7 @@
-import { isEmpty } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBOutOfRangeProps } from "..";
+import { isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBOutOfRangeProps } from '..';
 
 
 export const withFBOutOfRange = <T extends FBOutOfRangeProps>(
@@ -23,12 +23,12 @@ export const withFBOutOfRange = <T extends FBOutOfRangeProps>(
     // MARK: @methods
     const getIsInRange = (value) =>
       !value
-      || value === ""
+      || value === ''
       || ((!pass?.from || value >= pass?.from) && (!pass?.to || value <= pass?.to));
 
     // MARK: @observer
     useObserver(() => {
-      isInRange = getIsInRange(formState?.inputState.get(parentName || "")?.value);
+      isInRange = getIsInRange(formState?.inputState.get(parentName || '')?.value);
     });
 
 
@@ -39,6 +39,6 @@ export const withFBOutOfRange = <T extends FBOutOfRangeProps>(
     });
   };
 
-  Comp.displayName = "withFBOutOfRange";
+  Comp.displayName = 'withFBOutOfRange';
   return Comp;
 };

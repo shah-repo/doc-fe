@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { Group, Permission } from "../../../state/ducks/auth/types";
-import { groupManagementActions } from "../../../state/ducks/groupManagement";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import useAsync from "../../hooks/useAsync";
-import { toEditRequestBody, toGroupOptions, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
-import { DEFAULT_GROUP } from "../utils/types";
-import GroupContentPresenter from "./GroupContent.presenter";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Group, Permission } from '../../../state/ducks/auth/types';
+import { Employee } from '../../../state/ducks/company/types';
+import { groupManagementActions } from '../../../state/ducks/groupManagement';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import useAsync from '../../hooks/useAsync';
+import { toEditRequestBody, toGroupOptions, toMembersOptions, toParentOptions, toRequestBody } from '../utils/transform';
+import { DEFAULT_GROUP } from '../utils/types';
+import GroupContentPresenter from './GroupContent.presenter';
 
 interface Props {
   selectedGroup?: LoadCompanyGroup;
@@ -82,10 +83,17 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
 
   const handleEditGroup = (groupId: string, values: GroupRequestBody) => {
     const isGroupNameChanged = !(selectedGroup && (selectedGroup.name === values.name));
+    const initialDeactivedMembers = selectedGroup?.employees
+      ?.filter((e) => !e.active)
+      ?.map((employee: Employee) => ({
+        label: employee?.user?.name?.trim(),
+        value: employee?.id,
+      })) as OptionType[] || [];
+
     dispatch(
       groupManagementActions.editGroup(
         groupId,
-        toEditRequestBody(isGroupNameChanged, values, members, parentGroups),
+        toEditRequestBody(isGroupNameChanged, values, [...initialDeactivedMembers, ...members], parentGroups),
         editGroupAsync,
       ),
     );

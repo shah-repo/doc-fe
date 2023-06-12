@@ -1,99 +1,99 @@
-import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
-import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
-import { Dictionary } from "lodash";
-import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBProviderProps, FBSchemaState } from "..";
-import { Employee } from "../../../state/ducks/company/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
+import { BaseTextFieldProps, BoxProps } from '@material-ui/core';
+import { AutocompleteProps } from '@material-ui/lab/Autocomplete';
+import { Dictionary } from 'lodash';
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBProviderProps, FBSchemaState } from '..';
+import { Employee } from '../../../state/ducks/company/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
 
-type FBInputTransform = "upper" | "lower";
-export type FBVisibilityType = "visible" | "hidden";
+type FBInputTransform = 'upper' | 'lower';
+export type FBVisibilityType = 'visible' | 'hidden';
 
 export type FBInputType =
-  | "url"
-  | "number"
-  | "textfield"
-  | "checkbox"
-  | "checkboxgroup"
-  | "section"
-  | "subsection"
-  | "datepicker"
-  | "texteditor"
-  | "select"
-  | "radio"
-  | "radiogroup"
-  | "autocomplete"
-  | "autocompleteasync"
-  | "hyperlink"
-  | "fileupload"
-  | "zipattachment"
-  | "schemaItem"
-  | "action"
-  | "summarysection"
-  | "editoroptions"
-  | "schemaselect"
-  | "paragraph"
-  | "documentRevisions"
-  | "instructionsmediaupload"
-  | "evidencemediaupload"
-  | "purchaseorder"
-  | "approvalMatrix"
-  | "approvalRoles"
-  | "poreceive"
-  | "stepsection"
-  | "teststep"
-  | "checkpoint"
-  | "approval"
-  | "inlineapproval"
-  | "createlabel"
-  | "quantity"
-  | "timer"
-  | "requestapproval"
-  | "instructionsdocument"
-  | "selectdocument"
-  | "hellosign"
-  | "customcontrol"
-  | "poApprovalMatrix"
-  | "task"
-  | "approvers"
-  | "blanktplform"
-  | "approvals"
-  | "procedure"
-  | "parts"
-  | "procedurediff"
-  | "ebpart"
-  | "eqmaintenance"
-  | "textfieldwithrange"
-  | "range"
-  | "passpercentage"
-  | "supplier"
-  | "mpiprocedure"
-  | "lhrstep"
-  | "unitMeasures"
-  | "quantityunit"
-  | "partsselection"
-  | "mediaalbum"
-  | "poapprovals"
-  | "lhrbuild"
-  | "purchaseordersummary"
-  | "downloadsheet";
+  | 'url'
+  | 'number'
+  | 'textfield'
+  | 'checkbox'
+  | 'checkboxgroup'
+  | 'section'
+  | 'subsection'
+  | 'datepicker'
+  | 'texteditor'
+  | 'select'
+  | 'radio'
+  | 'radiogroup'
+  | 'autocomplete'
+  | 'autocompleteasync'
+  | 'hyperlink'
+  | 'fileupload'
+  | 'zipattachment'
+  | 'schemaItem'
+  | 'action'
+  | 'summarysection'
+  | 'editoroptions'
+  | 'schemaselect'
+  | 'paragraph'
+  | 'documentRevisions'
+  | 'instructionsmediaupload'
+  | 'evidencemediaupload'
+  | 'purchaseorder'
+  | 'approvalMatrix'
+  | 'approvalRoles'
+  | 'poreceive'
+  | 'stepsection'
+  | 'teststep'
+  | 'checkpoint'
+  | 'approval'
+  | 'inlineapproval'
+  | 'createlabel'
+  | 'quantity'
+  | 'timer'
+  | 'requestapproval'
+  | 'instructionsdocument'
+  | 'selectdocument'
+  | 'hellosign'
+  | 'customcontrol'
+  | 'poApprovalMatrix'
+  | 'task'
+  | 'approvers'
+  | 'blanktplform'
+  | 'approvals'
+  | 'procedure'
+  | 'parts'
+  | 'procedurediff'
+  | 'ebpart'
+  | 'eqmaintenance'
+  | 'textfieldwithrange'
+  | 'range'
+  | 'passpercentage'
+  | 'supplier'
+  | 'mpiprocedure'
+  | 'lhrstep'
+  | 'unitMeasures'
+  | 'quantityunit'
+  | 'partsselection'
+  | 'mediaalbum'
+  | 'poapprovals'
+  | 'lhrbuild'
+  | 'purchaseordersummary'
+  | 'downloadsheet';
 
 export type FBInputProps =
   & FBLabelProps
   & FBOptionProps
   & FBEditorOptionsProps
-  & Pick<AutocompleteProps, "multiple">
-  & Pick<FBProviderProps, "formState">
+  & Pick<AutocompleteProps, 'multiple'>
+  & Pick<FBProviderProps, 'formState'>
   & Pick<BaseTextFieldProps,
-    | "children"
-    | "error"
-    | "value"
-    | "disabled"
-    | "name"
-    | "helperText"
-    | "rows"
-    | "placeholder"
-    | "defaultChecked"
-    | "hidden"
+    | 'children'
+    | 'error'
+    | 'value'
+    | 'disabled'
+    | 'name'
+    | 'helperText'
+    | 'rows'
+    | 'placeholder'
+    | 'defaultChecked'
+    | 'hidden'
   > & {
     onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
     onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
@@ -206,58 +206,58 @@ export type FBInputProps =
   };
 
 export const OmitInputClones: FBInputType[] = [
-  "section",
-  "documentRevisions",
-  "approvers",
-  "approval",
-  "blanktplform",
-  "approvals",
-  "procedure",
-  "mpiprocedure",
-  "procedurediff",
-  "eqmaintenance",
-  "ebpart",
-  "parts",
-  "range",
-  "passpercentage",
-  "poreceive",
-  "quantityunit",
-  "instructionsmediaupload",
-  "evidencemediaupload",
-  "mediaalbum",
-  "lhrstep",
-  "datepicker",
-  "lhrbuild",
-  "radiogroup",
-  "downloadsheet",
+  'section',
+  'documentRevisions',
+  'approvers',
+  'approval',
+  'blanktplform',
+  'approvals',
+  'procedure',
+  'mpiprocedure',
+  'procedurediff',
+  'eqmaintenance',
+  'ebpart',
+  'parts',
+  'range',
+  'passpercentage',
+  'poreceive',
+  'quantityunit',
+  'instructionsmediaupload',
+  'evidencemediaupload',
+  'mediaalbum',
+  'lhrstep',
+  'datepicker',
+  'lhrbuild',
+  'radiogroup',
+  'downloadsheet',
 ];
 
 export const OmitIncludeNotes: FBInputType[] = [
-  "stepsection",
-  "teststep",
-  "section",
-  "subsection",
+  'stepsection',
+  'teststep',
+  'section',
+  'subsection',
 ];
 
 export const FBAutosave: FBInputType[] = [
-  "textfield",
-  "checkboxgroup",
-  "autocomplete",
-  "select",
-  "quantity",
-  "texteditor",
+  'textfield',
+  'checkboxgroup',
+  'autocomplete',
+  'select',
+  'quantity',
+  'texteditor',
 ];
 
 export const BlockTypeField: FBInputType[] = [
-  "section",
-  "approvals",
-  "blanktplform",
-  "purchaseorder",
-  "poapprovals",
-  "poApprovalMatrix",
-  "eqmaintenance",
-  "stepsection",
-  "teststep",
+  'section',
+  'approvals',
+  'blanktplform',
+  'purchaseorder',
+  'poapprovals',
+  'poApprovalMatrix',
+  'eqmaintenance',
+  'stepsection',
+  'teststep',
 ];
 
 export interface FBInputConstructor {

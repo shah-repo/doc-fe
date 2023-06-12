@@ -1,10 +1,10 @@
-import { Button } from "@material-ui/core";
-import React, { useContext, useMemo } from "react";
-import Text from "../../../Text";
-import { SetFile } from "../../attachment.icon/container";
-import { checkIfFileIsViewable } from "../utils/helpers";
-import { styles } from "../utils/styles";
-import { ViewFileTitleControlsProps } from "../utils/types";
+import { Button } from '@material-ui/core';
+import React, { useContext, useMemo } from 'react';
+import Text from '../../../Text';
+import { SetFile } from '../../attachment.icon/container';
+import { checkIfFileIsViewable } from '../utils/helpers';
+import { styles } from '../utils/styles';
+import { ViewFileTitleControlsProps } from '../utils/types';
 
 const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps> = ({
   attachment = {},

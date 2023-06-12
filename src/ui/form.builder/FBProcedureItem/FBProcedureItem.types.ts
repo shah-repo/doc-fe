@@ -1,16 +1,16 @@
-import { FBPartItemStatus, FBProcedureProps, FBProviderProps } from "..";
-import { Id } from "../../../state/ducks/common/types";
+import { FBPartItemStatus, FBProcedureProps, FBProviderProps } from '..';
+import { Id } from '../../../state/ducks/common/types';
 
 export enum FBProcedureItemType {
-  attachments = "attachments",
-  materials = "materials",
-  equipment = "equipment",
+  attachments = 'attachments',
+  materials = 'materials',
+  equipment = 'equipment',
 }
 
 export enum FBProcedureItemLocale {
-  materials = "form.builder.materials",
-  equipment = "form.builder.equipment",
-  attachments = "form.builder.attachments",
+  materials = 'form.builder.materials',
+  equipment = 'form.builder.equipment',
+  attachments = 'form.builder.attachments',
 }
 
 export const FBProcedureItemOmitAction: Partial<FBProcedureItemType[]> = [
@@ -18,8 +18,8 @@ export const FBProcedureItemOmitAction: Partial<FBProcedureItemType[]> = [
 ];
 
 export type FBProcedureItemProps =
-& Pick<FBProviderProps, "dialogState">
-& Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview" | "loading">
+& Pick<FBProviderProps, 'dialogState'>
+& Pick<FBProcedureProps, 'name' | 'stepIndex' | 'disabled' | 'isPreview' | 'loading'>
 & {
   onClick?: (part?: FBProcedureItemConfig) => void;
   handleRemove?: (id: string) => void;

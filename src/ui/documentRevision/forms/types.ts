@@ -1,9 +1,9 @@
-import { Attachment } from "../../../state/ducks/attachments/types";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { Id } from "../../../state/ducks/common/types";
-import { DocumentRevisionDocument, DocumentRevisionStatus, FBDocumentRevisionProps, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FBSchemaProps } from "../../form.builder";
+import { Attachment } from '../../../state/ducks/attachments/types';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { Id } from '../../../state/ducks/common/types';
+import { DocumentRevisionDocument, DocumentRevisionStatus, FBDocumentRevisionProps, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FBSchemaProps } from '../../form.builder';
 
 export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   version?: number;
@@ -39,6 +39,6 @@ export interface ApproveAndReleaseFormValues {
 }
 
 export enum FBDataStoreApprovalKeys {
-  PO_APPROVALS="poApprovals",
-  INLINE_APPROVALS="inlineApprovals"
+  PO_APPROVALS='poApprovals',
+  INLINE_APPROVALS='inlineApprovals'
 }

@@ -1,11 +1,11 @@
-import { DialogProps, SvgIconProps } from "@material-ui/core";
-import { ReactNode } from "react";
-import { FBDialogState, FBLabelLocaleProps } from "..";
+import { DialogProps, SvgIconProps } from '@material-ui/core';
+import { ReactNode } from 'react';
+import { FBDialogState, FBLabelLocaleProps } from '..';
 
 export type FBDialogProps =
-& Pick<Partial<DialogProps>, "open" | "maxWidth" | "classes">
+& Pick<Partial<DialogProps>, 'open' | 'maxWidth' | 'classes'>
 & {
-  handleClose?: SvgIconProps["onClick"];
+  handleClose?: SvgIconProps['onClick'];
   handleActionsRef?: (instance: any) => any;
   handleTitleRef?: (instance: any) => any;
   onClose?: () => any;
@@ -16,4 +16,5 @@ export type FBDialogProps =
   portalAction?: Element;
   portalTitle?: Element;
   showLeftPanelEditor?: boolean;
+  fullscreen?: boolean
 };

@@ -1,8 +1,8 @@
-import { FBAutocompleteAsyncProps, FBProviderProps } from "..";
-import { Approval } from "../../../state/ducks/common/types";
+import { FBAutocompleteAsyncProps, FBProviderProps } from '..';
+import { Approval } from '../../../state/ducks/common/types';
 
 export type FBApproversProps =
-& Pick<FBProviderProps, "approversState">
+& Pick<FBProviderProps, 'approversState'>
 & FBAutocompleteAsyncProps
 & {
   isIncluded?: (group: FBRequiredApprover) => void;

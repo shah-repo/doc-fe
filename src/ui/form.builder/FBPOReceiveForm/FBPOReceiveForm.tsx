@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBForm, FBPOReceiveFormProps, FBTextField } from "..";
-import { FormContext } from "../../components/forms/FormContext";
-import { withFBPOReceiveForm } from "./FBPOReceiveForm.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBForm, FBPOReceiveFormProps, FBTextField } from '..';
+import { FormContext } from '../../components/forms/FormContext';
+import { withFBPOReceiveForm } from './FBPOReceiveForm.wrap';
 
 
 const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
@@ -15,28 +15,32 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
         label="form.builder.field.part.number.or.service"
         defaultValue={item?.partNumberDocId || item?.serviceId}
         disabled={true}
+        name="partNumberService"
         hidden={!(item?.partNumberDocId || item?.serviceId)}
       />
       <FBTextField
         label="form.builder.field.supplier.part.number"
         defaultValue={item?.supplierPartNumber}
         disabled={true}
+        name="supplierPartNumber"
         hidden={!item?.supplierPartNumber}
       />
       <FBTextField
         label="form.builder.description"
         defaultValue={item?.partNumberTitle || item?.description}
+        name="description"
         disabled={true}
       />
       <FBTextField
         label="form.builder.field.ordered"
         defaultValue={item?.order}
+        name="ordered"
         disabled={true}
       />
       <Box display="flex" justifyContent="space-between">
         <Box width="100%" marginRight="10px">
           <FBTextField
-            inputProps={{ type: "number", min: "0" }}
+            inputProps={{ type: 'number', min: '0' }}
             defaultValue={item?.received}
             label="form.builder.quantity.received"
             name="received"
@@ -47,6 +51,7 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
           <FBTextField
             label="form.builder.field.units"
             defaultValue={item?.units}
+            name="units"
             disabled={true}
           />
         </Box>

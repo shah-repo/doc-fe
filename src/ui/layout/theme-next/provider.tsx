@@ -1,11 +1,11 @@
-import { createMuiTheme as createTheme, ThemeProvider } from "@material-ui/core";
-import * as React from "react";
-import { shape, spacing } from "./consts";
-import overrides from "./overrides";
-import palette from "./palete";
-import props from "./props";
-import shadows from "./shadows";
-import typography from "./typography";
+import { createMuiTheme as createTheme, ThemeProvider } from '@material-ui/core';
+import * as React from 'react';
+import { shape, spacing } from './consts';
+import overrides from './overrides';
+import palette from './palete';
+import props from './props';
+import shadows from './shadows';
+import typography from './typography';
 
 const baseTheme = createTheme({
   palette,

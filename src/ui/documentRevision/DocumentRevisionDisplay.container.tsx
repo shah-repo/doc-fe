@@ -1,19 +1,22 @@
-import { get } from "lodash";
-import React, { useCallback, useEffect, useMemo } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { DocumentRevisionSummary } from "../../App";
-import { getHasPermission } from "../../common/utils/selectors";
-import { authSelectors } from "../../state/ducks/auth";
-import { GroupTag, Permission } from "../../state/ducks/auth/types";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../state/reducers";
-import { AsyncState } from "../../state/types";
-import AsyncGate from "../components/AsyncGate";
-import DocumentRevisionUpdatedSubscriptions from "../document.revision/subscriptons";
-import CloneContainer from "./Clone.container";
-import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
-import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
+import { get } from 'lodash';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { DocumentRevisionSummary, SM } from '../../App';
+import { getHasPermission } from '../../common/utils/selectors';
+import { authSelectors } from '../../state/ducks/auth';
+import { GroupTag, Permission } from '../../state/ducks/auth/types';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../state/reducers';
+import { AsyncState } from '../../state/types';
+import AsyncGate from '../components/AsyncGate';
+import DocumentRevisionUpdatedSubscriptions from '../document.revision/subscriptons';
+import { checkIsDocumentPO } from '../documentRevision/helpers/checkDocumentGroup';
+import useGetHasTag from '../hooks/useGetHasTag';
+import CloneContainer from './Clone.container';
+import DocumentRevisionUpdateContainer from './DocumentRevisionUpdate.container';
+import { canChangeDocumentOwner, canEditDocumentRevision } from './helpers/documentRevisionPermissions';
+import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
 
 interface StateProps {
   currentUserEmail: string;
@@ -92,11 +95,16 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
     loadDocumentRevisions();
   }, [loadDocumentRevisionAction, loadDocumentRevisions]);
 
-  const operators = get(selectedDocument, "document.operators", []);
+  const operators = get(selectedDocument, 'document.operators', []);
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
   const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
   const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
+  const isPOEditState =
+    useGetHasTag(GroupTag.PO_ADMIN) &&
+    checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions) &&
+    SM.isNewVersion && isDocumentRevisionHasOutput(documentRevision);
+
   isOperator = React.createContext(isCurrentUserOperator);
 
   const canChangeOwnerShip = useMemo(() => {
@@ -120,11 +128,10 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
     canEditDocRev;
 
   const canPreview =
-    documentRevision && !(canEdit || isNewVersion || isNewOutput);
+    documentRevision && !(canEdit || isNewVersion || isNewOutput || isPOEditState);
 
   const subscribeToSocket = documentRevision &&
     <DocumentRevisionUpdatedSubscriptions documentRevision={documentRevision} />;
-
   return (
     <AsyncGate
       asyncState={loadDocumentRevisionAsyncState}
@@ -132,7 +139,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
       startActionOnMount={false}
     >
       {subscribeToSocket}
-      {canEdit && (
+      {(canEdit || isPOEditState) && (
         <DocumentRevisionUpdateContainer
           documentRevision={documentRevision}
           documentId={documentId}
@@ -143,7 +150,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
       {canPreview && (
         <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
       )}
-      {isNewVersion && (
+      {(isNewVersion && !isPOEditState) && (
         <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={isNewVersion} />
       )}
       {isNewOutput && (

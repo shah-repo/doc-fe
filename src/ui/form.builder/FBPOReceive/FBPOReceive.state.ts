@@ -1,12 +1,12 @@
-import { Dictionary, template } from "lodash";
-import { action, computed } from "mobx";
-import { useIntl } from "react-intl";
-import { FBPurchaseOrderItem, FBSchemaProps, ReceiveQuantityBody } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../components/notifications";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import { FBEditorElementType } from "../types/editor";
+import { Dictionary, template } from 'lodash';
+import { action, computed } from 'mobx';
+import { useIntl } from 'react-intl';
+import { FBPurchaseOrderItem, FBSchemaProps, ReceiveQuantityBody } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import { FBEditorElementType } from '../types/editor';
 
 class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
   public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
@@ -34,13 +34,13 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
       return;
     }
     const poFieldName = this.schema
-      .find((schemaItem) => schemaItem.type as FBEditorElementType  === "purchaseorder")
+      .find((schemaItem) => schemaItem.type as FBEditorElementType  === 'purchaseorder')
       ?.name;
 
     if (!poFieldName) {
       // TODO: agree on alternative for notifications
       const intl = useIntl();
-      toastError(intl.formatMessage({ id: "form.builder.receive.po.not.found" }));
+      toastError(intl.formatMessage({ id: 'form.builder.receive.po.not.found' }));
       return;
     }
 

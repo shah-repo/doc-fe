@@ -1,6 +1,6 @@
-import React from "react";
-import { FBFilePreviewProps } from "..";
-import { SUPPORTED_VIDEO_FILES } from "../../components/common/view.file/utils/constants";
+import React from 'react';
+import { FBFilePreviewProps } from '..';
+import { SUPPORTED_VIDEO_FILES } from '../../components/common/view.file/utils/constants';
 
 export const withFBFilePreview = <T extends FBFilePreviewProps>(
   Component: React.FunctionComponent<T>,
@@ -15,13 +15,13 @@ export const withFBFilePreview = <T extends FBFilePreviewProps>(
 
     switch (true) {
       case SUPPORTED_VIDEO_FILES.includes(type):
-        previewType = "video";
+        previewType = 'video';
         break;
-      case type === "pdf":
-        previewType = "pdf";
+      case type === 'pdf':
+        previewType = 'pdf';
         break;
       default:
-        previewType = "image";
+        previewType = 'image';
     }
 
     return Component({

@@ -1,13 +1,13 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Portal } from "@material-ui/core";
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import CloseIcon from "@material-ui/icons/Close";
-import { hasIn, isString } from "lodash";
-import React from "react";
-import { FBLabelLocaleProps, FBText } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { FBDialogProps } from "./FBDialog.types";
-import { withFBDialog } from "./FBDialog.wrap";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Portal } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CloseIcon from '@material-ui/icons/Close';
+import { hasIn, isString } from 'lodash';
+import React from 'react';
+import { FBLabelLocaleProps, FBText } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { FBDialogProps } from './FBDialog.types';
+import { withFBDialog } from './FBDialog.wrap';
 
 const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   handleActionsRef,
@@ -21,23 +21,24 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   actions,
   maxWidth,
   classes,
+  fullscreen,
 }) => (
   <Dialog
     fullWidth={true}
-    fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
+    fullScreen={fullscreen ?? useMediaQuery(useTheme().breakpoints.down(maxWidth || 'sm'))}
     {...{ open, maxWidth, classes }}
   >
     <DialogTitle>
       <Box display="flex" flexDirection="row-reverse">
         <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
       </Box>
-      {(hasIn(title, "locale") || isString(title)) && (
+      {(hasIn(title, 'locale') || isString(title)) && (
         <FBText
           locale={(title as FBLabelLocaleProps)?.locale || title as string}
           values={(title as FBLabelLocaleProps)?.values}
           boxProps={{
-            fontWeight: "fontWeightBold",
-            textAlign: "left",
+            fontWeight: 'fontWeightBold',
+            textAlign: 'left',
             border: 1,
             // MUI border color issue
             borderTop: 0,
@@ -55,7 +56,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       {content && portalTitle && portalAction && (
         <content.type {...content.props}>
           {content.props.children}
-          {!isString(title) && !hasIn(title, "locale") && (
+          {!isString(title) && !hasIn(title, 'locale') && (
             <Portal container={portalTitle}>
               {title}
             </Portal>

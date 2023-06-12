@@ -1,23 +1,23 @@
-import { mount } from "enzyme";
-import React from "react";
-import { Props } from "./FBButton";
-import FBButton from "./FBButton";
+import { mount } from 'enzyme';
+import React from 'react';
+import { Props } from './FBButton';
+import FBButton from './FBButton';
 
-jest.mock("../../../components/Text");
+jest.mock('../../../components/Text');
 
-describe("FBButton component tests", () => {
+describe('FBButton component tests', () => {
   const getWrapper = (props: Props) => mount(<FBButton {...props} />);
 
-  it("displays button component by default", () => {
+  it('displays button component by default', () => {
     const wrapper = getWrapper({});
     expect(wrapper.find(FBButton)).toHaveLength(1);
   });
 
-  it("displays label", () => {
+  it('displays label', () => {
     const wrapper = getWrapper({
-      label: "button_label",
+      label: 'button_label',
     });
 
-    expect(wrapper.text()).toContain("button_label");
+    expect(wrapper.text()).toContain('button_label');
   });
 });

@@ -1,10 +1,12 @@
-import { get, isUndefined } from "lodash";
-import { reaction } from "mobx";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { FB, FBTextFieldProps } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
-import { isTranslation } from "../../translations/types";
+import { get, isEmpty, isUndefined } from 'lodash';
+import { reaction } from 'mobx';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBTextFieldProps } from '..';
+import { THRESHOLD_KEY } from '../../../state/ducks/documentRevisions/constants';
+import { useFormContext } from '../../components/forms/FormContext';
+import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isTranslation } from '../../translations/types';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -13,10 +15,10 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     onFocus,
     multiline,
     rows = 1,
-    placeholder = "",
+    placeholder = '',
     defaultValue,
     disabled,
-    name = "",
+    name = '',
     value,
     ...props
   }: T) => {
@@ -25,17 +27,18 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     const { submitForm } = useFormContext();
     const { workspaceMode: mode } = formState || {};
     const { id } = workspaceState || {};
+    const isDocumentPOAM = checkIsDocumentPOAM(workspaceState?.document?.document?.documentType?.groupOptions);
     defaultValue = defaultValue || formState?.getFieldValue(name);
 
-    if (!["justificationOfChange", "descriptionOfChange"].includes(name)) {
+    if (!['justificationOfChange', 'descriptionOfChange'].includes(name)) {
       value = value ?? formState?.getFieldValue(name);
     }
 
     const intl = useIntl();
     disabled = (
       disabled ||
-      get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
-      formState?.getFieldValue("signatureRequestId")
+      get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD' ||
+      formState?.getFieldValue('signatureRequestId')
     );
 
     (isUndefined(multiline)) && (
@@ -62,18 +65,22 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.focus();
         return;
       }
-      if (ev?.target?.type === "number" && ev?.target?.step === ".01") {
+      if (ev?.target?.type === 'number' && ev?.target?.step === '.01') {
         ev.target.value = Math.abs(ev.target?.value).toFixed(2).toString();
       }
       if (!name) { return; }
+      if (isDocumentPOAM && name === THRESHOLD_KEY && isEmpty(ev.target?.value)) {
+        // Setting POAM Item form value back to 0 If the value is removed
+        formState?.setFieldValue(name, 0, true);
+      }
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
       if (workspaceState?.isChangeRequest && workspaceState?.autosave &&
-         (name.includes(".justificationOfChange") ||  name.includes(".descriptionOfChange"))) {
+         (name.includes('.justificationOfChange') ||  name.includes('.descriptionOfChange'))) {
         submitForm();
         return;
       }
-      if (!workspaceState?.autosave && name?.includes("lhrs-start-quantity")) {
+      if (!workspaceState?.autosave && name?.includes('lhrs-start-quantity')) {
         workspaceState?.saveDocRev(formState?.getValues(), true);
       }
     };

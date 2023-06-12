@@ -1,87 +1,87 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 const SIDEBAR_WIDTH = 300;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
     drawerPaper: {
-      marginTop: "105px",
-      position: "fixed",
-      height: "100%",
-      overflow: "auto",
+      marginTop: '105px',
+      position: 'fixed',
+      height: '100%',
+      overflow: 'auto',
       width: SIDEBAR_WIDTH,
-      transition: theme.transitions.create("width", {
+      transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
       }),
     },
     drawerPaperClose: {
       width: 60,
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
+      overflowX: 'hidden',
+      transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
     },
     drawerInner: {
       width: SIDEBAR_WIDTH,
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
     },
     drawerHeader: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      padding: "0 8px",
-      minHeight: "10px",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      padding: '0 8px',
+      minHeight: '10px',
     },
     sidebarList: {
-      height: "100%",
-      overflow: "auto",
-      paddingRight: "17px",
-      minWidth: "100%",
+      height: '100%',
+      overflow: 'auto',
+      paddingRight: '17px',
+      minWidth: '100%',
     },
     menuIcon: {
-      "margin": "8px 13px 13px 11px",
-      "paddingTop": "5px",
-      "paddingBottom": "5px",
-      "justifyContent": "unset",
-      "&:hover": {
-        background: "none",
+      'margin': '8px 13px 13px 11px',
+      'paddingTop': '5px',
+      'paddingBottom': '5px',
+      'justifyContent': 'unset',
+      '&:hover': {
+        background: 'none',
       },
     },
     iconButton: {
-      "margin": "8px 13px 13px 11px",
-      "paddingTop": "5px",
-      "paddingBottom": "5px",
-      "&:hover, &:focus, li.active > a": {
-        "background": Colors.light_blue,
-        "borderRadius": "5px",
-        "& svg": {
+      'margin': '8px 13px 13px 11px',
+      'paddingTop': '5px',
+      'paddingBottom': '5px',
+      '&:hover, &:focus, li.active > a': {
+        'background': Colors.light_blue,
+        'borderRadius': '5px',
+        '& svg': {
           stroke: Colors.medium_blue,
         },
       },
-      "& svg": {
+      '& svg': {
         stroke: Colors.hint_gray,
       },
     },
     iconButtonNew: {
-      "&:hover, &:focus, li.active > a": {
-        "background": Colors.light_blue,
-        "borderRadius": "5px",
-        "& svg": {
+      '&:hover, &:focus, li.active > a': {
+        'background': Colors.light_blue,
+        'borderRadius': '5px',
+        '& svg': {
           stroke: Colors.medium_blue,
         },
       },
-      "& svg": {
+      '& svg': {
         stroke: Colors.hint_gray,
       },
     },
     titleOfRevision: {
       color: theme.palette.text.primary,
-      textDecoration: "none",
+      textDecoration: 'none',
       fontWeight: theme.typography.fontWeightBold,
     },
   })

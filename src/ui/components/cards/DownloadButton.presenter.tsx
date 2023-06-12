@@ -1,6 +1,6 @@
-import { CircularProgress, IconButton } from "@material-ui/core";
-import { CloudDownload } from "@material-ui/icons";
-import React from "react";
+import { CircularProgress, IconButton } from '@material-ui/core';
+import { CloudDownload } from '@material-ui/icons';
+import React from 'react';
 
 export interface DownloadButtonPresenterProps {
   isLoading: boolean;

@@ -1,6 +1,6 @@
-import React from "react";
-import Text from "../../components/Text";
-import { Translation } from "../../translations/types";
+import React from 'react';
+import Text from '../../components/Text';
+import { Translation } from '../../translations/types';
 
 interface OwnProps {
   label?: Translation;
@@ -16,7 +16,7 @@ export const SummaryInfo: React.FunctionComponent<Props> = ({
   <div data-cy={dataCy}>
     {label &&
         <>
-          <Text translation={label} />:{" "}
+          <Text translation={label} />:{' '}
         </>
     }
     {value}

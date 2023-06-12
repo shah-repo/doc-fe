@@ -1,9 +1,9 @@
-import { Button, createStyles, makeStyles } from "@material-ui/core";
-import React from "react";
-import SummaryFieldWithHtml from "../../../../common/summary/baseWithHtml";
-import Date from "../../../../components/Date";
-import Text from "../../../../components/Text";
-import { ImplementationPlanTaskFormValues } from "../../types";
+import { Button, createStyles, makeStyles } from '@material-ui/core';
+import React from 'react';
+import SummaryFieldWithHtml from '../../../../common/summary/baseWithHtml';
+import Date from '../../../../components/Date';
+import Text from '../../../../components/Text';
+import { ImplementationPlanTaskFormValues } from '../../types';
 
 export interface Props {
   task: ImplementationPlanTaskFormValues;
@@ -15,20 +15,20 @@ export interface Props {
 const styles = makeStyles(() =>
   createStyles({
     container: {
-      border: "1px solid lightgray",
-      margin: "10px 0",
+      border: '1px solid lightgray',
+      margin: '10px 0',
       padding: 10,
       lineHeight: 2,
     },
     detailsContainer: {
       marginTop: 10,
-      color: "gray",
+      color: 'gray',
     },
     marginRight: {
       marginRight: 20,
     },
     button: {
-      float: "right",
+      float: 'right',
     },
   },
   ));

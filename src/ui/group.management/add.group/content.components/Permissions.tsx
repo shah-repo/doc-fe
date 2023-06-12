@@ -1,13 +1,14 @@
-import { Box, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import Select from "react-select";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { Permission } from "../../../../state/ducks/auth/types";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
-import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import Text from "../../../components/Text";
-import { toArray, toOptions } from "../../utils/transform";
+import { Box, Grid, Typography } from '@material-ui/core';
+import { cloneDeep } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import Select from 'react-select';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
+import { GroupRequestBody } from '../../../../state/ducks/groupManagement/types';
+import { MultiValueRemove, selectStyles, selectTheme } from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import Text from '../../../components/Text';
+import { toArray, toOptions } from '../../utils/transform';
 
 interface Props {
   group: GroupRequestBody;
@@ -20,12 +21,15 @@ const Permissions: React.FunctionComponent<Props> = ({
   setGroup,
   currentEmployeePermissions,
 }) => {
-  const currentEmployeeTags = useSelector(authSelectors.currentEmployeeTags);
+  const currentEmployeeTags = cloneDeep(useSelector(authSelectors.currentEmployeeTags));
+  if (!currentEmployeeTags.includes(GroupTag.PO_ADMIN)) {
+    currentEmployeeTags.push(GroupTag.PO_ADMIN);
+  }
 
   const permissionsRenderer = () => (
     <Box width={700} mt={5}>
-      <Typography variant="h4" style={{ marginBottom: "16px" }}>
-        <Text message={"common.permissions"} />
+      <Typography variant="h4" style={{ marginBottom: '16px' }}>
+        <Text message={'common.permissions'} />
       </Typography>
       <Select
         id="Group-permissions"
@@ -43,8 +47,8 @@ const Permissions: React.FunctionComponent<Props> = ({
 
   const tagsRenderer = () => (
     <Box width={700} mt={5}>
-      <Typography variant="h4" style={{ marginBottom: "16px" }}>
-        <Text message={"common.tags"} />
+      <Typography variant="h4" style={{ marginBottom: '16px' }}>
+        <Text message={'common.tags'} />
       </Typography>
       <Select
         id="Group-addTags"
@@ -54,6 +58,7 @@ const Permissions: React.FunctionComponent<Props> = ({
         onChange={(state: any) => setGroup({ ...group, tags: toArray(state) })}
         value={toOptions(group.tags)}
         styles={selectStyles}
+        theme={selectTheme}
       />
     </Box>
   );

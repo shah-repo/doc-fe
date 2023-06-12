@@ -1,46 +1,61 @@
-import { Box, IconButton } from "@material-ui/core";
-import ReplayIcon from "@material-ui/icons/Replay";
-import { Provider } from "mobx-react";
-import React from "react";
-import { FBButton, FBDialog, FBInput, FBSection, FBTooltip } from "..";
-import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from "./FBPOApprovalMatrix.types";
-import { withFBPOApprovalMatrix } from "./FBPOApprovalMatrix.wrap";
-import FBPOApprovalMatrixTable from "./table/FBPOApprovalMatrixTable";
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box } from '@material-ui/core';
+import { Provider } from 'mobx-react';
+import React from 'react';
+import { FBDialog, FBInput, FBSection, FBTooltip } from '..';
+import { translate } from '../../../common/intl';
+import { Button, IconButton } from '../../components/forms/fields-next';
+import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from './FBPOApprovalMatrix.types';
+import { withFBPOApprovalMatrix } from './FBPOApprovalMatrix.wrap';
+import FBPOApprovalMatrixTable from './table/FBPOApprovalMatrixTable';
 
 const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> = ({
   handleAdd,
   handleRevert,
   poamState,
   dialogState,
-  name,
+  name = '',
   autosave,
   ...props
-}) => (
-  <Provider {...{ poamState, dialogState }}>
-    <FBDialog />
-    <FBInput {...{ name, autosave }} disabled={props.disabled} type="poApprovalMatrix">
-      <Box>
-        <FBSection name={`fb-poam-section-${name}`} label={props.label}>
-          <Box display="flex" flexDirection="row-reverse">
-            <IconButton color="inherit" size="small" onClick={handleRevert} >
-              <FBTooltip title='Revert to initial'>
-                <ReplayIcon />
+}) => {
+  return (
+    <Provider {...{ poamState, dialogState }}>
+      <FBDialog />
+      <Box pb={2}>
+        <FBInput {...{ name, autosave }} disabled={props.disabled} type="poApprovalMatrix">
+          <FBSection name={`fb-poam-section-${name}`} label={props.label}>
+            <Box display="flex" flexDirection="row-reverse">
+              <FBTooltip title="form.builder.poam.button.revert">
+                <IconButton
+                  kind="form"
+                  onClick={handleRevert}
+                  data-cy="revert-to-initial"
+                >
+                  <FontAwesomeIcon icon={regular('rotate-left')} />
+                </IconButton>
               </FBTooltip>
-            </IconButton>
-          </Box>
-        </FBSection>
-        <FBPOApprovalMatrixTable {...{ name }} {...props as FBPOApprovalMatrixTableProps} />
-        <FBButton
-          fullWidth={true}
-          disabled={props.disabled}
-          label="form.builder.add.item"
-          onClick={handleAdd}
-          variant="outlined"
-          style={{ margin: "8px 0" }}
+            </Box>
+          </FBSection>
+        </FBInput>
+        <FBPOApprovalMatrixTable
+          {...props as FBPOApprovalMatrixTableProps}
+          name={name}
         />
+        {!props.disabled && (
+          <Button
+            attached
+            fullWidth
+            kind="add"
+            onClick={handleAdd}
+            data-cy="fb-control-btn"
+          >
+            {translate('form.builder.add.line.item')}
+          </Button>
+        )}
       </Box>
-    </FBInput>
-  </Provider>
-);
+    </Provider>
+  );
+};
 
 export default withFBPOApprovalMatrix(FBPOApprovalMatrix);

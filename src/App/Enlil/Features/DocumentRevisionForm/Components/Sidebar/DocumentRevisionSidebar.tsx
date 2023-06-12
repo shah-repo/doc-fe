@@ -1,45 +1,45 @@
-import { Box, IconButton, Typography } from "@material-ui/core";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { Observer } from "mobx-react";
-import React from "react";
-import { DocumentRevisionSidebarProps, SMBox, SMText } from "../../../../..";
-import { ReactComponent as BadgeIcon } from "../../../../../../../src/assets/images/badge.svg";
-import { ReactComponent as BookmarkIcon } from "../../../../../../../src/assets/images/bookmark.svg";
-import { ReactComponent as CRIcon } from "../../../../../../../src/assets/images/cr.svg";
-import { ReactComponent as TimelineIcon } from "../../../../../../../src/assets/images/history.svg";
-import { ReactComponent as MigrationIcon } from "../../../../../../../src/assets/images/migration.svg";
-import { ReactComponent as NoteIcon } from "../../../../../../../src/assets/images/note.svg";
-import { ChangeRequest } from "../../../../../../state/ducks/changeRequest/types";
-import AccessPermissionsContainer from "../../../../../../ui/documentRevision/accessPermissions/AccessPermissions.container";
-import DocumentRevisionAuditContainer from "../../../../../../ui/documentRevision/audit/Audit.container";
-import DocumentRevisionListContainer from "../../../../../../ui/documentRevision/DocumentRevisionList.container";
-import ChangeDocumentFormContainer from "../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container";
-import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks";
-import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/RevisionHistory";
-import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
-import Colors from "../../../../../../ui/layout/theme/utils/colors";
-import { withDocumentRevisionSidebarWrap } from "./DocumentRevisionSidebar.wrap";
+import { Box, IconButton, Typography } from '@material-ui/core';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import KeyboardTabIcon from '@material-ui/icons/KeyboardTab';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { DocumentRevisionSidebarProps, SMBox, SMText } from '../../../../..';
+import { ReactComponent as BadgeIcon } from '../../../../../../../src/assets/images/badge.svg';
+import { ReactComponent as BookmarkIcon } from '../../../../../../../src/assets/images/bookmark.svg';
+import { ReactComponent as CRIcon } from '../../../../../../../src/assets/images/cr.svg';
+import { ReactComponent as TimelineIcon } from '../../../../../../../src/assets/images/history.svg';
+import { ReactComponent as MigrationIcon } from '../../../../../../../src/assets/images/migration.svg';
+import { ReactComponent as NoteIcon } from '../../../../../../../src/assets/images/note.svg';
+import { ChangeRequest } from '../../../../../../state/ducks/changeRequest/types';
+import AccessPermissionsContainer from '../../../../../../ui/documentRevision/accessPermissions/AccessPermissions.container';
+import DocumentRevisionAuditContainer from '../../../../../../ui/documentRevision/audit/Audit.container';
+import DocumentRevisionListContainer from '../../../../../../ui/documentRevision/DocumentRevisionList.container';
+import ChangeDocumentFormContainer from '../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container';
+import Bookmarks from '../../../../../../ui/documentRevision/Sidebar/Bookmarks';
+import RevisionHistory from '../../../../../../ui/documentRevision/Sidebar/RevisionHistory';
+import SidebarContainer from '../../../../../../ui/documentRevision/Sidebar/Sidebar.container';
+import Colors from '../../../../../../ui/layout/theme/utils/colors';
+import { withDocumentRevisionSidebarWrap } from './DocumentRevisionSidebar.wrap';
 
 const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarProps> = ({
   _documentRevisionFormState,
   _documentRevisionSidebarState,
   title,
-  documentTypeId = "",
+  documentTypeId = '',
   docRevsWithoutCanceled,
-  documentRevisionId = "",
+  documentRevisionId = '',
   isInlineApproval = false,
   selectedDocument,
   documentRevisions,
   showFormMigration,
   formDocument,
-  documentId = "",
+  documentId = '',
   canAccess,
   isRecord = false,
   isNewOutput = false,
-  docId = "",
+  docId = '',
   intl,
-}) =>  (
+}) => (
   <Observer>
     {() => (
       <Box
@@ -49,7 +49,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         borderColor={Colors.medium_gray}
         borderLeft={0.5}
         style={{
-          transition: _documentRevisionSidebarState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
+          transition: _documentRevisionSidebarState?.open ? 'all .2s ease-in-out' : ' all .2s ease-in-out',
         }}
       >
         <Box
@@ -57,14 +57,14 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
           height={56}
           alignItems="center"
         >
-          <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
+          <IconButton data-cy="sidebar-toggle-icon" onClick={_documentRevisionSidebarState?.setOpen}>
             {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
             {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
           </IconButton>
           {_documentRevisionSidebarState?.open && (
             <Typography variant="button">
               <SMText
-                boxProps={{ flexGrow: 1, ml: 2, fontSize: "button" }}
+                boxProps={{ flexGrow: 1, ml: 2, fontSize: 'button' }}
                 label={title || _documentRevisionSidebarState.title}
               />
             </Typography>
@@ -80,13 +80,13 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             sidebarList={[
               {
                 icon: <NoteIcon />,
-                type: "note",
+                type: 'note',
                 details: {
                   shouldShow: true,
                   title: intl?.formatMessage({
                     id: `document.revision.docVersion.${_documentRevisionFormState?.documentTypeAcronym}`,
-                    defaultMessage: "document.revision.docVersion",
-                  }) || "",
+                    defaultMessage: 'document.revision.docVersion',
+                  }) || '',
                   component: (
                     <DocumentRevisionListContainer
                       documentRevisions={docRevsWithoutCanceled || []}
@@ -107,13 +107,13 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
               },
               {
                 icon: <TimelineIcon />,
-                type: "history",
+                type: 'history',
                 details: {
                   shouldShow: Boolean(documentRevisionId),
-                  dataCy: "timeline-icon",
+                  dataCy: 'timeline-icon',
                   title: intl?.formatMessage({
-                    id: "document.revision.history",
-                  }) || "",
+                    id: 'document.revision.history',
+                  }) || '',
                   component: (documentRevisionId && selectedDocument) ? (
                     <DocumentRevisionAuditContainer
                       documentTypeId={documentTypeId}
@@ -127,16 +127,16 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
               },
               {
                 icon: <BadgeIcon />,
-                type: "permissions",
+                type: 'permissions',
                 details: {
                   shouldShow: Boolean(documentRevisionId && canAccess && !isNewOutput),
-                  dataCy: "permission-icon",
+                  dataCy: 'permission-icon',
                   title: intl?.formatMessage({
-                    id: "document.access.permissions",
-                  }) || "",
+                    id: 'document.access.permissions',
+                  }) || '',
                   tooltip: intl?.formatMessage({
-                    id: "document.access.permissions.tooltip",
-                  }) || "",
+                    id: 'document.access.permissions.tooltip',
+                  }) || '',
                   component: (documentRevisionId && canAccess && !isNewOutput) ? (
                     <AccessPermissionsContainer
                       documentRevisionId={documentRevisionId}
@@ -150,44 +150,44 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
               },
               {
                 icon: <BookmarkIcon />,
-                type: "bookmarks",
+                type: 'bookmarks',
                 details: {
                   shouldShow: true,
-                  dataCy: "bookmark-icon",
+                  dataCy: 'bookmark-icon',
                   title: intl?.formatMessage({
-                    id: "document.revision.bookmarks",
-                  }) || "",
+                    id: 'document.revision.bookmarks',
+                  }) || '',
                   component: <Bookmarks />,
                 },
               },
               {
                 icon: <CRIcon />,
-                type: "crHistory",
+                type: 'crHistory',
                 details: {
                   shouldShow: true,
-                  dataCy: "cr-icon",
+                  dataCy: 'cr-icon',
                   title: intl?.formatMessage({
-                    id: "document.revision.cr.history",
-                  }) || "",
+                    id: 'document.revision.cr.history',
+                  }) || '',
                   component: <RevisionHistory changeRequests={documentRevisions?.map((e) =>
                     e.changeRequest) as ChangeRequest[]} />,
                 },
               },
               {
                 icon: <MigrationIcon />,
-                type: "formMigration",
+                type: 'formMigration',
                 details: {
                   shouldShow: showFormMigration,
-                  dataCy: "form-migration-icon",
+                  dataCy: 'form-migration-icon',
                   title: intl?.formatMessage({
-                    id: "common.form.migration",
-                  }) || "",
+                    id: 'common.form.migration',
+                  }) || '',
                   component: showFormMigration ? (
                     <ChangeDocumentFormContainer
-                      docRevId={documentRevisionId || ""}
+                      docRevId={documentRevisionId || ''}
                       documentTypeId={documentTypeId}
                       sourceSchema={formDocument?.formTemplate?.schema || []}
-                      sourceFormId={formDocument?.id || ""}
+                      sourceFormId={formDocument?.id || ''}
                     />
                   ) : null,
                 },

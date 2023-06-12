@@ -1,7 +1,7 @@
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBProcedureDiffProps, FBProcedureDiffState } from "..";
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBProcedureDiffProps, FBProcedureDiffState } from '..';
 
 export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
   Component: React.FunctionComponent<T>,
@@ -17,7 +17,7 @@ export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const initialMode = workspaceState?.mode || "none";
+    const initialMode = workspaceState?.mode || 'none';
     procedureDiffState = FB.useRef(FBProcedureDiffState, initialMode);
 
     // MARK: @reactions
@@ -37,7 +37,7 @@ export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
       if (!procedureDiffState) { return; }
       procedureDiffState.setChecked();
       if (procedureDiffState.checked) {
-        workspaceState?.setMode("preview");
+        workspaceState?.setMode('preview');
       } else {
         workspaceState?.setMode(procedureDiffState.initialMode);
       }
@@ -57,6 +57,6 @@ export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
     });
   };
 
-  Comp.displayName = "withFBProcedureDiff";
+  Comp.displayName = 'withFBProcedureDiff';
   return Comp;
 };

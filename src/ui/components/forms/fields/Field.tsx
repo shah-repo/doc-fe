@@ -1,21 +1,21 @@
-import { BoxProps, FormControl, FormHelperText, Typography } from "@material-ui/core";
-import { FormControlProps } from "@material-ui/core/FormControl";
-import { InputLabelProps } from "@material-ui/core/InputLabel";
-import { FieldProps as FormikFieldProps } from "formik";
-import { get } from "lodash";
-import * as React from "react";
-import { TypographyProps, TypographySize } from "../../../../state/ducks/common/types";
-import { Translation } from "../../../translations/types";
-import HeaderField from "../../common/header.field/field";
-import Text from "../../Text";
-import { styles } from "./Field.styles";
-import { LabelField } from "./Input.styles";
+import { BoxProps, FormControl, FormHelperText, Typography } from '@material-ui/core';
+import { FormControlProps } from '@material-ui/core/FormControl';
+import { InputLabelProps } from '@material-ui/core/InputLabel';
+import { FieldProps as FormikFieldProps } from 'formik';
+import { get } from 'lodash';
+import * as React from 'react';
+import { TypographyProps, TypographySize } from '../../../../state/ducks/common/types';
+import { Translation } from '../../../translations/types';
+import HeaderField from '../../common/header.field/field';
+import Text from '../../Text';
+import { styles } from './Field.styles';
+import { LabelField } from './Input.styles';
 
 export interface FieldOwnProps {
   label?: Translation | string;
   formControlProps?: FormControlProps;
   inputLabelProps?: InputLabelProps;
-  variant?: "standard" | "outlined" | "filled";
+  variant?: 'standard' | 'outlined' | 'filled';
   required?: boolean;
   gutter?: boolean;
   minDate?: string;
@@ -40,7 +40,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
   label,
   variant,
   required,
-  size = "md",
+  size = 'md',
   gutter = true,
   actionsRenderer,
   labelProps,
@@ -59,12 +59,12 @@ const Field: React.FunctionComponent<FieldProps> = ({
   const LabelComponent = () => {
     if (actionsRenderer) {
       return (
-        <HeaderField dataProp={label || ""} actionsRenderer={actionsRenderer} />
+        <HeaderField dataProp={label || ''} actionsRenderer={actionsRenderer} />
       );
     }
     return (
       label && (
-        <LabelField htmlFor={field.name} style={{ position: "inherit" }}>
+        <LabelField htmlFor={field.name} style={{ position: 'inherit' }}>
           <Typography
             variant={TypographySize[size]}
             className={classes.typography}
@@ -86,7 +86,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
   return (
     <FormControl
       id={`field-${field.name}`}
-      variant={variant || "standard"}
+      variant={variant || 'standard'}
       required={required}
       fullWidth={true}
       error={shouldDisplayError}

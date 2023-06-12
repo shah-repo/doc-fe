@@ -1,8 +1,8 @@
-import { uniq } from "lodash";
-import { combineReducers } from "redux";
-import asyncReducer from "../../reducers/asyncReducer";
-import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
-import { Document, DocumentListAction, DocumentProposedIdSetAction, DocumentsAllIdsState, DocumentsByIdState, DocumentSetAction, DocumentsReviewIdsState, DocumentsToReviewListAction } from "./types";
+import { uniq } from 'lodash';
+import { combineReducers } from 'redux';
+import asyncReducer from '../../reducers/asyncReducer';
+import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from './constants';
+import { Document, DocumentListAction, DocumentProposedIdSetAction, DocumentsAllIdsState, DocumentsByIdState, DocumentSetAction, DocumentsReviewIdsState, DocumentsToReviewListAction } from './types';
 
 type DocumentActions = DocumentListAction | DocumentSetAction | DocumentsToReviewListAction;
 
@@ -50,7 +50,7 @@ const reviewIds = (
   return state;
 };
 
-const proposedDocId = (state = "", action: DocumentProposedIdSetAction): string => {
+const proposedDocId = (state = '', action: DocumentProposedIdSetAction): string => {
   if (action.type === DOCUMENT_PROPOSED_DOC_ID_SET) {
     return action.payload;
   }
