@@ -36,7 +36,7 @@ const employees: Employee[] = [
         timeInPosition: 2,
         employees: [
           {
-            id: 29,
+            id: 3,
             name: 'Buffy Weber',
             displayRevision: '1',
             displayStatus: 'Released',
@@ -55,7 +55,7 @@ const employees: Employee[] = [
             timeInPosition: 2,
             employees: [
               {
-                id: 11,
+                id: 4,
                 displayRevision: '1',
                 displayStatus: 'Draft',
                 title: 'Right Lens',
@@ -75,7 +75,7 @@ const employees: Employee[] = [
                 employees: [],
               },
               {
-                id: 11,
+                id: 5,
                 displayRevision: '1',
                 displayStatus: 'Draft',
                 title: 'Left Lens',
@@ -97,7 +97,7 @@ const employees: Employee[] = [
             ],
           },
           {
-            id: 30,
+            id: 6,
             name: 'Buffy Weber',
             displayRevision: '1',
             displayStatus: 'Released',
@@ -116,7 +116,7 @@ const employees: Employee[] = [
             timeInPosition: 2,
             employees: [
               {
-                id: 60,
+                id: 7,
                 displayRevision: '1',
                 displayStatus: 'Draft',
                 title: 'Hinge',
@@ -135,7 +135,7 @@ const employees: Employee[] = [
                 timeInPosition: 2,
               },
               {
-                id: 78,
+                id: 8,
                 displayRevision: 'B',
                 displayStatus: 'Draft',
                 title: 'Screw',
@@ -156,7 +156,7 @@ const employees: Employee[] = [
             ],
           },
           {
-            id: 45,
+            id: 9,
             name: 'Buffy Weber',
             displayRevision: '2',
             displayStatus: 'Released',
@@ -175,7 +175,7 @@ const employees: Employee[] = [
             timeInPosition: 2,
             employees: [
               {
-                id: 46,
+                id: 10,
                 displayRevision: '1C',
                 displayStatus: 'Released',
                 title: 'Sticker',
@@ -199,7 +199,7 @@ const employees: Employee[] = [
         ],
       },
       {
-        id: 90,
+        id: 11,
         displayRevision: '1',
         displayStatus: 'Draft',
         title: 'Packaging',
@@ -215,7 +215,7 @@ const employees: Employee[] = [
         position: 'CEO',
         timeInPosition: 3,
         employees: [{
-          id: 89,
+          id: 12,
           displayRevision: '1',
           displayStatus: 'Draft',
           title: 'Box',
@@ -235,7 +235,7 @@ const employees: Employee[] = [
           employees: [],
         },
         {
-          id: 89,
+          id: 13,
           displayRevision: '1',
           displayStatus: 'Draft',
           title: 'Product Label',
@@ -254,7 +254,7 @@ const employees: Employee[] = [
           timeInPosition: 2,
           employees: [],
         }, {
-          id: 89,
+          id: 14,
           displayRevision: '1',
           displayStatus: 'Draft',
           title: 'Silk Pouch',
@@ -273,7 +273,7 @@ const employees: Employee[] = [
           timeInPosition: 2,
           employees: [],
         }, {
-          id: 89,
+          id: 15,
           displayRevision: '1',
           displayStatus: 'Draft',
           title: 'Warrenty Card',
@@ -292,7 +292,7 @@ const employees: Employee[] = [
           timeInPosition: 2,
           employees: [],
         }, {
-          id: 89,
+          id: 16,
           displayRevision: '1',
           displayStatus: 'Draft',
           title: 'Manual',

@@ -4,10 +4,10 @@ import {
   extendDataItem, filterBy,
   mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent,
 } from '@progress/kendo-react-treelist';
-import { set } from 'lodash';
+import { isEmpty, set } from 'lodash';
 import * as React from 'react';
 import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/grid_view.svg';
-import { withThemeNext } from '../../../../layout/theme-next';
+import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { columns, expandField, subItemsField } from './constants';
 import employees from './data';
 import { DataState, Employee, FBBOMProps } from './interface';
@@ -83,6 +83,11 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   //   });
   // };
 
+  const rowRender = (row, props) => {
+    const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
+    return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color }} />;
+  };
+
   return <>
     <GridToolbar>
       <Grid container data-cy="toolbar-treelist">
@@ -106,6 +111,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
       expandField={expandField}
       subItemsField={subItemsField}
       onExpandChange={onExpandChange}
+      rowRender={rowRender}
       sortable={{ mode: 'multiple' }}
       {...state.dataState}
       data={processData()}

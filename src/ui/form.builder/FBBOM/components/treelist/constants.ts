@@ -14,7 +14,7 @@ export const columns: CustomTreeListColumnProps[] = [
     width: '250px',
     filter: TreeListTextFilter,
     expandable: true,
-    locked: true,
+    locked: false,
     show: true,
   },
   {

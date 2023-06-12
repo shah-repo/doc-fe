@@ -258,15 +258,15 @@ export default makeStyles((theme) => ({
           },
         },
         '&.k-alt': {
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
 
-          '& .k-grid-content-sticky': {
-            backgroundColor: Colors.white,
-          },
+          // '& .k-grid-content-sticky': {
+          //   backgroundColor: Colors.white,
+          // },
 
-          '&:hover td': {
-            backgroundColor: Colors.hover,
-          },
+          // '&:hover td': {
+          //   backgroundColor: Colors.hover,
+          // },
         },
         '&:hover td': {
           backgroundColor: Colors.hover,
@@ -399,8 +399,6 @@ export default makeStyles((theme) => ({
       },
     },
     '.k-dropdown': {
-      width: '100%',
-
       '& .k-dropdown-wrap': {
         ...baseInputStyles(theme),
         justifyContent: 'space-between',
