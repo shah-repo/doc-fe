@@ -1,11 +1,17 @@
+import { Grid } from '@material-ui/core';
+import { GridToolbar } from '@progress/kendo-react-grid';
 import {
   extendDataItem, filterBy,
   mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent,
 } from '@progress/kendo-react-treelist';
+import { set } from 'lodash';
 import * as React from 'react';
+import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/grid_view.svg';
+import { withThemeNext } from '../../../../layout/theme-next';
 import { columns, expandField, subItemsField } from './constants';
 import employees from './data';
 import { DataState, Employee, FBBOMProps } from './interface';
+import useStyles from './styles';
 
 interface AppState {
   data: Employee[]
@@ -14,6 +20,7 @@ interface AppState {
 }
 
 const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
+  useStyles();
   const [state, setState] = React.useState<AppState>({
     data: [...employees],
     dataState: {
@@ -63,16 +70,48 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     return addExpandField(sortedData as Employee[]);
   };
 
-  return <TreeList
-    expandField={expandField}
-    subItemsField={subItemsField}
-    onExpandChange={onExpandChange}
-    sortable={{ mode: 'multiple' }}
-    {...state.dataState}
-    data={processData()}
-    onDataStateChange={handleDataStateChange}
-    columns={columns}
-  />;
+  const clearFilter = () => {
+    const { dataState } = state;
+    set(dataState, 'filter.filters', []);
+  };
+
+  // const onColumnShowHide = ({ field }) => {
+  //   each(columns, (column) => {
+  //     if (column.field === field) {
+  //       column.show = !column.show;
+  //     }
+  //   });
+  // };
+
+  return <>
+    <GridToolbar>
+      <Grid container data-cy="toolbar-treelist">
+        <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
+          {/* <ClearFilters {...{ clearFilter }} /> */}
+        </Grid>
+        <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
+          {/* <StyleTooltip
+            title={<Text translation="common.column" />}
+            placement="top"
+            arrow
+          >
+            <IconButton onClick={handleClick} data-cy="manageColumnsBtn"> */}
+          <ViewGridIcon />
+          {/* </IconButton>
+          </StyleTooltip> */}
+        </Grid>
+      </Grid>
+    </GridToolbar>
+    <TreeList
+      expandField={expandField}
+      subItemsField={subItemsField}
+      onExpandChange={onExpandChange}
+      sortable={{ mode: 'multiple' }}
+      {...state.dataState}
+      data={processData()}
+      onDataStateChange={handleDataStateChange}
+      columns={columns}
+    /></>;
 };
 
-export default FBBOMTreeList;
+export default withThemeNext(React.forwardRef(FBBOMTreeList));
