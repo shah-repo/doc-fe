@@ -145,7 +145,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       const sections = filter(schemaDiff, (schemaItem) =>
         schemaItem.type && FBSectionTypes.includes(schemaItem.type));
       bookmarkState?.removeBookmarks(map(sections, 'name'));
-      workspaceState && (workspaceState.schema = schema);
+      workspaceState?.initSchema(schema);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [schema, workspaceState]);
 
