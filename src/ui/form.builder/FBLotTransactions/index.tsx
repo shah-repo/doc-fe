@@ -6,46 +6,47 @@ import { MomentFormats } from '../../../common/utils/date';
 import { Employee } from '../../../state/ducks/company/types';
 import DateFormatter from '../../components/Date';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import { ColumnDefinition, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { ColumnDefinition, DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
+import { MODE_FIELD, Mode } from '../FBApprovalMatrixRoles/constants';
 import useStyles from '../FBApprovalMatrixRoles/styles';
 import { EmployeeCellTemplate } from './components/EmployeeCellTemplate';
 import { LocationCellTemplate } from './components/LocationCellTemplate';
-import { CompanyLocation, EditableLot, FBLotTransactionsProps, LotEditEvent, LotTransfer, LotTransferType } from './types';
+import { CompanyLocation, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransferType } from './types';
 import { withFBLotTransactions } from './wrap';
 
 interface SchemaOptions {
   locations: CompanyLocation[]
   employees: Employee[]
-  onRowClick?: (e: LotEditEvent) => void
 }
 
 const buildSchema = ({
   locations,
   employees,
-  onRowClick,
-}: SchemaOptions): Array<ColumnDefinition<LotTransfer>> => ([
+}: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => ([
   {
     id: 'type',
     field: 'type',
     title: 'Transfer Type',
     filterCell: InputFilter,
     template: ({ dataItem }) => translate(`form.builder.lotTransactions.type.${dataItem.type}`),
+    width: 150,
   },
   {
     id: 'from',
     field: 'from',
     title: 'From',
     filterCell: InputFilter,
-    template: (props) => <LocationCellTemplate {...props} locations={locations} onClick={onRowClick} />,
+    template: (props) => <LocationCellTemplate {...props} locations={locations} />,
+    width: 200,
   },
   {
     id: 'to',
     field: 'to',
     title: 'To',
     filterCell: InputFilter,
-    template: (props) => <LocationCellTemplate {...props} locations={locations} onClick={onRowClick} />,
+    template: (props) => <LocationCellTemplate {...props} locations={locations} />,
+    width: 200,
   },
   {
     id: 'build',
@@ -53,6 +54,7 @@ const buildSchema = ({
     title: 'Build',
     filterCell: InputFilter,
     template: ({ dataItem }) => dataItem.build?.docId ?? '-',
+    width: 200,
   },
   {
     id: 'quantity',
@@ -63,6 +65,7 @@ const buildSchema = ({
       const NEGATIVE_TRANSFER_TYPES = [LotTransferType.Allocate, LotTransferType.Transfer];
       return NEGATIVE_TRANSFER_TYPES.includes(dataItem.type) ? `-${dataItem.quantity}` : dataItem.quantity;
     },
+    width: 150,
   },
   {
     id: 'date',
@@ -70,6 +73,7 @@ const buildSchema = ({
     title: 'Date',
     filterCell: InputFilter,
     template: ({ dataItem }) => <DateFormatter value={dataItem.date} format={MomentFormats.MonthDateYearTwoDigit} />,
+    width: 150,
   },
   {
     id: 'by',
@@ -77,12 +81,14 @@ const buildSchema = ({
     title: 'By',
     filterCell: InputFilter,
     template: (props) => <EmployeeCellTemplate {...props} employees={employees} />,
+    width: 150,
   },
   {
     id: 'comments',
     field: 'comments',
     title: 'Comments',
     filterCell: InputFilter,
+    width: 200,
   },
 ]);
 
@@ -94,43 +100,57 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 }) => {
   const classes = useStyles();
   const isActive = true;
+  const [editedLotTransfer, setEditedLotTransfer] = React.useState<EditableLotTransfer>();
 
-  const [editedLot, setEditedLot] = React.useState<EditableLot>();
+  const editLotTransfer = ({ dataItem }: LotTranferEditEvent) => setEditedLotTransfer(dataItem);
 
-  const editLot = ({ dataItem }: LotEditEvent) => {
-    const editedLot = { ...dataItem, [MODE_FIELD]: Mode.edit };
-    setEditedLot(editedLot);
+  const updateEditedLotTransfer = (event: DataGridItemChangeEvent<EditableLotTransfer>) => {
+    if (!editedLotTransfer || !event.field) {
+      return;
+    }
+    setEditedLotTransfer({
+      ...editedLotTransfer,
+      [event.field]: event.value as unknown,
+    });
   };
 
   const schema = buildSchema({
     locations,
     employees,
-    onRowClick: isActive ? editLot : undefined,
   });
 
-  const rowRender: DataGridProps<EditableLot>['rowRender'] = (row, { dataItem }) => {
-    const item = dataItem as EditableLot;
+  const rowRender: DataGridProps<EditableLotTransfer>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableLotTransfer;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
-    // const dataCy = `row-${kebabCase(item.name)}`;
 
     return React.cloneElement(
       row,
       {
-        // ['data-cy' as string]: dataCy,
         className: cx(row.props.className, { [classes.updatingRow]: isUpdating }),
       },
     );
   };
 
+  const transactionsList = transactions.map((transfer) => {
+    const isLotTransferEdited = editedLotTransfer && editedLotTransfer.id === transfer.id;
+
+    return {
+      ...(isLotTransferEdited ? editedLotTransfer : transfer),
+      [MODE_FIELD]: isLotTransferEdited ? Mode.edit : Mode.show,
+    };
+  });
+
   return (
-    <Box>
-      <KendoDataGrid<LotTransfer>
-        data={transactions}
+    <Box position="relative">
+      <KendoDataGrid<EditableLotTransfer>
+        fullWidth
+        filterable
+        hasBoxScrollbars
+        data={transactionsList}
         schema={schema}
         rowRender={rowRender}
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        onRowClick={isActive ? editLot : undefined}
-        filterable
+        onRowClick={isActive ? editLotTransfer : undefined}
+        onItemChange={updateEditedLotTransfer}
       />
     </Box>
   );

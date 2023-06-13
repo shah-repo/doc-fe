@@ -25,6 +25,7 @@ const LOCATIONS: CompanyLocation[] = [
 
 const TRANSACTIONS: LotTransfer[] = [
   {
+    id: '1',
     type: LotTransferType.Allocate,
     from: 'loc_1',
     to: 'loc_2',
@@ -35,6 +36,7 @@ const TRANSACTIONS: LotTransfer[] = [
     comments: 'Allocated to cleanroom 1',
   },
   {
+    id: '2',
     type: LotTransferType.Return,
     from: 'loc_2',
     to: 'loc_1',

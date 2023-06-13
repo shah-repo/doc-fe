@@ -1,6 +1,6 @@
 import { FBInputProps } from '..';
 import { Employee } from '../../../state/ducks/company/types';
-import { ErrorField, ERROR_FIELD, Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
+import { MODE_FIELD, Mode } from '../FBApprovalMatrixRoles/constants';
 
 export interface CompanyLocation {
   id: string
@@ -17,29 +17,27 @@ export type FBLotTransactionsProps =
 };
 
 export enum LotTransferType {
-  Allocate = 'Allocate',
-  Transfer = 'Transfer',
-  Return = 'Return',
+  Allocate = 'allocate',
+  Transfer = 'transfer',
+  Return = 'return',
+  Move = 'move',
 }
 
 export interface LotTransfer {
+  id: string
   type: LotTransferType
-  from: string // location id
-  to?: string // location id
-  build?: { id: string, docId: string } // eb or lhr
+  from: string
+  to?: string
+  build?: { id: string, docId: string }
   quantity: number
   date: Date
-  by: string // employee id
+  by: string
   comments?: string
-
-  [MODE_FIELD]: Mode
 }
 
-export interface LotEditEvent {
-  dataItem: EditableLot
-}
-export interface EditableLot extends LotTransfer {
+export interface EditableLotTransfer extends LotTransfer {
   [MODE_FIELD]: Mode
-  // [SEARCHABLE_GROUPS_FIELD]: string
-  [ERROR_FIELD]?: ErrorField
+}
+export interface LotTranferEditEvent {
+  dataItem: EditableLotTransfer
 }
