@@ -1,5 +1,6 @@
 import { FBInputProps } from '..';
 import { Employee } from '../../../state/ducks/company/types';
+import { ErrorField, ERROR_FIELD, Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
 
 export interface CompanyLocation {
   id: string
@@ -30,4 +31,15 @@ export interface LotTransfer {
   date: Date
   by: string // employee id
   comments?: string
+
+  [MODE_FIELD]: Mode
+}
+
+export interface LotEditEvent {
+  dataItem: EditableLot
+}
+export interface EditableLot extends LotTransfer {
+  [MODE_FIELD]: Mode
+  // [SEARCHABLE_GROUPS_FIELD]: string
+  [ERROR_FIELD]?: ErrorField
 }
