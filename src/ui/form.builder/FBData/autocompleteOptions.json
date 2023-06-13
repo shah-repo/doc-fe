@@ -338,6 +338,7 @@
   {
     "id": "43",
     "label": "Company Locations",
+    "optionValueType": "id",
     "hidden": false
   }
 ]
