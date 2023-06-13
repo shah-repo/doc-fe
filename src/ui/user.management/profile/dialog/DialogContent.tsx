@@ -55,6 +55,7 @@ interface OwnProps {
   usernameError: Translation | null
   isDeveloper: boolean
   canUpdateCompany: boolean
+  canUpdateLocations: boolean
 }
 
 type Props = OwnProps;
@@ -269,7 +270,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
-        <CompanyLocations canUpdateCompany={canUpdateCompany} locations={companyMine.locations} />
+        <CompanyLocations isActive={canUpdateCompany || canUpdateCompany} locations={companyMine.locations} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
         {isDeveloper && <ApiTokenContent />}
