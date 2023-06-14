@@ -20,11 +20,11 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  onLoadMore: () => void;
-  className?: string;
-  disable?: boolean;
-  label?: string;
-  id?: string;
+  onLoadMore: () => void
+  className?: string
+  disable?: boolean
+  label?: string
+  id?: string
 }
 
 const LoadMoreButton: React.FC<Props> = ({

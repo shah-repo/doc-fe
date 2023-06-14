@@ -5,9 +5,9 @@ import Text from '../../components/Text';
 import { styles } from './styles';
 
 interface Props {
-  errorMessage: string;
-  goToDashboard: () => void;
-  retry: () => void;
+  errorMessage: string
+  goToDashboard: () => void
+  retry: () => void
 }
 
 const SlackLandingError: React.FunctionComponent<Props> = ({

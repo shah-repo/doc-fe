@@ -8,7 +8,7 @@ import GenerateHtmlPreview from '../../../documentRevision/forms/presenters/Gene
 import POApproveOrReject from './POApproveOrReject';
 
 interface Props {
-  documentRevision: DocumentRevision;
+  documentRevision: DocumentRevision
 }
 
 const POActions: React.FunctionComponent<Props> = ({
@@ -25,8 +25,8 @@ const POActions: React.FunctionComponent<Props> = ({
         showDownloadButton={true}
       />
       {
-        documentRevision?.approvals && approvalId &&
-        <POApproveOrReject approvalId={approvalId} />
+        documentRevision?.approvals && approvalId
+        && <POApproveOrReject approvalId={approvalId} />
       }
     </Box>
   );

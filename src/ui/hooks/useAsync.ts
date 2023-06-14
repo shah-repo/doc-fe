@@ -4,9 +4,9 @@ import { AsyncState, AsyncStatus } from '../../state/types';
 import useCallbackHandler from './useCallbackHandler';
 
 interface AsyncHandlers<T> {
-  onSuccess?: (arg?: T) => void;
-  onError?: (message?: string) => void;
-  setCancelToken?: (token?: CancelTokenSource) => void;
+  onSuccess?: (arg?: T) => void
+  onError?: (message?: string) => void
+  setCancelToken?: (token?: CancelTokenSource) => void
 }
 
 export const ASYNC_DEFAULT_STATE = {

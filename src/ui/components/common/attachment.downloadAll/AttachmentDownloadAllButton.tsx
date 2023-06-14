@@ -17,12 +17,11 @@ import PasswordDialog from '../../password/dialog';
 import { Password } from '../../password/types';
 import AttachmentRedLineWarningDialog from '../attachment.redline.warning/dialog';
 
-
 interface Props {
-  isAttachmentEmpty: boolean;
-  docRevId: string;
-  containsRedline: boolean;
-  docRevStatus: DocumentRevisionStatus;
+  isAttachmentEmpty: boolean
+  docRevId: string
+  containsRedline: boolean
+  docRevStatus: DocumentRevisionStatus
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -69,7 +68,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
 
   const classes = styles({ isAttachmentEmpty });
 
-
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       setIsDownloading(false);
@@ -81,7 +79,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       message && toastError(message as unknown as string);
     },
   });
-
 
   const passwordSubmit = (values: Password) => {
     async.start(downloadAllAttachmentsPassword, docRevId, async, values.password);
@@ -100,7 +97,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
 
     return 'common.attachment.redline.warning.download.redlineAll';
   };
-
 
   const warningSubmit = () => {
     redlineWarningDialogHandler.close();
@@ -143,7 +139,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         asyncState={passwordState}
       />
       <label
-        htmlFor={'button-file'}
+        htmlFor="button-file"
         className={classes.downloadLabel}
         onClick={handleAllDownload(docRevId, undefined)}>
         <Link

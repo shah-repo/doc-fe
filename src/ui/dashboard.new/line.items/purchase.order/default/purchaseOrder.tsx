@@ -34,36 +34,36 @@ import useStyles from './purchaseOrder.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  docId: string;
-  docRevId: string;
-  type: string;
-  pinned: boolean;
-  docRevName: string;
-  docTypeGroup: string;
-  displaystatus: string;
-  docRevVersion: string;
-  purchaseOrderSupplierDocRevId: string;
-  purchaseOrderSupplierDocId: string;
-  status: string;
-  timestamp: string;
+  id: string
+  docDocumentId: string
+  docId: string
+  docRevId: string
+  type: string
+  pinned: boolean
+  docRevName: string
+  docTypeGroup: string
+  displaystatus: string
+  docRevVersion: string
+  purchaseOrderSupplierDocRevId: string
+  purchaseOrderSupplierDocId: string
+  status: string
+  timestamp: string
   purchaseOrderAttachments: {
-    name: string;
-    type: string;
-    id: string;
-  }[];
-  purchaseOrdeLineItemCount: number;
-  purchaseOrderDescription: string;
-  purchaseOrderCurrency: string;
-  purchaseOrderTotalAmount: string;
-  purchaseSupplierName: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+    name: string
+    type: string
+    id: string
+  }[]
+  purchaseOrdeLineItemCount: number
+  purchaseOrderDescription: string
+  purchaseOrderCurrency: string
+  purchaseOrderTotalAmount: string
+  purchaseSupplierName: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 const PurchaseOrderItemPresenter: React.FC<Props> = ({
   id,
@@ -105,7 +105,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
       isRegular: true,
       ltext: 'Total:',
       rtext: `${purchaseOrderCurrency} ${formatCurrency(
-        purchaseOrderTotalAmount
+        purchaseOrderTotalAmount,
       )}`,
     },
     {
@@ -268,7 +268,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -299,8 +299,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 />
               </span>
             )}
-            {
-              <StyleTooltip
+            <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
@@ -314,7 +313,6 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   />
                 </span>
               </StyleTooltip>
-            }
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon
@@ -403,7 +401,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                         poItem.rtext
                           ? documentVersionPath(
                             purchaseOrderSupplierDocRevId || '',
-                            purchaseOrderSupplierDocId
+                            purchaseOrderSupplierDocId,
                           )
                           : '#'
                       }

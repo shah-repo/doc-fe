@@ -7,7 +7,7 @@ import FBPOApprovalMatrixForm from './form/FBPOApprovalMatrixForm';
 import FBPOApprovalMatrixFormActions from './form/FBPOApprovalMatrixForm.actions';
 
 export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({
@@ -37,7 +37,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       isOutput,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-
 
     // const stages = [1, 2, 3];
     // const approvalLevel: POApprovalMatrixLevel[] = [];
@@ -103,7 +102,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     React.useEffect(() => {
       reaction(
         () => poamState?.approvalLevels,
-        () => formState?.setFieldAutosave(name)
+        () => formState?.setFieldAutosave(name),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

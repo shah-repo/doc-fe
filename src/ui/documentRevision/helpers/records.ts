@@ -35,9 +35,9 @@ const isInlineSectionApproved = (documentRevision, formState, schema?: FBSchemaP
 const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision, formState: SMFormState) => {
   const fieldApprovals = getFieldApprovals(fieldName, documentRevision);
   if (
-    documentRevision?.version > 1 &&
-    isEmpty(fieldApprovals) &&
-    Boolean(formState?.getValues()?.formInput?.[fieldName])
+    documentRevision?.version > 1
+    && isEmpty(fieldApprovals)
+    && Boolean(formState?.getValues()?.formInput?.[fieldName])
   ) {
     return some(fieldApprovals, (approval) => approval.status === ApprovalStatus.Approved)
     || !fieldApprovals?.length;

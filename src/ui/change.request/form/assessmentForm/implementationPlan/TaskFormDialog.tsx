@@ -8,12 +8,12 @@ import { ImplementationPlanTaskFormValues } from '../../types';
 import TaskForm from './TaskForm';
 
 interface OwnProps {
-  onSubmit: (values: ImplementationPlanTaskFormValues) => void;
-  closeDialog: () => void;
-  openDialog: () => void;
-  isDialogOpen: boolean;
-  buttonProps?: ButtonProps;
-  task: ImplementationPlanTaskFormValues | null;
+  onSubmit: (values: ImplementationPlanTaskFormValues) => void
+  closeDialog: () => void
+  openDialog: () => void
+  isDialogOpen: boolean
+  buttonProps?: ButtonProps
+  task: ImplementationPlanTaskFormValues | null
 }
 
 export type TaskFormDialogProps = OwnProps;
@@ -35,8 +35,8 @@ const styles = makeStyles(() =>
   },
   ));
 
-export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
-  ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps, task }) => {
+export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps>
+  = ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps, task }) => {
     const classes = styles();
     const renderForm = (props: FormikProps<any>) => (
       <TaskForm cancel={closeDialog} {...props} />

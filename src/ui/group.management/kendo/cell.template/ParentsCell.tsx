@@ -7,14 +7,14 @@ import { userManagementSelectors } from '../../../../state/ducks/userManagement'
 import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface ParentCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number | undefined;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  isOfficial: boolean;
-  field?: string;
+  dataItem: any
+  rowType?: string
+  colSpan?: number | undefined
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  isOfficial: boolean
+  field?: string
 }
 
 export const ParentsCell = ({

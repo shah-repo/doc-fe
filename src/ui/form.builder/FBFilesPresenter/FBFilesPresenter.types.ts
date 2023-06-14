@@ -6,6 +6,6 @@ export type FBFilesPresenterProps =
 & Pick<FBProviderProps, 'filesPresenterState'>
 & Pick<FBFilePresenterProps, 'mode'>
 & {
-  files?: Id[];
-  attachments?: FBAttachment[];
+  files?: Id[]
+  attachments?: FBAttachment[]
 };

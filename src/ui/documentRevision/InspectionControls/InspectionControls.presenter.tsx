@@ -30,9 +30,9 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
   const renderButton = () => {
     if (!renderAsButton) {
       return (<StyledMenuListItem disabled={disabled} button alignItems="flex-start" onClick={onButtonClick}>
-        <StyledMenuListIcon><FaiIcon/></StyledMenuListIcon>
+        <StyledMenuListIcon><FaiIcon /></StyledMenuListIcon>
         <StyledMenuListItemText
-          data-cy={'PreviewControlsContainer-inspection-FAI'}
+          data-cy="PreviewControlsContainer-inspection-FAI"
           primary={<Text translation="document.revision.fai" />}
         />
       </StyledMenuListItem>
@@ -40,11 +40,11 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
     }
     return (<StyledButton
       color="primary"
-      data-cy={'PreviewControlsContainer-inspection-FAI'}
+      data-cy="PreviewControlsContainer-inspection-FAI"
       onClick={onButtonClick}
       {...{ disabled }}
     >
-      <Text translation={'document.revision.fai'} />
+      <Text translation="document.revision.fai" />
     </StyledButton>);
   };
 
@@ -56,11 +56,11 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
         <Button
           variant="outlined"
           color="secondary"
-          data-cy={'PreviewControlsContainer-inspection-FAI'}
+          data-cy="PreviewControlsContainer-inspection-FAI"
           onClick={onButtonClick}
           {...{ disabled }}
         >
-          <Text translation={'document.revision.fai'} />
+          <Text translation="document.revision.fai" />
         </Button>
       )}
       <InspectionDialog { ...(props) } />

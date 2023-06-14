@@ -27,16 +27,16 @@ import styles from './TransitionDialog.styles';
 import { PasswordFormValues, Transition } from './types';
 
 interface TransitionDialogProps {
-  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
-  asyncState: AsyncState;
-  arId?: string;
-  title?: string;
-  buttonProps?: ButtonProps;
-  transition: Transition;
-  label: string;
-  hideLabel?: boolean;
-  transitionDialog: DialogHandler;
-  effectiveDateDialog?: DialogHandler;
+  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
+  asyncState: AsyncState
+  arId?: string
+  title?: string
+  buttonProps?: ButtonProps
+  transition: Transition
+  label: string
+  hideLabel?: boolean
+  transitionDialog: DialogHandler
+  effectiveDateDialog?: DialogHandler
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;
@@ -60,8 +60,8 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
     />
   );
 
-  const isClosedTransition =
-    transition === TransitionTypes.TRANSITION_CLOSED ? true : false;
+  const isClosedTransition
+    = transition === TransitionTypes.TRANSITION_CLOSED ? true : false;
 
   const renderCloseForm = (props: FormikProps<any>) => (
     <ClosedActionForm
@@ -95,9 +95,9 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
             effectiveDateDialog.close();
             transitionDialog.open();
           }}
-          message={'transition.action.effective.date.message'}
-          confirmLabel={'common.true'}
-          cancelLabel={'common.false'}
+          message="transition.action.effective.date.message"
+          confirmLabel="common.true"
+          cancelLabel="common.false"
         />
       )}
       <Dialog

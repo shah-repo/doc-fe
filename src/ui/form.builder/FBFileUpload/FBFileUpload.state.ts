@@ -18,7 +18,7 @@ class FBFileUploadState {
     this.files = files || [];
   }
 
-  public startUnzipping = (values: {docRevisionId: string; attachmentId: string}) => {
+  public startUnzipping = (values: {docRevisionId: string, attachmentId: string}) => {
     this.startAttachmentUnzippingApi.set({
       url: FBEndpoint.AttachmentUnzipping,
       body: values,

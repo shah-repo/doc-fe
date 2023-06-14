@@ -70,7 +70,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
     <DialogActions style={{ margin: 0 }}>
       <div ref={handleActionsRef} />
     </DialogActions>
-  </ Dialog>
+  </Dialog>
 );
 
 export default withFBDialog(FBDialog);

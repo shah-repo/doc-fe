@@ -10,7 +10,7 @@ import { store } from '../../../state/store';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBApproval = <T extends FBApprovalProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({
@@ -65,12 +65,12 @@ export const withFBApproval = <T extends FBApprovalProps>(
       disabled = false;
     } else {
       disabled = (
-        isReleased ||
-        !isOutput ||
-        (isOutput && !documentId) ||
-        (reviseDisabled && workspaceState?.isRevised) ||
-        (revisionStage === 3 && isRecord) ||
-        isDeprecated
+        isReleased
+        || !isOutput
+        || (isOutput && !documentId)
+        || (reviseDisabled && workspaceState?.isRevised)
+        || (revisionStage === 3 && isRecord)
+        || isDeprecated
       );
     }
 
@@ -112,25 +112,25 @@ export const withFBApproval = <T extends FBApprovalProps>(
 
     function findApprover(id: string): FBApprovalValue | undefined {
       return (
-        findLast(hasApproved, { userId: id }) ||
-        findLast(hasApproved, { groupId: id }) ||
-        findLast(hasApproved, { approvalRoleId: id })
+        findLast(hasApproved, { userId: id })
+        || findLast(hasApproved, { groupId: id })
+        || findLast(hasApproved, { approvalRoleId: id })
       );
     }
 
     function approverIsVisible(id: string): boolean {
       return (
-        !isApproved ||
-        (isApproved && !isEmpty(findApprover(id)))
+        !isApproved
+        || (isApproved && !isEmpty(findApprover(id)))
       );
     }
 
     function approverName(approver?: FBInlineApproverType): string {
       return (
-        (approver as Employee)?.user?.email ||
-        (approver as GroupRequestBody)?.name ||
-        (approver as FBInlineApprovalRole)?.name ||
-        ''
+        (approver as Employee)?.user?.email
+        || (approver as GroupRequestBody)?.name
+        || (approver as FBInlineApprovalRole)?.name
+        || ''
       );
     }
 
@@ -196,9 +196,9 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalRoles = approvalState?.approvalRoles as unknown as FBInlineApprovalRole[];
       hasApproved = approvalState?.hasApproved;
       loading = (
-        approvalState?.approversApi.loading ||
-        approvalState?.groupsApi.loading ||
-        approvalState?.approvalRolesApi.loading
+        approvalState?.approversApi.loading
+        || approvalState?.groupsApi.loading
+        || approvalState?.approvalRolesApi.loading
       );
       approveLoading = approvalState?.postApi.loading;
     });
@@ -210,7 +210,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
           formState?.setFieldValue(name, cloneDeep(data));
           if (!approvalNonVersioned) { return; }
           formState?.setFieldAutosave(name);
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

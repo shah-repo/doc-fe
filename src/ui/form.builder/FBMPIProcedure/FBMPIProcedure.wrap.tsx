@@ -29,8 +29,8 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     const redlineActive = useSelector(companySelectors.getRedlineActive);
 
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
-    isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview') &&
-    !redlineActive;
+    isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview')
+    && !redlineActive;
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
@@ -51,7 +51,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
           };
           workspaceState.saveDocRev(formState?.getValues());
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -66,7 +66,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
             ...mpiProcedureState.value,
             attachments,
           };
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -79,12 +79,11 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
           ...mpiProcedureState.value,
           description,
         };
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @helpers
-
 
     // MARK: @methods
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {

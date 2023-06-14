@@ -11,46 +11,46 @@ export enum ApprovalStatus {
 }
 
 export interface Owner {
-  id: string;
-  user: User;
+  id: string
+  user: User
 }
 
 export interface User {
-  avatar: string | null;
-  id: string;
-  email: string;
-  name: string;
-  confirmed?: boolean;
-  locked?: boolean;
-  initialColor: string;
+  avatar: string | null
+  id: string
+  email: string
+  name: string
+  confirmed?: boolean
+  locked?: boolean
+  initialColor: string
 }
 
 export interface Approval {
-  updatedAt: string;
-  id: string;
-  status: ApprovalStatus;
-  type: 'MASTER' | 'SECTION';
-  fieldId?: string;
-  approver: Owner;
-  approverId?: string;
-  approverName?: string;
-  approverEmail?: string;
-  approverGroups?: string[];
-  documentRevision?: DocumentRevision;
-  changeRequest?: ChangeRequest;
-  reviewedAt?: string;
-  assignedAt?: string;
-  assigned: Partial<Employee>;
-  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
-  manually?: boolean;
+  updatedAt: string
+  id: string
+  status: ApprovalStatus
+  type: 'MASTER' | 'SECTION'
+  fieldId?: string
+  approver: Owner
+  approverId?: string
+  approverName?: string
+  approverEmail?: string
+  approverGroups?: string[]
+  documentRevision?: DocumentRevision
+  changeRequest?: ChangeRequest
+  reviewedAt?: string
+  assignedAt?: string
+  assigned: Partial<Employee>
+  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>
+  manually?: boolean
 }
 
 export interface Id {
-  id: string;
+  id: string
 }
 
 export interface DataProps<T> {
-  dataProp: T;
+  dataProp: T
 }
 
 export type RenderSize = 'sm' | 'md' | 'lg';
@@ -68,9 +68,9 @@ export enum TypographyColor {
 }
 
 export interface TypographyProps {
-  size: keyof typeof TypographySize;
-  color: keyof typeof TypographyColor;
-  variant: string;
+  size: keyof typeof TypographySize
+  color: keyof typeof TypographyColor
+  variant: string
 }
 
 export type Nullable<T> = T | null;

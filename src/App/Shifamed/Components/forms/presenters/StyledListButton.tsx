@@ -1,4 +1,3 @@
-
 import { Button, withStyles } from '@material-ui/core';
 import Colors from '../../../../../ui/layout/theme/utils/colors';
 

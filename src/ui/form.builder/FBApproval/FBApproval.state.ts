@@ -67,21 +67,21 @@ class FBApprovalState {
   @computed public get approvers(): Employee[] | undefined {
     return FBAutocompleteAsyncStore.getValues<Employee>(
       this.approversId,
-      this.approversValue
+      this.approversValue,
     );
   }
 
   @computed public get groups(): GroupRequestBody[] | undefined {
     return FBAutocompleteAsyncStore.getValues<GroupRequestBody>(
       this.groupsId,
-      this.groupsValue
+      this.groupsValue,
     );
   }
 
   @computed public get approvalRoles(): FBInlineApprovalRole[] | undefined {
     return FBAutocompleteAsyncStore.getValues<FBInlineApprovalRole>(
       this.approvalRolesId,
-      this.approvalRolesValue
+      this.approvalRolesValue,
     );
   }
 

@@ -5,7 +5,7 @@ import { ComponentsProps } from '@material-ui/core/styles/props';
 import cx from 'classnames';
 import React from 'react';
 
-const DeleteButton: React.FC<{ className?: string; onClick?: () => void }> = ({ className, onClick }) => (
+const DeleteButton: React.FC<{ className?: string, onClick?: () => void }> = ({ className, onClick }) => (
   <span className="chip-delete" onClick={onClick}>
     <FontAwesomeIcon className={cx(className, 'chip-delete-icon')} icon={regular('trash-can')} />
   </span>

@@ -10,7 +10,7 @@ export const getStartOfDayDateString = (date: DateTypes, format = '') =>
 
 export const toStartOfDay = (date: DateTypes) =>
   new Date(
-    ...(moment.utc(date).toArray().slice(0, 3) as [number, number, number])
+    ...(moment.utc(date).toArray().slice(0, 3) as [number, number, number]),
   );
 
 export const getFormattedStartOfDayDateString = (date: DateTypes) =>
@@ -39,7 +39,7 @@ export enum MomentFormats {
   Time = 'hh:mm:ss A z',
   AsyncTasksDefaultDateTimeFormatter = 'YYYY-MM-DDTHH:mm:ss z',
   YearMonthDateDotNotation = 'YYYY.MM.DD',
-  YearMonthDate= 'YYYY-MM-DD'
+  YearMonthDate= 'YYYY-MM-DD',
 }
 
 export const toValidateIfDate = (value: moment.MomentInput) => moment(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();

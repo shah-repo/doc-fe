@@ -23,4 +23,3 @@ export const withSMDialog = <T extends SMDialogHOCProps>(
   Comp.displayName = 'withSMDialog';
   return Comp;
 };
-

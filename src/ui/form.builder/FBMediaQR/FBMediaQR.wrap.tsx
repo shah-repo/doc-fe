@@ -3,7 +3,7 @@ import { FB, FBMediaQRProps } from '..';
 import FBDRStore from '../stores/ui/FBDRStore';
 
 export const withFBMediaQR = <T extends FBMediaQRProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     isTemplate,

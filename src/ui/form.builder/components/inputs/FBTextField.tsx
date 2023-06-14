@@ -21,10 +21,10 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   inputProps,
   ...props
 }) => {
-  const disableEdit =
-    disabled ||
-    get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD' ||
-    FBStore.getValue('signatureRequestId');
+  const disableEdit
+    = disabled
+    || get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD'
+    || FBStore.getValue('signatureRequestId');
 
   return (
     <FBInput disabled={disableEdit} {...props} type="textfield">

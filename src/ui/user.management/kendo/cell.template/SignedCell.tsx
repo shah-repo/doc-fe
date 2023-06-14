@@ -23,10 +23,10 @@ export const SignedCell = ({
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const getResendSignupEmailAction = useActionCreator(
-    authActions.resendSignupEmail
+    authActions.resendSignupEmail,
   );
   const getSendPasswordResetEmailAction = useActionCreator(
-    authActions.sendPasswordResetEmail
+    authActions.sendPasswordResetEmail,
   );
 
   const asyncSignUpEmail = useAsync({
@@ -46,12 +46,12 @@ export const SignedCell = ({
       ? asyncSignUpEmail.start(
         getResendSignupEmailAction,
           user?.email,
-          asyncSignUpEmail
+          asyncSignUpEmail,
       )
       : asyncResetPasswordEmail.start(
         getSendPasswordResetEmailAction,
         id,
-        asyncResetPasswordEmail
+        asyncResetPasswordEmail,
       );
   };
 
@@ -69,9 +69,9 @@ export const SignedCell = ({
           onClick={() => handleResendEmail(dataItem)}
         >
           <span className={classes.link}>
-            <Text translation={!dataItem?.user?.confirmed ?
-              'user.management.resend.signup.email' :
-              'reset.password'
+            <Text translation={!dataItem?.user?.confirmed
+              ? 'user.management.resend.signup.email'
+              : 'reset.password'
             } />
           </span>
         </Link>
@@ -91,8 +91,8 @@ export const SignedCell = ({
           data={
             dataItem?.user?.confirmed && !dataItem?.user?.locked
               ? getTranslatedText('user.management.signed.up')
-              : !dataItem?.user?.confirmed ? getTranslatedText('user.management.resend.signup.email') :
-                getTranslatedText('reset.password')
+              : !dataItem?.user?.confirmed ? getTranslatedText('user.management.resend.signup.email')
+                : getTranslatedText('reset.password')
           }
           childrenElement={getChildrenElement}
         />

@@ -6,8 +6,8 @@ import Text from '../../components/Text';
 import styles from './styles';
 
 interface OwnProps {
-  groupName: string;
-  employees: Employee[];
+  groupName: string
+  employees: Employee[]
 }
 
 type Props = OwnProps;
@@ -27,8 +27,8 @@ const GroupsDisplayContent: React.FunctionComponent<Props> = ({
 
   const memberChipRenderer = (employees: Employee[]) => (
     employees.map((employee) => (
-      employee.user &&
-      <Chip
+      employee.user
+      && <Chip
         key={employee.id}
         label={employee.user.name}
         className={classes.chip}
@@ -38,7 +38,7 @@ const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   const membersRenderer = (employees: Employee[]) => (
     <Box width={700} mt={5}>
       <Typography variant="h4">
-        <Text translation={'common.members'} />
+        <Text translation="common.members" />
       </Typography>
       <Box mt={2}>
         {memberChipRenderer(employees)}
@@ -49,7 +49,7 @@ const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   const groupNameRenderer = () => (
     <Box width={700}>
       <Typography variant="h4" style={{ marginBottom: '16px' }} >
-        <Text translation={'common.group.name'} />
+        <Text translation="common.group.name" />
       </Typography>
       <Text message={groupName} />
     </Box>

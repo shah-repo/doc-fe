@@ -26,10 +26,10 @@ import { getHighestReleasedRevision, getHighestRevision } from '../transform';
 import { styles } from './AvailableReferences.new.styles';
 
 interface AvailableReferencesProps extends FieldOwnProps {
-  disabled?: boolean;
-  availableReferences: {label: string; value: string; deleteDisabled?: boolean }[];
-  documentReferences: Reference[];
-  documentGroupOptions?: DocumentGroupOptionsType[];
+  disabled?: boolean
+  availableReferences: {label: string, value: string, deleteDisabled?: boolean }[]
+  documentReferences: Reference[]
+  documentGroupOptions?: DocumentGroupOptionsType[]
 }
 
 type AvailableReferencesPropsWithFormik = AvailableReferencesProps &
@@ -86,17 +86,17 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   };
 
   const docRevsById = useSelector(documentRevisionsSelectors.byId);
-  const isDocumentFai =
-    checkIsTypeFaiInspection(documentGroupOptions);
-  const canDocumentCreateInspection =
-    checkCanTypeCreateInspection(documentGroupOptions);
+  const isDocumentFai
+    = checkIsTypeFaiInspection(documentGroupOptions);
+  const canDocumentCreateInspection
+    = checkCanTypeCreateInspection(documentGroupOptions);
 
   const options = some(documentReferences, (ref) => {
     if (!ref.documentRevisions) { return false; }
     const { isReferencePart, canReferenceCreateInspection } = getReferenceValues(ref.documentRevisions, docRevsById);
 
-    return (isReferencePart && canDocumentCreateInspection) ||
-        (canReferenceCreateInspection && isDocumentFai);
+    return (isReferencePart && canDocumentCreateInspection)
+        || (canReferenceCreateInspection && isDocumentFai);
   })
     ? availableReferences.filter((ref) => !ref.deleteDisabled)
     : availableReferences
@@ -114,11 +114,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       label: `${ref.docId} - ${highestRev?.displayRevision} - ${highestRev?.name}`,
       value: ref.id,
       url: `/document_revision/${ref.docId}/version/${highestRev?.id}`,
-      deleteDisabled: (isReferencePart && canDocumentCreateInspection) ||
-        (canReferenceCreateInspection && isDocumentFai),
+      deleteDisabled: (isReferencePart && canDocumentCreateInspection)
+        || (canReferenceCreateInspection && isDocumentFai),
     };
   });
-
 
   useEffect(() => {
     const value = defaultValue(documentReferences);
@@ -147,7 +146,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const filterOptions = () => {
     if (inputValue) {
       const updatedOptions = availableReferences.filter(
-        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase())
+        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase()),
       );
       setModifiedOptions(updatedOptions);
     } else {
@@ -175,8 +174,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
     if (
-      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) ===
-      listboxNode.clientHeight
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
+      === listboxNode.clientHeight
     ) {
       const nextOffset = offset + limit;
       setOffset(nextOffset);
@@ -273,7 +272,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 </FBTooltip>
               </Link>}
             disabled={option.deleteDisabled}
-            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
+            deleteIcon={<RemoveReference className={classes.deleteIcon} />}
             onDelete={(e) => {
               onChange(e, value.filter((obj) => obj.value !== option.value));
             }}

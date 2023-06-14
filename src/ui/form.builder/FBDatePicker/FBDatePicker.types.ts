@@ -5,8 +5,8 @@ export type FBDatePickerProps =
 & Pick<FBProviderProps, 'datePickerState'>
 & Omit<FBInputProps, 'onChange'>
 & {
-  onChange?: BaseKeyboardPickerProps['onChange'];
-  onDatePickerClick?: () => void;
-  onDatePickerClose?: () => void;
-  disablePastDates?: boolean;
+  onChange?: BaseKeyboardPickerProps['onChange']
+  onDatePickerClick?: () => void
+  onDatePickerClose?: () => void
+  disablePastDates?: boolean
 };

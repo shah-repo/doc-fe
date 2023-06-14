@@ -6,5 +6,5 @@ export default makeStyles(() =>
       '& p':
       { marginBottom: '0px' },
     },
-  })
+  }),
 );

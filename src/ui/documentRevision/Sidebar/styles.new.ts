@@ -139,5 +139,5 @@ export default makeStyles((theme) =>
         stroke: Colors.medium_blue,
       },
     },
-  })
+  }),
 );

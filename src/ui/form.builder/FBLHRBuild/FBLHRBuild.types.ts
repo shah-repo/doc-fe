@@ -8,15 +8,15 @@ export type FBLHRBuildProps =
 & Pick<FBProviderProps, 'lhrBuildState'>
 & Pick<SMDialogProps, 'onDialogActionClick'>
 & {
-  buildValidationRules: Nullable<string>;
+  buildValidationRules: Nullable<string>
 };
 
 export interface FBLHRBuildConstructor {
-  value?: string;
-  disabled?: boolean;
+  value?: string
+  disabled?: boolean
 }
 
 export enum FBLHRBuildOptions {
   'R&D' = 'R&D',
-  Production = 'Production'
+  Production = 'Production',
 }

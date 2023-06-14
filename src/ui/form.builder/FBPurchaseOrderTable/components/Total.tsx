@@ -69,6 +69,7 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
               >
                 <FormattedNumber
                   value={Number(calculation?.subTotal)}
+                  // eslint-disable-next-line react/style-prop-object
                   style="currency"
                   currency={calculation?.currency}
                 />
@@ -169,6 +170,7 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
               >
                 <FormattedNumber
                   value={Number(calculation?.totalAmount)}
+                  // eslint-disable-next-line react/style-prop-object
                   style="currency"
                   currency={calculation?.currency}
                 />

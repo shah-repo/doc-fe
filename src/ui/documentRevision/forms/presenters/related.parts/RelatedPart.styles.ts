@@ -315,6 +315,5 @@ export default makeStyles((theme) =>
       display: 'flex',
       fontWeight: 600,
     },
-  })
+  }),
 );
-

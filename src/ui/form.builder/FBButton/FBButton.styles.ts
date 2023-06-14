@@ -5,8 +5,8 @@ import Colors from '../../layout/theme/utils/colors';
 type Props =
   & Pick<ButtonProps, 'size'>
   & {
-    newVariant?: boolean;
-    isHover?: boolean;
+    newVariant?: boolean
+    isHover?: boolean
   };
 
 const SIZES = {
@@ -64,5 +64,5 @@ export default makeStyles(() =>
         },
       },
     }),
-  })
+  }),
 );

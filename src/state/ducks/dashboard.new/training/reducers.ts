@@ -6,7 +6,7 @@ import { TrainingListAction, TrainingState } from './types';
 
 const training = (
   state: TrainingState = TRAINING_LIST_INITIAL_STATE,
-  action: TrainingListAction
+  action: TrainingListAction,
 ): TrainingState => {
   const actionResult = get(action.payload, 'results');
   const stateResult = get(state, 'results');

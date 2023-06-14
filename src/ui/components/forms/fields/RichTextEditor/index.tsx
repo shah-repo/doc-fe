@@ -31,12 +31,12 @@ const toolbarOptions = [
 const inline = { options: ['bold', 'italic', 'underline', 'monospace'] };
 
 interface RichTextEditorOwnProps extends FieldOwnProps {
-  size?: RenderSize;
-  customToolbarAction?: () => void;
-  actionsRenderer?: () => any;
-  hidden?: boolean;
-  editorProps?: EditorProps;
-  toggleToolbar?: boolean;
+  size?: RenderSize
+  customToolbarAction?: () => void
+  actionsRenderer?: () => any
+  hidden?: boolean
+  editorProps?: EditorProps
+  toggleToolbar?: boolean
 }
 
 type RichTextEditorPropsWithFormik = RichTextEditorOwnProps & FormikFieldProps;

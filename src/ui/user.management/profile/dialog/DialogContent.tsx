@@ -11,49 +11,51 @@ import { tableSearchActions } from '../../../../state/ducks/tableSearch';
 import { userManagementActions } from '../../../../state/ducks/userManagement';
 import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
 import { AsyncState } from '../../../../state/types';
-import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import SubmitButton from '../../../components/forms/SubmitButton';
 import Text from '../../../components/Text';
+import SubmitButton from '../../../components/forms/SubmitButton';
+import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import useAsync from '../../../hooks/useAsync';
 import { Translation } from '../../../translations/types';
 import styles from '../../profile/UserProfile.styles';
 import { toEmployeeActiveStatusEditRequestBody } from '../../utils/transform';
 import AcctCodes from '../AddressesAndCodes/AcctCodes';
 import Addresses from '../AddressesAndCodes/Addresses';
+import { CompanyLocations } from '../CompanyLocations';
+import HelloSignAccess from '../HelloSignAccess';
 import ApiTokenContent from '../apiTokenContent/ApiTokenContent';
 import CompanyStageManagementContainer from '../company.stage.management/CompanyStageManagement.container';
 import UserGroups from '../groups/UserGroups';
-import HelloSignAccess from '../HelloSignAccess';
 import NavigationManagementContainer from '../navigation.management/NavigationManagement.container';
 import WhiteLabelingManagementContainer from '../whiteLabeling.management/WhiteLabelingManagement.container';
 
 interface OwnProps {
-  canManageUsers: boolean;
-  employeeGroups: OptionType[];
-  employeeId: string;
-  editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
-  callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
-  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
-  callbackUpdateWithUpload?: (avatar: string, name: string) => void;
-  showEditUser: boolean;
-  showEdit: () => void;
-  closeEdit: () => void;
-  userInfo: EmployeeEditRequestBody;
-  asyncState: AsyncState;
-  getUrl: () => void;
-  slackIntegrationEnabled: boolean;
-  slackTeamId: string;
-  slackUserId: string;
-  email: string;
-  activeStatus: boolean;
-  file: File | null;
-  setFile: (value: File | null) => void;
-  setUserInfo: (values: EmployeeEditRequestBody) => void;
-  userId: string;
-  isCurrentUser: boolean;
-  usernameError: Translation | null;
-  isDeveloper: boolean;
-  canUpdateCompany: boolean;
+  canManageUsers: boolean
+  employeeGroups: OptionType[]
+  employeeId: string
+  editCurrentEmployee: (values: EmployeeEditRequestBody) => void
+  callbackUpdateGroups?: (values: GetEmployeeResponse) => void
+  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void
+  callbackUpdateWithUpload?: (avatar: string, name: string) => void
+  showEditUser: boolean
+  showEdit: () => void
+  closeEdit: () => void
+  userInfo: EmployeeEditRequestBody
+  asyncState: AsyncState
+  getUrl: () => void
+  slackIntegrationEnabled: boolean
+  slackTeamId: string
+  slackUserId: string
+  email: string
+  activeStatus: boolean
+  file: File | null
+  setFile: (value: File | null) => void
+  setUserInfo: (values: EmployeeEditRequestBody) => void
+  userId: string
+  isCurrentUser: boolean
+  usernameError: Translation | null
+  isDeveloper: boolean
+  canUpdateCompany: boolean
+  canUpdateLocations: boolean
 }
 
 type Props = OwnProps;
@@ -85,6 +87,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   usernameError,
   isDeveloper,
   canUpdateCompany,
+  canUpdateLocations,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -244,10 +247,10 @@ const DialogContent: React.FunctionComponent<Props> = ({
           employeeGroups={employeeGroups}
           employeeId={employeeId}
           callbackUpdateGroups={callbackUpdateGroups}
-          fromUserProfile= {true}
+          fromUserProfile={true}
         />
         <Box display="flex" alignItems="flex-end" mt={2}>
-          {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled}/>}
+          {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled} />}
           {slackIntegrationEnabled && slackTeamId && !slackUserId && (
             <div>
               <Typography variant="h4" className={classes.integrations}>
@@ -257,17 +260,18 @@ const DialogContent: React.FunctionComponent<Props> = ({
               <SubmitButton
                 onClick={getUrl}
                 asyncState={asyncState}
-                label={'integrations.add'}
+                label="integrations.add"
                 className={classes.addButton}
                 id="DialogContent-addEmployee"
               />
             </div>
           )}
         </Box>
-        <NavigationManagementContainer/>
-        <CompanyStageManagementContainer/>
-        <WhiteLabelingManagementContainer/>
+        <NavigationManagementContainer />
+        <CompanyStageManagementContainer />
+        <WhiteLabelingManagementContainer />
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
+        <CompanyLocations isActive={canUpdateLocations || canUpdateCompany} locations={companyMine.locations} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
         {isDeveloper && <ApiTokenContent />}

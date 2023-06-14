@@ -21,20 +21,20 @@ import { AddUserManage } from '../types';
 import { styles } from './styles';
 
 interface GroupOptions {
-  label: string;
-  text: string;
-  value: string;
-  tags: Nullable<GroupTag[]>;
-  type?: GroupType;
-  defaultForNewUsers: boolean;
-  permissions: Permission[];
-  parents: Group[];
-  joinedParents: Group[];
-  isOfficial: boolean;
+  label: string
+  text: string
+  value: string
+  tags: Nullable<GroupTag[]>
+  type?: GroupType
+  defaultForNewUsers: boolean
+  permissions: Permission[]
+  parents: Group[]
+  joinedParents: Group[]
+  isOfficial: boolean
 }
 
 interface GroupsProps extends GridCellProps {
-  updatedGridData?: AddUserManage;
+  updatedGridData?: AddUserManage
 }
 
 export const GroupsCell = ({

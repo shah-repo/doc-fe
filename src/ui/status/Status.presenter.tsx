@@ -10,10 +10,10 @@ const MICRO_STATUS_QUERY = '/micro/status';
 const DOC_EXPORT_QUERY = '/export/status';
 
 interface StatusState {
-  backend: object;
-  bgWorker: object;
-  remoteJS: object;
-  docExport: object;
+  backend: object
+  bgWorker: object
+  remoteJS: object
+  docExport: object
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -89,7 +89,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
           }}><b>{key}: </b></td>
           <td>{dict[key]}</td>
         </tr>
-      )
+      ),
     );
   }
 

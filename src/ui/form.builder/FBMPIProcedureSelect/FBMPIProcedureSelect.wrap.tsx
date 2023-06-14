@@ -12,8 +12,8 @@ import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentT
 import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { isMoreDigitsAfterDecimal } from '../../dashboard.new/line.items/common/Utils';
-import Colors from '../../layout/theme/utils/colors';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import useStyles from './styles';
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   Component: React.FunctionComponent<T>,
@@ -32,19 +32,20 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     // MARK: @config
     const { dialogState, workspaceState, mpiProcedureState } = FB.useStores();
     const dispatch = useDispatch();
+    const classes = useStyles();
     formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
     const { id, document } = workspaceState || {};
     const [selectedEQ, setEQ] = useState<FBSelectedEQ | undefined>();
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
-    const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
+    const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
     const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
     const enforceFlag = Boolean(smartRefLHR?.toDocRev?.document.typeSpecificConfig?.eqProdEnforceConfig.value);
     const intl = useIntl();
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
+        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -56,9 +57,9 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = isDocPIInstance ?
-            data.smartReferencesTo :
-            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
+          const refs = isDocPIInstance
+            ? data.smartReferencesTo
+            : uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
           const partsSelected = refs?.reduce((selected, ref) => {
             if (ref?.metadata?.fieldId === name
                 && ref.active
@@ -72,12 +73,12 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
               });
             }
             return selected;
-          }, [] as Partial<FBMPIProcedureSelectValue>[]);
+          }, [] as Array<Partial<FBMPIProcedureSelectValue>>);
 
           mpiProcedureState?.setPartsSelected(partsSelected);
           id && dispatch(documentRevisionsActions.loadAudit(id));
           id && dispatch(documentRevisionsActions.reload(id));
-        }
+        },
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -89,7 +90,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           if (!data) { return; }
           id && dispatch(documentRevisionsActions.loadAudit(id));
           id && dispatch(documentRevisionsActions.reload(id));
-        }
+        },
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -107,9 +108,9 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
 
     // MARK: @helpers
     isOptionDisabled = (option) => {
-      const pmDate = FB.calculateDateByType(option, 'preventativeMaintenance' );
-      const calDate = FB.calculateDateByType(option, 'calibration' );
-      const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
+      const pmDate = FB.calculateDateByType(option, 'preventativeMaintenance');
+      const calDate = FB.calculateDateByType(option, 'calibration');
+      const isOverdue = isDateOverdue(pmDate) || isDateOverdue(calDate);
 
       if (!enforceFlag && !isEqActive(option.eqStatus)) {
         return true;
@@ -123,45 +124,59 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
 
     // eslint-disable-next-line react/display-name
     renderOptionWithDate = (option: any) => {
-      const pmDate = FB.calculateDateByType(option, 'preventativeMaintenance' );
-      const calDate = FB.calculateDateByType(option, 'calibration' );
+      const pmDate = FB.calculateDateByType(option, 'preventativeMaintenance');
+      const calDate = FB.calculateDateByType(option, 'calibration');
 
-      return <Grid container>
-        <Grid item xs={2}>
-          <Typography noWrap>
-            {option.document.docId}<span> &#9642;</span>
-          </Typography>
+      return (
+        <Grid container justify="flex-start" alignItems="center">
+          <Grid item>
+            <Typography>{option.document.docId}</Typography>
+          </Grid>
+          <Grid item className={classes.grayDot} />
+          <Grid item>
+            <Typography>
+              {intl.formatMessage(
+                { id: 'form.builder.lhrs.procedure.select.equipment.option' },
+                { revision: option.displayRevision, name: option.name },
+              )}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} className={classes.dueDate}>
+            {calDate && (
+              <span>
+                {intl.formatMessage(
+                  { id: 'form.builder.lhrs.procedure.select.equipment.option.cal.due' },
+                  { date: getFormattedDateString(calDate, MomentFormats.BriefDate) },
+                )}
+              </span>
+            )}
+            {pmDate && calDate && (
+              <Box component="span" className={classes.black}>
+                &#9642;
+              </Box>
+            )}
+            {pmDate && (
+              <span>
+                {intl.formatMessage(
+                  { id: 'form.builder.lhrs.procedure.select.equipment.option.pm.due' },
+                  { date: getFormattedDateString(pmDate, MomentFormats.BriefDate) },
+                )}
+              </span>
+            )}
+          </Grid>
         </Grid>
-        <Grid item >
-          <Typography noWrap>
-            {`rev ${option.displayRevision} `}
-          </Typography>
-        </Grid>
-        <Grid item xs={8} >
-          <Typography noWrap>
-            {`- ${option.name}`}
-          </Typography>
-        </Grid>
-        <Grid
-          item xs={12}
-          style={{ textAlign: 'left', color: Colors.latest_red_varient, fontSize: '14px', paddingBottom: '4px' }}
-        >
-          {calDate && <span> Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)} </span>}
-          {pmDate && calDate && <Box component="span" style={{ color: Colors.black }}>&#9642;</Box>}
-          {pmDate && <span> PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
-        </Grid>
-      </Grid>;
+      );
     };
 
     onChange = async () => {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       const formValue = await formState?.getValues() as FBMPIProcedureSelectValue;
       const { usedOverride } = formValue;
-      const id =  (usedOverride as DocumentRevision).id;
+      const id = (usedOverride as DocumentRevision).id;
 
       const item: any = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.releasedEquipment, id);
-      const pmDate = FB.calculateDateByType(item, 'preventativeMaintenance' );
-      const calDate = FB.calculateDateByType(item, 'calibration' );
+      const pmDate = FB.calculateDateByType(item, 'preventativeMaintenance');
+      const calDate = FB.calculateDateByType(item, 'calibration');
       setEQ({
         status: item?.eqStatus,
         pmDate,
@@ -169,7 +184,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       });
     };
 
-    function handleAdd() {
+    function handleAdd () {
       if (!id) { return; }
       const formValue = formState?.getValues() as FBMPIProcedureSelectValue;
       const { quantity, unit, usedOverride } = formValue;
@@ -183,7 +198,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       }
       if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
         toastError(intl.formatMessage({ id: 'document.revision.quantity.decimals.error' },
-          { name: intl.formatMessage({ id: 'form.builder.quantity' } ) }));
+          { name: intl.formatMessage({ id: 'form.builder.quantity' }) }));
         return;
       }
       const part = {
@@ -204,7 +219,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       handleCancel?.();
     }
 
-    function handleCancel() {
+    function handleCancel () {
       dialogState?.closeDialog();
     }
 

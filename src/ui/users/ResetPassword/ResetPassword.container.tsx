@@ -9,8 +9,8 @@ import { ResetPasswordValues } from '../types';
 import ResetPasswordPresenter from './ResetPassword.presenter';
 
 interface Props {
-  asyncState: AsyncState;
-  onSubmit: (confirmValues: ResetPasswordValues) => void;
+  asyncState: AsyncState
+  onSubmit: (confirmValues: ResetPasswordValues) => void
 }
 
 const ResetPasswordContainer: React.FunctionComponent<Props> = ({
@@ -41,8 +41,7 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
 
   return (
     <div>
-      {(
-        <FormContext.Provider value={{ submitOnChange: false }}>
+      <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
             initialValues={initialValues}
             onSubmit={onSubmit}
@@ -51,7 +50,6 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
             {render}
           </Formik>
         </FormContext.Provider>
-      )}
     </div>
   );
 };

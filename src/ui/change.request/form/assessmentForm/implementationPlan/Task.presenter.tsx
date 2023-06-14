@@ -6,10 +6,10 @@ import Text from '../../../../components/Text';
 import { ImplementationPlanTaskFormValues } from '../../types';
 
 export interface Props {
-  task: ImplementationPlanTaskFormValues;
-  removeTask: (index: number) => () => void;
-  editTask: (task: ImplementationPlanTaskFormValues, index: number) => () => void;
-  index: number;
+  task: ImplementationPlanTaskFormValues
+  removeTask: (index: number) => () => void
+  editTask: (task: ImplementationPlanTaskFormValues, index: number) => () => void
+  index: number
 }
 
 const styles = makeStyles(() =>

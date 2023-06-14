@@ -4,8 +4,8 @@ import { trainingStatsSelectors } from '../../../../state/ducks/dashboard.new/tr
 import TrainingChartPresenter from './TrainingChart.presenter';
 
 interface TrainingChartProps {
-  tabValue: number;
-  infoChangeTab: (newValue: number) => void;
+  tabValue: number
+  infoChangeTab: (newValue: number) => void
 }
 
 const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
@@ -13,7 +13,7 @@ const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
   infoChangeTab,
 }) => {
   const overdueTrainingChartData = useSelector(
-    trainingStatsSelectors.overdueTrainingChartData
+    trainingStatsSelectors.overdueTrainingChartData,
   );
   const dueTrainingChartData = useSelector(trainingStatsSelectors.dueTrainingChartData);
   return (

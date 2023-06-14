@@ -20,17 +20,16 @@ import { AttachmentStyleProps } from '../attachment.field/utils/types';
 import AttachmentLineTypeForm from './AttachmentLineTypeForm';
 
 interface Props {
-  upload: typeof attachmentsActions.upload;
-  field: FieldInputProps<any>;
-  form: FormikProps<any>;
-  multiple?: boolean;
-  name?: string;
-  disabled?: boolean;
-  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
-  isField: boolean;
-  isUploading: boolean;
+  upload: typeof attachmentsActions.upload
+  field: FieldInputProps<any>
+  form: FormikProps<any>
+  multiple?: boolean
+  name?: string
+  disabled?: boolean
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any
+  isField: boolean
+  isUploading: boolean
 }
-
 
 const styles = makeStyles((theme) => {
   const linkStyle = {
@@ -77,7 +76,6 @@ const styles = makeStyles((theme) => {
   };
 });
 
-
 const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   upload,
   multiple,
@@ -119,8 +117,8 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {(isChangeRequestFormOnScreenContext || isRecord) &&
-        <Box className={classes.root} id="AttachmentFieldPresenter-field">
+      {(isChangeRequestFormOnScreenContext || isRecord)
+        && <Box className={classes.root} id="AttachmentFieldPresenter-field">
           <input
             accept="*"
             className={classes.input}
@@ -146,8 +144,8 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         </Box>
       }
 
-      {(!isChangeRequestFormOnScreenContext && !isRecord) &&
-        <Button
+      {(!isChangeRequestFormOnScreenContext && !isRecord)
+        && <Button
           color="primary"
           disableRipple
           startIcon={<AttachFileIcon />}
@@ -160,8 +158,8 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         </Button>
       }
 
-      {dialog.isOpen &&
-        <Dialog
+      {dialog.isOpen
+        && <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           fullWidth={true}

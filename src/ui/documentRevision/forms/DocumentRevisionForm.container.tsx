@@ -32,13 +32,13 @@ import { isDocumentAlphaReleased } from '../helpers/revisionStage';
 import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
 
 export interface FormHeaderContext {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip: boolean;
-  values: DocumentRevisionFormValues;
-  isDisabled: boolean;
-  mode: FBWorkspaceMode;
-  asyncState: AsyncState;
-  type?: DocumentCloneType;
+  documentRevision: DocumentRevision
+  canChangeOwnerShip: boolean
+  values: DocumentRevisionFormValues
+  isDisabled: boolean
+  mode: FBWorkspaceMode
+  asyncState: AsyncState
+  type?: DocumentCloneType
 }
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
@@ -46,24 +46,24 @@ export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 interface OwnProps {
-  initialValues: DocumentRevisionFormValues;
-  asyncState: AsyncState;
+  initialValues: DocumentRevisionFormValues
+  asyncState: AsyncState
   onSubmit: (
     values: DocumentRevisionFormValues,
     actions: FormikActions<DocumentRevisionFormValues>,
     cleanInitialValues?: DocumentRevisionFormValues,
-  ) => void;
-  showRevisionTypeChange?: boolean;
-  setDocId?: typeof documentsActions.setDocumentProposedId;
-  doNotPrompt?: boolean;
-  setDoNotPrompt?: (value: boolean) => void;
-  onDirtyFlagChange?: (dirty: boolean) => void;
-  documentRevision: DocumentRevision;
-  proposedDocId?: string;
-  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
-  canChangeOwnerShip?: boolean;
-  type?: DocumentCloneType;
-  isNewVersion?: boolean;
+  ) => void
+  showRevisionTypeChange?: boolean
+  setDocId?: typeof documentsActions.setDocumentProposedId
+  doNotPrompt?: boolean
+  setDoNotPrompt?: (value: boolean) => void
+  onDirtyFlagChange?: (dirty: boolean) => void
+  documentRevision: DocumentRevision
+  proposedDocId?: string
+  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId
+  canChangeOwnerShip?: boolean
+  type?: DocumentCloneType
+  isNewVersion?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -119,9 +119,9 @@ DocumentRevisionFormContainerProps
       });
     }
 
-    const retrain = initialValues.id ?
-      initialValues.retrain :
-      initialValues.document?.documentType?.defaultTraining || false;
+    const retrain = initialValues.id
+      ? initialValues.retrain
+      : initialValues.document?.documentType?.defaultTraining || false;
 
     const attachments = outputRevision
       ? filter(initialValues.attachments, (file) => file.lineType !== 'RED_LINE')
@@ -148,10 +148,10 @@ DocumentRevisionFormContainerProps
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     if (didMount) {
       if (
-        documentRevision?.updatedAt &&
-        FBDataStore?.refreshData?.updatedAt &&
-        moment(FBDataStore?.refreshData?.updatedAt).diff(
-          moment(documentRevision?.updatedAt)
+        documentRevision?.updatedAt
+        && FBDataStore?.refreshData?.updatedAt
+        && moment(FBDataStore?.refreshData?.updatedAt).diff(
+          moment(documentRevision?.updatedAt),
         ) >= 0
       ) {
         documentRevision.updatedAt = FBDataStore?.refreshData?.updatedAt;
@@ -201,9 +201,9 @@ DocumentRevisionFormContainerProps
   let mode: Partial<FBWorkspaceMode> = 'none';
 
   let { schema: originScheme = [] } = (
-    (cleanInitialValues)?.formTemplate ||
-    (cleanInitialValues)?.formDocument?.formTemplate ||
-    {}
+    (cleanInitialValues)?.formTemplate
+    || (cleanInitialValues)?.formDocument?.formTemplate
+    || {}
   );
   originScheme = cleanInitialValues?.schema || originScheme;
   const formInput = useMemo(() =>
@@ -242,12 +242,12 @@ DocumentRevisionFormContainerProps
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
     documentRevision?.status,
     documentRevision?.formDocument?.status,
-    documentRevision?.formDocument?.document?.id
+    documentRevision?.formDocument?.document?.id,
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
 
-  const shouldShowUpgrade =
-    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
+  const shouldShowUpgrade
+    = ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isMPIOutput && !isLHR;
   const isDAM = checkIsDocumentDAM(formGroupOptions);
 

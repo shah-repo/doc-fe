@@ -5,8 +5,8 @@ import { Attachment } from '../../../state/ducks/attachments/types';
 import DownloadButtonContainer from './DownloadButton.container';
 
 export interface FileCardProps {
-  removeAttachment?: () => void;
-  attachment: Attachment;
+  removeAttachment?: () => void
+  attachment: Attachment
 }
 
 const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, attachment }) => {

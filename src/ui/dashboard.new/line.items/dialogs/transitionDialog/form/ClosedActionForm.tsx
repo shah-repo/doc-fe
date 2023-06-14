@@ -15,10 +15,10 @@ import { StyleTooltip } from '../../../common/StyleTooltip';
 import styles from './ClosedActionForm.styles';
 
 interface ClosedActionFormProps extends WithStyles<typeof styles> {
-  asyncState: AsyncState;
-  cancel: () => void;
-  arId?: string;
-  title?: string;
+  asyncState: AsyncState
+  cancel: () => void
+  arId?: string
+  title?: string
 }
 
 const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({

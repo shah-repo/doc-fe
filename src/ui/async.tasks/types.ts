@@ -23,17 +23,17 @@ export enum SQS_TYPES{
   USAGE_REPORT='USAGE_REPORT',
   SEND_PASSWORD_EXPIRATION_EMAILS='SEND_PASSWORD_EXPIRATION_EMAILS',
   PRECALC_PAGE_DETAILS='PRECALC_PAGE_DETAILS',
-  SELECT_ALL='Select All'
+  SELECT_ALL='Select All',
 }
 
 export interface TimeTravelProps {
-  year: number;
-  month: number;
-  day: number;
-  hour: number;
-  minute: number;
-  second: number;
-  nextTaskTypes?: string[];
+  year: number
+  month: number
+  day: number
+  hour: number
+  minute: number
+  second: number
+  nextTaskTypes?: string[]
 }
 
 export const NEXT_TASK_TYPES = [
@@ -52,12 +52,12 @@ export const NEXT_TASK_TYPES_USER = [
 ];
 
 export interface AsyncProps {
-  initialValues: TimeTravelProps;
+  initialValues: TimeTravelProps
   setFieldValue: (
     field: string,
     value: any,
     shouldValidate?: boolean | undefined
-  ) => void;
-  errors: FormikErrors<TimeTravelProps>;
-  type?: SQS_TYPES;
+  ) => void
+  errors: FormikErrors<TimeTravelProps>
+  type?: SQS_TYPES
 }

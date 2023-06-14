@@ -44,7 +44,6 @@ AttachmentIconFactoryProps
     isNewVersion,
   };
 
-
   if (isUploading) {
     props = {
       ...defaultProps,

@@ -11,9 +11,9 @@ import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatar
 import { styles } from './Audit.presenter.styles';
 
 interface OwnProps {
-  audit: AuditGroupType;
-  approvals: Approval[];
-  isDrawerOpen: boolean;
+  audit: AuditGroupType
+  approvals: Approval[]
+  isDrawerOpen: boolean
 }
 
 type AuditPresenterProps = OwnProps;

@@ -9,17 +9,17 @@ import Field, { FieldOwnProps } from './Field';
 import { InputField } from './Input.styles';
 
 export interface SelectOption {
-  value: string | number;
-  text: string;
+  value: string | number
+  text: string
 }
 
 interface SelectOwnProps extends FieldOwnProps {
-  selectProps?: MuiSelectProps;
-  options: SelectOption[];
-  includeEmpty?: boolean;
-  inputFieldProps?: InputBaseProps;
-  inputStyleProps?: string;
-  labelProps?: BoxProps;
+  selectProps?: MuiSelectProps
+  options: SelectOption[]
+  includeEmpty?: boolean
+  inputFieldProps?: InputBaseProps
+  inputStyleProps?: string
+  labelProps?: BoxProps
 }
 
 type SelectPropsWithFormik = SelectOwnProps &
@@ -56,7 +56,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
         {...selectProps}
         className={inputStyleProps}
         data-cy={`select.${fieldProps.field.name}`}
-        input={<InputField name={fieldProps.field.name} {...inputFieldProps}/>}
+        input={<InputField name={fieldProps.field.name} {...inputFieldProps} />}
         onChange={(evt, child) => {
           field.onChange(evt);
           selectProps?.onChange?.(evt, child);

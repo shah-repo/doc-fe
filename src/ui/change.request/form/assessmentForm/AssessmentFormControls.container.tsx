@@ -19,9 +19,9 @@ import TransitionButton from './TransitionButton';
 import AssessmentFormVoidContainer from './Void';
 
 interface Props {
-  changeRequest?: ChangeRequest;
-  errors?: FormikErrors<any>;
-  isButtonShown?: boolean;
+  changeRequest?: ChangeRequest
+  errors?: FormikErrors<any>
+  isButtonShown?: boolean
 }
 
 const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
@@ -54,8 +54,8 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     showButton: boolean,
     transition: ChangeRequestTransition,
     buttonProps?: ButtonProps,
-  ) => showButton &&
-        <ChangeRequestWithdrawDialog
+  ) => showButton
+        && <ChangeRequestWithdrawDialog
           transition={transition}
           changeRequestId={changeRequest.id}
           buttonProps={buttonProps}
@@ -67,8 +67,8 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     showButton: boolean,
     transition: ChangeRequestTransition,
     buttonProps?: ButtonProps,
-  ) => showButton &&
-        <ChangeRequestTransitionDialogContainer
+  ) => showButton
+        && <ChangeRequestTransitionDialogContainer
           transition={transition}
           changeRequestId={changeRequest.id}
           buttonProps={buttonProps}
@@ -79,25 +79,24 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     showButton: boolean,
     transition: ChangeRequestTransition,
     buttonProps?: ButtonProps,
-  ) => showButton && !isButtonShown &&
-        <TransitionButton
+  ) => showButton && !isButtonShown
+        && <TransitionButton
           changeRequestId={changeRequest.id}
           transition={transition}
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}
         />;
 
-
   const formHasErrors = !isEmpty(errors);
   const isCurrentUserOwner = changeRequest.owner.user.email === currentUserEmail;
-  const canWithdraw =
-    isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
-  const canSendToReview =
-    isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
-  const canClose =
-    isCurrentUserOwner &&
-    (changeRequest.state === ChangeRequestStatus.Approved ||
-      changeRequest.state === ChangeRequestStatus.Implementation);
+  const canWithdraw
+    = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
+  const canSendToReview
+    = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
+  const canClose
+    = isCurrentUserOwner
+    && (changeRequest.state === ChangeRequestStatus.Approved
+      || changeRequest.state === ChangeRequestStatus.Implementation);
 
   const currentUserApproval = changeRequest.approvals.filter(
     (approval) => approval.approver.user.email === currentUserEmail,
@@ -105,10 +104,10 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
 
   const approverHasPendingStatus = find(currentUserApproval, (approval) => approval.status === ApprovalStatus.Pending);
   const isCurrentUserApprover = !!currentUserApproval;
-  const canApproveOrReject =
-    isCurrentUserApprover &&
-    changeRequest.state === ChangeRequestStatus.InReview &&
-    Boolean(approverHasPendingStatus);
+  const canApproveOrReject
+    = isCurrentUserApprover
+    && changeRequest.state === ChangeRequestStatus.InReview
+    && Boolean(approverHasPendingStatus);
 
   return (
     <>
@@ -120,11 +119,11 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
       <HeaderMenu>
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {
-          canChangeOwnerShip &&
-           <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}
+          canChangeOwnerShip
+           && <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}
              renderAsButton={false} />
         }
-        <ExportARToEmail {...{ id: changeRequest.id, renderAsButton: false }}/>
+        <ExportARToEmail {...{ id: changeRequest.id, renderAsButton: false }} />
       </HeaderMenu>
     </>
   );

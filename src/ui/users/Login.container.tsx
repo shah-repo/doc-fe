@@ -12,12 +12,12 @@ import LoginPresenter from './Login.presenter';
 import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
 
 interface StateProps {
-  isUserAuthenticated: boolean;
-  employees: Employee[];
-  hasMultipleCompanies: boolean;
-  passwordSoonToExpire: boolean;
-  daysUntilPasswordExpires: number;
-  isScheduledForDeletion: boolean;
+  isUserAuthenticated: boolean
+  employees: Employee[]
+  hasMultipleCompanies: boolean
+  passwordSoonToExpire: boolean
+  daysUntilPasswordExpires: number
+  isScheduledForDeletion: boolean
 }
 
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, 'location'>;
@@ -41,8 +41,8 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
       </div>,
       { autoClose: 10000 });
 
-    props.isScheduledForDeletion &&
-    toastSuccess(
+    props.isScheduledForDeletion
+    && toastSuccess(
       <div>
         {intl.formatMessage({ id: 'toast.notification.deletion' })}
         <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>

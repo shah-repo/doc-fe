@@ -6,5 +6,5 @@ export type FBMediaQRProps =
 & Pick<FBInputProps, 'isTemplate'>
 & Pick<FBMediaAlbumFieldProps, 'setMediaFieldMode' | 'loading' | 'qrValue'>
 & {
-  mode?: FBMediaQRMode;
+  mode?: FBMediaQRMode
 };
