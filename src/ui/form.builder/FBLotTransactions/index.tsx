@@ -1,18 +1,19 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
-import { translate } from '../../../common/intl';
-import { MomentFormats } from '../../../common/utils/date';
 import { Employee } from '../../../state/ducks/company/types';
-import DateFormatter from '../../components/Date';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { MODE_FIELD, Mode } from '../FBApprovalMatrixRoles/constants';
+import { Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
 import useStyles from '../FBApprovalMatrixRoles/styles';
+import { CommentsCellTemplate } from './components/CommentsCellTemplate';
+import { DateCellTemplate } from './components/DateCellTemplate';
 import { EmployeeCellTemplate } from './components/EmployeeCellTemplate';
 import { LocationCellTemplate } from './components/LocationCellTemplate';
-import { CompanyLocation, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransferType } from './types';
+import { QuantityCellTemplate } from './components/QuantityCellTemplate';
+import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
+import { CompanyLocation, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent } from './types';
 import { withFBLotTransactions } from './wrap';
 
 interface SchemaOptions {
@@ -29,7 +30,7 @@ const buildSchema = ({
     field: 'type',
     title: 'Transfer Type',
     filterCell: InputFilter,
-    template: ({ dataItem }) => translate(`form.builder.lotTransactions.type.${dataItem.type}`),
+    template: TransferTypeCellTemplate,
     width: 150,
   },
   {
@@ -61,10 +62,7 @@ const buildSchema = ({
     field: 'quantity',
     title: 'Quantity',
     filterCell: InputFilter,
-    template: ({ dataItem }) => {
-      const NEGATIVE_TRANSFER_TYPES = [LotTransferType.Allocate, LotTransferType.Transfer];
-      return NEGATIVE_TRANSFER_TYPES.includes(dataItem.type) ? `-${dataItem.quantity}` : dataItem.quantity;
-    },
+    template: QuantityCellTemplate,
     width: 150,
   },
   {
@@ -72,7 +70,7 @@ const buildSchema = ({
     field: 'date',
     title: 'Date',
     filterCell: InputFilter,
-    template: ({ dataItem }) => <DateFormatter value={dataItem.date} format={MomentFormats.MonthDateYearTwoDigit} />,
+    template: DateCellTemplate,
     width: 150,
   },
   {
@@ -88,6 +86,7 @@ const buildSchema = ({
     field: 'comments',
     title: 'Comments',
     filterCell: InputFilter,
+    template: CommentsCellTemplate,
     width: 200,
   },
 ]);
