@@ -39,7 +39,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   isNewOutput = false,
   docId = '',
   intl,
-}) =>  (
+}) => (
   <Observer>
     {() => (
       <Box
@@ -57,7 +57,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
           height={56}
           alignItems="center"
         >
-          <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
+          <IconButton data-cy="sidebar-toggle-icon" onClick={_documentRevisionSidebarState?.setOpen}>
             {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
             {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
           </IconButton>

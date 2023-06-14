@@ -35,6 +35,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     ...props
   }: T) => {
     const { purchaseOrderState, dialogState, formState, workspaceState, poApprovalsState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     const history = useHistory();
     const createDocAction = useActionCreator(documentRevisionsActions.create);
 
@@ -59,7 +60,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
 
       if (isPOEditState) {
         const allItems = purchaseOrderState.calculateCost() as FBPurchaseOrderCalculation;
-        const totalAmount = parseFloat(allItems.totalAmount);
+        const totalAmount = parseFloat(allItems.totalInUSD);
         const previousItems = cloneDeep(get(allItems, 'items')) as FBPurchaseOrderItem[];
         previousItems[values?.index] = values;
 
@@ -73,7 +74,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (o1.limit + o1.threshold) >= totalAmount);
         if (isEdit && topApprovals?.length
-           && UpdatedAmount > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
+           && (UpdatedAmount * allItems.exchangeRate) > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
         ) {
           return dialog?.open();
         }
@@ -180,6 +181,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       return cloneDeep(toNewVersionRequestBody(values));
     };
     onAlertNotificationConfirm = async () => {
+      _documentRevisionFormState?.setDoNotPrompt(true);
       const latestDocRevData = getLatestDocRevData();
       try {
         const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];

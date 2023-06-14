@@ -13,6 +13,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public itemTotalAmount = 0;
   @observable public hasPartNumber = false;
   @observable public isAllItemsReceived = false;
+  @observable public rerenderCurrency = false;
   @observable value: FBPurchaseOrderValue = {
     tax: '0.00',
     taxRate: TAX_RATE,

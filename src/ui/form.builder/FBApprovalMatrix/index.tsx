@@ -1,20 +1,25 @@
-import React from 'react';
-import Grid from './components/Grid';
-import { GridProps } from './components/Grid/types';
-import createSchema from './schema';
-import { withFBApprovalMatrix } from './wrap';
-import { FB, FBProvider, FBDialog, FBDialogState, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalMatrixItem, FBApprovalRolesStages, FBDocTypeGroup } from '..';
-import { translate } from '../../../common/intl';
-import { IconButton } from '../../components/forms/fields-next';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { v4 as generateUuid } from 'uuid';
+import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDialog, FBDialogState, FBDocTypeGroup, FBProvider } from '..';
+import { translate } from '../../../common/intl';
+import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import Grid from './components/Grid';
+import { GridProps } from './components/Grid/types';
+import { DEFAULT_CATEGORY_LABEL } from './constants';
+import createSchema from './schema';
 import useStyles from './styles';
+import { withFBApprovalMatrix } from './wrap';
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  const { data, handleSave, disabled, withoutStatus } = props;
+  const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
 
@@ -26,7 +31,8 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     cellARHeaderClassName: classes.cellARHeader,
   });
 
-  const defaultNewValue: GridProps<FBApprovalMatrixItem>['defaultNewValue'] = {
+  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
+    id: generateUuid() as string,
     docType: {
       name: '',
       group: FBDocTypeGroup.OTHER,
@@ -43,14 +49,18 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-  };
+  });
+
+  approvalMatrix?.forEach((am) => {
+    am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
+  });
 
   const renderTable = () => (
     <GridTable
       data={approvalMatrix}
       schema={schema}
       disabled={disabled}
-      defaultNewValue={defaultNewValue}
+      generateNewItem={generateNewItem}
       onSave={handleSave}
       withoutStatus={withoutStatus}
     />
@@ -60,7 +70,11 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const handleFullscreenClick = () => {
     dialogState.config({
       title: 'tabId.matrixdetails',
-      content: renderTable(),
+      content: (
+        <Box className={cx(classes.container, classes.fullScreen)}>
+          {renderTable()}
+        </Box>
+      ),
       open: true,
     });
   };
@@ -68,21 +82,26 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   return (
     <FBProvider dialogState={dialogState}>
       <FBDialog fullscreen />
-      <StyleTooltip
-        title={translate('form.builder.fullscreen.mode')}
-        placement="top"
-        arrow
+      <Box
+        className={classes.container}
+        {...size && { height: size.height - 80 }}
       >
-        <IconButton
-          className={classes.buttonFullscreen}
-          kind="ghost"
-          data-cy="button-fullscreen"
-          onClick={handleFullscreenClick}
+        <StyleTooltip
+          title={translate('form.builder.fullscreen.mode')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={solid('expand')} />
-        </IconButton>
-      </StyleTooltip>
-      {renderTable()}
+          <IconButton
+            className={classes.buttonFullscreen}
+            kind="ghost"
+            data-cy="button-fullscreen"
+            onClick={handleFullscreenClick}
+          >
+            <FontAwesomeIcon icon={solid('expand')} />
+          </IconButton>
+        </StyleTooltip>
+        {renderTable()}
+      </Box>
     </FBProvider>
   );
 };

@@ -51,7 +51,6 @@ import FBEditorTextFieldWithRange from '../FBEditorTextFieldWithRange/FBEditorTe
 import FBEditorZIPUpload from '../FBEditorZIPUpload/FBEditorZIPUpload';
 
 class FBEditorState {
-
   public static omitFinalValidation: FBInputType[] = [
     'section',
     'subsection',
@@ -119,7 +118,7 @@ class FBEditorState {
 
   public static pickCustomHandler: FBInputType[] = ['teststep'];
 
-  private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+  private static readonly editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBEditorLabel,
     subsection: FBEditorLabel,
     stepsection: FBEditorLabel,
@@ -242,6 +241,9 @@ class FBEditorState {
   public static includeDefaultValue = (type: FBInputType) => includes(FBEditorState.pickDefaultValue, type);
 
   @action public setMode = (mode: FBEditorMode) => set(this, 'mode', mode);
+
+  @observable public tabId?: string = '';
+  @action public setTabId = (tabId: string): string => set(this, 'tabId', tabId);
 }
 
 export default FBEditorState;

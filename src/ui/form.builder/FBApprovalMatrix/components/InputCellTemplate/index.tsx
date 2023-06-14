@@ -1,9 +1,10 @@
-import React from 'react';
-import { get, set, debounce } from 'lodash';
 import { Input, InputProps } from '@progress/kendo-react-inputs';
-import { MODE_FIELD, Mode } from '../Grid';
-import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { debounce, get } from 'lodash';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
+import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { Mode, MODE_FIELD } from '../Grid';
 
 const InputCellTemplate: CellTemplate = (props) => {
   const { dataItem, field, dataIndex, column, onChange } = props;
@@ -19,7 +20,7 @@ const InputCellTemplate: CellTemplate = (props) => {
     (event) => {
       onChange?.({
         dataIndex,
-        dataItem: set(dataItem as Record<string, unknown>, path, event.value),
+        dataItem,
         syntheticEvent: event.syntheticEvent,
         field,
         value: event.value,
@@ -29,7 +30,14 @@ const InputCellTemplate: CellTemplate = (props) => {
   );
 
   if (!canBeModified) {
-    return value || '-';
+    return (
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={value ?? ''}
+      >
+        {value || '-'}
+      </OverflowTooltip>);
   }
 
   return (

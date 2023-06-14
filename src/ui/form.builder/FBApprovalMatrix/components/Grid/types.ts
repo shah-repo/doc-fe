@@ -7,7 +7,7 @@ export type GridItem<T> = T & {
 };
 
 export interface GridProps<T> extends DataGridProps<T> {
-  defaultNewValue: Omit<GridItem<T>, 'id'>
+  generateNewItem?: () => GridItem<T>
   onSave?: (data: DataGridProps<T>['data']) => void
   disabled?: boolean
   withoutStatus?: boolean

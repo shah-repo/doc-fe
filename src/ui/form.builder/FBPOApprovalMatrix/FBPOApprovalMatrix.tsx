@@ -30,6 +30,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
                 <IconButton
                   kind="form"
                   onClick={handleRevert}
+                  data-cy="revert-to-initial"
                 >
                   <FontAwesomeIcon icon={regular('rotate-left')} />
                 </IconButton>

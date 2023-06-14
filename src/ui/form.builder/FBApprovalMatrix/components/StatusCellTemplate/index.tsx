@@ -1,5 +1,5 @@
 import React from 'react';
-import { get, set } from 'lodash';
+import { get } from 'lodash';
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
 import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY, createOption } from '../Grid';
@@ -28,14 +28,12 @@ const StatusCellTemplate: CellTemplate = (props) => {
   );
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
-    const newValue = event.value[DATA_ITEM_KEY];
-
     onChange?.({
       dataIndex,
-      dataItem: set(dataItem as Record<string, unknown>, path, newValue),
+      dataItem,
       syntheticEvent: event.syntheticEvent,
       field,
-      value: newValue,
+      value: event.value[DATA_ITEM_KEY],
     });
   };
 
