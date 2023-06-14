@@ -117,6 +117,7 @@
   "change.request.select.template": "Select an Approval Request template to continue",
   "change.request.select.existing.title": "Select One",
   "change.request.select.existing.content": "Select an Existing Approval Request to continue",
+  "change.request.name.required": "{name} is a required field",
   "changeRequest.transition.submitted": "Submit Approval Request",
   "changeRequest.transition.approve": "Approve submission",
   "changeRequest.transition.reject": "Reject submission",
