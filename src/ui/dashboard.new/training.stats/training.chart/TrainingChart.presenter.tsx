@@ -10,14 +10,14 @@ import DoughnutChartOptions from './DoughnutChartOptions';
 import { styles } from './TrainingChart.styles';
 
 interface TrainingChartPresenterProps {
-  overdue: number;
-  dueInSeven: number;
-  tabValue: number;
-  infoChangeTab: (newValue: number) => void;
+  overdue: number
+  dueInSeven: number
+  tabValue: number
+  infoChangeTab: (newValue: number) => void
 }
 
-const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
-  ({ overdue, dueInSeven, tabValue, infoChangeTab }) => {
+const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps>
+  = ({ overdue, dueInSeven, tabValue, infoChangeTab }) => {
     const totalCount = overdue + dueInSeven;
     const scaleNumber = linearScale([0, totalCount], [1, 50]);
     const getScaledValue = (value: number) => {
@@ -93,26 +93,26 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           text = '' + totalCount;
           subText = TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
           color = Colors.gray;
-          DoughnutChartOptions.series.data[0].itemStyle.color =
-          Colors.latest_red_varient;
-          DoughnutChartOptions.series.data[1].itemStyle.color =
-          Colors.latest_yellow_varient;
+          DoughnutChartOptions.series.data[0].itemStyle.color
+          = Colors.latest_red_varient;
+          DoughnutChartOptions.series.data[1].itemStyle.color
+          = Colors.latest_yellow_varient;
         } else if (tabValue === 2) {
           text = '' + dueInSeven;
           subText = TrainingStatusChartLabelTypes.DUE;
           color = Colors.latest_yellow_varient;
-          DoughnutChartOptions.series.data[0].itemStyle.color =
-          Colors.platinum_grey;
-          DoughnutChartOptions.series.data[1].itemStyle.color =
-          Colors.latest_yellow_varient;
+          DoughnutChartOptions.series.data[0].itemStyle.color
+          = Colors.platinum_grey;
+          DoughnutChartOptions.series.data[1].itemStyle.color
+          = Colors.latest_yellow_varient;
         } else if (tabValue === 1) {
           text = '' + overdue;
           subText = TrainingStatusChartLabelTypes.OVERDUE;
           color = Colors.latest_red_varient;
-          DoughnutChartOptions.series.data[0].itemStyle.color =
-          Colors.latest_red_varient;
-          DoughnutChartOptions.series.data[1].itemStyle.color =
-          Colors.platinum_grey;
+          DoughnutChartOptions.series.data[0].itemStyle.color
+          = Colors.latest_red_varient;
+          DoughnutChartOptions.series.data[1].itemStyle.color
+          = Colors.platinum_grey;
         }
         DoughnutChartOptions.title.text = text;
         DoughnutChartOptions.title.subtext = subText;
@@ -121,12 +121,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart?.setOption(DoughnutChartOptions);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [tabValue]
+      [tabValue],
     );
     useEffect(() => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       myChart = echarts.init(
-        document.getElementById('training-chart') as HTMLInputElement
+        document.getElementById('training-chart') as HTMLInputElement,
       );
       myChart.setOption(DoughnutChartOptions);
       window.onresize = function() {
@@ -135,36 +135,36 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       myChart.on('mouseover', (evt: any) => {
         DoughnutChartOptions.series.data.forEach((data, index) => {
           if (index !== evt?.dataIndex) {
-            DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.platinum_grey;
+            DoughnutChartOptions.series.data[index].itemStyle.color
+              = Colors.platinum_grey;
           }
           if (index === evt?.dataIndex && index === 0 ) {
-            DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.latest_red_varient;
+            DoughnutChartOptions.series.data[index].itemStyle.color
+              = Colors.latest_red_varient;
             DoughnutChartOptions.title.text = overdue.toString();
           }
           if (index === evt?.dataIndex && index === 1 ) {
-            DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.latest_yellow_varient;
+            DoughnutChartOptions.series.data[index].itemStyle.color
+              = Colors.latest_yellow_varient;
             DoughnutChartOptions.title.text = dueInSeven.toString();
           }
         });
         DoughnutChartOptions.title.subtext = evt?.data?.name;
         if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
-          DoughnutChartOptions.title.subtextStyle.color =
-            Colors.latest_red_varient;
+          DoughnutChartOptions.title.subtextStyle.color
+            = Colors.latest_red_varient;
         } else if (evt.data?.name === TrainingStatusChartLabelTypes.DUE) {
-          DoughnutChartOptions.title.subtextStyle.color =
-            Colors.latest_yellow_varient;
+          DoughnutChartOptions.title.subtextStyle.color
+            = Colors.latest_yellow_varient;
           DoughnutChartOptions.title.text = dueInSeven.toString();
         }
         myChart.setOption(DoughnutChartOptions);
       });
       myChart.on('mouseout', (e: any) => {
-        DoughnutChartOptions.series.data[0].itemStyle.color =
-        Colors.latest_red_varient;
-        DoughnutChartOptions.series.data[1].itemStyle.color =
-        Colors.latest_yellow_varient;
+        DoughnutChartOptions.series.data[0].itemStyle.color
+        = Colors.latest_red_varient;
+        DoughnutChartOptions.series.data[1].itemStyle.color
+        = Colors.latest_yellow_varient;
         updateChart(tabValue);
       });
       updateChart(tabValue);
@@ -201,7 +201,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           </Typography>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
-          <div id="training-chart" className={classes.chartScroll}></div>
+          <div id="training-chart" className={classes.chartScroll} />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" marginTop={2}>
           <StyledTabs
@@ -224,8 +224,8 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               classes={{ root: classes.tab }}
               label={
                 <Box alignItems="center">
-                  <span className={classes.overdueTab}></span>
-                  < span className={`${classes.tabHeader} ${classes.legend} ${value !== 1 && classes.inactive}`}>
+                  <span className={classes.overdueTab} />
+                  <span className={`${classes.tabHeader} ${classes.legend} ${value !== 1 && classes.inactive}`}>
                     <Text translation="common.overdue" />
                   </span>
                 </Box>
@@ -236,7 +236,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               classes={{ root: classes.tab }}
               label={
                 <Box alignItems="center">
-                  <span className={classes.dueInSevenTab}></span>
+                  <span className={classes.dueInSevenTab} />
                   <span className={`${classes.tabHeader} ${classes.legend} ${value !== 2 && classes.inactive}`}>
                     <Text translation="common.duein7days" />
                   </span>

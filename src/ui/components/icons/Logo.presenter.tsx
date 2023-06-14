@@ -4,8 +4,8 @@ import Text from '../../components/Text';
 import styles from './Logo.styles';
 
 interface Props {
-  logo: string;
-  showEnvironment: boolean;
+  logo: string
+  showEnvironment: boolean
 }
 
 const Logo: React.FunctionComponent<Props> = ({

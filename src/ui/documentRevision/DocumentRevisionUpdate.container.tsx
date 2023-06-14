@@ -27,11 +27,11 @@ import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
 import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
 
 interface Props {
-  documentId?: string;
-  documentRevision: DocumentRevision;
-  onDirtyFlagChange?: (dirty: boolean) => void;
-  canChangeOwnerShip?: boolean;
-  isNewVersion?: boolean;
+  documentId?: string
+  documentRevision: DocumentRevision
+  onDirtyFlagChange?: (dirty: boolean) => void
+  canChangeOwnerShip?: boolean
+  isNewVersion?: boolean
 }
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
@@ -84,7 +84,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState) {
     return (
-      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }} />
     );
   }
 
@@ -172,7 +172,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
     if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
       const hasReceivableKeyExists = Object.keys(
-        formStateContext?._currentValue
+        formStateContext?._currentValue,
       )?.some((key) => key.includes('receivable'));
       if (hasReceivableKeyExists) {
         set(dataToSubmit, 'formInput', formStateContext?._currentValue);
@@ -181,9 +181,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
     if (redlineActive) {
       if (
-        isEmpty(dataToSubmit) ||
-        (Object.keys(dataToSubmit).includes('formInput') &&
-          Object.keys(dataToSubmit).length === 1)
+        isEmpty(dataToSubmit)
+        || (Object.keys(dataToSubmit).includes('formInput')
+          && Object.keys(dataToSubmit).length === 1)
       ) {
         dispatch(companyActions.redlineConfig(false));
         redlineDataToSubmit.redline = false;

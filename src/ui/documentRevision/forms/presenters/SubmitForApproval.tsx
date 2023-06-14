@@ -21,14 +21,14 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/chec
 import { styles } from './FinalizeAndRelease.styles';
 
 interface Props {
-  docRevId: string;
-  status?: DocumentRevisionStatus;
-  revisionChangeType: string;
-  docRevOwner: string;
-  updatedAt?: string;
-  currentDocumentType?: DocumentType;
-  renderAsButton?: boolean;
-  hasBuildType?: boolean;
+  docRevId: string
+  status?: DocumentRevisionStatus
+  revisionChangeType: string
+  docRevOwner: string
+  updatedAt?: string
+  currentDocumentType?: DocumentType
+  renderAsButton?: boolean
+  hasBuildType?: boolean
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({

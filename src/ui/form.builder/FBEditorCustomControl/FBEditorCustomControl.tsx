@@ -28,13 +28,13 @@ const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps>
               onClick={() => handleSelect && handleSelect(control)}
             >
               <IconButton disableRipple={true}>
-                {FBEditorState.editorTypeIconMapping[control.name] &&
-                React.createElement(
-                  FBEditorState.editorTypeIconMapping[control.name]
+                {FBEditorState.editorTypeIconMapping[control.name]
+                && React.createElement(
+                  FBEditorState.editorTypeIconMapping[control.name],
                 )}
-                {!FBEditorState.editorTypeIconMapping[control.name] &&
-                React.createElement(
-                  FBEditorState.editorTypeIconMapping.default
+                {!FBEditorState.editorTypeIconMapping[control.name]
+                && React.createElement(
+                  FBEditorState.editorTypeIconMapping.default,
                 )}
               </IconButton>
               <ListItemText key={i} data-cy={control.name}>

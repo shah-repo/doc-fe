@@ -1,4 +1,3 @@
-
 import { Box, CircularProgress } from '@material-ui/core';
 import { hasIn, isEmpty, isString } from 'lodash';
 import React from 'react';

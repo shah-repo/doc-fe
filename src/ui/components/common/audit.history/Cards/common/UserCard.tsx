@@ -16,22 +16,22 @@ const styles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       letterSpacing: 0,
     }),
-  })
+  }),
 );
 
 interface Props {
-  avatar: Nullable<string>;
-  initialColor: string;
-  name: string;
+  avatar: Nullable<string>
+  initialColor: string
+  name: string
 }
 
 const UserCard: React.FunctionComponent<Props> = ({ avatar, initialColor, name }) => {
   const classes = styles({ initialColor });
   return (
     <>
-      {avatar ?
-        <Avatar className={classes.avatar} alt={name} src={avatar} /> :
-        <Avatar className={classes.avatar} data-cy="header-userInitials">
+      {avatar
+        ? <Avatar className={classes.avatar} alt={name} src={avatar} />
+        : <Avatar className={classes.avatar} data-cy="header-userInitials">
           <Box letterSpacing={0} style={{ textTransform: 'uppercase' }}>{getInitalsFromName(name)}</Box>
         </Avatar>
       }

@@ -12,7 +12,6 @@ export class IotService {
     return Promise.resolve();
   }
 
-
   public async subscribeToTopic(topic: any, notif: any): Promise<any> {
     return Promise.resolve();
   }

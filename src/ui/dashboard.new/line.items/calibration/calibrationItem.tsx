@@ -14,23 +14,23 @@ import useStyles from './calibrationItem.styles';
 import DismissAction from '../common/DismissAction';
 
 interface Props {
-  id: string;
-  docId: string;
-  docDocumentId: string;
-  type: ActionTypes;
-  docRevName: string;
-  docRevVersion: string;
-  docRevId: string;
-  docRevOwnerId: string;
-  equipmentInterval: number;
-  dueOn?: string;
-  timestamp?: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+  id: string
+  docId: string
+  docDocumentId: string
+  type: ActionTypes
+  docRevName: string
+  docRevVersion: string
+  docRevId: string
+  docRevOwnerId: string
+  equipmentInterval: number
+  dueOn?: string
+  timestamp?: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -129,7 +129,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </Typography>
               </Grid>
-              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true} className={classes.grayDot} />
               <Grid item={true}>
                 <Typography
                   component="span"
@@ -148,7 +148,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               justify="flex-start"
               alignItems="center"
             >
-              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true} className={classes.grayDot} />
               <Grid item={true} md={12} sm={12}>
                 <Typography
                   component="span"

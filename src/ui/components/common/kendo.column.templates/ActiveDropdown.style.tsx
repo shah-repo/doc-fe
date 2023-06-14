@@ -21,5 +21,5 @@ export const styles = makeStyles((theme: Theme) =>
     value: {
       margin: theme.spacing(0.625),
     },
-  })
+  }),
 );

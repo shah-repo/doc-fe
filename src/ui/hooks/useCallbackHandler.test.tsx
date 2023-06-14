@@ -18,7 +18,7 @@ describe('useCallbackHandler hook tests', () => {
     const handler = jest.fn();
 
     interface TestComponentProps {
-      renderId: number;
+      renderId: number
     }
 
     const TestComponent: React.FunctionComponent<TestComponentProps> = ({ renderId }) => {

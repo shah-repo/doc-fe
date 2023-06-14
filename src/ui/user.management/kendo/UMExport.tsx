@@ -12,9 +12,9 @@ import { styles } from '../../documentType/list/styles';
 import useDialog from '../../hooks/useDialog';
 
 interface Props {
-  gridData: Partial<UMExportDataProp>[];
-  columns: KendoColumn[];
-  isGrouped: boolean;
+  gridData: Partial<UMExportDataProp>[]
+  columns: KendoColumn[]
+  isGrouped: boolean
 }
 const UMExport: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();

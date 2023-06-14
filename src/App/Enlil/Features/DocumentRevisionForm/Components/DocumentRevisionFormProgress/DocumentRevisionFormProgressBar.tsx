@@ -15,7 +15,7 @@ import SM from '../../../../../Shifamed/Utils/SM/SM';
 import { BorderLinearProgress } from './BorderLinearProgress';
 
 interface Props {
-  smartReferencesFrom?: SmartReference[];
+  smartReferencesFrom?: SmartReference[]
 }
 
 const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({

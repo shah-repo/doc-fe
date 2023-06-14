@@ -3,7 +3,7 @@ import React from 'react';
 import { FB, FBFieldName, FBWorkspaceTplActionsProps } from '..';
 
 export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleCancel,

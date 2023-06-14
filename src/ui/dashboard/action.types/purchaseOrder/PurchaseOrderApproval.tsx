@@ -8,9 +8,9 @@ import DashboardActionTypeBase from '../DashboardActionTypeBase';
 import PODetailsContainer from './PODetailsContainer';
 
 interface Props {
-  index: number;
-  documentRevision: DocumentRevision;
-  docRevAttachments: Attachment[];
+  index: number
+  documentRevision: DocumentRevision
+  docRevAttachments: Attachment[]
 }
 
 const PurchaseOrderApproval: React.FunctionComponent<Props> = ({

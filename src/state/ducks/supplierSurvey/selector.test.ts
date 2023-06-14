@@ -1,4 +1,3 @@
-
 import { cloneDeep } from 'lodash';
 import { ApplicationState } from '../../reducers';
 import { getAsyncState } from '../../tests/factories';

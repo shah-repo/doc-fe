@@ -11,10 +11,10 @@ import { companyActions } from '../../../../../state/ducks/company';
 import Text from '../../../../components/Text';
 
 interface Props {
-  isUserDocumentOwner: boolean;
-  docTypeHasRedline: boolean;
-  isLHRProductionBuild: boolean;
-  renderAsButton?: boolean;
+  isUserDocumentOwner: boolean
+  docTypeHasRedline: boolean
+  isLHRProductionBuild: boolean
+  renderAsButton?: boolean
 }
 
 const RedlineButton: React.FunctionComponent<Props> = ({
@@ -40,7 +40,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   if (isNewLayout) {
     if (!renderAsButton) {
       return <StyledMenuListItem button alignItems="flex-start" onClick={handleClick}>
-        <StyledMenuListIcon><RedlineIcon/></StyledMenuListIcon>
+        <StyledMenuListIcon><RedlineIcon /></StyledMenuListIcon>
         <StyledMenuListItemText
           data-cy="redlineButton"
           id="Redline"
@@ -67,7 +67,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
         onClick={() => handleClick()}
         id="Redline"
       >
-        <Text translation="common.redline"/>
+        <Text translation="common.redline" />
       </Button>
     </>
   );

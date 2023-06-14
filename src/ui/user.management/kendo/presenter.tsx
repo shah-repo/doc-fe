@@ -9,9 +9,9 @@ import gridConfiguration from './column.definition';
 import { KendoPanel } from './KendoPanel';
 
 interface Props {
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
-  data: TableDataProps<GetEmployeeResponse>;
+  tableName: string
+  tableCriteria: TablePanelStateProps
+  data: TableDataProps<GetEmployeeResponse>
 }
 
 const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({

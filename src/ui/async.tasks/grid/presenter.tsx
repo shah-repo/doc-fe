@@ -66,16 +66,16 @@ export function AsyncTasksPresenter({
               ))}
             </Select>
           </FormControl>
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.UPDATE_BILLS,
           SQS_TYPES.RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES,
           SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS,
         ].includes(SQS_TYPES[type]) && (
-            <EmptyForm {...{ handleEmptyFormSubmit }} key={type}/>
+            <EmptyForm {...{ handleEmptyFormSubmit }} key={type} />
           )}
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.TRAINING_RECORDS_STATUS,
           SQS_TYPES.TRAINING_RECORDS_REFRESH,
           SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS,
@@ -88,7 +88,7 @@ export function AsyncTasksPresenter({
           SQS_TYPES.USAGE_REPORT,
           SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS,
         ].includes(SQS_TYPES[type]) && (
-            <DateForm {...{ handleDateFormSubmit }} key={type}/>
+            <DateForm {...{ handleDateFormSubmit }} key={type} />
           )}
           {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
             <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
@@ -96,36 +96,36 @@ export function AsyncTasksPresenter({
           {SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC === type && (
             <PasswordExpirationEmailSpecificForm key={type} {...{ handlePasswordExpirationEmailSpecificFormSubmit }} />
           )}
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE,
           SQS_TYPES.PRECALC_PAGE_DETAILS,
         ].includes(SQS_TYPES[type]) && (
-            <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type}/>
+            <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type} />
           )}
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.UNLOCK_USER_AND_SET_DEFAULT_PASSWORD,
         ].includes(SQS_TYPES[type]) && (
-            <EmailForm {...{ handleEmailFormSubmit, type }} key={type}/>
+            <EmailForm {...{ handleEmailFormSubmit, type }} key={type} />
           )}
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.TIME_TRAVEL_USER_SESSION,
         ].includes(SQS_TYPES[type]) && (
-            <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type}/>
+            <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type} />
           )}
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.TIME_TRAVEL_COMPANY,
         ].includes(SQS_TYPES[type]) && (
-            <TimeTravelCompany {...{ handleTimeTravelCompany }} key={type}/>
+            <TimeTravelCompany {...{ handleTimeTravelCompany }} key={type} />
           )}
-          {type &&
-        [
+          {type
+        && [
           SQS_TYPES.TIME_TRAVEL_USER,
         ].includes(SQS_TYPES[type]) && (
-            <TimeTravelUser {...{ handleTimeTravelUser }} key={type}/>
+            <TimeTravelUser {...{ handleTimeTravelUser }} key={type} />
           )}
           <PasswordDialogueContainer
             transition="approve"

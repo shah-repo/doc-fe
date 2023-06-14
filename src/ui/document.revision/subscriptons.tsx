@@ -7,7 +7,7 @@ import useAsync from '../hooks/useAsync';
 import useMqttSubscription from '../hooks/useMqttSubscription';
 
 interface Props {
-  documentRevision: DocumentRevision;
+  documentRevision: DocumentRevision
 }
 
 const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({

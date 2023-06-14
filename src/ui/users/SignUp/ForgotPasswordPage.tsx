@@ -11,10 +11,10 @@ import { PasswordEmail } from '../types';
 import { styles } from './SignUp.styles';
 
 interface Props extends FormikProps<PasswordEmail> {
-  logo: string;
-  closeForgotPasswordPage: () => void;
-  asyncState: AsyncState;
-  showVerificationState: (values: PasswordEmail, message: string) => void;
+  logo: string
+  closeForgotPasswordPage: () => void
+  asyncState: AsyncState
+  showVerificationState: (values: PasswordEmail, message: string) => void
 }
 
 const ForgotPasswordPage: React.FunctionComponent<Props> = ({
@@ -34,10 +34,10 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
           className={classes.logo}
         />
         <Typography variant="h4" className={classes.boldTitle}>
-          <Text translation={'forgot.password'} />
+          <Text translation="forgot.password" />
         </Typography>
         <Typography variant="subtitle1" className={classes.marginTitle} id="ForgotPasswordPage-title">
-          <Text translation={'forgot.password.message'} />
+          <Text translation="forgot.password.message" />
           <FormMessage asyncState={asyncState} className={classes.status} id="ForgotPasswordPage-formError" />
         </Typography>
         <InputField
@@ -52,12 +52,12 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
         <SubmitButton
           onClick={() => showVerificationState(values, 'forgot.password.email')}
           asyncState={asyncState}
-          label={'forgot.password.reset'}
+          label="forgot.password.reset"
           className={classes.submit}
           id="ForgotPasswordPage-submitNewPassword"
         />
         <Button className={classes.navigationLink} onClick={closeForgotPasswordPage} id="ForgotPasswordPage-linkRoute" >
-          <Text translation={'forgot.password.close'} />
+          <Text translation="forgot.password.close" />
         </Button>
       </Paper>
     </div>

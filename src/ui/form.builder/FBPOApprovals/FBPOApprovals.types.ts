@@ -5,25 +5,25 @@ export type FBPOApprovalsProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
 & FBAutocompleteAsyncProps
 & {
-  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;
-  isIncluded?(group: FBRequiredApprover): void;
-  onApproveClick?: (approvalId: string) => void;
-  approvals?: FBInlineApprovalBody[];
-  poApprovalsState?: FBPOApprovalsState;
-  docId?: string;
-  groups?: Record<string, FBRequiredApprover>;
-  checkedGroups?: any[];
-  owners?: Owner[];
-  currentUser?: string;
-  documentStatus?: DocumentRevisionStatus;
-  dialogState?: FBDialogState;
-  disableChipDelete?: boolean;
+  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void
+  isIncluded?(group: FBRequiredApprover): void
+  onApproveClick?: (approvalId: string) => void
+  approvals?: FBInlineApprovalBody[]
+  poApprovalsState?: FBPOApprovalsState
+  docId?: string
+  groups?: Record<string, FBRequiredApprover>
+  checkedGroups?: any[]
+  owners?: Owner[]
+  currentUser?: string
+  documentStatus?: DocumentRevisionStatus
+  dialogState?: FBDialogState
+  disableChipDelete?: boolean
 };
 
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {
-  id?: string[];
+  id?: string[]
 };
 
 export interface FBPOInlineApprovalUpdateBody {
-  signatureGroupName: string;
+  signatureGroupName: string
 }

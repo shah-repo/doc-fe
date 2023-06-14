@@ -15,7 +15,6 @@ export const withFBParts = <T extends FBPartsProps>(
     const { workspaceState, formState } = FB.useStores();
     partsState = FB.useRef(FBPartsState);
 
-
     // MARK: Reactions
     // On schema change. This will register reaction for
     // each procedure added and it's value change.
@@ -31,7 +30,7 @@ export const withFBParts = <T extends FBPartsProps>(
         });
       }, {
         fireImmediately: true,
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -42,7 +41,7 @@ export const withFBParts = <T extends FBPartsProps>(
         () => formState?.newValues.get(name),
         (data) => {
           partsState?.parts.set(name, data);
-        }
+        },
       );
 
       reaction(
@@ -52,7 +51,7 @@ export const withFBParts = <T extends FBPartsProps>(
             return partsState?.diffParts.clear();
           }
           partsState?.diffParts.set(name, data);
-        }
+        },
       );
     }
 

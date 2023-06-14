@@ -7,8 +7,8 @@ import Text from '../../components/Text';
 import styles from './styles';
 
 interface Props {
-  isOpen: boolean;
-  closeDialog: () => void;
+  isOpen: boolean
+  closeDialog: () => void
 }
 
 const AddEmployeeDialogPresenter: React.FunctionComponent<Props> = ({

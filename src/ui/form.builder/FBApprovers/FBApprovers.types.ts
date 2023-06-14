@@ -5,61 +5,61 @@ export type FBApproversProps =
 & Pick<FBProviderProps, 'approversState'>
 & FBAutocompleteAsyncProps
 & {
-  isIncluded?: (group: FBRequiredApprover) => void;
-  onBlur?: () => any;
-  groups?: Record<string, FBRequiredApprover>;
-  checkedGroups?: FBRequiredApprover[];
-  value?: string[];
-  changeRequestApprovals?: Approval[];
+  isIncluded?: (group: FBRequiredApprover) => void
+  onBlur?: () => any
+  groups?: Record<string, FBRequiredApprover>
+  checkedGroups?: FBRequiredApprover[]
+  value?: string[]
+  changeRequestApprovals?: Approval[]
 };
 
 export interface FBId {
-  id: string;
+  id: string
 }
 
 export interface FBEmployee {
-  id: string;
-  active: boolean;
-  user: FBUser;
+  id: string
+  active: boolean
+  user: FBUser
 }
 
 interface FBUser {
-  id: string;
-  email: string;
-  name: string;
+  id: string
+  email: string
+  name: string
 }
 
 export interface FBGroup {
-  id: string;
-  name?: string;
-  employees: FBEmployee[];
+  id: string
+  name?: string
+  employees: FBEmployee[]
 }
 
 export interface FBApprover {
-  id: string;
-  name?: string;
-  user?: FBUser;
+  id: string
+  name?: string
+  user?: FBUser
 }
 
 export interface FBJoinedEmployee {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 export type FBRequiredApprover =
 & FBJoinedEmployee
 & {
-  joinedEmployees: FBJoinedEmployee[] | string[];
-  groupApprover?: string; // FE property for POAM check (ENC-4125)
-  documentStage?: number;
-  type?: string;
+  joinedEmployees: FBJoinedEmployee[] | string[]
+  groupApprover?: string // FE property for POAM check (ENC-4125)
+  documentStage?: number
+  type?: string
 };
 
 export interface FBApproversConstructor {
-  documentRevisions?: string[];
-  formValue?: string[];
+  documentRevisions?: string[]
+  formValue?: string[]
 }
 
 export interface FBApproversBody {
-  ids: string[];
+  ids: string[]
 }

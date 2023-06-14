@@ -4,16 +4,14 @@ import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
 import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 
-
 const restrictedPermissions = [
   Permission.USERS_GET,
 ];
 
-
 export const toOptions = (permissions: any[]): OptionType[] =>
   permissions
     .filter((permission) =>
-      !restrictedPermissions.includes(permission)
+      !restrictedPermissions.includes(permission),
     )
     .map((permission) => ({
       label: permission,
@@ -74,12 +72,11 @@ export const toRequestBody = (
   parentGroups: OptionType[]) =>
   ({ ...omit(values, ['id']), employees: toIds(members), parents: toIds(parentGroups) });
 
-
 export const toEditRequestBody = (
   isGroupNameChanged: boolean,
   values: GroupRequestBody,
   members: OptionType[],
-  parentGroups: OptionType[]
-) => isGroupNameChanged ?
-  toRequestBody(values, members, parentGroups) :
-  omit(toRequestBody(values, members, parentGroups), ['name'] );
+  parentGroups: OptionType[],
+) => isGroupNameChanged
+  ? toRequestBody(values, members, parentGroups)
+  : omit(toRequestBody(values, members, parentGroups), ['name'] );

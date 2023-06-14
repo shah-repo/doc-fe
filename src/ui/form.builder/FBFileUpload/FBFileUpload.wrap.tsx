@@ -36,7 +36,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
         (files) => {
           if (!fileUploadState) { return; }
           fileUploadState.files = formState?.inputState.get(name)?.value;
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -54,7 +54,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
             if (!isUnderWorkspace) { return; }
             workspaceState?.saveDocRev(formState?.getValues());
           }
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

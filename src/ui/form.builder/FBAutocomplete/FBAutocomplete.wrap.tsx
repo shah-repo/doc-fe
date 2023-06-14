@@ -13,7 +13,7 @@ import useGetHasTag from '../../hooks/useGetHasTag';
 import { isTranslation } from '../../translations/types';
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     onInputChange,
@@ -43,16 +43,16 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const isInputOwner = workspaceState?.getIsInputOwner(name);
-    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
-      !isInputOwner) || disabled;
+    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name])
+      && !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
     const multiple = editorProperties?.includes('multiple') || props.multiple;
     const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-    disabled =
-      PO_REQUESTOR_COMPONENT_NAME === name &&
-      isDocumentRevisionReleased(workspaceState?.documentStatus) &&
-      isUserAdminEnforce
+    disabled
+      = PO_REQUESTOR_COMPONENT_NAME === name
+      && isDocumentRevisionReleased(workspaceState?.documentStatus)
+      && isUserAdminEnforce
         ? isUserAdminEnforce
         : disabled;
 

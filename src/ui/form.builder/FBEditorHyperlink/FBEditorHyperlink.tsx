@@ -14,7 +14,7 @@ const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
     <FBEditor {...props} {...{ inputProps }}>
       <FBTextField label="form.builder.label" name="label" rules="required"  className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={AutoCompleteStyles.labelProps}/>
+        labelProps={AutoCompleteStyles.labelProps} />
       <FBTextField
         type="url"
         label="URL"

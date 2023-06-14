@@ -19,14 +19,14 @@ import Text from '../../Text';
 import { styles } from './styles';
 
 interface OwnProps {
-  employees: SelectOption[];
-  updateOwner: any;
-  currentOwner: Owner;
-  asyncState: AsyncState;
-  isDialogOpen: boolean;
-  closeDialog: () => void;
-  openDialog: () => void;
-  renderAsButton: boolean;
+  employees: SelectOption[]
+  updateOwner: any
+  currentOwner: Owner
+  asyncState: AsyncState
+  isDialogOpen: boolean
+  closeDialog: () => void
+  openDialog: () => void
+  renderAsButton: boolean
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({

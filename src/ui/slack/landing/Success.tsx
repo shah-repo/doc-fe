@@ -6,8 +6,8 @@ import SlackLandingCounter from './Counter';
 import { styles } from './styles';
 
 interface Props {
-  successMessage: string;
-  onCounterFinish: () => void;
+  successMessage: string
+  onCounterFinish: () => void
 }
 
 const SlackLandingSuccess: React.FunctionComponent<Props> = ({

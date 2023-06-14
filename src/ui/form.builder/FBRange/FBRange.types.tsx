@@ -1,4 +1,4 @@
 export interface FBRangeValue {
-  from?: number;
-  to: number;
+  from?: number
+  to: number
 }

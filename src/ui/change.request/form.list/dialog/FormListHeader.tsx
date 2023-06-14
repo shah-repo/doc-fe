@@ -8,9 +8,9 @@ import Colors from '../../../layout/theme/utils/colors';
 import { Translation } from '../../../translations/types';
 
 interface Props {
-  dialog: DialogHandler;
-  subtitle1Translation?: Translation;
-  subtitle2Translation?: Translation;
+  dialog: DialogHandler
+  subtitle1Translation?: Translation
+  subtitle2Translation?: Translation
 }
 
 const FormListHeader: React.FunctionComponent<Props> = (
@@ -27,7 +27,7 @@ const FormListHeader: React.FunctionComponent<Props> = (
           alignItems="center"
           justifyContent="center"
         >
-          <WindowParagraph/>
+          <WindowParagraph />
         </Box>
       </Grid>
       <Grid item xs={9}>

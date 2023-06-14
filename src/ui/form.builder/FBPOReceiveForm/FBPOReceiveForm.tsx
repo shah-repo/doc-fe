@@ -4,7 +4,6 @@ import { FBForm, FBPOReceiveFormProps, FBTextField } from '..';
 import { FormContext } from '../../components/forms/FormContext';
 import { withFBPOReceiveForm } from './FBPOReceiveForm.wrap';
 
-
 const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
   children,
   item,

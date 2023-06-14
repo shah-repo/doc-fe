@@ -9,11 +9,11 @@ import { useFormContext } from '../FormContext';
 import Field, { FieldOwnProps } from './Field';
 
 interface CheckboxOwnProps extends FieldOwnProps {
-  checkboxProps?: MuiCheckboxProps;
+  checkboxProps?: MuiCheckboxProps
 }
 
 interface OwnProps {
-  label: Translation;
+  label: Translation
 }
 
 type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;

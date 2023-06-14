@@ -3,7 +3,6 @@ import React from 'react';
 import { FB, FBPartsItemProps, FBProcedureItemType } from '..';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
-
 export const withFBPartsItem = <T extends FBPartsItemProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -22,9 +21,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
 
     // MARK: Reactions
 
-
     // MARK: @helpers
-
 
     // MARK: @methods
     getItem = (id: string): string => partsState?.getItem(id, type) || '';

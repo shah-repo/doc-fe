@@ -32,7 +32,7 @@ export function TrainingListPresenter({
             <GridTitle translation="page.title.training" />
           </Grid>
           <Grid item>
-            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped}/>
+            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
           </Grid>
         </Grid>
       </Grid>

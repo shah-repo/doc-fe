@@ -11,9 +11,9 @@ import { Translation } from '../../translations/types';
 import { styles } from './SignUp.styles';
 
 interface ConfirmPasswordPresenter {
-  asyncState: AsyncState;
-  logo: string;
-  title: Translation;
+  asyncState: AsyncState
+  logo: string
+  title: Translation
 }
 
 const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter> = ({
@@ -32,7 +32,7 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
           <Text translation={title} />
         </Typography>
         <Form className={classes.formStyle}>
-          <FormMessage asyncState={asyncState} className={classes.status} id="ConfirmPasswordPresenter-formError"/>
+          <FormMessage asyncState={asyncState} className={classes.status} id="ConfirmPasswordPresenter-formError" />
           <InputField
             name="email"
             label="login.email"
@@ -68,7 +68,7 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
           />
           <SubmitButton
             asyncState={asyncState}
-            label={'login.submit'}
+            label="login.submit"
             className={classes.submit}
             id="ConfirmPasswordPresenter-loginSubmit"
           />

@@ -8,9 +8,9 @@ import { FB, FBProcedureItemType, FBProcedureState } from '../form.builder';
 import AuditAttachment from './AuditAttachment';
 
 interface OwnProps {
-  audit: Audit;
-  dataCy?: string;
-  auditValue?: string;
+  audit: Audit
+  dataCy?: string
+  auditValue?: string
 }
 
 type Props = OwnProps;
@@ -32,7 +32,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
   const el = {
     description() {
       return (
-        <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: auditValue as string }}/>
+        <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: auditValue as string }} />
       );
     },
     partLot() {

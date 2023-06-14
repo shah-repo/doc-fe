@@ -11,14 +11,14 @@ import NavigationProfilePresenter from './NavigationProfile.presenter';
 type Props = RouteComponentProps;
 
 interface UserMenuContext {
-  handleLogout: () => void;
-  openUserProfile: () => void;
-  hasMultipleCompanies: boolean;
-  handleSwitchCompany: () => void;
+  handleLogout: () => void
+  openUserProfile: () => void
+  hasMultipleCompanies: boolean
+  handleSwitchCompany: () => void
 }
 
 export let UserMenuContext = React.createContext<UserMenuContext | undefined>(
-  undefined
+  undefined,
 );
 
 const NavigationProfileContainer: React.FunctionComponent<Props> = ({
@@ -61,7 +61,6 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
 
     history.push(LOGIN_URL);
   };
-
 
   const handleLogout = () => {
     dispatch(authActions.logout());

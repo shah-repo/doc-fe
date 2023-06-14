@@ -15,10 +15,10 @@ import { changeRequestPreviewPath } from '../utils/paths';
 import useStyles from './ChangeRequestEditDialog.styles';
 
 interface Props {
-  changeRequestId: string;
-  approvalRequestDialog: DialogHandler;
-  closeDialog: () => void;
-  currentDocRevId?: string;
+  changeRequestId: string
+  approvalRequestDialog: DialogHandler
+  closeDialog: () => void
+  currentDocRevId?: string
 }
 
 const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
@@ -83,7 +83,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
             changeRequest={changeRequestDetails}
             hideSideBar
             currentDocRevId={currentDocRevId}
-            inDialog={true}/>
+            inDialog={true} />
         </DialogContent>
       </Dialog>
     </AsyncGate>

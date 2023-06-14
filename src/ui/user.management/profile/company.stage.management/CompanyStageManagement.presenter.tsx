@@ -9,7 +9,7 @@ import Text from '../../../components/Text';
 import Colors from '../../../layout/theme/utils/colors';
 
 interface Props extends FormikProps<any> {
-  asyncState: AsyncState;
+  asyncState: AsyncState
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -34,7 +34,7 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
     <FormWrapper
       {...{ dirty, initialValues, resetForm }}
     >
-      <Field name={'numOfRevStages'}>
+      <Field name="numOfRevStages">
         {({
           field,
         }) => (
@@ -46,14 +46,14 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
               <RadioButton
                 // has to be string
                 // if value is number, cheking radio buttons doesn't work correctly
-                label={'2'}
-                value={'2'}
+                label="2"
+                value="2"
               />
               <RadioButton
                 // has to be string
                 // if value is number, cheking radio buttons doesn't work correctly
-                label={'3'}
-                value={'3'}
+                label="3"
+                value="3"
               />
             </RadioGroup>
           </>
@@ -64,7 +64,7 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
       </Box>
       <Box display="flex" justifyContent="flex-end">
         <Button type="submit" variant="outlined">
-          <Text translation={'common.save'} />
+          <Text translation="common.save" />
         </Button>
       </Box>
     </FormWrapper>

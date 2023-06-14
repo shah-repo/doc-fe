@@ -95,7 +95,7 @@ const getPOApprovalMatrix = (handlers: Handlers): ApiAction<FBApprovalMatrixFiel
 const updateDocumentType = (
   id: string,
   body: DocumentType,
-  handlers: Handlers
+  handlers: Handlers,
 ): ApiAction<DocumentType[]> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/${id}`,
   method: 'patch',

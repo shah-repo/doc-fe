@@ -20,23 +20,23 @@ import useStyles from './default.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docTypeGroup: DocTypeGroups;
-  docDocumentId: string;
-  docId: string;
-  docRevId?: string;
-  type: string;
-  docRevName: string;
-  docRevVersion: string;
-  status: string;
-  displaystatus: string;
-  timestamp: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+  id: string
+  docTypeGroup: DocTypeGroups
+  docDocumentId: string
+  docId: string
+  docRevId?: string
+  type: string
+  docRevName: string
+  docRevVersion: string
+  status: string
+  displaystatus: string
+  timestamp: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
   id,
@@ -121,8 +121,8 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
                   <Text translation="common.is" />
                 </Typography>
               </Grid>
-              {STATUS_TYPES_LABEL.APPROVED === status ||
-                  (STATUS_TYPES_LABEL.RELEASED === status && (
+              {STATUS_TYPES_LABEL.APPROVED === status
+                  || (STATUS_TYPES_LABEL.RELEASED === status && (
                     <Grid item={true}>
                       <Typography
                         component="span"
@@ -154,8 +154,8 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
                       </Typography>
                     </Grid>
                   ))}
-              {STATUS_TYPES_LABEL.APPROVED !== status &&
-                  STATUS_TYPES_LABEL.RELEASED !== status && (
+              {STATUS_TYPES_LABEL.APPROVED !== status
+                  && STATUS_TYPES_LABEL.RELEASED !== status && (
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -177,7 +177,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
               justify="flex-start"
               alignItems="center"
             >
-              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true} className={classes.grayDot} />
               <Grid item={true}>
                 <Typography
                   component="span"

@@ -11,16 +11,16 @@ import GridCellStyles from './CellStyles';
 import './KendoStyles.css';
 
 interface FormAreaProps extends FieldWrapperProps {
-  defaultVal: string;
-  isEdit: boolean;
+  defaultVal: string
+  isEdit: boolean
 }
 interface TextAreaDialogProps extends TextAreaProps {
-  cancelEdit: () => void;
-  addClick: (event) => void;
-  openForm: boolean;
-  fieldName?: string;
-  item: FBSchemaProps;
-  isEdit: boolean;
+  cancelEdit: () => void
+  addClick: (event) => void
+  openForm: boolean
+  fieldName?: string
+  item: FBSchemaProps
+  isEdit: boolean
 }
 const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
   defaultVal,
@@ -28,7 +28,7 @@ const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
   ...others
 }) =>
   <FieldWrapper>
-    <div className={'k-form-field-wrap'}>
+    <div className="k-form-field-wrap">
       <TextArea defaultValue={defaultVal} readOnly={!isEdit}
         rows={17}
         {...others} />
@@ -95,7 +95,7 @@ export const TextareaDialog: React.FunctionComponent<TextAreaDialogProps> = ({
         onSubmit={addClick}
         render={() => (
           <FormElement>
-            <fieldset className={'k-form-fieldset'}>
+            <fieldset className="k-form-fieldset">
               <DialogContent dividers>
                 <Field
                   id={field}

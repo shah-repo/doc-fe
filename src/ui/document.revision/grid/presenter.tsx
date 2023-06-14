@@ -33,7 +33,7 @@ export function DocumentListPresenter({
             <GridTitle translation="navigation.document.list" />
           </Grid>
           <Grid item>
-            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped}/>
+            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
             <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
           </Grid>
         </Grid>

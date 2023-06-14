@@ -8,7 +8,7 @@ import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from '../../form.builder'
 import Colors from '../../layout/theme/utils/colors';
 
 interface SidebarPresenterProps {
-  bookmarks?: FBBookmarkItem[];
+  bookmarks?: FBBookmarkItem[]
 }
 
 const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
@@ -45,7 +45,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
               <Box mr={3.5}>
                 <IconButton size="small" onClick={() => copy(`${link[0]}#${hash}`)}>
                   <FBTooltip title="common.copy.link">
-                    <CopyIcon/>
+                    <CopyIcon />
                   </FBTooltip>
                 </IconButton>
               </Box>

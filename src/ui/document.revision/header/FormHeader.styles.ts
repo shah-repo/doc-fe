@@ -10,5 +10,5 @@ export default makeStyles((theme: Theme) =>
       borderBottomLeftRadius: isCreateUrl ? 0 : theme.shape.borderRadius,
       borderBottomRightRadius: isCreateUrl ? 0 : theme.shape.borderRadius,
     }),
-  })
+  }),
 );

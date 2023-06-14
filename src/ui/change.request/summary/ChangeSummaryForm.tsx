@@ -24,19 +24,19 @@ type ChangeRequestFormProps =
 & SMTabsHOCProps
 & Pick<BoxProps, 'onScroll'>
 & {
-  asyncState: AsyncState;
-  changeRequest: ChangeRequest;
-  doNotPrompt?: boolean;
-  changeOpenStatus: (status: boolean) => void;
-  schema?: FBSchemaProps[];
-  mode: FBWorkspaceMode;
-  withoutBottomBar: boolean;
-  autosave: boolean;
-  canEdit: boolean;
-  canChangeOwnership: boolean;
-  displayLastSaved: boolean;
-  errors: any;
-  hideSideBar?: boolean;
+  asyncState: AsyncState
+  changeRequest: ChangeRequest
+  doNotPrompt?: boolean
+  changeOpenStatus: (status: boolean) => void
+  schema?: FBSchemaProps[]
+  mode: FBWorkspaceMode
+  withoutBottomBar: boolean
+  autosave: boolean
+  canEdit: boolean
+  canChangeOwnership: boolean
+  displayLastSaved: boolean
+  errors: any
+  hideSideBar?: boolean
 };
 
 const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -87,7 +87,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         <SummaryHeader {...{
           dataProp: changeRequest, canChangeOwnership, asyncState,
           errors, canEdit, displayLastSaved,
-        }}/>
+        }} />
       }
     >
       <SMTemplate
@@ -99,7 +99,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
-                setOpen={changeSidebarOpenStatus} fromEdit={true}/>}
+                setOpen={changeSidebarOpenStatus} fromEdit={true} />}
             </Observer>
           ),
         }}
@@ -132,8 +132,8 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
                       return (
                         <SMBox key={index} pt={.25}>
-                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
-                            <FBWorkspace
+                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
+                            && <FBWorkspace
                               isPortal={false}
                               initialValues={cloneDeep(changeRequest?.formInput)}
                               changeRequest={cloneDeep(changeRequest)}
@@ -143,9 +143,9 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               mode={mode}
                             />
                           }
-                          {tabType === TabTypeOptions.ITEMS &&
-                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
-                            changeRequest && (
+                          {tabType === TabTypeOptions.ITEMS
+                            && _tabsState?.isTabActive(TabTypeOptions.ITEMS)
+                            && changeRequest && (
                             <ItemsAndDetailsWrapper
                               changeRequest={cloneDeep(changeRequest)}
                               initialValues={cloneDeep(changeRequest?.formInput) ?? {}}
@@ -154,9 +154,9 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
-                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
-                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
-                              <FBWorkspace
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                            && _formState?.mode !== FBWorkspaceModeOptions.NONE
+                              && <FBWorkspace
                                 isPortal={false}
                                 initialValues={cloneDeep(changeRequest?.formInput)}
                                 changeRequest={cloneDeep(changeRequest)}
@@ -179,6 +179,5 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     </SMForm>
   );
 };
-
 
 export default withSMTabs(ChangeSummaryForm);

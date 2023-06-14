@@ -13,8 +13,8 @@ import AssessmentFormControlsContainer from './AssessmentFormControls.container'
 import TransitionButton from './TransitionButton';
 
 interface OwnProps {
-  changeRequest?: ChangeRequest;
-  asyncState: AsyncState;
+  changeRequest?: ChangeRequest
+  asyncState: AsyncState
 }
 type Props = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
@@ -56,8 +56,8 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     isButtonShown: boolean,
     transition: ChangeRequestTransition,
     buttonProps?: ButtonProps,
-  ) => isButtonShown && changeRequest &&
-        <TransitionButton
+  ) => isButtonShown && changeRequest
+        && <TransitionButton
           changeRequestId={changeRequest.id}
           transition={transition}
           buttonProps={buttonProps}
@@ -67,8 +67,8 @@ const DocRevActions: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOwner = changeRequest?.owner.user.email === currentUserEmail;
 
-  const canSendToReview =
-    isCurrentUserOwner && changeRequest?.state === ChangeRequestStatus.Draft;
+  const canSendToReview
+    = isCurrentUserOwner && changeRequest?.state === ChangeRequestStatus.Draft;
 
   return (
     <Grid
@@ -85,7 +85,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         dataCy={label}
         label={label} />
       {renderTransitionButton(canSendToReview, 'in_review')}
-      <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown/>
+      <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown />
     </Grid>
   );
 };

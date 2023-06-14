@@ -13,8 +13,8 @@ import CloneModal from './clone/CloneDialog';
 import { styles } from './clone/CloneModal.styles';
 
 interface CloneEBButtonProps extends ButtonProps {
-  documentRevision: DocumentRevision;
-  renderAsButton?: boolean;
+  documentRevision: DocumentRevision
+  renderAsButton?: boolean
 }
 
 const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
@@ -41,7 +41,7 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
     if (isNewLayout) {
       if (!renderAsButton) {
         return (<StyledMenuListItem button alignItems="flex-start" onClick={openCloneModel}>
-          <StyledMenuListIcon><CloneIcon/></StyledMenuListIcon>
+          <StyledMenuListIcon><CloneIcon /></StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="CloneEBButton"
             primary={<Text translation="documentRevision.clone.eb" />}

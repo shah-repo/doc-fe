@@ -28,32 +28,32 @@ import NavigationManagementContainer from '../navigation.management/NavigationMa
 import WhiteLabelingManagementContainer from '../whiteLabeling.management/WhiteLabelingManagement.container';
 
 interface OwnProps {
-  canManageUsers: boolean;
-  employeeGroups: OptionType[];
-  employeeId: string;
-  editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
-  callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
-  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
-  callbackUpdateWithUpload?: (avatar: string, name: string) => void;
-  showEditUser: boolean;
-  showEdit: () => void;
-  closeEdit: () => void;
-  userInfo: EmployeeEditRequestBody;
-  asyncState: AsyncState;
-  getUrl: () => void;
-  slackIntegrationEnabled: boolean;
-  slackTeamId: string;
-  slackUserId: string;
-  email: string;
-  activeStatus: boolean;
-  file: File | null;
-  setFile: (value: File | null) => void;
-  setUserInfo: (values: EmployeeEditRequestBody) => void;
-  userId: string;
-  isCurrentUser: boolean;
-  usernameError: Translation | null;
-  isDeveloper: boolean;
-  canUpdateCompany: boolean;
+  canManageUsers: boolean
+  employeeGroups: OptionType[]
+  employeeId: string
+  editCurrentEmployee: (values: EmployeeEditRequestBody) => void
+  callbackUpdateGroups?: (values: GetEmployeeResponse) => void
+  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void
+  callbackUpdateWithUpload?: (avatar: string, name: string) => void
+  showEditUser: boolean
+  showEdit: () => void
+  closeEdit: () => void
+  userInfo: EmployeeEditRequestBody
+  asyncState: AsyncState
+  getUrl: () => void
+  slackIntegrationEnabled: boolean
+  slackTeamId: string
+  slackUserId: string
+  email: string
+  activeStatus: boolean
+  file: File | null
+  setFile: (value: File | null) => void
+  setUserInfo: (values: EmployeeEditRequestBody) => void
+  userId: string
+  isCurrentUser: boolean
+  usernameError: Translation | null
+  isDeveloper: boolean
+  canUpdateCompany: boolean
 }
 
 type Props = OwnProps;
@@ -247,7 +247,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
           fromUserProfile= {true}
         />
         <Box display="flex" alignItems="flex-end" mt={2}>
-          {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled}/>}
+          {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled} />}
           {slackIntegrationEnabled && slackTeamId && !slackUserId && (
             <div>
               <Typography variant="h4" className={classes.integrations}>
@@ -257,16 +257,16 @@ const DialogContent: React.FunctionComponent<Props> = ({
               <SubmitButton
                 onClick={getUrl}
                 asyncState={asyncState}
-                label={'integrations.add'}
+                label="integrations.add"
                 className={classes.addButton}
                 id="DialogContent-addEmployee"
               />
             </div>
           )}
         </Box>
-        <NavigationManagementContainer/>
-        <CompanyStageManagementContainer/>
-        <WhiteLabelingManagementContainer/>
+        <NavigationManagementContainer />
+        <CompanyStageManagementContainer />
+        <WhiteLabelingManagementContainer />
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}

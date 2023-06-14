@@ -13,13 +13,13 @@ import { DEFAULT_GROUP } from '../utils/types';
 import GroupContentPresenter from './GroupContent.presenter';
 
 interface Props {
-  selectedGroup?: LoadCompanyGroup;
-  isCreateMode?: boolean;
-  employees: GetEmployeeResponse[];
-  handleTableRefresh: () => void;
-  closeDialog: (flag?: boolean) => void;
-  currentEmployeePermissions: Permission[];
-  hasOfficialPermission: boolean;
+  selectedGroup?: LoadCompanyGroup
+  isCreateMode?: boolean
+  employees: GetEmployeeResponse[]
+  handleTableRefresh: () => void
+  closeDialog: (flag?: boolean) => void
+  currentEmployeePermissions: Permission[]
+  hasOfficialPermission: boolean
 }
 
 const GroupContentContainer: React.FunctionComponent<Props> = ({
@@ -44,7 +44,7 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
     if (selectedGroup) {
       setGroup(toGroupOptions(selectedGroup));
       setMembers(toMembersOptions(
-        (selectedGroup.employees.filter((e) => e.active) as unknown) as GetEmployeeResponse[])
+        (selectedGroup.employees.filter((e) => e.active) as unknown) as GetEmployeeResponse[]),
       );
       setParentGroups(toParentOptions((selectedGroup.parents as unknown) as Group[]));
     }

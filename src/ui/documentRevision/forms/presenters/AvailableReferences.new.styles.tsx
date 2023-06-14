@@ -79,5 +79,5 @@ export const styles = makeStyles((theme) =>
       fontFamily: 'Sora',
       overflowWrap: 'anywhere',
     },
-  })
+  }),
 );

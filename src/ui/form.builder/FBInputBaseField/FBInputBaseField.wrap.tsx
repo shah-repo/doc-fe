@@ -23,9 +23,9 @@ export const withFBInputBaseField = <T extends FBInputBaseFieldProps>(
     defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
-      disabled ||
-      get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD' ||
-      formState?.getFieldValue('signatureRequestId')
+      disabled
+      || get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD'
+      || formState?.getFieldValue('signatureRequestId')
     );
 
     (isUndefined(multiline)) && (

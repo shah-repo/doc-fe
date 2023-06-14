@@ -20,7 +20,7 @@ describe('Container tests', () => {
   };
 
   const getWrapper = (props: Partial<Props> = {}) => shallow(
-    <Container {...defaultProps} {...props}/>,
+    <Container {...defaultProps} {...props} />,
   );
 
   it('Set path props correctly', () => {

@@ -23,5 +23,5 @@ export default makeStyles(() =>
         marginBottom: 0,
       },
     },
-  })
+  }),
 );

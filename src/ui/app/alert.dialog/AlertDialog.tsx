@@ -7,12 +7,12 @@ import { Translation } from '../../translations/types';
 import { styles } from './AlertDialog.styles';
 
 interface Props {
-  confirmAction: (values?) => void;
-  cancelAction?: (e: React.MouseEvent<HTMLElement>) => void;
-  message: Translation;
-  dialog: DialogHandler;
-  confirmLabel?: Translation;
-  cancelLabel?: Translation;
+  confirmAction: (values?) => void
+  cancelAction?: (e: React.MouseEvent<HTMLElement>) => void
+  message: Translation
+  dialog: DialogHandler
+  confirmLabel?: Translation
+  cancelLabel?: Translation
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -35,8 +35,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        dialog.isOpen &&
-        <Dialog
+        dialog.isOpen
+        && <Dialog
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"

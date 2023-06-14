@@ -11,8 +11,8 @@ import Text from '../../../Text';
 import WatermarkPresenter from './presenter';
 
 interface Props {
-  newWatermarkRequest: Nullable<WatermarkRequest>;
-  newWatermarkError: string;
+  newWatermarkRequest: Nullable<WatermarkRequest>
+  newWatermarkError: string
 }
 
 const WatermarkContainer: React.FunctionComponent<Props> = ({

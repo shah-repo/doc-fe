@@ -6,28 +6,28 @@ export type FBMPIProcedureSelectProps =
 & Pick<FBFormProps, 'children' | 'initialValues'>
 & Pick<FBProviderProps, 'formState' | 'mpiProcedureSelectState'>
 & {
-  type: FBProcedureItemType;
-  unitDisabled?: boolean;
-  selectedEQ?: any;
-  isOptionDisabled?: (option: any) => any;
-  renderOptionWithDate?: (option: any) => any;
-  onChange?: () => void;
+  type: FBProcedureItemType
+  unitDisabled?: boolean
+  selectedEQ?: any
+  isOptionDisabled?: (option: any) => any
+  renderOptionWithDate?: (option: any) => any
+  onChange?: () => void
 };
 
 export interface FBMPIProcedureSelectValue {
-  fieldId: string;
-  forPreselected: { id: string };
-  usedOverride: Partial<DocumentRevision> | string;
-  type: FBProcedureItemType | 'MATERIAL' | 'EQUIPMENT';
-  overrideDocId?: string;
-  refId?: string;
-  materialId?: string;
-  equipmentId?: string;
-  quantity?: number;
-  unit?: string;
-  lotPart?: string;
-  pmDueDate?: string;
-  calDueDate?: string;
+  fieldId: string
+  forPreselected: { id: string }
+  usedOverride: Partial<DocumentRevision> | string
+  type: FBProcedureItemType | 'MATERIAL' | 'EQUIPMENT'
+  overrideDocId?: string
+  refId?: string
+  materialId?: string
+  equipmentId?: string
+  quantity?: number
+  unit?: string
+  lotPart?: string
+  pmDueDate?: string
+  calDueDate?: string
 }
 
 export enum EQStatus {
@@ -40,7 +40,7 @@ export enum EQStatus {
 }
 
 export interface FBSelectedEQ {
-  status: EQStatus;
-  pmDate?: string;
-  calDate?: string;
+  status: EQStatus
+  pmDate?: string
+  calDate?: string
 }

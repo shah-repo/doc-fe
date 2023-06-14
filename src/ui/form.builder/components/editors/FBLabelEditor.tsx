@@ -4,9 +4,9 @@ import FBTextField from '../inputs/FBTextField';
 import FBAdditionsEditor from './FBAdditionsEditor';
 
 interface FBLabelEditorProps {
-  defaultValue?: string;
-  standalone?: boolean;
-  type?: string;
+  defaultValue?: string
+  standalone?: boolean
+  type?: string
 }
 const FBLabelEditor: React.FunctionComponent<FBLabelEditorProps> = ({
   standalone = true,

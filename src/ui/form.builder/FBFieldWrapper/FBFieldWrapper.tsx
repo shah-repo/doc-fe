@@ -24,10 +24,10 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   return (
     <FBProvider {...{ fieldWrapperState }}>
       <Box {...{ onMouseOver, onMouseLeave }} className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}>
-        {<Box className={classes.tools} visibility={toolsVisible}>
+        <Box className={classes.tools} visibility={toolsVisible}>
           <FBFieldTopBar {...{ inputProps }} />
           <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
-        </Box>}
+        </Box>
         <Box className={classes.field}>
           {props.children}
         </Box>

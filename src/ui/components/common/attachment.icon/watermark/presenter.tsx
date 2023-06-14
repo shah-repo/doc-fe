@@ -9,10 +9,10 @@ import React from 'react';
 import Text from '../../../Text';
 
 interface Props {
-  isOpen: boolean;
-  handleClose: () => void;
-  title: string;
-  content: any;
+  isOpen: boolean
+  handleClose: () => void
+  title: string
+  content: any
 }
 
 const WatermarkPresenter: React.FunctionComponent<Props> = ({

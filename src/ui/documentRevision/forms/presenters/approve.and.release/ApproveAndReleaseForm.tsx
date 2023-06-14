@@ -24,25 +24,25 @@ import { ApproveAndReleaseFormValues } from '../../types';
 import useStyles from './ApproveAndRelease.styles';
 
 interface Props extends FormikProps<ApproveAndReleaseFormValues> {
-  asyncState: AsyncState;
-  cancel: () => void;
-  isQms: boolean;
-  needsSignature: boolean;
-  documentTypeGroups: Group[];
-  owner: Owner;
-  templateOptions: TemplateOption[];
-  selectedInvalid: boolean;
-  isRecord: boolean;
-  isInlineApproval: boolean;
-  isDocumentPO: boolean;
-  checkedGroups: Group[];
-  initialGroups: Group[];
-  setCheckedGroups(groups: Group[]): void;
-  setFormDocument: (value: string) => void;
-  setDocumentType: (value: string) => void;
-  setSelectedInvalid: (value: boolean) => void;
-  closeDialog: () => void;
-  asyncGetDocTypeState: AsyncState;
+  asyncState: AsyncState
+  cancel: () => void
+  isQms: boolean
+  needsSignature: boolean
+  documentTypeGroups: Group[]
+  owner: Owner
+  templateOptions: TemplateOption[]
+  selectedInvalid: boolean
+  isRecord: boolean
+  isInlineApproval: boolean
+  isDocumentPO: boolean
+  checkedGroups: Group[]
+  initialGroups: Group[]
+  setCheckedGroups(groups: Group[]): void
+  setFormDocument: (value: string) => void
+  setDocumentType: (value: string) => void
+  setSelectedInvalid: (value: boolean) => void
+  closeDialog: () => void
+  asyncGetDocTypeState: AsyncState
 }
 
 const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
@@ -100,8 +100,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       return acc;
     }, {});
 
-    const generatedValues =
-      (schema as FBSchemaProps[]).reduce<object>((acc, item) => {
+    const generatedValues
+      = (schema as FBSchemaProps[]).reduce<object>((acc, item) => {
         // fields effectiveDate,  documentRevisions and approvers are required in all CR forms
         // they will be automatically set by backend.
         switch (item.name) {

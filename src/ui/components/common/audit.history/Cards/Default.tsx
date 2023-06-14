@@ -7,7 +7,7 @@ import DetailDescription from './common/detail.description';
 import UserAvatarCard from './common/userAvatar';
 
 interface Props {
-  auditDetails:  AuditDetailsProps;
+  auditDetails:  AuditDetailsProps
 }
 
 const Default: React.FunctionComponent<Props> = ({ auditDetails }) => {

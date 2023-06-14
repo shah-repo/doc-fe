@@ -5,5 +5,5 @@ export const styles = makeStyles(() =>
     root: {
       overflow: 'auto',
     },
-  })
+  }),
 );

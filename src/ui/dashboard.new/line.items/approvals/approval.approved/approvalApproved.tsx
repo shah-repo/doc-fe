@@ -31,29 +31,29 @@ import useStyles from './approvalApproved.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  title: string;
-  arId: string;
-  arChangeRequestId: string;
-  arStatus: string;
-  timestamp: string;
+  id: string
+  type: string
+  title: string
+  arId: string
+  arChangeRequestId: string
+  arStatus: string
+  timestamp: string
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const ApprovalApprovedPresenter: React.FC<Props> = ({
   id,
@@ -160,10 +160,10 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true}>
-                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={title}/>
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={title} />
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -209,7 +209,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"

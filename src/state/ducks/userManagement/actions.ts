@@ -133,7 +133,6 @@ const generateApiToken = (data: ApiTokenData, handlers: Handlers): ApiAction =>
     handlers,
   });
 
-
 const getApiTokenList = (): ApiAction<GetApiTokenList[]> =>
   apiAction({
     url: `${API_TOKEN}`,

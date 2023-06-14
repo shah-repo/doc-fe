@@ -5,10 +5,10 @@ import { TablePanelStateProps } from '../../components/table/types';
 import { KendoPanel } from './KendoPanel';
 
 interface DTMProps {
-  gridData: DocumentType[];
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
-  gridConfiguration: KendoGridConfiguration;
+  gridData: DocumentType[]
+  tableName: string
+  tableCriteria: TablePanelStateProps
+  gridConfiguration: KendoGridConfiguration
 }
 
 export const DocumentTypeManagementPresenter: React.FunctionComponent<DTMProps> = ({

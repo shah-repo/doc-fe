@@ -12,13 +12,13 @@ import PoRejectDialog from '../../dialogs/transitionDialog/PoRejectDialog';
 import { PasswordFormValues } from '../../dialogs/transitionDialog/types';
 
 interface Props {
-  approvalId: string;
-  transition: ChangeRequestTransition;
-  buttonProps?: ButtonProps;
-  label: string;
-  transitionDialog: any;
-  onSuccess?: () => void;
-  type?: string;
+  approvalId: string
+  transition: ChangeRequestTransition
+  buttonProps?: ButtonProps
+  label: string
+  transitionDialog: any
+  onSuccess?: () => void
+  type?: string
 }
 
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({

@@ -9,11 +9,11 @@ import FBButtonStyles from '../../form.builder/FBButton/FBButton.styles';
 import Text from '../Text';
 
 interface SubmitButtonProps extends ButtonProps {
-  asyncState: AsyncState;
-  label: string;
-  errors?: FormikErrors<any>;
-  dataCy?: string;
-  showNewButton?: boolean;
+  asyncState: AsyncState
+  label: string
+  errors?: FormikErrors<any>
+  dataCy?: string
+  showNewButton?: boolean
 }
 const StyledSubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
   asyncState,

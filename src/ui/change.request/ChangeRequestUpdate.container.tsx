@@ -19,19 +19,19 @@ import { canEditChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
 
 interface StateProps {
-  currentUserEmail: string;
+  currentUserEmail: string
 }
 
 interface DispatchProps {
-  save: typeof changeRequestsActions.save;
-  loadAudit: typeof changeRequestsActions.loadAudit;
+  save: typeof changeRequestsActions.save
+  loadAudit: typeof changeRequestsActions.loadAudit
 }
 
 interface OwnProps {
-  changeRequest: ChangeRequest;
-  hideSideBar?: boolean;
-  inDialog?: boolean;
-  currentDocRevId?: string;
+  changeRequest: ChangeRequest
+  hideSideBar?: boolean
+  inDialog?: boolean
+  currentDocRevId?: string
 }
 
 type ChangeRequestUpdateContainerProps = OwnProps &
@@ -44,7 +44,6 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
   { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, inDialog = false, currentDocRevId }) => {
-
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -79,7 +78,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     const dataToSubmit = compareValuesToSubmit(
       initialValues,
       { ...values, formInput: formStateContext?._currentValue },
-      toChangeRequestEditRequestBody
+      toChangeRequestEditRequestBody,
     );
 
     if (isEmpty(dataToSubmit)) {

@@ -8,7 +8,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 
 interface Props {
-  id: string;
+  id: string
 }
 
 const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({

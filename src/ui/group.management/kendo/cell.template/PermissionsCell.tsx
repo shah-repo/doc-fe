@@ -8,14 +8,14 @@ import ExpandableTemplate from '../../../components/common/kendo/ExpandableTempl
 import { toOptions } from '../../utils/transform';
 
 interface PermissionCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number | undefined;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  field?: string;
-  isOfficial: boolean;
+  dataItem: any
+  rowType?: string
+  colSpan?: number | undefined
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  field?: string
+  isOfficial: boolean
 }
 
 export const PermissionsCell = ({

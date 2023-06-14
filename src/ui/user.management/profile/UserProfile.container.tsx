@@ -13,8 +13,8 @@ import useGetHasTag from '../../hooks/useGetHasTag';
 import UserProfilePresenter from './UserProfile.presenter';
 
 interface Props {
-  closeUserProfile: () => void;
-  showUserProfile: boolean;
+  closeUserProfile: () => void
+  showUserProfile: boolean
 }
 
 const UserProfileContainer: React.FunctionComponent<Props> = ({

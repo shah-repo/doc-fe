@@ -51,7 +51,6 @@ export const withFBRange = <T extends FBInputProps>(
 
     // MARK: @observer
 
-
     return Component({
       ...(props as T),
       name,

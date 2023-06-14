@@ -34,7 +34,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     },
   });
   const getStatusesAction = useActionCreator(
-    documentRevisionsActions.getDocRevStatuses
+    documentRevisionsActions.getDocRevStatuses,
   );
   const getStatuses = () =>
     async.start(
@@ -53,7 +53,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const setSearchStatus = (
     dataState: DataStateProps,
-    columns: KendoColumn[]
+    columns: KendoColumn[],
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -65,8 +65,8 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
           },
           columnConfig: JSON.stringify(columns),
         },
-        TABLE_NAME
-      )
+        TABLE_NAME,
+      ),
     );
   };
 

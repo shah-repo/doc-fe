@@ -10,12 +10,12 @@ import { Translation } from '../../translations/types';
 import BuildsPresenter from './builds.presenter';
 
 interface OwnProps {
-  label: Translation;
-  isDraft?: boolean;
-  docRevId?: string;
-  showRemoveButton?: boolean;
-  labelProps?: BoxProps;
-  labelFont?: BoxProps;
+  label: Translation
+  isDraft?: boolean
+  docRevId?: string
+  showRemoveButton?: boolean
+  labelProps?: BoxProps
+  labelFont?: BoxProps
 }
 type Props = OwnProps & DataProps<DocumentRevision[]>;
 
@@ -39,7 +39,7 @@ const BuildsContainer: React.FunctionComponent<Props> = ({
   };
   return (
     <Grid xs={12}>
-      <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }}/>
+      <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }} />
     </Grid>
   );
 };

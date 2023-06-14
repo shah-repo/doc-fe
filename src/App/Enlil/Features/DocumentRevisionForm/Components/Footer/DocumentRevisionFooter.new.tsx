@@ -27,7 +27,7 @@ const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterP
             <>
               {getFormattedDateString(
                   _documentRevisionFooterState?.releasedAt,
-                  MomentFormats.MonthDateYearTwoDigit
+                  MomentFormats.MonthDateYearTwoDigit,
               )}
             </>
           </Typography>

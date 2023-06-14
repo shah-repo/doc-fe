@@ -9,9 +9,8 @@ const useGetHasPermission = (
 ) => {
   const selectGetHasPermission = useMemo(() => authSelectors.makeGetHasPermission(), []);
   return useSelector(
-    (state: ApplicationState) => selectGetHasPermission(state, permission)
+    (state: ApplicationState) => selectGetHasPermission(state, permission),
   );
 };
 
 export default useGetHasPermission;
-
