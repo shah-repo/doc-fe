@@ -3,17 +3,17 @@ import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from '
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 class FBAutocompleteAsyncState extends FBRequest<any, any> {
-  private optionId: string | undefined;
+  private readonly optionId: string | undefined;
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
-  private urlValues?: Record<string, any> = {};
+  private readonly urlValues?: Record<string, any> = {};
 
-  public constructor({ optionId, urlValues }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.setOptionId(optionId);
@@ -29,14 +29,14 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     });
   };
 
-  @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
+  @computed public get optionConfig (): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
       return;
     }
     return find(FBData.autocompleteOptions, { id: this.optionId });
   }
 
-  @computed public get sliceData(): any {
+  @computed public get sliceData (): any {
     if (!this.optionId) {
       return;
     }
@@ -123,7 +123,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   };
 
-  public onSuccess() {
+  public onSuccess () {
     super.onSuccess();
     if (!this.optionId) {
       return;
@@ -140,7 +140,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());
   }
 
-  protected loadInternal() {
+  protected loadInternal () {
     if (!this.optionConfig) {
       return;
     }

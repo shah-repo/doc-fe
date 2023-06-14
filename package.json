@@ -160,6 +160,7 @@
     "@types/react-table": "^7.0.16",
     "@types/react-virtualized": "9.21.7",
     "@types/unzipper": "^0.10.5",
+    "@types/uuid": "^9.0.1",
     "@types/validatorjs": "^3.15.0",
     "@types/yup": "0.26.27",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
