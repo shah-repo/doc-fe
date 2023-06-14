@@ -69,6 +69,8 @@ const getActiveEmployees = (state: ApplicationState) =>
 
 const getAllEmployees = (state: ApplicationState) => state.company.companyMine.employees;
 
+const getAllLocations = (state: ApplicationState) => state.company.companyMine.locations;
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -89,4 +91,5 @@ export default {
   getActiveEmployees,
   getAllEmployees,
   getActiveLocations,
+  getAllLocations,
 };

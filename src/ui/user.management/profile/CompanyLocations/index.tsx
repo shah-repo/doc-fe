@@ -20,7 +20,7 @@ import { EditableCompanyLocation, Props } from './types';
 
 export const CompanyLocations: React.FC<Props> = ({
   locations = [],
-  canUpdateCompany = false,
+  isActive = false,
   ...props
 }) => {
   const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
@@ -90,7 +90,7 @@ export const CompanyLocations: React.FC<Props> = ({
   };
 
   const schema = buildSchema({
-    isActive: canUpdateCompany,
+    isActive,
     actionsClass: classes.actionsCell,
     onDiscard: discardLocation,
     onConfirm: submitForm,
@@ -105,16 +105,16 @@ export const CompanyLocations: React.FC<Props> = ({
         <KendoDataGrid
           data={locationsList}
           schema={schema}
-          onRowClick={canUpdateCompany ? editLocation : undefined}
+          onRowClick={isActive ? editLocation : undefined}
           rowRender={rowRender}
-          className={cx(classes.grid, { [classes.gridWithButton]: canUpdateCompany })}
+          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         />
-        {canUpdateCompany && (
+        {isActive && (
           <Button
             attached
             fullWidth
             kind="add"
-            data-cy="form-builder-add-another-role"
+            data-cy="form-builder-add-another-location"
             disabled={editedLocation !== undefined}
             onClick={addLocation}
           >
