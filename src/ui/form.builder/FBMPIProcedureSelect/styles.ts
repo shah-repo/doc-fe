@@ -4,20 +4,13 @@ import { Colors } from '../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   ...grayDotStyles(theme, {
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: theme.spacing(0.5),
+    marginRight: theme.spacing(0.5),
   }),
   dueDate: {
     textAlign: 'left',
     color: Colors.error,
     fontSize: 14,
-    paddingBottom: 4,
+    paddingBottom: theme.spacing(0.5),
   },
-  // callOrDueDateExists: {
-  //   paddingTop: '20 !important',
-  //   color: 'red',
-  //   paddingBottom: '20 !important',
-  //   marginTop: '20 !important',
-  //   marginBottom: '20 !important',
-  // },
 }));

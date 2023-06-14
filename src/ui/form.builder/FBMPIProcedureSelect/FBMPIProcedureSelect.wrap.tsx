@@ -132,21 +132,17 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         <Grid
           container
           justify="flex-start"
-          alignItems="center"
-          // className={classNames({
-          //   [classes.callOrDueDateExists]: !isEmpty(pmDate || calDate),
-          // })}
-        >
+          alignItems="center">
           <Grid item>
             <Typography>{option.document.docId}</Typography>
           </Grid>
           <Grid item className={classes.grayDot} />
           <Grid item>
-            <Typography>{`rev ${option.displayRevision} `}</Typography>
+            <Typography>{` rev ${option.displayRevision} - ${option.name}`}</Typography>
           </Grid>
-          <Grid item>
-            <Typography>{`- ${option.name}`}</Typography>
-          </Grid>
+          {/* <Grid item>
+            <Typography>{``}</Typography>
+          </Grid> */}
           <Grid item xs={12} className={classes.dueDate}>
             {calDate && (
               <span>
