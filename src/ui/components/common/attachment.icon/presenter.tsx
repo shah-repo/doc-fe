@@ -68,7 +68,7 @@ AttachmentIconProps
 
   const formDocumentId = documentRevisionData?.document.id || '';
   const formDocuments: Document = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocument(state, formDocumentId)
+    documentRevisionsSelectors.getDocument(state, formDocumentId),
   );
   const releasedVersions = formDocuments?.documentRevisions.filter((e) => isDocumentRevisionReleased(e.status));
   const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1]?.id;
@@ -83,9 +83,9 @@ AttachmentIconProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isTransferred = isNewVersion ||
-  lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1]?.id  ?
-  docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
+  const isTransferred = isNewVersion
+  || lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1]?.id
+  ?  docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
 
   const deleteButtonRenderer = canDeleteFile && (
     <Box
@@ -103,7 +103,7 @@ AttachmentIconProps
       >
         {removeHover ? (
           <CustomStyleTooltip
-            title={<Text translation={'common.delete'} />}
+            title={<Text translation="common.delete" />}
             placement="top"
             arrow
             classes={{
@@ -135,16 +135,16 @@ AttachmentIconProps
             id="AttachmentIconPresenter-handleIconClick"
           >
             {isLoading && <CircularProgress className={classes.progress} />}
-            {!isLoading &&
-              <FileIcon
+            {!isLoading
+              && <FileIcon
                 {...other}
                 attachment={attachment}
                 extension={file.type}
                 isUploading={isUploading}
                 isRedLine={isRedLine}
                 isPrimary={isPrimary}
-                isTransferred={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft ||
-                  documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransferred : false}
+                isTransferred={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft
+                  || documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransferred : false}
               />
             }
           </ButtonBase>

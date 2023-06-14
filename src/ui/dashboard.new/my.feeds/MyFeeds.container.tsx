@@ -32,7 +32,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   };
   const loadMyFeeds = useActionCreator(dashboardMyFeedsActions.loadMyFeedsList);
   const loadMyFeedsListAsyncState = useSelector(
-    dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo
+    dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo,
   );
   const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
   const pinnedOrUnPinnedAsync = useAsync({
@@ -42,9 +42,9 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
-  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
+  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem,
   );
-  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem
+  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem,
   );
   const pinLineItem = (id: string) => {
     pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);

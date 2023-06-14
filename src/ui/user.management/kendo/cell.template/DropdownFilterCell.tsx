@@ -11,8 +11,8 @@ import {
 } from '../../../components/common/kendo/helpers';
 
 interface DropdownFilterCellProps extends GridFilterCellProps {
-  defaultItem: string;
-  data: string[];
+  defaultItem: string
+  data: string[]
 }
 
 export const DropdownFilterCell = ({

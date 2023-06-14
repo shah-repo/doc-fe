@@ -3,14 +3,13 @@ import { Attachment } from '../attachments/types';
 import { Owner, User } from '../common/types';
 import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from './constants';
 
-
 export enum DocumentStatus {
   Draft = 'DRAFT',
   InReview = 'IN_REVIEW',
   Withdrawn = 'WITHDRAWN',
   Approved = 'APPROVED',
   Rejected = 'REJECTED',
-  Released = 'RELEASED'
+  Released = 'RELEASED',
 }
 
 export enum ApprovalStatus {
@@ -21,57 +20,57 @@ export enum ApprovalStatus {
 }
 
 interface Approval {
-  id: string;
-  status: ApprovalStatus;
-  approver: User;
-  reviewedAt?: string;
+  id: string
+  status: ApprovalStatus
+  approver: User
+  reviewedAt?: string
 }
 
 export interface Document {
-  id: string;
-  name: string;
-  type: string;
-  status: DocumentStatus;
-  owner: Owner;
-  approvals: Approval[];
-  attachments: Attachment[];
-  actions: TableColumnActionType[];
-  docId: string;
+  id: string
+  name: string
+  type: string
+  status: DocumentStatus
+  owner: Owner
+  approvals: Approval[]
+  attachments: Attachment[]
+  actions: TableColumnActionType[]
+  docId: string
 }
 
 export interface DocumentProposedId {
-  docId?: string;
+  docId?: string
 }
 
 export interface DocumentProposedIdSetAction {
-  type: typeof DOCUMENT_PROPOSED_DOC_ID_SET;
-  payload: string;
+  type: typeof DOCUMENT_PROPOSED_DOC_ID_SET
+  payload: string
 }
 
 export interface DocumentEditRequestBody {
-  name: string;
-  type: string;
-  attachmentIds: string[];
-  approversEmails: string[];
+  name: string
+  type: string
+  attachmentIds: string[]
+  approversEmails: string[]
 }
 
 export interface DocumentListAction {
-  type: typeof DOCUMENTS_LIST;
-  payload: Document[];
+  type: typeof DOCUMENTS_LIST
+  payload: Document[]
 }
 
 export interface DocumentsToReviewListAction {
-  type: typeof DOCUMENTS_TO_REVIEW_LIST;
-  payload: Document[];
+  type: typeof DOCUMENTS_TO_REVIEW_LIST
+  payload: Document[]
 }
 
 export interface DocumentSetAction {
-  type: typeof DOCUMENT_SET;
-  payload: Document;
+  type: typeof DOCUMENT_SET
+  payload: Document
 }
 
 export interface DocumentsByIdState {
-  [key: string]: Document;
+  [key: string]: Document
 }
 
 export type DocumentsAllIdsState = string[];
@@ -80,13 +79,13 @@ export type DocumentsReviewIdsState = string[];
 export type DocumentTransition = 'approve' | 'reject' | 'to_review' | 'withdraw';
 
 export interface DocumentTransitionRequestBody {
-  password: string;
+  password: string
 }
 
 export interface DocumentTransitionResponse {
-  id: string;
+  id: string
 }
 
 export interface AccessRequestBody {
-  employee: DocumentTransitionResponse;
+  employee: DocumentTransitionResponse
 }

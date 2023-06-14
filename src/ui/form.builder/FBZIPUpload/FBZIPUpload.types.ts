@@ -10,13 +10,12 @@ export enum FBUnzipStatus {
 export type FBFZIPUploadProps =
 & FBInputProps
 & {
-  fileUploadState?: FBFileUploadState;
-  readonly?: boolean;
-  files?: Id[];
-  disableFileUpload: boolean;
-  startUnzip: () => void;
-  docRevisionId: string;
-  unzipStatus?: string;
-  disableUnzipButton: boolean;
+  fileUploadState?: FBFileUploadState
+  readonly?: boolean
+  files?: Id[]
+  disableFileUpload: boolean
+  startUnzip: () => void
+  docRevisionId: string
+  unzipStatus?: string
+  disableUnzipButton: boolean
 };
-

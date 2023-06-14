@@ -22,13 +22,13 @@ import Text from '../../../../../components/Text';
 import styles from './EffectiveDateForm.styles';
 
 interface EffectiveDateFormProps extends WithStyles<typeof styles> {
-  asyncState: AsyncState;
-  cancel: () => void;
+  asyncState: AsyncState
+  cancel: () => void
 }
 interface DateFieldProps {
   values: {
-    effectiveDate: Date;
-  };
+    effectiveDate: Date
+  }
 }
 const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFieldProps> = ({
   cancel,

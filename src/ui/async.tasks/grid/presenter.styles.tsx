@@ -42,5 +42,5 @@ export const styles = makeStyles((theme) =>
     groupCell: {
       whiteSpace: 'pre-wrap',
     },
-  })
+  }),
 );

@@ -33,7 +33,7 @@ const FBRange: React.FunctionComponent<FBInputProps> = ({
           gutter={false}
         />
       </Box>
-    </ FBInput>
+    </FBInput>
   );
 };
 

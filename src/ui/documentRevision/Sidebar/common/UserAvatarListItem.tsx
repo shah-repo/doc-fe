@@ -34,11 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }));
 
 interface Props {
-  user: User;
-  secondaryComponent: JSX.Element;
-  name: string | JSX.Element;
+  user: User
+  secondaryComponent: JSX.Element
+  name: string | JSX.Element
 }
-
 
 const UserAvatarListItem: React.FunctionComponent<Props> = ({
   user,

@@ -7,9 +7,9 @@ import { ReferenceSummary as Model } from '../utils/types';
 import { styles } from './references.styles';
 
 interface OwnProps {
-  label: string;
-  fromReferencedBy?: boolean;
-  canEdit?: boolean;
+  label: string
+  fromReferencedBy?: boolean
+  canEdit?: boolean
 }
 
 type Props = OwnProps & DataProps<Model[]>;
@@ -37,8 +37,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               variant="body2"
               color="textPrimary"
             >
-              {
-                <Link
+              <Link
                   className={classes.link}
                   to={reference.url}
                   target="_blank"
@@ -46,7 +45,6 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
                 >
                   {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
                 </Link>
-              }
             </Typography>
           </Grid>
         </Grid>
@@ -56,7 +54,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   const referencesEmptyRenderer = () => (
     <>
       <Typography variant="h5" className={classes.noHeader} >
-        <Text message="common.none"/>
+        <Text message="common.none" />
       </Typography>
     </>
   );

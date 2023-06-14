@@ -11,27 +11,27 @@ import { IotCredentials } from '../../../state/ducks/auth/types';
 const loggerDebug = debug('enlil:iotservice');
 
 interface AwsMqttClient {
-  connected: boolean;
-  _events: any;
-  on: any;
-  _resubscribeTopics: any;
-  subscribe: (topic: string) => Promise<void>;
-  unsubscribe: (topic: any) => Promise<void>;
-  end: (force?: boolean, cb?: () => void) => this;
+  connected: boolean
+  _events: any
+  on: any
+  _resubscribeTopics: any
+  subscribe: (topic: string) => Promise<void>
+  unsubscribe: (topic: any) => Promise<void>
+  end: (force?: boolean, cb?: () => void) => this
 }
 
 interface IAwsMqttClient {
-  region: string;
-  expires: number;
-  credentials: any;
-  clientId: string;
-  endpoint: string;
+  region: string
+  expires: number
+  credentials: any
+  clientId: string
+  endpoint: string
   will: {
-    topic: string;
-    payload: string;
-    qos: number;
-    retain: boolean;
-  };
+    topic: string
+    payload: string
+    qos: number
+    retain: boolean
+  }
 }
 
 type NotifType = (...args: any) => void;
@@ -50,7 +50,7 @@ export class IotService {
   private static instance: IotService;
   private emitter = new EventEmitter();
   private connectedSubscriptionsTopics: string[] = [];
-  private connectedSubscriptions: {topic: string; notif: NotifType}[] = [];
+  private connectedSubscriptions: {topic: string, notif: NotifType}[] = [];
   private credentialsMqtt!: IotCredentials;
   private constructor(
     public mqttClientInstance: AwsMqttClient,
@@ -93,22 +93,22 @@ export class IotService {
     const connectedTopicIndexToPop = this.connectedSubscriptionsTopics
       .findIndex((s) => s === topic);
     if (connectedTopicIndexToPop > -1) {
-      this.connectedSubscriptionsTopics =
-        this.connectedSubscriptionsTopics.filter((_, index) => connectedTopicIndexToPop !== index);
+      this.connectedSubscriptionsTopics
+        = this.connectedSubscriptionsTopics.filter((_, index) => connectedTopicIndexToPop !== index);
     }
 
     const connectedSubsIndexToPop = this.connectedSubscriptions
       .findIndex((s) => s.topic === topic && s.notif === notif);
     if (connectedSubsIndexToPop > -1) {
-      this.connectedSubscriptions =
-        this.connectedSubscriptions.filter((_, index) => connectedSubsIndexToPop !== index);
+      this.connectedSubscriptions
+        = this.connectedSubscriptions.filter((_, index) => connectedSubsIndexToPop !== index);
     }
     this.emitter.removeListener(topic, notif);
 
     if (this.emitter.listenerCount(topic)) {
       loggerDebug(
-        `(unsubscribeFromTopic) There are listeners for topic ${topic}, ` +
-        'skipping unsubscribeFromTopicMqttClientInstance');
+        `(unsubscribeFromTopic) There are listeners for topic ${topic}, `
+        + 'skipping unsubscribeFromTopicMqttClientInstance');
     } else {
       await this.unsubscribeFromTopicMqttClientInstance(topic);
       loggerDebug(`(unsubscribeFromTopic) No more listeners for topic ${topic}, unsubscribing`);

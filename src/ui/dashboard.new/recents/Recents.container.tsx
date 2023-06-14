@@ -10,7 +10,7 @@ import RecentsPresenter from './Recents.presenter';
 const RecentsContainer: React.FunctionComponent<{}> = () => {
   const loadRecents = useActionCreator(dashboardRecentsActions.loadRecentsList);
   const loadRecentsListAsyncState = useSelector(
-    dashboardRecentsSelectors.getLoadRecentsListAsyncInfo
+    dashboardRecentsSelectors.getLoadRecentsListAsyncInfo,
   );
   const recents = useSelector(dashboardRecentsSelectors.recentsList);
   return (

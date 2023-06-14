@@ -20,7 +20,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const [isTruncated, setIsTruncated] = useState(true);
   const toggleIsTruncated = useCallback(
     () => setIsTruncated((prevValue) => !prevValue),
-    []
+    [],
   );
 
   const sanitizedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, '')) : '';
@@ -34,8 +34,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const displayValue = truncatedValue.trim();
 
   const intl = useIntl();
-  const btnText =
-    intl.formatMessage({ id: isTruncated ? 'document.revision.view.more' : 'document.revision.view.less' });
+  const btnText
+    = intl.formatMessage({ id: isTruncated ? 'document.revision.view.more' : 'document.revision.view.less' });
 
   return (
     <Grid item={true} xs={12} className={classes.root}>

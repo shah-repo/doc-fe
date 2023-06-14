@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export const withActionButton = <T extends any>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     ...props

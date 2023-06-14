@@ -3,7 +3,7 @@ import Moment, { MomentProps } from 'react-moment';
 import { MomentFormats, TIME_ZONE } from '../../common/utils/date';
 
 interface DateTimeProps extends MomentProps {
-  value: string;
+  value: string
 }
 
 type Props = DateTimeProps;

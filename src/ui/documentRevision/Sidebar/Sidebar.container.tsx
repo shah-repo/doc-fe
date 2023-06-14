@@ -6,10 +6,10 @@ import SidebarPresenter from './Sidebar.presenter.new';
 import { Sidebar } from './types.new';
 
 interface SidebarContainerProps {
-  sidebarList: Sidebar[];
-  isDrawerOpen?: boolean;
-  setOpen?: (value: boolean) => void;
-  setTab?: (value: number) => void;
+  sidebarList: Sidebar[]
+  isDrawerOpen?: boolean
+  setOpen?: (value: boolean) => void
+  setTab?: (value: number) => void
 }
 
 const SidebarContainer: React.FunctionComponent<

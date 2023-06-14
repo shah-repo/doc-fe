@@ -11,9 +11,9 @@ import ExportListDialog from '../../document.revision/list/ExportListDialog/Expo
 import useDialog from '../../hooks/useDialog';
 
 interface Props {
-  gridData: TrainingListData[];
-  columns: any[];
-  isGrouped: boolean;
+  gridData: TrainingListData[]
+  columns: any[]
+  isGrouped: boolean
 }
 const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();

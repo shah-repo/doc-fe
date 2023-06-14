@@ -26,26 +26,26 @@ export enum HelpCenterItemType {
 }
 
 interface HelpCenterItemData {
-  type: HelpCenterItemType;
-  title: string;
-  url: string;
+  type: HelpCenterItemType
+  title: string
+  url: string
 }
 
 export interface HelpCenterHowToItemData extends HelpCenterItemData {
-  type: HelpCenterItemType.HowTo;
+  type: HelpCenterItemType.HowTo
 }
 export interface HelpCenterVideoItemData extends Partial<HelpCenterItemData> {
-  type: HelpCenterItemType.Video;
-  url: string;
+  type: HelpCenterItemType.Video
+  url: string
 }
 export interface HelpCenterWorkflowItemData extends HelpCenterItemData {
-  type: HelpCenterItemType.Workflow;
+  type: HelpCenterItemType.Workflow
 }
 
 export type HelpCenterItems = HelpCenterHowToItemData | HelpCenterVideoItemData | HelpCenterWorkflowItemData;
 
 export interface HelpCenterModuleData {
-  title: string;
-  url?: string;
-  items: HelpCenterItems[];
+  title: string
+  url?: string
+  items: HelpCenterItems[]
 }

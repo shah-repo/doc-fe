@@ -17,7 +17,7 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   const classes = useStyles();
 
   const isEQ = checkIsDocumentEquipment(
-    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions
+    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions,
   );
 
   return (

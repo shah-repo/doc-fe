@@ -15,14 +15,14 @@ import SupplierSurveyPresenter from './SupplierSurvey.presenter';
 import SupplierSurveySubmitMessage from './SupplierSurveySubmitMessage.presenter';
 
 interface StateProps {
-  isUserAuthenticated: boolean;
-  loadSupplierSurveyListAsyncState: AsyncState;
-  supplierSurvey: SupplierSurveyForm;
+  isUserAuthenticated: boolean
+  loadSupplierSurveyListAsyncState: AsyncState
+  supplierSurvey: SupplierSurveyForm
 }
 
 interface DispatchProps {
-  loadSupplierSurvey: typeof supplierSurveyActions.loadSupplierSurveyList;
-  submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey;
+  loadSupplierSurvey: typeof supplierSurveyActions.loadSupplierSurveyList
+  submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey
 }
 
 type SupplierSurveyContainerProps = StateProps &
@@ -68,9 +68,9 @@ SupplierSurveyContainerProps
     }, async);
   };
 
-  const schema =
-  get(supplierSurvey, 'surveyFormDocumentRevision.formTemplate.schema') ||
-  get(supplierSurvey, 'surveyFormDocumentRevision.formDocument.formTemplate.schema', []);
+  const schema
+  = get(supplierSurvey, 'surveyFormDocumentRevision.formTemplate.schema')
+  || get(supplierSurvey, 'surveyFormDocumentRevision.formDocument.formTemplate.schema', []);
   FBStore.setFormSchema(schema);
 
   return (

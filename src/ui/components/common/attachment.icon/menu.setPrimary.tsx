@@ -12,9 +12,9 @@ import { toastError } from '../../notifications';
 import Text from '../../Text';
 
 interface Props {
-  handleClose?: any;
-  attachment: any;
-  documentRevision?: DocumentRevision;
+  handleClose?: any
+  attachment: any
+  documentRevision?: DocumentRevision
 }
 
 const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
@@ -38,7 +38,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   const isNewDocument = isDocumentPage && !documentRevision?.id;
   const canSetAsPrimary =  isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
-    documentRevision?.status
+    documentRevision?.status,
   ) && documentRevision?.document?.canAccess && attachment.lineType !== LINE_TYPES.RED_LINE;
 
   if (!canSetAsPrimary || isNewDocument) {
@@ -51,7 +51,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <MenuItem data-cy={'set.attachment.as.primary'} onClick={handleClick}>
+    <MenuItem data-cy="set.attachment.as.primary" onClick={handleClick}>
       <StarsRoundedIcon color="primary" fontSize="small" style={{ marginRight: 5 }} />
       <Text translation="attachment.set.as.primary" />
     </MenuItem>

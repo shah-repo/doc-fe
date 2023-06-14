@@ -13,17 +13,17 @@ import styles from './NavigationLink.styles';
 
 interface NavigationLinkPresenterProps extends
   NavigationItem {
-  ActionIcon?: ReactNode;
-  isChild?: boolean;
-  toggleChildren?: (event: React.MouseEvent) => void;
-  currentPath: string;
+  ActionIcon?: ReactNode
+  isChild?: boolean
+  toggleChildren?: (event: React.MouseEvent) => void
+  currentPath: string
   checkIfItemIsActive: (
     type: NavigationItemType,
     currentPath: string,
     path?: string,
     category?: string,
     menu?: NavigationItem[],
-  ) => boolean;
+  ) => boolean
 }
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
@@ -59,7 +59,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             className={classNames(
               classes.icon, {
                 [classes.iconActive]: type !== 'MENU' && isItemActive,
-              }
+              },
             )}
           />
         </ListItemIcon>

@@ -23,7 +23,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
@@ -68,20 +68,20 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // Set new pm button disabled status.
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
-      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.frequency`)?.value,
-      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     function newPMDisabled(): boolean {
       return !(
-        formState?.getFieldValue(`${name}.preventativeForm`) &&
-        formState?.getFieldValue(`${name}.frequency`)
+        formState?.getFieldValue(`${name}.preventativeForm`)
+        && formState?.getFieldValue(`${name}.frequency`)
       ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm
         || Boolean(eqMaintenanceState?.newPMLoading);
     }
@@ -95,7 +95,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
         window.open(
           documentVersionPath(data?.id as string, data?.document?.id as string),
-          '_blank'
+          '_blank',
         );
         eqMaintenanceState?.setNewPMLoading(false);
         eqMaintenanceState?.setNewPMDisabled(newPMDisabled());
@@ -158,8 +158,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string ) => {
       const filterValue = lowerCase(inputValue);
 
-      return lowerCase(docRev.name).includes(filterValue) ||
-             lowerCase(docRev.docId).includes(filterValue);
+      return lowerCase(docRev.name).includes(filterValue)
+             || lowerCase(docRev.docId).includes(filterValue);
     };
 
     function handleFilter(
@@ -169,8 +169,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       const typeValue = formState?.getFieldValue(`${name}.preventativeForm`);
       const { inputValue = '' } = state || {};
       const options = data?.filter((form) =>
-        filterOutOption(form, inputValue) &&
-        form.documentRevisions.some((doc) =>
+        filterOutOption(form, inputValue)
+        && form.documentRevisions.some((doc) =>
           doc.status === DocumentRevisionStatus.Released && form.id !== typeValue ));
       return options;
     }

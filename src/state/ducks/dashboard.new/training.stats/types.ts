@@ -13,54 +13,53 @@ export enum TrainingStatusChartLabelTypes {
 }
 
 interface User {
-  createdAt: string;
-  updatedAt: string;
-  internalTags?: string;
-  id: string;
-  email: string;
-  name: string;
-  confirmed: string;
-  locked: string;
-  passwordExpires: string;
-  passwordUpdatedAt: string;
-  passwordLastEmailSentAt: Nullable<string>;
-  permissions: Nullable<string>;
-  avatar: Nullable<string>;
-  initialColor: string;
+  createdAt: string
+  updatedAt: string
+  internalTags?: string
+  id: string
+  email: string
+  name: string
+  confirmed: string
+  locked: string
+  passwordExpires: string
+  passwordUpdatedAt: string
+  passwordLastEmailSentAt: Nullable<string>
+  permissions: Nullable<string>
+  avatar: Nullable<string>
+  initialColor: string
 }
 
 export interface TrainingStatsListApiResponse {
-  results: TrainingStats[];
-  page_total: number;
-  total: number;
+  results: TrainingStats[]
+  page_total: number
+  total: number
 }
 
 interface TrainingStats {
-  user: User;
-  id: string;
-  status: TrainingStatusTypes;
-  dueOn: string;
-  docTitle: string;
-  docId: string;
+  user: User
+  id: string
+  status: TrainingStatusTypes
+  dueOn: string
+  docTitle: string
+  docId: string
 }
 
 export interface TrainingStatsListAction {
-  type: typeof TRAINING_STATS_LIST;
-  payload: TrainingStatsListApiResponse;
-  initialLoad?: boolean;
+  type: typeof TRAINING_STATS_LIST
+  payload: TrainingStatsListApiResponse
+  initialLoad?: boolean
 }
 
 export type TrainingStatsState = TrainingStatsListApiResponse;
 
 export interface TrainingStatsChart {
-  DUE: number;
-  OVERDUE: number;
+  DUE: number
+  OVERDUE: number
 }
 
 export interface TrainingStatsChartAction {
-  type: typeof TRAINING_STATS_CHART;
-  payload: TrainingStatsChart;
+  type: typeof TRAINING_STATS_CHART
+  payload: TrainingStatsChart
 }
 
 export type TrainingStatsChartState = TrainingStatsChart;
-

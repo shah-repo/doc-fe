@@ -9,8 +9,8 @@ import ChangeRequestTransitionDialogContainer from '../../change.request/dialogs
 import { changeRequestEditPath } from '../../change.request/utils/paths';
 
 interface Props {
-  index: number;
-  changeRequest: ChangeRequest;
+  index: number
+  changeRequest: ChangeRequest
 }
 
 const styles = makeStyles((theme: Theme) =>

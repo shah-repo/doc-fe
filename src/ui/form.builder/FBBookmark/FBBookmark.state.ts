@@ -31,4 +31,3 @@ class FBBookmarkState {
 }
 
 export default FBBookmarkState;
-

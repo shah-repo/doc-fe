@@ -24,11 +24,11 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
 
     const isInputFromDefaultSchema = workspaceState?.document?.formDocument?.formTemplate?.schema.find(
-      (schemaElement) => schemaElement.name === inputProps?.name
+      (schemaElement) => schemaElement.name === inputProps?.name,
     );
 
-    const shouldHideTools =
-      sortableState?.isDragPerfomed
+    const shouldHideTools
+      = sortableState?.isDragPerfomed
       || designDisabled
       || (!showSchemaFields && isInputFromDefaultSchema)
       || (reviseDisabled && workspaceState?.isRevised);

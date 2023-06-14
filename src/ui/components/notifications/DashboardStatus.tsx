@@ -31,7 +31,7 @@ const DashboardToastr: React.FC = () => {
             color="textPrimary"
             className={classes.secondaryText}
           >
-            <Text translation="dashboard.lineItems.status"/>
+            <Text translation="dashboard.lineItems.status" />
           </Typography>
         }
         className={classes.listItemText}
@@ -41,7 +41,7 @@ const DashboardToastr: React.FC = () => {
 };
 
 export const openDashboardToastr = ( options = {}) =>
-  toast(<DashboardToastr/>, {
+  toast(<DashboardToastr />, {
     ...{
       toastId: 'dashboardStatusToast',
       bodyClassName: 'dashboardStatusToastrBody',

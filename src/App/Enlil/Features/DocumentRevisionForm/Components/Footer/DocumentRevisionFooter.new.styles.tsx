@@ -21,5 +21,5 @@ export const styles = makeStyles(() =>
       lineHeight: '15px',
       color: Colors.almost_black,
     },
-  })
+  }),
 );

@@ -42,7 +42,7 @@ export type FBEditorElementType =
 export type FBEditorModeType = 'create' | 'update';
 
 export interface FBEditorFormProps {
-  type: FBEditorElementType;
-  index: number;
-  mode: FBEditorModeType;
+  type: FBEditorElementType
+  index: number
+  mode: FBEditorModeType
 }

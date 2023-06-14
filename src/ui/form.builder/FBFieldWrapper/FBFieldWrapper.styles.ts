@@ -2,9 +2,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
 
 interface StylesProps {
-  mt: number;
-  mb: number;
-  isDragged?: boolean;
+  mt: number
+  mb: number
+  isDragged?: boolean
 }
 
 export default makeStyles((theme: Theme) =>
@@ -27,5 +27,5 @@ export default makeStyles((theme: Theme) =>
       backgroundColor: isDragged ? Colors.alabaster : '',
       boxShadow: isDragged ? theme.shadows[5] : '',
     }),
-  })
+  }),
 );

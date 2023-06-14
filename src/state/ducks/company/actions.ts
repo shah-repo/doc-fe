@@ -13,7 +13,7 @@ const selectCompany = (company: Company): SelectCompanyAction => ({
 const setCompanyMine = (
   company: Company,
   navigationMenu?: NavigationMenu,
-  currentEmployeeId?: string
+  currentEmployeeId?: string,
 ): CompanyMineAction => ({
   type: SET_COMPANY_MINE,
   payload: company,
@@ -50,7 +50,6 @@ const updateNavigationMenuItem = ( label: string, isOpen: boolean): UpdateNaviga
 const autosaveConfig = () => ({
   type: AUTOSAVE_CONFIG,
 });
-
 
 const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,

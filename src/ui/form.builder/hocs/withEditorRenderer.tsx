@@ -16,8 +16,8 @@ import { FBInputProps } from '../types/common';
 import { FBEditorFormProps } from '../types/editor';
 import { FBTemplateSchema } from '../types/store';
 
-export const withEditorRenderer =
-(other: FBEditorFormProps) =>
+export const withEditorRenderer
+= (other: FBEditorFormProps) =>
   (props: FormikProps<Partial<FBTemplateSchema>>) => {
     const { type, index, mode } = other;
     const InputType = FBFieldEditorComponent[type as string];

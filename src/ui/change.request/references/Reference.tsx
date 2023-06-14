@@ -9,8 +9,8 @@ import { styles } from '../../documentRevision/References/References.styles';
 import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatarListItem';
 
 interface OwnProps {
-  chosenForm?: FBDocumentRevisionProps | undefined;
-  changeRequest?: ChangeRequest | undefined;
+  chosenForm?: FBDocumentRevisionProps | undefined
+  changeRequest?: ChangeRequest | undefined
 }
 
 const CRReferences: React.FunctionComponent<OwnProps> = ({

@@ -51,13 +51,13 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
         }
 
         submitForm();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions),
-      () => mapCollection()
+      () => mapCollection(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

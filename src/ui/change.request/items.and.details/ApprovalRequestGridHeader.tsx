@@ -8,16 +8,16 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{}> = () => {
   return (
     <div className={classes.header}>
       <div className={classes.cellOne}>
-        <Text translation="approvalRequest.grid.heading.item"/>
+        <Text translation="approvalRequest.grid.heading.item" />
       </div>
       <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
-          <Text translation="approvalRequest.grid.heading.description.of.change"/>
+          <Text translation="approvalRequest.grid.heading.description.of.change" />
         </span>
       </div>
       <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
-          <Text translation="approvalRequest.grid.heading.justification.of.change"/>
+          <Text translation="approvalRequest.grid.heading.justification.of.change" />
         </span>
       </div>
     </div>

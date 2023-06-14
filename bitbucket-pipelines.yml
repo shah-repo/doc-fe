@@ -193,6 +193,7 @@ pipelines:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER
+          - step: *BUILD_DEV
 
   tags:
     deploy-to-dev:

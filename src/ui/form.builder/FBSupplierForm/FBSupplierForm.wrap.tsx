@@ -29,7 +29,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     React.useEffect(() => dialogState?.setActions(
       <FBSupplierFormActions
         {...{ onDialogConfirm, onDialogClose, disabled: supplierState?.proposedDocIdApi.loading }}
-      />
+      />,
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [supplierState?.proposedDocIdApi.loading]);
 
@@ -96,9 +96,9 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // MARK: @observer
     useObserver(() => {
       loading = (
-        supplierState?.newSupplierApi.loading ||
-        supplierState?.proposedDocIdApi.loading ||
-        supplierState?.documentTypeApi.loading
+        supplierState?.newSupplierApi.loading
+        || supplierState?.proposedDocIdApi.loading
+        || supplierState?.documentTypeApi.loading
       );
       disabled = disabled || loading;
 

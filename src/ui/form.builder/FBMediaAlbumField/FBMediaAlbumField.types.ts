@@ -15,14 +15,14 @@ export type FBMediaAlbumFieldProps =
 | 'index'
 | 'editorConfig'
 > & {
-  onFileUploadChange?: (event: React.FormEvent<HTMLInputElement>) => any;
-  removeMedia?: (mediaId: string) => any;
-  setMediaFieldMode?: () => any;
-  mediaAlbumFieldState?: FBMediaAlbumFieldState;
-  actionsDisabled?: boolean;
-  mode?: FBMediaAlbumFieldMode;
-  qrValue?: string;
-  collection?: FBAttachment[];
-  loading?: boolean;
-  fieldType?: FBInputType;
+  onFileUploadChange?: (event: React.FormEvent<HTMLInputElement>) => any
+  removeMedia?: (mediaId: string) => any
+  setMediaFieldMode?: () => any
+  mediaAlbumFieldState?: FBMediaAlbumFieldState
+  actionsDisabled?: boolean
+  mode?: FBMediaAlbumFieldMode
+  qrValue?: string
+  collection?: FBAttachment[]
+  loading?: boolean
+  fieldType?: FBInputType
 };

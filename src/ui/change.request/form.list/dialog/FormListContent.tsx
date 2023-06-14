@@ -10,12 +10,12 @@ import { styles } from '../FormList.styles';
 import FormListActions from './FormListActions';
 
 interface Props {
-  dialog: DialogHandler;
-  templateOptions?: TemplateOption[];
-  inDraftAROptions? : InDraftAROption[];
-  handleTemplateSelection?: (option: TemplateOption) => void;
-  handleExistingARSelection?: (option: InDraftAROption) => void;
-  labelTranslation?: Translation;
+  dialog: DialogHandler
+  templateOptions?: TemplateOption[]
+  inDraftAROptions? : InDraftAROption[]
+  handleTemplateSelection?: (option: TemplateOption) => void
+  handleExistingARSelection?: (option: InDraftAROption) => void
+  labelTranslation?: Translation
 }
 
 const FormListContent: React.FunctionComponent<Props> = ({
@@ -40,7 +40,7 @@ const FormListContent: React.FunctionComponent<Props> = ({
         options={templateOptions ?? inDraftAROptions ?? []}
         onClick={(option) => { setFormValues(option); }}
       />
-      <FormListActions {...{ dialog, confirm }}/>
+      <FormListActions {...{ dialog, confirm }} />
     </DialogContent>
   );
 

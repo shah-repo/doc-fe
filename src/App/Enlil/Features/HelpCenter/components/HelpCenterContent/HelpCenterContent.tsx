@@ -9,9 +9,9 @@ import HelpCenterPopular from '../HelpCenterPopular/HelpCenterPopular';
 import useStyles from './HelpCenterContent.styles';
 
 interface Props {
-  content: HelpCenterModuleData;
-  opened: boolean;
-  handleCloseDialog: () => void;
+  content: HelpCenterModuleData
+  opened: boolean
+  handleCloseDialog: () => void
 }
 
 const HelpCenterContent: React.FC<Props> = ({ content, opened, handleCloseDialog }) => {

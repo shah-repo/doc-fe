@@ -31,8 +31,8 @@ import CompleteTraining from './training/complete.training';
 import TrainingControl from './training/training.control';
 
 interface OwnProps {
-  canShowCreateVersionButton?: boolean;
-  canChangeOwnerShip?: boolean;
+  canShowCreateVersionButton?: boolean
+  canChangeOwnerShip?: boolean
 }
 
 type Props = OwnProps &
@@ -90,8 +90,8 @@ const Presenter: React.FunctionComponent<Props> = ({
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
 
-  const relatedPartsViewOnly =
-        !dataProp?.relatedPartsStatus
+  const relatedPartsViewOnly
+        = !dataProp?.relatedPartsStatus
         || dataProp?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER
         || isDocumentRevisionInStatus(
           [DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
@@ -146,8 +146,8 @@ const Presenter: React.FunctionComponent<Props> = ({
     <Box minHeight={16} width="calc(100% - 8px)">
       <Grid container>
         {
-          isTrainingVisible && !isRecord &&
-          <SummaryField
+          isTrainingVisible && !isRecord
+          && <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
             {...summaryStyles}
@@ -173,8 +173,8 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {(isPart || isPartForm) &&
-            <Grid item xs={12}>
+        {(isPart || isPartForm)
+            && <Grid item xs={12}>
               <RelatedPartsWrapper
                 viewOnly={relatedPartsViewOnly}
                 documentRevision={dataProp}

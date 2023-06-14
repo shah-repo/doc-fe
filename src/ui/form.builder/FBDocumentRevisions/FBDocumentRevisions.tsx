@@ -32,10 +32,10 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
         variant="outlined"
         style={{ margin: 0 }}
         onClick={handleForm}
-        dataCy={'fb.add.document'}
+        dataCy="fb.add.document"
       />
     </FBInput>
-  </ FBProvider>
+  </FBProvider>
 );
 
 export default withFBDocumentRevisions(FBDocumentRevisions);

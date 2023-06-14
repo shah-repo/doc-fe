@@ -15,9 +15,9 @@ class FormBuilderValidatorStored {
   public selectedFieldIndex: number | null = null;
 
   @computed get schemaItemOptions(): SelectOption[] {
-    const schema = isNull(this.selectedFieldIndex) ?
-      FBStore.getSchema() :
-      (FBStore.getSchema()).filter((item) => item.index !== this.selectedFieldIndex);
+    const schema = isNull(this.selectedFieldIndex)
+      ? FBStore.getSchema()
+      : (FBStore.getSchema()).filter((item) => item.index !== this.selectedFieldIndex);
     return schema.map((schemaItem) => ({
       value: schemaItem.name,
       text: schemaItem.label,
@@ -40,9 +40,9 @@ class FormBuilderValidatorStored {
     const rules: Dictionary<string> = {};
     map(FBStore.getSchema(), (schemaItem) => {
       if (
-        schemaItem.rules &&
-        schemaItem.rules !== '' &&
-        isEmpty(schemaItem.applicableOn)
+        schemaItem.rules
+        && schemaItem.rules !== ''
+        && isEmpty(schemaItem.applicableOn)
       ) {
         rules[schemaItem.name || ''] = schemaItem.rules;
       }
@@ -54,9 +54,9 @@ class FormBuilderValidatorStored {
     const rules: Dictionary<string> = {};
     map(FBStore.getSchema(), (schemaItem) => {
       if (
-        schemaItem.rules &&
-        schemaItem.rules !== '' &&
-        !isEmpty(schemaItem.applicableOn)
+        schemaItem.rules
+        && schemaItem.rules !== ''
+        && !isEmpty(schemaItem.applicableOn)
       ) {
         rules[schemaItem.name || ''] = schemaItem.rules;
       }

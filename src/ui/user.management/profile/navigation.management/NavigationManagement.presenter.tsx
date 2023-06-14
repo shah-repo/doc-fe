@@ -8,7 +8,7 @@ import Text from '../../../components/Text';
 import Colors from '../../../layout/theme/utils/colors';
 
 interface Props extends FormikProps<any>{
-  asyncState: AsyncState;
+  asyncState: AsyncState
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -40,7 +40,7 @@ const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
       <FormWrapper
         {...{ dirty, initialValues, resetForm }}
       >
-        <Field name={'navigation'}>
+        <Field name="navigation">
           {({
             field,
           }) => (
@@ -60,7 +60,7 @@ const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
         </Box>
         <Box display="flex" justifyContent="flex-end">
           <Button type="submit" variant="outlined">
-            <Text translation={'common.save'} />
+            <Text translation="common.save" />
           </Button>
         </Box>
       </FormWrapper>

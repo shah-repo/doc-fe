@@ -18,12 +18,12 @@ const SlackLandingContainer: React.FunctionComponent<Props> = ({
   location,
   history,
 }) => {
-  const redirectUriEnv = location.pathname === SLACK_COMPANY_URL ?
-    Config.SlackCompanyUri :
-    Config.SlackUserUri;
-  const URL = location.pathname === SLACK_COMPANY_URL ?
-    SLACK_COMPANY_OAUTH_URL :
-    SLACK_USER_OAUTH_URL;
+  const redirectUriEnv = location.pathname === SLACK_COMPANY_URL
+    ? Config.SlackCompanyUri
+    : Config.SlackUserUri;
+  const URL = location.pathname === SLACK_COMPANY_URL
+    ? SLACK_COMPANY_OAUTH_URL
+    : SLACK_USER_OAUTH_URL;
   const { code } = parse(location.search);
   const postSlackCodeAction = useActionCreator(slackActions.postSlackCode);
   const employeeId = useSelector(authSelectors.currentEmployeeId);

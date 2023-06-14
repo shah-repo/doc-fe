@@ -5,11 +5,10 @@ import { Nullable } from '../../../../state/ducks/common/types';
 import Text from '../../Text';
 import styles from './utils/styles';
 
-
 interface OwnProps {
-  showEditUser: boolean;
-  setPreviewAvatar: (values: string) => void;
-  setFile: (value: Nullable<File>) => void;
+  showEditUser: boolean
+  setPreviewAvatar: (values: string) => void
+  setFile: (value: Nullable<File>) => void
 }
 
 type Props = OwnProps;
@@ -35,12 +34,12 @@ const AvatarUploadContainer: React.FunctionComponent<Props> = ({
     >
       <input
         accept="image/png, image/jpeg"
-        id={'AvatarUploadContainer-avatar'}
+        id="AvatarUploadContainer-avatar"
         type="file"
         style={{ display: 'none' }}
         onChange={onChange}
       />
-      <label htmlFor={'AvatarUploadContainer-avatar'}>
+      <label htmlFor="AvatarUploadContainer-avatar">
         <Link variant="button" className={classes.link} id="AvatarUploadContainer-uploadPhoto">
           <Text translation="common.upload.photo" />
         </Link>

@@ -6,7 +6,7 @@ import useStyles from './HeaderPOStatus.styles';
 import { StyledPOStatusButton } from './HeaderPOStatusButton';
 
 interface Props {
-  poStatus: POStatusType;
+  poStatus: POStatusType
 }
 
 const HeaderPOStatus: React.FC<Props> = ({ poStatus }) => {
@@ -16,7 +16,7 @@ const HeaderPOStatus: React.FC<Props> = ({ poStatus }) => {
     <StyledPOStatusButton type="submit" color="primary" disableRipple>
       <div data-cy={`po-status-button-${poStatus}`} className={classNames(classes.statusIcon,
         classes[poStatus])} />
-      <Text message={POStatusLabelMapping[poStatus]}/>
+      <Text message={POStatusLabelMapping[poStatus]} />
     </StyledPOStatusButton>
   );
 };

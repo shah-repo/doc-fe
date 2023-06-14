@@ -25,19 +25,19 @@ type ChangeRequestFormProps =
 & SMTabsHOCProps
 & Pick<BoxProps, 'onScroll'>
 & {
-  formValues: FormikProps<ChangeRequestFormValues>;
-  asyncState: AsyncState;
-  changeRequest?: ChangeRequest;
-  doNotPrompt?: boolean;
-  changeOpenStatus: (status: boolean) => void;
-  schema?: FBSchemaProps[];
-  mode: FBWorkspaceMode;
-  withoutBottomBar: boolean;
-  autosave: boolean;
-  formInput?: Record<string, any>;
-  hideSideBar: boolean;
-  currentDocRevId?: string;
-  inDialog: boolean;
+  formValues: FormikProps<ChangeRequestFormValues>
+  asyncState: AsyncState
+  changeRequest?: ChangeRequest
+  doNotPrompt?: boolean
+  changeOpenStatus: (status: boolean) => void
+  schema?: FBSchemaProps[]
+  mode: FBWorkspaceMode
+  withoutBottomBar: boolean
+  autosave: boolean
+  formInput?: Record<string, any>
+  hideSideBar: boolean
+  currentDocRevId?: string
+  inDialog: boolean
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -73,7 +73,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-
   if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.items') === -1) {
     tabConfig.splice(1, 0, {
       labelId: 'tabId.items',
@@ -95,7 +94,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
       header= {
-        <FormHeader {...{ changeRequest, asyncState }}/>
+        <FormHeader {...{ changeRequest, asyncState }} />
       }
     >
       <SMTemplate
@@ -138,8 +137,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
                       return (
                         <SMBox key={index} pt={.25}>
-                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
-                              <FBWorkspace
+                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
+                              && <FBWorkspace
                                 isPortal={false}
                                 initialValues={formInput}
                                 changeRequest={cloneDeep(changeRequest)}
@@ -149,9 +148,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
-                          {tabType === TabTypeOptions.ITEMS &&
-                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
-                            changeRequest && (
+                          {tabType === TabTypeOptions.ITEMS
+                            && _tabsState?.isTabActive(TabTypeOptions.ITEMS)
+                            && changeRequest && (
                             <ItemsAndDetailsWrapper
                               currentDocRevId={currentDocRevId}
                               changeRequest={cloneDeep(changeRequest)}
@@ -161,9 +160,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
-                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
-                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
-                            <FBWorkspace
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                            && _formState?.mode !== FBWorkspaceModeOptions.NONE
+                            && <FBWorkspace
                               isPortal={false}
                               initialValues={formInput}
                               changeRequest={cloneDeep(changeRequest)}
@@ -186,6 +185,5 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     </SMForm>
   );
 };
-
 
 export default withSMTabs(ChangeRequestForm);

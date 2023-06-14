@@ -13,15 +13,15 @@ import gridConfiguration from './column.definition';
 import { KendoPanel } from './KendoPanel';
 
 interface Props {
-  tableName: string;
-  tableData: TableDataProps<LoadCompanyGroup>;
-  clearFilter?: () => void;
-  tableCriteria: TablePanelStateProps;
-  handlePermission: (dataItem: LoadCompanyGroup) => void;
-  previewGroupsDialog: ReturnType<typeof useDialog>;
-  editGroupsDialog: ReturnType<typeof useDialog>;
-  selectedGroup: LoadCompanyGroup;
-  canCreateGroups: boolean;
+  tableName: string
+  tableData: TableDataProps<LoadCompanyGroup>
+  clearFilter?: () => void
+  tableCriteria: TablePanelStateProps
+  handlePermission: (dataItem: LoadCompanyGroup) => void
+  previewGroupsDialog: ReturnType<typeof useDialog>
+  editGroupsDialog: ReturnType<typeof useDialog>
+  selectedGroup: LoadCompanyGroup
+  canCreateGroups: boolean
 }
 
 const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
@@ -63,7 +63,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
         isOpen={editGroupsDialog.isOpen}
         closeDialog={closeDialog}
         selectedGroup={selectedGroup}
-        title={'group.management.edit.group'}
+        title="group.management.edit.group"
       />
     </Grid>
   );

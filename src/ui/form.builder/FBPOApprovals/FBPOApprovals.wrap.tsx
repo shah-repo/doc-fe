@@ -63,7 +63,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
       const requiredGroups: string[] = compact(
-        map(groups, (group) => includesApprover(group, option.id) ? group.name : '')
+        map(groups, (group) => includesApprover(group, option.id) ? group.name : ''),
       );
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
@@ -132,7 +132,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       },
       {
         equals: isEqual,
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -142,7 +142,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      []
+      [],
     );
 
     // On revisionChangeType change
@@ -154,7 +154,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
             updateApprovals({ prevRequester: prevRequester.current });
           });
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -169,7 +169,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       },
       {
         fireImmediately: true,
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -177,7 +177,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => poApprovalsState?.busy,
       () => {
         formState?.getInputState(name)?.setRender();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -208,4 +208,3 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Comp.displayName = 'withFBPOApprovals';
   return Comp;
 };
-

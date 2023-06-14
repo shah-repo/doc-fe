@@ -5,9 +5,9 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import useDescription from '../../../hooks/docCustomization/useDescription';
 
 interface Props {
-  isQms: boolean;
-  documentTypeId?: string;
-  isDisabled?: boolean;
+  isQms: boolean
+  documentTypeId?: string
+  isDisabled?: boolean
 }
 
 const Description: React.FunctionComponent<Props> = ({

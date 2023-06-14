@@ -23,5 +23,5 @@ export default makeStyles((theme: Theme) =>
       borderRadius: '50%',
       marginRight: theme.spacing(2),
     },
-  })
+  }),
 );

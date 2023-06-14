@@ -5,8 +5,8 @@ export type FBApprovalPasswordFormProps =
 & Pick<FBFormProps, 'formState'>
 & Pick<FBInputProps, 'name'>
 & {
-  approvalTransition?(transition: FBInlineApprovalTransition, approvalId: string): void;
-  approvalId?: string;
-  onDialogClose?(): any;
-  onDialogApprove?(): any;
+  approvalTransition?(transition: FBInlineApprovalTransition, approvalId: string): void
+  approvalId?: string
+  onDialogClose?(): any
+  onDialogApprove?(): any
 };

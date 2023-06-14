@@ -5,7 +5,7 @@ export type FBEditorActionsProps =
 & Pick<FBInputProps, 'type' | 'index' | 'stringToOptions'>
 & FBValidationProps
 & {
-  handleAdd?: ButtonProps['onClick'];
-  handleCancel?: ButtonProps['onClick'];
-  parentFormState?: FBFormState;
+  handleAdd?: ButtonProps['onClick']
+  handleCancel?: ButtonProps['onClick']
+  parentFormState?: FBFormState
 };

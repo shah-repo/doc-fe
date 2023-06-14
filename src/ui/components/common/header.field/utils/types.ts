@@ -1,3 +1,3 @@
 export interface HeaderFieldProps {
-  actionsRenderer?: () => any;
+  actionsRenderer?: () => any
 }

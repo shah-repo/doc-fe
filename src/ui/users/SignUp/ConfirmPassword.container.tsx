@@ -12,11 +12,11 @@ import { PasswordValues } from '../types';
 import ConfirmPasswordPresenter from './ConfirmPassword.presenter';
 
 interface Props {
-  clientEmail: string;
-  asyncState: AsyncState;
-  onSubmit: (confirmValues: PasswordValues) => void;
-  isUserAuthenticated: boolean;
-  title: Translation;
+  clientEmail: string
+  asyncState: AsyncState
+  onSubmit: (confirmValues: PasswordValues) => void
+  isUserAuthenticated: boolean
+  title: Translation
 }
 
 const ConfirmPasswordContainer: React.FunctionComponent<Props> = ({

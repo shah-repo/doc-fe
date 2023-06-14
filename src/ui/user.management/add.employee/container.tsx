@@ -3,7 +3,7 @@ import useDialog from '../../hooks/useDialog';
 import AddEmployeePresenter from './presenter';
 
 interface Props {
-  addGroup?: () => void;
+  addGroup?: () => void
 }
 const AddEmployeeContainer: React.FunctionComponent<Props> = ({ addGroup }) => {
   const dialog = useDialog();

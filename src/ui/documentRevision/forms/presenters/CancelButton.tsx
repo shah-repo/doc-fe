@@ -18,9 +18,9 @@ import { checkIsDocumentRecord } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft } from '../../helpers/documentRevisionStatus';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  setShouldDisplay: (value: boolean) => void;
-  renderAsButton?: boolean;
+  documentRevision: DocumentRevision
+  setShouldDisplay: (value: boolean) => void
+  renderAsButton?: boolean
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
@@ -48,14 +48,14 @@ const CancelButton: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        (!isNewLayout && canShowCancelButton) &&
-        <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
+        (!isNewLayout && canShowCancelButton)
+        && <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
           <Text translation="common.cancel.draft" />
         </Button>
       }
       {
-        (isNewLayout && canShowCancelButton && !renderAsButton) &&
-       ( <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
+        (isNewLayout && canShowCancelButton && !renderAsButton)
+       && ( <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
          <StyledMenuListIcon>
            <CancelDraftIcon />
          </StyledMenuListIcon>
@@ -67,14 +67,14 @@ const CancelButton: React.FunctionComponent<Props> = ({
        </StyledMenuListItem>)
       }
       {
-        (isNewLayout && canShowCancelButton && renderAsButton) &&
-        <StyledButton
+        (isNewLayout && canShowCancelButton && renderAsButton)
+        && <StyledButton
           color="primary"
           id="cancelDraftButton"
           data-cy="cancelDraftButton"
           onClick={dialog.open}
         >
-          <Text translation={'common.cancel.draft'} />
+          <Text translation="common.cancel.draft" />
         </StyledButton> }
       <AlertDialog
         confirmAction={handleCancelDraft}

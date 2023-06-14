@@ -14,10 +14,10 @@ import Text from '../../../../components/Text';
 import { styles } from './styles';
 
 interface Props {
-  asyncState: AsyncState;
-  cancel: () => void;
-  docDetails: Partial<DocumentRevision>;
-  trId?: string;
+  asyncState: AsyncState
+  cancel: () => void
+  docDetails: Partial<DocumentRevision>
+  trId?: string
 }
 
 const TrainingForm: React.FunctionComponent<Props> = ({
@@ -64,7 +64,7 @@ const TrainingForm: React.FunctionComponent<Props> = ({
         <Grid item xs={6} >
           <Grid item xs={12} className={classes.item}>
             <span className={classes.label}>
-              <Text translation="training.acknowledge.statement"/>
+              <Text translation="training.acknowledge.statement" />
             </span>
             <span className={classes.itemContentBlue}>
              &nbsp; {docDetails.docId}&nbsp;

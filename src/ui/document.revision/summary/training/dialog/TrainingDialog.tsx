@@ -14,15 +14,15 @@ import Colors from '../../../../layout/theme/utils/colors';
 import TrainingForm from './TrainingForm';
 
 interface Props {
-  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
-  openDialog: () => void;
-  asyncState: AsyncState;
-  buttonProps?: ButtonProps;
-  transition: Transition;
-  label: string;
-  transitionDialog: DialogHandler;
-  docDetails: Partial<DocumentRevision>;
-  trId?: string;
+  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
+  openDialog: () => void
+  asyncState: AsyncState
+  buttonProps?: ButtonProps
+  transition: Transition
+  label: string
+  transitionDialog: DialogHandler
+  docDetails: Partial<DocumentRevision>
+  trId?: string
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -44,8 +44,8 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 
-const TrainingDialog: React.FunctionComponent<Props> =
-  ({
+const TrainingDialog: React.FunctionComponent<Props>
+  = ({
     onSubmit,
     openDialog,
     asyncState,
@@ -94,7 +94,7 @@ const TrainingDialog: React.FunctionComponent<Props> =
           </IconButton>
           <DialogTitle>
             <Typography className={classes.dialogTitle}>
-              <Text translation={'training.acknowledge.completion'} />
+              <Text translation="training.acknowledge.completion" />
             </Typography>
           </DialogTitle>
 

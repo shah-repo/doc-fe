@@ -48,7 +48,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
     <ListItem className={classes.listItemPadding}>
       <Typography variant="h6">
         <Box fontSize={12}>
-          <Text translation="common.crid"/>
+          <Text translation="common.crid" />
         </Box>
         <div className={classes.linkContainer}>
           <Link
@@ -63,12 +63,12 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
           </Link>
           <VisibilityOutlinedIcon
             className={classes.viewIcon}
-            onClick={openChangeRequestDialog}/>
+            onClick={openChangeRequestDialog} />
         </div>
       </Typography>
       {
-        approvalRequestDialog.isOpen &&
-        <ChangeRequestEditDialog
+        approvalRequestDialog.isOpen
+        && <ChangeRequestEditDialog
           changeRequestId={changeRequest?.id}
           approvalRequestDialog={approvalRequestDialog}
           closeDialog = {closeCRDialog}

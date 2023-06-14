@@ -11,10 +11,10 @@ import useDialog from '../../../../hooks/useDialog';
 import UpgradeToLatestDialog from './UpgradeToLatestDialog';
 
 interface Props {
-  shouldShowUpgrade: boolean;
-  setShouldDisplay?: (value: boolean) => void;
-  onUpgradeClick: () => void;
-  renderAsButton?: boolean;
+  shouldShowUpgrade: boolean
+  setShouldDisplay?: (value: boolean) => void
+  onUpgradeClick: () => void
+  renderAsButton?: boolean
 }
 
 const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
@@ -42,7 +42,7 @@ const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
             >
               <Text translation="common.upgrade" />
             </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
-              <StyledMenuListIcon><UpgradeToLatestIcon/></StyledMenuListIcon>
+              <StyledMenuListIcon><UpgradeToLatestIcon /></StyledMenuListIcon>
               <StyledMenuListItemText
                 id="UpgradeToLatest-upgrade"
                 primary={<Text translation="common.upgrade" />}

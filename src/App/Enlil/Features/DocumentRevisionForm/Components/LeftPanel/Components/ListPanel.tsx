@@ -104,8 +104,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           disableRipple={true}
                           className={classes.iconBtn}
                           onClick={
-                            openEditor &&
-                            openEditor({ type: picker.key, index, isAddAction: true })
+                            openEditor
+                            && openEditor({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           {FBEditorState.editorTypeIconMapping[
@@ -117,13 +117,13 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           {!FBEditorState.editorTypeIconMapping[
                             picker.key
                           ] && React.createElement(
-                            FBEditorState.editorTypeIconMapping.default
+                            FBEditorState.editorTypeIconMapping.default,
                           )}
                         </IconButton>
                         <ListItemText key={index} data-cy={picker.label}
                           onClick={
-                            openEditor &&
-                            openEditor({ type: picker.key, index, isAddAction: true })
+                            openEditor
+                            && openEditor({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           <Typography className={classes.listSubItem}>
@@ -164,7 +164,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     each(Object.keys(pickers), (value) => {
       const filteredList = pickers[value]
         .filter((el) =>
-          el.label.toLowerCase().includes(searchString.toLowerCase())
+          el.label.toLowerCase().includes(searchString.toLowerCase()),
         );
       if (filteredList.length) {
         filteredData[value] = filteredList;

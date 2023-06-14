@@ -46,7 +46,7 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
         revision,
         revisionStage as number,
         subRevision,
-        revisionChangeType
+        revisionChangeType,
       );
       _documentRevisionFooterState?.setInfo({ docId, version, releasedAt });
       _documentRevisionFooterState?.setHidden(false);

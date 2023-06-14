@@ -9,9 +9,8 @@ import { FBMapWrapper } from '../../form.builder';
 import Colors from '../../layout/theme/utils/colors';
 import styles from './styles';
 
-
 interface SidebarPresenterProps {
-  changeRequests: ChangeRequest[];
+  changeRequests: ChangeRequest[]
 }
 
 const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ changeRequests }) => {

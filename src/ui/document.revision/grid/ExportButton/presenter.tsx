@@ -11,9 +11,9 @@ import ExportListDialog from '../../list/ExportListDialog/ExportListDialog';
 import styles from './styles';
 
 interface Props {
-  gridData: DocumentRevision[];
-  columns: any[];
-  isGrouped: boolean;
+  gridData: DocumentRevision[]
+  columns: any[]
+  isGrouped: boolean
 }
 const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();

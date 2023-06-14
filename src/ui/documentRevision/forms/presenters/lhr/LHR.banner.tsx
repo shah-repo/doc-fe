@@ -6,7 +6,7 @@ import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { styles } from './LHR.banner.styles';
 
 interface LHRBannerProps{
-  documentRevision: DocumentRevision;
+  documentRevision: DocumentRevision
 }
 
 const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }) => {
@@ -33,11 +33,11 @@ const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }
         <Grid item={true}>
           {lhrData?.lot.label}
         </Grid>&nbsp;
-        <Grid item={true} className={classes.blackDot}></Grid>&nbsp;
+        <Grid item={true} className={classes.blackDot} />&nbsp;
         <Grid item={true}>
           {lhrData?.lhr.label}
         </Grid>&nbsp;
-        <Grid item={true} className={classes.blackDot}></Grid>&nbsp;
+        <Grid item={true} className={classes.blackDot} />&nbsp;
         <Grid item={true} className={classes.partLabel} onClick={() => history.push(url)}>
           {lhrData?.part.label}
         </Grid>

@@ -5,5 +5,5 @@ export type FBFieldMarkDownProps =
   & Pick<FBInputProps, 'index'>
   & Pick<BoxProps, 'mt' | 'mb'>
   & {
-    source?: string;
+    source?: string
   };

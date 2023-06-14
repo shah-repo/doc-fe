@@ -17,7 +17,7 @@ import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 
 interface Props {
-  changeRequest: ChangeRequest | undefined;
+  changeRequest: ChangeRequest | undefined
 }
 const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
   changeRequest,
@@ -77,7 +77,7 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
       )}
       <AlertDialog
         confirmAction={voidDocument}
-        message={'change.request.void.alert'}
+        message="change.request.void.alert"
         {...{ dialog }}
       />
     </>

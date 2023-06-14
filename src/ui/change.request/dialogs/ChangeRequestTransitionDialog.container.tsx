@@ -9,11 +9,11 @@ import useDialog from '../../hooks/useDialog';
 import { EffectiveDateFormValues, PasswordFormValues } from '../form/types';
 
 interface Props {
-  changeRequestId: string;
-  transition: ChangeRequestTransition;
-  buttonProps?: ButtonProps;
-  label: string;
-  onSuccess?: () => void;
+  changeRequestId: string
+  transition: ChangeRequestTransition
+  buttonProps?: ButtonProps
+  label: string
+  onSuccess?: () => void
 }
 
 const TransitionDialogContainer: React.FunctionComponent<Props> = ({
