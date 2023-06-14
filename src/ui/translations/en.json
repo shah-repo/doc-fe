@@ -1088,6 +1088,7 @@
   "form.builder.mpi.procedure.materials.title": "{title} | Qty: {quantity} {unit}",
   "form.builder.mpi.procedure.materials.title.id": "{id}: {title} | Qty: {quantity} {unit}",
   "form.builder.lhrs.procedure.materials.title": "{title} - rev {revision} | Qty: {quantity} {unit}",
+  "form.builder.lhrs.procedure.select.equipment.option": " rev {revision} - {name}",
   "form.builder.procedure.equipment.title": "{title} ",
   "form.builder.mpi.procedure.equipment.title.id": "{id}: {title} ",
   "form.builder.mpi.procedure.equipment.title": "{title}",

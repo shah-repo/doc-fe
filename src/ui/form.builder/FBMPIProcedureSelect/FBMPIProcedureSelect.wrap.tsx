@@ -129,20 +129,19 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       const calDate = FB.calculateDateByType(option, 'calibration');
 
       return (
-        <Grid
-          container
-          justify="flex-start"
-          alignItems="center">
+        <Grid container justify="flex-start" alignItems="center">
           <Grid item>
             <Typography>{option.document.docId}</Typography>
           </Grid>
           <Grid item className={classes.grayDot} />
           <Grid item>
-            <Typography>{` rev ${option.displayRevision} - ${option.name}`}</Typography>
+            <Typography>
+              {intl.formatMessage(
+                { id: 'form.builder.lhrs.procedure.select.equipment.option' },
+                { revision: option.displayRevision, name: option.name },
+              )}
+            </Typography>
           </Grid>
-          {/* <Grid item>
-            <Typography>{``}</Typography>
-          </Grid> */}
           <Grid item xs={12} className={classes.dueDate}>
             {calDate && (
               <span>
