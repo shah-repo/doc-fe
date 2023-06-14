@@ -12,7 +12,6 @@ import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentT
 import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { isMoreDigitsAfterDecimal } from '../../dashboard.new/line.items/common/Utils';
-import Colors from '../../layout/theme/utils/colors';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import useStyles from './styles';
 
@@ -152,7 +151,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
               </span>
             )}
             {pmDate && calDate && (
-              <Box component="span" style={{ color: Colors.black }}>
+              <Box component="span" className={classes.black}>
                 &#9642;
               </Box>
             )}

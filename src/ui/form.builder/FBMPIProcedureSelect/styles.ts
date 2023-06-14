@@ -13,4 +13,7 @@ export default makeStyles((theme) => ({
     fontSize: 14,
     paddingBottom: theme.spacing(0.5),
   },
+  black: {
+    color: Colors.black,
+  },
 }));
