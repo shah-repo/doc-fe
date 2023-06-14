@@ -25,7 +25,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const formik = useFormikContext();
   const intl = useIntl();
   const maxAutoRowExpandSize = 4;
-  defaultValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
+  const fieldValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const classes = styles();
 
   const onBlur = (evt) => {
@@ -36,7 +36,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   };
 
   const textEditorRenderComponent = ({ field }: FieldProps) => {
-    const value = (defaultValue ?? field?.value) as string;
+    const value = fieldValue ?? field?.value;
     return (<>
       <TextareaAutosize
         defaultValue={value}
@@ -58,7 +58,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
       label={label}
       required
       component={textEditorRenderComponent}
-      defaultVal={defaultValue as string}
+      defaultVal={fieldValue}
     />);
 };
 
