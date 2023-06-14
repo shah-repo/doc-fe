@@ -6,5 +6,5 @@ export const styles = makeStyles((theme) =>
       overflow: 'auto',
       margin: theme.spacing(1),
     },
-  })
+  }),
 );

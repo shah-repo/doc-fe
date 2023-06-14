@@ -8,11 +8,11 @@ import { styles } from './styles';
 import SlackLandingSuccess from './Success';
 
 interface Props {
-  successMessage: string;
-  errorMessage: string;
-  onCounterFinish: () => void;
-  goToDashboard: () => void;
-  retry: () => void;
+  successMessage: string
+  errorMessage: string
+  onCounterFinish: () => void
+  goToDashboard: () => void
+  retry: () => void
 }
 
 const SlackLandingPresenter: React.FunctionComponent<Props> = ({

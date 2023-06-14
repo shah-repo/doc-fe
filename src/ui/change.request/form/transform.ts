@@ -4,9 +4,9 @@ import { ChangeRequest, ChangeRequestEditRequestBody } from '../../../state/duck
 import { ChangeRequestFormValues, TemplateOption } from './types';
 
 interface OptionApproverType {
-  value: string;
-  label: string;
-  groups: string[];
+  value: string
+  label: string
+  groups: string[]
 }
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {

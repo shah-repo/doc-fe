@@ -3,7 +3,6 @@ import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBOutOfRangeProps } from '..';
 
-
 export const withFBOutOfRange = <T extends FBOutOfRangeProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -30,7 +29,6 @@ export const withFBOutOfRange = <T extends FBOutOfRangeProps>(
     useObserver(() => {
       isInRange = getIsInRange(formState?.inputState.get(parentName || '')?.value);
     });
-
 
     if (!pass || isEmpty(pass) || isInRange) { return null; }
 

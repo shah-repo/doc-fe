@@ -107,8 +107,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
-      const requiredGroups: string [] =
-        compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
+      const requiredGroups: string []
+        = compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
           <b>{option.user?.name}</b>&nbsp; ({option.user?.email})
@@ -134,8 +134,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
       if (isARforPO) { // one user can fullfil only one signature requirement (POAM)
         if (!isEmpty(difference(newSelectionIds, previousSelectionIds))) { // user added
           const newUserId = last(difference(newSelectionIds, previousSelectionIds));
-          const checkedGroup =
-            find(requiredGroups, (group) =>
+          const checkedGroup
+            = find(requiredGroups, (group) =>
               includes(map((group.joinedEmployees as FBJoinedEmployee[]), 'id'), newUserId)
               && !includes(approversState?.checkedGroups?.map((g) => g.id), group.id)) as FBRequiredApprover;
           if (!checkedGroup) {

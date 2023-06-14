@@ -1,3 +1,3 @@
 export interface IRemoteValidatorsHelper {
-  getDocumentRevById: (id: string) => Promise<any>;
+  getDocumentRevById: (id: string) => Promise<any>
 }

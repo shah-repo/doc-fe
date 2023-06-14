@@ -12,10 +12,10 @@ import { LoginFormValues, PasswordEmail } from '../types';
 import LoginFormPresenter from './LoginForm.presenter';
 
 interface Props {
-  signMessage: Translation;
-  signLabel: Translation;
-  route: string;
-  title: Translation;
+  signMessage: Translation
+  signLabel: Translation
+  route: string
+  title: Translation
 }
 
 const LoginFormContainer: React.FunctionComponent<Props> = ({
@@ -87,7 +87,7 @@ const LoginFormContainer: React.FunctionComponent<Props> = ({
       title={title}
       logo={logo}
       forgotPassword={handleForgotPassword}
-      buttonLabel={'login.submit'}
+      buttonLabel="login.submit"
     />
   );
 

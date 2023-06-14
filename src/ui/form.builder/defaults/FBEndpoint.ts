@@ -63,4 +63,3 @@ export enum FBEndpoint {
   ModifyFavourites = '/user_favourites/${id}',
   ApprovalLevels = '/document_revisions/threshold',
 }
-

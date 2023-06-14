@@ -9,7 +9,7 @@ import { DisplayText, TranslatedText } from '../../../components/common/kendo/he
 import { trainingCompletedOnDateOption } from '../../utils/helpers';
 
 interface Props extends GridFilterCellProps {
-  defaultItem: string;
+  defaultItem: string
 }
 
 export const CompletedDateFilterTemplate = ({

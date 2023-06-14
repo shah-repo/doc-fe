@@ -16,11 +16,11 @@ import { FBValidatorDelimiter, FBValidatorTrigger } from './validation/validator
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
 interface FBLabelRendererProps {
-  labelRenderer?: React.ReactNode;
+  labelRenderer?: React.ReactNode
 }
 
 interface FBOptionRendererProps {
-  optionsRenderer?: React.ReactNode[];
+  optionsRenderer?: React.ReactNode[]
 }
 
 export enum FBLabelFontSize {
@@ -33,10 +33,10 @@ export type FBLabelProps =
   & Pick<FormControlProps, 'error'>
   & Pick<BoxProps, 'm' | 'mb' | 'ml' | 'mr' | 'mt' | 'mx' | 'my' | 'p' | 'pb' | 'pl' | 'pr' | 'pt' | 'px' | 'py'>
   & {
-    label?: string | ReactNode;
-    fontSize?: 'sm' | 'md' | 'lg';
-    loading?: boolean;
-    isFullWidth?: boolean;
+    label?: string | ReactNode
+    fontSize?: 'sm' | 'md' | 'lg'
+    loading?: boolean
+    isFullWidth?: boolean
   };
 
 export type FBOptionProps =
@@ -44,15 +44,15 @@ export type FBOptionProps =
   & Pick<FBContextProps, 'includeContext'>
   & Pick<BaseTextFieldProps, 'name' | 'type'>
   & {
-    options?: any[] | string;
-    optionId?: string;
-    optionPath?: string;
-    optionLabelKey?: string;
-    optionValueKey?: string;
-    includeNone?: boolean;
-    value?: any;
-    optionObjectKeys?: string[];
-    optionValueType?:  'object' | 'key';
+    options?: any[] | string
+    optionId?: string
+    optionPath?: string
+    optionLabelKey?: string
+    optionValueKey?: string
+    includeNone?: boolean
+    value?: any
+    optionObjectKeys?: string[]
+    optionValueType?:  'object' | 'key'
   };
 
 export type FBInputProps = Omit<FBFormikFieldProps, 'name'>
@@ -82,62 +82,62 @@ export type FBInputProps = Omit<FBFormikFieldProps, 'name'>
 | 'fullWidth'
 >
 & {
-  index?: number;
-  type?: FBEditorElementType | string;
-  linkUrl?: string;
-  onChange?: (e: any, value: any) => void;
+  index?: number
+  type?: FBEditorElementType | string
+  linkUrl?: string
+  onChange?: (e: any, value: any) => void
   afterChange?: (
     fieldName: string,
     value: any,
     values: Dictionary<any>,
-  ) => void;
-  rules?: string;
-  applicableIn?: string[];
-  checked?: boolean;
-  validatorFieldName?: string;
-  hasSchemaItem?: boolean;
-  hasSchemaItems?: boolean;
-  applicableOn?: any[];
-  multiple?: boolean;
-  gutter?: boolean;
-  tooltip?: string;
-  validationMode?: ('ValidationHidden' | 'ValidationDisabled')[];
-  formValuesRules?: Dictionary<any>;
-  templateId?: string;
-  isTemplate?: boolean;
-  hellosignFlowProps?: any;
-  paragraph?: string;
-  includeQRScan?: boolean;
-  loading?: boolean;
-  approvers?: string[] | Employee[];
-  approverGroups?: string[] | GroupRequestBody[];
-  approveIsBlocking?: boolean;
-  instructionsDocument?: string;
-  approved?: boolean;
-  designDisabled?: boolean;
-  reviseDisabled?: boolean;
-  tabIndex?: number;
+  ) => void
+  rules?: string
+  applicableIn?: string[]
+  checked?: boolean
+  validatorFieldName?: string
+  hasSchemaItem?: boolean
+  hasSchemaItems?: boolean
+  applicableOn?: any[]
+  multiple?: boolean
+  gutter?: boolean
+  tooltip?: string
+  validationMode?: ('ValidationHidden' | 'ValidationDisabled')[]
+  formValuesRules?: Dictionary<any>
+  templateId?: string
+  isTemplate?: boolean
+  hellosignFlowProps?: any
+  paragraph?: string
+  includeQRScan?: boolean
+  loading?: boolean
+  approvers?: string[] | Employee[]
+  approverGroups?: string[] | GroupRequestBody[]
+  approveIsBlocking?: boolean
+  instructionsDocument?: string
+  approved?: boolean
+  designDisabled?: boolean
+  reviseDisabled?: boolean
+  tabIndex?: number
 };
 
 export type FBFormDefaultProps = FBInputProps &
 FBLabelRendererProps &
 FBOptionRendererProps & {
-  index?: number;
-  type?: FBEditorElementType | string;
-  readOnly?: boolean;
-  className?: string;
-  gutter?: boolean;
-  options?: SelectOption[] | string[] | string;
-  includeOther?: boolean;
-  includeNote?: boolean;
-  optionNote?: string;
-  autocompleteId?: string;
-  isMulti?: boolean;
-  linkUrl?: string;
-  rules?: string;
-  validatorDelimiter?: FBValidatorDelimiter;
-  hasSchemaItem?: boolean;
-  fieldName?: string;
-  row?: boolean;
-  applicableOn?: FBValidatorTrigger[];
+  index?: number
+  type?: FBEditorElementType | string
+  readOnly?: boolean
+  className?: string
+  gutter?: boolean
+  options?: SelectOption[] | string[] | string
+  includeOther?: boolean
+  includeNote?: boolean
+  optionNote?: string
+  autocompleteId?: string
+  isMulti?: boolean
+  linkUrl?: string
+  rules?: string
+  validatorDelimiter?: FBValidatorDelimiter
+  hasSchemaItem?: boolean
+  fieldName?: string
+  row?: boolean
+  applicableOn?: FBValidatorTrigger[]
 };

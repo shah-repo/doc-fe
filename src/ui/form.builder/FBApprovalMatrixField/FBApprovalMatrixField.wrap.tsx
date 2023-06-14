@@ -4,7 +4,7 @@ import React from 'react';
 import { FB, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from '..';
 
 export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
@@ -16,12 +16,11 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
   }: T) => {
 
     const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
-    const { document: { outputRevision = false } = {}, isOutput } = workspaceState || {};
-    const formValue = formState?.getFieldValue(name);
+    const { document: { outputRevision = false } = {}, formInput, isOutput } = workspaceState || {};
 
     const approvalMatrixState = !approvalMatrixFieldState ? (
       FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-        formValue: { [type as string]: cloneDeep(formValue) },
+        formValue: cloneDeep(formInput),
         outputRevision,
         isOutput,
       })) : approvalMatrixFieldState;
@@ -36,7 +35,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
         (data) => {
           formState?.setFieldValue(name, cloneDeep(data?.[type || '']));
           formState?.setFieldAutosave(name);
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

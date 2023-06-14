@@ -30,5 +30,5 @@ export default makeStyles(() =>
     previewDialog: {
       backgroundColor: Colors.alabaster,
     },
-  })
+  }),
 );

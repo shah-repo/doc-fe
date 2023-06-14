@@ -79,8 +79,8 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       if (type === FBProcedureItemType.attachments) { return; }
       if (type === FBProcedureItemType.materials) {
         loading = (
-          !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || '') ||
-          !FBAutocompleteAsyncStore.data.get(procedureState?.lotsId || '')
+          !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || '')
+          || !FBAutocompleteAsyncStore.data.get(procedureState?.lotsId || '')
         );
       } else {
         loading = !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || '');

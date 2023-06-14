@@ -12,20 +12,20 @@ import Permissions from './content.components/Permissions';
 import SharedContent from './content.components/SharedContent';
 
 interface Props {
-  employees: GetEmployeeResponse[];
-  members: OptionType[];
-  setMembers: (state: any) => void;
-  isCreateMode?: boolean;
-  group: GroupRequestBody;
-  setGroup: (values: GroupRequestBody) => void;
-  handleAsyncState: () => AsyncActionPayload;
-  hasOfficialPermission: boolean;
-  currentEmployeePermissions: Permission[];
-  canCreateOfficialGroup: boolean;
-  parentGroups: any[];
-  setParentGroups: (selectedItems: any) => void;
-  handleReset: () => void;
-  handleSubmit: () => void;
+  employees: GetEmployeeResponse[]
+  members: OptionType[]
+  setMembers: (state: any) => void
+  isCreateMode?: boolean
+  group: GroupRequestBody
+  setGroup: (values: GroupRequestBody) => void
+  handleAsyncState: () => AsyncActionPayload
+  hasOfficialPermission: boolean
+  currentEmployeePermissions: Permission[]
+  canCreateOfficialGroup: boolean
+  parentGroups: any[]
+  setParentGroups: (selectedItems: any) => void
+  handleReset: () => void
+  handleSubmit: () => void
 }
 
 const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -62,14 +62,14 @@ const GroupContentPresenter: React.FunctionComponent<Props> = ({
           handleAsyncState={handleAsyncState}
           hasOfficialPermission={hasOfficialPermission}
         />
-        {canCreateOfficialGroup &&
-        <Permissions
+        {canCreateOfficialGroup
+        && <Permissions
           group={group}
           setGroup={setGroup}
           currentEmployeePermissions={currentEmployeePermissions}
         />}
-        {canCreateOfficialGroup &&
-        <ParentGroups
+        {canCreateOfficialGroup
+        && <ParentGroups
           parentGroups={parentGroups}
           setParentGroups={setParentGroups}
           currentGroupId={id}

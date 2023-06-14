@@ -4,7 +4,7 @@ import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
-  clearFilter?: () => void;
+  clearFilter?: () => void
 }
 
 const styles = makeStyles((theme: Theme) =>

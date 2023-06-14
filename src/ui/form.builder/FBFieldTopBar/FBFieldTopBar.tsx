@@ -22,12 +22,12 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
       <Grid container className={classes.tools}>
         <DragHandleIcon className="drag-handle" />
         <CodeIcon onClick={markDownSchemaItem} />
-        <EditIcon onClick={editSchemaItem} data-cy={'edit-schema-item'} />
+        <EditIcon onClick={editSchemaItem} data-cy="edit-schema-item" />
         <RemoveIcon
           fill={deleteDisabled ? Colors.hint_gray : 'none'}
           className={deleteDisabled ? 'schema-delete-disabled' : 'schema-delete-enabled'}
           {...!deleteDisabled && { onClick: removeSchemaItem }}
-          data-cy={'remove-schema-item'}
+          data-cy="remove-schema-item"
         />
       </Grid>
     </Box>

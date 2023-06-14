@@ -5,8 +5,8 @@ import { Translation } from '../../../translations/types';
 import { styles } from './styles';
 
 interface Props {
-  translation?: Translation;
-  title?: string;
+  translation?: Translation
+  title?: string
 }
 const GridTitle: React.FunctionComponent<Props> = ({ translation, title = '' }) => {
   const classes = styles();

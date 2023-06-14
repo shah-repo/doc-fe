@@ -14,20 +14,20 @@ import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWith
 import { DocumentRevisionFormValues } from './forms/types';
 
 interface DispatchProps {
-  create: typeof documentRevisionsActions.create;
-  setDocId: typeof documentsActions.setDocumentProposedId;
-  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
-  loadDocument: typeof documentRevisionsActions.loadDocument;
+  create: typeof documentRevisionsActions.create
+  setDocId: typeof documentsActions.setDocumentProposedId
+  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId
+  loadDocument: typeof documentRevisionsActions.loadDocument
 }
 
 interface OwnProps {
-  documentRevision: DocumentRevision;
-  type?: DocumentCloneType;
-  isNewVersion: boolean;
+  documentRevision: DocumentRevision
+  type?: DocumentCloneType
+  isNewVersion: boolean
 }
 
 interface StateProps {
-  proposedDocId: string;
+  proposedDocId: string
 }
 
 type DocumentRevisionCreateContainerProps =

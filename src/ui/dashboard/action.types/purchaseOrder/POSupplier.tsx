@@ -4,7 +4,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from '../../../.
 import PODetailItem from './PODetailItem';
 
 interface Props {
-  supplierId: string;
+  supplierId: string
 }
 
 const POSupplier: React.FunctionComponent<Props> = ({
@@ -27,4 +27,3 @@ const POSupplier: React.FunctionComponent<Props> = ({
 };
 
 export default POSupplier;
-

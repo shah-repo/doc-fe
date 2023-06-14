@@ -8,5 +8,5 @@ export const styles = makeStyles((theme) =>
     grid: {
       marginTop: theme.spacing(0.5),
     },
-  })
+  }),
 );

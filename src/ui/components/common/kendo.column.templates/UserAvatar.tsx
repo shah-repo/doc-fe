@@ -38,13 +38,13 @@ export const UserAvatar = ({
       onClick={cellClickEvent}
     >
       <Box className={classes.avatar}>
-        {avatar ?
-          <Avatar className={classes.icon} alt={owner} src={avatar} /> :
-          <Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
+        {avatar
+          ? <Avatar className={classes.icon} alt={owner} src={avatar} />
+          : <Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
             {getInitalsFromName(owner)}
           </Avatar>
         }
-        <Tooltip data={owner}/>
+        <Tooltip data={owner} />
       </Box>
     </td>
   );

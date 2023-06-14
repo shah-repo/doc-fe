@@ -14,8 +14,8 @@ import Text from '../../../../../components/Text';
 import styles from './PasswordForm.styles';
 
 interface PasswordFormProps extends WithStyles<typeof styles> {
-  asyncState: AsyncState;
-  cancel: () => void;
+  asyncState: AsyncState
+  cancel: () => void
 }
 
 const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({

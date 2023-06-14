@@ -34,19 +34,19 @@ import TrainingItem from '../line.items/training/default/DefaultTraining';
 import NoPendingActions from '../NoPendingActions';
 
 interface Props {
-  loadMyFeeds: any;
-  hoverItemId: string;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (pinnedItemId: string) => void;
-  onMouseLeaveItem: (any) => void;
-  onMouseHoverItem: (id: string) => void;
-  loadMyFeedsListAsyncState: AsyncState;
+  loadMyFeeds: any
+  hoverItemId: string
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (pinnedItemId: string) => void
+  onMouseLeaveItem: (any) => void
+  onMouseHoverItem: (id: string) => void
+  loadMyFeedsListAsyncState: AsyncState
   // TO DO:: Needs to add type definitions
-  feedItems: any;
-  overallLimit: number;
-  onLoadMoreData: () => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+  feedItems: any
+  overallLimit: number
+  onLoadMoreData: () => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 
 const LineItemsPresenter: React.FC<Props> = ({
@@ -81,11 +81,11 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   dueOn={getFormattedDateString(
                     pendingAction.dueOn,
-                    MomentFormats.ShortBriefDate
+                    MomentFormats.ShortBriefDate,
                   )}
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
@@ -111,7 +111,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
@@ -160,7 +160,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
@@ -192,7 +192,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
@@ -240,7 +240,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   status={pendingAction.approvalStatusChanged}
                   docRevName={pendingAction.docRevName}
@@ -268,7 +268,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     type={pendingAction.type}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     purchaseOrderSupplierDocRevId={
                       pendingAction.purchaseOrderSupplierDocRevId
@@ -322,7 +322,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   pinned={pendingAction.pinned}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
@@ -370,7 +370,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     type={pendingAction.type}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     status={pendingAction.docRevStatus}
                     displaystatus={pendingAction.docRevDisplayStatus}
@@ -404,7 +404,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   status={pendingAction.docRevStatus}
                   docRevName={pendingAction.docRevName}
@@ -431,11 +431,11 @@ const LineItemsPresenter: React.FC<Props> = ({
                   status={pendingAction.trainingStatus}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   dueOn={getFormattedDateString(
                     pendingAction.dueOn,
-                    MomentFormats.ShortBriefDate
+                    MomentFormats.ShortBriefDate,
                   )}
                   hoverItemId={hoverItemId}
                   onMouseHoverItem={onMouseHoverItem}
@@ -455,7 +455,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   arId={pendingAction.arId}
                   docRevOwnerName={pendingAction.arOwnerName}
@@ -486,7 +486,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
@@ -511,7 +511,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     arStatus={pendingAction.arStatus}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
@@ -535,7 +535,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     arStatus={pendingAction.arStatus}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
@@ -559,7 +559,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     arStatus={pendingAction.arStatus}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     pendingApprovers={pendingAction.pendingApprovers}
                     approvedApprovers={pendingAction.approvedApprovers}

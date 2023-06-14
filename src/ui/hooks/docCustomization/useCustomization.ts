@@ -7,9 +7,9 @@ import { UIConfig } from './types';
 
 const configureStatus = (status: string) => status && status.replace(' ', '_').toUpperCase();
 
-export const useAdministrativeChange = (documentTypeId = '',): UIConfig =>
+export const useAdministrativeChange = (documentTypeId = ''): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.ADM_CHANGE, 'documentRevision.form.administrativeChange');
-export const useApproveAndRelease = (documentTypeId = '',): UIConfig =>
+export const useApproveAndRelease = (documentTypeId = ''): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.APPROVE_RELEASE_BTN, 'common.approve.and.release');
 export const useCRLink = (documentTypeId = ''): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.CR_ID);

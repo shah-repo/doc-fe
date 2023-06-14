@@ -11,7 +11,7 @@ import { documentVersionPath } from '../../document.revision/utils/paths';
 import Colors from '../../layout/theme/utils/colors';
 
 interface FBEQMaintenanceHistoryProps {
-  maintenanceHistory?: DocumentRevision[];
+  maintenanceHistory?: DocumentRevision[]
 }
 
 const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
@@ -20,7 +20,7 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
   <Box mb={5} fontWeight="fontWeightBold">
     <Box display="flex" alignItems="center" mb={1}>
       <FBText
-        locale={'document.revision.history'}
+        locale="document.revision.history"
       />
       <ArrowDropDownIcon />
     </Box>

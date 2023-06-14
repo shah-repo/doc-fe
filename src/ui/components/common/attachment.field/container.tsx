@@ -93,15 +93,15 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
       (file) => {
         const type = file.name.split('.').pop();
         if (type === 'doc') {
-          !isUserAlertedNoDocFiles &&
-           toastError(intl.formatMessage({ id: 'common.attachment.form.DOCERROR' }));
+          !isUserAlertedNoDocFiles
+           && toastError(intl.formatMessage({ id: 'common.attachment.form.DOCERROR' }));
           isUserAlertedNoDocFiles = true;
           return false;
         }
 
         if (type !== 'docx' && cleanCopyRequired) {
-          !isUserAlrtedCleanCopyMismatch &&
-          toastError(intl.formatMessage({ id: 'common.attachment.form.Create.Clean.Copy.Error' }));
+          !isUserAlrtedCleanCopyMismatch
+          && toastError(intl.formatMessage({ id: 'common.attachment.form.Create.Clean.Copy.Error' }));
           isUserAlrtedCleanCopyMismatch = true;
           return false;
         }
@@ -118,13 +118,13 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
 
   return (
     <>
-      {isUploading &&
-      <Box>
+      {isUploading
+      && <Box>
         <CircularProgress color="secondary" />
       </Box>}
 
-      {!isUploading &&
-      <Box>
+      {!isUploading
+      && <Box>
         <Presenter
           {
             ...{

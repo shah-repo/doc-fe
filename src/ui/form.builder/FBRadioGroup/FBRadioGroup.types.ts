@@ -6,6 +6,6 @@ export type FBRadioGroupProps =
 & Omit<FBInputProps, 'onChange'>
 & Pick<RadioGroupProps, 'row' | 'onChange'>
 & {
-  controls?: React.ReactNode[];
-  controlValue?: string;
+  controls?: React.ReactNode[]
+  controlValue?: string
 };

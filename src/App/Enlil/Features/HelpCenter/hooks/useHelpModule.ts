@@ -9,8 +9,8 @@ import * as URL from '../../../../../ui/constants/urls';
 import { HelpModule } from '../HelpCenter.types';
 
 interface RouteChecker {
-  module: HelpModule;
-  check: (path: string) => boolean;
+  module: HelpModule
+  check: (path: string) => boolean
 }
 
 const ROUTES: RouteChecker[] = [
@@ -50,7 +50,7 @@ export default function useHelpModule(): HelpModule {
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
       documentMatch?.params.documentRevisionId,
-    )
+    ),
   );
 
   // Special case:

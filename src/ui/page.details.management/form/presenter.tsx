@@ -12,8 +12,8 @@ import { PageDetailsCategory } from '../types';
 import styles from './styles';
 
 interface Props extends FormikProps<PageDetailsCategory> {
-  handleTransition: () => void;
-  transitionLabel: Translation;
+  handleTransition: () => void
+  transitionLabel: Translation
 }
 
 export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
@@ -73,7 +73,7 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
             variant="outlined"
             data-cy={`submit.${props.values.category ? camelCase(props.values.category) : 'new'}`}
           >
-            <Text translation={'common.save'} />
+            <Text translation="common.save" />
           </Button>
           <Button onClick={handleTransition} variant="outlined">
             <Text translation={transitionLabel} />

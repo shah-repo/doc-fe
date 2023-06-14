@@ -22,7 +22,7 @@ class FBEBPartState {
   public documentTypeApi = new FBRequest<DocumentTypeById, null>(FBEndpoint.FetchDocumentType);
 
   // MARK: @constructor
-  public constructor(children: { childrenParts?: string; childrenPartsForRevise?: string }) {
+  public constructor(children: { childrenParts?: string, childrenPartsForRevise?: string }) {
     this.childrenParts = children.childrenParts;
     this.childrenPartsForRevise = children.childrenPartsForRevise;
   }

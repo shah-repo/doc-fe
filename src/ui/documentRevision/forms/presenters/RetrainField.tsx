@@ -6,10 +6,10 @@ import CheckboxField from '../../../components/forms/fields/Checkbox';
 import { useTraining } from '../../../hooks/docCustomization/useCustomization';
 
 interface Props {
-  revisionChangeType?: RevisionChangeType ;
-  documentTypeId?: string;
-  isDisabled?: boolean;
-  isRecord?: boolean;
+  revisionChangeType?: RevisionChangeType
+  documentTypeId?: string
+  isDisabled?: boolean
+  isRecord?: boolean
 }
 
 const RetrainField: React.FunctionComponent<Props> = ({

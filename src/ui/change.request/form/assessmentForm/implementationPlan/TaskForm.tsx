@@ -15,11 +15,11 @@ import Text from '../../../../components/Text';
 import { ImplementationPlanTaskFormValues } from '../../types';
 
 interface OwnProps extends FormikProps<ImplementationPlanTaskFormValues> {
-  cancel: () => void;
+  cancel: () => void
 }
 
 interface StateProps {
-  availableAssignees: OptionType[];
+  availableAssignees: OptionType[]
 }
 
 export type TaskFormProps = OwnProps & StateProps;

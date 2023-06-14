@@ -20,5 +20,5 @@ export default makeStyles(() =>
       'word-break': 'break-all',
       'letterSpacing': 0,
     },
-  })
+  }),
 );

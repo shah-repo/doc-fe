@@ -8,7 +8,7 @@ export type FBAutocompleteAsyncProps =
   autocompleteAsyncState?: FBAutocompleteAsyncState
   selectedOptions?: string[]
   shouldReloadOnInit?: boolean
-  additionalData?: any[]; // TODO: make autocomplete async generic type by data
+  additionalData?: any[] // TODO: make autocomplete async generic type by data
   forceNewRender?: boolean
   /**
    * @cfg {Record} Additional url params.

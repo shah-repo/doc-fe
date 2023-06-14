@@ -13,14 +13,14 @@ import { toMembersOptions } from '../../utils/transform';
 import GroupType from './GroupType';
 
 interface Props {
-  employees: GetEmployeeResponse[];
-  members: OptionType[];
-  setMembers: (state: any) => void;
-  isCreateMode?: boolean;
-  group: GroupRequestBody;
-  setGroup: (values: GroupRequestBody) => void;
-  handleAsyncState: () => AsyncActionPayload;
-  hasOfficialPermission: boolean;
+  employees: GetEmployeeResponse[]
+  members: OptionType[]
+  setMembers: (state: any) => void
+  isCreateMode?: boolean
+  group: GroupRequestBody
+  setGroup: (values: GroupRequestBody) => void
+  handleAsyncState: () => AsyncActionPayload
+  hasOfficialPermission: boolean
 }
 
 const SharedContent: React.FunctionComponent<Props> = ({
@@ -57,7 +57,7 @@ const SharedContent: React.FunctionComponent<Props> = ({
   const addMembersRenderer = () => (
     <Box width={700} mt={5}>
       <Typography variant="h4" style={{ marginBottom: '16px' }}>
-        <Text message={'common.members'} />
+        <Text message="common.members" />
       </Typography>
       <Select
         id="Group-members"

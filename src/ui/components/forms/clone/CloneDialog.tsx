@@ -23,8 +23,8 @@ import useAsync from '../../../hooks/useAsync';
 import { styles } from './CloneModal.styles';
 
 interface CloneModalProps {
-  handleCloneModelClose: () => void;
-  documentRevision: DocumentRevision;
+  handleCloneModelClose: () => void
+  documentRevision: DocumentRevision
 }
 
 const CloneModal: React.FunctionComponent<CloneModalProps> = ({
@@ -45,7 +45,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
       history.push({
         pathname: documentVersionPath(
           documentRevision.id,
-          documentRevision.document.id
+          documentRevision.document.id,
         ),
       });
     },
@@ -104,7 +104,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
         </Typography>
         <RadioGroup value={value} onChange={handleChange}>
           <FormControlLabel
-            value={'false'}
+            value="false"
             control={
               <Radio
                 classes={{ root: classes.radio, checked: classes.checked }}
@@ -120,7 +120,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
             }
           />
           <FormControlLabel
-            value={'true'}
+            value="true"
             control={
               <Radio
                 classes={{ root: classes.radio, checked: classes.checked }}

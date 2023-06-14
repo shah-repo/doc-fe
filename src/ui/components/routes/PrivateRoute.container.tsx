@@ -7,7 +7,7 @@ import { companyActions } from '../../../state/ducks/company';
 import PrivateRoutePresenter from './PrivateRoute.presenter';
 
 interface OwnProps extends RouteProps {
-  component: React.ComponentType;
+  component: React.ComponentType
 }
 
 type Props = OwnProps;

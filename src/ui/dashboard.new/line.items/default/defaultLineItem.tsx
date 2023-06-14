@@ -4,9 +4,9 @@ import { StyledListItem } from '../common/StyledListItem';
 import useStyles from './defaultLineItem.styles';
 
 interface Props {
-  type: string;
-  status?: string;
-  onMouseHoverItem: (id: string) => void;
+  type: string
+  status?: string
+  onMouseHoverItem: (id: string) => void
 }
 
 const ApprovalChangePresenter: React.FC<Props> = ({

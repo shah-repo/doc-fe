@@ -5,7 +5,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface Props {
-  documentRevision: DocumentRevision;
+  documentRevision: DocumentRevision
 }
 
 const PDFSocket: React.FunctionComponent<Props> = ({

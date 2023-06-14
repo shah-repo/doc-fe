@@ -14,11 +14,11 @@ import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
 import GroupContentContainer from './GroupContent.container';
 
 interface Props {
-  isOpen: boolean;
-  closeDialog: (flag?: boolean) => void;
-  selectedGroup?: LoadCompanyGroup;
-  title: any;
-  isCreateMode?: boolean;
+  isOpen: boolean
+  closeDialog: (flag?: boolean) => void
+  selectedGroup?: LoadCompanyGroup
+  title: any
+  isCreateMode?: boolean
 }
 
 const AddGroup: React.FunctionComponent<Props> = ({

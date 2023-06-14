@@ -4,7 +4,7 @@ import OutlinedInput, { OutlinedInputProps } from '@material-ui/core/OutlinedInp
 import { createStyles, withStyles } from '@material-ui/core/styles';
 
 interface ModifiedOutlinedInputProps extends Omit<OutlinedInputProps, 'labelWidth'> {
-  labelWidth?: OutlinedInputProps['labelWidth'];
+  labelWidth?: OutlinedInputProps['labelWidth']
 }
 
 export const InputField = withStyles((theme: Theme) =>

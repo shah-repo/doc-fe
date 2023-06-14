@@ -71,7 +71,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
           if (!data?.url) { return; }
           file.url = filePresenterState?.data?.url;
           handleLoaded();
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

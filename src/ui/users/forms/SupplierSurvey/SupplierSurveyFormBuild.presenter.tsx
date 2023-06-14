@@ -11,9 +11,9 @@ import SubmitButton from '../../../components/forms/SubmitButton';
 import { FBWorkspace } from '../../../form.builder';
 
 interface Props extends FormikProps<FBDocumentRevisionProps> {
-  asyncState: AsyncState;
-  supplierSurvey: SupplierSurveyForm;
-  name?: string;
+  asyncState: AsyncState
+  supplierSurvey: SupplierSurveyForm
+  name?: string
 }
 
 const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
@@ -45,7 +45,7 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
       <Box width="700px" display="flex" justifyContent="flex-end">
         <SubmitButton
           asyncState={asyncState}
-          label={'common.save'}
+          label="common.save"
           id="SupplierSurveyFormBuild-saveSurveyForm"
         />
       </Box>

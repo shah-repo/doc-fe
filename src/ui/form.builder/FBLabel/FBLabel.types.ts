@@ -4,17 +4,17 @@ import { ReactNode } from 'react';
 import { Props } from 'react-intl/lib/components/message';
 
 export interface FBLabelLocaleProps {
-  locale: string;
-  values: Props['values'];
+  locale: string
+  values: Props['values']
 }
 
 export type FBLabelProps =
   & Pick<FormControlProps, 'error'>
   & {
-    label?: string | ReactNode | FBLabelLocaleProps;
-    fontSize?: string | SvgIconProps['fontSize'] | 'sm' | 'md' | 'lg';
-    loading?: boolean;
-    labelProps?: BoxProps;
+    label?: string | ReactNode | FBLabelLocaleProps
+    fontSize?: string | SvgIconProps['fontSize'] | 'sm' | 'md' | 'lg'
+    loading?: boolean
+    labelProps?: BoxProps
   };
 
 export enum FBLabelFontSize {

@@ -7,7 +7,7 @@ jest.mock('../../Text');
 
 describe('File component tests', () => {
   interface TestFormValues {
-    test: File | null;
+    test: File | null
   }
   let formProps: FormikProps<TestFormValues>;
 

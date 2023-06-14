@@ -83,9 +83,9 @@ const makeGetAvailableReferences = () => createSelector(
 
       if (isDocumentRevisionPendingChange(status)) {
         if (
-          changeRequest &&
-            currentDocRev.changeRequest &&
-            changeRequest.id === currentDocRev.changeRequest.id
+          changeRequest
+            && currentDocRev.changeRequest
+            && changeRequest.id === currentDocRev.changeRequest.id
         ) {
           return true;
         }
@@ -100,10 +100,10 @@ const makeGetAvailableReferences = () => createSelector(
       return currentDocRev.document?.id !== docRev.document.id;
     });
 
-    const isCurrentRevFai =
-      checkIsTypeFaiInspection(currentDocRev.document?.documentType?.groupOptions);
-    const canCurrentRevCreateInspection =
-      checkCanTypeCreateInspection(currentDocRev.document?.documentType?.groupOptions);
+    const isCurrentRevFai
+      = checkIsTypeFaiInspection(currentDocRev.document?.documentType?.groupOptions);
+    const canCurrentRevCreateInspection
+      = checkCanTypeCreateInspection(currentDocRev.document?.documentType?.groupOptions);
 
     return uniqueIds.map((id) => {
       const { document, name, displayRevision } = docRevs[id];
@@ -113,8 +113,8 @@ const makeGetAvailableReferences = () => createSelector(
       return {
         value: document.id,
         label: `${document.docId} - ${displayRevision} - ${name}`,
-        deleteDisabled: ((isReferencePart && canCurrentRevCreateInspection) ||
-        (canReferenceCreateInspection && isCurrentRevFai)) && currentDocRev.id,
+        deleteDisabled: ((isReferencePart && canCurrentRevCreateInspection)
+        || (canReferenceCreateInspection && isCurrentRevFai)) && currentDocRev.id,
       };
     });
   },

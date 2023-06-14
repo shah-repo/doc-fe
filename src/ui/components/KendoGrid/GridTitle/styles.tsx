@@ -9,5 +9,5 @@ export const styles = makeStyles(() =>
       color: Colors.almost_black,
       textTransform: 'capitalize',
     },
-  })
+  }),
 );

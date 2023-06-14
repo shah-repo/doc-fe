@@ -15,14 +15,14 @@ import useStyles from './ChangeDocumentForm.styles';
 import { determineLabel, toFieldsOptions, toFormOptions } from './utils/transform';
 
 interface Props {
-  availableForms: DocumentTypeByIdForm[];
-  handleFormChange: (value) => void;
-  availableFields: FBSchemaProps[];
-  sourceSchema: FBSchemaProps[];
-  updateFormAsyncState: AsyncState;
-  isDialogOpen: boolean;
-  openDialog: () => void;
-  closeDialog: () => void;
+  availableForms: DocumentTypeByIdForm[]
+  handleFormChange: (value) => void
+  availableFields: FBSchemaProps[]
+  sourceSchema: FBSchemaProps[]
+  updateFormAsyncState: AsyncState
+  isDialogOpen: boolean
+  openDialog: () => void
+  closeDialog: () => void
 }
 
 function renderFields(availableFields: FBSchemaProps[], sourceSchema: FBSchemaProps[]) {

@@ -16,10 +16,10 @@ import useDialog from '../../../hooks/useDialog';
 import TrainingDialog from './dialog/TrainingDialog';
 
 interface Props {
-  trainingRecords: TrainingRecord[];
-  id: string;
-  document: DocumentRevisionDocument;
-  docDetails: Partial<DocumentRevision>;
+  trainingRecords: TrainingRecord[]
+  id: string
+  document: DocumentRevisionDocument
+  docDetails: Partial<DocumentRevision>
 }
 
 const CompleteTraining: React.FunctionComponent<Props> = ({
@@ -32,7 +32,7 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const completeTrainingAction = useActionCreator(trainingActions.completeSelfTaughtTraining);
   const doc: Document = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocument(state, document?.id)
+    documentRevisionsSelectors.getDocument(state, document?.id),
   );
   const docHasRetrain = doc?.documentRevisions.filter((item) => item.retrain);
 

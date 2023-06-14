@@ -15,12 +15,12 @@ import { InputField } from '../Input.styles';
 import { OptionType } from './types';
 
 interface AutocompleteOwnProps extends FieldOwnProps {
-  autocompleteProps: Omit<SelectComponentsProps, 'onChange'>;
-  options: OptionType[];
-  onClick?: (value: any) => void;
-  onChange?: (value: ValueType<OptionType>) => void;
-  isDisabled?: boolean;
-  portal?: boolean;
+  autocompleteProps: Omit<SelectComponentsProps, 'onChange'>
+  options: OptionType[]
+  onClick?: (value: any) => void
+  onChange?: (value: ValueType<OptionType>) => void
+  isDisabled?: boolean
+  portal?: boolean
 }
 
 export const selectStyles: StylesConfig = {

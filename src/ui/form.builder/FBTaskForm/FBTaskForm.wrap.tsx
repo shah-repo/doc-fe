@@ -74,7 +74,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBTaskFormActions {...{ handleAdd, handleCancel }} />
+        <FBTaskFormActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

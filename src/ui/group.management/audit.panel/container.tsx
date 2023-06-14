@@ -10,12 +10,12 @@ import Colors from '../../layout/theme/utils/colors';
 import AuditItemPresenter from './presenter';
 
 interface TranslatedTextProps {
-  [employeeName: string]: string;
+  [employeeName: string]: string
 }
 
 interface Props {
-  openHistoryPanel: boolean;
-  closeHistoryPanel: () => void;
+  openHistoryPanel: boolean
+  closeHistoryPanel: () => void
 }
 
 const AuditItemsContainer: React.FunctionComponent<Props> = ({
@@ -35,12 +35,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
-
   const addUpdatedGroupName = (sameGroup, companyGroupName) => {
     const auditTypes = map(sameGroup, 'auditType');
     if (
-      !auditTypes.includes(ACTION_TITLE_MAPPING.GroupNameUpdated) &&
-        !auditTypes.includes(ACTION_TITLE_MAPPING.AddedGroup)
+      !auditTypes.includes(ACTION_TITLE_MAPPING.GroupNameUpdated)
+        && !auditTypes.includes(ACTION_TITLE_MAPPING.AddedGroup)
     ) {
       sameGroup.unshift({
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, {}),
@@ -53,7 +52,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
 
   const createGroups = (
     groupedItems: GMAuditGroupProps[],
-    companyGroupName: string
+    companyGroupName: string,
   ) => {
     const similarGroups = groupBy(groupedItems, 'primaryText');
     let sameGroup = map(similarGroups, (items, key) => {
@@ -70,27 +69,27 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       if (auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroup, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroup, { groupName: '' }),
         );
       }
       if (auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: '' }),
         );
       }
       // UpdatedGroup
       if (auditType === ACTION_TITLE_MAPPING.UpdatedGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroups, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.UpdatedGroup, { groupName: '' }),
         );
       }
       // Added Members
       if (auditType === ACTION_TITLE_MAPPING.AddedMembers && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.AddedMembers, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.AddedMember, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.AddedMember, { groupName: '' }),
         );
       }
 
@@ -98,11 +97,11 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       if (auditType === ACTION_TITLE_MAPPING.RemovedMembers && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.RemovedMembers, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.RemovedMember, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.RemovedMember, { groupName: '' }),
         );
       }
-      let secondaryTextHtml = <span>{without(secondaryText, undefined, '').length ?
-        secondaryText.join(', ') : 'N/A'}</span>;
+      let secondaryTextHtml = <span>{without(secondaryText, undefined, '').length
+        ? secondaryText.join(', ') : 'N/A'}</span>;
       let primaryTextHtml = <span>{primaryText}</span>;
       if (auditType === ACTION_TITLE_MAPPING.GroupNameUpdated) {
         const items = secondaryText[0].split('-NAME-UP-DATED-TO-');
@@ -116,8 +115,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           </>
         );
       } else if (
-        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups ||
-        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
+        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups
+        || auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
       ) {
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.DeleteFromGroup);
         primaryTextHtml = (
@@ -135,8 +134,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           </>
         );
       } else if (
-        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups ||
-        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
+        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups
+        || auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
       ) {
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.AddToGroup);
         primaryTextHtml = (
@@ -303,7 +302,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         ]),
         descriptions: createGroups(
           groupedItems as GMAuditGroupProps[],
-          getGroupName(companyGroupIds)
+          getGroupName(companyGroupIds),
         ),
       };
     });

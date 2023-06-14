@@ -13,14 +13,14 @@ import { versionNumber } from '../../helpers/generateRevisionNumber';
 import { styles } from './RevisionTypeChange.styles';
 
 interface Props {
-  documentTypeId?: string;
-  isDisabled: boolean;
-  isDocRevFirstDraft: boolean;
-  showAdministrativeAndVoidChange: boolean;
-  isRecord?: boolean;
-  isPORecord?: boolean;
-  releasedDocRev?: DocumentRevision;
-  isAlphaReleased: boolean;
+  documentTypeId?: string
+  isDisabled: boolean
+  isDocRevFirstDraft: boolean
+  showAdministrativeAndVoidChange: boolean
+  isRecord?: boolean
+  isPORecord?: boolean
+  releasedDocRev?: DocumentRevision
+  isAlphaReleased: boolean
 }
 const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = '',
@@ -79,8 +79,8 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
       <RadioGroup name="revisionChangeType" validate={validator(required)}>
         <Box>
           {
-            showNextRevisionLevel && !showAdministrativeAndVoidChange &&
-            <CustomLabelTooltip tooltipConfig={revisionLevelTooltipConfig}>
+            showNextRevisionLevel && !showAdministrativeAndVoidChange
+            && <CustomLabelTooltip tooltipConfig={revisionLevelTooltipConfig}>
               <>
                 <RadioButton
                   label={
@@ -101,8 +101,8 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
         </Box>
         <Box>
           {
-            showNextRevisionStage && !showAdministrativeAndVoidChange && !isAlphaReleased &&
-            <CustomLabelTooltip tooltipConfig={revisionStageTooltipConfig}>
+            showNextRevisionStage && !showAdministrativeAndVoidChange && !isAlphaReleased
+            && <CustomLabelTooltip tooltipConfig={revisionStageTooltipConfig}>
               <>
                 <RadioButton
                   label={
@@ -125,8 +125,8 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
         </Box>
         <Box>
           {
-            showObsolete && !isDocRevFirstDraft && !isPORecord &&
-            <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
+            showObsolete && !isDocRevFirstDraft && !isPORecord
+            && <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
               <>
                 <RadioButton
                   label={
@@ -145,8 +145,8 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
         </Box>
         <Box>
           {
-            showAdministrationChange && !isPORecord && !isDocRevFirstDraft &&
-            <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
+            showAdministrationChange && !isPORecord && !isDocRevFirstDraft
+            && <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
               <>
                 <RadioButton
                   label={

@@ -8,14 +8,14 @@ import { userManagementSelectors } from '../../../../state/ducks/userManagement'
 import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
 
 interface TagsCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number | undefined;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  field?: string;
-  isOfficial: boolean;
+  dataItem: any
+  rowType?: string
+  colSpan?: number | undefined
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  field?: string
+  isOfficial: boolean
 }
 
 export const TagsCell = ({
@@ -32,7 +32,7 @@ export const TagsCell = ({
   const tags = dataItem[field || ''];
 
   const allGroups = cloneDeep(uniq(useSelector(userManagementSelectors.getOfficialGroups).filter(
-    (group) => group.tags && group.tags.length
+    (group) => group.tags && group.tags.length,
   ).map((e) => e.tags).flat().sort()));
 
   if (!allGroups.includes(GroupTag.PO_ADMIN)) {

@@ -37,39 +37,39 @@ import useStyles from './approverActions.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  docId: string;
-  docRevId: string;
-  type: string;
-  docRevName: string;
-  docRevVersion: string;
-  purchaseOrderSupplierDocRevId: string;
-  purchaseOrderSupplierDocId: string;
-  status: string;
-  timestamp: string;
+  id: string
+  docDocumentId: string
+  docId: string
+  docRevId: string
+  type: string
+  docRevName: string
+  docRevVersion: string
+  purchaseOrderSupplierDocRevId: string
+  purchaseOrderSupplierDocId: string
+  status: string
+  timestamp: string
   purchaseOrderAttachments?:
   | {
-    name: string;
-    type: string;
-    id: string;
-  }[];
-  purchaseOrdeLineItemCount?: number;
-  purchaseOrderDescription?: string;
-  purchaseOrderCurrency?: string;
-  purchaseOrderTotalAmount?: string;
-  purchaseSupplierName?: string;
-  approverName: string;
-  approvalId: string;
-  approverAvatar: Nullable<string>;
-  approverInitialColor: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+    name: string
+    type: string
+    id: string
+  }[]
+  purchaseOrdeLineItemCount?: number
+  purchaseOrderDescription?: string
+  purchaseOrderCurrency?: string
+  purchaseOrderTotalAmount?: string
+  purchaseSupplierName?: string
+  approverName: string
+  approvalId: string
+  approverAvatar: Nullable<string>
+  approverInitialColor: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 const ApproverActionItemPresenter: React.FC<Props> = ({
   id,
@@ -191,8 +191,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
       >
-        {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED &&
-        open ? (
+        {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED
+        && open ? (
             <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
           ) : (
             <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
@@ -287,8 +287,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     </Typography>
                   </Grid>
                 )}
-                {STATUS_TYPES_LABEL.APPROVED !== status &&
-                  STATUS_TYPES_LABEL.REJECTED !== status && (
+                {STATUS_TYPES_LABEL.APPROVED !== status
+                  && STATUS_TYPES_LABEL.REJECTED !== status && (
                   <Grid item={true}>
                     <Typography
                       component="span"
@@ -345,7 +345,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -376,8 +376,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 />
               </span>
             )}
-            {
-              <StyleTooltip
+            <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
@@ -391,7 +390,6 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   />
                 </span>
               </StyleTooltip>
-            }
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon
@@ -480,7 +478,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                         poItem.rtext
                           ? documentVersionPath(
                             purchaseOrderSupplierDocRevId || '',
-                            purchaseOrderSupplierDocId
+                            purchaseOrderSupplierDocId,
                           )
                           : ''
                       }

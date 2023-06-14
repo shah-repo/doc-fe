@@ -10,11 +10,11 @@ import { useAssignOperatorsToDocument } from '../../hooks/docCustomization/useCu
 import AccessPermissionsPresenter from './AccessPermissions.presenter.new';
 
 interface OwnProps {
-  canAccess: boolean;
-  withoutCurrentUser: boolean;
-  documentRevisionId: string;
-  documentId: string;
-  documentTypeId: string;
+  canAccess: boolean
+  withoutCurrentUser: boolean
+  documentRevisionId: string
+  documentId: string
+  documentTypeId: string
 }
 
 type AccessPermissionsContainerProps = OwnProps;

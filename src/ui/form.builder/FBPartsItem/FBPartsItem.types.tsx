@@ -21,6 +21,6 @@ export type FBPartsItemProps =
 & Pick<FBInputProps, 'gutter'>
 & Pick<FBProcedureItemProps, 'name' | 'type' | 'getItem' | 'getLot' | 'loading'>
 & {
-  getItemUrl?(id: string): string | undefined;
-  collection?: FBProcedureItemConfig[];
+  getItemUrl?(id: string): string | undefined
+  collection?: FBProcedureItemConfig[]
 };

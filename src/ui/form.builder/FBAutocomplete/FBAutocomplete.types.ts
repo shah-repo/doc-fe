@@ -15,21 +15,21 @@ export type FBAutocompleteProps =
  | 'groupBy'
  | 'disableClearable'
  > & {
-   onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
-   refresh?: () => any;
-   autoCompleteClasses?: AutocompleteProps['classes'];
-   disabledOptions?: string[];
-   customStyles?: {};
-   groupByKey?: string;
-   inputStyle?: any;
-   modifiedOptions?: any[];
-   debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
-   inputPropStyle?: React.CSSProperties;
-   inputPropStyleSize?: any;
-   isDocumentLHRT?: boolean;
+   onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any
+   refresh?: () => any
+   autoCompleteClasses?: AutocompleteProps['classes']
+   disabledOptions?: string[]
+   customStyles?: {}
+   groupByKey?: string
+   inputStyle?: any
+   modifiedOptions?: any[]
+   debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void
+   inputPropStyle?: React.CSSProperties
+   inputPropStyleSize?: any
+   isDocumentLHRT?: boolean
    /**
     * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.
     */
-   disableBackspace?: boolean;
-   disableChipDelete?: boolean;
+   disableBackspace?: boolean
+   disableChipDelete?: boolean
  };

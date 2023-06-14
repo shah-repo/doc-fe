@@ -26,7 +26,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const setSearchStatus = (
     dataState: DataStateProps,
-    columns: KendoColumn[]
+    columns: KendoColumn[],
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -38,16 +38,16 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
           },
           columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        CR_TABLE_NAME
-      )
+        CR_TABLE_NAME,
+      ),
     );
   };
 
   useEffect(() => {
     if (
-      isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters) &&
-      isEmpty(tableCriteria?.queryDict?.dataState?.sort) &&
-      isEmpty(tableCriteria?.queryDict?.dataState?.group)
+      isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters)
+      && isEmpty(tableCriteria?.queryDict?.dataState?.sort)
+      && isEmpty(tableCriteria?.queryDict?.dataState?.group)
     ) {
       const dataState: DataStateProps = {
         filter: {

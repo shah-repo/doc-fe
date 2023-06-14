@@ -18,8 +18,8 @@ import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers
 import FBDataStore from '../FBStore/FBDataStore';
 
 interface CheckApprovalsArguments {
-  prevRequester?: string;
-  poItems?: FBPurchaseOrderValue;
+  prevRequester?: string
+  poItems?: FBPurchaseOrderValue
 }
 
 export const usePoApprovals = (
@@ -32,8 +32,8 @@ export const usePoApprovals = (
   const { document: documentRevision }  = workspaceState || {};
   const authUser = store.getState().auth.user;
   const isCurrentUserOperator = some(documentRevision?.document.operators, ['user.email', authUser.email ]);
-  const canEditDocRev = documentRevision &&
-  canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
+  const canEditDocRev = documentRevision
+  && canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
 
   const getSignatureGroupName = (id: string) => {
     const approversGroups = compact(map(poApprovalsState?.groups, (group) =>
@@ -59,7 +59,7 @@ export const usePoApprovals = (
     if (updatedSignatureGroupName) {
       return poApprovalsState?.updateSignatureGroupName(
         approval.id,
-        updatedSignatureGroupName
+        updatedSignatureGroupName,
       );
     }
   };
@@ -76,8 +76,8 @@ export const usePoApprovals = (
   const updateSignatureGroupNames = async () => {
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
 
-    const shouldUpdate =
-      isDocumentRevisionInDraft(workspaceState?.document?.status)
+    const shouldUpdate
+      = isDocumentRevisionInDraft(workspaceState?.document?.status)
       && !isAdministrativeChange
       && poApprovalsState?.requireAdditionalApprovers;
 
@@ -86,7 +86,7 @@ export const usePoApprovals = (
     }
 
     return updateSignaturesQueue(
-      sortBy(poApprovalsState?.activeApprovals, 'signatureGroupName').map((approval) => approval.id)
+      sortBy(poApprovalsState?.activeApprovals, 'signatureGroupName').map((approval) => approval.id),
     );
   };
 
@@ -198,7 +198,7 @@ export const usePoApprovals = (
       if (groups && workspaceState) {
         updateSignatureGroupNames();
       }
-    }
+    },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 
@@ -206,7 +206,7 @@ export const usePoApprovals = (
     () => poApprovalsState?.approvalApi.data,
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
-    }
+    },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 
@@ -220,7 +220,7 @@ export const usePoApprovals = (
         document.location.reload(); // documentRevision values are not consistent.
       }
       updateSignatureGroupNames();
-    }
+    },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 

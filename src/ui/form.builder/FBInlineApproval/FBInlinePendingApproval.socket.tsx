@@ -6,7 +6,6 @@ const FBInlinePendingApprovalSocket: React.FunctionComponent<{}> = () => {
   const { workspaceState } = FB.useStores();
   const { id } = workspaceState || {};
 
-
   const callback = useCallback(() => {
     window.location.reload();
   }, []);
@@ -15,7 +14,6 @@ const FBInlinePendingApprovalSocket: React.FunctionComponent<{}> = () => {
   , [id]);
 
   useMqttSubscription(topic, callback);
-
 
   return null;
 };

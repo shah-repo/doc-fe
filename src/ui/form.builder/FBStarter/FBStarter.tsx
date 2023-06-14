@@ -19,13 +19,13 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
   const { _documentRevisionFormState } = SM.useStores();
 
   const isEQ = checkIsDocumentEquipment(
-    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions
+    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions,
   );
   if (isNewLayout) {
     return (
       <Box
         display="flex"
-        className={'fbStarterAddField'}
+        className="fbStarterAddField"
         mb={1}
         mt={6}
         onMouseEnter={() => setIsHover(true)}

@@ -9,8 +9,8 @@ import Text from '../../../components/Text';
 import { styles } from './ApiToken.style';
 
 interface Props {
-  tableName: string;
-  disableApiToken: (id: string) => void;
+  tableName: string
+  disableApiToken: (id: string) => void
 }
 
 const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({

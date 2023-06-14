@@ -10,17 +10,17 @@ export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest> & Au
 export type ContainerOwnProps = RouteComponentProps<RouteParams>;
 
 export interface ContainerDispatchProps {
-  load: typeof changeRequestsActions.load;
+  load: typeof changeRequestsActions.load
 }
 
 // Common
 export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
 
 export interface RouteParams {
-  changeRequestId: string;
+  changeRequestId: string
 }
 
 export interface RouteParamsCreate {
-  documentTypeId: string;
-  formId: string;
+  documentTypeId: string
+  formId: string
 }

@@ -24,7 +24,7 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
       if (lastVersion > version) {
         window.location.href = documentVersionPath(documentRevision.id, documentId);
       }
-    }
+    },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
   const callback = useCallback(() => {

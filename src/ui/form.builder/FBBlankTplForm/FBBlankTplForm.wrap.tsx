@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { FB, FBBlankTplFormProps, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
 
-
 export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -30,7 +29,7 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
             name,
             defaultValue: formState?.inputState.get(name || '')?.value,
           });
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -11,7 +11,7 @@ import { scrollToBottom } from '../../line.items/common/Utils';
 import TrainingLineItemsPresenter from './TrainingLineItems.presenter';
 
 interface TrainingLineItemsProps {
-  tabValue: number;
+  tabValue: number
 }
 
 const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
@@ -22,11 +22,11 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   const [offset, setOffset] = React.useState(TRAINING_STATS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(TRAINING_STATS_LIMIT);
   const loadTrainingStatsList = useActionCreator(
-    trainingStatsActions.loadTrainingStatsList
+    trainingStatsActions.loadTrainingStatsList,
   );
 
   const loadTrainingStatsListAsyncInfo = useSelector(
-    trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
+    trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo,
   );
 
   // Create Payload on Tab Change

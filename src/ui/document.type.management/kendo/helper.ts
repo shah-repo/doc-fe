@@ -17,4 +17,3 @@ const checkIfJSONObject = (value: string, title: string) => {
   }
 };
 export default checkIfJSONObject;
-
