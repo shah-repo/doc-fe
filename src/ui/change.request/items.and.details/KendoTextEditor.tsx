@@ -24,6 +24,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const { formState } = FB.useStores();
   const formik = useFormikContext();
   const intl = useIntl();
+  const maxAutoRowExpandSize = 4;
   defaultValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const classes = styles();
 
@@ -35,15 +36,15 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   };
 
   const textEditorRenderComponent = ({ field }: FieldProps) => {
-    const defaultVal = (defaultValue ?? field?.value) as string;
+    const value = (defaultValue ?? field?.value) as string;
     return (<>
       <TextareaAutosize
-        defaultValue={defaultVal}
+        defaultValue={value}
         onBlur={onBlur}
         className={classes.textArea}
-        rowsMax={4}
+        rowsMax={maxAutoRowExpandSize}
       />
-      {!defaultVal && <p className={classes.error}>
+      {!value && <p className={classes.error}>
         <span>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</span>
       </p>}
     </>);
