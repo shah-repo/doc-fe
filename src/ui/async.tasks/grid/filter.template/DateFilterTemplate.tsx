@@ -23,7 +23,7 @@ export const DateFilterTemplate = ({
       value: isValueExists
         ? getFormattedDateString(
           target.value,
-          MomentFormats.AsyncTasksDefaultDateTimeFormatter
+          MomentFormats.AsyncTasksDefaultDateTimeFormatter,
         )
         : '',
       operator: isValueExists ? 'lte' : '',

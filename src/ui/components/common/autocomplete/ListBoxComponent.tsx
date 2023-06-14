@@ -48,8 +48,8 @@ const useResetCache = (data: any) => {
 };
 
 // Adapter for react-window
-const ListBoxComponent: React.ForwardRefExoticComponent<RefAttributes<HTMLDivElement>> =
-  forwardRef<HTMLDivElement>(function ListBoxComponent(props, ref) {
+const ListBoxComponent: React.ForwardRefExoticComponent<RefAttributes<HTMLDivElement>>
+  = forwardRef<HTMLDivElement>(function ListBoxComponent(props, ref) {
     const { children, ...other } = props;
     const itemData = Children.toArray(children);
     const itemCount = itemData.length;

@@ -15,12 +15,12 @@ import useGetHasTag from '../../hooks/useGetHasTag';
 import UserProfilePresenter from './UserProfile.presenter';
 
 interface GetEmployeeResponseCustom extends GetEmployeeResponse {
-  groupsOrg?: Group[];
+  groupsOrg?: Group[]
 }
 interface Props {
-  closeUserProfile: () => void;
-  showUserProfile: boolean;
-  selectedEmployee: GetEmployeeResponse;
+  closeUserProfile: () => void
+  showUserProfile: boolean
+  selectedEmployee: GetEmployeeResponse
 }
 
 const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
@@ -115,7 +115,7 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
       getSlackUrlAction,
       Config.SlackUserUri,
       USER_SLACK_URL,
-      asyncSlack
+      asyncSlack,
     );
   };
 

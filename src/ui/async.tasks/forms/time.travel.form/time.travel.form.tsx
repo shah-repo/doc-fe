@@ -10,7 +10,7 @@ import AsyncTime from '../async.time';
 import { styles } from './time.travel.form.styles';
 
 interface Props {
-  handleTimeTravelFormSubmit: (values: TimeTravelProps) => void;
+  handleTimeTravelFormSubmit: (values: TimeTravelProps) => void
 }
 const RecentsPresenter: React.FunctionComponent<Props> = ({
   handleTimeTravelFormSubmit,
@@ -28,7 +28,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   };
   const handleSubmit = (values: TimeTravelProps) => {
     const isAllValuesAreEmpty = !Object.values(values).some(
-      (fieldValue) => +fieldValue > 0
+      (fieldValue) => +fieldValue > 0,
     );
     if (!isAllValuesAreEmpty) {
       handleTimeTravelFormSubmit(values);
@@ -57,7 +57,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             </Box>
             <Box display="flex" justifyContent="flex-end" mt={1}>
               <Button type="submit" variant="contained" color="secondary">
-                <Text translation={'common.submit'} />
+                <Text translation="common.submit" />
               </Button>
             </Box>
           </Form>

@@ -34,8 +34,8 @@ const AsyncNextTask: React.FunctionComponent<AsyncProps> = ({
   } else {
     NEXT_TASK = NEXT_TASK_TYPES_USER;
   }
-  const isAllSelected =
-    NEXT_TASK.length > 0 && selected.length === NEXT_TASK.length;
+  const isAllSelected
+    = NEXT_TASK.length > 0 && selected.length === NEXT_TASK.length;
   const handleChange = (event, setFieldValue) => {
     let value = event.target.value;
     if (value[value.length - 1] === 'all') {
@@ -57,10 +57,10 @@ const AsyncNextTask: React.FunctionComponent<AsyncProps> = ({
   };
 
   return (
-    <Grid item={true} sm={4} data-cy={'next.task'} >
+    <Grid item={true} sm={4} data-cy="next.task" >
       <FormControl className={classes.formControl}>
         <InputLabel id="mutiple-select-label">
-          <Text translation={'async.task.next.task'} />
+          <Text translation="async.task.next.task" />
         </InputLabel>
         <Select
           labelId="mutiple-select-label"
@@ -96,7 +96,7 @@ const AsyncNextTask: React.FunctionComponent<AsyncProps> = ({
             </ListItemIcon>
             <ListItemText
               classes={{ primary: classes.selectAllText }}
-              primary={<Text translation={'common.select.all'} />}
+              primary={<Text translation="common.select.all" />}
             />
           </MenuItem>
           {NEXT_TASK.map((option) => (

@@ -4,7 +4,7 @@ import React from 'react';
 import { FB, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from '..';
 
 export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
@@ -35,7 +35,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
         (data) => {
           formState?.setFieldValue(name, cloneDeep(data?.[type || '']));
           formState?.setFieldAutosave(name);
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

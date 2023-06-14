@@ -19,7 +19,6 @@ export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGri
   ))
 );
 
-
 export const formDataToStoreData = (
   documentRevisionsAssigned: FBDocumentRevisionsValue[], documentRevisionsData?: any[]) =>
 
@@ -37,8 +36,8 @@ export const formDataToStoreData = (
 
     const docRevId = item.proposedDocumentRevision.id;
 
-    const { displayRevision, name, document } =
-        documentRevisionsData?.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
+    const { displayRevision, name, document }
+        = documentRevisionsData?.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
     if (document) {
       entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
       entryInfo.isPart = document.documentType.group === DOC_TYPE_GROUP.PART;
@@ -48,4 +47,3 @@ export const formDataToStoreData = (
 
     return entryInfo;
   });
-

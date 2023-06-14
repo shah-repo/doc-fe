@@ -19,7 +19,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const [overallLimit, setOverallLimit] = React.useState(TRAINING_LIMIT);
   const loadTrainingList = useActionCreator(trainingActions.loadTrainingList);
   const loadTrainingListAsyncInfo = useSelector(
-    trainingSelectors.getLoadTrainingListAsyncInfo
+    trainingSelectors.getLoadTrainingListAsyncInfo,
   );
   const dispatch = useDispatch();
   const pinnedOrUnPinnedAsync = useAsync({
@@ -29,9 +29,9 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       dispatch(trainingActions.loadTrainingList(TRAINING_INITIAL_PAYLOAD));
     },
   });
-  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
+  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem,
   );
-  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem
+  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem,
   );
   const pinLineItem = (id: string) => {
     pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);
@@ -62,7 +62,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       asyncState={loadTrainingListAsyncInfo}
       startActionOnMount={true}
     >
-      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem, overallLimit }} onLoadMoreData={onLoadMoreData}/>
+      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem, overallLimit }} onLoadMoreData={onLoadMoreData} />
     </AsyncGate>
   );
 };

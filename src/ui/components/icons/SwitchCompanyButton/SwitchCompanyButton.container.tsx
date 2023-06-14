@@ -8,8 +8,8 @@ import { ApplicationState } from '../../../../state/reducers';
 import Text from '../../Text';
 
 interface StateProps {
-  isUserAuthenticated: boolean;
-  employees: Employee[];
+  isUserAuthenticated: boolean
+  employees: Employee[]
 }
 
 type SwitchCompanyButtonProps = StateProps & Pick<RouteComponentProps, 'location'>;

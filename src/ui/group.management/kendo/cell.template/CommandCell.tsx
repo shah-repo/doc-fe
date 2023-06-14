@@ -11,16 +11,16 @@ import Tooltip from '../../../components/common/kendo/Tooltip';
 import Commandstyles from './CommandCell.styles';
 
 interface CommandCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  update: ((props: GroupRequestBody) => void);
-  discard: ((props: LoadCompanyGroup) => void);
-  cancel: (() => void);
-  edit: ((props: GridRowClickEvent) => void);
+  dataItem: any
+  rowType?: string
+  colSpan?: number
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  update: ((props: GroupRequestBody) => void)
+  discard: ((props: LoadCompanyGroup) => void)
+  cancel: (() => void)
+  edit: ((props: GridRowClickEvent) => void)
 }
 
 export const CommandCell = ({

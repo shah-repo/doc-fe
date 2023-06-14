@@ -31,8 +31,8 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 interface Props{
-  status?: DocumentRevisionStatus;
-  displayStatus?: DocumentRevisionStatus;
+  status?: DocumentRevisionStatus
+  displayStatus?: DocumentRevisionStatus
 }
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const headerBackgroundClasses = headerBackgroundStyles();

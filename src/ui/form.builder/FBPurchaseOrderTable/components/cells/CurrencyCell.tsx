@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
+import { defaultCurrency } from '../../../../../common/intl';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBPurchaseOrderItem } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
 import ContentCell from './ContentCell';
-import { defaultCurrency } from '../../../../../common/intl';
 
 const SumCell: CellComponent<FBPurchaseOrderItem, { currency?: string }> = ({
   dataItem,
@@ -21,6 +21,7 @@ const SumCell: CellComponent<FBPurchaseOrderItem, { currency?: string }> = ({
     >
       <FormattedNumber
         value={value}
+        // eslint-disable-next-line react/style-prop-object
         style="currency"
         currency={currency}
       />

@@ -7,9 +7,9 @@ import Text from '../components/Text';
 import { Translation } from '../translations/types';
 
 interface SubmitButtonProps extends ButtonProps {
-  asyncState: AsyncState;
-  label: Translation;
-  errors?: FormikErrors<any>;
+  asyncState: AsyncState
+  label: Translation
+  errors?: FormikErrors<any>
 }
 
 const AsyncButton: React.FunctionComponent<SubmitButtonProps> = ({

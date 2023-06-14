@@ -18,8 +18,8 @@ import useAsync from '../../hooks/useAsync';
 import { AddEmployeeFormValues } from './form.container';
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
-  asyncState: AsyncState;
-  groupOptions: OptionType[];
+  asyncState: AsyncState
+  groupOptions: OptionType[]
 }
 
 const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
@@ -115,7 +115,7 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
           </Button>
           <SubmitButton
             asyncState={asyncState}
-            label={'common.save'}
+            label="common.save"
             id="AddEmployeeFormPresenter-submitForm"
           />
         </Grid>

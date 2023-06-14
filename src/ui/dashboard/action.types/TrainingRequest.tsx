@@ -7,8 +7,8 @@ import { documentVersionPath } from '../../document.revision/utils/paths';
 import DashboardActionTypeBase from './DashboardActionTypeBase';
 
 interface Props {
-  index: number;
-  trainingRecord: TrainingRecord;
+  index: number
+  trainingRecord: TrainingRecord
 }
 
 const TrainingRequest: React.FunctionComponent<Props> = ({

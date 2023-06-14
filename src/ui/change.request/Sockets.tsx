@@ -6,7 +6,7 @@ import useAsync from '../hooks/useAsync';
 import useMqttSubscription from '../hooks/useMqttSubscription';
 
 interface Props {
-  changeRequest: ChangeRequest;
+  changeRequest: ChangeRequest
 }
 
 const ChangeRequestSockets: React.FunctionComponent<Props> = ({

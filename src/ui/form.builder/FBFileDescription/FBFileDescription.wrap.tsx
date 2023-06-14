@@ -17,7 +17,7 @@ export const withFBFileDescription = <T extends FBFileDescriptionProps>(
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBFileDescriptionActions {...{ handleAdd, handleCancel }} />
+        <FBFileDescriptionActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

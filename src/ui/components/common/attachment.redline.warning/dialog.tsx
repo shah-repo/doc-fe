@@ -7,13 +7,13 @@ import { FormContext } from '../../forms/FormContext';
 import RedlineWarningForm from './form/warningform';
 
 interface Props {
-  onSubmit: () => void;
-  closeDialog: () => void;
-  isDialogOpen: boolean;
-  asyncState: AsyncState;
-  dialogTitle?: Translation;
-  translationText: Translation;
-  translationButtonText?: string;
+  onSubmit: () => void
+  closeDialog: () => void
+  isDialogOpen: boolean
+  asyncState: AsyncState
+  dialogTitle?: Translation
+  translationText: Translation
+  translationButtonText?: string
 }
 
 export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
@@ -42,7 +42,7 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
       open={isDialogOpen}
       onSubmit={preventPropagation}
     >
-      <DialogContent data-cy={'download.warning'}>
+      <DialogContent data-cy="download.warning">
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
             initialValues={{ password: '' }}

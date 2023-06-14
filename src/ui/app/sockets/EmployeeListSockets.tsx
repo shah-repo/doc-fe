@@ -7,7 +7,6 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
-
 const EmployeeListSockets: React.FunctionComponent = () => {
 
   const loadAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);

@@ -23,7 +23,7 @@ class FBDownloadSheetTplState {
       link.click();
       link.remove();
       toastSuccess(
-        intl.formatMessage({ id: 'document.revision.bulkCreate.download.excelTemplate' })
+        intl.formatMessage({ id: 'document.revision.bulkCreate.download.excelTemplate' }),
       );
     });
   };

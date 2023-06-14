@@ -21,5 +21,5 @@ export default makeStyles((theme: Theme) =>
     actions: {
       padding: theme.spacing(.5, 1, 0),
     },
-  })
+  }),
 );

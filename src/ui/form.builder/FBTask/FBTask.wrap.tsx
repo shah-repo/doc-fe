@@ -34,9 +34,9 @@ export const withFBTask = <T extends FBTaskProps>(
     onClick = (id?: string) => {
       taskState?.handleAddTask(Boolean(crId));
       const initialValues = taskState?.getTask(id);
-      const title = initialValues ?
-        'form.builder.edit.implementation.task' :
-        'form.builder.add.implementation.task';
+      const title = initialValues
+        ? 'form.builder.edit.implementation.task'
+        : 'form.builder.add.implementation.task';
 
       dialogState?.config({
         open: Boolean(crId),

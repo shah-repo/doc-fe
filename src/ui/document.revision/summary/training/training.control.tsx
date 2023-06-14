@@ -24,8 +24,8 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   const async = useAsync({ onSuccess: dialog.close });
 
   const trainingRecord = useMemo(() =>
-    dataProp &&
-    dataProp.find((record) => !record.completedAt && record.isValid)
+    dataProp
+    && dataProp.find((record) => !record.completedAt && record.isValid)
   , [dataProp]);
 
   if (!trainingRecord) {

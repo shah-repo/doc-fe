@@ -13,9 +13,9 @@ import useAsync from '../../../hooks/useAsync';
 import { DialogHandler } from '../../../hooks/useDialog';
 
 interface Props {
-  dialog: DialogHandler;
-  docRevId: string;
-  docRevOwner: string;
+  dialog: DialogHandler
+  docRevId: string
+  docRevOwner: string
 }
 
 export const VoidPOStatusDialog: React.FunctionComponent<Props> = ({

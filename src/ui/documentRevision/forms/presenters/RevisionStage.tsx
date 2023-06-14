@@ -11,11 +11,11 @@ import { useRevisionStageSelect } from '../../../hooks/docCustomization/useCusto
 import { styles } from './styles/RevisionStage.styles';
 
 interface Props {
-  isDisabled: boolean;
-  isDocRevFirstDraft: boolean;
-  shouldShowRevStageForDocType: boolean;
-  documentTypeId: string;
-  defaultRevisionStage: string;
+  isDisabled: boolean
+  isDocRevFirstDraft: boolean
+  shouldShowRevStageForDocType: boolean
+  documentTypeId: string
+  defaultRevisionStage: string
 }
 
 const RevisionStage: React.FunctionComponent<Props> = ({
@@ -28,9 +28,9 @@ const RevisionStage: React.FunctionComponent<Props> = ({
   const { isVisible } = useRevisionStageSelect(documentTypeId);
   const classes = styles();
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
-  const revStageOptions = numOfRevStages === 2 ?
-    RevisionStageOptions.filter((stage) => stage.value !== 2) :
-    RevisionStageOptions;
+  const revStageOptions = numOfRevStages === 2
+    ? RevisionStageOptions.filter((stage) => stage.value !== 2)
+    : RevisionStageOptions;
 
   if ((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType)) || (!isVisible && defaultRevisionStage)) {
     return null;
@@ -39,7 +39,7 @@ const RevisionStage: React.FunctionComponent<Props> = ({
   return (
     <Box>
       <Typography variant="h6" className={classes.title}>
-        <Text message={'document.revision.stage'}/>
+        <Text message="document.revision.stage" />
       </Typography>
       <RadioGroup name="revisionStage" validate={validator(required)}>
         {revStageOptions.map((option) =>

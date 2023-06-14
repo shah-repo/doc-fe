@@ -26,7 +26,7 @@ export const withFBApprovalPasswordForm = (
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBApprovalPasswordFormActions {...{ onDialogApprove, onDialogClose }} />
+        <FBApprovalPasswordFormActions {...{ onDialogApprove, onDialogClose }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

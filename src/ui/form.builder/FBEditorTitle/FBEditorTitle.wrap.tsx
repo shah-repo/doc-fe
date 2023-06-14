@@ -3,7 +3,7 @@ import React from 'react';
 import { FB, FBEditorTitleProps } from '..';
 
 export const withFBEditorTitle = <T extends FBEditorTitleProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     mode,

@@ -1,3 +1,3 @@
 export interface FBStateProps<T> {
-  state?: T;
+  state?: T
 }

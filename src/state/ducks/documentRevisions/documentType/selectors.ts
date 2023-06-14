@@ -66,8 +66,8 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
             DOC_TYPE_GROUP_OPTION.PO,
             DOC_TYPE_GROUP_OPTION.RECEIVABLE,
           ],
-          documentTypes[id].groupOptions
-        )
+          documentTypes[id].groupOptions,
+        ),
       )
         .map((id) => ({
           value: documentTypes[id].id,
@@ -86,8 +86,8 @@ const getDocumentTypeByAcronym = createSelector(
       .values(docTypesById)
       .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
 );
-const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
-  state.documentType.docRevTypeId.forms[0].id : '';
+const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0]
+  ? state.documentType.docRevTypeId.forms[0].id : '';
 
 const docRevTypeForms = (state: ApplicationState) => state.documentType.docRevTypeId.forms;
 

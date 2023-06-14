@@ -5,7 +5,6 @@ import InputField from '../../../../components/forms/fields/Input';
 import { ImplementationPlanTaskFormValues } from '../../types';
 import { TaskForm, TaskFormProps } from './TaskForm';
 
-
 describe('TaskForm tests', () => {
   let wrapper: ShallowWrapper;
   const defaultProps = {

@@ -35,7 +35,7 @@ export default class SM {
   public static reaction<T>(
     expression: (r: IReactionPublic) => T,
     effect: (arg: T, r: IReactionPublic) => void,
-    opts?: IReactionOptions
+    opts?: IReactionOptions,
   ) {
     if (!expression) { return; }
     useEffect(() => {

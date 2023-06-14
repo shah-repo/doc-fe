@@ -7,8 +7,8 @@ import POActions from './POActions';
 import PODetails from './PODetails';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  docRevAttachments: Attachment[];
+  documentRevision: DocumentRevision
+  docRevAttachments: Attachment[]
 }
 
 const PODetailsContainer: React.FunctionComponent<Props> = ({

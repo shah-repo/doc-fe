@@ -39,7 +39,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     }
     const ebPartState = FB.useRef(
       FBEBPartState,
-      { childrenParts: first(childrenParts)?.id, childrenPartsForRevise: first(childrenPartsForRevise)?.id }
+      { childrenParts: first(childrenParts)?.id, childrenPartsForRevise: first(childrenPartsForRevise)?.id },
     );
     const { id: ebId } = workspaceState || {};
 
@@ -53,7 +53,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       () => ebPartState?.childrenParts,
       (data) => {
         formState?.setFieldValue('childrenParts', data, true, true);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -85,9 +85,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          updateAudit
+          updateAudit,
         );
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [ebId]);
 
@@ -105,9 +105,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          updateAudit
+          updateAudit,
         );
-      }
+      },
     ));
 
     // on add part
@@ -131,16 +131,16 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       (value: PartType) => {
         formState?.getInputState('childrenParts')?.setHidden(value !== PartType.DocumentRevision);
         formState?.getInputState('childForRevise')?.setHidden(value === PartType.DocumentRevision);
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @observer
     useObserver(() => {
       loading = (
-        ebPartState?.newChildApi.loading ||
-        ebPartState?.existingChildApi.loading ||
-        ebPartState?.documentApi.loading
+        ebPartState?.newChildApi.loading
+        || ebPartState?.existingChildApi.loading
+        || ebPartState?.documentApi.loading
       );
       disabled = disabled || loading;
       partType = formState?.getInputState('partType')?.value;

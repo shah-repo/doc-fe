@@ -4,10 +4,9 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import EditRemoveAddFields from './EditRemoveAddFields';
 
-
 interface OwnProps {
-  canUpdateCompany: boolean;
-  addresses: string[];
+  canUpdateCompany: boolean
+  addresses: string[]
 }
 
 type Props = OwnProps;

@@ -8,11 +8,11 @@ import { AsyncState, AsyncStatus } from '../../../state/types';
 import Text from '../../components/Text';
 
 export interface SubmitButtonProps extends ButtonProps {
-  asyncState: AsyncState;
-  label: string;
-  errors?: FormikErrors<any>;
-  dataCy?: string;
-  showNewButton?: boolean;
+  asyncState: AsyncState
+  label: string
+  errors?: FormikErrors<any>
+  dataCy?: string
+  showNewButton?: boolean
 }
 
 const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({

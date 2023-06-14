@@ -52,15 +52,14 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                 <Box onMouseEnter={() => setIsHover(true)}
                   onMouseLeave={() => setIsHover(false)}>
                   <FBTooltip title="form.builder.clone.step">
-                    { isHover ?
-                      <CloneIcon
+                    { isHover
+                      ? <CloneIcon
                         data-cy="form.builder.clone.step"
                         onClick={() => handleAdd?.(true)}
                         {...{ disabled }}
                         style={{ marginLeft: '15px', cursor: 'pointer' }}
                       />
-                      :
-                      <OutlinedCloneIcon
+                      :                      <OutlinedCloneIcon
                         data-cy="form.builder.clone.step"
                         onClick={() => handleAdd?.(true)}
                         {...{ disabled }}
@@ -72,14 +71,13 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                 <Box onMouseEnter={() => setIsHoverAddIcon(true)}
                   onMouseLeave={() => setIsHoverAddIcon(false)}>
                   <FBTooltip title="form.builder.add">
-                    { isAddIconHover ?
-                      <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
+                    { isAddIconHover
+                      ? <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
                         data-cy="form.builder.add.step"
                         onClick={() => handleAdd?.()}
                         {...{ disabled }}
                       />
-                      :
-                      <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                      :                      <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                         data-cy="form.builder.add.step"
                         onClick={() => handleAdd?.()}
                         {...{ disabled }}

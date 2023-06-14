@@ -11,9 +11,9 @@ import { RequestType } from './helpers/types';
 import OwnerChangerPresenter from './presenter';
 
 interface OwnProps {
-  requestId: string;
-  requestType: RequestType;
-  renderAsButton: boolean;
+  requestId: string
+  requestType: RequestType
+  renderAsButton: boolean
 }
 
 const OwnerChangerContainer: React.FC<OwnProps> = ({

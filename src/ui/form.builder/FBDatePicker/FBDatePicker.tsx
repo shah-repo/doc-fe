@@ -60,5 +60,4 @@ const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
   );
 };
 
-
 export default withDatePicker(FBDatePicker);

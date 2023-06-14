@@ -30,7 +30,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   const classes = styles();
   return (
     <FBInput showErrorMsg={false} {...{ name, rules, autosave }} {...props} type="eqmaintenance">
-      <DocumentRevisionSockets eqMaintenanceState ={eqMaintenanceState} docRevId={docRevId}/>
+      <DocumentRevisionSockets eqMaintenanceState ={eqMaintenanceState} docRevId={docRevId} />
       <FBSection
         {...{ label }}
         name={`${name}-section`}
@@ -87,8 +87,8 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         {...{ disabled, autosave }}
       />
       {!isEmpty(maintenanceHistory) && <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />}
-      {complianceDueDate &&
-      <Box mb={3} data-cy="maintenance.status">
+      {complianceDueDate
+      && <Box mb={3} data-cy="maintenance.status">
         <FBText
           boxProps={{ display: 'inline-flex' }}
           locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
@@ -98,7 +98,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         <span> - </span>
         <FBText
           boxProps={{ display: 'inline-flex' }}
-          locale={'common.due.date'}
+          locale="common.due.date"
         />
         <span>: </span>
         {complianceDueDate}

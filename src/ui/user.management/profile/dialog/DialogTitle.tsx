@@ -10,13 +10,13 @@ import { Translation } from '../../../translations/types';
 const MAX_NAME_LENGTH = 100;
 
 interface Props {
-  close: () => void;
-  showEditUser: boolean;
-  name: string;
-  userInfo: EmployeeEditRequestBody;
-  setUserInfo: (values: EmployeeEditRequestBody) => void;
-  setUsernameError: (value: Translation | null) => void;
-  usernameError: Translation | null;
+  close: () => void
+  showEditUser: boolean
+  name: string
+  userInfo: EmployeeEditRequestBody
+  setUserInfo: (values: EmployeeEditRequestBody) => void
+  setUsernameError: (value: Translation | null) => void
+  usernameError: Translation | null
 }
 
 const DialogTitle: React.FunctionComponent<Props> = ({

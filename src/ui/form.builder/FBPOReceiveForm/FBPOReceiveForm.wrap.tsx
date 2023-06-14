@@ -8,7 +8,6 @@ import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBPOReceiveFormState from './FBPOReceiveForm.state';
 
-
 export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -25,10 +24,9 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     const documentId = workspaceState?.documentId as string;
     const name = first(workspaceState?.getItemsByType('poreceive'))?.name || '';
 
-
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(
       FBPOReceiveFormState,
-      { groupOptions, item, documentId }
+      { groupOptions, item, documentId },
     );
 
     handleReceive = async () => {
@@ -73,8 +71,8 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         workspaceState.id,
         {
           formInput: receivedItemsInput,
-          referenceTo: hasNoReference ?
-            [{
+          referenceTo: hasNoReference
+            ? [{
               id: poReceiveState?.data?.document.id,
             }] as Id[] : undefined,
         });
@@ -85,7 +83,6 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     };
-
 
     return Component({
       item,

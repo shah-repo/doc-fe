@@ -26,24 +26,24 @@ import useStyles from './taskApproval.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  type: string;
-  docId: string;
-  docRevId: string;
-  approvalId: string;
-  timestamp: string;
-  docRevOwnerAvatar: Nullable<string>;
-  docRevOwnerInitialColor: string;
-  docRevOwnerName: string;
-  docRevName: string;
-  docRevVersion: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (pinnedItemId: string) => void;
-  dismissLineItem?: (id: string) => void;
+  id: string
+  docDocumentId: string
+  type: string
+  docId: string
+  docRevId: string
+  approvalId: string
+  timestamp: string
+  docRevOwnerAvatar: Nullable<string>
+  docRevOwnerInitialColor: string
+  docRevOwnerName: string
+  docRevName: string
+  docRevVersion: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (pinnedItemId: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -128,7 +128,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       approvalId,
       'reject',
       rejectDialogAsync,
-      null
+      null,
     );
   };
 
@@ -212,7 +212,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"

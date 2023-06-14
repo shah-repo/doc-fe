@@ -5,7 +5,7 @@ import { ReactComponent as ExportIcon } from '../../../../assets/images/export_d
 import { styles } from './ExportListIcon.styles';
 
 interface Props {
-  isGrouped: boolean;
+  isGrouped: boolean
 }
 
 const ExportListIcon: React.FunctionComponent<Props> = ({ isGrouped }) => {

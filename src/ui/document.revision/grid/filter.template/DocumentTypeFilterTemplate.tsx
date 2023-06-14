@@ -13,8 +13,8 @@ import { removeLastCharacterIfNotAlphaNumeric } from '../../../common/utils/help
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
-  defaultItem: string;
-  onStateChange?: (setDefault: boolean) => void;
+  defaultItem: string
+  onStateChange?: (setDefault: boolean) => void
 }
 
 export const DocumentTypeFilterTemplate = ({

@@ -12,9 +12,9 @@ import { Translation } from '../../translations/types';
 import { WatermarkResponse } from './types';
 
 interface Props {
-  addRequestResult: (data: WatermarkResponse) => void;
-  removeWatermark: (id: string) => void;
-  watermarkId: string;
+  addRequestResult: (data: WatermarkResponse) => void
+  removeWatermark: (id: string) => void
+  watermarkId: string
 }
 
 const WatermarkFooterRequest: React.FunctionComponent<Props> = ({

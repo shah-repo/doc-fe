@@ -47,24 +47,23 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       workspaceState?.saveDocRev(formState?.getValues());
     }
 
-
     SM.reaction(
       () => workspaceState?.changeRequest,
       (value?: ChangeRequest) => {
         if (value) {
           setApprovalRequest(value);
         }
-      }
+      },
     );
 
     useEffect(() => {
       // Populate with a default value if there is no default value, no initialValue, the editorProperties has
       //  defaultCurrentDate & the documentRevision is an output
-      const isUnderDefault =
-        !defaultValue &&
-        !initialValue &&
-        defaultCurrentDate &&
-        (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
+      const isUnderDefault
+        = !defaultValue
+        && !initialValue
+        && defaultCurrentDate
+        && (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
 
       if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();

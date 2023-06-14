@@ -4,7 +4,7 @@ import rowstyle from './SwitchCompany.module.css';
 import { styles } from './SwitchCompany.styles';
 
 interface Props {
-  numberOfCompanies: number;
+  numberOfCompanies: number
 }
 
 const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numberOfCompanies }) => {

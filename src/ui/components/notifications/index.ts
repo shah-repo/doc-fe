@@ -38,4 +38,3 @@ export const toastInfo = (message: string | ReactNode, options: ToastOptions = {
 
 export const toastSuccess = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);
-

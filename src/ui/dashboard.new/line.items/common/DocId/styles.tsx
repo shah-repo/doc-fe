@@ -18,5 +18,5 @@ export const styles = makeStyles(() =>
       fontWeight: 400,
       letterSpacing: 0,
     },
-  })
+  }),
 );

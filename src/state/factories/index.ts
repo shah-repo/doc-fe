@@ -1,8 +1,8 @@
 import { CALL_API } from '../middlewares/api';
 import { ApiAction, Handlers } from '../types';
 
-export const apiAction =
-  <R, B>(apiDefinition: Partial<ApiAction<R, B>>): ApiAction<R, B> => {
+export const apiAction
+  = <R, B>(apiDefinition: Partial<ApiAction<R, B>>): ApiAction<R, B> => {
     const action: ApiAction<R, B> = {
       url: '/',
       method: 'get',
@@ -18,7 +18,7 @@ export const apiAction =
   };
 
 interface ApiDefinitionWithCallbacks<R, B> extends Partial<ApiAction<R, B>> {
-  handlers: Handlers<R>;
+  handlers: Handlers<R>
 }
 
 export const apiActionWithCallbacks = <R, B>(apiDefinition: ApiDefinitionWithCallbacks<R, B>):

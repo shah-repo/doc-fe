@@ -4,5 +4,5 @@ import { FBStateProps } from '../../helpers/FBStateProps';
 export type FBActionContainerProps =
   & FBStateProps<FBActionContainerState>
   & {
-    actions?: string[] | React.ReactNode[];
+    actions?: string[] | React.ReactNode[]
   };

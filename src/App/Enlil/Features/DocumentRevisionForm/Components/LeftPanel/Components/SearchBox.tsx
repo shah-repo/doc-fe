@@ -5,7 +5,7 @@ import { ReactComponent as SearchIcon } from '../../../../../../../assets/images
 import styles from './SearchBox.styles';
 
 interface Props {
-  onSearch: (event) => void;
+  onSearch: (event) => void
 }
 const SearchBox: React.FunctionComponent<Props> = ({ onSearch }) => {
   const classes = styles();

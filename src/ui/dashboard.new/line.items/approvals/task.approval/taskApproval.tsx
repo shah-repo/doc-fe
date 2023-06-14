@@ -27,31 +27,31 @@ import useStyles from './taskApproval.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  arId: string;
+  id: string
+  type: string
+  arId: string
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  arChangeRequestId: string;
-  timestamp: string;
-  docRevOwnerAvatar: Nullable<string>;
-  docRevOwnerInitialColor: string;
-  docRevOwnerName?: string;
-  title?: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  arChangeRequestId: string
+  timestamp: string
+  docRevOwnerAvatar: Nullable<string>
+  docRevOwnerInitialColor: string
+  docRevOwnerName?: string
+  title?: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -192,10 +192,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId}/>
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle  url={changeRequestEditPath(arChangeRequestId)} title={title || ''}/>
+                  <ApprovalTitle  url={changeRequestEditPath(arChangeRequestId)} title={title || ''} />
                 </Grid>
               </Grid>
               <Grid
@@ -204,7 +204,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"

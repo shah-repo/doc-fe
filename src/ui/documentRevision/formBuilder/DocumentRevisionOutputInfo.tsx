@@ -7,7 +7,7 @@ import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/
 import { generateRevisionNumber } from '../helpers/generateRevisionNumber';
 
 interface Props {
-  formDocument?: FBDocumentRevisionProps;
+  formDocument?: FBDocumentRevisionProps
 }
 
 const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({

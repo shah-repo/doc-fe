@@ -7,7 +7,7 @@ export type FBEditorValidationProps =
 & Pick<FBInputProps, 'onChange'>
 & Pick<FBSchemaComponentProps, 'schema' | 'schemaState'>
 & {
-  handleCustomValidation?: () => any;
-  customValidationEnabled?: boolean;
-  dialogState?: FBDialogState;
+  handleCustomValidation?: () => any
+  customValidationEnabled?: boolean
+  dialogState?: FBDialogState
 };

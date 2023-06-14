@@ -8,7 +8,6 @@ import Tooltip from '../../../components/common/kendo/Tooltip';
 import checkIfJSONObject from '../helper';
 import { TextareaDialog } from './TextareaDialog';
 
-
 export const FieldsConfig: React.FunctionComponent<GridCellProps> = ({
   onChange,
   dataItem,
