@@ -10,7 +10,7 @@ import { companySelectors } from '../../../state/ducks/company';
 import { toastError } from '../../components/notifications';
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     mediaAlbumFieldState,
@@ -119,7 +119,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           });
           if (addedFiles.length === 0) { return; }
           mediaAlbumFieldState?.getFiles(addedFiles);
-        }
+        },
       );
       return () => {
         if (!mediaAlbumFieldState?.previewOnlyIds.length) {
@@ -141,7 +141,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         if (!data) { return; }
         mediaAlbumFieldState?.download(data, dialogState?.open);
         mediaAlbumFieldState!.fromUpload = true;
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -155,7 +155,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           return;
         }
         mediaAlbumFieldState?.getAllAttachments(id);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -179,7 +179,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
               workspaceState?.saveDocRev(formState?.getValues());
             }
           }
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

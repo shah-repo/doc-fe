@@ -26,8 +26,8 @@ import NavigationProfileContainer from './NavigationProfile.container';
 type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
 
 function  itemAllowedForUser(item: NavigationItem, userTags: GroupTag[]): boolean {
-  return !item.restrictedToUsersWithTags?.length ||
-        item.restrictedToUsersWithTags.some((tag) => userTags.includes(tag));
+  return !item.restrictedToUsersWithTags?.length
+        || item.restrictedToUsersWithTags.some((tag) => userTags.includes(tag));
 }
 
 const Navigation: React.FunctionComponent<NavigationProps> = ({

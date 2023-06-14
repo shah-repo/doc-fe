@@ -50,5 +50,5 @@ export default makeStyles(() =>
       lineHeight: '18px',
       color: Colors.dark_jungle_green,
     },
-  })
+  }),
 );

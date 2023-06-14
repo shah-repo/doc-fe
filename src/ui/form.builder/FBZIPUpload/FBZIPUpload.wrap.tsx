@@ -33,9 +33,9 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     });
 
     disableFileUpload = fileUploadState?.files.length === 1;
-    disableUnzipButton = fileUploadState?.unzipStatus === FBUnzipStatus.FAILED ||
-    fileUploadState?.unzipStatus === FBUnzipStatus.DONE ||
-    fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING;
+    disableUnzipButton = fileUploadState?.unzipStatus === FBUnzipStatus.FAILED
+    || fileUploadState?.unzipStatus === FBUnzipStatus.DONE
+    || fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING;
 
     React.useEffect(() => {
       if (isEmpty(files)) {
@@ -53,7 +53,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
             return;
           }
           fileUploadState?.setUnzipStatus(data[0]?.status);
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -71,7 +71,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
             if (!isUnderWorkspace) { return; }
             workspaceState?.saveDocRev(formState?.getValues());
           }
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

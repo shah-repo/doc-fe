@@ -60,7 +60,7 @@ const styles = makeStyles((theme: Theme) =>
         zIndex: 1000,
       },
     },
-  })
+  }),
 );
 
 function Row(props: { row: PageDetails }) {
@@ -83,7 +83,7 @@ function Row(props: { row: PageDetails }) {
       <TableRow>
         <TableCell className={classes.cell} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <PageDetailsFormContainer pageDetails={row}/>
+            <PageDetailsFormContainer pageDetails={row} />
           </Collapse>
         </TableCell>
       </TableRow>
@@ -107,7 +107,7 @@ const PageDetailsManagementContainer: React.FC = () => {
     <Box className={classes.root}>
       <Box display="flex" justifyContent="flex-end">
         <Button onClick={dialog.open} variant="outlined">
-          <Text translation={'common.add.page.details'} />
+          <Text translation="common.add.page.details" />
         </Button>
       </Box>
       <Box width="100%" className={cx(classes.containingBox, 'containing-box-scrollbar')}>
@@ -116,7 +116,7 @@ const PageDetailsManagementContainer: React.FC = () => {
             <TableRow>
               <TableCell />
               <TableCell className={classes.header}>
-                <Text translation={'page.details'} />
+                <Text translation="page.details" />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -125,7 +125,7 @@ const PageDetailsManagementContainer: React.FC = () => {
           </TableBody>
         </Table>
       </Box>
-      <PageDetailsForm {...{ dialog }}/>
+      <PageDetailsForm {...{ dialog }} />
     </Box>
 
   );

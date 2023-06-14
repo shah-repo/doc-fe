@@ -5,10 +5,10 @@ import { GroupRequestBody } from '../../../../state/ducks/groupManagement/types'
 import Text from '../../../components/Text';
 
 interface Props {
-  handleReset: () => void;
-  handleSubmit: () => void;
-  isCreateMode?: boolean;
-  group: GroupRequestBody;
+  handleReset: () => void
+  handleSubmit: () => void
+  isCreateMode?: boolean
+  group: GroupRequestBody
 }
 
 const ActionButtons: React.FunctionComponent<Props> = ({

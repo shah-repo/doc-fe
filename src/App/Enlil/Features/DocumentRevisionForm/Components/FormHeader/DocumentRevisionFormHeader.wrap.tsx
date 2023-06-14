@@ -27,9 +27,9 @@ export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHea
     }
 
     isDisabledInput = (
-      !isUndefined(_documentRevisionFormState?.documentRevision?.id) &&
-      isCurrentUserOperator &&
-      !isOwner
+      !isUndefined(_documentRevisionFormState?.documentRevision?.id)
+      && isCurrentUserOperator
+      && !isOwner
     );
 
     // MARK: @state

@@ -3,8 +3,8 @@ import { CloudDownload } from '@material-ui/icons';
 import React from 'react';
 
 export interface DownloadButtonPresenterProps {
-  isLoading: boolean;
-  onClick: () => void;
+  isLoading: boolean
+  onClick: () => void
 }
 
 const DownloadButtonPresenter: React.FunctionComponent<DownloadButtonPresenterProps> = ({ isLoading, onClick }) => (

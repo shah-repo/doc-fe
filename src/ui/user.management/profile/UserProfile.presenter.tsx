@@ -15,32 +15,32 @@ import DialogTitle from './dialog/DialogTitle';
 import { Translation } from '../../translations/types';
 
 interface OwnProps {
-  isOpen: boolean;
-  close: () => void;
-  canManageUsers: boolean;
-  employeeGroups: OptionType[];
-  name: string;
-  avatar: string | null;
-  email: string;
-  editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
-  showEditUser: boolean;
-  showEdit: () => void;
-  closeEdit: () => void;
-  employeeId: string;
-  callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
-  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
-  callbackUpdateWithUpload?: (avatar: string, name: string) => void;
-  asyncState: AsyncState;
-  getUrl: () => void;
-  slackIntegrationEnabled: boolean;
-  slackTeamId: string;
-  slackUserId: string;
-  previewAvatar: string;
-  setPreviewAvatar: (value: string) => void;
-  activeStatus: boolean;
-  userId: string;
-  isDeveloper: boolean;
-  canUpdateCompany: boolean;
+  isOpen: boolean
+  close: () => void
+  canManageUsers: boolean
+  employeeGroups: OptionType[]
+  name: string
+  avatar: string | null
+  email: string
+  editCurrentEmployee: (values: EmployeeEditRequestBody) => void
+  showEditUser: boolean
+  showEdit: () => void
+  closeEdit: () => void
+  employeeId: string
+  callbackUpdateGroups?: (values: GetEmployeeResponse) => void
+  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void
+  callbackUpdateWithUpload?: (avatar: string, name: string) => void
+  asyncState: AsyncState
+  getUrl: () => void
+  slackIntegrationEnabled: boolean
+  slackTeamId: string
+  slackUserId: string
+  previewAvatar: string
+  setPreviewAvatar: (value: string) => void
+  activeStatus: boolean
+  userId: string
+  isDeveloper: boolean
+  canUpdateCompany: boolean
 }
 
 type Props = OwnProps;

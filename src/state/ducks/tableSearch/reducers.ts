@@ -78,8 +78,8 @@ const data = (
           const { payload: updatedEmployee } = action;
 
           if (
-            employee.id ===
-            ((updatedEmployee as unknown) as GetEmployeeResponse).id
+            employee.id
+            === ((updatedEmployee as unknown) as GetEmployeeResponse).id
           ) {
             return {
               ...action.payload,

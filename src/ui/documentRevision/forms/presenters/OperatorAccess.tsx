@@ -7,8 +7,8 @@ import AutocompleteField from '../../../components/forms/fields/Autocomplete/Aut
 import { useAssignOperatorsToDocument } from '../../../hooks/docCustomization/useCustomization';
 
 interface Props {
-  documentTypeId: string;
-  isDisabled?: boolean;
+  documentTypeId: string
+  isDisabled?: boolean
 }
 
 const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId, isDisabled }) => {
@@ -16,7 +16,7 @@ const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId, isDisa
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
       state,
-      currentUserId
+      currentUserId,
     );
   });
   const { isVisible } = useAssignOperatorsToDocument(documentTypeId);

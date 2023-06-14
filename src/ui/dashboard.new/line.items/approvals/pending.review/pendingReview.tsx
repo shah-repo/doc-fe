@@ -30,44 +30,44 @@ import useStyles from './pendingReview.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  title: string;
-  arId: string;
-  arChangeRequestId: string;
-  arStatus: string;
-  timestamp: string;
+  id: string
+  type: string
+  title: string
+  arId: string
+  arChangeRequestId: string
+  arStatus: string
+  timestamp: string
   pendingApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   approvedApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  pendingEmailSentAt: Nullable<string>;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  pendingEmailSentAt: Nullable<string>
+  dismissLineItem?: (id: string) => void
 }
 const PendingReviewPresenter: React.FC<Props> = ({
   id,
@@ -94,8 +94,8 @@ const PendingReviewPresenter: React.FC<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
-  const { count, pending, approved, primaryText, secondaryText } =
-    getPendingTooltipText(pendingApprovers, approvedApprovers);
+  const { count, pending, approved, primaryText, secondaryText }
+    = getPendingTooltipText(pendingApprovers, approvedApprovers);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -171,10 +171,10 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 data-cy={arId + 'InReview'}
               >
                 <Grid item={true}>
-                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
+                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title}/>
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title} />
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -272,7 +272,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                ></Grid>
+                 />
                 <Grid item={true}>
                   <Typography
                     component="span"

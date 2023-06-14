@@ -6,7 +6,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 
 interface OwnProps {
-  helloSignStatus: boolean;
+  helloSignStatus: boolean
 }
 
 type Props = OwnProps;

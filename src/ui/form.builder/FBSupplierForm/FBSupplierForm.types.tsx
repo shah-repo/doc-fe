@@ -5,9 +5,9 @@ export type FBSupplierFormProps =
 & Pick<FBProviderProps, 'formState'>
 & Pick<FBInputProps, 'children' | 'disabled' | 'loading'>
 & {
-  onDialogClose?: () => void;
-  onDialogConfirm?: () => void;
-  ebId?: string;
-  formOptions?: DocumentTypeByIdForm[];
-  formAutocompleteDisabled?: boolean;
+  onDialogClose?: () => void
+  onDialogConfirm?: () => void
+  ebId?: string
+  formOptions?: DocumentTypeByIdForm[]
+  formAutocompleteDisabled?: boolean
 };

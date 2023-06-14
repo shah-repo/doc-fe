@@ -11,5 +11,5 @@ export const styles = makeStyles((theme: Theme) =>
       fill: Colors.white,
       marginRight: theme.spacing(0.625),
     },
-  })
+  }),
 );

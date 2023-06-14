@@ -17,28 +17,28 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     useEffect(() => reaction(
       () => formState?.getInputState('editorConfig.rangeOption')?.value,
       (value: boolean | undefined) => setRange(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => formState?.getInputState('editorConfig.inspection')?.value,
       (value: boolean) => setInspection(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => formState?.getInputState('editorConfig.passValue')?.value,
       (value: boolean) => setPassValue(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => formState?.getInputState('editorConfig.pass.type')?.value,
       (value: string | undefined) => setPassType(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

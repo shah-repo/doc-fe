@@ -22,8 +22,8 @@ import Trainings from '../trainings/Trainings.container';
 import { Translation } from '../../translations/types';
 
 type TabProps = ComponentProps<typeof StyledTab> & {
-  title: Translation;
-  count?: number;
+  title: Translation
+  count?: number
 };
 
 const Tab: FC<TabProps> = (props) => {
@@ -88,7 +88,7 @@ const Tabs: FC = () => {
 
   const handleChange = useCallback(
     (event: any, newValue: DashboardTabValues) => setValue(newValue),
-    []
+    [],
   );
 
   return (

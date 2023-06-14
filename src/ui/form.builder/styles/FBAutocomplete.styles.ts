@@ -23,7 +23,6 @@ export const styles = {
   },
 };
 
-
 export const FBAutoCompleteStyle = makeStyles(() =>
   createStyles({
     root: {
@@ -37,5 +36,5 @@ export const FBAutoCompleteStyle = makeStyles(() =>
         color: Colors.almost_black,
       },
     },
-  })
+  }),
 );

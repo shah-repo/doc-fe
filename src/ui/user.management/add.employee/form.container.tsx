@@ -14,10 +14,10 @@ import AddEmployeeFormPresenter from './form.presenter';
 import { transformToAddEmployeeRequest } from './utils/transform';
 
 export interface AddEmployeeFormValues {
-  id?: string;
-  name: string;
-  email: string;
-  groups: OptionType[];
+  id?: string
+  name: string
+  email: string
+  groups: OptionType[]
 }
 
 const AddEmployeeFormContainer: React.FunctionComponent = () => {
@@ -51,7 +51,6 @@ const AddEmployeeFormContainer: React.FunctionComponent = () => {
       );
     },
   });
-
 
   const onSubmit = (values: AddEmployeeFormValues) => {
     async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);

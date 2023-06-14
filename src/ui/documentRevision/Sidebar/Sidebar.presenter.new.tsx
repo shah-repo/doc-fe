@@ -8,13 +8,13 @@ import useStyles from './styles.new';
 import { Sidebar } from './types.new';
 
 interface Props {
-  isDrawerOpen: boolean;
-  indexNumber: number;
-  sidebarList: Sidebar[];
-  inputRef: React.MutableRefObject<null>;
-  handleMenuIconClick: (index: number) => void;
-  onDrawerToggle: () => void;
-  loading?: boolean;
+  isDrawerOpen: boolean
+  indexNumber: number
+  sidebarList: Sidebar[]
+  inputRef: React.MutableRefObject<null>
+  handleMenuIconClick: (index: number) => void
+  onDrawerToggle: () => void
+  loading?: boolean
 }
 
 const SidebarPresenter: React.FunctionComponent<Props> = ({
@@ -57,7 +57,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                 </IconButton>
               </FBTooltip>
             </Box>
-          )
+          ),
         )}
       </Box>
       <Box

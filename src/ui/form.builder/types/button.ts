@@ -5,7 +5,7 @@ export type FBButtonProps =
 & ButtonProps
 & Omit<FBFormDefaultProps, 'label'>
 & {
-  component?: (props: any) => JSX.Element;
-  label?: string;
-  buttonType?: 'button' | 'submit';
+  component?: (props: any) => JSX.Element
+  label?: string
+  buttonType?: 'button' | 'submit'
 };

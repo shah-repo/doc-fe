@@ -23,5 +23,5 @@ export const styles = makeStyles((theme: Theme) =>
         marginTop: theme.spacing(1),
       },
     },
-  })
+  }),
 );

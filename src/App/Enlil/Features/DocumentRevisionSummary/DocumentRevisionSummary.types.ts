@@ -9,9 +9,8 @@ export type DocumentRevisionSummaryProps =
 | '_documentRevisionFormState'
 | 'schema'>
 & {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip?: boolean;
-  isFB?: boolean;
-  isSideBarHidden?: boolean;
+  documentRevision: DocumentRevision
+  canChangeOwnerShip?: boolean
+  isFB?: boolean
+  isSideBarHidden?: boolean
 };
-

@@ -125,7 +125,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         document?.approvals?.push(data as Approval);
         FBStore.selectedApprover.push(data as Approval);
         concatApprovals(data);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -134,8 +134,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       () => approvalsState?.transitionApi.data,
       (data) => {
         if (
-          isReceivable &&
-          data?.poDocId && data?.poDocRevision
+          isReceivable
+          && data?.poDocId && data?.poDocRevision
         ) {
           localStorage.setItem('reOpenedPOInfo', JSON.stringify({ id: data?.poDocId, revId: data?.poDocRevision }));
         }
@@ -143,7 +143,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         if (data?.status === DocumentStatus.Draft) {
           window.location.reload();
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -168,7 +168,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -215,15 +215,14 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       group.joinedEmployees.some((employee) =>
         approvals?.map((approval) => approval.approver?.id).includes(employee));
 
-
     isContributorIncluded = (id: string): boolean => {
       const values = formState?.inputState.get('fb-approvals-' + name)?.value;
       return values?.includes(id);
     };
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
-      const requiredGroups: string [] =
-        compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
+      const requiredGroups: string []
+        = compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
           <Box fontWeight="fontWeightMedium">{option.user?.name}</Box>
@@ -251,14 +250,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       isComponentVisible = document?.status !== DocumentRevisionStatus.Voided
         && (!inlineApprovalExists || isRevisionAfterA);
 
-
       loading = (
-        approvalsState.loading ||
-        approvalsState?.approvalApi.loading ||
-        approvalsState?.transitionApi.loading
+        approvalsState.loading
+        || approvalsState?.approvalApi.loading
+        || approvalsState?.transitionApi.loading
       );
     });
-
 
     // TODO: check what is going on with the types,
     // had to add any, DocumentStatus and DocumentRevisionStatus are not the same
@@ -266,8 +263,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     showFieldOwnersWarning = document?.document
     .documentType
-    .groupOptions?.includes(DOC_TYPE_GROUP_OPTION.INPUT_OWNERS_APPROVERS) &&
-     !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
+    .groupOptions?.includes(DOC_TYPE_GROUP_OPTION.INPUT_OWNERS_APPROVERS)
+     && !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
 
     if (!isComponentVisible) {
       return null;

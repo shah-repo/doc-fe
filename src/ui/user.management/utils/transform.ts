@@ -24,7 +24,7 @@ export const toNavigationIntialValues = (navigationItems) => {
   // We omit "isOpen" value because that is an internal flag
   // for menus in navigation
   const navigationOmitedValues = navigationItems.map((item) => (
-    omit(item, ['isOpen']))
+    omit(item, ['isOpen'])),
   );
 
   return ({

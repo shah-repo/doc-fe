@@ -11,7 +11,7 @@ export type ContainerOwnProps = RouteComponentProps<RouteParams>;
 export type ContainerStateProps = LoadAsyncState & DataProps<DocumentRevision>;
 
 export interface ContainerDispatchProps {
-  load: typeof documentRevisionsActions.load;
+  load: typeof documentRevisionsActions.load
 }
 
 export enum ReleasedDateOptions {
@@ -26,18 +26,18 @@ export enum CompletedOnDateOptions {
   OVERDUE = 'Overdue',
 }
 export interface RouteParams {
-  documentRevisionId: string;
-  documentId: string;
+  documentRevisionId: string
+  documentId: string
 }
 export interface ReferenceSummary {
-  id: string;
-  url: string;
-  docId?: string;
-  title: string;
-  displayRevision?: string;
+  id: string
+  url: string
+  docId?: string
+  title: string
+  displayRevision?: string
 }
 
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
-  documentRevisionId: string;
-  docDetails: Partial<DocumentRevision>;
+  documentRevisionId: string
+  docDetails: Partial<DocumentRevision>
 }

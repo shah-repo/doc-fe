@@ -10,7 +10,7 @@ const FBFileDescriptionActions: React.FunctionComponent<FBFileDescriptionActions
   <Box display="flex" flexDirection="row-reverse" mx={3}>
     <FBSubmitButton
       variant="contained"
-      label={'form.builder.save'}
+      label="form.builder.save"
       onClick={handleAdd}
     />
     <StyledCancelFBButton

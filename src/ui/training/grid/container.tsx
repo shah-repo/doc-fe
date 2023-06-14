@@ -26,7 +26,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const setSearchStatus = (
     dataState: DataStateProps,
-    columns: KendoColumn[]
+    columns: KendoColumn[],
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -38,8 +38,8 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
           },
           columnConfig: JSON.stringify(columns),
         },
-        TRAINING_TABLE_NAME
-      )
+        TRAINING_TABLE_NAME,
+      ),
     );
   };
 
@@ -67,7 +67,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       };
       setSearchStatus(
         dataState,
-        gridConfiguration.columns
+        gridConfiguration.columns,
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +75,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const trainingDetailsDialog = useDialog();
   const [training, setTraining] = useState<TrainingRecordQuery>(
-    DEFAULT_TRAINING_RECORD_QUERY
+    DEFAULT_TRAINING_RECORD_QUERY,
   );
 
   const onRowClick = (rowData: { dataItem: TrainingRecordQuery }) => {

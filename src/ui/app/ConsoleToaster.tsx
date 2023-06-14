@@ -6,7 +6,7 @@ import './consoleToaster.css';
 
 const recentlySeenMessages = new Set<string>();
 
-function wrapConsoleCall(callback, options: {class: string; title: string}) {
+function wrapConsoleCall(callback, options: {class: string, title: string}) {
   // const x = callback;
 
   return function(...args) {
@@ -43,4 +43,3 @@ if (Config.consoleToastsEnabled) {
   console.info = wrapConsoleCall(console.info, { class: 'Toastify-console-log-info', title: 'Console Info' });
   // console.log = wrapConsoleCall(console.log, { class: "Toastify-console-log-log", title: "Console Log" });
 }
-

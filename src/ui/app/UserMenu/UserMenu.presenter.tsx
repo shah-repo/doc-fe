@@ -12,9 +12,9 @@ import Colors from '../../layout/theme/utils/colors';
 import { UserMenuContext } from '../NavigationProfile.container';
 
 interface Props {
-  location: any;
-  anchorEl: Nullable<HTMLElement>;
-  handleCloseMenu: () => void;
+  location: any
+  anchorEl: Nullable<HTMLElement>
+  handleCloseMenu: () => void
 }
 
 const UserMenuPresenter: React.FunctionComponent<Props> = ({
@@ -53,8 +53,8 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
             <Text translation="header.menu.my.profile" />
           </ListItemText>
         </MenuItem>
-        {hasMultipleCompanies &&
-          <MenuItem onClick={handleSwitchCompany}>
+        {hasMultipleCompanies
+          && <MenuItem onClick={handleSwitchCompany}>
             <ListItemIcon>
               <SyncAltOutlinedIcon fontSize="small" />
             </ListItemIcon>

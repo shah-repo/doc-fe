@@ -8,9 +8,9 @@ import { toSupplierSurveyFormValues } from '../transform';
 import SupplierSurveyFormBuild from './SupplierSurveyFormBuild.presenter';
 
 interface Props {
-  asyncState: AsyncState;
-  supplierSurvey: SupplierSurveyForm;
-  onSubmit: () => void;
+  asyncState: AsyncState
+  supplierSurvey: SupplierSurveyForm
+  onSubmit: () => void
 }
 
 const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({ onSubmit, supplierSurvey, asyncState }) => {

@@ -35,8 +35,8 @@ export const editorPropertiesFlags: FBEditorPropertiesType[] = [
 ];
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, 'type' | 'options' | 'onChange'> & {
-  inputProps?: Partial<FBInputProps>;
-  docGroupOptions?: DocumentGroupOptionsType[];
+  inputProps?: Partial<FBInputProps>
+  docGroupOptions?: DocumentGroupOptionsType[]
 };
 
 export const FBEditorPropertiesOmitByGroup = {
@@ -46,7 +46,7 @@ export const FBEditorPropertiesOmitByGroup = {
 export type FBEditorPropertiesOption =
 & Pick<FBOption, 'text'>
 & {
-  value?: string;
-  outputText?: string; // Option as FBOption label text
-  isOption?: boolean; // Whether the option will be treated as FBOption
+  value?: string
+  outputText?: string // Option as FBOption label text
+  isOption?: boolean // Whether the option will be treated as FBOption
 };

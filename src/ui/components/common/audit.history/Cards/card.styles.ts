@@ -9,5 +9,5 @@ export default makeStyles(() =>
       boxShadow: `0px 1px 0px ${Colors.link_water}`,
       margin: '1px 0',
     },
-  })
+  }),
 );

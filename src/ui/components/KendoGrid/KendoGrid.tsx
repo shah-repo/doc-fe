@@ -74,7 +74,7 @@ export function KendoGrid<T extends any>({
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(
-    tableCriteria?.queryDict?.dataState
+    tableCriteria?.queryDict?.dataState,
   );
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -105,7 +105,7 @@ export function KendoGrid<T extends any>({
   };
 
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(records, dataState)
+    processWithGroups(records, dataState),
   );
 
   const dataStateChange = (e: GridDataStateChangeEvent) => {
@@ -141,8 +141,8 @@ export function KendoGrid<T extends any>({
             dataState: updatedDataState,
           },
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
 
@@ -296,9 +296,9 @@ export function KendoGrid<T extends any>({
             }
             cell={(props) =>
             {
-              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder &&
-                 props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released) ?
-                DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
+              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder
+                 && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
+                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
               return RenderCustomCell(
                 {
                   ...props,
@@ -306,7 +306,7 @@ export function KendoGrid<T extends any>({
                   showTooltip: column.showTooltip,
                   tooltipField: column.tooltipField,
                 },
-                column.cell || ''
+                column.cell || '',
               ); }
             }
             filterCell={
@@ -326,7 +326,7 @@ export function KendoGrid<T extends any>({
                 : undefined
             }
           />
-        )
+        ),
     );
   const clearFilter = () => {
     set(dataState, 'filter.filters', []);
@@ -338,8 +338,8 @@ export function KendoGrid<T extends any>({
             dataState,
           },
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const updateDataColumnsState = (dataColumns: KendoColumnProps[]) => {
@@ -350,8 +350,8 @@ export function KendoGrid<T extends any>({
           ...tableCriteria,
           columnConfig: JSON.stringify(dataColumns),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const onColumnShowHide = ({ field }) => {
@@ -378,7 +378,7 @@ export function KendoGrid<T extends any>({
         setCollapsedState(newCollapsedIds);
       }
     },
-    [collapsedState]
+    [collapsedState],
   );
 
   const onColumnResize = ({ end, columns: cols }: GridColumnResizeEvent) => {

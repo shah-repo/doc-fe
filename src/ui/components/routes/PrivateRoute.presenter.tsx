@@ -3,12 +3,12 @@ import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { LOGIN_URL } from '../../constants/urls';
 
 export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, 'location' | 'history'> {
-  isAuthenticated: boolean;
-  component: React.ComponentType;
+  isAuthenticated: boolean
+  component: React.ComponentType
 }
 
-const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps> =
-  ({ component: Component, isAuthenticated, ...rest }) => {
+const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps>
+  = ({ component: Component, isAuthenticated, ...rest }) => {
     useEffect(() => {
       if (!isAuthenticated) {
         rest.history.replace('/');
@@ -20,7 +20,7 @@ const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps>
     }
 
     return (
-      <Redirect to={{ pathname: LOGIN_URL, state: { from: rest.location } }}/>
+      <Redirect to={{ pathname: LOGIN_URL, state: { from: rest.location } }} />
     );
   };
 

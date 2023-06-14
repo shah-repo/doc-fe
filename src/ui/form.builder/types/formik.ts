@@ -3,9 +3,9 @@ import { Dictionary } from 'lodash';
 import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 
 export interface FBFormikProps extends Omit<FormikConfig<any>, 'onSubmit' | 'initialValues'> {
-  onSubmit?: (values: any) => void;
-  initialValues?: any;
-  formComponent?: Element;
+  onSubmit?: (values: any) => void
+  initialValues?: any
+  formComponent?: Element
 }
 
 export type FBFormikFieldProps =
@@ -13,15 +13,15 @@ export type FBFormikFieldProps =
   & Pick<Partial<FieldConfig>, 'validate'>;
 
 export interface FBDocumentFlowProps {
-  id?: string;
-  formTemplate?: FBFormTemplateProps;
-  formDocument?: FBDocumentFlowProps;
-  formInput?: Dictionary<any>;
-  document?: Partial<DocumentRevisionDocumentRequest>;
-  revision?: number;
-  revisionStage?: number;
-  revisionChangeType?: RevisionChangeType;
-  releasedAt?: string;
-  renderHTML?: string;
-  status?: DocumentRevisionStatus;
+  id?: string
+  formTemplate?: FBFormTemplateProps
+  formDocument?: FBDocumentFlowProps
+  formInput?: Dictionary<any>
+  document?: Partial<DocumentRevisionDocumentRequest>
+  revision?: number
+  revisionStage?: number
+  revisionChangeType?: RevisionChangeType
+  releasedAt?: string
+  renderHTML?: string
+  status?: DocumentRevisionStatus
 }

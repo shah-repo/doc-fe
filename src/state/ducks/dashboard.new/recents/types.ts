@@ -7,18 +7,18 @@ export enum RecentTypes {
 }
 
 export interface RecentItems {
-  accessedAt: string;
-  itemType: string;
-  itemId: string;
-  docId: string;
-  docTitle: string;
-  docTypeGroup: DocTypeGroups;
-  docRevId?: string;
+  accessedAt: string
+  itemType: string
+  itemId: string
+  docId: string
+  docTitle: string
+  docTypeGroup: DocTypeGroups
+  docRevId?: string
 }
 
 export interface RecentsListAction {
-  type: typeof RECENTS_LIST;
-  payload: RecentItems[];
+  type: typeof RECENTS_LIST
+  payload: RecentItems[]
 }
 
 export type RecentsState = RecentItems[];

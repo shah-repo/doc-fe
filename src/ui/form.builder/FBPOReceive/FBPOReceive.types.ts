@@ -6,14 +6,13 @@ export type FBPOReceiveProps =
 & Pick<FBFormProps, 'initialValues'>
 & Pick<FBAutocompleteProps, 'getOptionLabel'>
 & {
-  dialogState?: FBDialogState;
-  poReceiveState?: FBPOReceiveState;
-  po?: DocumentRevision;
-  schema?: FBSchemaProps[];
-  loading?: boolean;
+  dialogState?: FBDialogState
+  poReceiveState?: FBPOReceiveState
+  po?: DocumentRevision
+  schema?: FBSchemaProps[]
+  loading?: boolean
 };
 
 export type FBPOReceiveItemProps =
 & Pick<FBPurchaseOrderProps, 'handleItem' | 'mode'>
 & Partial<FBSchemaProps>;
-

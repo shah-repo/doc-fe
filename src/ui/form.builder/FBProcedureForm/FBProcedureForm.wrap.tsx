@@ -54,7 +54,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     const isDocumentMPIOutput = checkIsDocumentMPIOutput(workspaceState?.document?.document.documentType.groupOptions);
     const isRedlineActive = useSelector(companySelectors.getRedlineActive);
 
-
     const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
@@ -70,7 +69,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
+        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -83,13 +82,13 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
           const matDocId = find(materials, (rev) => rev.id === formState?.inputState.get('title')?.value)?.documentId;
           const releasedRev = find(
             materials,
-            (rev) => rev.documentId === matDocId && isDocumentRevisionReleased(rev.status)
+            (rev) => rev.documentId === matDocId && isDocumentRevisionReleased(rev.status),
           );
           if (!releasedRev) { return; }
           formState?.setFieldValue('title', releasedRev?.id);
           formState?.getInputState('title')?.setRender();
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -102,7 +101,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
           return procedureFormState?.fetchLotsToPart(id);
         }
         procedureFormState?.clearLots();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -120,7 +119,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
           return procedureFormState?.fetchPartsOfLot(id);
         }
         procedureFormState?.clearParts();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -133,10 +132,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         formState?.setFieldValue('title', first(data)?.id);
         formState?.getInputState('title')?.setRender();
         formState?.validate();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
 
     // MARK: @helpers
     function handleAdd() {
@@ -197,8 +195,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         }
         if (mode === 'eb') {
           return data.filter((e) =>
-            e.status === DocumentRevisionStatus.Released ||
-            e.status === DocumentRevisionStatus.Draft);
+            e.status === DocumentRevisionStatus.Released
+            || e.status === DocumentRevisionStatus.Draft);
         }
       }
       return data;
@@ -240,9 +238,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
       // disabled while adding or editing material/eq
-      disabled = formState?.inputState.get('LHRTparameter')?.value ||
-      Boolean(formState?.getFieldValue('LHRTparameter') ||
-        initialValues?.LHRTparameter);
+      disabled = formState?.inputState.get('LHRTparameter')?.value
+      || Boolean(formState?.getFieldValue('LHRTparameter')
+        || initialValues?.LHRTparameter);
     });
 
     return Component({

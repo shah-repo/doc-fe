@@ -16,8 +16,8 @@ const helpContent = {
 };
 
 interface Props {
-  persistent?: boolean;
-  draggable?: boolean;
+  persistent?: boolean
+  draggable?: boolean
 }
 
 const HelpCenter: React.FC<Props> = ({ persistent }) => {

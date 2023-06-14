@@ -9,7 +9,7 @@ import useAsync from '../../../hooks/useAsync';
 import POAttachment from './POAttachment';
 
 interface Props {
-  docRevAttachments: Attachment[];
+  docRevAttachments: Attachment[]
 }
 
 const POAttachments: React.FunctionComponent<Props> = ({

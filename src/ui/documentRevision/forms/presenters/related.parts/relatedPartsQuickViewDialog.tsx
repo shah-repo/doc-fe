@@ -13,11 +13,11 @@ import useAsync from '../../../../hooks/useAsync';
 import useStyles from './RelatedPart.styles';
 
 interface Props {
-  documentId: string;
-  isOpen: boolean;
-  onDialogClose: () => void;
-  onNewTabOpen: () => void;
-  documentRevisionId: string;
+  documentId: string
+  isOpen: boolean
+  onDialogClose: () => void
+  onNewTabOpen: () => void
+  documentRevisionId: string
 }
 
 const Loader = () => {
@@ -105,8 +105,8 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
       </DialogTitle>
       <DialogContent dividers>
         {isLoading && <Loader />}
-        {!isLoading && documentRevision &&
-            <DocumentRevisionSummary {...{ documentRevision, isSideBarHidden: true, canChangeOwnerShip: false }}/> }
+        {!isLoading && documentRevision
+            && <DocumentRevisionSummary {...{ documentRevision, isSideBarHidden: true, canChangeOwnerShip: false }} /> }
       </DialogContent>
     </Dialog>
   );

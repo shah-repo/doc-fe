@@ -17,26 +17,25 @@ import { styles } from './EmailModal.styles';
 import { StyledListItem } from './StyledListItem';
 
 interface EmailModalProps {
-  id: string;
-  handleEmailModelClose: () => void;
-  setLastEmailSent: (flag: boolean) => void;
+  id: string
+  handleEmailModelClose: () => void
+  setLastEmailSent: (flag: boolean) => void
   pendingApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
-  pendingEmailSentAt?: Nullable<string>;
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
+  pendingEmailSentAt?: Nullable<string>
   approvedApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
 }
-
 
 const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
   id,
@@ -230,7 +229,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
                           <Text translation="email.last.sent" />:&nbsp;
                           {getFormattedDateString(
                             pendingEmailSentAt,
-                            MomentFormats.BriefDate
+                            MomentFormats.BriefDate,
                           )}
                         </Typography>
                       )}
@@ -267,9 +266,9 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
           <List dense disablePadding>
             {pendingApprovers.map((pending, index) => (
               <StyledListItem button key={index}>
-                {pending.userAvatar ?
-                  <Avatar className={classes.listitemicon} alt={pending.userName} src={pending.userAvatar} /> :
-                  <Avatar className={classes.listitemicon} style={{ backgroundColor: pending.userInitialColor }}>
+                {pending.userAvatar
+                  ? <Avatar className={classes.listitemicon} alt={pending.userName} src={pending.userAvatar} />
+                  : <Avatar className={classes.listitemicon} style={{ backgroundColor: pending.userInitialColor }}>
                     {getInitalsFromName(pending.userName)}
                   </Avatar>
                 }

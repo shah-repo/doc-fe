@@ -6,8 +6,8 @@ import Text from '../../../components/Text';
 import { styles } from './ApiToken.style';
 
 interface Props {
-  apiTokenKey: string;
-  apiTokenSecret: string;
+  apiTokenKey: string
+  apiTokenSecret: string
 }
 
 const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({

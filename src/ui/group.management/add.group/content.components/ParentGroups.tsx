@@ -9,9 +9,9 @@ import { selectStyles, selectTheme } from '../../../components/forms/fields/Auto
 import Text from '../../../components/Text';
 
 interface Props {
-  parentGroups: any[];
-  setParentGroups: (selectedItems: any) => void;
-  currentGroupId: string;
+  parentGroups: any[]
+  setParentGroups: (selectedItems: any) => void
+  currentGroupId: string
 }
 
 const ParentGroups: React.FunctionComponent<Props> = ({
@@ -23,11 +23,11 @@ const ParentGroups: React.FunctionComponent<Props> = ({
   const availableGroups = allGroups.filter((group) => group.value !== currentGroupId);
 
   const MultiValueRemove = (props) =>
-    props.data.type === GroupType.MANAGMENT ?
-      <components.MultiValueRemove {...props}>
-        <DeleteIcon style={{ width: 12, height: 12 }}/>
-      </components.MultiValueRemove> :
-      <></>;
+    props.data.type === GroupType.MANAGMENT
+      ? <components.MultiValueRemove {...props}>
+        <DeleteIcon style={{ width: 12, height: 12 }} />
+      </components.MultiValueRemove>
+      : <></>;
 
   return (
     <Grid>

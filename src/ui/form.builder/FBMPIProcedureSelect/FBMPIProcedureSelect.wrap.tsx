@@ -44,7 +44,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
+        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -56,9 +56,9 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = isDocPIInstance ?
-            data.smartReferencesTo :
-            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
+          const refs = isDocPIInstance
+            ? data.smartReferencesTo
+            : uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
           const partsSelected = refs?.reduce((selected, ref) => {
             if (ref?.metadata?.fieldId === name
                 && ref.active
@@ -77,7 +77,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           mpiProcedureState?.setPartsSelected(partsSelected);
           id && dispatch(documentRevisionsActions.loadAudit(id));
           id && dispatch(documentRevisionsActions.reload(id));
-        }
+        },
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -89,7 +89,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           if (!data) { return; }
           id && dispatch(documentRevisionsActions.loadAudit(id));
           id && dispatch(documentRevisionsActions.reload(id));
-        }
+        },
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

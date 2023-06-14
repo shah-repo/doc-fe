@@ -36,8 +36,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       formState?.omitFieldValue(key);
     });
 
-    const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
+    const dataToSend: FBDocumentRevisionsValue[]
+      = storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
     dataToSend.push(formValue);
 
     submitData(dataToSend);
@@ -46,8 +46,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   const handleRemove = (docRevId: string) => {
     const orderItemsFiltered = itemsAndDetailsState.approvalRequestItemsList
       .filter((item: ApprovalRequestGridItem) => item.docRevId !== docRevId);
-    const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(orderItemsFiltered);
+    const dataToSend: FBDocumentRevisionsValue[]
+      = storeDataToFormData(orderItemsFiltered);
 
     submitData(dataToSend);
   };
@@ -64,8 +64,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
         return { ...item, justificationOfChange, descriptionOfChange };
       });
 
-    const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(orderItemsUpdated);
+    const dataToSend: FBDocumentRevisionsValue[]
+      = storeDataToFormData(orderItemsUpdated);
     submitData(dataToSend);
   };
 
@@ -82,8 +82,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   };
 
   useEffect(() => {
-    if (asyncState && (asyncState.status === AsyncStatus.Success ||
-      asyncState.status === AsyncStatus.Error)) {
+    if (asyncState && (asyncState.status === AsyncStatus.Success
+      || asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
@@ -136,7 +136,6 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   ));
 
 };
-
 
 const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProps> = ({
   changeRequest,

@@ -7,8 +7,8 @@ import { ApplicationState } from '../../../../state/reducers';
 import AutocompleteField from '../../../components/forms/fields/Autocomplete/Autocomplete';
 
 interface Props {
-  portal?: boolean;
-  isDisabled?: boolean;
+  portal?: boolean
+  isDisabled?: boolean
 }
 
 const SecurityEmployees: React.FunctionComponent<Props> = ({ portal, isDisabled }) => {
@@ -17,7 +17,7 @@ const SecurityEmployees: React.FunctionComponent<Props> = ({ portal, isDisabled 
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
       state,
-      currentUserId
+      currentUserId,
     );
   });
 

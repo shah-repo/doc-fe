@@ -12,12 +12,12 @@ import Colors from '../../layout/theme/utils/colors';
 import AuditItemPresenter from './presenter';
 
 interface TranslatedTextProps {
-  [employeeName: string]: string;
+  [employeeName: string]: string
 }
 
 interface Props {
-  openHistoryPanel: boolean;
-  closeHistoryPanel: () => void;
+  openHistoryPanel: boolean
+  closeHistoryPanel: () => void
 }
 
 const AuditItemsContainer: React.FunctionComponent<Props> = ({
@@ -38,8 +38,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
   const addUserNameAndEmailBlock = (sameGroup, employeeDetails) => {
     const auditTypes = map(sameGroup, 'auditType');
     if (
-      auditTypes.includes(ACTION_TITLE_MAPPING.AddedToGroups) ||
-      auditTypes.includes(ACTION_TITLE_MAPPING.AddedToGroup)
+      auditTypes.includes(ACTION_TITLE_MAPPING.AddedToGroups)
+      || auditTypes.includes(ACTION_TITLE_MAPPING.AddedToGroup)
     ) {
       sameGroup.unshift({
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.AddedUserEmail, {}),
@@ -73,7 +73,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
 
   const getDescription = (
     auditRecord: UMAuditProps,
-    employeeDetails: Employee | { user: Partial<User> }
+    employeeDetails: Employee | { user: Partial<User> },
   ) => {
     let actionInfo = {
       primaryText: ACTION_TITLE_MAPPING.Unknown as string,
@@ -85,13 +85,13 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       const groupName = getGroupName(
         auditRecord.nextValue === 'undefined'
           ? auditRecord.previousValue
-          : auditRecord.nextValue
+          : auditRecord.nextValue,
       );
       if (auditRecord.type === 'ARRAY_NEW') {
         actionInfo = {
           primaryText: `${getTranslatedText(
             ACTION_TITLE_MAPPING.EmployeesAddedToGroups,
-            { groupName: '' }
+            { groupName: '' },
           )}${UM_AUDIT_CONCAT_KEYS.AddToGroup}${groupName}`,
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.EmployeesAddedToGroups,
@@ -101,7 +101,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         actionInfo = {
           primaryText: `${getTranslatedText(
             ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups,
-            { groupName: '' }
+            { groupName: '' },
           )}${UM_AUDIT_CONCAT_KEYS.DeleteFromGroup}${groupName}`,
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups,
@@ -109,27 +109,27 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         };
       }
     } else if (
-      auditRecord.fieldPath === 'resendConfirmationEmailTimestamp' &&
-      auditRecord.type === 'OBJECT_EDITED'
+      auditRecord.fieldPath === 'resendConfirmationEmailTimestamp'
+      && auditRecord.type === 'OBJECT_EDITED'
     ) {
       actionInfo = {
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResentPassword, {}),
         secondaryText: getTranslatedText(
           ACTION_TITLE_MAPPING.ResentPasswordDescription,
-          {}
+          {},
         ),
         auditType: ACTION_TITLE_MAPPING.ResentPassword,
         sortedIndex: 0,
       };
     } else if (
-      auditRecord.fieldPath === 'resetPasswordEmailTimestamp' &&
-      auditRecord.type === 'OBJECT_EDITED'
+      auditRecord.fieldPath === 'resetPasswordEmailTimestamp'
+      && auditRecord.type === 'OBJECT_EDITED'
     ) {
       actionInfo = {
         primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ResetPassword, {}),
         secondaryText: getTranslatedText(
           ACTION_TITLE_MAPPING.ResetPasswordDescription,
-          {}
+          {},
         ),
         auditType: ACTION_TITLE_MAPPING.ResetPassword,
         sortedIndex: 0,
@@ -139,7 +139,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         actionInfo = {
           primaryText: getTranslatedText(
             ACTION_TITLE_MAPPING.EmployeeNameUpdated,
-            {}
+            {},
           ),
           secondaryText: `${auditRecord.previousValue}${UM_AUDIT_CONCAT_KEYS.NameSeparator}${auditRecord.nextValue}`,
           auditType: ACTION_TITLE_MAPPING.EmployeeNameUpdated,
@@ -172,7 +172,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           actionInfo = {
             primaryText: getTranslatedText(
               ACTION_TITLE_MAPPING.AddedToGroups,
-              {}
+              {},
             ),
             secondaryText: getGroupName(auditRecord.nextValue),
             auditType: ACTION_TITLE_MAPPING.AddedToGroups,
@@ -183,7 +183,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         actionInfo = {
           primaryText: getTranslatedText(
             ACTION_TITLE_MAPPING.DeletedFromGroups,
-            {}
+            {},
           ),
           secondaryText: getGroupName(auditRecord.previousValue),
           auditType: ACTION_TITLE_MAPPING.DeletedFromGroups,
@@ -195,7 +195,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         actionInfo = {
           primaryText: getTranslatedText(
             ACTION_TITLE_MAPPING.CreatedNewUser,
-            {}
+            {},
           ),
           secondaryText: auditRecord.employeeName,
           auditType: ACTION_TITLE_MAPPING.CreatedNewUser,
@@ -203,13 +203,13 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         };
       } else if (auditRecord.type === 'BOOLEAN_EDITED') {
         if (
-          auditRecord.previousValue === 'true' &&
-          auditRecord.nextValue === 'false'
+          auditRecord.previousValue === 'true'
+          && auditRecord.nextValue === 'false'
         ) {
           actionInfo = {
             primaryText: getTranslatedText(
               ACTION_TITLE_MAPPING.DeactivateUser,
-              {}
+              {},
             ),
             secondaryText: auditRecord.employeeName,
             auditType: ACTION_TITLE_MAPPING.DeactivateUser,
@@ -217,8 +217,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           };
         }
         if (
-          auditRecord.previousValue === 'false' &&
-          auditRecord.nextValue === 'true'
+          auditRecord.previousValue === 'false'
+          && auditRecord.nextValue === 'true'
         ) {
           actionInfo = {
             primaryText: getTranslatedText(ACTION_TITLE_MAPPING.ReactivateUser, {
@@ -254,13 +254,13 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       if (auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroups, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroup, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesAddedToGroup, { groupName: '' }),
         );
       }
       if (auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups && secondaryText.length <= 1) {
         primaryText = primaryText.replace(
           getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups, { groupName: '' }),
-          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: '' })
+          getTranslatedText(ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup, { groupName: '' }),
         );
       }
       let secondaryTextHtml = <span>{secondaryText.join(', ')}</span>;
@@ -289,8 +289,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           </>
         );
       } else if (
-        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups ||
-        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
+        auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroups
+        || auditType === ACTION_TITLE_MAPPING.EmployeesDeleteFromGroup
       ) {
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.DeleteFromGroup);
         primaryTextHtml = (
@@ -314,8 +314,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         );
         secondaryTextHtml = (<></>);
       } else if (
-        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups ||
-        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
+        auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroups
+        || auditType === ACTION_TITLE_MAPPING.EmployeesAddedToGroup
       ) {
         const items = primaryText.split(UM_AUDIT_CONCAT_KEYS.AddToGroup);
         primaryTextHtml = (
@@ -339,8 +339,8 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
   const getCardGroups = (auditData: UMAuditProps[]) => {
     const auditRecords = map(auditData, (auditRecord: UMAuditProps) => {
       const { employeeId, employeeName, ownerId, ownerEmail, groupId, timestamp, userId } = auditRecord;
-      const employeeDetails = getUserDetails(employeeId) ||
-        getUserDetailsByUserId(userId) || {
+      const employeeDetails = getUserDetails(employeeId)
+        || getUserDetailsByUserId(userId) || {
         user: { name: employeeName, email: '' },
       };
       const ownerDetails = getUserDetails(ownerId) || {
@@ -366,7 +366,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         ...pick(auditRecordGroups[groupKey][0], ['timestamp', 'groupId', 'ownerDetails']),
         descriptions: createGroups(
           groupedItems as UMAuditGroupProps[],
-          auditRecordGroups[groupKey][0].employeeDetails as Partial<Employee>
+          auditRecordGroups[groupKey][0].employeeDetails as Partial<Employee>,
         ),
       };
     });

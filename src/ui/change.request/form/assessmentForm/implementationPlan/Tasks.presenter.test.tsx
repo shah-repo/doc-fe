@@ -19,7 +19,7 @@ describe('Tasks presenter test without tasks', () => {
   };
 
   const getWrapper = (props: Partial<Props> = {}) => shallow(
-    <TasksPresenter {...defaultProps} {...props}/>,
+    <TasksPresenter {...defaultProps} {...props} />,
   );
 
   it('Doesnt show task presenter if there is no tasks', () => {
@@ -55,7 +55,7 @@ describe('Tasks presenter test with tasks', () => {
   };
 
   const getWrapper = (props: Partial<Props>) => shallow(
-    <TasksPresenter {...defaultProps} {...props}/>,
+    <TasksPresenter {...defaultProps} {...props} />,
   );
 
   it('Match number of task presenters to number of tasks', () => {

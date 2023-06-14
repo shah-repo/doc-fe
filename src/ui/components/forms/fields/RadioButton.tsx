@@ -9,7 +9,7 @@ import { ReactComponent as CheckedRadioIcon } from '../../../../assets/images/ra
 import { ReactComponent as UnCheckedRadioIcon } from '../../../../assets/images/unchecked_radio.svg';
 
 interface RadioButtonOwnProps extends Pick<FormControlLabelProps, Exclude<keyof FormControlLabelProps, 'control'>> {
-  radioButton?: MuiRadioProps;
+  radioButton?: MuiRadioProps
 }
 
 type RadioButtonProps = RadioButtonOwnProps;

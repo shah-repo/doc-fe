@@ -4,7 +4,7 @@ import React from 'react';
 import { FB, FBMediaAlbumProps, FBMediaAlbumState, FBWorkspaceModeOptions } from '..';
 
 export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     onClick,
@@ -36,9 +36,9 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       title = (mode === 'carousel')
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : '';
-      hiddenContainer = Boolean((workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
-        workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW || actionsDisabled)
-         && isEmpty(collection)
+      hiddenContainer = Boolean((workspaceMode === FBWorkspaceModeOptions.PREVIEW
+        || workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW || actionsDisabled)
+         && isEmpty(collection),
       );
     });
 
@@ -61,7 +61,6 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     if (fileUploadEl) {
       fileUploadEl.onclick = registerCancel;
     }
-
 
     function registerCancel() {
       document.body.onfocus = removeLock;

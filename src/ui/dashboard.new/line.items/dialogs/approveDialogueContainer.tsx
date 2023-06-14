@@ -23,14 +23,14 @@ import { Translation } from '../../../translations/types';
 import TransitionDialog from './transitionDialog/TransitionDialog';
 
 interface Props {
-  changeRequestId: string;
-  transition: ChangeRequestTransition;
-  buttonProps?: ButtonProps;
-  arId?: string;
-  title?: string;
-  label: string;
-  transitionDialog: any;
-  onSuccess?: () => void;
+  changeRequestId: string
+  transition: ChangeRequestTransition
+  buttonProps?: ButtonProps
+  arId?: string
+  title?: string
+  label: string
+  transitionDialog: any
+  onSuccess?: () => void
 }
 
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
@@ -45,7 +45,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 }) => {
   const effectiveDateDialog = useDialog();
   const applyTransitionAction = useActionCreator(
-    changeRequestsActions.applyTransition
+    changeRequestsActions.applyTransition,
   );
   const dispatch = useDispatch();
 
@@ -55,14 +55,14 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       effectiveDateDialog.close();
       transitionDialog.close();
       toastSuccess(<><div style={{ display: 'flex' }}>
-        <div><SuccessIcon style={{ height: '30px' }}/></div>
+        <div><SuccessIcon style={{ height: '30px' }} /></div>
         <div style={{ color: Colors.black }}>
           <div><span style={{ fontWeight: 'bold' }}>
-            <Text translation={`approvalRequest.status.${response?.state}` as Translation}/></span></div>
-          {response?.state === 'IN_REVIEW' ?
-            <div><Text translation={'approvalRequest.status.message.IN_REVIEW_PENDING' as Translation}
-            /> </div> :
-            <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
+            <Text translation={`approvalRequest.status.${response?.state}` as Translation} /></span></div>
+          {response?.state === 'IN_REVIEW'
+            ? <div><Text translation={'approvalRequest.status.message.IN_REVIEW_PENDING' as Translation}
+            /> </div>
+            : <div><Text translation={`approvalRequest.status.message.${response?.state}` as Translation}
               values={{ crId: response?.crId, title: response?.title }} />
             </div>}
         </div>
@@ -80,7 +80,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       changeRequestId,
       values,
       transition,
-      async
+      async,
     );
   };
 

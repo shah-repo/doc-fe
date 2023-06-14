@@ -10,18 +10,18 @@ import { ApplicationState } from '../../../state/reducers';
 import AuditPresenter from './Audit.presenter';
 
 interface Props {
-  changeRequest: ChangeRequest;
-  isDrawerOpen: boolean;
+  changeRequest: ChangeRequest
+  isDrawerOpen: boolean
 }
 
 type OwnProps = Props;
 
 interface StateProps {
-  audit: AuditGroupType;
+  audit: AuditGroupType
 }
 
 interface DispatchProps {
-  loadAudit: typeof changeRequestsActions.loadAudit;
+  loadAudit: typeof changeRequestsActions.loadAudit
 }
 
 type AuditContainerProps = OwnProps & StateProps & DispatchProps;

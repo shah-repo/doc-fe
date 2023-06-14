@@ -7,9 +7,9 @@ import Text from '../Text';
 import { WatermarkResponse } from './types';
 
 interface Props {
-  result: WatermarkResponse;
-  close: () => void;
-  download: () => void;
+  result: WatermarkResponse
+  close: () => void
+  download: () => void
 }
 
 const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
@@ -35,9 +35,9 @@ const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
       <Text translation="common.dismiss" />
     </Button>
   );
-  const renderIcon = result.success ?
-    <SuccessIcon /> :
-    <WarningIcon />;
+  const renderIcon = result.success
+    ? <SuccessIcon />
+    : <WarningIcon />;
 
   return (
     <Grid

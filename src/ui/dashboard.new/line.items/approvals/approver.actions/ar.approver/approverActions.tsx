@@ -30,32 +30,32 @@ import useStyles from './approverActions.styles';
 import DismissAction from '../../../common/DismissAction';
 
 interface Props {
-  id: string;
-  arId: string;
-  arChangeRequestId: string;
-  type: string;
-  arTitle: string;
-  approvalStatusChanged: string;
-  timestamp: string;
+  id: string
+  arId: string
+  arChangeRequestId: string
+  type: string
+  arTitle: string
+  approvalStatusChanged: string
+  timestamp: string
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  approverName: string;
-  approverAvatar: Nullable<string>;
-  approverInitialColor: string;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  approverName: string
+  approverAvatar: Nullable<string>
+  approverInitialColor: string
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const ARApproverActionItemPresenter: React.FC<Props> = ({
   id,
@@ -221,8 +221,8 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
                     </Typography>
                   </Grid>
                 )}
-                {STATUS_TYPES_LABEL.APPROVED !== approvalStatusChanged &&
-                  STATUS_TYPES_LABEL.REJECTED !== approvalStatusChanged && (
+                {STATUS_TYPES_LABEL.APPROVED !== approvalStatusChanged
+                  && STATUS_TYPES_LABEL.REJECTED !== approvalStatusChanged && (
                   <Grid item={true}>
                     <Typography
                       component="span"
@@ -247,7 +247,7 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
                   </Typography>
                 </Grid> */}
                 <Grid item={true}>
-                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
                 </Grid>
                 {/* {arTitle && (
                   <Grid item={true}>
@@ -263,7 +263,7 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={arTitle}/>
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={arTitle} />
                 </Grid>
               </Grid>
               <Grid
@@ -272,7 +272,7 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true}>
                   <Typography
                     component="span"

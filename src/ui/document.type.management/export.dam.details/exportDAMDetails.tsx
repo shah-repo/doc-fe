@@ -9,7 +9,7 @@ import { DialogHandler } from '../../hooks/useDialog';
 import { styles } from './exportDAMDetails.styles';
 
 interface Props {
-  dialog: DialogHandler;
+  dialog: DialogHandler
 }
 
 const ExportDAMDetails: React.FunctionComponent<Props> = ({
@@ -51,8 +51,8 @@ const ExportDAMDetails: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        dialog.isOpen &&
-        <Dialog
+        dialog.isOpen
+        && <Dialog
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"

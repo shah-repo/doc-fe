@@ -16,18 +16,18 @@ import { UserManage } from '../types';
 import Commandstyles from './CommandCell.styles';
 
 interface CommandCellProps {
-  dataItem: UserManage | GetEmployeeResponse;
-  editField: string;
-  add: (dataItem: UserManage) => void;
-  cancel: (dataItem: UserManage) => void;
-  edit: (dataItem: GetEmployeeResponse) => void;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  ariaColumnIndex?: number;
-  className?: string;
-  columnIndex?: number;
-  role?: string;
-  rowType?: string;
+  dataItem: UserManage | GetEmployeeResponse
+  editField: string
+  add: (dataItem: UserManage) => void
+  cancel: (dataItem: UserManage) => void
+  edit: (dataItem: GetEmployeeResponse) => void
+  colSpan?: number
+  style?: React.CSSProperties
+  ariaColumnIndex?: number
+  className?: string
+  columnIndex?: number
+  role?: string
+  rowType?: string
 }
 
 export const CommandCell = ({
@@ -147,4 +147,3 @@ export const CommandCell = ({
     </td>
   );
 };
-

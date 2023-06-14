@@ -96,9 +96,8 @@ export const toDocumentRevisionFormValues = (
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
   const isDocRevFirstDraft = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
-      documentRevision?.status
+      documentRevision?.status,
   ) && documentRevision?.version === 1;
-
 
   if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
     values.revisionStage = documentRevision.revisionStage.toString();

@@ -35,8 +35,8 @@ const DialogOpener: React.FunctionComponent<Props> = ({
         {textToShow}
       </div>
       {
-        dialogHandler.isOpen &&
-        <Dialog
+        dialogHandler.isOpen
+        && <Dialog
           auditId={id}
           dialogHandler={dialogHandler}
         />

@@ -20,4 +20,3 @@ export const TRAINING_STATS_LIST_INITIAL_STATE = {
   page_total: 0,
   total: 0,
 };
-

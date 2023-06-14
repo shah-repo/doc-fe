@@ -29,7 +29,7 @@ class FBPartsState extends FBProcedureState {
 
       const numberOfDigits = Math.max(
         this.getNumberOfDigits(currentQuantity),
-        this.getNumberOfDigits(quantityToAdd)
+        this.getNumberOfDigits(quantityToAdd),
       );
 
       result[key] = {
