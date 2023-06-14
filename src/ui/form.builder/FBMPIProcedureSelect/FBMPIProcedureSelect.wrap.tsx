@@ -145,9 +145,10 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           <Grid item xs={12} className={classes.dueDate}>
             {calDate && (
               <span>
-                {' '}
-                Cal Due:{' '}
-                {getFormattedDateString(calDate, MomentFormats.BriefDate)}{' '}
+                {intl.formatMessage(
+                  { id: 'form.builder.lhrs.procedure.select.equipment.option.cal.due' },
+                  { date: getFormattedDateString(calDate, MomentFormats.BriefDate) },
+                )}
               </span>
             )}
             {pmDate && calDate && (
@@ -157,9 +158,10 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
             )}
             {pmDate && (
               <span>
-                {' '}
-                PM Due:{' '}
-                {getFormattedDateString(pmDate, MomentFormats.BriefDate)}{' '}
+                {intl.formatMessage(
+                  { id: 'form.builder.lhrs.procedure.select.equipment.option.pm.due' },
+                  { date: getFormattedDateString(pmDate, MomentFormats.BriefDate) },
+                )}
               </span>
             )}
           </Grid>
