@@ -3,7 +3,7 @@ import React from 'react';
 import { FB, FBActionFieldActions, FBActionFieldProps, FBActionOptionProps, FBData, FBDialogState, FBForm } from '..';
 
 export const withFBActionField = <T extends FBActionFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({

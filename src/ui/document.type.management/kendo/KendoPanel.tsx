@@ -1,5 +1,5 @@
 import { Button, Grid } from '@material-ui/core';
-import { FilterDescriptor, State, process } from '@progress/kendo-data-query';
+import { FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import {
   GridColumn,
@@ -20,22 +20,22 @@ import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import Config from '../../../config';
 import { documentTypeActions } from '../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP_OPTION, DocumentType, GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
-import Text from '../../components/Text';
 import CellRender from '../../components/common/kendo.column.templates/CellRender';
 import { DropdownFilterTemplate } from '../../components/common/kendo.column.templates/DropdownFilterTemplate';
 import ColumnHeader from '../../components/common/kendo/ColumnHeader';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, TranslatedText } from '../../components/common/kendo/helpers';
 import Loader from '../../components/common/kendo/Loader';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
-import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorTooltip } from '../../components/common/kendo/helpers';
 import { KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { toastError } from '../../components/notifications';
+import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import { TablePanelStateProps } from '../../components/table/types';
+import Text from '../../components/Text';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -48,25 +48,25 @@ import { getDropDownDataSource } from './filter.template/CommonCellDropdownFilte
 import { styles } from './styles';
 import { DTMAddRow, DTMRowItem } from './types';
 
-interface KendoPanelProps<T> {
-  gridData: DocumentType[];
-  gridConfiguration: KendoGridConfiguration;
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
+interface KendoPanelProps<DocumentType> {
+  gridData: DocumentType[]
+  gridConfiguration: KendoGridConfiguration
+  tableName: string
+  tableCriteria: TablePanelStateProps
 }
 interface DocumentTypeCustom extends DocumentType {
-  inEdit?: boolean;
-  isNewRecord?: boolean;
+  inEdit?: boolean
+  isNewRecord?: boolean
 }
 interface ResultProps {
   dataSource: {
-    text: string;
-    value: string | boolean;
-  }[];
-  operator: string;
+    text: string
+    value: string | boolean
+  }[]
+  operator: string
 
 }
-export function KendoPanel<T extends { id?: string }>({
+export function KendoPanel({
   gridData,
   gridConfiguration,
   tableName,
@@ -83,7 +83,7 @@ export function KendoPanel<T extends { id?: string }>({
   const { columnConfig, kendoConfig } = tableCriteria;
 
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
-    columnConfig ? JSON.parse(columnConfig) : gridConfiguration.columns
+    columnConfig ? JSON.parse(columnConfig) : gridConfiguration.columns,
   );
 
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
@@ -102,11 +102,11 @@ export function KendoPanel<T extends { id?: string }>({
 
   // Update
   const updateDocumentTypeAction = useActionCreator(
-    documentTypeActions.updateDocumentType
+    documentTypeActions.updateDocumentType,
   );
   // Add New
   const addDocumentTypeAction = useActionCreator(
-    documentTypeActions.addDocumentType
+    documentTypeActions.addDocumentType,
   );
   const disabled = Config.docTypeManagementEditDisabled;
   const dispatch = useDispatch();
@@ -138,7 +138,7 @@ export function KendoPanel<T extends { id?: string }>({
   const [dataState, setDataState] = React.useState(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = React.useState(
-    processWithGroups(gridData, dataState)
+    processWithGroups(gridData, dataState),
   );
   useEffect(() => {
     setIsLoading(true);
@@ -195,8 +195,8 @@ export function KendoPanel<T extends { id?: string }>({
           ...tableCriteria,
           kendoConfig,
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
 
@@ -327,8 +327,8 @@ export function KendoPanel<T extends { id?: string }>({
   // On field config: inline edit
   const update = (dataItem: DTMRowItem) => {
     // need to convert
-    dataItem.active = dataItem.active === true || dataItem.active.toString() ===
-    getTranslatedText(TranslatedText[DisplayText.ACTIVE]);
+    dataItem.active = dataItem.active === true || dataItem.active.toString()
+    === getTranslatedText(TranslatedText[DisplayText.ACTIVE]);
     const newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,
@@ -363,7 +363,7 @@ export function KendoPanel<T extends { id?: string }>({
       updateDocumentTypeAction,
       id,
       toDocumentTypeBody(values),
-      async
+      async,
     );
   };
 
@@ -406,8 +406,8 @@ export function KendoPanel<T extends { id?: string }>({
       values.startingNumber = startingNumber
         ? +startingNumber
         : startingNumber;
-      values.hiddenForCreationForUsersWithoutTags =
-      values.hiddenForCreationForUsersWithoutTagsFormatted;
+      values.hiddenForCreationForUsersWithoutTags
+      = values.hiddenForCreationForUsersWithoutTagsFormatted;
       delete values.inEdit;
       delete values.expanded;
       delete values.isNewRecord;
@@ -474,8 +474,8 @@ export function KendoPanel<T extends { id?: string }>({
           ...tableCriteria,
           columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
 
@@ -486,8 +486,8 @@ export function KendoPanel<T extends { id?: string }>({
           ...tableCriteria,
           columnConfig: JSON.stringify(dataColumns),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
 
@@ -527,7 +527,7 @@ export function KendoPanel<T extends { id?: string }>({
         setCollapsedState(newCollapsedIds);
       }
     },
-    [collapsedState]
+    [collapsedState],
   );
 
   const result = setExpandedState({
@@ -569,7 +569,7 @@ export function KendoPanel<T extends { id?: string }>({
               className={classes.clearButton}
               onClick={async () => { await clearFilter(false); }}
             >
-              <Text translation={'common.clear.filters'} />
+              <Text translation="common.clear.filters" />
             </Button>
           </Grid>
         </GridToolbar>
@@ -598,7 +598,7 @@ export function KendoPanel<T extends { id?: string }>({
               disabled={isGrouped}
             >
               <ExportListIcon isGrouped={isGrouped} />
-              <Text translation={'common.export.dam.details'} />
+              <Text translation="common.export.dam.details" />
             </Button>
             <Button
               variant="outlined"
@@ -607,7 +607,7 @@ export function KendoPanel<T extends { id?: string }>({
               className={ disabled ? classes.disabledAddBtn : classes.addBtn}
               {...{ disabled }}
             >
-              <Text translation={'common.add.document.type'} />
+              <Text translation="common.add.document.type" />
             </Button>
           </Grid>
         </Grid>
@@ -619,4 +619,3 @@ export function KendoPanel<T extends { id?: string }>({
     </Grid>
   );
 }
-

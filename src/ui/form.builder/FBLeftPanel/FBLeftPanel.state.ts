@@ -24,7 +24,6 @@ class FBLeftPanelState {
     return this.index;
   }
 
-
   @action public setShowLeftPanelEditor = (open: boolean) => {
     set(this, 'showLeftPanelEditor', open);
   };

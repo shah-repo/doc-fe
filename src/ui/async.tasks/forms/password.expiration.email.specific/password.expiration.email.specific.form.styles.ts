@@ -9,5 +9,5 @@ export const styles = makeStyles((theme) =>
     mt8: {
       marginTop: theme.spacing(1),
     },
-  })
+  }),
 );

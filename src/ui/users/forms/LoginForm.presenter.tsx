@@ -13,14 +13,14 @@ import { LoginFormValues } from '../types';
 import styles from './LoginForm.styles';
 
 interface Props extends WithStyles<typeof styles>, FormikProps<LoginFormValues> {
-  asyncState: AsyncState;
-  signMessage: Translation;
-  signLabel: Translation;
-  route: string;
-  title: Translation;
-  logo: string;
-  forgotPassword?: () => void;
-  buttonLabel: Translation;
+  asyncState: AsyncState
+  signMessage: Translation
+  signLabel: Translation
+  route: string
+  title: Translation
+  logo: string
+  forgotPassword?: () => void
+  buttonLabel: Translation
 }
 
 const LoginFormPresenter: React.FunctionComponent<Props> = ({
@@ -41,7 +41,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
       onClick={forgotPassword}
       className={classes.forgotPasswordLink}
       id="LoginFormPresenter-forgotLink">
-      <Text translation={'forgot.password'} />
+      <Text translation="forgot.password" />
     </Button>
   );
 
@@ -62,7 +62,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           label="login.email"
           size="sm"
           gutter={false}
-          dataCy={'LoginFormPresenter-email'}
+          dataCy="LoginFormPresenter-email"
           inputProps={{ autoComplete: 'email', autoFocus: true, id: 'LoginFormPresenter-email' }}
           validate={validator(required, email)}
           lpignore={false}
@@ -75,7 +75,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
             label="login.password"
             size="sm"
             gutter={false}
-            dataCy={'LoginFormPresenter-password'}
+            dataCy="LoginFormPresenter-password"
             inputProps={{ autoComplete: 'current-password', id: 'LoginFormPresenter-password', type: 'password' }}
             validate={validator(required)}
             lpignore={false}
@@ -86,7 +86,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           asyncState={asyncState}
           label={buttonLabel}
           className={classes.submit}
-          data-cy={'LoginFormPresenter-submit'}
+          data-cy="LoginFormPresenter-submit"
           id="LoginFormPresenter-submit"
           dataCy="LoginFormPresenter-submit"
         />

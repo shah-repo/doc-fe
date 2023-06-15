@@ -107,7 +107,7 @@ enum Colors {
   chinese_silver='#C8CACF',
   spanish_gray='#999999',
   gains_boro='#DDDDDD',
-  white_smoke='#F9F9F9'
+  white_smoke='#F9F9F9',
 }
 
 export default Colors;

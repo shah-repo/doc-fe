@@ -61,8 +61,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
               readOnly={true}
               editorState={editor}
               toolbarHidden={true}
-              editorClassName={!flag ? descriptionClasses.descriptionEditorClass :
-                descriptionClasses.descriptionSummaryEditorClass}
+              editorClassName={!flag ? descriptionClasses.descriptionEditorClass
+                : descriptionClasses.descriptionSummaryEditorClass}
               editorStyle={{
                 lineHeight: '24px',
               }}

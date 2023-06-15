@@ -46,7 +46,7 @@ const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
 
 const docRevTypeId = (
   state: DocRevByIdState = DOC_REV_BY_ID_DEFAULT_STATE,
-  action: DocumentTypeByIdAction
+  action: DocumentTypeByIdAction,
 ): DocRevByIdState => {
   switch (action.type) {
     case DOCUMENT_TYPE_BY_ID:

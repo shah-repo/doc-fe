@@ -3,8 +3,8 @@ import FBEQMaintenanceState from '../../form.builder/FBEQMaintenance/FBEQMainten
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface DocumentRevisionSocketProps {
-  docRevId: string;
-  eqMaintenanceState?: FBEQMaintenanceState;
+  docRevId: string
+  eqMaintenanceState?: FBEQMaintenanceState
 }
 
 const DocumentRevSocket: React.FunctionComponent<

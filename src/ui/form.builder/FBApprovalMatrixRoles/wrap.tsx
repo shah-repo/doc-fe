@@ -1,9 +1,9 @@
-import { cloneDeep, get, isArray } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { FB, FBApprovalRole, FBDAMFields } from '..';
+import { FB, FBApprovalMatrixFieldData, FBApprovalRole } from '..';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { FBApprovalMatrixRolesProps } from './types';
 
@@ -15,22 +15,21 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     name,
     ...props
   }: T) => {
-    const { formState, approvalMatrixFieldState } = FB.useStores();
+    const { workspaceState, formState, approvalMatrixFieldState } = FB.useStores();
+    const { formInput } = workspaceState ?? {};
 
     const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
       id: group.value,
       name: group.label,
     }));
 
-    let existingRoles = useObserver(
+    const existingRoles = useObserver(
       () => (
-        formState?.getFieldValue(FBDAMFields.DAR) ?? []
-      ) as FBApprovalRole[],
+        approvalMatrixFieldState?.getCurrentData('roles')
+          ?? approvalMatrixFieldState?.extractData(formInput as FBApprovalMatrixFieldData, 'roles')
+          ?? []
+      ),
     );
-
-    if (!isArray(existingRoles)) {
-      existingRoles = get(existingRoles, 'approvalRoles');
-    }
 
     approvalRoles = existingRoles.map((role) => {
       const foundGroups = role.groups.map(({ id }) => {

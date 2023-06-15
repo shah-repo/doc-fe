@@ -10,8 +10,8 @@ import Text from '../../components/Text';
 import { styles } from './ResetPassword.styles';
 
 interface Props {
-  asyncState: AsyncState;
-  logo: string;
+  asyncState: AsyncState
+  logo: string
 }
 
 const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
@@ -29,16 +29,16 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
         />
         <Box display="flex" textAlign="center" mb={3} data-cy="ResetPassword-title">
           <Typography variant="h4" className={classes.title}>
-            <Text translation={'reset.password'} />
+            <Text translation="reset.password" />
           </Typography>
         </Box>
         <Box display="flex" textAlign="center" data-cy="ResetPassword-subtitle">
           <Typography variant="h5"className={classes.subtitle} >
-            <Text translation={'reset.choose.new.password'} />
+            <Text translation="reset.choose.new.password" />
           </Typography>
         </Box>
         <Form className={classes.formStyle}>
-          <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError"/>
+          <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError" />
           <InputField
             name="email"
             label="reset.enter.email"
@@ -50,7 +50,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             }}
             validate={validator(required)}
             lpignore={false}
-            dataCy={'email'}
+            dataCy="email"
           />
           <InputField
             name="currentPassword"
@@ -63,7 +63,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             }}
             validate={validator(required)}
             lpignore={false}
-            dataCy={'currentPassword'}
+            dataCy="currentPassword"
           />
           <InputField
             name="newPassword"
@@ -76,7 +76,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             }}
             validate={validator(required)}
             lpignore={false}
-            dataCy={'newPasswordFirstInput'}
+            dataCy="newPasswordFirstInput"
           />
           <InputField
             name="newPasswordConfirmation"
@@ -87,15 +87,15 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
               autoComplete: 'reset-password',
               type: 'password',
             }}
-            dataCy={'newPasswordConfirmation'}
+            dataCy="newPasswordConfirmation"
             validate={validator(required)}
             lpignore={false}
           />
           <SubmitButton
             asyncState={asyncState}
-            label={'reset.password'}
+            label="reset.password"
             className={classes.submit}
-            dataCy={'resetButtonSubmit'}
+            dataCy="resetButtonSubmit"
           />
         </Form>
       </Paper>

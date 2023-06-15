@@ -15,4 +15,3 @@ export const SET_DOCUMENT_TYPES_BY_CATEGORY = 'documentType/SET_CATEGORY';
 export const TAB_CONFIGURATION_URL = `${DOCUMENT_TYPE_ROOT_URL}/tab_configuration_for_groups`;
 export const TAB_CONFIGURATION_LIST_ASYNC = 'tabConfiguration/LIST_ASYNC';
 export const TAB_CONFIGURATION_LIST = 'tabConfiguration/LIST';
-

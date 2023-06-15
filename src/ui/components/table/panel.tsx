@@ -240,15 +240,13 @@ export function TablePanel<T extends any>({
         );
       });
 
-
   };
 
-  const noRowsRenderer = () => isLoading ?
-    <Box textAlign="center" marginTop="50px">
+  const noRowsRenderer = () => isLoading
+    ? <Box textAlign="center" marginTop="50px">
       <CircularProgress />
     </Box>
-    :
-    <Box className={classes.emptyMsg} data-cy={'no.results.found'}>
+    :    <Box className={classes.emptyMsg} data-cy="no.results.found">
       <Text translation={noRowsTranslation} />
     </Box>;
 
@@ -308,7 +306,6 @@ export function TablePanel<T extends any>({
       ),
     );
   };
-
 
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 

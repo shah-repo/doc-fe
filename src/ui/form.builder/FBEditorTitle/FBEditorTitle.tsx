@@ -15,9 +15,9 @@ import styles from './FBEditorTitle.styles';
 import { withFBEditorTitle } from './FBEditorTitle.wrap';
 
 interface FBEditorTitlePropsIncludesType extends FBEditorTitleProps {
-  type?: string;
-  onFBEditorClose?: () => void;
-  underValidation?: boolean;
+  type?: string
+  onFBEditorClose?: () => void
+  underValidation?: boolean
 }
 
 const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = ({

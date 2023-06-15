@@ -9,6 +9,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
 import useStyles from './styles';
 import { GridItem, GridProps } from './types';
+import { Box } from '@material-ui/core';
 
 function normalizeData <T> (data: T[]): T[] {
   return cloneDeep(data).map(dataItem => {
@@ -173,21 +174,24 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   return (
     <>
-      <KendoDataGrid
-        className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
-        data={data}
-        schema={schema}
-        rowRender={rowRender}
-        dataItemKey="id"
-        onRowClick={!disabled ? handleRowClick : undefined}
-        onDataStateChange={handleDataStateChange}
-        onItemChange={handleItemChange}
-        defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
-        filterable
-        fullWidth
-        hasBoxScrollbars
-        {...restProps}
-      />
+      <Box className={classes.gridContainer}>
+        <KendoDataGrid
+          className={cx(classes.grid, { [classes.gridWithButton]: withButton })}
+          data={data}
+          schema={schema}
+          rowRender={rowRender}
+          dataItemKey="id"
+          onRowClick={!disabled ? handleRowClick : undefined}
+          onDataStateChange={handleDataStateChange}
+          onItemChange={handleItemChange}
+          defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
+          filterable
+          fullWidth
+          fullHeight
+          hasBoxScrollbars
+          {...restProps}
+        />
+      </Box>
       {withButton && (
         <Button
           data-cy="button-add"

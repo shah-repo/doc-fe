@@ -49,4 +49,3 @@ export * from './Shifamed/Utils/SM/SM';
 export { default as SM } from './Shifamed/Utils/SM/SM';
 export { default as SMProvider } from './Shifamed/Utils/SMProvider/SMProvider';
 export * from './Shifamed/Utils/SMProvider/SMProvider.types';
-

@@ -19,8 +19,8 @@ import useDialog from '../../../hooks/useDialog';
 import { checkIsDocumentRecord } from '../../helpers/checkDocumentGroup';
 
 interface Props {
-  documentRevision: DocumentRevision | undefined;
-  renderAsButton?: boolean;
+  documentRevision: DocumentRevision | undefined
+  renderAsButton?: boolean
 }
 const VoidButton: React.FunctionComponent<Props> = ({
   documentRevision,

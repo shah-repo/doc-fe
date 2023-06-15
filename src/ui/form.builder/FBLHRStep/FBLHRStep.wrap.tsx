@@ -84,7 +84,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
             },
           });
         }
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -104,7 +104,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           .setLHRs(docRev);
         setDisplayToLHRs();
         openLHRs(docRev);
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -117,9 +117,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         if (!highestRev) { return; }
         window.open(
           `/document_revision/${highestRev.documentId}/version/${highestRev.id}`,
-          '_self'
+          '_self',
         );
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -154,7 +154,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
         lhrStepState.setMaterials(flattenDeep([editorMaterials]));
         lhrStepState.setEquipment(flattenDeep([editorEquipment]));
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -180,7 +180,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         FBAutocompleteAsyncStore.add(
           FBAutocompleteAsyncOption.mpiDocuments,
           lhrStepState.stepLHRs.id,
-          lhrStepState.stepLHRs
+          lhrStepState.stepLHRs,
         );
       formState?.setFieldValue(name, lhrStepState.stepLHRs.id);
       formState?.getInputState(name)?.setRender();
@@ -190,8 +190,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const filterOutOption = (docRev: DocumentRevision, inputValue: string ) => {
       const filterValue = lowerCase(inputValue);
 
-      return lowerCase(docRev.name).includes(filterValue) ||
-        lowerCase(docRev.document.docId).includes(filterValue);
+      return lowerCase(docRev.name).includes(filterValue)
+        || lowerCase(docRev.document.docId).includes(filterValue);
     };
 
     function handleFilter(
@@ -200,9 +200,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     ) {
       const { inputValue = '' } = state || {};
 
-      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft ||
-        docRev.status === DocumentRevisionStatus.Released) &&
-          filterOutOption(docRev, inputValue));
+      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft
+        || docRev.status === DocumentRevisionStatus.Released)
+          && filterOutOption(docRev, inputValue));
 
       return options;
     }
@@ -216,7 +216,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       materials = lhrStepState?.materials;
       equipment = lhrStepState?.equipment;
     });
-
 
     return Component({
       ...(props as T),

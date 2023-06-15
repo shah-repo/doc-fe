@@ -6,7 +6,6 @@ import FBAutocomplete from '../FBAutocomplete/FBAutocomplete';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
 import { withFBPOReceiveCreateLot } from './FBPOReceiveCreateLot.wrap';
 
-
 const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> = ({
   children,
   item,

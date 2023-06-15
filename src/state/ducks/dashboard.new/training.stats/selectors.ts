@@ -27,11 +27,11 @@ const dueTrainingChartData = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStatsChart[TrainingStatusTypes.DUE];
 
 const getLoadTrainingStatsChartAsyncInfo = (
-  state: ApplicationState
+  state: ApplicationState,
 ): AsyncState => state.dashboardNew.trainingStats.loadTrainingStatsChartAsyncInfo;
 
 const getLoadTrainingStatsListAsyncInfo = (
-  state: ApplicationState
+  state: ApplicationState,
 ): AsyncState => state.dashboardNew.trainingStats.loadTrainingStatsAsyncInfo;
 
 export default {

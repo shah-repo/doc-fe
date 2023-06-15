@@ -9,7 +9,7 @@ type TrainingStatsChart = TrainingStatsChartAction;
 
 const trainingStatsList = (
   state: TrainingStatsState = TRAINING_STATS_LIST_INITIAL_STATE,
-  action: trainingStatsList
+  action: trainingStatsList,
 ): TrainingStatsState => {
   const actionResult = action.payload?.results || [];
   const stateResult = state.results;
@@ -24,7 +24,7 @@ const trainingStatsList = (
 
 const trainingStatsChart = (
   state: TrainingStatsChartState = TRAINING_STATS_CHART_INITIAL_STATE,
-  action: TrainingStatsChart
+  action: TrainingStatsChart,
 ): TrainingStatsChartState => {
   switch (action.type) {
     case TRAINING_STATS_CHART:

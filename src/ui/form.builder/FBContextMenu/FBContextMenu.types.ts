@@ -3,10 +3,10 @@ import { FBContextMenuState, FBFormProps } from '..';
 import { TextProps } from '../../components/Text';
 
 interface FBContextMenuItemProps {
-  text: string;
-  textValues?: TextProps['values'];
-  hidden?: boolean;
-  onClick: () => any;
+  text: string
+  textValues?: TextProps['values']
+  hidden?: boolean
+  onClick: () => any
 }
 
 export type FBContextMenuProps =
@@ -14,11 +14,11 @@ export type FBContextMenuProps =
 & Pick<Partial<MenuProps>, 'anchorPosition' | 'open'>
 & Pick<FBFormProps, 'children'>
 & {
-  onClose?: () => any;
-  onBlur?: () => any;
-  menuId?: string;
-  contextMenuState?: FBContextMenuState;
-  menuItems?: FBContextMenuItemProps[];
-  menuEls?: FBFormProps['children'];
-  boxProps?: Omit<BoxProps, 'onContextMenu' | 'onBlur'>;
+  onClose?: () => any
+  onBlur?: () => any
+  menuId?: string
+  contextMenuState?: FBContextMenuState
+  menuItems?: FBContextMenuItemProps[]
+  menuEls?: FBFormProps['children']
+  boxProps?: Omit<BoxProps, 'onContextMenu' | 'onBlur'>
 };

@@ -5,7 +5,6 @@ import { FB, FBFormState, FBPurchaseOrderFormProps, FBPurchaseOrderItem } from '
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { generateDocIdLabel } from './helpers';
 
-
 export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -70,7 +69,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
           formState?.removeFieldRules('partNumber');
           formState?.removeFieldRules('supplierPartNumber');
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

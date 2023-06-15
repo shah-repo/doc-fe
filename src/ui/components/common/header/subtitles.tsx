@@ -17,8 +17,8 @@ const styles = makeStyles({
   },
 });
 
-const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: string}) => any =
-  ({ docRevId, documentId, label }) => {
+const generateDocRevUrl: (params: {docRevId: string, documentId: string, label: string}) => any
+  = ({ docRevId, documentId, label }) => {
     const classes = styles();
 
     return (
@@ -38,10 +38,10 @@ const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragm
 </React.Fragment>;
 
 const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
-  const subtitle =
-    uniqBy(
+  const subtitle
+    = uniqBy(
       concat(documentRevision?.smartReferencesTo, documentRevision?.document.smartReferencesTo),
-      'id'
+      'id',
     )
     ?.find((ref) => ref?.active && ref?.type === SmartReferenceType.HiddenPiInstance)
     ?.toDocRev

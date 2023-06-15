@@ -9,10 +9,10 @@ import { FBInlineApprovalTransition } from '../../form.builder';
 import { DialogHandler } from '../../hooks/useDialog';
 
 interface Props {
-  asyncState: AsyncActionPayload;
-  approvalId: string;
-  changeApprovalStatus(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;
-  passwordDialog: DialogHandler;
+  asyncState: AsyncActionPayload
+  approvalId: string
+  changeApprovalStatus(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void
+  passwordDialog: DialogHandler
 }
 
 export const DocumentRevisionApprovalDialog: React.FunctionComponent<Props> = ({

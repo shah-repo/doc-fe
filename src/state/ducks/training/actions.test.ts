@@ -1,4 +1,3 @@
-
 import { getCallbackHandler } from '../../../common/tests/factories';
 import { Handlers } from '../../types';
 import actions from './actions';

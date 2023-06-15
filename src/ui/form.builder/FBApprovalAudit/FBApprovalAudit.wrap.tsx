@@ -11,7 +11,7 @@ import FBStore from '../FBStore/FBStore';
 
 // *NOTE: This needs to be refactored! Wait for the BE changes
 export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     approvalAuditState,
@@ -133,8 +133,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
             const poCalcName = FBAuditPOCalculation[poKey as keyof typeof FBAuditPOCalculation];
             const poItemName = FBAuditPOItem[poKey as keyof typeof FBAuditPOItem];
             const hasNoChange = (
-              (previousValue === 'undefined' || toNumber(previousValue) === 0) &&
-              toNumber(nextValue) === 0
+              (previousValue === 'undefined' || toNumber(previousValue) === 0)
+              && toNumber(nextValue) === 0
             );
 
             if (!field.includes('items') && poCalcName) { // Calculation
@@ -205,8 +205,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           approvalAuditState?.setAutocompleteOptionId(optionId);
           const data = FBAutocompleteAsyncStore.data.get(optionId || '');
           if (!data) { return; }
-          const { labelKey = 'text', labelPrefixRoot = '' } =
-              approvalAuditState?.autocompleteApi.optionConfig || {};
+          const { labelKey = 'text', labelPrefixRoot = '' }
+              = approvalAuditState?.autocompleteApi.optionConfig || {};
           let prevIds: string[] = [];
           let nextIds: string[] = [];
           let desc = 'Changed ' + label + ': ';
@@ -273,9 +273,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
       const compactMapped = sortBy(compact(mapped), 'timestamp');
       const approvals = filter(compactMapped,  ({ type, timestamp }) =>
-        type === 'inlineapproval' || type === 'requestapproval'
+        type === 'inlineapproval' || type === 'requestapproval',
       );
-
 
       // TODO: refacoring & sync approveAt with createdAt
       let startDate = last(approvals)?.timestamp || (new Date()).toISOString();
@@ -287,9 +286,9 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       const endDate = releasedAt ? new Date(releasedAt) : (lastChange ? new Date(lastChange) : Date.now());
 
       const filteredMapped = filter(compactMapped, (cm) => (
-        startDate &&
-        new Date(cm.timestamp) >= new Date(startDate) &&
-        new Date(cm.timestamp) <= new Date(endDate)
+        startDate
+        && new Date(cm.timestamp) >= new Date(startDate)
+        && new Date(cm.timestamp) <= new Date(endDate)
       ));
       return filteredMapped as FBAuditData[];
     }
@@ -311,7 +310,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     React.useEffect(() => {
       reaction(
         () => FBAutocompleteAsyncStore.data,
-        () => approvalAuditState?.refresh()
+        () => approvalAuditState?.refresh(),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

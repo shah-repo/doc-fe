@@ -6,5 +6,5 @@ export const styles = makeStyles(() =>
       fontSize: 12,
       fontWeight: 600,
     },
-  })
+  }),
 );

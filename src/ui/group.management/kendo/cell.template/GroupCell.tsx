@@ -6,15 +6,15 @@ import { DisplayText, TranslatedText } from '../../../components/common/kendo/he
 import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface GroupCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number | undefined;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  setOfficial: ((props: boolean) => void);
-  isOfficial: boolean;
-  field?: string;
+  dataItem: any
+  rowType?: string
+  colSpan?: number | undefined
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  setOfficial: ((props: boolean) => void)
+  isOfficial: boolean
+  field?: string
 }
 
 export const GroupCell = ({

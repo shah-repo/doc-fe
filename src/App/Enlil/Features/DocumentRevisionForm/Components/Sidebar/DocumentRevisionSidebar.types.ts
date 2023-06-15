@@ -13,23 +13,23 @@ export type DocumentRevisionSidebarProps =
   'docId'
 >
 & {
-  intl?: IntlShape;
-  docRevsWithoutCanceled?: DocumentRevision[];
-  documentRevisionId?: string;
-  isInlineApproval?: boolean;
-  isRecord?: boolean;
-  selectedDocument?: DocumentRevision;
-  canAccess?: boolean;
-  showFormMigration?: boolean;
-  formDocument?: FBDocumentRevisionProps;
-  isNewOutput?: boolean;
-  title?: string;
-  edit: boolean;
+  intl?: IntlShape
+  docRevsWithoutCanceled?: DocumentRevision[]
+  documentRevisionId?: string
+  isInlineApproval?: boolean
+  isRecord?: boolean
+  selectedDocument?: DocumentRevision
+  canAccess?: boolean
+  showFormMigration?: boolean
+  formDocument?: FBDocumentRevisionProps
+  isNewOutput?: boolean
+  title?: string
+  edit: boolean
 };
 
 export interface DocumentRevisionSidebarStateProps {
-  setOpen: () => void;
-  setTitle: (title: string) => void;
-  open: boolean;
-  title: string;
+  setOpen: () => void
+  setTitle: (title: string) => void
+  open: boolean
+  title: string
 }

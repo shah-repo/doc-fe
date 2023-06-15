@@ -117,6 +117,7 @@
   "change.request.select.template": "Select an Approval Request template to continue",
   "change.request.select.existing.title": "Select One",
   "change.request.select.existing.content": "Select an Existing Approval Request to continue",
+  "change.request.name.required": "{name} is a required field",
   "changeRequest.transition.submitted": "Submit Approval Request",
   "changeRequest.transition.approve": "Approve submission",
   "changeRequest.transition.reject": "Reject submission",
@@ -204,7 +205,7 @@
   "documentRevision.audit.formInput.po-items-built-in.items.unitPrice.NUMBER_EDITED": "Line Item Unit Price Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.received.NUMBER_EDITED": "Line Item Received Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.formattedDate.STRING_EDITED": "Line Item Date Updated",
-  "documentRevision.audit.formInput.po-items-built-in.items.order.NUMBER_EDITED": "Line Item Order Updated",
+  "documentRevision.audit.formInput.po-items-built-in.items.order.NUMBER_EDITED": "Line Item Ordered Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.partNumberDocId.STRING_EDITED": "Line Item Part Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.supplierPartNumber.STRING_EDITED": "Line Item Supplier Part Number Updated",
   "documentRevision.audit.formInput.po-items-built-in.items.partNumberTitle.STRING_EDITED": "Line Item Description Updated",
@@ -1089,6 +1090,9 @@
   "form.builder.mpi.procedure.materials.title": "{title} | Qty: {quantity} {unit}",
   "form.builder.mpi.procedure.materials.title.id": "{id}: {title} | Qty: {quantity} {unit}",
   "form.builder.lhrs.procedure.materials.title": "{title} - rev {revision} | Qty: {quantity} {unit}",
+  "form.builder.lhrs.procedure.select.equipment.option": " Rev {revision} - {name}",
+  "form.builder.lhrs.procedure.select.equipment.option.cal.due": " Cal Due: {date} ",
+  "form.builder.lhrs.procedure.select.equipment.option.pm.due": " PM Due: {date} ",
   "form.builder.procedure.equipment.title": "{title} ",
   "form.builder.mpi.procedure.equipment.title.id": "{id}: {title} ",
   "form.builder.mpi.procedure.equipment.title": "{title}",
@@ -1517,5 +1521,7 @@
   "approvalRequest.status.message.IN_REVIEW_PENDING": "The document is still in review pending other approvers",
   "documentRevision.po.notification.alert.add": "Adding a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?",
   "documentRevision.po.notification.alert.update": "PO Amount has exceeded the threshold limit. A new revision will be created and new approvals are required.\n\nWould you like to proceed?",
-  "documentRevision.po.notification.alert.remove": "Removing a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?"
+  "documentRevision.po.notification.alert.remove": "Removing a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?",
+  "settings.locations": "Locations",
+  "settings.locations.add": "Add another location"
 }

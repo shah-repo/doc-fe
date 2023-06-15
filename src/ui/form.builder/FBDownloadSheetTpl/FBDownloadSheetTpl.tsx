@@ -14,8 +14,8 @@ const FBDownloadSheetTpl: React.FunctionComponent<FBDownloadSheetTplProps> = ({
 
   <Box display="flex" flexDirection="row">
     <FBButton
-      startIcon={<GetApp width={20} height={20} style={{ marginRight: 4 }}/>}
-      key={'downloadsheet'}
+      startIcon={<GetApp width={20} height={20} style={{ marginRight: 4 }} />}
+      key="downloadsheet"
       label={label}
       variant="contained"
       style={{ margin: '0 0 2px 0', padding: '10px 20px' }}

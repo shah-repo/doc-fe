@@ -26,8 +26,8 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, document } = workspaceState || {};
     const formContext = useFormContext();
-    buildValidationRules = isOutput || (!isOutput && document?.status === DocumentRevisionStatus.Released) ?
-      'required' : null;
+    buildValidationRules = isOutput || (!isOutput && document?.status === DocumentRevisionStatus.Released)
+      ? 'required' : null;
 
     lhrBuildState = FB.useRef(FBLHRBuildState, {
       value: formState?.getFieldValue(name),
@@ -56,7 +56,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       (value) => {
         formState?.setFieldValue(name, value);
         workspaceState?.formInputSync.set(name, value);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -66,7 +66,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         const { autosave } = workspaceState || {};
         const isDisabled = (autosave && (value === FBLHRBuildOptions['R&D'])) || disabled;
         lhrBuildState?.setDisabled(isDisabled);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

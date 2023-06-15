@@ -70,5 +70,5 @@ export default makeStyles((theme: Theme) =>
       color: Colors.almost_black,
       cursor: 'pointer',
     },
-  })
+  }),
 );

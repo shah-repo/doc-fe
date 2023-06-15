@@ -12,21 +12,21 @@ import { styles } from './Field.styles';
 import { LabelField } from './Input.styles';
 
 export interface FieldOwnProps {
-  label?: Translation | string;
-  formControlProps?: FormControlProps;
-  inputLabelProps?: InputLabelProps;
-  variant?: 'standard' | 'outlined' | 'filled';
-  required?: boolean;
-  gutter?: boolean;
-  minDate?: string;
-  value?: string;
-  actionsRenderer?: () => any;
-  labelProps?: BoxProps;
+  label?: Translation | string
+  formControlProps?: FormControlProps
+  inputLabelProps?: InputLabelProps
+  variant?: 'standard' | 'outlined' | 'filled'
+  required?: boolean
+  gutter?: boolean
+  minDate?: string
+  value?: string
+  actionsRenderer?: () => any
+  labelProps?: BoxProps
 }
 
 export interface FieldStyleProps {
-  gutter?: boolean;
-  error?: boolean;
+  gutter?: boolean
+  error?: boolean
 }
 
 type FieldProps = FieldOwnProps & FormikFieldProps & Partial<TypographyProps>;

@@ -18,10 +18,10 @@ import { getVersionNumber } from '../utils/helpers';
 import useStyles from './FormHeader.styles';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip?: boolean;
-  canShowCreateVersionButton?: boolean;
-  displayLastSaved: boolean;
+  documentRevision: DocumentRevision
+  canChangeOwnerShip?: boolean
+  canShowCreateVersionButton?: boolean
+  displayLastSaved: boolean
 }
 
 const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({

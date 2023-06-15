@@ -16,7 +16,6 @@ const FBCheckboxGroupComp: React.FunctionComponent<FBCheckboxGroupProps> = ({
   );
 };
 
-
 const FBCheckboxGroupChild = withFBCheckboxGroup(FBCheckboxGroupComp);
 
 const FBCheckboxGroup: React.FunctionComponent<FBCheckboxGroupProps> = ({

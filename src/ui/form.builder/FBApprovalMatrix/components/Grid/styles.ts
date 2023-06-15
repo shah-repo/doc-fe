@@ -28,10 +28,10 @@ export default makeStyles((theme) => {
         backgroundColor: `${Colors.darkGray} !important`,
       },
     },
+    gridContainer: {
+      flexGrow: 1,
+    },
     grid: {
-      '& .k-grid-container': {
-        maxHeight: 300, // @todo
-      },
       '& .k-column-title': {
         fontSize: 12,
         textTransform: 'uppercase',

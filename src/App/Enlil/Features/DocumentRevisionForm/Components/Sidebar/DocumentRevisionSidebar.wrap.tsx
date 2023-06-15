@@ -51,16 +51,16 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
       documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
     const { formDocument } = selectedDocument || {};
 
-    isInlineApproval =
-    !!docRevsWithoutCanceled?.find(
-      (e) => isFormWithInlineApproval(e.formDocument?.formTemplate?.schema)
-    ) ||
-    !!isFormWithInlineApproval(selectedDocument?.formDocument?.formTemplate?.schema);
+    isInlineApproval
+    = !!docRevsWithoutCanceled?.find(
+      (e) => isFormWithInlineApproval(e.formDocument?.formTemplate?.schema),
+    )
+    || !!isFormWithInlineApproval(selectedDocument?.formDocument?.formTemplate?.schema);
 
-    isRecord =
-    !!docRevsWithoutCanceled?.find(
-      (e) => checkIsDocumentRecord(e.document?.documentType?.groupOptions)) ||
-    (!!checkIsDocumentRecord(selectedDocument?.document?.documentType?.groupOptions));
+    isRecord
+    = !!docRevsWithoutCanceled?.find(
+      (e) => checkIsDocumentRecord(e.document?.documentType?.groupOptions))
+    || (!!checkIsDocumentRecord(selectedDocument?.document?.documentType?.groupOptions));
 
     canAccess = selectedDocument?.document.canAccess;
 

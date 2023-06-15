@@ -104,5 +104,5 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       lineHeight: '15px',
     },
-  })
+  }),
 );

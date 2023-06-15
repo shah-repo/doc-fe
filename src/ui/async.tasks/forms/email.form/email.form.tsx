@@ -4,8 +4,8 @@ import Text from '../../../components/Text';
 import { styles } from './email.form.styles';
 
 interface Props {
-  handleEmailFormSubmit: (id: string) => void;
-  type: string;
+  handleEmailFormSubmit: (id: string) => void
+  type: string
 }
 const EmailAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handleEmailFormSubmit,
@@ -23,7 +23,7 @@ const EmailAsyncTaskPresenter: React.FunctionComponent<Props> = ({
           id="filled-textarea"
           label={
             <Text
-              translation={'async.tasks.user.email'}
+              translation="async.tasks.user.email"
             />
           }
           multiline
@@ -41,7 +41,7 @@ const EmailAsyncTaskPresenter: React.FunctionComponent<Props> = ({
             handleEmailFormSubmit(email);
           }}
         >
-          <Text translation={'common.submit'} />
+          <Text translation="common.submit" />
         </Button>
       </Box>
     </Box>

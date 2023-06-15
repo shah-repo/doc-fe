@@ -10,5 +10,5 @@ export const styles = makeStyles((theme: Theme) =>
     closeIcon: { padding: 0 },
     dialogContent: { width: 500 },
     formControl: { width: '100%' },
-  })
+  }),
 );

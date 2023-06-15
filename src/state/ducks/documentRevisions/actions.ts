@@ -29,10 +29,10 @@ const documentRevisionSet = (
 
 const loadList = (
   states: DocumentRevisionStatus[] = [],
-  queryParams: DocRevQueryParam
+  queryParams: DocRevQueryParam,
 ): ApiAction<DocumentRevision[]> => {
-  const url =
-    states.length === 0
+  const url
+    = states.length === 0
       ? DOCUMENT_REVISION_ROOT_URL
       : states.reduce((acc, state) => acc, `${DOCUMENT_REVISION_ROOT_URL}?`);
   return apiAction({
@@ -336,7 +336,7 @@ const obsoletePO = (id: string, body: {poStatus: POStatusType}): ApiAction<Docum
 const setPrimaryAttachment = (
   docRevId: string,
   attachmentId: string,
-  handlers: Handlers
+  handlers: Handlers,
 ): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${docRevId}/set_primary/${attachmentId}`,
@@ -362,16 +362,16 @@ const getDocRevStatuses = (
   category?: string,
   notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
-  const categoryUrl = category === undefined ?
-    states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
-      `${DOCUMENT_REVISION_ROOT_URL}/statuses?`) :
-    states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
+  const categoryUrl = category === undefined
+    ? states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
+      `${DOCUMENT_REVISION_ROOT_URL}/statuses?`)
+    : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
-  const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0 ?
-    notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
+  const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0
+    ? notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
-  const url = notIncategory === undefined ?
-    notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
+  const url = notIncategory === undefined
+    ? notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
     method: 'get',
@@ -498,4 +498,3 @@ export default {
   getFormMappingTemplate,
   fetchAvailableParts,
 };
-

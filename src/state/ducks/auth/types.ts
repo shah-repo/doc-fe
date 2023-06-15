@@ -3,168 +3,168 @@ import { Employee } from '../company/types';
 import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
 
 export interface LoginRequestBody {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface ForgotPassword {
-  email: string;
+  email: string
 }
 
 export interface ForgotPasswordConfirmation {
-  email: string;
-  code: string;
-  password: string;
+  email: string
+  code: string
+  password: string
 }
 
-export interface  NewPasswordConfirmation {
-  email: string;
-  newPassword: string;
-  oldPassword: string;
+export interface NewPasswordConfirmation {
+  email: string
+  newPassword: string
+  oldPassword: string
 }
 
 export interface LoginWithCodeRequestBody {
-  code: string;
+  code: string
 }
 
 export interface LogoutRequestBody {
-  AccessToken: string;
+  AccessToken: string
 }
 
 export interface AuthResponse {
-  ExpiresAt: string;
-  ExpiresIn: number;
-  id: string;
-  email: string;
-  name: string;
-  sessionId: string;
-  employees: Employee[];
-  avatar: string | null;
-  iotCredentials: IotCredentials;
-  passwordUpdatedAt: string;
-  passwordExpiresAt: string;
+  ExpiresAt: string
+  ExpiresIn: number
+  id: string
+  email: string
+  name: string
+  sessionId: string
+  employees: Employee[]
+  avatar: string | null
+  iotCredentials: IotCredentials
+  passwordUpdatedAt: string
+  passwordExpiresAt: string
 }
 
 export interface User {
-  id: string;
-  email: string;
-  name: string;
-  employeeId: string;
-  sessionId: string;
-  employees: Employee[];
-  avatar: string | null;
+  id: string
+  email: string
+  name: string
+  employeeId: string
+  sessionId: string
+  employees: Employee[]
+  avatar: string | null
 }
 
 export interface Group {
-  id: string;
-  name: string;
-  tags: Nullable<GroupTag[]>;
-  joinedTags: Nullable<GroupTag[]>;
-  permissions: Permission[];
-  joinedPermissions: Nullable<Permission[]>;
-  joinedParents: Group[];
-  parents: Group[];
-  joinedEmployees: Employee[];
-  type?: GroupType;
-  groupApprover?: string; // FE property for POAM check (ENC-4125)
-  documentStage?: number;
+  id: string
+  name: string
+  tags: Nullable<GroupTag[]>
+  joinedTags: Nullable<GroupTag[]>
+  permissions: Permission[]
+  joinedPermissions: Nullable<Permission[]>
+  joinedParents: Group[]
+  parents: Group[]
+  joinedEmployees: Employee[]
+  type?: GroupType
+  groupApprover?: string // FE property for POAM check (ENC-4125)
+  documentStage?: number
 }
 
 export interface AuthUserAction {
-  type: typeof AUTH_USER;
-  payload: AuthResponse;
+  type: typeof AUTH_USER
+  payload: AuthResponse
 }
 
 export interface SignupAction {
-  type: typeof SIGNUP_URL;
+  type: typeof SIGNUP_URL
 }
 
 export interface ForgotPasswordAction {
-  type: typeof FORGOT_PASSWORD_URL;
+  type: typeof FORGOT_PASSWORD_URL
 }
 
 export interface ConfirmPasswordAction {
-  type: typeof CONFIRM_FORGOT_PASSWORD_URL;
+  type: typeof CONFIRM_FORGOT_PASSWORD_URL
 }
 
 export interface LogoutUserAction {
-  type: typeof LOGOUT_USER;
+  type: typeof LOGOUT_USER
 }
 
 export interface EditUserMeAction {
-  type: typeof USERS_ME_URL;
-  payload: User;
+  type: typeof USERS_ME_URL
+  payload: User
 }
 
 export interface UserState {
-  id: string;
-  email: string;
-  name: string;
-  employeeId: string;
-  sessionId: string;
-  employees: Employee[];
-  avatar: string | null;
-  groups: Group[];
-  employee: Employee;
-  iotCredentials: IotCredentials;
-  customLabels: boolean;
-  passwordSoonToExpire: boolean;
-  daysUntilPasswordExpires: number;
-  initialColor: string;
+  id: string
+  email: string
+  name: string
+  employeeId: string
+  sessionId: string
+  employees: Employee[]
+  avatar: string | null
+  groups: Group[]
+  employee: Employee
+  iotCredentials: IotCredentials
+  customLabels: boolean
+  passwordSoonToExpire: boolean
+  daysUntilPasswordExpires: number
+  initialColor: string
 }
 
 export interface IotCredentials {
-  credentials: Credentials;
-  endpoint: string;
-  environment: string;
-  companyId: string;
-  employeeId: string;
-  region: string;
+  credentials: Credentials
+  endpoint: string
+  environment: string
+  companyId: string
+  employeeId: string
+  region: string
 }
 
 interface Credentials {
-  AccessKeyId: string;
-  SecretAccessKey: string;
-  SessionToken: string;
-  Expiration: string;
+  AccessKeyId: string
+  SecretAccessKey: string
+  SessionToken: string
+  Expiration: string
 }
 
 export interface AuthProps {
-  currentUserEmail: string;
+  currentUserEmail: string
 }
 
 export interface UserGroupsAction {
-  type: typeof USER_GROUPS;
-  payload: Group[];
+  type: typeof USER_GROUPS
+  payload: Group[]
 }
 
 export interface UserGroupsState {
-  tags: GroupTag[];
-  permissions: Permission[];
+  tags: GroupTag[]
+  permissions: Permission[]
 }
 
 export interface SelectEmployeeAction {
-  type: typeof SET_EMPLOYEE;
-  payload: Employee;
+  type: typeof SET_EMPLOYEE
+  payload: Employee
 }
 
 export interface SetCredentialsAction {
-  type: typeof SET_CREDENTIALS;
-  payload: any;
+  type: typeof SET_CREDENTIALS
+  payload: any
 }
 
 export interface ToggleCustomLabelsAction {
-  type: typeof TOGGLE_CUSTOM_LABELS;
-  payload: boolean;
+  type: typeof TOGGLE_CUSTOM_LABELS
+  payload: boolean
 }
 
 export interface EmployeeEditRequestBody {
-  name: string;
-  avatar: string | null;
+  name: string
+  avatar: string | null
 }
 
 export interface ClearNonAuthDataAction {
-  type: typeof CLEAR_NON_AUTH_DATA;
+  type: typeof CLEAR_NON_AUTH_DATA
 }
 
 export enum Permission {
@@ -175,6 +175,7 @@ export enum Permission {
   COMPANY_GET = 'COMPANY_GET',
   COMPANY_UPDATE = 'COMPANY_UPDATE',
   COMPANY_UPDATE_CURRENT = 'COMPANY_UPDATE_CURRENT',
+  COMPANY_UPDATE_LOCATIONS = 'COMPANY_UPDATE_LOCATIONS',
   CR_OWNER_AS_APPROVER = 'CR_OWNER_AS_APPROVER',
   CR_ON_APPROVER_LIST = 'CR_ON_APPROVER_LIST',
   DOCUMENT_OWNER_CHANGE = 'DOCUMENT_OWNER_CHANGE',

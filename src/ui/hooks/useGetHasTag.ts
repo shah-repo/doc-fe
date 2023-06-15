@@ -9,9 +9,8 @@ const useGetHasTag = (
 ) => {
   const selectGetHasTag = useMemo(() => authSelectors.makeGetHasTag(), []);
   return useSelector(
-    (state: ApplicationState) => selectGetHasTag(state, tag)
+    (state: ApplicationState) => selectGetHasTag(state, tag),
   );
 };
 
 export default useGetHasTag;
-

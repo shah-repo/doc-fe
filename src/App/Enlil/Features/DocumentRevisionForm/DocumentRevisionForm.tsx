@@ -1,8 +1,9 @@
 import { Box } from '@material-ui/core';
-import { filter, get, includes, map, size } from 'lodash';
+import { debounce, filter, get, includes, map, size } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { GroupTag } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
@@ -125,6 +126,16 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }
   });
 
+  const handleResize: AutoSizerProps['onResize'] = useCallback(
+    debounce(
+      (size) => {
+        _tabsState?.setContentSize(size);
+      },
+      400,
+    ),
+    [_tabsState],
+  );
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
@@ -193,102 +204,106 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index}>
-                          {tabType === 'MIXED' && (
-                            <>
-                              <DocumentRevisionFormPresenter
-                                {...formValues}
-                                releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                                {...{
-                                  documentRevisions,
-                                  documentRevision,
-                                  showRevisionTypeChange,
-                                  proposedDocId,
-                                  setDocId,
-                                  doNotPrompt,
-                                  onDirtyFlagChange,
-                                  documentTypesById,
-                                  canChangeOwnerShip,
-                                  type,
-                                  isNewVersion,
-                                  bannerPortal,
-                                  showAdministrativeAndVoidChange,
-                                  redlineActive,
-                                  isOutput,
-                                  isDisabled,
-                                  email,
-                                  isOwner,
-                                  mode,
-                                }}
-                              />
-                              {documentRevision && showTabContent && (
-                                <FBWorkspace
-                                  isPortal={false}
-                                  document={{
-                                    ...documentRevision as unknown as DocumentRevision,
-                                    ...formValues.values as unknown as DocumentRevision,
-                                  }}
-                                  {... { autosaveEnabled, workspaceState }}
-                                  initialValues={formInput}
-                                  schema={schema}
+                        <AutoSizer onResize={handleResize}>
+                          {(size) => (
+                            <SMBox key={index} {...size}>
+                              {tabType === 'MIXED' && (
+                                <>
+                                  <DocumentRevisionFormPresenter
+                                    {...formValues}
+                                    releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                                    {...{
+                                      documentRevisions,
+                                      documentRevision,
+                                      showRevisionTypeChange,
+                                      proposedDocId,
+                                      setDocId,
+                                      doNotPrompt,
+                                      onDirtyFlagChange,
+                                      documentTypesById,
+                                      canChangeOwnerShip,
+                                      type,
+                                      isNewVersion,
+                                      bannerPortal,
+                                      showAdministrativeAndVoidChange,
+                                      redlineActive,
+                                      isOutput,
+                                      isDisabled,
+                                      email,
+                                      isOwner,
+                                      mode,
+                                    }}
+                                  />
+                                  {documentRevision && showTabContent && (
+                                    <FBWorkspace
+                                      isPortal={false}
+                                      document={{
+                                        ...documentRevision as unknown as DocumentRevision,
+                                        ...formValues.values as unknown as DocumentRevision,
+                                      }}
+                                      {... { autosaveEnabled, workspaceState }}
+                                      initialValues={formInput}
+                                      schema={schema}
+                                    />
+                                  )}
+                                </>
+                              )}
+                              {tabType === 'DYNAMIC' && showTabContent && _formState?.mode !== 'none' && (
+                                <>
+                                  {tabInfo.tabId === 'lineitems' && (
+                                    <Box pb={3.75}>
+                                      <FBSection
+                                        name="fb-po-section-po-items-built-in"
+                                        label="form.builder.po.details"
+                                      />
+                                      <AttachmentsField
+                                        isDisabled={isDisabledInput}
+                                        isNewVersion={false}
+                                        docRevId={docRevId}
+                                        isAttachmentEmpty={isAttachmentEmpty}
+                                        containsRedline={false}
+                                        docRevStatus={documentRevision?.status}
+                                        documentRevision={documentRevision}
+                                        documentTypeId={documentTypeId || ''}
+                                        labeld="Supporting Documents"
+                                      />
+                                    </Box>
+                                  )}
+                                  <FBWorkspace
+                                    isPortal={false}
+                                    document={{
+                                      ...formValues.values as unknown as DocumentRevision,
+                                      ...documentRevision as unknown as DocumentRevision,
+                                    }}
+                                    {... { autosaveEnabled, workspaceState }}
+                                    initialValues={formInput}
+                                    schema={schema}
+                                  />
+                                </>
+                              )}
+                              {tabType === TabTypeOptions.TABS_MEQ && (
+                                <FBMaterialEqInfoContainer
+                                  documentRevision={documentRevision}
+                                  inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                                 />
                               )}
-                            </>
-                          )}
-                          {tabType === 'DYNAMIC' && showTabContent && _formState?.mode !== 'none' && (
-                            <>
-                              {tabInfo.tabId === 'lineitems' && (
-                                <Box pb={3.75}>
-                                  <FBSection
-                                    name="fb-po-section-po-items-built-in"
-                                    label="form.builder.po.details"
-                                  />
-                                  <AttachmentsField
-                                    isDisabled={isDisabledInput}
-                                    isNewVersion={false}
-                                    docRevId={docRevId}
-                                    isAttachmentEmpty={isAttachmentEmpty}
-                                    containsRedline={false}
-                                    docRevStatus={documentRevision?.status}
-                                    documentRevision={documentRevision}
-                                    documentTypeId={documentTypeId || ''}
-                                    labeld="Supporting Documents"
-                                  />
-                                </Box>
+                              {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
+                                <FBTrainingInfoContainer
+                                  documentRevisionId={documentRevision?.id}
+                                  docRevStatus={documentRevision?.status}
+                                />
                               )}
-                              <FBWorkspace
-                                isPortal={false}
-                                document={{
-                                  ...formValues.values as unknown as DocumentRevision,
-                                  ...documentRevision as unknown as DocumentRevision,
-                                }}
-                                {... { autosaveEnabled, workspaceState }}
-                                initialValues={formInput}
-                                schema={schema}
-                              />
-                            </>
+                              {tabType === TabTypeOptions.ITEMS && (
+                                <ItemsAndDetailsWrapper
+                                  currentDocRevId={documentRevision?.id}
+                                  initialValues={formInput ?? {}}
+                                  autosave={autosaveEnabled}
+                                  mode={FBWorkspaceModeOptions.PREVIEW}
+                                />
+                              )}
+                            </SMBox>
                           )}
-                          {tabType === TabTypeOptions.TABS_MEQ && (
-                            <FBMaterialEqInfoContainer
-                              documentRevision={documentRevision}
-                              inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
-                            />
-                          )}
-                          {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
-                            <FBTrainingInfoContainer
-                              documentRevisionId={documentRevision?.id}
-                              docRevStatus={documentRevision?.status}
-                            />
-                          )}
-                          {tabType === TabTypeOptions.ITEMS && (
-                            <ItemsAndDetailsWrapper
-                              currentDocRevId={documentRevision?.id}
-                              initialValues={formInput ?? {}}
-                              autosave={autosaveEnabled}
-                              mode={FBWorkspaceModeOptions.PREVIEW}
-                            />
-                          )}
-                        </SMBox>
+                        </AutoSizer>
                       );
                     })}
                   </SMTabs>

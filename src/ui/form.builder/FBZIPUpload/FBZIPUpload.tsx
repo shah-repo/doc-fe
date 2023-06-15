@@ -60,8 +60,8 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                 </Grid>
                 <Grid item xs={4} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                   <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                    {fileUploadState?.unzipStatus &&
-                <Box
+                    {fileUploadState?.unzipStatus
+                && <Box
                   css={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -74,11 +74,11 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                   }}
                   color={Colors.almost_black}
                 >
-                  {fileUploadState?.unzipStatus === FBUnzipStatus.DONE ?
-                    <SuccessIcon fontSize="small" style={{ color: Colors.latest_green_varient }} />
-                    : (fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING ?
-                      <CachedIcon fontSize="small" style={{ color: Colors.font_gray }} /> :
-                      <CancelIcon fontSize="small" style={{ color: Colors.latest_red_varient }} />)
+                  {fileUploadState?.unzipStatus === FBUnzipStatus.DONE
+                    ? <SuccessIcon fontSize="small" style={{ color: Colors.latest_green_varient }} />
+                    : (fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING
+                      ? <CachedIcon fontSize="small" style={{ color: Colors.font_gray }} />
+                      : <CancelIcon fontSize="small" style={{ color: Colors.latest_red_varient }} />)
                   }
                   <b style={{ marginLeft: '10px' }}>
                     {getStatus()}
@@ -88,7 +88,7 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                   <Grid item xs={12} style={{ maxWidth: 'fit-content' }}>
                     <FBButton
                       key={`fb-zip-attachment-button-${name}`}
-                      label={'form.builder.unzip.files'}
+                      label="form.builder.unzip.files"
                       onClick={() => { startUnzip(); }}
                       disabled= {
                         (fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING) || disableUnzipButton || disabled

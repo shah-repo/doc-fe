@@ -31,5 +31,5 @@ export default makeStyles((theme: Theme) =>
       textTransform: 'capitalize',
       color: Colors.font_gray,
     },
-  })
+  }),
 );

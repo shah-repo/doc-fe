@@ -23,14 +23,13 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
     totalAmount: 0,
   });
 
-
   useEffect(() => reaction(
     () => _tabsState?.activeTabId,
     () => {
       const formValue = FBStore?.purchaseOrderValue || formState?.getFieldValue('po-items-built-in', defaultValue);
       const poSummaryObj = pick(formValue, requiredKeys);
       setPoSummary(poSummaryObj);
-    }
+    },
   ));
 
   const labelMap = {
@@ -54,7 +53,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
             <Grid container spacing={3} alignItems="center" justify="space-between"
               style={{ marginBottom: key !== 'shippingCost' ? 8 : 0 }}>
               <Grid item xs="auto">
-                <FBText locale={labelMap[key]}></FBText>
+                <FBText locale={labelMap[key]} />
               </Grid>
               <Grid item xs="auto">
                 <Box fontWeight={600}>
@@ -67,11 +66,11 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
               </Grid>
             </Grid>))}
         </Box>
-        <Divider style={{ marginTop: 8, marginBottom: 20 }}></Divider>
+        <Divider style={{ marginTop: 8, marginBottom: 20 }} />
         <Box>
           <Grid container spacing={3} alignItems="center" justify="space-between">
             <Grid item xs="auto">
-              <FBText locale="form.builder.grand.total"></FBText>
+              <FBText locale="form.builder.grand.total" />
             </Grid>
             <Grid item xs="auto">
               <Box fontWeight={600}>

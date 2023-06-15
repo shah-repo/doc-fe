@@ -17,9 +17,9 @@ import styles from './styles';
 
 let call: CancelTokenSource;
 interface OwnProps {
-  openHistoryPanel: boolean;
-  closeHistoryPanel: (panel: boolean) => void;
-  getCardGroups: (records: GMAuditProps[]) => object;
+  openHistoryPanel: boolean
+  closeHistoryPanel: (panel: boolean) => void
+  getCardGroups: (records: GMAuditProps[]) => object
 }
 
 const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
@@ -119,8 +119,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
           <Box key={groupKey} style={{ padding: 0 }}>
-            {<Default auditDetails={auditDetails} />}
-          </Box>)
+            <Default auditDetails={auditDetails} />
+          </Box>),
         )}
       </Box>
     </>

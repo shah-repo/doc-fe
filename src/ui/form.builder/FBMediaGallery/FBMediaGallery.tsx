@@ -8,7 +8,6 @@ import { FBAttachment, FBMapWrapper, FBMediaGalleryProps } from '..';
 import Text from '../../components/Text';
 import { withFBMediaGallery } from './FBMediaGallery.wrap';
 
-
 const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
   handleDelete,
   previewType,
@@ -136,6 +135,5 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
     </Box>
   );
 };
-
 
 export default withFBMediaGallery(FBMediaGallery);

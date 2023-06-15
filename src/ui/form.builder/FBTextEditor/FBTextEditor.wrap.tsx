@@ -100,7 +100,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
           if (oldValue === htmlContent) { return; }
           formState?.setFieldValue(name, htmlContent, false, omitFormValue);
           formState?.validate();
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -111,12 +111,11 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         (value) => {
           if (!textEditorState?.masked) { return; }
           onEditorStateChange?.(htmlToEditorState(value));
-        }
+        },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     // MARK: @helpers
     // Creates editor state with initial value

@@ -39,8 +39,8 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
                 </Box>
               </Box>
               <Box borderBottom={lastNote ? 0 : '1px solid lightgrey'} >
-                {note?.description &&
-                  <Typography
+                {note?.description
+                  && <Typography
                     variant="subtitle1"
                     style={{ marginBottom: 16, marginLeft: 64, overflowWrap: 'anywhere' }}>
                     <Text message={note?.description} />
@@ -52,8 +52,8 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
             </Box>
           ); }}
       </FBMapWrapper>
-      {isDraft &&
-      <Box
+      {isDraft
+      && <Box
         border="1px solid lightgrey"
         height="max-content"
         display="flex"
@@ -84,8 +84,8 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
         >
           <SendIcon />
         </IconButton>
-        {!isEmpty(files) &&
-        <Box
+        {!isEmpty(files)
+        && <Box
           width="100%"
           padding={1}
         >

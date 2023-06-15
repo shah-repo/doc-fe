@@ -19,9 +19,9 @@ export type FBTextFieldProps =
     | 'onFocus'
   >
   & {
-    dataCy?: string;
+    dataCy?: string
     FBProps?: {
-      inputType?: FBInputType;
-    };
-    customHeight?: number;
+      inputType?: FBInputType
+    }
+    customHeight?: number
   };

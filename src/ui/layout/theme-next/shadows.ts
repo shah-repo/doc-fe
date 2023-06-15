@@ -9,7 +9,7 @@ const THEME_SHADOWS = {
 
 const shadows = (): Shadows => Array(25).fill(0).reduce(
   (list, value, index) => [...list, THEME_SHADOWS[index] ?? 'none'],
-  []
+  [],
 );
 
 export default shadows();

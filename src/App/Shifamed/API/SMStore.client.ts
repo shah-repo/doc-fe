@@ -2,7 +2,6 @@ import axios from 'axios';
 import { SMStoreAdapter } from '../..';
 import Config from '../../../config';
 
-
 let currentAdapter: any;
 
 /**

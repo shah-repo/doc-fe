@@ -27,7 +27,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
   const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
 
-
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
@@ -41,8 +40,8 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       </div>,
       { autoClose: 10000 });
 
-    employee.company.scheduledForDeletion &&
-    toastSuccess(
+    employee.company.scheduledForDeletion
+    && toastSuccess(
       <div>
         {intl.formatMessage({ id: 'toast.notification.deletion' })}
         <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
@@ -54,8 +53,8 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     .map(
       (employee: Employee) => {
         const { company } = employee;
-        const whiteLabeling =
-          ((company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+        const whiteLabeling
+          = ((company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
 
         return (
           <button

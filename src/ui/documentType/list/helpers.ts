@@ -12,4 +12,3 @@ export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
     return acc;
   }, [] as OptionType[]);
 };
-

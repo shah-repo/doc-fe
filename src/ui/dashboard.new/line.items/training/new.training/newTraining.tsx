@@ -29,22 +29,22 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import useStyles from './newTraining.styles';
 
 interface Props {
-  id: string;
-  docId: string;
-  type: string;
-  docRevName: string;
-  docRevVersion: string;
-  docDocumentId: string;
-  docRevId: string;
-  trainingStatus: string;
-  timestamp: string;
-  pendingTrainees: any;
-  hoverItemId: string;
-  pendingEmailSentAt: Nullable<string>;
-  onMouseHoverItem: (arId: string | undefined) => void;
-  pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  id: string
+  docId: string
+  type: string
+  docRevName: string
+  docRevVersion: string
+  docDocumentId: string
+  docRevId: string
+  trainingStatus: string
+  timestamp: string
+  pendingTrainees: any
+  hoverItemId: string
+  pendingEmailSentAt: Nullable<string>
+  onMouseHoverItem: (arId: string | undefined) => void
+  pinned: boolean
+  pinLineItem: (id: string) => void
+  unPinLineItem: (id: string) => void
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -164,8 +164,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           },
           columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        TRAINING_TABLE_NAME
-      )
+        TRAINING_TABLE_NAME,
+      ),
     );
   };
   return (
@@ -340,7 +340,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin7}`}
-                ></Grid>
+                 />
                 <Grid item={true}>
                   <Typography
                     component="span"

@@ -15,8 +15,8 @@ export type FBCheckboxGroupProps =
   >>
   & Pick<FormGroupProps, 'row'>
   & {
-    controls?: React.ReactNode[];
-    className?: string;
-    boxProps?: BoxProps;
-    labelProps?: BoxProps;
+    controls?: React.ReactNode[]
+    className?: string
+    boxProps?: BoxProps
+    labelProps?: BoxProps
   };

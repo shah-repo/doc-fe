@@ -12,15 +12,15 @@ import MenuItemSetPrimary from './menu.setPrimary';
 import { AttachmentMenuProps, PasswordSubmitActionType } from './utils/types';
 
 interface OwnProps {
-  redLineRequiresPassword: (attachment: Attachment, type?: AttachmentType) => boolean;
-  cleanCopyRequiresPassword: (attachment: Attachment) => boolean;
+  redLineRequiresPassword: (attachment: Attachment, type?: AttachmentType) => boolean
+  cleanCopyRequiresPassword: (attachment: Attachment) => boolean
   handleWatermarkRequest?: (
     attachment: Attachment,
     attachmentType: AttachmentType,
-    documentRevisionId?: string) => void;
-  setSelectedAttachment: (attachment: Attachment) => void;
-  handleIconClick?: (attachment: Attachment) => any;
-  documentRevision?: DocumentRevision;
+    documentRevisionId?: string) => void
+  setSelectedAttachment: (attachment: Attachment) => void
+  handleIconClick?: (attachment: Attachment) => any
+  documentRevision?: DocumentRevision
 }
 
 type Props = AttachmentMenuProps & OwnProps;
@@ -44,9 +44,8 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
   const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
-  const isDocObsoleteOrDeprecated = documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
-  documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated;
-
+  const isDocObsoleteOrDeprecated = documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete
+  || documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated;
 
   const {
     name: fileName,
@@ -76,8 +75,8 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE);
       openWarningDialog();
     } else if (
-      redLineRequiresPassword(attachment) &&
-      type === AttachmentType.Attached
+      redLineRequiresPassword(attachment)
+      && type === AttachmentType.Attached
     ) {
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
       openWarningDialog();
@@ -93,16 +92,16 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
 
   };
 
-  const renderDownloadFile =
-    <MenuItem onClick={handleClick(AttachmentType.Attached)}>
+  const renderDownloadFile
+    = <MenuItem onClick={handleClick(AttachmentType.Attached)}>
       <Text translation="attachment.download.file" values={{ fileName, fileType }} />
     </MenuItem>;
-  const renderDownloadCleanCopy = s3linkCleanCopy &&
-    <MenuItem onClick={handleClick(AttachmentType.CleanCopy)}>
+  const renderDownloadCleanCopy = s3linkCleanCopy
+    && <MenuItem onClick={handleClick(AttachmentType.CleanCopy)}>
       <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
     </MenuItem>;
-  const renderPDFFile = canWatermark &&
-    <MenuItem data-cy={'attachment.download.pdf'}
+  const renderPDFFile = canWatermark
+    && <MenuItem data-cy="attachment.download.pdf"
       onClick={handleWatermarkClick(AttachmentType.Attached, isDocObsoleteOrDeprecated)}>
       <Text translation="attachment.download.pdf" />
     </MenuItem>;
@@ -111,12 +110,12 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   //   <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, true)}>
   //     <Text translation="attachment.download.watermark" />
   //   </MenuItem>;
-  const renderWatermarkCleanCopy = canWatermark && s3linkCleanCopy &&
-    <MenuItem onClick={handleWatermarkClick(AttachmentType.CleanCopy)}>
+  const renderWatermarkCleanCopy = canWatermark && s3linkCleanCopy
+    && <MenuItem onClick={handleWatermarkClick(AttachmentType.CleanCopy)}>
       <Text translation="attachment.download.watermark.clean.copy" />
     </MenuItem>;
-  const renderPreviewFile = isFileViewable &&
-    <MenuItem onClick={handleIconClick && handleIconClick(file)}>
+  const renderPreviewFile = isFileViewable
+    && <MenuItem onClick={handleIconClick && handleIconClick(file)}>
       <Text translation="common.view.file" />
     </MenuItem>;
 

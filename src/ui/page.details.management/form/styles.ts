@@ -19,5 +19,5 @@ export default makeStyles((theme: Theme) =>
       justifyContent: 'center',
       padding: theme.spacing(2, 0),
     },
-  })
+  }),
 );

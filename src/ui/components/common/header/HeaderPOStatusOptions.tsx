@@ -19,11 +19,11 @@ import useStyles from './HeaderPOStatus.styles';
 import { VoidPOStatusDialog } from './VoidDialog';
 
 interface Props {
-  poStatus: POStatusType;
-  docId: string;
-  docRevOwner: string;
-  updatedAt: string;
-  isOwner: boolean;
+  poStatus: POStatusType
+  docId: string
+  docRevOwner: string
+  updatedAt: string
+  isOwner: boolean
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
@@ -111,7 +111,6 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     <Text message={getPOStatusMenuItemLabel(POStatusType[status])} />
   </>;
 
-
   const getMenuOptions = () => (
     <>
       {poStatus === POStatusType.CLOSED && (
@@ -156,7 +155,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           disableRipple
           onClick={handleClick}
         >
-          <div className={classNames(classes.statusIcon, classes[poStatus])}/>
+          <div className={classNames(classes.statusIcon, classes[poStatus])} />
           <Text message={POStatusLabelMapping[poStatus]} />
         </Button>
         <Button

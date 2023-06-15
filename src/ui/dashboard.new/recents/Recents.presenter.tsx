@@ -9,9 +9,9 @@ import Text from '../../components/Text';
 import RecentsItem from './Recents.item';
 
 interface Props {
-  loadRecents: ActionCreator<ApiAction<RecentItems[], any>>;
-  loadRecentsListAsyncState: AsyncState;
-  recents: RecentItems[];
+  loadRecents: ActionCreator<ApiAction<RecentItems[], any>>
+  loadRecentsListAsyncState: AsyncState
+  recents: RecentItems[]
 }
 
 const RecentsPresenter: React.FC<Props> = ({

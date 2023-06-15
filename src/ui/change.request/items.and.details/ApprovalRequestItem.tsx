@@ -8,13 +8,13 @@ import ItemsAndDetailsState from './ItemsAndDetails.state';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 const ApprovalRequestItem: React.FunctionComponent<{
-  entry: ApprovalRequestGridItem;
-  formState: FBFormState;
-  disabledOptions: () => string[];
-  handleRemove: (docRevId: string) => void;
-  handleUpdate: () => void;
-  viewItemActionsVisible: boolean;
-  itemsAndDetailsState: ItemsAndDetailsState;
+  entry: ApprovalRequestGridItem
+  formState: FBFormState
+  disabledOptions: () => string[]
+  handleRemove: (docRevId: string) => void
+  handleUpdate: () => void
+  viewItemActionsVisible: boolean
+  itemsAndDetailsState: ItemsAndDetailsState
 }> = ({
   entry,
   formState,
@@ -60,8 +60,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
   return useObserver(() => (
     <>
       {
-        isEditMode &&
-          <ApprovalRequestEditGridItem {...{ formState }}
+        isEditMode
+          && <ApprovalRequestEditGridItem {...{ formState }}
             disabledOptions={disabledOptions()}
             addRevisionToChangeRequest={addRevisionToChangeRequest}
             resetAndCancelEdit={resetAndCancelEdit}
@@ -71,8 +71,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
             entry={entry}
           />
       }
-      { !isEditMode &&
-        <ApprovalRequestViewGridItem
+      { !isEditMode
+        && <ApprovalRequestViewGridItem
           entry={entry}
           editItem={editItem}
           handleRemove={handleRemove}

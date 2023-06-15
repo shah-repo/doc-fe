@@ -12,15 +12,15 @@ import DocumentRevisionListPresenter from './DocumentRevisionList.presenter.new'
 import { checkIsDocumentPO } from './helpers/checkDocumentGroup';
 
 interface OwnProps {
-  documentRevisions: DocumentRevision[];
-  documentId: string;
-  docId: string;
-  selectedDocumentRevision: Nullable<string>;
-  documentRevisionId: Nullable<string>;
-  documentTypeId?: string;
-  isInlineApproval: boolean;
-  isRecord: boolean;
-  _documentRevisionSidebarState?: DocumentRevisionSidebarState;
+  documentRevisions: DocumentRevision[]
+  documentId: string
+  docId: string
+  selectedDocumentRevision: Nullable<string>
+  documentRevisionId: Nullable<string>
+  documentTypeId?: string
+  isInlineApproval: boolean
+  isRecord: boolean
+  _documentRevisionSidebarState?: DocumentRevisionSidebarState
 }
 
 type DocumentRevisionListContainerProps = OwnProps;
@@ -73,7 +73,7 @@ DocumentRevisionListContainerProps
                 _documentRevisionSidebarState,
               }}
             />
-          )
+          ),
           )
         }
       </List>

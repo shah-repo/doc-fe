@@ -6,9 +6,9 @@ import { Audit } from '../../state/ducks/audit/types';
 import { FB, FBFilesPresenterState } from '../form.builder';
 
 interface OwnProps {
-  audit: Audit;
-  dataCy?: string;
-  loading?: boolean;
+  audit: Audit
+  dataCy?: string
+  loading?: boolean
 }
 
 type Props = OwnProps;
@@ -46,8 +46,8 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading &&
-      <div>{`${first(attachmentState.filesApi.data)?.name}.${first(attachmentState.filesApi.data)?.type}`}</div>
+      {!loading
+      && <div>{`${first(attachmentState.filesApi.data)?.name}.${first(attachmentState.filesApi.data)?.type}`}</div>
       }
     </Fragment>
   );

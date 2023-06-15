@@ -5,7 +5,7 @@ import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBA
 import { styles } from './styles/DocIdInput.styles';
 
 interface Props {
-  isDisabled: boolean;
+  isDisabled: boolean
 }
 
 const RenderHtmlField: React.FunctionComponent<Props> = ({ isDisabled = false }) => {

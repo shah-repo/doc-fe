@@ -4,8 +4,8 @@ import SecurityEmployees from './SecurityEmployees';
 import SecurityGroups from './SecurityGroups';
 
 interface Props {
-  documentTypeId: string;
-  isDisabled?: boolean;
+  documentTypeId: string
+  isDisabled?: boolean
 }
 
 const DocumentSecurity: React.FunctionComponent<Props> = ({ documentTypeId, isDisabled }) => (

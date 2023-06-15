@@ -13,24 +13,24 @@ export enum DialogCloseReason {
 }
 
 export interface DialogProps extends Omit<MuiDialogProps, 'title' | 'onClose'> {
-  breakpoint?: DialogBreakpoint;
-  loading?: boolean;
-  hideCloseButton?: boolean;
-  title?: React.ReactNode | Translation;
-  titleProps?: PropsWithDataset<MuiDialogTitleProps>;
-  contentProps?: PropsWithDataset<MuiDialogContentProps>;
-  actions?: React.ReactNode;
-  actionsRef?: React.MutableRefObject<unknown>;
-  actionsProps?: PropsWithDataset<MuiDialogActionsProps>;
-  confirmLabel?: React.ReactNode | Translation;
-  cancelLabel?: React.ReactNode | Translation;
-  confirmProps?: PropsWithDataset<ButtonProps>;
-  cancelProps?: PropsWithDataset<ButtonProps>;
-  onConfirm?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  breakpoint?: DialogBreakpoint
+  loading?: boolean
+  hideCloseButton?: boolean
+  title?: React.ReactNode | Translation
+  titleProps?: PropsWithDataset<MuiDialogTitleProps>
+  contentProps?: PropsWithDataset<MuiDialogContentProps>
+  actions?: React.ReactNode
+  actionsRef?: React.MutableRefObject<unknown>
+  actionsProps?: PropsWithDataset<MuiDialogActionsProps>
+  confirmLabel?: React.ReactNode | Translation
+  cancelLabel?: React.ReactNode | Translation
+  confirmProps?: PropsWithDataset<ButtonProps>
+  cancelProps?: PropsWithDataset<ButtonProps>
+  onConfirm?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: {
-    bivarianceHack(event: {}, reason: DialogCloseReason): void;
-  }['bivarianceHack'];
+    bivarianceHack(event: {}, reason: DialogCloseReason): void
+  }['bivarianceHack']
 }
 
 export type DialogActionsProps = Pick<

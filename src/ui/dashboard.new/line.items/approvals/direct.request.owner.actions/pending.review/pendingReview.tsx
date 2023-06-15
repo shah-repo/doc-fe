@@ -24,26 +24,26 @@ import useStyles from './pendingReview.styles';
 import DismissAction from '../../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docTypeGroup: DocTypeGroups;
-  docDocumentId: string;
-  docId: string;
-  docRevId?: string;
-  type: string;
-  docRevName: string;
-  docRevVersion: string;
-  status: string;
-  displaystatus: string;
-  timestamp: string;
-  docRevPendingApprovals: any[];
-  docRevApprovedApprovals: any[];
-  hoverItemId: string;
-  pendingEmailSentAt: Nullable<string>;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+  id: string
+  docTypeGroup: DocTypeGroups
+  docDocumentId: string
+  docId: string
+  docRevId?: string
+  type: string
+  docRevName: string
+  docRevVersion: string
+  status: string
+  displaystatus: string
+  timestamp: string
+  docRevPendingApprovals: any[]
+  docRevApprovedApprovals: any[]
+  hoverItemId: string
+  pendingEmailSentAt: Nullable<string>
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const PendingReviewItemPresenter: React.FC<Props> = ({
   id,
@@ -72,8 +72,8 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
-  const { count, pending, approved, primaryText, secondaryText } =
-    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
+  const { count, pending, approved, primaryText, secondaryText }
+    = getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
@@ -126,7 +126,7 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
             <>
               <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'}>
                 <Grid item={true}>
-                  <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId}/>
+                  <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
@@ -239,7 +239,7 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                ></Grid>
+                 />
                 <Grid item={true}>
                   <Typography
                     component="span"

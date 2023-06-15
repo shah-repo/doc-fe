@@ -18,14 +18,14 @@ import Text from '../../../components/Text';
 import { styles } from './TrainingItem.styles';
 
 interface TrainingItemProps {
-  id: string;
-  avatar: Nullable<string>;
-  name: string;
-  initialColor: string;
-  documentId: string;
-  title: string;
-  status: string;
-  date: string;
+  id: string
+  avatar: Nullable<string>
+  name: string
+  initialColor: string
+  documentId: string
+  title: string
+  status: string
+  date: string
 }
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
@@ -48,7 +48,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     status,
     documentId,
     title,
-    date
+    date,
   ) => (
     <>
       <Grid container className={classes.header}>
@@ -110,7 +110,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.docIdAndTitle}
             color="textPrimary"
             dangerouslySetInnerHTML={{ __html: title }}
-          ></Typography>
+           />
         </Grid>
       </Grid>
       <Grid
@@ -145,7 +145,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           status,
           documentId,
           title,
-          date
+          date,
         )}
       />
     </ListItem>

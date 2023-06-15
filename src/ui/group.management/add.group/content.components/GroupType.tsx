@@ -4,8 +4,8 @@ import { GroupRequestBody } from '../../../../state/ducks/groupManagement/types'
 import Text from '../../../components/Text';
 
 interface Props {
-  group: GroupRequestBody;
-  setGroup: (values: GroupRequestBody) => void;
+  group: GroupRequestBody
+  setGroup: (values: GroupRequestBody) => void
 }
 
 const GroupType: React.FunctionComponent<Props> = ({
@@ -28,7 +28,7 @@ const GroupType: React.FunctionComponent<Props> = ({
   return (
     <Box width={700} mt={-6} mb={2}>
       <Typography variant="h4" style={{ marginBottom: '16px' }}>
-        <Text message={'group.management.group.type'} />
+        <Text message="group.management.group.type" />
       </Typography>
       <RadioGroup
         id="Group-groupType"

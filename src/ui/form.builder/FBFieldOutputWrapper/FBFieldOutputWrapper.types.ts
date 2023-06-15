@@ -5,6 +5,6 @@ export type FBFieldOutputWrapperProps =
   & Pick<FBFormProps, 'children'>
   & Pick<BoxProps, 'mt' | 'mb'>
   & {
-    inputProps?: Partial<FBInputProps>;
-    position: number;
+    inputProps?: Partial<FBInputProps>
+    position: number
   };

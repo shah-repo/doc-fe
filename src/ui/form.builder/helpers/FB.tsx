@@ -34,10 +34,10 @@ class FB {
   }
 
   public static isConsideredEmptyInput(input: Record<string, any>): boolean {
-    return input == null ||
-      (typeof input === 'object' && Object.keys(input).length === 0) ||
-      (Array.isArray(input) && input.length === 0) ||
-      (typeof input !== 'number' && !input);
+    return input == null
+      || (typeof input === 'object' && Object.keys(input).length === 0)
+      || (Array.isArray(input) && input.length === 0)
+      || (typeof input !== 'number' && !input);
   }
 
   public static calculateDateByType = (option: any, type: string) => {

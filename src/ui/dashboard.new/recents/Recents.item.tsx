@@ -73,18 +73,18 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
           >
             <Grid item={true}>
               {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
-                <DocId url={changeRequestEditPath(itemId)}  docId={docId}/>
+                <DocId url={changeRequestEditPath(itemId)}  docId={docId} />
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <DocId url={documentVersionPath(docRevId || '', itemId)}  docId={docId}/>
+                <DocId url={documentVersionPath(docRevId || '', itemId)}  docId={docId} />
               )}
             </Grid>
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
               {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
-                <ApprovalTitle url={changeRequestEditPath(itemId)} title={docTitle}/>
+                <ApprovalTitle url={changeRequestEditPath(itemId)} title={docTitle} />
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <ApprovalTitle url={documentVersionPath(docRevId || '', itemId)} title={docTitle}/>
+                <ApprovalTitle url={documentVersionPath(docRevId || '', itemId)} title={docTitle} />
               )}
             </Grid>
             <Grid
@@ -92,8 +92,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
               className={`${classes.ml5}`}
             >
               <Box
-                className={`${classes.blackDot}`}>
-              </Box>
+                className={`${classes.blackDot}`} />
             </Grid>
             <Grid item={true}>
               <Typography

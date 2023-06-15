@@ -5,8 +5,8 @@ import { Attachment } from '../../../state/ducks/attachments/types';
 export type FBFilePresenterDownloadType = 'download' | 'view';
 
 export type FBAttachment = Attachment & {
-  url?: string;
-  description?: string;
+  url?: string
+  description?: string
 };
 
 export enum FBFilePresenterColor {
@@ -42,21 +42,21 @@ export type FBFilePresenterProps =
 & Pick<FBProviderProps, 'filePresenterState' | 'dialogState'>
 & Pick<BoxProps, 'onMouseOver' | 'onMouseLeave'>
 & {
-  handleDownload?: (type: FBFilePresenterDownloadType) => any;
-  handleIconClick?: () => any;
-  handleRemove?: () => any;
-  toolsVisible?: boolean;
-  file: FBAttachment;
-  fileName?: string;
-  fileShortName?: string;
-  fileExtension?: string;
-  fileSize?: string;
-  fileType?: string;
-  fileColor?: string;
-  fileDescription?: string;
-  loading?: boolean;
-  mode?: FBFilePresenterMode;
-  omitDescription?: boolean;
+  handleDownload?: (type: FBFilePresenterDownloadType) => any
+  handleIconClick?: () => any
+  handleRemove?: () => any
+  toolsVisible?: boolean
+  file: FBAttachment
+  fileName?: string
+  fileShortName?: string
+  fileExtension?: string
+  fileSize?: string
+  fileType?: string
+  fileColor?: string
+  fileDescription?: string
+  loading?: boolean
+  mode?: FBFilePresenterMode
+  omitDescription?: boolean
 };
 
 export type FBFilePresenterModeProps =

@@ -8,7 +8,7 @@ import useAsync from '../hooks/useAsync';
 import { toastError } from './notifications';
 
 interface Props {
-  s3link: string;
+  s3link: string
 }
 
 const AuditDownloadS3link: React.FunctionComponent<Props> = ({

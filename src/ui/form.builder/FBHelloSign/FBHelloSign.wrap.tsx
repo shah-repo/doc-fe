@@ -51,7 +51,6 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       return 'form.builder.cancel.signature';
     }
 
-
     function helloSignIframe(data: any) {
       // using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
       let previouslyFinished = false;
@@ -66,7 +65,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       client.on('finish', () => {
         previouslyFinished = true;
         helloSignState?.setLoadingMessage(
-          intl.formatMessage({ id: 'form.builder.template.message.retrieving' })
+          intl.formatMessage({ id: 'form.builder.template.message.retrieving' }),
         );
         helloSignState?.setOverlay(true);
       });
@@ -83,7 +82,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       }
       if (!signatureId) {
         helloSignState?.setLoadingMessage(
-          intl.formatMessage({ id: 'form.builder.signature.sending' })
+          intl.formatMessage({ id: 'form.builder.signature.sending' }),
         );
         helloSignState?.setOverlay(true);
         const status = await helloSignState?.sendSignatureApi.post();
@@ -96,12 +95,12 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       } else {
         helloSignState?.setOverlay(true);
         helloSignState?.setLoadingMessage(
-          intl.formatMessage({ id: 'form.builder.signature.cancelling' })
+          intl.formatMessage({ id: 'form.builder.signature.cancelling' }),
         );
         await helloSignState?.cancelSignatureApi.patch();
         helloSignState?.setOverlay(false);
         return toastInfo(
-          'Signature request cancellation requested. This page will be reloaded after the request is completed.'
+          'Signature request cancellation requested. This page will be reloaded after the request is completed.',
         );
       }
     }
@@ -119,7 +118,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
           formState?.setFieldError(name!, msg);
       } else {
         helloSignState?.setLoadingMessage(
-          intl.formatMessage({ id: 'form.builder.template.message.loading' })
+          intl.formatMessage({ id: 'form.builder.template.message.loading' }),
         );
         helloSignState?.setOverlay(true);
         const data = await helloSignState?.createTemplateApi.post();

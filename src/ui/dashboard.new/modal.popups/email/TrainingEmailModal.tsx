@@ -31,13 +31,13 @@ import { StyledListItem } from './StyledListItem';
 import { styles } from './TrainingEmailModal.styles';
 
 interface TrainingEmailModalProps {
-  id: string;
-  handleEmailModelClose: () => void;
-  pendingTrainees?: any;
-  timestamp?: string | undefined;
-  pendingEmailSentAt: Nullable<string>;
-  setLastEmailSent: (flag: boolean) => void;
-  isOverDue?: boolean;
+  id: string
+  handleEmailModelClose: () => void
+  pendingTrainees?: any
+  timestamp?: string | undefined
+  pendingEmailSentAt: Nullable<string>
+  setLastEmailSent: (flag: boolean) => void
+  isOverDue?: boolean
 }
 
 const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
@@ -223,7 +223,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                           <Text translation="email.last.sent" />:&nbsp;
                           {getFormattedDateString(
                             pendingEmailSentAt,
-                            MomentFormats.BriefDate
+                            MomentFormats.BriefDate,
                           )}
                         </Typography>
                       )}
@@ -260,9 +260,9 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           <List dense disablePadding>
             {pendingTrainees?.map((due, index) => (
               <StyledListItem button key={index}>
-                {due.userAvatar ?
-                  <Avatar className={classes.listitemicon} alt={due.userName} src={due.userAvatar} /> :
-                  <Avatar className={classes.listitemicon} style={{ backgroundColor: due.userInitialColor }}>
+                {due.userAvatar
+                  ? <Avatar className={classes.listitemicon} alt={due.userName} src={due.userAvatar} />
+                  : <Avatar className={classes.listitemicon} style={{ backgroundColor: due.userInitialColor }}>
                     {getInitalsFromName(due.userName)}
                   </Avatar>
                 }

@@ -26,9 +26,9 @@ import { changeRequestEditPath } from '../utils/paths';
 import ChangeSummaryForm from './ChangeSummaryForm';
 
 interface OwnProps {
-  changeRequest: ChangeRequest;
-  currentUserEmail: string;
-  hideSideBar?: boolean;
+  changeRequest: ChangeRequest
+  currentUserEmail: string
+  hideSideBar?: boolean
 }
 type Props = OwnProps & SMFormHOCProps;
 
@@ -76,7 +76,7 @@ const Container: React.FunctionComponent<Props> = ({
     const dataToSubmit = compareValuesToSubmit(
       initialValues,
       { ...values, formInput: formStateContext?._currentValue },
-      toChangeRequestEditRequestBody
+      toChangeRequestEditRequestBody,
     );
 
     if (isEmpty(dataToSubmit)) {
@@ -112,7 +112,6 @@ const Container: React.FunctionComponent<Props> = ({
       {...props}
     />
   );
-
 
   return (
     <FBProvider {...{ bookmarkState }}>
