@@ -17,7 +17,6 @@ import { isDocumentRevisionReleased } from '../../documentRevision/helpers/docum
 import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
 import Colors from '../../layout/theme/utils/colors';
-import FBLotTransactions from '../FBLotTransactions';
 
 const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   isStarter,
@@ -82,10 +81,6 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       {() => (
         <Box>
           <FBWorkspaceSocket />
-          {/* DEV code dont not commit! */}
-          {[DOC_TYPE_GROUP.LOT].includes(group as DOC_TYPE_GROUP) && (
-            <FBLotTransactions name="lot_transactions" />
-          )}
           {size(schema) > 0 && (
             <FBSchema
               {...{ schema }}
