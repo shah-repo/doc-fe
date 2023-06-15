@@ -1,16 +1,15 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
-import { omit } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
 import { Employee } from '../../../state/ducks/company/types';
-import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
+import { Button } from '../../components/forms/fields-next';
+import { toastError } from '../../components/notifications';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { ErrorField, ERROR_FIELD, Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
+import { ERROR_FIELD, ErrorField, MODE_FIELD, Mode } from '../FBApprovalMatrixRoles/constants';
 import useStyles from '../FBApprovalMatrixRoles/styles';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
@@ -179,13 +178,13 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     if (!editedLotTransfer || !isLotTransactionValid(editedLotTransfer)) {
       return;
     }
-    const LotTransferToSave = omit(editedLotTransfer, MODE_FIELD);
+    // const LotTransferToSave = omit(editedLotTransfer, MODE_FIELD);
     // isNewLotTransactionAdded ? addRole(LotTransferToSave) : updateRole(LotTransferToSave);
 
     discardLotTransaction();
   };
 
-  const isNewLotTransactionAdded = editedLotTransfer?.[MODE_FIELD] === Mode.add;
+  // const isNewLotTransactionAdded = editedLotTransfer?.[MODE_FIELD] === Mode.add;
 
   const schema = buildSchema({
     locations,
