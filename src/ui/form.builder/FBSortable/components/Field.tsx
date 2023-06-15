@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FBFieldWrapper, FBSchemaState } from '../..';
 import { SortableFieldProps } from '../types';
 
@@ -8,7 +8,16 @@ export const Field = React.memo<SortableFieldProps>(({
 }) => {
   const { name = '' } = item;
 
-  const schemaField = FBSchemaState.component({
+  // To avoid UI-freezes on rendering huge list of fields.
+  const [rendered, setRendered] = useState(isFirst);
+  useEffect(
+    () => {
+      setTimeout(() => setRendered(true));
+    },
+    [],
+  );
+
+  const schemaField = rendered && FBSchemaState.component({
     ...item,
     autosave,
     disabled,
