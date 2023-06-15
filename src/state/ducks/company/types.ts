@@ -33,6 +33,12 @@ export interface Employee {
   user?: User
 }
 
+export interface CompanyLocation {
+  id: string
+  name: string
+  active: boolean
+}
+
 export interface Company {
   slackIntegrationEnabled: boolean
   id: string
@@ -46,6 +52,7 @@ export interface Company {
   teamId: string
   addresses: string[]
   acctCodes: string[]
+  locations: CompanyLocation[]
   navigation: NavigationItem[]
   employees?: Employee[]
   scheduledForDeletion: boolean

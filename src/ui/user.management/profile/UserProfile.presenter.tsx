@@ -10,9 +10,9 @@ import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import AvatarContainer from '../../components/icons/avatar/avatar.container';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
 import DialogContent from './dialog/DialogContent';
 import DialogTitle from './dialog/DialogTitle';
-import { Translation } from '../../translations/types';
 
 interface OwnProps {
   isOpen: boolean
@@ -41,6 +41,7 @@ interface OwnProps {
   userId: string
   isDeveloper: boolean
   canUpdateCompany: boolean
+  canUpdateLocations: boolean
 }
 
 type Props = OwnProps;
@@ -72,6 +73,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   callbackUpdateWithUpload,
   isDeveloper,
   canUpdateCompany,
+  canUpdateLocations,
 }) => {
   const [usernameError, setUsernameError] = useState<Translation | null>(null);
   const currentUserId = useSelector(authSelectors.currentUserId);
@@ -155,6 +157,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         usernameError={usernameError}
         isDeveloper={isDeveloper}
         canUpdateCompany={canUpdateCompany}
+        canUpdateLocations={canUpdateLocations}
       />
     </Dialog>
   );

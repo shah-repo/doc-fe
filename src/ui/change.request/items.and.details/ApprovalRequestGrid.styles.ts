@@ -8,7 +8,7 @@ export default makeStyles((theme) =>
     },
     title: {
       display: 'flex',
-      padding: theme.spacing(.5),
+      padding: theme.spacing(0.5),
       alignItems: 'center',
     },
     fullWidth: {
@@ -67,14 +67,14 @@ export default makeStyles((theme) =>
       fontWeight: 'normal',
     },
     iconButton: {
-      'fontSize': '16px',
+      fontSize: '16px',
       '&:hover': {
         color: Colors.blue,
       },
     },
     viewIcon: {
       fill: Colors.cerulean,
-      marginTop: theme.spacing(.5),
+      marginTop: theme.spacing(0.5),
       fontSize: '1.2rem',
       cursor: 'pointer',
     },
@@ -92,20 +92,20 @@ export default makeStyles((theme) =>
 
       fontWeight: 600,
 
-      borderRadius: theme.spacing(.5, .5, 0, 0),
+      borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
     cellOne: {
-      'width': '30%',
-      'display': 'flex',
-      'alignItems': 'center',
-      'columnGap': theme.spacing(1.25),
-      'paddingRight': theme.spacing(1),
+      width: '30%',
+      display: 'flex',
+      alignItems: 'center',
+      columnGap: theme.spacing(1.25),
+      paddingRight: theme.spacing(1),
       '& > .MuiBox-root': {
         width: '100%',
       },
     },
     cellOther: {
-      'width': '35%',
+      width: '35%',
       '& .MuiOutlinedInput-multiline': {
         padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
       },
@@ -130,13 +130,13 @@ export default makeStyles((theme) =>
       border: `1px solid ${Colors.alice_blue}`,
     },
     enclosingDivViewItem: {
-      'backgroundColor': Colors.white,
-      'cursor': 'pointer',
+      backgroundColor: Colors.white,
+      cursor: 'pointer',
       '& .actionBtnClass': {
         display: 'none',
       },
       '&:hover': {
-        'backgroundColor': Colors.whitest_grey,
+        backgroundColor: Colors.whitest_grey,
         '& .iconClass': {
           backgroundColor: Colors.white,
         },
@@ -159,10 +159,10 @@ export default makeStyles((theme) =>
       padding: theme.spacing(1.5),
     },
     editItemRow: {
-      'width': '100%',
-      'border': `1px solid ${Colors.dodger_blue}`,
-      'position': 'relative',
-      'flexWrap': 'wrap',
+      width: '100%',
+      border: `1px solid ${Colors.dodger_blue}`,
+      position: 'relative',
+      flexWrap: 'wrap',
       '& div div.MuiBox-root': {
         marginBottom: 0,
       },
@@ -171,7 +171,7 @@ export default makeStyles((theme) =>
       backgroundColor: Colors.dodger_blue,
       position: 'absolute',
       right: 0,
-      borderRadius: theme.spacing(0, 0, .5, .5),
+      borderRadius: theme.spacing(0, 0, 0.5, 0.5),
       zIndex: 100,
       display: 'flex',
       justifyContent: 'center',
@@ -179,7 +179,7 @@ export default makeStyles((theme) =>
     actionButton: {
       backgroundColor: Colors.white,
       borderRadius: '6px',
-      padding: theme.spacing(.6),
+      padding: theme.spacing(0.6),
       minWidth: 'auto',
       border: theme.spacing(1),
     },
@@ -230,7 +230,7 @@ export default makeStyles((theme) =>
       paddingBottom: theme.spacing(1.75),
     },
     docListItem: {
-      padding: theme.spacing(.75, 0),
+      padding: theme.spacing(0.75, 0),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -246,7 +246,7 @@ export default makeStyles((theme) =>
       alignItems: 'center',
     },
     textField: {
-      'width': '100%',
+      width: '100%',
       '& .MuiInputBase-root': {
         marginTop: 0,
         padding: 0,
@@ -258,7 +258,7 @@ export default makeStyles((theme) =>
       },
       '& .MuiFormHelperText-root': {
         lineHeight: '1.15rem',
-        margin: theme.spacing(1, 0, 0, .5),
+        margin: theme.spacing(1, 0, 0, 0.5),
       },
     },
     option: {
@@ -270,10 +270,22 @@ export default makeStyles((theme) =>
       color: Colors.almost_black,
     },
     link: {
-      'textDecoration': 'none',
+      textDecoration: 'none',
       '&:hover': {
         textDecoration: 'underline',
       },
+    },
+    truncate: {
+      fontFamily: 'Sora',
+      fontWeight: 400,
+      fontSize: 14,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'pre-line',
+      display: '-webkit-box',
+      '-webkit-line-clamp': 4,
+      'line-clamp': 4,
+      '-webkit-box-orient': 'vertical',
     },
   }),
 );

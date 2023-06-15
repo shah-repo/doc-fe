@@ -18,7 +18,7 @@ export type FBAutocompleteAsyncProps =
   withoutLabelKey?: boolean
 };
 
-export interface FBAutocompleteAsyncConfig  {
+export interface FBAutocompleteAsyncConfig {
   id: string
   label: string
   labelKey: string
@@ -71,6 +71,7 @@ export enum FBAutocompleteAsyncOption {
   outputDocumentTypes = '35',
   trainingDocuments = '36',
   releasedParts = '42',
+  companyLocations = '43',
 }
 
 export interface FBAutocompleteAsyncConstructor {

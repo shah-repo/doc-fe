@@ -5,16 +5,17 @@ import cx from 'classnames';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from '../../form.builder';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
+import KendoTextEditor from './KendoTextEditor';
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
   disabledOptions: string[]
   formState: FBFormState
   addRevisionToChangeRequest: () => void
   resetAndCancelEdit?: () => void
-  showAutoComplete? : boolean
+  showAutoComplete?: boolean
   titleText?: string
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
@@ -54,32 +55,29 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <FBTextField
+            <KendoTextEditor
               name="descriptionOfChange"
               label="form.builder.description.of.change"
               placeholder="form.builder.enter"
               rules="required"
-              multiline={true}
-              rows={1}
             />
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <FBTextField
+            <KendoTextEditor
               name="justificationOfChange"
               label="form.builder.justification.of.change"
               placeholder="form.builder.enter"
               rules="required"
-              multiline={true}
-              rows={1}
             />
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
           { showDeleteButton && <Button className={classes.actionButton}>
             <DeleteIcon className={classes.iconButton}
-              onClick={() =>  {
+              onClick={() => {
                 resetAndCancelEdit?.();
-                handleRemove?.(entry?.docRevId as string); }} />
+                handleRemove?.(entry?.docRevId as string);
+              }} />
           </Button> }
           <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton} />

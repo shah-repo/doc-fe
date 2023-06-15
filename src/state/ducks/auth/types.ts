@@ -17,7 +17,7 @@ export interface ForgotPasswordConfirmation {
   password: string
 }
 
-export interface  NewPasswordConfirmation {
+export interface NewPasswordConfirmation {
   email: string
   newPassword: string
   oldPassword: string
@@ -175,6 +175,7 @@ export enum Permission {
   COMPANY_GET = 'COMPANY_GET',
   COMPANY_UPDATE = 'COMPANY_UPDATE',
   COMPANY_UPDATE_CURRENT = 'COMPANY_UPDATE_CURRENT',
+  COMPANY_UPDATE_LOCATIONS = 'COMPANY_UPDATE_LOCATIONS',
   CR_OWNER_AS_APPROVER = 'CR_OWNER_AS_APPROVER',
   CR_ON_APPROVER_LIST = 'CR_ON_APPROVER_LIST',
   DOCUMENT_OWNER_CHANGE = 'DOCUMENT_OWNER_CHANGE',
