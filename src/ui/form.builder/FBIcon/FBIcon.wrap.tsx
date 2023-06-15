@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { FBData, FBIconProps, FBIconType } from '..';
 
 export const withFBIcon = <T extends FBIconProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({

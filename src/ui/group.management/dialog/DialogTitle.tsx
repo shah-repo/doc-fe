@@ -6,8 +6,8 @@ import { Translation } from '../../translations/types';
 import styles from './styles';
 
 interface OwnProps {
-  closeDialog: () => void;
-  title: Translation;
+  closeDialog: () => void
+  title: Translation
 }
 
 type Props = OwnProps;

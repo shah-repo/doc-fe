@@ -30,7 +30,7 @@ export const withFBSortable = <T extends FBSortableProps>(
     const isHiddenByRules = (item: FBSchemaProps) =>
       !workspaceState?.isMode('design') && workspaceState?.hiddenFieldsByRules?.has(item.name as string);
 
-    const SortableItem = SortableElement(({ value, position }: { value: FBSchemaProps; position: number }) => (
+    const SortableItem = SortableElement(({ value, position }: { value: FBSchemaProps, position: number }) => (
       <Observer>
         {() => (
           <li style={{ listStyleType: 'none', display: isHiddenByRules(value) ? 'none' : 'block' }}>
@@ -48,8 +48,8 @@ export const withFBSortable = <T extends FBSortableProps>(
 
     let position = 0;
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
-      if (schemaItem.deleted || schemaItem.hidden ||
-        (_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId))) { return; }
+      if (schemaItem.deleted || schemaItem.hidden
+        || (_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId))) { return; }
       position++;
       return (
         <SortableItem
@@ -75,14 +75,14 @@ export const withFBSortable = <T extends FBSortableProps>(
       workspaceState?.setSchema(newSchema);
     };
 
-    const shouldCancelStart = (e: { buttons: number; ctrlKey: boolean; button: number; target: HTMLElement }) => {
+    const shouldCancelStart = (e: { buttons: number, ctrlKey: boolean, button: number, target: HTMLElement }) => {
       // Limit sort to a sort icon click
       if (workspaceState?.mode === 'formDesign' && e.target.nodeName !== 'svg') {
         return true;
       }
       return (
-        (e.buttons === 1 && e.ctrlKey === true) || // macOS trackpad ctrl click
-        (e.buttons === 2 && e.button === 2)
+        (e.buttons === 1 && e.ctrlKey === true) // macOS trackpad ctrl click
+        || (e.buttons === 2 && e.button === 2)
       );
     };
 

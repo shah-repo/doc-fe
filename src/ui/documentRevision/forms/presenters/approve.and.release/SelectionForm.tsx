@@ -8,12 +8,12 @@ import useStyles from './ApproveAndRelease.styles';
 type Option = TemplateOption & InDraftAROption;
 
 interface Props {
-  title: string;
-  loading: boolean;
-  handler: DialogHandler;
-  options: TemplateOption[] | InDraftAROption[];
-  confirmLabel: string;
-  onConfirm: (option: Option) => void;
+  title: string
+  loading: boolean
+  handler: DialogHandler
+  options: TemplateOption[] | InDraftAROption[]
+  confirmLabel: string
+  onConfirm: (option: Option) => void
 }
 
 const SelectionForm: React.FC<Props> = ({

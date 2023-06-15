@@ -26,15 +26,15 @@ import { generateRevisionNumber } from './helpers/generateRevisionNumber';
 import { isDocumentAlphaReleased } from './helpers/revisionStage';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  documentId: string;
-  selectedDocumentRevision: Nullable<string>;
-  docId: string;
-  documentTypeId?: string;
-  isDocumentPO: boolean;
-  isInlineApproval: boolean;
-  isRecord: boolean;
-  _documentRevisionSidebarState?: DocumentRevisionSidebarState;
+  documentRevision: DocumentRevision
+  documentId: string
+  selectedDocumentRevision: Nullable<string>
+  docId: string
+  documentTypeId?: string
+  isDocumentPO: boolean
+  isInlineApproval: boolean
+  isRecord: boolean
+  _documentRevisionSidebarState?: DocumentRevisionSidebarState
 }
 
 const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -122,7 +122,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       className={_documentRevisionSidebarState?.open ? classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       }) : classes.container}
-      data-cy={'DocumentRevisionList-item'}
+      data-cy="DocumentRevisionList-item"
     >
       <NavLink
         to={link}
@@ -131,7 +131,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       >
         <Typography
           component="span"
-          data-cy={'revision'}
+          data-cy="revision"
           className={
             isSelected ? classes.activeLinkBox : classes.inActiveLinkBox
           }
@@ -143,8 +143,8 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
             <Typography data-cy="revision-status" variant="h6" component="span" className={classes.displayStatus}>
               <CustomLabelTooltip {...{ tooltipConfig }}>
                 <>
-                  &nbsp; - <Text message={isPO && isReleased ? SM.isNewVersion && isUserAdminEnforce ?
-                    STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED : displayStatus} />
+                  &nbsp; - <Text message={isPO && isReleased ? SM.isNewVersion && isUserAdminEnforce
+                    ? STATUS_TYPES_LABEL.EDIT : STATUS_TYPES_LABEL.APPROVED : displayStatus} />
                 </>
               </CustomLabelTooltip>
             </Typography>
@@ -159,7 +159,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         }
       >
         <SummaryInfo
-          dataCy={'common.docId'}
+          dataCy="common.docId"
           label={docIdLabel}
           value={docId}
         />

@@ -64,9 +64,9 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       }
       if (relatedValidationItem) {
         const relatedValidationLabel = (
-          relatedValidationItem.label ||
-          relatedValidationItem.placeholder ||
-          relatedValidationItem.name
+          relatedValidationItem.label
+          || relatedValidationItem.placeholder
+          || relatedValidationItem.name
         );
         // TODO: Check for copy and do translation
         // eslint-disable-next-line max-len

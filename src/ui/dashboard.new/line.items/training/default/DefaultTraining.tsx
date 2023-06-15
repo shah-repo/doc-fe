@@ -23,22 +23,22 @@ import useStyles from './DefaultTraining.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  docRevName: Nullable<string>;
-  docRevVersion: string;
-  docId: string;
-  docDocumentId: string;
-  docRevId: string;
-  status: string;
-  timestamp: string;
-  dueOn: Nullable<string>;
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+  id: string
+  type: string
+  docRevName: Nullable<string>
+  docRevVersion: string
+  docId: string
+  docDocumentId: string
+  docRevId: string
+  status: string
+  timestamp: string
+  dueOn: Nullable<string>
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -197,8 +197,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   )}
                 </Grid>
               )}
-              {TrainingStatus[status] &&
-                TrainingStatus.COMPLETED !== status && (
+              {TrainingStatus[status]
+                && TrainingStatus.COMPLETED !== status && (
                 <Grid
                   item={true}
                   className={
@@ -208,7 +208,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         ? classes.redDot
                         : classes.yellowDot
                   }
-                ></Grid>
+                 />
               )}
               {TrainingStatus[status] && TrainingStatus.COMPLETED !== status && (
                 <Grid item={true}>
@@ -247,7 +247,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               justify="flex-start"
               alignItems="center"
             >
-              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true} className={classes.grayDot} />
               <Grid item={true}>
                 <Typography
                   component="span"

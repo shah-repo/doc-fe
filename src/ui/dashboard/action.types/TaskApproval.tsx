@@ -5,8 +5,8 @@ import { changeRequestEditPath } from '../../change.request/utils/paths';
 import DashboardActionTypeBase from './DashboardActionTypeBase';
 
 interface Props {
-  index: number;
-  changeRequest: ChangeRequest;
+  index: number
+  changeRequest: ChangeRequest
 }
 
 const TaskApproval: React.FunctionComponent<Props> = ({

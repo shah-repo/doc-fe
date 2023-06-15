@@ -21,24 +21,24 @@ export type FBProcedureItemProps =
 & Pick<FBProviderProps, 'dialogState'>
 & Pick<FBProcedureProps, 'name' | 'stepIndex' | 'disabled' | 'isPreview' | 'loading'>
 & {
-  onClick?: (part?: FBProcedureItemConfig) => void;
-  handleRemove?: (id: string) => void;
-  getItem?: (id: string) => string;
-  getLot?: (id?: string) => string;
-  type: FBProcedureItemType;
-  value?: FBProcedureItemConfig[];
-  locked?: boolean;
+  onClick?: (part?: FBProcedureItemConfig) => void
+  handleRemove?: (id: string) => void
+  getItem?: (id: string) => string
+  getLot?: (id?: string) => string
+  type: FBProcedureItemType
+  value?: FBProcedureItemConfig[]
+  locked?: boolean
 };
 
 export interface FBProcedureItemConfig {
-  id: string;
-  title: string;
-  partLot?: string;
-  quantity?: number;
-  unit?: string;
-  status?: FBPartItemStatus;
-  attachments?: Id[];
-  LHRTparameter?: boolean;
-  type?: string;
-  paramsId?: string;
+  id: string
+  title: string
+  partLot?: string
+  quantity?: number
+  unit?: string
+  status?: FBPartItemStatus
+  attachments?: Id[]
+  LHRTparameter?: boolean
+  type?: string
+  paramsId?: string
 }

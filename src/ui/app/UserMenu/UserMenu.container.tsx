@@ -4,8 +4,8 @@ import { Nullable } from '../../../state/ducks/common/types';
 import UserMenuPresenter from './UserMenu.presenter';
 
 interface Props {
-  anchorEl: Nullable<HTMLElement>;
-  handleCloseMenu: () => void;
+  anchorEl: Nullable<HTMLElement>
+  handleCloseMenu: () => void
 }
 
 const UserMenuContainer: React.FunctionComponent<Props> = ({

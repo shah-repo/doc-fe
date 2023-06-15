@@ -21,7 +21,6 @@ const FileUploadChild: React.FunctionComponent<FBFileUploadProps> = ({
     )}
   </>;
 
-
 const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
   fileUploadState,
   ...props

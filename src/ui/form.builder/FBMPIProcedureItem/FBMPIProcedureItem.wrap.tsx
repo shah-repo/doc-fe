@@ -55,8 +55,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     const smartReferencesTo = useMemo(() =>
       smartRef?.filter((ref) =>
-      ref?.active &&
-      ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
+      ref?.active
+      && ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
     [smartRef, version]);
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
@@ -64,10 +64,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     isReleased = status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated;
     // Have to use isDocumentForm instead of isOutput because od MPI
     // ENC-7319
-    isSelectVisible = (!isDocumentForm &&
-      workspaceState?.mode !== 'preview' &&
-      workspaceState?.mode !== 'formPreview') ||
-      redlineActive;
+    isSelectVisible = (!isDocumentForm
+      && workspaceState?.mode !== 'preview'
+      && workspaceState?.mode !== 'formPreview')
+      || redlineActive;
     redlineActive = useSelector(companySelectors.getRedlineActive);
 
     useEffect(() => {
@@ -86,7 +86,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
           if (!data) { return; }
           const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
           setLhrsQuantity(formValue);
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -102,12 +102,12 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         () => mpiProcedureState?.deleteLotApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = isDocPIInstance ?
-            data.smartReferencesTo :
-            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
+          const refs = isDocPIInstance
+            ? data.smartReferencesTo
+            : uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
           setFilteredParts(refs);
           id && dispatch(documentRevisionsActions.reload(id));
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -181,14 +181,14 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     getProcedureLocale = (item: FBProcedureItemConfig) => {
       if (isDocumentMPI) {
-        return item.type ?
-          `form.builder.mpi.procedure.${type}.title.id` :
-          `form.builder.mpi.procedure.${type}.title`;
+        return item.type
+          ? `form.builder.mpi.procedure.${type}.title.id`
+          : `form.builder.mpi.procedure.${type}.title`;
       }
       const usedItem = usedDocumentsInLHRS?.[item.title];
-      return usedItem ?
-        `form.builder.lhrs.procedure.${type}.title` :
-        `form.builder.mpi.procedure.${type}.title`;
+      return usedItem
+        ? `form.builder.lhrs.procedure.${type}.title`
+        : `form.builder.mpi.procedure.${type}.title`;
     };
 
     getProcedureValues = (item: FBProcedureItemConfig) => {
@@ -199,14 +199,14 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       const revision = usedItem?.displayRevision;
 
       if (isDocumentMPI) {
-        return item.type ?
-          { id, title: getItem?.(item.title), quantity, unit } :
-          { title: getItem?.(item.title), quantity, unit };
+        return item.type
+          ? { id, title: getItem?.(item.title), quantity, unit }
+          : { title: getItem?.(item.title), quantity, unit };
       }
 
-      return usedItem ?
-        { title: getItem?.(usedItem?.docRevId), revision, quantity, unit } :
-        { title: getItem?.(item.title), quantity, unit };
+      return usedItem
+        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit }
+        : { title: getItem?.(item.title), quantity, unit };
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
@@ -221,8 +221,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       if (type === FBProcedureItemType.attachments) { return; }
       if (type === FBProcedureItemType.materials) {
         loading = (
-          !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.materialsId || '') ||
-          !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.lotsId || '')
+          !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.materialsId || '')
+          || !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.lotsId || '')
         );
       } else {
         loading = !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.equipmentId || '');

@@ -17,9 +17,9 @@ import { DialogHandler } from '../../../hooks/useDialog';
 import useMqttSubscription from '../../../hooks/useMqttSubscription';
 
 interface Props {
-  id: string;
-  downloadPdfHover: boolean;
-  dialogPDF: DialogHandler;
+  id: string
+  downloadPdfHover: boolean
+  dialogPDF: DialogHandler
 }
 const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
   id,
@@ -78,7 +78,7 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
           classes={{
             paper: classes.paper,
           }}
-          maxWidth={'lg'}
+          maxWidth="lg"
           fullWidth={true}
           disableBackdropClick={true}
         >
@@ -95,7 +95,7 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
             <ViewFileContent
               asyncState={assetAsync.asyncState}
               url={URL}
-              type={'PDF'}
+              type="PDF"
               handleClose={dialogPDF.close}
             />
           </DialogContent>

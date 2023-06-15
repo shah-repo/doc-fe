@@ -39,8 +39,8 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
           </Box>
         </Box>
       )}
-      {trainingData &&
-        Object.keys(trainingData).map((state: string, index: number) => (
+      {trainingData
+        && Object.keys(trainingData).map((state: string, index: number) => (
           <List
             aria-labelledby="nested-list-subheader"
             key={index}
@@ -165,12 +165,12 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
                                 ? <Text translation="common.due.by.date" values={{
                                   date: getFormattedDateString(
                                     item.dueOn,
-                                    MomentFormats.BriefDate
+                                    MomentFormats.BriefDate,
                                   ),
                                 }} />
                                 : <Text message={getFormattedDateString(
                                   item.completedAt,
-                                  MomentFormats.DateTime
+                                  MomentFormats.DateTime,
                                 )} />}
                             </Typography>
                           }
@@ -180,7 +180,7 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
                         <Divider className={classes.divider} />
                       )}
                     </>
-                  )
+                  ),
                 )}
               </List>
             </Collapse>

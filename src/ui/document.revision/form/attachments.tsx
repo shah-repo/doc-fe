@@ -9,15 +9,15 @@ import { useAttachments } from '../../hooks/docCustomization/useCustomization';
 import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
-  isDisabled: boolean;
-  isNewVersion: boolean;
-  isAttachmentEmpty: boolean;
-  labeld?: string;
-  docRevId: string;
-  containsRedline: boolean;
-  docRevStatus: DocumentRevisionStatus;
-  documentRevision: DocumentRevision;
-  documentTypeId: string;
+  isDisabled: boolean
+  isNewVersion: boolean
+  isAttachmentEmpty: boolean
+  labeld?: string
+  docRevId: string
+  containsRedline: boolean
+  docRevStatus: DocumentRevisionStatus
+  documentRevision: DocumentRevision
+  documentTypeId: string
 }
 
 const classes = {
@@ -55,16 +55,16 @@ const Attachments: React.FunctionComponent<Props> = ({
     <Box>
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
-          <Text message={labeld || label}/>
+          <Text message={labeld || label} />
         </Typography>
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {isAttachmentEmpty}
           docRevId = {docRevId}
           containsRedline={containsRedline}
-          docRevStatus = {docRevStatus}/>
+          docRevStatus = {docRevStatus} />
       </Box>
-      <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
-      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>
+      <AttachmentField name="attachments" component="field" disabled={isDisabled} />
+      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }} />
     </Box>
   ); };
 

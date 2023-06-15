@@ -4,12 +4,12 @@ import AvatarPresenter from './avatar.presenter';
 import { getInitalsFromName } from './helpers';
 
 interface OwnProps {
-  avatar: string | null;
-  showEditUser: boolean;
-  previewAvatar: string;
-  setPreviewAvatar: (value: string) => void;
-  setFile: (value: Nullable<File>) => void;
-  name: string;
+  avatar: string | null
+  showEditUser: boolean
+  previewAvatar: string
+  setPreviewAvatar: (value: string) => void
+  setFile: (value: Nullable<File>) => void
+  name: string
 }
 
 type Props = OwnProps;

@@ -12,7 +12,7 @@ import NavigationLinkPresenter from './NavigationLink.presenter';
 import { updateNavigationItem } from './NavigationLocalStorageHelpers';
 
 interface NavigationLinkContainerProps extends NavigationItem {
-  currentPath: string;
+  currentPath: string
 }
 
 const checkIfItemIsActive = (
@@ -63,8 +63,8 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     <Collapse in={isOpenMenu} timeout="auto" unmountOnExit={true}>
       <List disablePadding>
         {menu?.map((ld) => (
-          ld.type !== 'MENU' &&
-          <NavigationLinkPresenter
+          ld.type !== 'MENU'
+          && <NavigationLinkPresenter
             {...ld}
             key={ld.path || ld.category}
             isChild={true}

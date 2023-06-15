@@ -13,9 +13,9 @@ export const DataDog: React.FunctionComponent<any> = () => {
 
   useEffect(() => {
     if (
-      companyId.length === 0 ||
-      companyName.length === 0 ||
-      employeeId.length === 0) {
+      companyId.length === 0
+      || companyName.length === 0
+      || employeeId.length === 0) {
       datadogRum.removeUser();
     } else {
       deleteCookie('_dd_s');

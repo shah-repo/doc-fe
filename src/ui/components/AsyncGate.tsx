@@ -6,10 +6,10 @@ import styles from './AsyncGate.styles';
 import Text from './Text';
 
 export interface AsyncGateProps  {
-  asyncState: AsyncState;
-  asyncAction?: (...args: any[]) => any;
-  startActionOnMount?: boolean;
-  passive?: boolean;
+  asyncState: AsyncState
+  asyncAction?: (...args: any[]) => any
+  startActionOnMount?: boolean
+  passive?: boolean
 }
 
 type Props = AsyncGateProps & WithStyles<typeof styles>;

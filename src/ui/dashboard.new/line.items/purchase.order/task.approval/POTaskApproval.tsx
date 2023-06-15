@@ -34,37 +34,37 @@ import useStyles from './taskApproval.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  type: string;
-  docId: string;
-  docRevId: string;
-  approvalId: string;
-  timestamp: string;
-  docRevOwnerAvatar: Nullable<string>;
-  docRevOwnerInitialColor: string;
-  docRevOwnerName: string;
-  docRevName: string;
-  docRevVersion: string;
-  purchaseOrderSupplierDocRevId: string;
-  purchaseOrderSupplierDocId: string;
-  purchaseOrderCurrency: string;
-  purchaseSupplierName: string;
-  purchaseOrderTotalAmount: string;
-  purchaseOrderDescription: string;
-  purchaseOrdeLineItemCount: string;
+  id: string
+  docDocumentId: string
+  type: string
+  docId: string
+  docRevId: string
+  approvalId: string
+  timestamp: string
+  docRevOwnerAvatar: Nullable<string>
+  docRevOwnerInitialColor: string
+  docRevOwnerName: string
+  docRevName: string
+  docRevVersion: string
+  purchaseOrderSupplierDocRevId: string
+  purchaseOrderSupplierDocId: string
+  purchaseOrderCurrency: string
+  purchaseSupplierName: string
+  purchaseOrderTotalAmount: string
+  purchaseOrderDescription: string
+  purchaseOrdeLineItemCount: string
   purchaseOrderAttachments: {
-    name: string;
-    type: string;
-    id: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+    name: string
+    type: string
+    id: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -115,7 +115,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       isRegular: true,
       ltext: 'Total:',
       rtext: `${purchaseOrderCurrency} ${formatCurrency(
-        purchaseOrderTotalAmount
+        purchaseOrderTotalAmount,
       )}`,
     },
     {
@@ -305,7 +305,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"
@@ -336,8 +336,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 />
               </span>
             )}
-            {
-              <StyleTooltip
+            <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
@@ -351,7 +350,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </span>
               </StyleTooltip>
-            }
             <span className={classes.actionIcon}>
               {!rejectHover && (
                 <RejectIcon
@@ -486,7 +484,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                         poItem.rtext
                           ? documentVersionPath(
                             purchaseOrderSupplierDocRevId || '',
-                            purchaseOrderSupplierDocId || ''
+                            purchaseOrderSupplierDocId || '',
                           )
                           : '#'
                       }

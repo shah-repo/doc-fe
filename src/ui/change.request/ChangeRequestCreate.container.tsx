@@ -14,7 +14,7 @@ import { changeRequestEditPath } from './utils/paths';
 import { RouteParamsCreate } from './utils/types';
 
 interface OwnProps extends RouteComponentProps {
-  changeRequest?: ChangeRequest;
+  changeRequest?: ChangeRequest
 }
 
 type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
@@ -24,8 +24,8 @@ const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
   description: '',
 } as unknown as ChangeRequest);
 
-const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
-  ({ history, match }) => {
+const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps>
+  = ({ history, match }) => {
     const documentTypeId = match.params.documentTypeId;
     const formId = match.params.formId;
     const create = useActionCreator(changeRequestsActions.create);
@@ -57,7 +57,6 @@ const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateC
         asyncGetDocTypeByGroup);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
       async.start(create, toChangeRequestEditRequestBody(values), async);

@@ -54,7 +54,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
         // eslint-disable-next-line react-hooks/exhaustive-deps
         (value) => notesFormState?.setfiles(value),
       );
-    }
+    },
     );
     // MARK: @helpers
 

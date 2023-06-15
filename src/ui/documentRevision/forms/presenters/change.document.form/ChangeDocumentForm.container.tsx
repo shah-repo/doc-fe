@@ -16,10 +16,10 @@ import ChangeDocumentFormPresenter from './ChangeDocumentForm.presenter';
 import { toFieldInitialValues, toUpdateFormRequestBody } from './utils/transform';
 
 interface Props {
-  documentTypeId: string;
-  docRevId: string;
-  sourceSchema: FBSchemaProps[];
-  sourceFormId: string;
+  documentTypeId: string
+  docRevId: string
+  sourceSchema: FBSchemaProps[]
+  sourceFormId: string
 }
 
 const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
@@ -47,10 +47,10 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
       }
       window.open(
         `/document_revision/${data.document.id}/version/${data.id}`,
-        '_self'
+        '_self',
       );
     },
-  }
+  },
   );
 
   const getFormMappingTemplateAsync = useAsync({
@@ -60,7 +60,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
       }
       setTemplate(data.mapping);
     },
-  }
+  },
   );
 
   const onSubmit = (values) => {

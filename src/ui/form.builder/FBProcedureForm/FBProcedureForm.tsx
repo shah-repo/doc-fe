@@ -4,7 +4,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBCheckbox, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from '..';
 import { withFBProcedureForm } from './FBProcedureForm.wrap';
 
-
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   lotFilterOptions,
   partFilterOptions,
@@ -26,8 +25,8 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       name="id"
       defaultValue={FB.uniqid}
     />
-    {type === FBProcedureItemType.materials &&
-    <>
+    {type === FBProcedureItemType.materials
+    && <>
       <FBAutocompleteAsync
         name="title"
         label="form.builder.part"
@@ -56,8 +55,8 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       )}
     </>
     }
-    {type === FBProcedureItemType.equipment &&
-    <FBAutocompleteAsync
+    {type === FBProcedureItemType.equipment
+    && <FBAutocompleteAsync
       name="title"
       label="form.builder.title"
       rules="required"

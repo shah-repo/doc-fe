@@ -9,12 +9,12 @@ import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToE
 import { styles } from './styles';
 
 interface Props {
-  dialog: DialogHandler;
-  training: TrainingRecordQuery;
+  dialog: DialogHandler
+  training: TrainingRecordQuery
 }
 
-const TrainingDetails: React.FunctionComponent<Props> =
-  ({
+const TrainingDetails: React.FunctionComponent<Props>
+  = ({
     dialog,
     training,
   }) => {
@@ -23,11 +23,11 @@ const TrainingDetails: React.FunctionComponent<Props> =
     return (
       <>
         <IconButton className={classes.closeButton} onClick={dialog.close}>
-          <CloseIcon data-cy="close-icon"/>
+          <CloseIcon data-cy="close-icon" />
         </IconButton>
         <DialogTitle>
           <Typography className={classes.dialogTitle}>
-            <Text translation={'common.training.record'}/>
+            <Text translation="common.training.record" />
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -63,7 +63,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
             <Grid item xs={6} >
               <Grid item xs={12} className={classes.item}>
                 <span className={classes.label}>
-                  <Text translation="training.acknowledge.completed.statement"/>
+                  <Text translation="training.acknowledge.completed.statement" />
                 </span>
                 <span className={classes.itemContentBlue}>
                   &nbsp;
@@ -77,8 +77,8 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   <span className={classes.itemContentBlue}>
                     {training.trainingPlan?.employee.user?.name}
                   </span> | Trainee &nbsp;
-                  { training.completedAt &&
-                    <span>
+                  { training.completedAt
+                    && <span>
                     | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.DateTime)}
                     </span>
                   }
@@ -86,7 +86,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <Box display="flex" justifyContent="flex-start">
-                  <ExportTrainingRecordToEmail id={training.id}/>
+                  <ExportTrainingRecordToEmail id={training.id} />
                 </Box>
               </Grid>
             </Grid>

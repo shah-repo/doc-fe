@@ -37,17 +37,17 @@ import { filterSecurityGroupsForQms } from './helpers';
 import { styles } from './styles';
 
 interface MultipleFormInitialValues {
-  selectType: OptionType[];
+  selectType: OptionType[]
 }
 
 interface Props {
-  isByCategory: boolean;
-  labelName: string;
-  documentTypeId?: string;
-  categoryName?: string;
-  headers: HeaderTableType[];
-  tableData: any[];
-  isGrouped: boolean;
+  isByCategory: boolean
+  labelName: string
+  documentTypeId?: string
+  categoryName?: string
+  headers: HeaderTableType[]
+  tableData: any[]
+  isGrouped: boolean
 }
 
 let selectedTypeLabel = '';
@@ -353,20 +353,16 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           </div>
         )
       }
-      {
-        <FormContext.Provider value={{ submitOnChange: false }}>
+      <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
             {renderFormTemplateDialog}
           </Formik>
         </FormContext.Provider>
-      }
-      {
-        <FormContext.Provider value={{ submitOnChange: false }}>
+      <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik initialValues={{}} onSubmit={handleFormSelection}>
             {renderFormListDialog}
           </Formik>
         </FormContext.Provider>
-      }
     </>
   );
 };

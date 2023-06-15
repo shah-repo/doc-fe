@@ -4,7 +4,7 @@ import Text from '../../components/Text';
 import useInterval from '../../hooks/useInterval';
 
 interface Props {
-  onCounterFinish: () => void;
+  onCounterFinish: () => void
 }
 
 const SlackLandingCounter: React.FunctionComponent<Props> = ({

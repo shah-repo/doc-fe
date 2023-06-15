@@ -9,8 +9,8 @@ import FBTrainingInfoPresenter from './FBTrainingInfo.presenter';
 import { GroupByStateProps, TrainingItem, TrainingStates } from './FBTrainingInfo.types';
 
 interface TrainingInfoContainerProps {
-  documentRevisionId?: string;
-  docRevStatus: DocumentRevisionStatus;
+  documentRevisionId?: string
+  docRevStatus: DocumentRevisionStatus
 }
 
 let call: CancelTokenSource;

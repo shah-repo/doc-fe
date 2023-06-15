@@ -10,14 +10,14 @@ import DocumentRevisionListPresenter from './DocumentRevisionList.presenter';
 import { checkIsDocumentPO } from './helpers/checkDocumentGroup';
 
 interface OwnProps {
-  documentRevisions: DocumentRevision[];
-  documentId: string;
-  docId: string;
-  selectedDocumentRevision: Nullable<string>;
-  documentRevisionId: Nullable<string>;
-  documentTypeId?: string;
-  isInlineApproval: boolean;
-  isRecord: boolean;
+  documentRevisions: DocumentRevision[]
+  documentId: string
+  docId: string
+  selectedDocumentRevision: Nullable<string>
+  documentRevisionId: Nullable<string>
+  documentTypeId?: string
+  isInlineApproval: boolean
+  isRecord: boolean
 }
 
 type DocumentRevisionListContainerProps = OwnProps;
@@ -65,7 +65,7 @@ DocumentRevisionListContainerProps
                 isRecord,
               }}
             />
-          )
+          ),
           )
         }
       </List>

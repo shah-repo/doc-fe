@@ -9,10 +9,10 @@ import { styles } from './ApiToken.style';
 import ApiTokenResponseFormPresenter from './ApiTokenResponseForm.presenter';
 
 interface Props {
-  dialog: DialogHandler;
-  apiTokenName: string;
-  apiTokenKey: string;
-  apiTokenSecret: string;
+  dialog: DialogHandler
+  apiTokenName: string
+  apiTokenKey: string
+  apiTokenSecret: string
 }
 
 const ApiTokenDialog: React.FunctionComponent<Props> = ({

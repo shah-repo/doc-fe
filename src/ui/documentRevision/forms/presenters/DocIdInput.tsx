@@ -14,12 +14,12 @@ import { DocumentCloneType } from '../../Clone.container';
 import { styles } from './styles/DocIdInput.styles';
 
 interface Props {
-  isDisabled: boolean;
-  document?: Partial<DocumentRevisionDocument>;
-  documentTypesById: DocumentTypeByIdState;
-  documentTypeId?: string;
-  setDocId: ((docId: string) => DocumentProposedIdSetAction) | undefined;
-  type?: DocumentCloneType;
+  isDisabled: boolean
+  document?: Partial<DocumentRevisionDocument>
+  documentTypesById: DocumentTypeByIdState
+  documentTypeId?: string
+  setDocId: ((docId: string) => DocumentProposedIdSetAction) | undefined
+  type?: DocumentCloneType
 }
 
 const DocIdInput: React.FunctionComponent<Props> = ({

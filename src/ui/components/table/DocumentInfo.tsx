@@ -3,7 +3,7 @@ import React from 'react';
 import Text from '../Text';
 
 interface OwnProps {
-  numberOfRecords: number;
+  numberOfRecords: number
 }
 
 export type Props = OwnProps;
@@ -12,7 +12,7 @@ export const DocumentInfo: React.FunctionComponent<Props> = ({
   numberOfRecords,
 }) => (
   <Box component="span">
-    <Text translation="common.records.found"/>
+    <Text translation="common.records.found" />
         :&nbsp;
     <span
       data-testid="numberOfRecords"

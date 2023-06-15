@@ -72,18 +72,18 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
               >
                 <Box flexGrow={1}>
                   <FBText
-                    locale={item.type ?
-                      `form.builder.mpi.procedure.${type}.title.id` :
-                      `form.builder.mpi.procedure.${type}.title`
+                    locale={item.type
+                      ? `form.builder.mpi.procedure.${type}.title.id`
+                      : `form.builder.mpi.procedure.${type}.title`
                     }
-                    values={item.type ?
-                      {
+                    values={item.type
+                      ? {
                         id: item.id,
                         title: getItem?.(item.title),
                         quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
                         unit: item.unit,
-                      } :
-                      {
+                      }
+                      : {
                         title: getItem?.(item.title),
                         quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
                         unit: item.unit,

@@ -55,8 +55,8 @@ const validatorFactory = (...validators: Validator[]): Validator => (value: any)
 
 export const validator = (() => {
   const memo: {
-    validators: Validator[];
-    finalValidator: Validator;
+    validators: Validator[]
+    finalValidator: Validator
   }[] = [];
 
   return (...validators: Validator[]): Validator => {

@@ -56,14 +56,13 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}>
               <FBTooltip title="form.builder.add">
-                {isHover ?
-                  <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
+                {isHover
+                  ? <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
                     data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                     onClick={() => onClick?.()}
                     {...{ disabled }}
                   />
-                  :
-                  <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                  :                  <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                     data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                     onClick={() => onClick?.()}
                     {...{ disabled }}
@@ -147,7 +146,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                   pt={0}
                   pb={0}
                 >
-                  <FBFilesPresenter files={item.attachments} mode="raw"/>
+                  <FBFilesPresenter files={item.attachments} mode="raw" />
                 </Box>
               </Box>
             )}

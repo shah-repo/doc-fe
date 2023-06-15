@@ -28,14 +28,14 @@ export enum TrainingStatus {
   ASSIGNED = 'ASSIGNED',
   DUE = 'DUE',
   COMPLETED = 'COMPLETED',
-  PENDING = 'Pending'
+  PENDING = 'Pending',
 }
 export enum TrainingStatusLabels {
   OVERDUE = 'OVERDUE',
   DUE = 'DUE IN 7 DAYS',
   ASSIGNED = 'ASSIGNED',
   COMPLETED = 'COMPLETED',
-  PENDING = 'Pending'
+  PENDING = 'Pending',
 }
 
 export enum LINE_ITEMS_STATUS_TYPES {
@@ -73,24 +73,24 @@ export enum STATUS_TYPES_LABEL {
 }
 
 interface MyFeedsItems {
-  accessedAt: string;
-  itemType: string;
-  itemId: string;
-  docId: string;
-  docTitle: string;
-  docType: string;
-  docRevId?: string;
+  accessedAt: string
+  itemType: string
+  itemId: string
+  docId: string
+  docTitle: string
+  docType: string
+  docRevId?: string
 }
 
 export interface MyFeedsListAction {
-  type: typeof MY_FEEDS_LIST;
-  payload: MyFeedsListApiResponse;
-  initialLoad?: boolean;
+  type: typeof MY_FEEDS_LIST
+  payload: MyFeedsListApiResponse
+  initialLoad?: boolean
 }
 
 export interface MyFeedsListApiResponse {
-  results: MyFeedsItems[];
-  page_total: number;
-  total: number;
+  results: MyFeedsItems[]
+  page_total: number
+  total: number
 }
 export type MyFeedsState = MyFeedsListApiResponse;

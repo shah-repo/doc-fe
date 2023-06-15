@@ -5,8 +5,8 @@ import { SQS_TYPES } from '../../types';
 import { styles } from './uuid.form.styles';
 
 interface Props {
-  handleuuidFormSubmit: (id: string) => void;
-  type: string;
+  handleuuidFormSubmit: (id: string) => void
+  type: string
 }
 const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handleuuidFormSubmit,
@@ -46,7 +46,7 @@ const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
             handleuuidFormSubmit(uuid);
           }}
         >
-          <Text translation={'common.submit'} />
+          <Text translation="common.submit" />
         </Button>
       </Box>
     </Box>

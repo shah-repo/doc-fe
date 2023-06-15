@@ -28,7 +28,7 @@ const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const editGroupsDialog = useDialog();
   const previewGroupsDialog = useDialog();
   const [selectedGroup, setGroup] = useState<LoadCompanyGroup>(
-    DEFAULT_SELECTED_GROUP
+    DEFAULT_SELECTED_GROUP,
   );
 
   const TABLE_NAME = 'groupManagement';
@@ -40,15 +40,15 @@ const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
   const currentEmployeePermissions = useSelector(
-    authSelectors.currentEmployeePermissions
+    authSelectors.currentEmployeePermissions,
   );
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
   const hasOfficialPermissions = getHasOfficialPermissions(
-    currentEmployeePermissions
+    currentEmployeePermissions,
   );
   const hasUnofficialPermissions = getHasUnofficialPermissions(
-    currentEmployeePermissions
+    currentEmployeePermissions,
   );
   const canCreateGroups = hasOfficialPermissions || hasUnofficialPermissions;
 
@@ -67,7 +67,7 @@ const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
   });
 
   const loadGroupByIdAction = useActionCreator(
-    userManagementActions.loadGroupById
+    userManagementActions.loadGroupById,
   );
 
   const handleGroupsPreview = ({ id }: LoadCompanyGroup) => {
@@ -81,13 +81,13 @@ const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const handlePermission = (rowData: LoadCompanyGroup) => {
     const isMemberOfGroup = getIsMemberOfGroup(
       rowData.employees,
-      currentEmployeeId
+      currentEmployeeId,
     );
     const canEditOfficialGroup = rowData.isOfficial && hasOfficialPermissions;
-    const canEditUnofficialGroup =
-      !rowData.isOfficial &&
-      (hasUnofficialPermissions || hasOfficialPermissions) &&
-      isMemberOfGroup;
+    const canEditUnofficialGroup
+      = !rowData.isOfficial
+      && (hasUnofficialPermissions || hasOfficialPermissions)
+      && isMemberOfGroup;
     if (canEditOfficialGroup || canEditUnofficialGroup) {
       handleGroupsEdit(rowData);
     } else {

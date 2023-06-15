@@ -14,7 +14,7 @@ describe('Clone container redirect test', () => {
   };
 
   const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow(
-    <CloneContainer {...defaultProps} {...props}/>,
+    <CloneContainer {...defaultProps} {...props} />,
   );
 
   it('Redirects when cannot create new version', () => {
@@ -35,7 +35,7 @@ describe('Clone container test', () => {
   };
 
   const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow(
-    <CloneContainer {...defaultProps} {...props}/>,
+    <CloneContainer {...defaultProps} {...props} />,
   );
 
   it('Can create new version', () => {

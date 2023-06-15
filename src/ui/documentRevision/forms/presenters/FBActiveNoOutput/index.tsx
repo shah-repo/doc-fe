@@ -26,11 +26,11 @@ import DocumentPreview from './components/DocumentPreview';
 import styles from './styles';
 
 interface Props {
-  status: DocumentRevisionStatus;
-  version: number;
-  docRevId?: string;
-  isDisabled: boolean;
-  outputDocs: OptionType[];
+  status: DocumentRevisionStatus
+  version: number
+  docRevId?: string
+  isDisabled: boolean
+  outputDocs: OptionType[]
 }
 
 const FBActiveNoOutput: React.FunctionComponent<Props> = ({
@@ -47,11 +47,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
-  const isdocRevStatusDraft =
-    isDocumentRevisionInDraft(status);
+  const isdocRevStatusDraft
+    = isDocumentRevisionInDraft(status);
   const isdocRevVersionOne = version === 1;
-  const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
+  const outputDocEnabled: boolean
+    = (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
 
   const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
@@ -145,7 +145,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
             </Grid>
           )}
         </Grid>
-        {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
+        {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled} />}
       </Box>
     </FBProvider>
   );

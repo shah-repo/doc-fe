@@ -5,8 +5,8 @@ import { changeRequestEditPath } from '../../change.request/utils/paths';
 import DashboardCRBase from './DashboardCRbase';
 
 interface Props {
-  index: number;
-  changeRequest: ChangeRequest;
+  index: number
+  changeRequest: ChangeRequest
 }
 
 const ChangeRequestApproval: React.FunctionComponent<Props> = ({

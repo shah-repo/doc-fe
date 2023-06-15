@@ -65,7 +65,7 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
 
   public addApproval = (
     approval: Partial<FBInlineApprovalBody>,
-    callback?: () => any
+    callback?: () => any,
   ) => {
     this.approvalApi.set({
       url: FBEndpoint.Approvals,
@@ -86,7 +86,7 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => {
     if (!id) { return; }
     this.transitionApi.set({

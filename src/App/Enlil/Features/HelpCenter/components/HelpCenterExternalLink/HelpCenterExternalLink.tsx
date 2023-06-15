@@ -17,11 +17,11 @@ const envUrl = (url: string) => {
 };
 
 interface Props {
-  to: string;
-  children: React.ReactNode;
-  component?: React.ElementType;
-  className?: string;
-  dataCy?: string;
+  to: string
+  children: React.ReactNode
+  component?: React.ElementType
+  className?: string
+  dataCy?: string
 }
 
 const HelpCenterExternalLink: React.FC<Props> = ({ to, component, children, className, dataCy }) => {

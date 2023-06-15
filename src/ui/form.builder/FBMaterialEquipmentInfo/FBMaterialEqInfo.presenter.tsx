@@ -96,8 +96,8 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
-            {haveData ?
-              data.map((item, pos) => (
+            {haveData
+              ? data.map((item, pos) => (
                 <ListItem
                   key={`${item.docId}-${item.title}`}
                   divider={pos < data.length - 1}
@@ -107,8 +107,8 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
                 >
                   <PanelItem item={item} classes={classes} />
                 </ListItem>
-              )) :
-              <ListItem className={classes.panelDetailsListItem}><SMText label="common.none" /></ListItem>
+              ))
+              : <ListItem className={classes.panelDetailsListItem}><SMText label="common.none" /></ListItem>
             }
           </List>
         </ExpansionPanelDetails>
@@ -197,7 +197,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
           ))}
         </Grid>
         <Grid item xs={3}>
-          <SMText label={'common.jump.to'} boxProps={{ className: classes.navTitle }} />
+          <SMText label="common.jump.to" boxProps={{ className: classes.navTitle }} />
           <MenuList>
             {panels.map((panel) => (
               <MenuItem

@@ -1,6 +1,5 @@
 import Colors from '../../layout/theme/utils/colors';
 
-
 export const FBFontStyle =  {
   font: {
   },

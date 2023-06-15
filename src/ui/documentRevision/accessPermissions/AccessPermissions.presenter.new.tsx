@@ -20,15 +20,15 @@ import Colors from '../../layout/theme/utils/colors';
 import { styles } from './AccessPermissions.styles.new';
 
 interface OwnProps {
-  availableApprovers: OptionType[];
-  groupOptions: OptionType[];
-  securityEmployees: [];
-  operators: [];
-  securityGroups: [];
-  documentId: string;
-  documentRevisionId: string;
-  isVisible: boolean;
-  label?: string;
+  availableApprovers: OptionType[]
+  groupOptions: OptionType[]
+  securityEmployees: []
+  operators: []
+  securityGroups: []
+  documentId: string
+  documentRevisionId: string
+  isVisible: boolean
+  label?: string
 }
 
 type AccessPermissionsPresenterProps = OwnProps;
@@ -164,9 +164,9 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
     {...props}
   >
     <button data-cy="add-user" onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
-      {(props.selectProps.menuIsOpen || props.hasValue) ?
-        <AddBoxOutlinedIcon data-cy="add-user" color="primary" fontSize="small" /> :
-        <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
+      {(props.selectProps.menuIsOpen || props.hasValue)
+        ? <AddBoxOutlinedIcon data-cy="add-user" color="primary" fontSize="small" />
+        : <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
     </button>
   </components.DropdownIndicator>);
   const securityGroupsIds = securityGroups.map((e: Group) => e.id);
@@ -229,7 +229,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={employeeSelectOptions}
-                      menuPlacement={'auto'}
+                      menuPlacement="auto"
                       styles={{
                         option: (style) => ({ ...style, wordWrap: 'break-word' }),
                       }}
@@ -309,7 +309,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={groupSelectOptions}
-                      menuPlacement={'auto'}
+                      menuPlacement="auto"
                       placeholder={intl.formatMessage({
                         id: 'document.revision.search.groups',
                       })}
@@ -356,7 +356,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       <Box width={203} fontFamily="Sora" pt={1.825}>
                         <Select
                           id="document.assing.to.sidebar"
-                          menuPlacement={'top'}
+                          menuPlacement="top"
                           options={operatorsSelectOptions}
                           onChange={(e) => saveValueOperator(e)}
                           placeholder={intl.formatMessage({

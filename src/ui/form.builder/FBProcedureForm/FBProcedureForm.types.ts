@@ -13,23 +13,23 @@ export type FBProcedureFormProps =
 & Pick<FBProcedureItemProps, 'type' | 'name'>
 & Pick<FBAutocompleteAsyncProps, 'optionId' | 'disabledOptions'>
 & {
-  handleChangeOfPart?: () => void;
-  handleChangeOfLot?: () => void;
-  handleReloading?: () => void;
-  lotFilterOptions?: FBAutocompleteProps['filterOptions'];
-  partFilterOptions?: FBAutocompleteProps['filterOptions'];
-  partOptions?: SelectOption[];
-  lotOptions?: SelectOption[];
-  procedureFormState?: FBProcedureFormState;
-  disabled?: boolean;
-  partLoading?: boolean;
-  lotLoading?: boolean;
-  mode?: FBProcedureFormMode;
-  lhrStepIndex?: number;
-  isDocumentMPI?: boolean;
+  handleChangeOfPart?: () => void
+  handleChangeOfLot?: () => void
+  handleReloading?: () => void
+  lotFilterOptions?: FBAutocompleteProps['filterOptions']
+  partFilterOptions?: FBAutocompleteProps['filterOptions']
+  partOptions?: SelectOption[]
+  lotOptions?: SelectOption[]
+  procedureFormState?: FBProcedureFormState
+  disabled?: boolean
+  partLoading?: boolean
+  lotLoading?: boolean
+  mode?: FBProcedureFormMode
+  lhrStepIndex?: number
+  isDocumentMPI?: boolean
 };
 
 export interface FBProcedureFormActionsProps {
-  handleAdd?: () => void;
-  handleCancel?: () => void;
+  handleAdd?: () => void
+  handleCancel?: () => void
 }

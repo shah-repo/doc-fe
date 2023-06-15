@@ -64,5 +64,5 @@ export default makeStyles((theme: Theme) =>
     iconActive: {
       backgroundColor: `${Colors.white} !important`,
     },
-  })
+  }),
 );

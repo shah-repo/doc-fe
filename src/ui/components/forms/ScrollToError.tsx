@@ -2,9 +2,9 @@ import { FormikErrors } from 'formik';
 import React, { useEffect } from 'react';
 
 interface Props {
-  errors: FormikErrors<any>;
-  isSubmitting: boolean;
-  isValidating: boolean;
+  errors: FormikErrors<any>
+  isSubmitting: boolean
+  isValidating: boolean
 }
 
 const ScrollToError: React.FunctionComponent<Props> = ({

@@ -6,7 +6,7 @@ import Text from '../../../components/Text';
 import { styles } from './password.expiration.email.specific.form.styles';
 
 interface Props {
-  handlePasswordExpirationEmailSpecificFormSubmit: ( { processedAtTimestamp, userEmails } ) => void;
+  handlePasswordExpirationEmailSpecificFormSubmit: ( { processedAtTimestamp, userEmails } ) => void
 }
 const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handlePasswordExpirationEmailSpecificFormSubmit,
@@ -16,7 +16,7 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
   const getUtcFormattedString = (date: string) =>
     moment(date, MomentFormats.AsyncTasksDefaultDateTimeFormatter).toISOString();
   const [processedAtTimestamp, setProcessedAtTimestamp] = React.useState(
-    getUtcFormattedString(defaultDate)
+    getUtcFormattedString(defaultDate),
   );
   const [userEmails, setUserEmails] = React.useState('');
   const handlePasswordUpdatedDateChange = (event: any) => {
@@ -60,7 +60,7 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
             handlePasswordExpirationEmailSpecificFormSubmit({ ...{ processedAtTimestamp, userEmails } });
           }}
         >
-          <Text translation={'common.submit'} />
+          <Text translation="common.submit" />
         </Button>
       </Box>
     </Box>

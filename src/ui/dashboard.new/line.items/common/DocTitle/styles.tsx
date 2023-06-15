@@ -18,5 +18,5 @@ export const styles = makeStyles(() =>
         textDecoration: 'underline',
       },
     },
-  })
+  }),
 );

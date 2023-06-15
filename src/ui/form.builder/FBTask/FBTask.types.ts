@@ -10,18 +10,18 @@ export type FBTaskItemStatus = 'DRAFT' | 'PENDING' | 'DONE' | 'ABANDONED';
 export type FBTaskActionMode = 'description' | 'note';
 
 export interface FBTaskItem {
-  id?: string;
-  descriptionSchema: FBSchemaProps[];
-  descriptionInput: Record<string, any>;
-  closingNoteSchema: FBSchemaProps[];
-  closingNoteInput: Record<string, any>;
-  assigned: Partial<Employee>;
-  type?: FBTaskItemType;
-  dueDate: string;
-  fieldId: string;
-  status?: FBTaskItemStatus;
-  attachments?: Attachment[];
-  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
+  id?: string
+  descriptionSchema: FBSchemaProps[]
+  descriptionInput: Record<string, any>
+  closingNoteSchema: FBSchemaProps[]
+  closingNoteInput: Record<string, any>
+  assigned: Partial<Employee>
+  type?: FBTaskItemType
+  dueDate: string
+  fieldId: string
+  status?: FBTaskItemStatus
+  attachments?: Attachment[]
+  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>
 }
 
 export type FBClosingNoteProps = Pick<FBTaskItem, 'id' | 'closingNoteInput' | 'attachments'>;
@@ -29,12 +29,12 @@ export type FBClosingNoteProps = Pick<FBTaskItem, 'id' | 'closingNoteInput' | 'a
 export type FBTaskProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
-  onClick?: (id?: string) => any;
-  taskState?: FBTaskState;
-  dialogState?: FBDialogState;
-  tasks?: FBTaskItem[];
-  loading?: boolean;
-  canAddTask?: boolean;
+  onClick?: (id?: string) => any
+  taskState?: FBTaskState
+  dialogState?: FBDialogState
+  tasks?: FBTaskItem[]
+  loading?: boolean
+  canAddTask?: boolean
 };
 
 export type FBTaskFormProps =
@@ -42,19 +42,19 @@ export type FBTaskFormProps =
 & Pick<FBFormProps, 'formState' | 'children' | 'initialValues'>
 & Pick<FBSchemaComponentProps, 'schema'>
 & {
-  handleAdd?: () => any;
-  handleCancel?: () => any;
-  actionMode?: FBTaskActionMode;
+  handleAdd?: () => any
+  handleCancel?: () => any
+  actionMode?: FBTaskActionMode
 };
 
 export type FBTaskFieldProps =
 & Pick<FBTaskProps, 'onClick'>
 & Pick<BoxProps, 'onMouseOver' | 'onMouseLeave'>
 & {
-  handleRemoveTask?: (task?: FBTaskItem) => any;
-  handleClosingNote?: () => any;
-  taskFieldState?: FBTaskFieldState;
-  task: FBTaskItem;
-  visibility?: FBVisibilityType;
-  canBeDone?: boolean;
+  handleRemoveTask?: (task?: FBTaskItem) => any
+  handleClosingNote?: () => any
+  taskFieldState?: FBTaskFieldState
+  task: FBTaskItem
+  visibility?: FBVisibilityType
+  canBeDone?: boolean
 };

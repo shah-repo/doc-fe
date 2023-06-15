@@ -45,7 +45,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         if (isEqual(formState?.getFieldValue(name), data)) { return; }
         formState?.setFieldValue(name, data);
         workspaceState?.saveDocRev(formState?.getValues());
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -65,7 +65,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
             ...procedureState.value,
             attachments,
           };
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -79,7 +79,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
           description,
         };
         workspaceState?.saveDocRev(formState?.getValues());
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -97,7 +97,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
             ...procedureState.value,
             ...formValue,
           });
-        }
+        },
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -115,7 +115,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         formState?.setFieldValue(diffInput, diffCollection, true, true);
       }, {
         fireImmediately: true,
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

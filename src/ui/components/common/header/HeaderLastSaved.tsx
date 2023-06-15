@@ -6,9 +6,9 @@ import Text from '../../Text';
 import useStyles from './HeaderLastSaved.styles';
 
 interface Props {
-  timestamp: string;
-  loading?: boolean;
-  updateInterval?: number;
+  timestamp: string
+  loading?: boolean
+  updateInterval?: number
 }
 
 const HeaderLastSaved: React.FC<Props> = ({

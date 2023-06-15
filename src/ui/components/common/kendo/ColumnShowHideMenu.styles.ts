@@ -20,5 +20,5 @@ export const styles = makeStyles(() =>
         background: Colors.water,
       },
     },
-  })
+  }),
 );

@@ -10,7 +10,7 @@ interface DatePickerOwnProps extends FieldOwnProps {
   datePickerProps?: Pick<
   ReactDatePickerProps,
   Exclude<keyof ReactDatePickerProps, 'onChange'>
-  >;
+  >
 }
 
 type DatePickerPropsWithFormik = DatePickerOwnProps &

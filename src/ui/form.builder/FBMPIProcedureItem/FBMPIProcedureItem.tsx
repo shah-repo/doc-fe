@@ -85,14 +85,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}>
             <FBTooltip title="form.builder.add">
-              { isHover ?
-                <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
+              { isHover
+                ? <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
                 />
-                :
-                <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                :                <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
@@ -191,8 +190,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               pr: 1,
                                             }}
                                           />
-                                          {(selection.calDueDate !== 'N/A') && type === 'equipment' &&
-                                          <Box
+                                          {(selection.calDueDate !== 'N/A') && type === 'equipment'
+                                          && <Box
                                             color={calOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={calOverdue ? 'bold' : 'normal'}
                                             ml={1}
@@ -209,8 +208,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                           }
-                                          {(selection.pmDueDate !== 'N/A') && type === 'equipment' &&
-                                          <Box
+                                          {(selection.pmDueDate !== 'N/A') && type === 'equipment'
+                                          && <Box
                                             color={pmOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={pmOverdue ? 'bold' : 'normal'}
                                             ml={1}
@@ -237,15 +236,15 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                           </IconButton>
 
                                         </Box>
-                                        {(pmOverdue || calOverdue) &&
-                                    <Box
+                                        {(pmOverdue || calOverdue)
+                                    && <Box
                                       color={Colors.error_red}
                                       fontWeight="bold"
                                       display="flex"
                                       alignItems="center"
                                       mt={0.5}
                                     >
-                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE &nbsp; &nbsp;
+                                      <WarningIcon width={14} height={14} /> &nbsp; OVERDUE &nbsp; &nbsp;
                                     </Box>
                                         }
                                       </>
@@ -311,7 +310,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                 pt={0}
                 pb={0}
               >
-                <FBFilesPresenter files={item.attachments} mode="raw"/>
+                <FBFilesPresenter files={item.attachments} mode="raw" />
               </Box>
             </Box>
           )}

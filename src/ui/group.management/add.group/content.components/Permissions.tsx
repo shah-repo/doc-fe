@@ -11,9 +11,9 @@ import Text from '../../../components/Text';
 import { toArray, toOptions } from '../../utils/transform';
 
 interface Props {
-  group: GroupRequestBody;
-  setGroup: (values: GroupRequestBody) => void;
-  currentEmployeePermissions: Permission[];
+  group: GroupRequestBody
+  setGroup: (values: GroupRequestBody) => void
+  currentEmployeePermissions: Permission[]
 }
 
 const Permissions: React.FunctionComponent<Props> = ({
@@ -29,7 +29,7 @@ const Permissions: React.FunctionComponent<Props> = ({
   const permissionsRenderer = () => (
     <Box width={700} mt={5}>
       <Typography variant="h4" style={{ marginBottom: '16px' }}>
-        <Text message={'common.permissions'} />
+        <Text message="common.permissions" />
       </Typography>
       <Select
         id="Group-permissions"
@@ -48,7 +48,7 @@ const Permissions: React.FunctionComponent<Props> = ({
   const tagsRenderer = () => (
     <Box width={700} mt={5}>
       <Typography variant="h4" style={{ marginBottom: '16px' }}>
-        <Text message={'common.tags'} />
+        <Text message="common.tags" />
       </Typography>
       <Select
         id="Group-addTags"

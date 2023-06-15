@@ -5,7 +5,7 @@ export type FBSchemaSelectProps =
 & Pick<FBInputProps, 'includeSelectedSchema'>
 & Pick<FBSchemaComponentProps, 'schema'>
 & {
-  schemaSelectState?: FBSchemaSelectState;
+  schemaSelectState?: FBSchemaSelectState
 };
 
 export const FBSchemeMultuValueTypes: FBInputType[] = ['checkboxgroup'];

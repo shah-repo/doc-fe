@@ -11,17 +11,17 @@ import { useDocumentStatus } from '../../hooks/docCustomization/useCustomization
 import AuditPresenter from './Audit.presenter.new';
 
 interface OwnProps {
-  documentRevisionId: string;
-  documentTypeId: string;
-  selectedDocument: DocumentRevision;
+  documentRevisionId: string
+  documentTypeId: string
+  selectedDocument: DocumentRevision
 }
 
 interface StateProps {
-  audit: AuditGroupType;
+  audit: AuditGroupType
 }
 
 interface DispatchProps {
-  loadAudit: typeof documentRevisionsActions.loadAudit;
+  loadAudit: typeof documentRevisionsActions.loadAudit
 }
 
 type AuditContainerProps = OwnProps & StateProps & DispatchProps;

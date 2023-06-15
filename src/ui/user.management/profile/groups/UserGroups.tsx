@@ -14,13 +14,12 @@ import useAsync from '../../../hooks/useAsync';
 import { toEmployeeGroupsEditRequestBody } from '../../utils/transform';
 import { styles } from './UserGroups.style';
 
-
 interface OwnProps {
-  canManageUsers: boolean;
-  employeeGroups: OptionType[];
-  employeeId: string;
-  callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
-  fromUserProfile?: boolean;
+  canManageUsers: boolean
+  employeeGroups: OptionType[]
+  employeeId: string
+  callbackUpdateGroups?: (values: GetEmployeeResponse) => void
+  fromUserProfile?: boolean
 }
 
 type Props = OwnProps;
@@ -94,7 +93,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
   const editGroupsRenderer = () => (
     <Box>
       <Typography variant="h6" style={{ marginBottom: '16px' }}>
-        <Text message={'common.groups'} />
+        <Text message="common.groups" />
       </Typography>
       <Select
         id="UserGroups-groups"
@@ -116,8 +115,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
           closeEditGroups();
         }}
         id="UserGroups-done"
-      >
-      </Button>
+       />
       <Button
         className={classes.outlinedButton}
         variant="outlined"

@@ -51,5 +51,4 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   );
 };
 
-
 export default withFBSupplier(FBSupplier);

@@ -16,14 +16,14 @@ import { generateRevisionNumber } from './helpers/generateRevisionNumber';
 import { isDocumentAlphaReleased } from './helpers/revisionStage';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  documentId: string;
-  selectedDocumentRevision: Nullable<string>;
-  docId: string;
-  documentTypeId?: string;
-  isDocumentPO: boolean;
-  isInlineApproval: boolean;
-  isRecord: boolean;
+  documentRevision: DocumentRevision
+  documentId: string
+  selectedDocumentRevision: Nullable<string>
+  docId: string
+  documentTypeId?: string
+  isDocumentPO: boolean
+  isInlineApproval: boolean
+  isRecord: boolean
 }
 
 const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -63,7 +63,6 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
   const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
 
-
   if (isRecord) {
     if (isReleased) {
       recordDateLabel = 'document.revision.released.date';
@@ -102,7 +101,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       className={classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       })}
-      data-cy={'DocumentRevisionList-item'}
+      data-cy="DocumentRevisionList-item"
     >
       <NavLink
         to={link}
@@ -110,13 +109,13 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         activeClassName={classes.activeLinkTitle}
       >
         <div
-          data-cy={'revision'}>
+          data-cy="revision">
           <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
           {
-            isStatusVisible &&
-            <CustomLabelTooltip {...{ tooltipConfig }}>
+            isStatusVisible
+            && <CustomLabelTooltip {...{ tooltipConfig }}>
               <>
               &nbsp; - <Text message={displayStatus} />
               </>
@@ -130,7 +129,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         className={classes.linkBody}
       >
         <SummaryInfo
-          dataCy={'common.docId'}
+          dataCy="common.docId"
           label={isDocumentPO ? undefined : docIdLabel}
           value={docId}
         />
@@ -147,7 +146,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         <SummaryInfo
           label={isRecord ? recordDateLabel : 'common.effective.date'}
           value={
-            <DateFormatter value={getDateValue()}/>
+            <DateFormatter value={getDateValue()} />
           }
         />
       </NavLink>

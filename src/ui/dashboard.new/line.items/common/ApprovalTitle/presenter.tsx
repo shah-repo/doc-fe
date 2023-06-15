@@ -6,8 +6,8 @@ import { StyleTooltip } from '../StyleTooltip';
 import { styles } from './styles';
 
 interface Props {
-  url: string;
-  title: Nullable<string>;
+  url: string
+  title: Nullable<string>
 }
 const ApprovalTitle: React.FunctionComponent<Props> = ({
   url,

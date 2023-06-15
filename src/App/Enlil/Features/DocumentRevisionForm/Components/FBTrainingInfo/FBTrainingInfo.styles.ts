@@ -100,5 +100,5 @@ export const styles = makeStyles((theme: Theme) =>
       marginLeft: '50px',
       marginRight: '111px',
     },
-  })
+  }),
 );

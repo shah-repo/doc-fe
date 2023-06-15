@@ -11,7 +11,7 @@ import { PageDetailsCategory, PageDetailsCategoryValues } from '../types';
 import { PageDetailsFormPresenter } from './presenter';
 
 interface Props {
-  pageDetails: PageDetails;
+  pageDetails: PageDetails
 }
 
 export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
@@ -34,7 +34,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
       updatePageDetailsAction,
       id,
       toPageDetailsBodyValues(values),
-      async
+      async,
     );
   };
 
