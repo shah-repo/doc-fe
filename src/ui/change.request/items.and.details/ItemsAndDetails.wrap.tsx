@@ -71,8 +71,15 @@ ItemsAndDetailsWrapperProps & {name: string}
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     if (autosave) {
+      const initialAsyncStatus = asyncState?.status;
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
+      setTimeout(() => {
+        if (asyncState?.status === initialAsyncStatus) {
+          itemsAndDetailsState.setLoadingState(false);
+          itemsAndDetailsState.setViewItemActionsVisibility(true);
+        }
+      }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
       const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
