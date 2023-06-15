@@ -32,6 +32,7 @@ import FBLHRBuild from '../FBLHRBuild/FBLHRBuild';
 import FBLHRStep from '../FBLHRStep/FBLHRStep';
 import FBLotOnHandQuantityField from '../FBLotOnHandQuantityField/FBLotOnHandQuantityField';
 import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
+import FBLotTransfers from '../FBLotTransfers';
 import FBMediaAlbumField from '../FBMediaAlbumField/FBMediaAlbumField';
 import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
 import FBParagraph from '../FBParagraph/FBParagraph';
@@ -136,6 +137,7 @@ class FBSchemaState {
     poapprovals: FBPOApprovals,
     lhrbuild: FBLHRBuild,
     downloadsheet: FBDownloadSheetTpl,
+    lotTransfers: FBLotTransfers,
     lotQuantity: FBLotQuantityField,
     lotOnHandQuantity: FBLotOnHandQuantityField,
   };

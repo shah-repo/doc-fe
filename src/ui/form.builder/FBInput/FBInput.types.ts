@@ -76,6 +76,7 @@ export type FBInputType =
   | 'lhrbuild'
   | 'purchaseordersummary'
   | 'downloadsheet'
+  | 'lotTransfers'
   | 'lotQuantity'
   | 'lotOnHandQuantity';
 
@@ -248,6 +249,7 @@ export const FBAutosave: FBInputType[] = [
   'select',
   'quantity',
   'texteditor',
+  'lotTransfers',
 ];
 
 export const BlockTypeField: FBInputType[] = [
