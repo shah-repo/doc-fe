@@ -29,10 +29,10 @@ class FBMediaAlbumFieldState {
 
   @computed public get loading(): boolean {
     return (
-      this.attachmentApi.loading ||
-      this.attachmentsApi.loading ||
-      this.filesApi.loading ||
-      this.attachmentDownloadApi.loading
+      this.attachmentApi.loading
+      || this.attachmentsApi.loading
+      || this.filesApi.loading
+      || this.attachmentDownloadApi.loading
     );
   }
 

@@ -20,7 +20,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   withoutBottomBar = false,
 }) => (
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
-    <FBSnackbar autoHideDuration={6000}/>
+    <FBSnackbar autoHideDuration={6000} />
     <FBDialog />
     {/* The workspaceMode of the form should be what is passed in Or
     by default be the mode in which the workspace is, instead of being 'none' */}

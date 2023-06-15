@@ -13,11 +13,11 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 
 interface Props {
-  transition: ChangeRequestTransition;
-  label: string;
-  changeRequestId: string;
-  buttonProps?: ButtonProps;
-  isSubmitButtonShown?: boolean;
+  transition: ChangeRequestTransition
+  label: string
+  changeRequestId: string
+  buttonProps?: ButtonProps
+  isSubmitButtonShown?: boolean
 }
 
 const TransitionButton: React.FunctionComponent<Props> = ({

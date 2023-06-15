@@ -35,5 +35,4 @@ const FBRequestApprovalField: React.FunctionComponent<FBRequestApprovalProps> = 
   </>
 );
 
-
 export default withFBRequestApproval(FBRequestApprovalField);

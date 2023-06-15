@@ -3,12 +3,12 @@ import React from 'react';
 import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface NameCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
+  dataItem: any
+  rowType?: string
+  colSpan?: number
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
 }
 
 export const NameCell = ({
@@ -39,7 +39,7 @@ export const NameCell = ({
           className={className}
           data-grid-col-index={columnIndex}
         >
-          <Tooltip data ={dataItem.name}/>
+          <Tooltip data ={dataItem.name} />
         </td>
       )}
       {dataItem.inEdit && (

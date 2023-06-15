@@ -23,7 +23,7 @@ export const useItemStatusStyles = makeStyles((theme) =>
       backgroundColor: FBMEQItemStatusBg[FBMEQItemStatus[key]],
       borderColor: FBMEQItemStatusBorder[FBMEQItemStatus[key]],
     },
-  }), {})
+  }), {}),
 );
 
 export default makeStyles((theme) => ({

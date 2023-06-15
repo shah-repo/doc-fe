@@ -53,7 +53,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     <Box ml={-4} display="flex" alignItems="center">
       <IconButton size="small" onClick={refresh} {...{ disabled }}>
         <CachedIcon fontSize="small" />
-      </ IconButton>
+      </IconButton>
     </Box>
   );
 
@@ -80,8 +80,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         inputProps={{
           ...params.inputProps,
           'style': {
-            padding: '10.5px 0', ...inputStyle, marginRight: customStyles ?
-              '10px' : disabled  ? '28px' : '0px',
+            padding: '10.5px 0', ...inputStyle, marginRight: customStyles
+              ? '10px' : disabled  ? '28px' : '0px',
             fontSize: 14,
           },
           'data-cy': props.name,
@@ -115,8 +115,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     const outputDocumentType = get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'label')
     || get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'group');
     const documentType = workspaceState?.document?.document?.documentType?.group;
-    if (dialogState?.open && documentType === DOC_TYPE_GROUP.LHRT &&
-      (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === 'Lot History Record')
+    if (dialogState?.open && documentType === DOC_TYPE_GROUP.LHRT
+      && (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === 'Lot History Record')
     && (props.name === 'lhr-selected-part' || props.name === 'lhrstep-built-in')) {
       return false; }
 
@@ -126,8 +126,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     return true;
   };
 
-  disabled = includes([ 'fb-approvers-approvers', 'form.builder.approvers'], props.name) &&
-    includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
+  disabled = includes([ 'fb-approvers-approvers', 'form.builder.approvers'], props.name)
+    && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
 
   return (

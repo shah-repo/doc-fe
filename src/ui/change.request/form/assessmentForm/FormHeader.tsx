@@ -10,8 +10,8 @@ import FormProgress from '../../../components/forms/FormProgress';
 import Actions from './Actions';
 
 interface Props {
-  changeRequest?: ChangeRequest;
-  asyncState: AsyncState;
+  changeRequest?: ChangeRequest
+  asyncState: AsyncState
 }
 
 const FormHeader: React.FC<Props> = ({

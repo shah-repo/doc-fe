@@ -4,8 +4,8 @@ import Text from '../../../components/Text';
 import { Translation } from '../../../translations/types';
 
 interface Props {
-  label: Translation;
-  value: string | number;
+  label: Translation
+  value: string | number
 }
 
 const PODetailItem: React.FunctionComponent<Props> = ({

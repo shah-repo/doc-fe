@@ -242,7 +242,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                               docRevStatus={documentRevision?.status}
                               documentRevision={documentRevision}
                               documentTypeId={docTypeId || ''}
-                              labeld={'Supporting Documents'}
+                              labeld="Supporting Documents"
                             />
                           )}
                           <FBSchema

@@ -32,19 +32,19 @@ export const withOnChange = <T extends FBInputProps>(
     const fieldName = field?.name || '';
     const fieldValue = FBStore.getValue(fieldName);
 
-    const isFieldValue =
-        Boolean(toInteger(fieldValue)) ||
-        isEqual(fieldValue, `context-${fieldName}`);
+    const isFieldValue
+        = Boolean(toInteger(fieldValue))
+        || isEqual(fieldValue, `context-${fieldName}`);
     const isFormValue = get(
       FBStore.getValues(),
       `context-${fieldName}`,
     ) as boolean;
     const contextChecked: boolean = isFieldValue || isFormValue;
 
-    const isContextActive =
-        contextChecked &&
-        includeContext &&
-        (FBStore.mode === 'form' || FBStore.mode === 'preview');
+    const isContextActive
+        = contextChecked
+        && includeContext
+        && (FBStore.mode === 'form' || FBStore.mode === 'preview');
     return isContextActive || false;
   }
 
@@ -86,7 +86,7 @@ export const withOnChange = <T extends FBInputProps>(
   }
 
   const handleChange = (
-    ev: React.ChangeEvent<{ value: any; checked: boolean }>,
+    ev: React.ChangeEvent<{ value: any, checked: boolean }>,
     value: any = undefined,
   ) => {
     // TODO: refactoring needed
@@ -163,8 +163,8 @@ export const withOnChange = <T extends FBInputProps>(
         const { optionValueKey = 'id', optionValueType = 'key', optionObjectKeys } = props;
         if (isArray(value)) {
           if (optionValueType === 'object') {
-            return optionObjectKeys ?
-              map(value, (v) => pick(v, optionObjectKeys as string[]))
+            return optionObjectKeys
+              ? map(value, (v) => pick(v, optionObjectKeys as string[]))
               : value;
           }
           return map(value, (v) => (lodashIsString(v) ? v : get(v, optionValueKey)));

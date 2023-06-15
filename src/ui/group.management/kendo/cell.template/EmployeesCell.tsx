@@ -7,18 +7,18 @@ import ExpandableTemplate from '../../../components/common/kendo/ExpandableTempl
 import { toMembersOptions } from '../../utils/transform';
 
 interface LoadMemberGroupExt extends LoadCompanyGroup {
-  memberNames: string;
+  memberNames: string
 }
 
 interface EmployeeCellProps {
-  dataItem: LoadMemberGroupExt;
-  rowType?: string;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  employees: GetEmployeeResponse[];
-  field?: string;
+  dataItem: LoadMemberGroupExt
+  rowType?: string
+  colSpan?: number
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  employees: GetEmployeeResponse[]
+  field?: string
 }
 
 export const EmployeesCell = ({
@@ -59,8 +59,8 @@ export const EmployeesCell = ({
       className={className}
       data-grid-col-index={columnIndex}
     >
-      {dataItem.inEdit ?
-        <MultiSelect
+      {dataItem.inEdit
+        ? <MultiSelect
           data={data}
           value={result}
           filterable={true}

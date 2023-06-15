@@ -58,7 +58,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
             && (group.joinedEmployees as string[]).includes(approval.approverId)
             && (group.type === GroupType.REVISION_APPROVAL);
           return poApproval || revisionApproval;
-        }
+        },
       );
       return signedGroup ? [...groups, signedGroup] : groups;
     }, []) ?? [];
@@ -103,7 +103,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
   };
 
   public addApproval = (
-    approval: Partial<FBInlineApprovalBody>
+    approval: Partial<FBInlineApprovalBody>,
   ) => this.approvalApi.set({
     url: FBEndpoint.Approvals,
     body: approval,
@@ -122,7 +122,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
   public applyTransition = (
     transition: FBInlineApprovalTransition,
     id?: string,
-    body?: FBInlineApprovalTransitionBody
+    body?: FBInlineApprovalTransitionBody,
   ) => {
     if (!id) { return; }
     return this.transitionApi.set({
@@ -144,7 +144,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
 
   public updateSignatureGroupName = (
     id: string,
-    signatureGroupName: string
+    signatureGroupName: string,
   ) => this.updateApi.set({
     url: FBEndpoint.ApprovalsUpdate,
     urlValues: { id },
@@ -179,5 +179,3 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
 }
 
 export default FBPOApprovalsState;
-
-

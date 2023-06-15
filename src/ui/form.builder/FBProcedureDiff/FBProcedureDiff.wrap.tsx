@@ -26,7 +26,7 @@ export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
       () => procedureDiffState?.checked,
       (checked) => {
         formState?.setFieldValue(name, checked, withState, true);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

@@ -88,7 +88,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
         return map(
-          groupBy(union(data, this.additionalData), 'document.docId'), (recs) => last(sortBy(recs, 'version'))
+          groupBy(union(data, this.additionalData), 'document.docId'), (recs) => last(sortBy(recs, 'version')),
         );
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
@@ -167,4 +167,3 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
 }
 
 export default FBAutocompleteAsyncState;
-

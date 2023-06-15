@@ -10,9 +10,9 @@ import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
-  defaultItem: string;
-  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[];
-  documentTypeCategory?: string;
+  defaultItem: string
+  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[]
+  documentTypeCategory?: string
 }
 
 export const StatusFilterTemplate = ({
@@ -48,16 +48,16 @@ export const StatusFilterTemplate = ({
         onChange={onDropdownChange}
         value={value || defaultItem}
         defaultItem={defaultItem}
-        itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
-          DocumentCategory.PurchaseOrder &&
-           itemProps?.dataItem === DocumentRevisionStatusDisplay.Released ) ?
-          DocumentRevisionStatusDisplay.Approved
+        itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory
+          === DocumentCategory.PurchaseOrder
+           && itemProps?.dataItem === DocumentRevisionStatusDisplay.Released )
+          ? DocumentRevisionStatusDisplay.Approved
           : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
-        valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory ===
-          DocumentCategory.PurchaseOrder && itemProps
-          === DocumentRevisionStatusDisplay.Released ) ?
-          DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
+        valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory
+          === DocumentCategory.PurchaseOrder && itemProps
+          === DocumentRevisionStatusDisplay.Released )
+          ? DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
         return React.cloneElement(li, li.props, itemChildren); }}
       />
       <button

@@ -31,7 +31,6 @@ import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustomization/useCustomization';
-import useActionCreator from '../../../hooks/useActionCreator';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
@@ -108,7 +107,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
 
-  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
@@ -214,8 +212,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
       return;
     }
-    const data = await workspaceState?.undoPO(
-      prevPODoc[0] as DocumentRevision);
 
     await getPOIndexDbInstance().clear();
     FBDataStore.setRefreshData(undefined);

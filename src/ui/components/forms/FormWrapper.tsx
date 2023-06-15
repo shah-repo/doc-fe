@@ -2,9 +2,9 @@ import { Form } from 'formik';
 import React, { useEffect } from 'react';
 
 interface Props {
-  dirty: boolean;
-  resetForm: () => void;
-  initialValues: any;
+  dirty: boolean
+  resetForm: () => void
+  initialValues: any
 }
 
 const FormWrapper: React.FunctionComponent<Props> = ({

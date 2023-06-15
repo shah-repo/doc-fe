@@ -2,7 +2,7 @@ import React from 'react';
 import { FB, FBAttachment, FBFilePreviewType, FBMediaGalleryProps } from '..';
 
 export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleDelete,

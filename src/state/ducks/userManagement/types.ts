@@ -5,53 +5,53 @@ import { Company, Employee } from '../company/types';
 import { COMPANY_GROUPS_LIST } from './constants';
 
 export interface GetEmployeeResponse {
-  id: string;
-  active: boolean;
-  groups: Group[];
-  user: User;
+  id: string
+  active: boolean
+  groups: Group[]
+  user: User
 }
 
 export interface UMExportDataProp extends GetEmployeeResponse {
-  status: string;
+  status: string
 }
 
 export interface GetSlackUrl {
-  url: string;
+  url: string
 }
 
 export interface AddEmployeeRequest {
-  user: Partial<User>;
-  groups: Nullable<Id[]>;
+  user: Partial<User>
+  groups: Nullable<Id[]>
 }
 
 export interface LoadCompanyGroup {
-  id: string;
-  name: string;
-  permissions: Permission[];
-  defaultForNewUsers: boolean;
-  tags: Nullable<GroupTag[]>;
-  company: Company;
-  employees: Employee[];
-  isOfficial: boolean;
-  parents: Group[];
-  joinedParents: Group[];
-  type?: GroupType;
-  inEdit?: boolean | string;
+  id: string
+  name: string
+  permissions: Permission[]
+  defaultForNewUsers: boolean
+  tags: Nullable<GroupTag[]>
+  company: Company
+  employees: Employee[]
+  isOfficial: boolean
+  parents: Group[]
+  joinedParents: Group[]
+  type?: GroupType
+  inEdit?: boolean | string
 }
 
 export interface EmployeeGroupsEditRequestBody {
-  groups: Id[];
+  groups: Id[]
 }
 
 export interface EmployeeActiveStatusRequestBody {
-  active: boolean;
+  active: boolean
 }
 
 export type LoadCompanyGroups = LoadCompanyGroup[];
 
 export interface CompanyGroupsListAction {
-  type: typeof COMPANY_GROUPS_LIST;
-  payload: LoadCompanyGroups;
+  type: typeof COMPANY_GROUPS_LIST
+  payload: LoadCompanyGroups
 }
 
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
@@ -59,44 +59,44 @@ export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 export type GroupsAllIdsState = string[];
 
 export interface ApiTokenData {
-  name: string;
+  name: string
 }
 
 export interface ApiTokenState {
-  id: string;
-  secretKey: string;
-  name: string;
+  id: string
+  secretKey: string
+  name: string
 }
 
 export interface GetApiTokenList {
-  id: string;
-  name: string;
-  active: boolean;
+  id: string
+  name: string
+  active: boolean
 }
 interface DescriptionItemsProp {
-  primaryText: string;
-  secondaryText: string;
+  primaryText: string
+  secondaryText: string
 }
 
 interface UserItemProp {
-  avatar: Nullable<string>;
-  email: string;
-  id: string;
-  initialColor: string;
-  name: string;
+  avatar: Nullable<string>
+  email: string
+  id: string
+  initialColor: string
+  name: string
 }
 interface OwnerItemsProp {
-  active: boolean;
-  id: string;
-  user: UserItemProp;
+  active: boolean
+  id: string
+  user: UserItemProp
 }
 
 export interface AuditDetailsProps {
-  descriptions: DescriptionItemsProp[];
-  employeeDetails: Employee;
-  groupId: string;
-  ownerDetails: OwnerItemsProp;
-  timestamp: string;
+  descriptions: DescriptionItemsProp[]
+  employeeDetails: Employee
+  groupId: string
+  ownerDetails: OwnerItemsProp
+  timestamp: string
 }
 
 export enum ACTION_TITLE_MAPPING {
@@ -141,66 +141,65 @@ export enum ACTION_TITLE_MAPPING {
   UpdatedGroup='UpdatedGroup',
   Removed='Removed',
   Added='Added',
-  UpdatedAvatar='UpdatedAvatar'
+  UpdatedAvatar='UpdatedAvatar',
 }
 
 export enum UM_AUDIT_CONCAT_KEYS {
   NameSeparator = '-NAME-UPDATED-TO-',
   DeleteFromGroup = '-DELETED-FROM-GROUP-',
   AddToGroup = '-ADDED-TO-GROUP-',
-  AvatarUpdated='-AVATAR-UPDATED-FOR-'
+  AvatarUpdated='-AVATAR-UPDATED-FOR-',
 }
 
 export interface UMAuditProps {
-  fieldPath: string;
-  type: string;
-  employeeId: string;
-  employeeName: string;
-  ownerId: string;
-  ownerName: string;
-  ownerEmail: string;
-  groupId: string;
-  timestamp: string;
-  id: string;
-  nextValue: string;
-  previousValue: string;
-  userId: string;
+  fieldPath: string
+  type: string
+  employeeId: string
+  employeeName: string
+  ownerId: string
+  ownerName: string
+  ownerEmail: string
+  groupId: string
+  timestamp: string
+  id: string
+  nextValue: string
+  previousValue: string
+  userId: string
 }
 
 export interface UMAuditGroupProps extends UMAuditProps {
-  primaryText: string;
-  secondaryText: string;
-  auditType: ACTION_TITLE_MAPPING;
-  sortedIndex: number;
-  groupKey: string;
-  ownerDetails: Partial<Employee>;
-  employeeDetails: Partial<Employee>;
+  primaryText: string
+  secondaryText: string
+  auditType: ACTION_TITLE_MAPPING
+  sortedIndex: number
+  groupKey: string
+  ownerDetails: Partial<Employee>
+  employeeDetails: Partial<Employee>
 }
 
 export interface GMAuditProps {
-  fieldPath: string;
-  type: string;
-  employeeId: string;
-  employeeName: string;
-  ownerId: string;
-  ownerName: string;
-  ownerEmail: string;
-  groupId: string;
-  timestamp: string;
-  companyId: string;
-  companyGroupId: string;
-  id: string;
-  previousValue: string;
-  nextValue: string;
+  fieldPath: string
+  type: string
+  employeeId: string
+  employeeName: string
+  ownerId: string
+  ownerName: string
+  ownerEmail: string
+  groupId: string
+  timestamp: string
+  companyId: string
+  companyGroupId: string
+  id: string
+  previousValue: string
+  nextValue: string
 }
 
 export interface GMAuditGroupProps extends GMAuditProps {
-  primaryText: string;
-  secondaryText: string;
-  auditType: ACTION_TITLE_MAPPING;
-  sortedIndex: number;
-  groupKey: string;
-  ownerDetails: Partial<Employee>;
-  employeeDetails: Partial<Employee>;
+  primaryText: string
+  secondaryText: string
+  auditType: ACTION_TITLE_MAPPING
+  sortedIndex: number
+  groupKey: string
+  ownerDetails: Partial<Employee>
+  employeeDetails: Partial<Employee>
 }
-

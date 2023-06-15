@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import ChangeRequestTransitionDialogContainer from '../../change.request/dialogs/ChangeRequestTransitionDialog.container';
 
 interface Props {
-  title: string;
-  crTitle: string;
-  url: string;
-  crId: string;
+  title: string
+  crTitle: string
+  url: string
+  crId: string
 }
 
 const styles = makeStyles((theme: Theme) =>

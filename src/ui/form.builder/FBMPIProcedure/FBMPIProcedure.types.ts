@@ -4,7 +4,6 @@ export type FBMPIProcedureProps =
 & Omit<FBProcedureProps, 'procedureState'>
 & Pick<FBProviderProps, 'mpiProcedureState'>
 & {
-  editorConfig?: FBProcedureValue;
-  redlineActive?: boolean;
+  editorConfig?: FBProcedureValue
+  redlineActive?: boolean
 };
-

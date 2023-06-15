@@ -18,10 +18,10 @@ import { documentVersionPath } from '../../document.revision/utils/paths';
 import InfoIcon from '@material-ui/icons/Info';
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
-  entry: ApprovalRequestGridItem;
-  editItem: () => void;
-  handleRemove: (docRevId: string) => void;
-  viewItemActionsVisible: boolean;
+  entry: ApprovalRequestGridItem
+  editItem: () => void
+  handleRemove: (docRevId: string) => void
+  viewItemActionsVisible: boolean
 }> = ({
   entry,
   editItem,
@@ -36,8 +36,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
-  const [docRelatedParts, setDocRelatedParts] =
-    useState<{revId: string; titleText: string; documentId: string; revisionChangeType?: RevisionChangeType}[]>([]);
+  const [docRelatedParts, setDocRelatedParts]
+    = useState<{revId: string, titleText: string, documentId: string, revisionChangeType?: RevisionChangeType}[]>([]);
   const [isExpanded, setExpanded] = useState(false);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
@@ -45,7 +45,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     url: FBEndpoint.FetchAutocompleteValue,
     values: { id: docRevId, optionId: FBAutocompleteAsyncOption.DRAFTdocumentRevisions },
   });
-
 
   const getRelatedParts = async (documentRevisionId, displayRevision) => {
     // get the related parts for this document.
@@ -67,7 +66,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       setDocRelatedParts(childrenDetails);
     }
   };
-
 
   const getDocumentDetails = async () => {
     if (!documentId) {
@@ -106,9 +104,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
           {
-            docRelatedParts.length > 0 &&
-            <span className={cx(classes.iconClass, 'iconClass')} onClick={toggleItem}>
-              <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
+            docRelatedParts.length > 0
+            && <span className={cx(classes.iconClass, 'iconClass')} onClick={toggleItem}>
+              <ChevronRightIcon fontSize="small" className={classes.showMoreIcon} />
             </span>
           }
           { docRevDocumentId && <Link
@@ -131,9 +129,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         </div>
       </div>
       {
-        docRelatedParts.length > 0 && isExpanded &&
-        <div className={cx(classes.moreDetails, classes.fullWidth)}>
-          <hr className={classes.separator}/>
+        docRelatedParts.length > 0 && isExpanded
+        && <div className={cx(classes.moreDetails, classes.fullWidth)}>
+          <hr className={classes.separator} />
           <h4 className={classes.moreDetailsHeader}>Related Parts</h4>
           <ul className={classes.docList}>
             {

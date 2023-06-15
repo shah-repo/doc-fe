@@ -12,7 +12,7 @@ import {
 import { TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction, TrainingStatsListApiResponse } from './types';
 
 const trainingStatsList = (
-  trainingStats: TrainingStatsListApiResponse = TRAINING_STATS_LIST_INITIAL_STATE, initialLoad = true
+  trainingStats: TrainingStatsListApiResponse = TRAINING_STATS_LIST_INITIAL_STATE, initialLoad = true,
 ): TrainingStatsListAction => ({
   type: TRAINING_STATS_LIST,
   payload: trainingStats,
@@ -34,7 +34,7 @@ const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStatsListApiResp
 };
 
 const trainingStatsChart = (
-  trainingStatsChart: TrainingStatsChart
+  trainingStatsChart: TrainingStatsChart,
 ): TrainingStatsChartAction => ({
   type: TRAINING_STATS_CHART,
   payload: trainingStatsChart,

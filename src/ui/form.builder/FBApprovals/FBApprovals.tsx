@@ -82,8 +82,8 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           const isApproved = isDocumentRevisionApproved(approval.status);
           return (
             <Box
-              data-cy={isApproved ? 'approved-' + approval.approverName :
-                'not-approved-' + approval.approver?.user.name}>
+              data-cy={isApproved ? 'approved-' + approval.approverName
+                : 'not-approved-' + approval.approver?.user.name}>
               <Box
                 key={`fb-ia-info-${approval.id}-${index}`}
                 pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
@@ -91,9 +91,9 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 flexDirection="row"
                 alignItems="center"
               >
-                {<Box fontWeight="bold">{
+                <Box fontWeight="bold">{
                   isApproved ? approval.approverName :  approval.approver?.user.name
-                }</Box>}
+                }</Box>
                 {approval.status && approval.approverGroup && (
                   <Box>&nbsp;| {approval.approverGroup?.join(', ')}</Box>
                 )}

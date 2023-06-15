@@ -7,10 +7,10 @@ import { isTranslation, Translation } from '../translations/types';
 
 export interface TextProps extends Props {
   /** id of the translation */
-  translation?: Translation;
+  translation?: Translation
   /** id of the translation or string to display */
-  message?: Translation | string;
-  dataCy?: string;
+  message?: Translation | string
+  dataCy?: string
 }
 
 const Text: React.FunctionComponent<TextProps> = ({

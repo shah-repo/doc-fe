@@ -14,7 +14,7 @@ enum States {
   EXPIRED,
   DOWNLOADING,
   DOWNLOAD_STARTED,
-  ERROR
+  ERROR,
 }
 
 const StateMessages: {[Key in States]: Translation} = {
@@ -68,7 +68,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
     const urlParams = new URLSearchParams(s3Url.split('?').slice(1).join('?'));
     const date = urlParams.get('X-Amz-Date')?.replace(
       /^(.{4})(.{2})(.{2})T(.{2})(.{2})(.{2})Z$/,
-      (match, year, month, day, hour, minute, second) => `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`
+      (match, year, month, day, hour, minute, second) => `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`,
       );
     const duration = parseInt(urlParams.get('X-Amz-Expires') || '', 10);
 
@@ -99,7 +99,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
       />
       <Box display="flex" textAlign="center" mb={5} data-cy="ExportFileDownload-info">
         <Typography variant="h5"className={classes.info}>
-          <Text translation={StateMessages[status]}/>
+          <Text translation={StateMessages[status]} />
         </Typography>
       </Box>
     </Paper>

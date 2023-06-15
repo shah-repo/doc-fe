@@ -5,7 +5,7 @@ import Text from '../../../components/Text';
 import styles from './styles';
 
 interface Props {
-  url: string;
+  url: string
 }
 const CreateButton: React.FunctionComponent<Props> = ({ url }) => {
   const classes = styles();

@@ -4,7 +4,7 @@ import React from 'react';
 import { FB, FBEditorState, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState, FBSchemeMultuValueTypes } from '..';
 
 export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     options,
@@ -29,8 +29,8 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       const fieldName = formState?.getFieldValue('name');
       const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
         const { type, deleted, multiple, label, name: schemaName } = item || {};
-        const isExludedFromValidation =
-          type && (
+        const isExludedFromValidation
+          = type && (
             FBEditorState.omitFinalValidation.includes(type)
             || !FBEditorState.underValidation(type)
           );
@@ -112,7 +112,6 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       name,
     });
   };
-
 
   return (props: T) => Comp(props);
 };

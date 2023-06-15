@@ -36,51 +36,51 @@ import useStyles from './purchaseOrder.styles';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  docId: string;
-  docRevId: string;
-  type: string;
-  docRevName: string;
-  docRevVersion: string;
-  purchaseOrderSupplierDocRevId: string;
-  purchaseOrderSupplierDocId: string;
-  status: string;
-  displaystatus: string;
-  docTypeGroup: string;
-  timestamp: string;
+  id: string
+  docDocumentId: string
+  docId: string
+  docRevId: string
+  type: string
+  docRevName: string
+  docRevVersion: string
+  purchaseOrderSupplierDocRevId: string
+  purchaseOrderSupplierDocId: string
+  status: string
+  displaystatus: string
+  docTypeGroup: string
+  timestamp: string
   docRevPendingApprovals: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   docRevApprovedApprovals: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   purchaseOrderAttachments: {
-    name: string;
-    type: string;
-    id: string;
-  }[];
-  purchaseOrdeLineItemCount: number;
-  purchaseOrderDescription: string;
-  pinned: boolean;
-  purchaseOrderCurrency: string;
-  purchaseOrderTotalAmount: string;
-  purchaseSupplierName: string;
-  hoverItemId: string;
-  pendingEmailSentAt: Nullable<string>;
-  onMouseHoverItem: (id: string) => void;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+    name: string
+    type: string
+    id: string
+  }[]
+  purchaseOrdeLineItemCount: number
+  purchaseOrderDescription: string
+  pinned: boolean
+  purchaseOrderCurrency: string
+  purchaseOrderTotalAmount: string
+  purchaseSupplierName: string
+  hoverItemId: string
+  pendingEmailSentAt: Nullable<string>
+  onMouseHoverItem: (id: string) => void
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 const PurchaseOrderItemPresenter: React.FC<Props> = ({
   id,
@@ -126,7 +126,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
       isRegular: true,
       ltext: 'Total:',
       rtext: `${purchaseOrderCurrency} ${formatCurrency(
-        purchaseOrderTotalAmount
+        purchaseOrderTotalAmount,
       )}`,
     },
     {
@@ -156,8 +156,8 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
-  const { count, pending, approved, primaryText, secondaryText } =
-    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
+  const { count, pending, approved, primaryText, secondaryText }
+    = getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -351,7 +351,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                ></Grid>
+                 />
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -382,8 +382,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 />
               </span>
             )}
-            {
-              <StyleTooltip
+            <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
@@ -397,7 +396,6 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   />
                 </span>
               </StyleTooltip>
-            }
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon
@@ -486,7 +484,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                         poItem.rtext
                           ? documentVersionPath(
                             purchaseOrderSupplierDocRevId || '',
-                            purchaseOrderSupplierDocId
+                            purchaseOrderSupplierDocId,
                           )
                           : '#'
                       }

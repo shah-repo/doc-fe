@@ -1,9 +1,6 @@
 import { Box, Grid } from '@material-ui/core';
-import { DataResult, State, process } from '@progress/kendo-data-query';
-import {
-  setExpandedState,
-  setGroupIds,
-} from '@progress/kendo-react-data-tools';
+import { DataResult, process, State } from '@progress/kendo-data-query';
+import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import {
   GridCellProps,
   GridColumn,
@@ -28,23 +25,22 @@ import { userManagementActions, userManagementSelectors } from '../../../state/d
 import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import CellRender from '../../components/common/kendo.column.templates/CellRender';
 import { DropdownFilterTemplate } from '../../components/common/kendo.column.templates/DropdownFilterTemplate';
 import ColumnHeader from '../../components/common/kendo/ColumnHeader';
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from '../../components/common/kendo/helpers';
 import Loader from '../../components/common/kendo/Loader';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
-import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth } from '../../components/common/kendo/helpers';
 import { KendoColumn } from '../../components/common/kendo/types';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { toastError } from '../../components/notifications';
+import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../../components/table/ClearFilters';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
 import AddEmployeeContainer from '../add.employee/container';
-import UMExport from './UMExport';
 import { CommandCell } from './cell.template/CommandCell';
 import { DropdownFilterCell } from './cell.template/DropdownFilterCell';
 import { EmailCell } from './cell.template/EmailCell';
@@ -54,10 +50,11 @@ import { NameCell } from './cell.template/NameCell';
 import { SignedCell } from './cell.template/SignedCell';
 import { enterUserInfo } from './column.definition';
 import { AddUserManage, UserManage, UserManagementProps } from './types';
+import UMExport from './UMExport';
 
 let call: CancelTokenSource;
 
-export function KendoPanel<T>({
+export function KendoPanel({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -77,7 +74,7 @@ export function KendoPanel<T>({
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
   const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
-    gridConfiguration.columns
+    gridConfiguration.columns,
   );
   const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
@@ -86,8 +83,8 @@ export function KendoPanel<T>({
           ...tableCriteria,
           columnConfig: JSON.stringify(dataColumns),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const processWithGroups = (data: Partial<GetEmployeeResponse>[], dataState: State) => {
@@ -189,8 +186,8 @@ export function KendoPanel<T>({
           columnConfig: JSON.stringify(gridConfiguration.columns),
           queryDict: {},
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const setKendoFilterStatus = (
@@ -203,8 +200,8 @@ export function KendoPanel<T>({
           kendoConfig,
           queryDict: {},
         },
-        tableName
-      )
+        tableName,
+      ),
     );
   };
   const [isLoading, setIsLoading] = useState(false);
@@ -213,7 +210,7 @@ export function KendoPanel<T>({
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(gridData, initialDataState)
+    processWithGroups(gridData, initialDataState),
   );
   useEffect(() => {
     if (rerender) {
@@ -260,8 +257,8 @@ export function KendoPanel<T>({
           kendoConfig: JSON.stringify(initialDataState),
           columnConfig: JSON.stringify(columnDefinitions),
         },
-        tableName
-      )
+        tableName,
+      ),
     );
     apiClient
       .request(requestConfig)
@@ -324,8 +321,8 @@ export function KendoPanel<T>({
               kendoConfig: JSON.stringify(initialDataState),
               columnConfig: JSON.stringify(columnDefinitions),
             },
-            tableName
-          )
+            tableName,
+          ),
         );
       }).finally(() => {
         setUpdatedGridData(undefined);
@@ -348,7 +345,7 @@ export function KendoPanel<T>({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [gridData]
+    [gridData],
   );
   const onExpandChange = useCallback(
     ({ value, dataItem }: GridExpandChangeEvent) => {
@@ -360,7 +357,7 @@ export function KendoPanel<T>({
         setCollapsedState(newCollapsedIds);
       }
     },
-    [collapsedState]
+    [collapsedState],
   );
   const clearFilter = () => setSearchStatus(false);
 
@@ -530,7 +527,7 @@ export function KendoPanel<T>({
         {columnRenderer(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
       </StyledKendoGrid>
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
     </>
   );
   const getExportData = (data) => {
@@ -550,7 +547,7 @@ export function KendoPanel<T>({
           <Grid item>
             <Box display="flex">
               <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
-                columns={columnDefinitions} isGrouped={(dataState.group || []).length > 0}/>
+                columns={columnDefinitions} isGrouped={(dataState.group || []).length > 0} />
               <AddEmployeeContainer addGroup={addNew} />
             </Box>
           </Grid>

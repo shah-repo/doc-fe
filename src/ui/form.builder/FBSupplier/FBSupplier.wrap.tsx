@@ -53,9 +53,9 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     // MARK: @observer
     useObserver(() => {
       loading = (
-        supplierState?.newSupplierApi.loading ||
-        supplierState?.proposedDocIdApi.loading ||
-        supplierState?.documentTypeApi.loading
+        supplierState?.newSupplierApi.loading
+        || supplierState?.proposedDocIdApi.loading
+        || supplierState?.documentTypeApi.loading
       );
       disabled = disabled || loading;
     });

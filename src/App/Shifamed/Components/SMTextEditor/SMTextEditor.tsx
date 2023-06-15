@@ -1,4 +1,3 @@
-
 import { Box, Button, ClickAwayListener } from '@material-ui/core';
 import { Observer } from 'mobx-react';
 import React, { useState } from 'react';
@@ -8,7 +7,6 @@ import { SMTextEditorProps } from '../../..';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { editorStyles, SMEditorStyles } from './SMTextEditor.styles';
 import { withSMTextEditor } from './SMTextEditor.wrap';
-
 
 const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   onEditorStateChange,
@@ -105,8 +103,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         toolbarStyle={editorStyles.toolbarStyle}
                         editorStyle={editorStyles.editorStyle}
                         toolbarClassName={classes.descriptionToolbarEditorClass}
-                        editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass :
-                          classes.descriptionMainEditorClass}
+                        editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass
+                          : classes.descriptionMainEditorClass}
                         placeholder={descriptionPlaceholder}
                         // fix for extra lines when pasting multiline content
                         stripPastedStyles={true}
@@ -119,8 +117,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             {isTextClamped ? <Button variant="text"
               onClick={ toggleButton }
               className={classes.moreOrLess}>{viewMore}</Button> : (
-              !_textEditorState?.previewMode && !isTextClamped &&
-               <Button variant="text"
+              !_textEditorState?.previewMode && !isTextClamped
+               && <Button variant="text"
                  onClick={ toggleButton }
                  className={classes.moreOrLess}
                >{viewLess}</Button>)}

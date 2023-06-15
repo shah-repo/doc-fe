@@ -65,5 +65,5 @@ export default makeStyles((theme) =>
     iconBtn: {
       marginLeft: 3,
     },
-  })
+  }),
 );

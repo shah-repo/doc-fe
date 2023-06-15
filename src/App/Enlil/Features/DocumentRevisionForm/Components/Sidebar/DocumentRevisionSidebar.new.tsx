@@ -77,6 +77,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                 }
               >
                 <IconButton
+                  data-cy="sidebar-toggle-icon"
                   onClick={handleRightPanelToggle}
                   className={cx(classes.iconButtonNew, { maximize: !_documentRevisionSidebarState?.open })}
                 >
@@ -188,7 +189,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                   type: 'permissions',
                   details: {
                     shouldShow: Boolean(
-                      documentRevisionId && canAccess && !isNewOutput
+                      documentRevisionId && canAccess && !isNewOutput,
                     ),
                     dataCy: 'permission-icon',
                     title:
@@ -238,7 +239,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                         documentId={documentId}
                         changeRequests={
                           documentRevisions?.map(
-                            (e) => e.changeRequest
+                            (e) => e.changeRequest,
                           ) as ChangeRequest[]
                         }
                       />

@@ -5,8 +5,8 @@ import { styles } from './utils/styles';
 import { AttachmentFieldProps } from './utils/types';
 
 interface Props extends AttachmentFieldProps {
-  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
-  isUploading: boolean;
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any
+  isUploading: boolean
 }
 
 const AttachmentFieldPresenter: React.FunctionComponent<
@@ -16,7 +16,7 @@ Props
   const classes = styles({ isField });
 
   return (
-    <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field" data-cy={'AttachmentFieldPresenter-field'}>
+    <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field" data-cy="AttachmentFieldPresenter-field">
       <AttachmentLineTypeSelector
         {...{ field, upload, form, name, multiple, disabled, onChange, isField, isUploading }}
       />

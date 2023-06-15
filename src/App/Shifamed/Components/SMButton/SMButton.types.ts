@@ -5,5 +5,5 @@ export type SMButtonProps =
 & ButtonProps
 & Pick<SMInputProps, 'label'>
 & {
-  dataCy?: string;
+  dataCy?: string
 };

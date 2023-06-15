@@ -16,7 +16,7 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
 
         _tabsState?.setActiveTabId(tabs[0].tabId);
       },
-      [_tabsState, tabs]
+      [_tabsState, tabs],
     );
 
     const handleChange: SMTabsProps['onChange'] = useCallback(
@@ -24,7 +24,7 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
         _tabsState?.setActiveTabId(newValue);
         return onChange?.(event, newValue);
       },
-      [_tabsState, onChange]
+      [_tabsState, onChange],
     );
 
     return (

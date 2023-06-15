@@ -13,15 +13,15 @@ export enum DTMCellTemplates {
   REVISION_STAGE='EditDropdownCellFormatter',
   SCHEMA='Schema',
   FIELDS_CONFIG='FieldsConfig',
-  INTEGER_NUMBER_CELL='IntegerNumberCell'
+  INTEGER_NUMBER_CELL='IntegerNumberCell',
 }
 interface CellTemplateProps {
-  ActiveDropdown: (props: CustomGridCellProps) => JSX.Element | null;
-  CheckboxCell: (props: CustomGridCellProps) => JSX.Element | null;
-  EditDropdownCellFormatter: (props: CustomGridCellProps) => JSX.Element | null;
-  Schema: (props: CustomGridCellProps) => JSX.Element | null;
-  FieldsConfig: (props: CustomGridCellProps) => JSX.Element | null;
-  IntegerNumberCell: (props: CustomGridCellProps) => JSX.Element | null;
+  ActiveDropdown: (props: CustomGridCellProps) => JSX.Element | null
+  CheckboxCell: (props: CustomGridCellProps) => JSX.Element | null
+  EditDropdownCellFormatter: (props: CustomGridCellProps) => JSX.Element | null
+  Schema: (props: CustomGridCellProps) => JSX.Element | null
+  FieldsConfig: (props: CustomGridCellProps) => JSX.Element | null
+  IntegerNumberCell: (props: CustomGridCellProps) => JSX.Element | null
 }
 export const DTMCellTemplateMapping: CellTemplateProps = {
   ActiveDropdown,

@@ -61,10 +61,10 @@ export const theme = Config.Theme;
 export const logo = '/logo_enlil_dark.svg';
 
 export function deleteCookie(name) {
-  document.cookie = name + '=' +
-      ';domain=' + window.location.hostname +
-      ';path=/' +
-      ';expires=' + new Date().toUTCString();
+  document.cookie = name + '='
+      + ';domain=' + window.location.hostname
+      + ';path=/'
+      + ';expires=' + new Date().toUTCString();
 }
 
 export const sortStringsByKey = (key: string) => (a, b) => {

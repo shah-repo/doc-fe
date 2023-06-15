@@ -12,16 +12,14 @@ import { AsyncState } from '../../../state/types';
 import SummaryField from '../../common/summary/NewBase';
 import SummaryFieldWithHtml from '../../common/summary/NewBaseWithHtml';
 
-
 interface ChangeSummaryFormHeaderProps {
-  title?: string;
-  description?: string;
-  isDisabledInput?: boolean;
-  documentTypeId?: string;
-  canEdit: boolean;
-  asyncState: AsyncState;
+  title?: string
+  description?: string
+  isDisabledInput?: boolean
+  documentTypeId?: string
+  canEdit: boolean
+  asyncState: AsyncState
 }
-
 
 const ChangeSummaryFormHeader: React.FunctionComponent<ChangeSummaryFormHeaderProps> = ({
   title,
@@ -48,7 +46,7 @@ const ChangeSummaryFormHeader: React.FunctionComponent<ChangeSummaryFormHeaderPr
             )}
           </Box>
           {isDescriptionVisible && (
-            <SummaryFieldWithHtml label={descriptionLabel} value={description}/>
+            <SummaryFieldWithHtml label={descriptionLabel} value={description} />
           )}
         </Box>
       )}

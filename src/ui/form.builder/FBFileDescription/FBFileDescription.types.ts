@@ -5,6 +5,6 @@ export type FBFileDescriptionProps =
 & Pick<FBProviderProps, 'formState'>;
 
 export interface FBFileDescriptionActionsProps {
-  handleAdd?: () => void;
-  handleCancel?: () => void;
+  handleAdd?: () => void
+  handleCancel?: () => void
 }

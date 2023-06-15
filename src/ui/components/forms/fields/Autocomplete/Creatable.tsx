@@ -16,11 +16,11 @@ import { selectStyles, selectTheme } from './Autocomplete';
 import { OptionType } from './types';
 
 interface AutocompleteOwnProps extends FieldOwnProps {
-  creatableProps: SelectComponentsProps & AsyncCreatableSelectProps<any>;
-  options?: OptionType[];
-  isDisabled?: boolean;
-  placeholder?: string;
-  labelProps?: BoxProps;
+  creatableProps: SelectComponentsProps & AsyncCreatableSelectProps<any>
+  options?: OptionType[]
+  isDisabled?: boolean
+  placeholder?: string
+  labelProps?: BoxProps
 }
 
 type CreatablePropsWithFormik = AutocompleteOwnProps &
@@ -99,8 +99,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     <Field {...fieldProps} label={undefined} labelProps={labelProps}>
       <ClickAwayListener onClickAway={onAway}>
         <div id="doc-header-title">
-          {showOnlyText &&
-        <Box
+          {showOnlyText
+        && <Box
           alignItems="center"
           display="flex"
           justifyContent="flex-start"
@@ -151,8 +151,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
             autoFocus={true}
             isClearable={Boolean(formikValue)}
             components={{ DropdownIndicator: null }}
-            placeholder={!inputValue ?
-              <div style={{ color: Colors.lightest_grey2 }}>{titlePlaceholder}</div> : null}
+            placeholder={!inputValue
+              ? <div style={{ color: Colors.lightest_grey2 }}>{titlePlaceholder}</div> : null}
             openMenuOnClick={false}
             openMenuOnFocus={false}
             createOptionPosition="first"

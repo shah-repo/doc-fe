@@ -17,15 +17,15 @@ import { docIdAsyncContext } from '../list/CreateDocumentByType';
 import { styles } from './FormListDialog/FormListDialog.styles';
 
 interface DocumentTypeDialogProps extends FormikProps<any> {
-  documentTypes: DocumentType[];
-  formIds: DocumentTypeByIdForm[];
-  areFormIdsLoading?: boolean;
-  dialog: DialogHandler;
-  handleSelection: (id: string) => void;
-  handleTemplateSelection: (id: string) => void;
-  isRecord: boolean;
-  closeMultipleFormDialog: () => void;
-  isLHR: boolean;
+  documentTypes: DocumentType[]
+  formIds: DocumentTypeByIdForm[]
+  areFormIdsLoading?: boolean
+  dialog: DialogHandler
+  handleSelection: (id: string) => void
+  handleTemplateSelection: (id: string) => void
+  isRecord: boolean
+  closeMultipleFormDialog: () => void
+  isLHR: boolean
 }
 
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
@@ -112,8 +112,8 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   return (
     <>
-      {dialog.isOpen &&
-      <Dialog
+      {dialog.isOpen
+      && <Dialog
         open={dialog.isOpen}
         onSubmit={preventPropagation}
         onClose={closeMultipleFormDialog}
@@ -123,7 +123,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
           <Grid container className={classes.containerWrap}>
             <Grid item xs={2} className={classes.gridWrap}>
               <span className={classes.iconContainer}>
-                <PostAddTwoToneIcon className={classes.icon}/>
+                <PostAddTwoToneIcon className={classes.icon} />
               </span>
             </Grid>
             <Grid item xs={10}>
@@ -131,7 +131,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                 <Text translation={isRecord ? 'record.select.type' : 'supplier.select.type' } />
               </Typography>
               <Typography variant="h5">
-                <Text translation={isRecord ? 'record.select.create.title' : 'document.select.create.title'}/>
+                <Text translation={isRecord ? 'record.select.create.title' : 'document.select.create.title'} />
               </Typography>
             </Grid>
           </Grid>

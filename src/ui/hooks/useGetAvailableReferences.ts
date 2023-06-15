@@ -9,9 +9,8 @@ const useGetAvailableReferences = (
 ) => {
   const selectGetAvailableReferences = useMemo(() => documentRevisionsSelectors.makeGetAvailableReferences(), []);
   return useSelector(
-    (state: ApplicationState) => selectGetAvailableReferences(state, initialValues)
+    (state: ApplicationState) => selectGetAvailableReferences(state, initialValues),
   );
 };
 
 export default useGetAvailableReferences;
-

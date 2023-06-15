@@ -71,5 +71,5 @@ export const styles = makeStyles((theme: Theme) =>
     margin5: {
       marginRight: '5px',
     },
-  })
+  }),
 );

@@ -7,7 +7,7 @@ import Text from '../../../components/Text';
 import GroupInfoPresenter from './GroupInfo.presenter';
 
 interface Props {
-  parentGroups: any[];
+  parentGroups: any[]
 }
 
 const JoinedGroups: React.FunctionComponent<Props> = ({
@@ -31,7 +31,7 @@ const JoinedGroups: React.FunctionComponent<Props> = ({
           borderBottom: 'solid',
           borderColor: 'grey',
         }}>
-        <Text message={`${p.name} ${inheritText(p)}`}/>
+        <Text message={`${p.name} ${inheritText(p)}`} />
       </Typography>
       <GroupInfoPresenter
         items={p.permissions}
@@ -41,7 +41,7 @@ const JoinedGroups: React.FunctionComponent<Props> = ({
         items={p.tags}
         title="common.tags"
       />
-    </Box>)
+    </Box>),
   );
 
   const renderSelectedGroupInfo = (parentGroups) => {

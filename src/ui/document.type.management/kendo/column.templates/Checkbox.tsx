@@ -1,4 +1,3 @@
-
 import { GridCellProps } from '@progress/kendo-react-grid';
 import {
   Checkbox,
@@ -57,7 +56,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
       <Checkbox
         value={dataValue}
         onChange={handleChange}
-        disabled={editMode ? field === 'equipmentEnforceProd' ? isLHR ? false : true : false : true}/>
+        disabled={editMode ? field === 'equipmentEnforceProd' ? isLHR ? false : true : false : true} />
     </td>
   );
 };

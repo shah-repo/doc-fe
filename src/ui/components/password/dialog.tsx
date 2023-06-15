@@ -9,11 +9,11 @@ import PasswordForm from './form/PasswordForm';
 import { Password } from './types';
 
 interface Props {
-  onSubmit: (values: Password) => void;
-  closeDialog: () => void;
-  isDialogOpen: boolean;
-  asyncState: AsyncState;
-  dialogTitle?: Translation;
+  onSubmit: (values: Password) => void
+  closeDialog: () => void
+  isDialogOpen: boolean
+  asyncState: AsyncState
+  dialogTitle?: Translation
 }
 
 const PasswordDialog: React.FunctionComponent<Props> = ({

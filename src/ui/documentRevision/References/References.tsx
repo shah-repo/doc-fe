@@ -27,14 +27,14 @@ const References = ({
   const { owner, status, deprecatedAt, referenceTo, releasedAt, retrain, document } = selectedDocument!;
   const initialValues = useMemo(
     () => selectedDocument && toDocumentRevisionFormValues(selectedDocument),
-    [selectedDocument]
+    [selectedDocument],
   );
   const availableReferences = useGetAvailableReferences(initialValues as DocumentRevisionFormValues);
   const isCurrentUserOperator = React.useContext(isOperator);
   const groupOptions = selectedDocument?.document.documentType.groupOptions;
   const email = useSelector(authSelectors.currentUserEmail);
-  const isDisabledInput = initialValues && initialValues.id !== undefined &&
-   isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email);
+  const isDisabledInput = initialValues && initialValues.id !== undefined
+   && isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email);
   return (
     <Box padding={1.875} width={1} data-cy="generalInfo">
       <Typography className={classes.generalInfo}>
@@ -86,7 +86,7 @@ const References = ({
           {releasedAt
             ? getFormattedDateString(
               releasedAt,
-              MomentFormats.MonthDateYearTwoDigit
+              MomentFormats.MonthDateYearTwoDigit,
             )
             : <Text translation="common.none" />}
         </Typography>

@@ -17,7 +17,7 @@ class SMStore implements SMStoreProps {
     if (isArray(data)) {
       this.data.set(url, observable.map(
         (data as Data[]).map((rec: Data) => [get(rec, 'id'), rec]),
-        { deep: false }
+        { deep: false },
       ));
     } else {
       if (JSON.stringify(this.data.get(url)) === JSON.stringify(data)) {
@@ -34,23 +34,23 @@ class SMStore implements SMStoreProps {
 
   public get = <Data, Body>(
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
+    callback?: (data?: Data, error?: SMStoreError) => any,
   ) => this.start<Data, Body>('get', set, callback);
 
   public post = <Data, Body>(
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
+    callback?: (data?: Data, error?: SMStoreError) => any,
   ) => this.start<Data, Body>('post', set, callback);
 
   public patch = <Data, Body>(
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
+    callback?: (data?: Data, error?: SMStoreError) => any,
   ) => this.start<Data, Body>('patch', set, callback);
 
   private start = <Data, Body>(
     method: SMStoreRequestMethod,
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
+    callback?: (data?: Data, error?: SMStoreError) => any,
   ) => {
     let urlStr = set.url;
     const { urlValues, body, mapping = '' } = set;
@@ -130,4 +130,3 @@ class SMStore implements SMStoreProps {
 }
 
 export default new SMStore();
-

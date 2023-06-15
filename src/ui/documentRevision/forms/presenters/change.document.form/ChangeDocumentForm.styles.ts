@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     actionsRoot: {
       padding: theme.spacing(1),
     },
-  })
+  }),
 );
 
 export default useStyles;
