@@ -1157,6 +1157,7 @@
   "form.builder.change": "Change",
   "form.builder.lot.number": "Lot Number",
   "form.builder.parts.manufactured": "Part to be Manufactured",
+  "form.builder.parts.bom.tableTitle": "ALTERNATE PARTS LIST:",
   "form.builder.add.note": "Add a Note",
   "form.builder.include.notes": "Include Notes",
   "form.builder.disable.past.date": "Disable Past Dates",

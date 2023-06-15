@@ -11,13 +11,13 @@ import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
-import { FB } from '../../../../form.builder';
+import { FB, FBButton } from '../../../../form.builder';
+import FBBOMDetailDrawer from '../../../../form.builder/FBBOM/components/drawer';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
-
 interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
@@ -73,6 +73,11 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const [parentPartStatus, setParentPartStatus] = useState(relatedPartsStatus);
   const [isSubPartBeingAdded, setSubPartBeingAdded] = useState(false);
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+
+  const closeDrawer = () => {
+    setOpenDrawer(false);
+  };
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
@@ -237,20 +242,29 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   };
 
   return useObserver(() => (
-    <RelatedParts
-      parentStatus = {parentPartStatus}
-      parentStatusChanged = {parentPartStatusChanged}
-      {...{
-        documentRevision,
-        createNewDocument,
-        viewRelatedPart,
-        handleRemove,
-        handleUpdate,
-        fetchRelatedParts,
-        voidRelatedPart,
-        relatedPartsState,
-      }}
-    />
+    <>
+      <RelatedParts
+        parentStatus = {parentPartStatus}
+        parentStatusChanged = {parentPartStatusChanged}
+        {...{
+          documentRevision,
+          createNewDocument,
+          viewRelatedPart,
+          handleRemove,
+          handleUpdate,
+          fetchRelatedParts,
+          voidRelatedPart,
+          relatedPartsState,
+        }}
+      />
+      {/* Temporarily added for BOM Drawer functionality */}
+      <FBButton
+        color="primary"
+        label="Open Left Drawer"
+        onClick={() => setOpenDrawer(true)}
+      />
+      <FBBOMDetailDrawer {...{ openDrawer, closeDrawer }} />
+    </>
   ));
 };
 

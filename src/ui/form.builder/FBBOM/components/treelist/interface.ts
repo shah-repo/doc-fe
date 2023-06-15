@@ -41,3 +41,18 @@ export interface EmployeesFlat {
   position: string
   timeInPosition: number
 }
+
+export interface FBBOMDrawerTableProps {}
+
+export interface AlternateParts {}
+
+export interface AlternatePart {
+  title: string
+  displayRevision: string
+  displayStatus: string
+  cost: string
+  partId: string
+  leadTime?: string
+  inEdit?: boolean
+  isNew?: boolean
+}
