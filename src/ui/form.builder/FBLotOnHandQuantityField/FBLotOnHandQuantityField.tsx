@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
-import { NEGATIVE_TRANSFER_TYPES } from '../FBLotTransfers/constants';
+import { DEDUCTABLE_TRANSFER_TYPES } from '../FBLotTransfers/constants';
 import { LotTransfer, LotTransferType } from '../FBLotTransfers/types';
 
 const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
@@ -15,10 +15,16 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
   const initialQuantity = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity') as number);
   const unit = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity_unit') as string);
 
-  const value = transfers?.reduce((acc, transfer) => {
-    const shouldDeduct = NEGATIVE_TRANSFER_TYPES.includes(transfer.type);
+  const value = transfers?.reduce((sum, transfer) => {
+    const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
     const shouldAdd = transfer.type !== LotTransferType.Move;
-    return shouldDeduct ? acc - transfer.quantity : shouldAdd ? acc + transfer.quantity : acc;
+    if (shouldDeduct) {
+      return sum - transfer.quantity;
+    }
+    if (shouldAdd) {
+      return sum + transfer.quantity;
+    }
+    return sum;
   }, initialQuantity) ?? initialQuantity;
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
