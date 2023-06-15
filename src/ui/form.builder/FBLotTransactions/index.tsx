@@ -1,29 +1,41 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
+import { omit } from 'lodash';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import { Employee } from '../../../state/ducks/company/types';
+import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
+import { ErrorField, ERROR_FIELD, Mode, MODE_FIELD } from '../FBApprovalMatrixRoles/constants';
 import useStyles from '../FBApprovalMatrixRoles/styles';
+import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { EmployeeCellTemplate } from './components/EmployeeCellTemplate';
 import { LocationCellTemplate } from './components/LocationCellTemplate';
 import { QuantityCellTemplate } from './components/QuantityCellTemplate';
 import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
-import { CompanyLocation, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent } from './types';
+import { CompanyLocation, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransferType } from './types';
 import { withFBLotTransactions } from './wrap';
 
 interface SchemaOptions {
   locations: CompanyLocation[]
   employees: Employee[]
+  actionsClass: string
+  discardLotTransaction: () => void
+  saveLotTransaction: () => void
 }
 
 const buildSchema = ({
   locations,
   employees,
+  actionsClass,
+  discardLotTransaction,
+  saveLotTransaction,
 }: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => ([
   {
     id: 'type',
@@ -89,6 +101,20 @@ const buildSchema = ({
     template: CommentsCellTemplate,
     width: 200,
   },
+  {
+    id: 'actions',
+    field: 'actions',
+    className: actionsClass,
+    filterable: false,
+    template: (props) => (
+      <ActionsCellTemplate
+        {...props}
+        onConfirm={saveLotTransaction}
+        onDiscard={discardLotTransaction}
+      />
+    ),
+    width: 0,
+  },
 ]);
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
@@ -101,7 +127,22 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const isActive = true;
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<EditableLotTransfer>();
 
+  // TO DO, add new empty row
+  const addNewLotTransaction = () => setEditedLotTransfer({
+    id: '',
+    type: LotTransferType.Allocate,
+    from: '',
+    to: '',
+    build: { id: '', docId: '' },
+    quantity: 0,
+    date: new Date(),
+    by: '',
+    comments: '',
+    [MODE_FIELD]: Mode.add,
+  });
+
   const editLotTransfer = ({ dataItem }: LotTranferEditEvent) => setEditedLotTransfer(dataItem);
+  const discardLotTransaction = () => setEditedLotTransfer(undefined);
 
   const updateEditedLotTransfer = (event: DataGridItemChangeEvent<EditableLotTransfer>) => {
     if (!editedLotTransfer || !event.field) {
@@ -113,9 +154,45 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     });
   };
 
+  const setFieldError = (field: ErrorField) => setEditedLotTransfer(prev => {
+    if (!prev) {
+      return prev;
+    }
+    return {
+      ...prev,
+      [ERROR_FIELD]: field,
+    };
+  });
+
+  // TO DO
+  const isLotTransactionValid = (lotTransfer: EditableLotTransfer) => {
+    if (lotTransfer.type === null) {
+      toastError(translate('form.builder.approvalRoles.error.empty'));
+      setFieldError(ErrorField.name);
+      return false;
+    }
+  };
+
+  // TO DO yet to finsih it. n
+  const saveLotTransaction = () => {
+    console.log('saveLotTransaction');
+    if (!editedLotTransfer || !isLotTransactionValid(editedLotTransfer)) {
+      return;
+    }
+    const LotTransferToSave = omit(editedLotTransfer, MODE_FIELD);
+    // isNewLotTransactionAdded ? addRole(LotTransferToSave) : updateRole(LotTransferToSave);
+
+    discardLotTransaction();
+  };
+
+  const isNewLotTransactionAdded = editedLotTransfer?.[MODE_FIELD] === Mode.add;
+
   const schema = buildSchema({
     locations,
     employees,
+    actionsClass: classes.actionsCell,
+    discardLotTransaction,
+    saveLotTransaction,
   });
 
   const rowRender: DataGridProps<EditableLotTransfer>['rowRender'] = (row, { dataItem }) => {
@@ -149,10 +226,22 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
         schema={schema}
         rowRender={rowRender}
         onRowClick={isActive ? editLotTransfer : undefined}
+        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         onItemChange={updateEditedLotTransfer}
       />
+      {isActive && (
+        <Button
+          attached
+          fullWidth
+          kind="add"
+          data-cy="form-builder-add-another-role"
+          // disabled={editedRole !== undefined}
+          onClick={addNewLotTransaction}
+        >
+          <Text message="form.builder.add.another.role" />
+        </Button>
+      )}
     </Box>
   );
 };
-
 export default withFBLotTransactions(FBLotTransactions);
