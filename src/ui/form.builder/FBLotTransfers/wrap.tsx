@@ -1,3 +1,4 @@
+import { remove, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -20,23 +21,28 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
     const transfers = useObserver(() => (workspaceState?.formInputSync.get(name) ?? []) as LotTransfer[]);
 
+    const updateFormState = (updatedTransfers: LotTransfer[]) => {
+      formState?.setFieldValue(name, updatedTransfers);
+      formState?.setFieldAutosave(name);
+    };
+
     const prepareLotTransfer = (transfer: LotTransfer) => ({
       ...transfer,
       by: currentEmployeeId,
     });
 
-    const addLotTransfer = (transfer: LotTransfer) => {
-      formState?.setFieldValue(name, [...transfers, prepareLotTransfer(transfer)]);
-      formState?.setFieldAutosave(name);
+    const deleteLotTransfer = (transfer: LotTransfer) => {
+      const updatedTransfers = remove(transfers, { id: transfer.id });
+      updateFormState(updatedTransfers);
     };
 
-    const updateLotTransfer = (editedTransfer: LotTransfer) => {
-      const updatedTransfers = transfers.map(transfer => ({
-        ...(transfer.id === editedTransfer.id ? prepareLotTransfer(editedTransfer) : transfer),
-      }));
+    const addLotTransfer = (transfer: LotTransfer) => {
+      updateLotTransfer(transfer);
+    };
 
-      formState?.setFieldValue(name, updatedTransfers);
-      formState?.setFieldAutosave(name);
+    const updateLotTransfer = (transfer: LotTransfer) => {
+      const updatedTransfers = unionBy([prepareLotTransfer(transfer)], transfers, 'id');
+      updateFormState(updatedTransfers);
     };
 
     const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -62,6 +68,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       employees,
       builds,
       addLotTransfer,
+      deleteLotTransfer,
       updateLotTransfer,
     });
   };

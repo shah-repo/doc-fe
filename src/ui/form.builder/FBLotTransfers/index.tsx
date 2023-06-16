@@ -22,6 +22,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   builds = [],
   addLotTransfer,
   updateLotTransfer,
+  deleteLotTransfer,
   name,
   ...props
 }) => {
@@ -66,6 +67,14 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     discardLotTransfer();
   };
 
+  const removeLotTransfer = () => {
+    if (!editedLotTransfer) {
+      return;
+    }
+    const lotTransferToRemove = omit(editedLotTransfer, [MODE_FIELD]);
+    deleteLotTransfer?.(lotTransferToRemove);
+  };
+
   const schema = buildSchema({
     locations,
     employees,
@@ -74,6 +83,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     actionsClass: classes.actionsCell,
     onConfirm: saveLotTransfer,
     onDiscard: discardLotTransfer,
+    onDelete: removeLotTransfer,
   });
 
   const rowRender: DataGridProps<EditableLotTransfer>['rowRender'] = (row, { dataItem }) => {

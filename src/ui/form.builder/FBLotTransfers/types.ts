@@ -26,6 +26,7 @@ export type FBLotTransactionsProps =
   builds?: BuildOption[]
   addLotTransfer?: (transfer: LotTransfer) => void
   updateLotTransfer?: (transfer: LotTransfer) => void
+  deleteLotTransfer?: (transfer: LotTransfer) => void
 };
 
 export enum LotTransferType {

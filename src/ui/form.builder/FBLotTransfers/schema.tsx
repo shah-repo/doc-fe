@@ -19,6 +19,7 @@ interface SchemaOptions {
   actionsClass: string
   onDiscard: () => void
   onConfirm: () => unknown
+  onDelete: () => void
 }
 
 export const buildSchema = ({
@@ -29,6 +30,7 @@ export const buildSchema = ({
   actionsClass,
   onDiscard,
   onConfirm,
+  onDelete,
 }: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => ([
   {
     id: 'type',
@@ -91,9 +93,16 @@ export const buildSchema = ({
     field: 'actions',
     filterable: false,
     className: actionsClass,
-    template: (props) => <ActionsCellTemplate {...props} onDiscard={onDiscard} onConfirm={onConfirm} />,
+    template: (props) => (
+      <ActionsCellTemplate
+        {...props}
+        onDiscard={onDiscard}
+        onConfirm={onConfirm}
+        onDelete={onDelete}
+      />
+    ),
     hidden: !isActive,
     locked: true,
-    width: 1,
+    width: 0,
   },
 ]);
