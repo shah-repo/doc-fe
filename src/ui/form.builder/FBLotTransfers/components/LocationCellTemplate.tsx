@@ -17,7 +17,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataIndex, dataItem, fie
       dataIndex,
       syntheticEvent: event,
       field,
-      value,
+      value: value?.id,
     });
   };
 

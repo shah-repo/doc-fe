@@ -7,13 +7,13 @@ import { ArrayElement, CustomTemplateProps, LotTransferType } from '../types';
 export const TransferTypeCellTemplate: React.FC<CustomTemplateProps> = ({ dataIndex, dataItem, field, onChange }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const handleChange = (event: ChangeEvent<unknown>, value: LotTransferType) => {
+  const handleChange = (event: ChangeEvent<unknown>, value: ArrayElement<typeof options>) => {
     onChange?.({
       dataItem,
       dataIndex,
       syntheticEvent: event,
       field,
-      value,
+      value: value.value,
     });
   };
 

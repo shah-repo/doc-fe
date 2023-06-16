@@ -8,6 +8,11 @@ interface Props extends CustomTemplateProps {
   builds?: BuildOption[]
 }
 
+const getOptionLabel = (option: BuildOption) => {
+  const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
+  return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
+};
+
 export const BuildCellTemplate: React.FC<Props> = ({ dataIndex, dataItem, field, builds, onChange }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
@@ -35,14 +40,12 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataIndex, dataItem, field,
           blurOnSelect
           value={value}
           options={builds}
-          getOptionLabel={
-            (option: BuildOption) => `${option.document?.docId} - ${option.displayRevision} - ${option.name}`
-          }
+          getOptionLabel={getOptionLabel}
           onChange={handleChange}
         />
       </FormField>
     );
   }
 
-  return <>{dataItem.build?.docId ?? EMPTY_VALUE_PLACEHOLDER}</>;
+  return <>{value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER}</>;
 };

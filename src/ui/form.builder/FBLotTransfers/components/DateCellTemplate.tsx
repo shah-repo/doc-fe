@@ -15,18 +15,14 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({
   const value = dataItem.date;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    console.log(date);
-    /*
-    const value = event.target.value;
-
+    const event = new Event('change') as unknown;
     onChange?.({
       dataItem,
       dataIndex,
-      syntheticEvent: event,
+      syntheticEvent: event as React.SyntheticEvent<HTMLInputElement>,
       field,
-      value,
+      value: date?.toDate(),
     });
-    */
   };
 
   if (isEditMode) {

@@ -56,7 +56,7 @@ export const buildSchema = ({
     field: 'build',
     title: 'form.builder.lot.transfers.build',
     template: (props) => <BuildCellTemplate {...props} builds={builds} />,
-    width: 180,
+    width: 200,
   },
   {
     id: 'quantity',

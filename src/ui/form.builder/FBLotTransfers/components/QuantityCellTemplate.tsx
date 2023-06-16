@@ -9,7 +9,7 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataIndex,
   const defaultValue = dataItem.quantity;
 
   const handleChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
-    const value = event.target.value;
+    const value = Number(event.target.value);
 
     onChange?.({
       dataItem,

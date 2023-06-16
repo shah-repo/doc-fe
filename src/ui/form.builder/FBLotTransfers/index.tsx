@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
+import { omit } from 'lodash';
 import React from 'react';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
@@ -52,6 +53,15 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   };
 
   const saveLotTransfer = () => {
+    if (!editedLotTransfer) {
+      return;
+    }
+    const lotTransferToSave = omit(editedLotTransfer, [MODE_FIELD]);
+    if (editedLotTransfer[MODE_FIELD] === Mode.add) {
+      addLotTransfer?.(lotTransferToSave);
+    } else {
+      updateLotTransfer?.(lotTransferToSave);
+    }
     discardLotTransfer();
   };
 
