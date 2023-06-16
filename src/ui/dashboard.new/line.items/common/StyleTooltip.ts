@@ -9,6 +9,7 @@ const styles = () => ({
     backgroundColor: Colors.black,
     fontSize: '12px',
     maxWidth: 420,
+    maxHeight: 207,
   },
   tooltipPlacementTop: {
     margin: '8px 0',

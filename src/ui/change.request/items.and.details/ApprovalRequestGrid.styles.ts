@@ -288,15 +288,15 @@ export default makeStyles((theme) =>
       '-webkit-box-orient': 'vertical',
     },
     tooltipBox: {
-      maxHeight: '198px !important',
+      maxHeight: '200px !important',
       maxWidth: '425px !important',
-      minHeight: '18px',
       overflow: 'auto',
+      padding: theme.spacing(0.25),
       fontSize: 12,
       whiteSpace: 'pre-line',
     },
     tooltipContent: {
-      maxHeight: '200px !important',
+      maxHeight: '190px !important',
       maxWidth: '420px !important',
       overflow: 'auto',
     },
