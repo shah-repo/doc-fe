@@ -4,8 +4,7 @@ import { Box } from '@material-ui/core';
 import { GridProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import React from 'react';
-import { FB, FBPurchaseOrderItem } from '..';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { FBPurchaseOrderItem } from '..';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -42,11 +41,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   isPOAddAction,
   isPORemoveAction,
   dialog,
+  isDocumentReleased,
 }) => {
   const classes = useStyles();
   const isActionsAllowed = !disabled || isReceivable;
-  const { workspaceState } = FB.useStores();
-  const documentStatus = workspaceState?.document?.status;
 
   const editItem = ({ dataItem }: DataGridRowClickEvent<FBPurchaseOrderItem>) => {
     handleItem?.(dataItem);
@@ -122,7 +120,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           schema={schema}
           className={cx(classes.grid, { [classes.activeGrid]: !disabled })}
           rowRender={rowRender}
-          onRowClick={documentStatus === DocumentRevisionStatus.Released ? undefined : editItem}
+          onRowClick={isDocumentReleased ? undefined : editItem}
           fullWidth
           hasBoxScrollbars
         />
