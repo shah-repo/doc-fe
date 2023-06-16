@@ -295,10 +295,5 @@ export default makeStyles((theme) =>
       fontSize: 12,
       whiteSpace: 'pre-line',
     },
-    tooltipContent: {
-      maxHeight: '190px !important',
-      maxWidth: '420px !important',
-      overflow: 'auto',
-    },
   }),
 );
