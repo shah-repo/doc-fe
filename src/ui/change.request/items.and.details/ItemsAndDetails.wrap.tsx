@@ -1,6 +1,6 @@
 import { cloneDeep, map } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
@@ -22,6 +22,7 @@ ItemsAndDetailsWrapperProps & {name: string}
 }) => {
   const { formState: parentFormState } = FB.useStores();
   const formState = FB.useRef(FBFormState, {});
+  const initialAsyncStatus = useRef(asyncState?.status);
 
   const { submitForm } = useFormContext();
 
@@ -71,11 +72,11 @@ ItemsAndDetailsWrapperProps & {name: string}
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     if (autosave) {
-      const initialAsyncStatus = asyncState?.status;
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
+      initialAsyncStatus.current = asyncState?.status;
       setTimeout(() => {
-        if (asyncState?.status === initialAsyncStatus) {
+        if (asyncState?.status === initialAsyncStatus.current) {
           itemsAndDetailsState.setLoadingState(false);
           itemsAndDetailsState.setViewItemActionsVisibility(true);
         }
@@ -88,6 +89,7 @@ ItemsAndDetailsWrapperProps & {name: string}
   };
 
   useEffect(() => {
+    initialAsyncStatus.current = asyncState?.status;
     if (asyncState && (asyncState.status === AsyncStatus.Success
       || asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
