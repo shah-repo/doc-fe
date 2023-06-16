@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { omit } from 'lodash';
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -29,7 +30,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<EditableLotTransfer>();
 
   const createDraftLotTransfer = () => setEditedLotTransfer({
-    id: '',
+    id: uuidv4(),
     type: LotTransferType.Allocate,
     from: '',
     to: '',
