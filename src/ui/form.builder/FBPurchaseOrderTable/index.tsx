@@ -45,7 +45,6 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
 }) => {
   const classes = useStyles();
   const isActionsAllowed = !disabled || isReceivable;
-
   const { workspaceState } = FB.useStores();
   const documentStatus = workspaceState?.document?.status;
 
