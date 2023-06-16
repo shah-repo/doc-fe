@@ -5,6 +5,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from '..';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
@@ -52,15 +53,15 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     // and discard value prop
     const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
 
-    function getDefault() {
+    function getDefault () {
       const objectValue: Record<FBOptionValueType, () => any> = {
         object: () => formValue,
         key: () => autocompleteAsyncState?.sliceValue(formValue) || formValue,
-        id: () =>  {
+        id: () => {
           const slicedValue = multiple
             ? map(formValue, optionValueKey)
             : get(formValue, optionValueKey);
-          return  autocompleteAsyncState?.sliceValue(slicedValue);
+          return autocompleteAsyncState?.sliceValue(slicedValue);
         },
       };
       return objectValue[optionValueType]();
@@ -90,6 +91,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     useEffect(() => {
       if (shouldReloadOnInit || optionId) {
+        const status = formState?.workspaceState?.document?.displayStatus;
+        if (name?.includes('porec') && status === DocumentRevisionStatus.Released) {
+          return;
+        }
         autocompleteAsyncState?.load(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,7 +102,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     if (optionId) {
       (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
-      refresh = () => autocompleteAsyncState?.load(true);
+      refresh = () => {
+        autocompleteAsyncState?.load(true);
+      };
     }
 
     // Fetch missing selected autocomplete value
@@ -173,7 +180,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       return `${optionLabel}${description}`;
     });
 
-    function htmlToPlainText(value?: string): string {
+    function htmlToPlainText (value?: string): string {
       if (!value) { return ''; }
       const contentBlock = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);

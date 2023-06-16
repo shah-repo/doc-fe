@@ -75,7 +75,9 @@ export type FBInputType =
   | 'poapprovals'
   | 'lhrbuild'
   | 'purchaseordersummary'
-  | 'downloadsheet';
+  | 'downloadsheet'
+  | 'lotQuantity'
+  | 'lotOnHandQuantity';
 
 export type FBInputProps =
   & FBLabelProps
@@ -84,16 +86,16 @@ export type FBInputProps =
   & Pick<AutocompleteProps, 'multiple'>
   & Pick<FBProviderProps, 'formState'>
   & Pick<BaseTextFieldProps,
-    | 'children'
-    | 'error'
-    | 'value'
-    | 'disabled'
-    | 'name'
-    | 'helperText'
-    | 'rows'
-    | 'placeholder'
-    | 'defaultChecked'
-    | 'hidden'
+  | 'children'
+  | 'error'
+  | 'value'
+  | 'disabled'
+  | 'name'
+  | 'helperText'
+  | 'rows'
+  | 'placeholder'
+  | 'defaultChecked'
+  | 'hidden'
   > & {
     onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any
     onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any

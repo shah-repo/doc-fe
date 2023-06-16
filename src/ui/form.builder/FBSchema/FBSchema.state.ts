@@ -30,6 +30,8 @@ import FBInlineApproval from '../FBInlineApproval/FBInlineApproval';
 import FBInstructionsDocument from '../FBInstructionsDocument/FBInstructionsDocument';
 import FBLHRBuild from '../FBLHRBuild/FBLHRBuild';
 import FBLHRStep from '../FBLHRStep/FBLHRStep';
+import FBLotOnHandQuantityField from '../FBLotOnHandQuantityField/FBLotOnHandQuantityField';
+import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
 import FBMediaAlbumField from '../FBMediaAlbumField/FBMediaAlbumField';
 import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
 import FBParagraph from '../FBParagraph/FBParagraph';
@@ -75,7 +77,7 @@ class FBSchemaState {
     'lhrstep',
   ];
 
-  private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+  private static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
     subsection: FBSubsection,
     stepsection: FBSection,
@@ -134,12 +136,14 @@ class FBSchemaState {
     poapprovals: FBPOApprovals,
     lhrbuild: FBLHRBuild,
     downloadsheet: FBDownloadSheetTpl,
+    lotQuantity: FBLotQuantityField,
+    lotOnHandQuantity: FBLotOnHandQuantityField,
   };
 
   @observable public schema?: FBSchemaProps[];
-  public validationSchema?: Partial<FBSchemaProps>[];
+  public validationSchema?: Array<Partial<FBSchemaProps>>;
 
-  public constructor(schema?: FBSchemaProps[]) {
+  public constructor (schema?: FBSchemaProps[]) {
     this.schema = schema;
   }
 
