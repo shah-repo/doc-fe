@@ -18,7 +18,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const locations = useSelector(companySelectors.getAllLocations);
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
-    const transfers = useObserver(() => workspaceState?.formInputSync.get(name) as LotTransfer[]);
+    const transfers = useObserver(() => (workspaceState?.formInputSync.get(name) ?? []) as LotTransfer[]);
 
     const prepareLotTransfer = (transfer: LotTransfer) => ({
       ...transfer,
