@@ -1,16 +1,16 @@
-import { BoxProps } from '@material-ui/core';
-import { FBFieldWrapperState, FBFormProps, FBInputProps, FBVisibilityType } from '..';
+import { FBFormProps, FBInputProps } from '..';
 
 export type FBFieldWrapperProps =
   & Pick<FBFormProps, 'children'>
-  & Pick<BoxProps, 'onMouseOver' | 'onMouseLeave' | 'mt' | 'mb'>
   & {
-    fieldWrapperState?: FBFieldWrapperState
-    toolsVisible?: FBVisibilityType
-    addToolVisible?: FBVisibilityType
-    markDownVisible?: boolean
+    mt?: number
+    mb?: number
     inputProps?: Partial<FBInputProps>
-    showSchemaFields?: boolean
-    isDragged?: boolean
-    position: number
+    showDefaultFieldTools?: boolean
+    canUseTools?: boolean
+    canAddField?: boolean
+    isFirst?: boolean
+    isDragging?: boolean
+    isMarkDownVisible?: boolean
+    toggleItemMarkdown?: () => void
   };
