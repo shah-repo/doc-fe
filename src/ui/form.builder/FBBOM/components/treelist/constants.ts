@@ -1,4 +1,5 @@
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
+import { Status } from './column.templates/Status';
 
 export const subItemsField = 'employees';
 export const expandField = 'expanded';
@@ -35,6 +36,7 @@ export const columns: CustomTreeListColumnProps[] = [
     field: 'displayStatus',
     title: 'Status',
     width: '200px',
+    cell: Status,
     filter: TreeListTextFilter,
     show: true,
   },

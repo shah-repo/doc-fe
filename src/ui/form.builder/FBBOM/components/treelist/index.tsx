@@ -4,7 +4,7 @@ import {
   extendDataItem, filterBy,
   mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent,
 } from '@progress/kendo-react-treelist';
-import { isEmpty, set } from 'lodash';
+import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/grid_view.svg';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
@@ -70,10 +70,10 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     return addExpandField(sortedData as Employee[]);
   };
 
-  const clearFilter = () => {
-    const { dataState } = state;
-    set(dataState, 'filter.filters', []);
-  };
+  // const clearFilter = () => {
+  //   const { dataState } = state;
+  //   set(dataState, 'filter.filters', []);
+  // };
 
   // const onColumnShowHide = ({ field }) => {
   //   each(columns, (column) => {
@@ -83,9 +83,12 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   //   });
   // };
 
+  // Add customozed cells to all columns
+  // change css styles
+
   const rowRender = (row, props) => {
     const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
-    return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color }} />;
+    return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color, borderBottom: '1px solid red' }} />;
   };
 
   return <>
