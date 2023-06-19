@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../layout/theme/utils/colors';
+import { Colors } from '../../layout/theme-next';
 
-export default makeStyles((theme) => ({
+export default makeStyles(theme => ({
   root: {
     position: 'absolute',
     left: 0,
@@ -12,12 +12,9 @@ export default makeStyles((theme) => ({
     zIndex: 5,
   },
   button: {
-    margin: 0,
-    borderRadius: theme.shape.borderRadius,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    width: theme.spacing(40),
-    border: 0,
-    backgroundColor: Colors.dodger_blue,
+    width: 320,
+    borderBottomRightRadius: theme.shape.borderRadius,
+    borderBottomLeftRadius: theme.shape.borderRadius,
+    backgroundColor: Colors.primaryLight,
   },
 }));
