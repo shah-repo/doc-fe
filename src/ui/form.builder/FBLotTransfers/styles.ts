@@ -8,16 +8,18 @@ export default makeStyles(theme => ({
     margin: theme.spacing(3, 0),
   },
   grid: {
-    '& .k-grid-container': {
-      minHeight: ROW_HEIGHT * 2,
-    },
     '& .k-column-title': {
       fontSize: 12,
       textTransform: 'uppercase',
     },
     '& td': {
       height: ROW_HEIGHT,
-      padding: `${theme.spacing(0.5, 1.5)} !important`,
+      padding: `${theme.spacing(0.5, 1.5)}`,
+    },
+  },
+  gridEditing: {
+    '& .k-grid-container': {
+      minHeight: ROW_HEIGHT * 2.5,
     },
   },
   gridWithButton: {
@@ -26,13 +28,11 @@ export default makeStyles(theme => ({
     borderBottom: 'none',
   },
   actionsCell: {
-    width: 0,
     overflow: 'visible !important',
     position: 'sticky',
     right: 0,
+    width: '0 !important',
     padding: '0 !important',
-    boxShadow: 'none !important',
-    clipPath: 'none !important',
     borderLeft: `1px solid ${Colors.primaryLight} !important`,
   },
   updatingRow: {

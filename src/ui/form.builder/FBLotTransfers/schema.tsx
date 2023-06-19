@@ -1,7 +1,6 @@
 import React from 'react';
 import { Employee } from '../../../state/ducks/company/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { BuildCellTemplate } from './components/BuildCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
@@ -15,22 +14,12 @@ interface SchemaOptions {
   locations: CompanyLocation[]
   employees: Employee[]
   builds: BuildOption[]
-  isActive: boolean
-  actionsClass: string
-  onDiscard: () => void
-  onConfirm: () => unknown
-  onDelete: () => void
 }
 
 export const buildSchema = ({
   locations,
   employees,
   builds,
-  isActive,
-  actionsClass,
-  onDiscard,
-  onConfirm,
-  onDelete,
 }: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => ([
   {
     id: 'type',
@@ -87,22 +76,5 @@ export const buildSchema = ({
     title: 'form.builder.lot.transfers.comments',
     template: CommentsCellTemplate,
     width: 250,
-  },
-  {
-    id: 'actions',
-    field: 'actions',
-    filterable: false,
-    className: actionsClass,
-    template: (props) => (
-      <ActionsCellTemplate
-        {...props}
-        onDiscard={onDiscard}
-        onConfirm={onConfirm}
-        onDelete={onDelete}
-      />
-    ),
-    hidden: !isActive,
-    locked: true,
-    width: 0,
   },
 ]);

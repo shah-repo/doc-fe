@@ -1,12 +1,15 @@
-import { remove, unionBy } from 'lodash';
+import { differenceBy, orderBy, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
+import { SM } from '../../../App';
 import { authSelectors } from '../../../state/ducks/auth';
 import { companySelectors } from '../../../state/ducks/company';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { BuildOption, FBLotTransactionsProps, LotTransfer } from './types';
+
+const prepareTransfers = (transfers: LotTransfer[]) => orderBy(transfers ?? [], 'date', 'desc');
 
 export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
   Component: React.FC<T>,
@@ -19,9 +22,19 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const locations = useSelector(companySelectors.getAllLocations);
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
-    const transfers = useObserver(() => (workspaceState?.formInputSync.get(name) ?? []) as LotTransfer[]);
+    const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name)));
 
-    const updateFormState = (updatedTransfers: LotTransfer[]) => {
+    const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => {
+      setTransfers(prepareTransfers(updatedTransfers));
+    };
+
+    SM.reaction(
+      () => workspaceState?.formInputSync.get(name) as LotTransfer[],
+      (data) => updateLocalTransfers(data),
+    );
+
+    const updateState = (updatedTransfers: LotTransfer[]) => {
+      updateLocalTransfers(updatedTransfers);
       formState?.setFieldValue(name, updatedTransfers);
       formState?.setFieldAutosave(name);
     };
@@ -32,17 +45,13 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     });
 
     const deleteLotTransfer = (transfer: LotTransfer) => {
-      const updatedTransfers = remove(transfers, { id: transfer.id });
-      updateFormState(updatedTransfers);
-    };
-
-    const addLotTransfer = (transfer: LotTransfer) => {
-      updateLotTransfer(transfer);
+      const updatedTransfers = differenceBy(transfers, [transfer], 'id');
+      updateState(updatedTransfers);
     };
 
     const updateLotTransfer = (transfer: LotTransfer) => {
       const updatedTransfers = unionBy([prepareLotTransfer(transfer)], transfers, 'id');
-      updateFormState(updatedTransfers);
+      updateState(updatedTransfers);
     };
 
     const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -67,9 +76,8 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       locations,
       employees,
       builds,
-      addLotTransfer,
-      deleteLotTransfer,
       updateLotTransfer,
+      deleteLotTransfer,
     });
   };
 

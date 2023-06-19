@@ -24,7 +24,6 @@ export type FBLotTransactionsProps =
   locations?: CompanyLocation[]
   employees?: Employee[]
   builds?: BuildOption[]
-  addLotTransfer?: (transfer: LotTransfer) => void
   updateLotTransfer?: (transfer: LotTransfer) => void
   deleteLotTransfer?: (transfer: LotTransfer) => void
 };
@@ -43,7 +42,7 @@ export interface LotTransfer {
   to?: string
   build?: { id: string, docId: string }
   quantity: number
-  date: Date
+  date: string
   by: string
   comments?: string
 }

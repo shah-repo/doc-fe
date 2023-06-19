@@ -8,6 +8,7 @@ import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { Button } from '../../components/forms/fields-next';
+import Actions from '../FBApprovalMatrixRoles/components/Actions';
 import FBInput from '../FBInput/FBInput';
 import { MODE_FIELD, Mode } from './constants';
 import { buildSchema } from './schema';
@@ -20,15 +21,16 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   locations = [],
   employees = [],
   builds = [],
-  addLotTransfer,
   updateLotTransfer,
   deleteLotTransfer,
   name,
+  disabled,
   ...props
 }) => {
   const classes = useStyles();
-  const isActive = true;
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<EditableLotTransfer>();
+  const isActive = !disabled;
+  const isEditing = Boolean(editedLotTransfer);
 
   const createDraftLotTransfer = () => setEditedLotTransfer({
     id: uuidv4(),
@@ -36,7 +38,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     from: '',
     to: '',
     quantity: 0,
-    date: new Date(),
+    date: new Date().toISOString(),
     by: '',
     [MODE_FIELD]: Mode.add,
   });
@@ -59,11 +61,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       return;
     }
     const lotTransferToSave = omit(editedLotTransfer, [MODE_FIELD]);
-    if (editedLotTransfer[MODE_FIELD] === Mode.add) {
-      addLotTransfer?.(lotTransferToSave);
-    } else {
-      updateLotTransfer?.(lotTransferToSave);
-    }
+    updateLotTransfer?.(lotTransferToSave);
     discardLotTransfer();
   };
 
@@ -71,30 +69,40 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     if (!editedLotTransfer) {
       return;
     }
-    const lotTransferToRemove = omit(editedLotTransfer, [MODE_FIELD]);
-    deleteLotTransfer?.(lotTransferToRemove);
+    if (editedLotTransfer[MODE_FIELD] === Mode.edit) {
+      const lotTransferToRemove = omit(editedLotTransfer, [MODE_FIELD]);
+      deleteLotTransfer?.(lotTransferToRemove);
+    }
+    discardLotTransfer();
   };
 
   const schema = buildSchema({
     locations,
     employees,
     builds,
-    isActive,
-    actionsClass: classes.actionsCell,
-    onConfirm: saveLotTransfer,
-    onDiscard: discardLotTransfer,
-    onDelete: removeLotTransfer,
   });
 
   const rowRender: DataGridProps<EditableLotTransfer>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableLotTransfer;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
 
+    const actions = (
+      <td className={classes.actionsCell}>
+        <Actions
+          dataItem={item}
+          onConfirm={saveLotTransfer}
+          onDiscard={discardLotTransfer}
+          onDelete={removeLotTransfer}
+        />
+      </td>
+    );
+
     return React.cloneElement(
       row,
       {
         className: cx(row.props.className, { [classes.updatingRow]: isUpdating }),
       },
+      isUpdating ? [row.props.children, actions] : row.props.children,
     );
   };
 
@@ -125,7 +133,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           rowRender={rowRender}
           onRowClick={isActive ? editLotTransfer : undefined}
           onItemChange={updateEditedLotTransfer}
-          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+          className={cx(classes.grid, { [classes.gridWithButton]: isActive, [classes.gridEditing]: isEditing })}
         />
       </FBInput>
       {isActive && (
