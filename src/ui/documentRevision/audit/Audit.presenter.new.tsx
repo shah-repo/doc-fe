@@ -381,7 +381,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     message={`documentRevision.audit.${change.field}.${change.type}`}
                     values={{
                       name: change.ownerName,
-                      docId: change.nextValue,
+                      nextStatus: change.nextValue,
                     }}
                   />
                 </Typography>
