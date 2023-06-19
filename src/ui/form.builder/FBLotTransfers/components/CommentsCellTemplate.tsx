@@ -32,6 +32,10 @@ export const CommentsCellTemplate: React.FC<CustomTemplateProps> = ({
     return (
       <FormField>
         <TextField
+          autosize
+          inputProps={{
+            rowsMax: 5,
+          }}
           value={defaultValue}
           placeholder={translate('form.builder.lot.transfers.comments')}
           onChange={handleChange}
