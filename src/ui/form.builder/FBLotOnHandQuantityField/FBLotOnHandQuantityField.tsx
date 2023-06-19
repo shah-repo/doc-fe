@@ -1,0 +1,61 @@
+import { Grid } from '@material-ui/core';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
+import { NEGATIVE_TRANSFER_TYPES } from '../FBLotTransfers/constants';
+import { LotTransfer, LotTransferType } from '../FBLotTransfers/types';
+
+const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
+  name = '',
+  ...props
+}) => {
+  const { workspaceState, formState } = FB.useStores();
+  const { workspaceMode: mode } = formState ?? {};
+  const transfers = useObserver(() => workspaceState?.formInputSync.get('lot_transfers') as LotTransfer[]);
+  const initialQuantity = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity') as number);
+  const unit = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity_unit') as string);
+
+  const value = transfers?.reduce((acc, transfer) => {
+    const shouldDeduct = NEGATIVE_TRANSFER_TYPES.includes(transfer.type);
+    const shouldAdd = transfer.type !== LotTransferType.Move;
+    return shouldDeduct ? acc - transfer.quantity : shouldAdd ? acc + transfer.quantity : acc;
+  }, initialQuantity) ?? initialQuantity;
+
+  if (mode === FBWorkspaceModeOptions.PREVIEW) {
+    return (
+      <FBTextField
+        {...props}
+        name={undefined}
+        gutter={false}
+        defaultValue={`${value} ${unit}`}
+        disabled
+      />
+    );
+  }
+
+  return (
+    <Grid container spacing={1}>
+      <Grid item md={8} xs={6}>
+        <FBTextField
+          {...props}
+          name={undefined}
+          gutter={false}
+          defaultValue={value}
+          disabled
+        />
+      </Grid>
+      <Grid item md={4} xs={6}>
+        <FBTextField
+          {...props}
+          label="form.builder.field.units"
+          name={undefined}
+          gutter={false}
+          defaultValue={unit}
+          disabled
+        />
+      </Grid>
+    </Grid>
+  );
+};
+
+export default FBLotOnHandQuantityField;

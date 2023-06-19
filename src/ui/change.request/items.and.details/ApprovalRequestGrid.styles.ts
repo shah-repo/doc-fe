@@ -287,5 +287,13 @@ export default makeStyles((theme) =>
       'line-clamp': 4,
       '-webkit-box-orient': 'vertical',
     },
+    tooltipBox: {
+      maxHeight: '200px !important',
+      maxWidth: '425px !important',
+      overflow: 'auto',
+      padding: theme.spacing(0.25),
+      fontSize: 12,
+      whiteSpace: 'pre-line',
+    },
   }),
 );

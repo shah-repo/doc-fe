@@ -5,13 +5,16 @@ const FBUnitMeasures: React.FunctionComponent<FBUnitMeasuresProps> = ({
   name,
   disabled,
   label,
+  gutter,
+  defaultValue,
 }) => (
   <FBAutocompleteAsync
     type="unitMeasures"
     optionId={FBAutocompleteAsyncOption.unitMeasures}
     autosave
     withState
-    {...{ disabled, name, label }}
+    defaultValue={defaultValue}
+    {...{ disabled, name, label, gutter }}
   />
 );
 

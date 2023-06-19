@@ -1,6 +1,6 @@
 import { cloneDeep, map } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
@@ -22,6 +22,7 @@ ItemsAndDetailsWrapperProps & {name: string}
 }) => {
   const { formState: parentFormState } = FB.useStores();
   const formState = FB.useRef(FBFormState, {});
+  const initialAsyncStatus = useRef(asyncState?.status);
 
   const { submitForm } = useFormContext();
 
@@ -73,6 +74,13 @@ ItemsAndDetailsWrapperProps & {name: string}
     if (autosave) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
+      initialAsyncStatus.current = asyncState?.status;
+      setTimeout(() => {
+        if (asyncState?.status === initialAsyncStatus.current) {
+          itemsAndDetailsState.setLoadingState(false);
+          itemsAndDetailsState.setViewItemActionsVisibility(true);
+        }
+      }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
       const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
@@ -81,6 +89,7 @@ ItemsAndDetailsWrapperProps & {name: string}
   };
 
   useEffect(() => {
+    initialAsyncStatus.current = asyncState?.status;
     if (asyncState && (asyncState.status === AsyncStatus.Success
       || asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
