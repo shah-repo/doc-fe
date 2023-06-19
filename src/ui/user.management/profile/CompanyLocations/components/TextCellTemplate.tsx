@@ -1,10 +1,9 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
-import { TextField } from '../../../../components/forms/fields-next';
-import FormikField from '../../../../components/forms/fields-next/FormikField/FormikField';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../constants';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
+import { MODE_FIELD, Mode } from '../constants';
 import { EditableCompanyLocation } from '../types';
 
 export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocation>> = ({ dataItem, field }) => {
