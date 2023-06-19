@@ -16,6 +16,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({
 
   const handleChange = (date: MaterialUiPickersDate) => {
     const event = new Event('change') as unknown;
+
     onChange?.({
       dataItem,
       dataIndex,
