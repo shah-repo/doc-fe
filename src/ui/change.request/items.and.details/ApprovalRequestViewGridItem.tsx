@@ -99,6 +99,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <Typography component="p" className={`${classes.truncate}`}>{data}</Typography>;
   };
 
+  const getTableItemElementData = () => {
+    return <span>{docTitle.replace(/(Rev [0-9A-Z]*)(.*)/, '$1')}</span>;
+  };
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -121,7 +125,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
               event.stopPropagation();
             }}
           >
-            <span>{docTitle}</span>
+            <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={docTitle} childrenElement={getTableItemElementData()} />
           </Link>
           }
         </div>

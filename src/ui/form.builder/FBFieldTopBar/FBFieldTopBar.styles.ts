@@ -25,6 +25,16 @@ export default makeStyles((theme) => ({
     borderTopRightRadius: theme.shape.borderRadius,
     background: Colors.dodger_blue,
     color: Colors.white,
-    cursor: 'pointer',
+
+    '& svg': {
+      cursor: 'pointer',
+    },
+  },
+  dragIcon: {
+    cursor: 'grab !important',
+
+    '.fb-sortable-drag &': {
+      cursor: 'grabbing !important',
+    },
   },
 }));

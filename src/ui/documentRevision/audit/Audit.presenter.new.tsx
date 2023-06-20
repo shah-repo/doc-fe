@@ -379,6 +379,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   <Text
                     dataCy={`change-key-${groupKey}-${key}`}
                     message={`documentRevision.audit.${change.field}.${change.type}`}
+                    values={{
+                      name: change.ownerName,
+                      nextStatus: change.nextValue,
+                    }}
                   />
                 </Typography>
               )}
@@ -445,7 +449,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             message={
               isRemovingApproverAction
                 ? `documentRevision.audit.${field}.ARRAY_DELETED`
-                : `documentRevision.audit.${field}.${type}`} />
+                : `documentRevision.audit.${field}.${type}`}
+          />
         </Typography>
         {auditGroup.map((change, index) => (
           <div
