@@ -2,7 +2,7 @@ import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FBBOMProps {}
-export interface Employee {
+export interface BOM {
   id: number
   title: string
   displayRevision: string
@@ -12,6 +12,7 @@ export interface Employee {
   leadTime?: string
   quantity?: string
   unit?: string
+  refDesignator?: string
   name: string
   reportsTo?: null | number
   phone?: string
@@ -20,7 +21,7 @@ export interface Employee {
   fullTime: boolean
   position: string
   timeInPosition?: number
-  employees?: Employee[]
+  employees?: BOM[]
   inEdit?: boolean
   isNew?: boolean
 }
@@ -28,18 +29,6 @@ export interface Employee {
 export interface DataState {
   sort?: SortDescriptor[]
   filter?: FilterDescriptor[]
-}
-
-export interface EmployeesFlat {
-  id: number
-  name: string
-  reportsTo: null | number
-  phone: string
-  extension: number
-  hireDate: Date
-  fullTime: boolean
-  position: string
-  timeInPosition: number
 }
 
 export interface FBBOMDrawerTableProps {}

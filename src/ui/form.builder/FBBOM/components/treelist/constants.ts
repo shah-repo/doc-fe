@@ -69,7 +69,7 @@ export const columns: CustomTreeListColumnProps[] = [
     show: true,
   },
   {
-    field: 'unit',
+    field: 'refDesignator',
     title: 'REF. DESIGNATOR',
     width: '200px',
     filter: TreeListTextFilter,

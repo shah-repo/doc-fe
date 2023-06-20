@@ -1,8 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  extendDataItem, filterBy,
-  mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent,
+  extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent, TreeListRowProps,
 } from '@progress/kendo-react-treelist';
 import { isEmpty } from 'lodash';
 import * as React from 'react';
@@ -10,11 +9,11 @@ import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/gri
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { columns, expandField, subItemsField } from './constants';
 import employees from './data';
-import { DataState, Employee, FBBOMProps } from './interface';
+import { BOM, DataState, FBBOMProps } from './interface';
 import useStyles from './styles';
 
 interface AppState {
-  data: Employee[]
+  data: BOM[]
   dataState: DataState
   expanded: number[]
 }
@@ -46,7 +45,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     });
   };
 
-  const addExpandField = (dataTree: Employee[]) => {
+  const addExpandField = (dataTree: BOM[]) => {
     const expanded: number[] = state.expanded;
     return mapTree(dataTree, subItemsField, (item) =>
       extendDataItem(item, subItemsField, {
@@ -67,7 +66,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
       dataState.sort,
       subItemsField,
     );
-    return addExpandField(sortedData as Employee[]);
+    return addExpandField(sortedData as BOM[]);
   };
 
   // const clearFilter = () => {
@@ -83,11 +82,11 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   //   });
   // };
 
-  // Add customozed cells to all columns
-  // change css styles
-
-  const rowRender = (row, props) => {
+  const rowRender = (row, props: TreeListRowProps) => {
     const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
+    if (isEmpty(props.dataItem.refDesignator)) {
+      props.dataItem.refDesignator = '-';
+    }
     return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color, borderBottom: '1px solid red' }} />;
   };
 
