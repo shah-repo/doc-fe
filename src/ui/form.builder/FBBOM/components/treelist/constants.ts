@@ -21,7 +21,7 @@ export const columns: CustomTreeListColumnProps[] = [
   {
     field: 'title',
     title: 'TITLE',
-    width: '350px',
+    width: '450px',
     filter: TreeListTextFilter,
     show: true,
   },
@@ -71,6 +71,34 @@ export const columns: CustomTreeListColumnProps[] = [
   {
     field: 'refDesignator',
     title: 'REF. DESIGNATOR',
+    width: '200px',
+    filter: TreeListTextFilter,
+    show: true,
+  },
+  {
+    field: 'primaryAttachments',
+    title: 'PRIMARY ATTACHMENTS',
+    width: '200px',
+    filter: TreeListTextFilter,
+    show: true,
+  },
+  {
+    field: 'attachments',
+    title: 'ATTACHMENTS',
+    width: '200px',
+    filter: TreeListTextFilter,
+    show: true,
+  },
+  {
+    field: 'issues',
+    title: 'ISSUES',
+    width: '200px',
+    filter: TreeListTextFilter,
+    show: true,
+  },
+  {
+    field: 'vendor',
+    title: 'VENDORS',
     width: '200px',
     filter: TreeListTextFilter,
     show: true,

@@ -1,4 +1,5 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
+import { TreeListRowProps } from '@progress/kendo-react-treelist';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FBBOMProps {}
@@ -13,14 +14,10 @@ export interface BOM {
   quantity?: string
   unit?: string
   refDesignator?: string
-  name: string
-  reportsTo?: null | number
-  phone?: string
-  extension?: number
-  hireDate?: Date
-  fullTime: boolean
-  position: string
-  timeInPosition?: number
+  primaryAttachments?: string
+  attachments?: boolean
+  vendor?: boolean
+  issues?: boolean
   employees?: BOM[]
   inEdit?: boolean
   isNew?: boolean
@@ -45,3 +42,7 @@ export interface AlternatePart {
   inEdit?: boolean
   isNew?: boolean
 }
+
+export type CustomTreeListRowProps = TreeListRowProps & {
+  dataItem: BOM
+};
