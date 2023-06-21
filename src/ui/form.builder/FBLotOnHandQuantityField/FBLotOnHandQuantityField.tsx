@@ -30,7 +30,6 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
     const compoundValue = `${value} ${unit}`;
-    console.log(compoundValue);
 
     return (
       <FBTextField
