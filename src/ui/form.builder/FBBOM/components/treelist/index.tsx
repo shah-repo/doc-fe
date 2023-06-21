@@ -90,36 +90,31 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color, borderBottom: '1px solid red' }} />;
   };
 
-  return <>
-    <GridToolbar>
-      <Grid container data-cy="toolbar-treelist">
-        <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
-          {/* <ClearFilters {...{ clearFilter }} /> */}
-        </Grid>
-        <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
-          {/* <StyleTooltip
-            title={<Text translation="common.column" />}
-            placement="top"
-            arrow
-          >
-            <IconButton onClick={handleClick} data-cy="manageColumnsBtn"> */}
-          <ViewGridIcon />
-          {/* </IconButton>
-          </StyleTooltip> */}
-        </Grid>
+  const renderToolbar = <GridToolbar>
+    <Grid container data-cy="toolbar-treelist">
+      <Grid item={true} xs={12} style={{ textAlign: 'right' }}>
+        <ViewGridIcon />
       </Grid>
-    </GridToolbar>
-    <TreeList
-      expandField={expandField}
-      subItemsField={subItemsField}
-      onExpandChange={onExpandChange}
-      rowRender={rowRender}
-      sortable={{ mode: 'multiple' }}
-      {...state.dataState}
-      data={processData()}
-      onDataStateChange={handleDataStateChange}
-      columns={columns}
-    /></>;
+    </Grid>
+  </GridToolbar>;
+
+  return (<Grid container>
+    <Grid item xs={12}>
+      <TreeList
+        style={{ width: '100%', overflow: 'scroll' }}
+        expandField={expandField}
+        subItemsField={subItemsField}
+        onExpandChange={onExpandChange}
+        rowRender={rowRender}
+        sortable={{ mode: 'multiple' }}
+        {...state.dataState}
+        data={processData()}
+        onDataStateChange={handleDataStateChange}
+        columns={columns}
+        toolbar={renderToolbar}
+      />
+    </Grid>
+  </Grid>);
 };
 
 export default withThemeNext(React.forwardRef(FBBOMTreeList));
