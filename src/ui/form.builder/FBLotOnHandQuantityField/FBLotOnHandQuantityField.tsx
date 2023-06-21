@@ -7,13 +7,14 @@ import { LotTransfer, LotTransferType } from '../FBLotTransfers/types';
 
 const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
   name = '',
+  label,
   ...props
 }) => {
   const { workspaceState, formState } = FB.useStores();
   const { workspaceMode: mode } = formState ?? {};
   const transfers = useObserver(() => workspaceState?.formInputSync.get('lot_transfers') as LotTransfer[]);
   const initialQuantity = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity') as number);
-  const unit = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity_unit') as string);
+  const unit = useObserver(() => String(workspaceState?.formInputSync.get('lot_usable_quantity_unit')));
 
   const value = transfers?.reduce((sum, transfer) => {
     const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
@@ -28,12 +29,16 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
   }, initialQuantity) ?? initialQuantity;
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
+    const compoundValue = `${value} ${unit}`;
+    console.log(compoundValue);
+
     return (
       <FBTextField
-        {...props}
+        label={label}
         name={undefined}
         gutter={false}
-        defaultValue={`${value} ${unit}`}
+        defaultValue={compoundValue}
+        value={compoundValue}
         disabled
       />
     );
@@ -43,20 +48,19 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
     <Grid container spacing={1}>
       <Grid item md={8} xs={6}>
         <FBTextField
-          {...props}
+          label={label}
           name={undefined}
           gutter={false}
-          defaultValue={value}
+          value={value}
           disabled
         />
       </Grid>
       <Grid item md={4} xs={6}>
         <FBTextField
-          {...props}
           label="form.builder.field.units"
           name={undefined}
           gutter={false}
-          defaultValue={unit}
+          value={unit}
           disabled
         />
       </Grid>

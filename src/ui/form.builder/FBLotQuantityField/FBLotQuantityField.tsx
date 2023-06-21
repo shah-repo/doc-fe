@@ -10,8 +10,8 @@ const FBQuantityField: React.FC<FBInputProps> = ({
 }) => {
   const { workspaceState, formState } = FB.useStores();
   const { workspaceMode: mode } = formState ?? {};
-  const unit = useObserver(() => workspaceState?.formInputSync.get(`${name}_unit`) as string);
   const value = formState?.getFieldValue(name) as number;
+  const unit = useObserver(() => String(workspaceState?.formInputSync.get(`${name}_unit`)));
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
     return (
