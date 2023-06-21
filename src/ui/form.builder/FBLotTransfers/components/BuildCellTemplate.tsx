@@ -1,8 +1,10 @@
+import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { Autocomplete, FormField } from '../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { BuildOption, CustomTemplateProps } from '../types';
+import { BuildOption, CustomTemplateProps, EditableLotTransfer } from '../types';
 
 interface Props extends CustomTemplateProps {
   builds?: BuildOption[]
@@ -13,7 +15,9 @@ const getOptionLabel = (option: BuildOption) => {
   return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
 };
 
-export const BuildCellTemplate: React.FC<Props> = ({ dataIndex, dataItem, field, builds, onChange }) => {
+export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, builds }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const handleChange = (event: ChangeEvent<unknown>, build?: BuildOption) => {
@@ -22,28 +26,28 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataIndex, dataItem, field,
       docId: build.document.docId,
     } : undefined;
 
-    onChange?.({
-      dataItem,
-      dataIndex,
-      syntheticEvent: event,
-      field,
-      value,
-    });
+    setFieldValue(field, value);
   };
 
-  const value = builds?.find((build) => build.id === dataItem.build?.id);
+  const defaultValue = isEditMode ? values.build?.id : dataItem.build?.id;
+  const value = builds?.find((build) => build.id === defaultValue);
 
-  if (isEditMode) {
+  // TODO recheck isEmpty condition after upgrading MUI Autocomplete
+  if (isEditMode && !isEmpty(values)) {
     return (
-      <FormField>
+      <FormikField
+        name={field}
+      >
         <Autocomplete
+          {...getFieldProps(field)}
           blurOnSelect
-          value={value}
           options={builds}
           getOptionLabel={getOptionLabel}
+          value={value}
           onChange={handleChange}
+          size="small"
         />
-      </FormField>
+      </FormikField>
     );
   }
 

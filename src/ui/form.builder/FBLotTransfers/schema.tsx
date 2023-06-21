@@ -26,7 +26,7 @@ export const buildSchema = ({
     field: 'type',
     title: 'form.builder.lot.transfers.type',
     template: TransferTypeCellTemplate,
-    width: 180,
+    width: 150,
   },
   {
     id: 'from',

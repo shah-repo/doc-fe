@@ -1,20 +1,41 @@
-import { Box } from '@material-ui/core';
+import { Box, Popper } from '@material-ui/core';
 import cx from 'classnames';
+import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { Button } from '../../components/forms/fields-next';
-import Actions from '../FBApprovalMatrixRoles/components/Actions';
+import Actions, { ActionsProps } from '../FBApprovalMatrixRoles/components/Actions';
 import FBInput from '../FBInput/FBInput';
 import { MODE_FIELD, Mode } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransferType } from './types';
+import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
 import { withFBLotTransactions } from './wrap';
+
+const ActionsCell: React.FC<ActionsProps<EditableLotTransfer>> = (props) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  return (
+    <>
+      <div ref={ref} style={{ height: '100%' }} />
+      <Popper
+        open
+        placement="bottom-end"
+        anchorEl={ref.current}
+      >
+        <Actions
+          scrollBehavior="smooth"
+          {...props}
+        />
+      </Popper>
+    </>
+  );
+};
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   transfers = [],
@@ -28,51 +49,48 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const [editedLotTransfer, setEditedLotTransfer] = React.useState<EditableLotTransfer>();
+  const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
   const isActive = !disabled;
-  const isEditing = Boolean(editedLotTransfer);
+
+  const formik = useFormik<Partial<EditableLotTransfer>>({
+    initialValues: {},
+    validate: (values) => {
+      const errors: Record<string, string> = {};
+      if (values.from && values.to && values.from === values.to) {
+        errors.to = 'validator.lot.transfers.same.location';
+      }
+      return errors;
+    },
+    onSubmit: (values) => {
+      const lotTransferToSave = omit(values, [MODE_FIELD]);
+      updateLotTransfer?.(lotTransferToSave as LotTransfer);
+      discardLotTransfer();
+    },
+  });
+
+  const { setValues } = formik;
+
+  useEffect(() => {
+    setValues(editedLotTransfer ?? {});
+  }, [editedLotTransfer, setValues]);
 
   const createDraftLotTransfer = () => setEditedLotTransfer({
     id: uuidv4(),
-    type: LotTransferType.Allocate,
-    from: '',
-    to: '',
-    quantity: 0,
     date: new Date().toISOString(),
-    by: '',
     [MODE_FIELD]: Mode.add,
   });
 
   const editLotTransfer = ({ dataItem }: LotTranferEditEvent) => setEditedLotTransfer(dataItem);
-  const discardLotTransfer = () => setEditedLotTransfer(undefined);
-
-  const updateEditedLotTransfer = (event: DataGridItemChangeEvent<EditableLotTransfer>) => {
-    if (!editedLotTransfer || !event.field) {
-      return;
-    }
-    setEditedLotTransfer({
-      ...editedLotTransfer,
-      [event.field]: event.value as unknown,
-    });
-  };
-
-  const saveLotTransfer = () => {
-    if (!editedLotTransfer) {
-      return;
-    }
-    const lotTransferToSave = omit(editedLotTransfer, [MODE_FIELD]);
-    updateLotTransfer?.(lotTransferToSave);
-    discardLotTransfer();
+  const discardLotTransfer = () => {
+    setEditedLotTransfer(undefined);
+    formik.resetForm();
   };
 
   const removeLotTransfer = () => {
     if (!editedLotTransfer) {
       return;
     }
-    if (editedLotTransfer[MODE_FIELD] === Mode.edit) {
-      const lotTransferToRemove = omit(editedLotTransfer, [MODE_FIELD]);
-      deleteLotTransfer?.(lotTransferToRemove);
-    }
+    deleteLotTransfer?.(editedLotTransfer as LotTransfer);
     discardLotTransfer();
   };
 
@@ -88,9 +106,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
     const actions = (
       <td className={classes.actionsCell}>
-        <Actions
+        <ActionsCell
           dataItem={item}
-          onConfirm={saveLotTransfer}
+          onConfirm={formik.submitForm}
           onDiscard={discardLotTransfer}
           onDelete={removeLotTransfer}
         />
@@ -121,21 +139,22 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   return (
     <Box position="relative">
-      <FBSection
-        label="form.builder.lot.transfers.title"
-      />
       <FBInput {...props} type="lotTransfers" name={name}>
+        <FBSection
+          label="form.builder.lot.transfers.title"
+        />
+      </FBInput>
+      <FormikProvider value={formik}>
         <KendoDataGrid<EditableLotTransfer>
           fullWidth
           hasBoxScrollbars
-          data={transferList}
+          data={transferList as EditableLotTransfer[]}
           schema={schema}
           rowRender={rowRender}
           onRowClick={isActive ? editLotTransfer : undefined}
-          onItemChange={updateEditedLotTransfer}
-          className={cx(classes.grid, { [classes.gridWithButton]: isActive, [classes.gridEditing]: isEditing })}
+          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         />
-      </FBInput>
+      </FormikProvider>
       {isActive && (
         <Button
           kind="add"

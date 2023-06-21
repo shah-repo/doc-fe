@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
-const ROW_HEIGHT = 42;
+const ROW_HEIGHT = 40;
 
 export default makeStyles(theme => ({
   root: {
@@ -14,12 +14,7 @@ export default makeStyles(theme => ({
     },
     '& td': {
       height: ROW_HEIGHT,
-      padding: `${theme.spacing(0.5, 1.5)}`,
-    },
-  },
-  gridEditing: {
-    '& .k-grid-container': {
-      minHeight: ROW_HEIGHT * 2.5,
+      boxSizing: 'border-box',
     },
   },
   gridWithButton: {
@@ -27,18 +22,23 @@ export default makeStyles(theme => ({
     borderBottomRightRadius: 0,
     borderBottom: 'none',
   },
+  updatingRow: {
+    position: 'relative',
+    zIndex: 3,
+    outline: `1px solid ${Colors.primaryLight}`,
+    outlineOffset: -1,
+
+    '& td': {
+      verticalAlign: 'top !important',
+    },
+  },
   actionsCell: {
     overflow: 'visible !important',
     position: 'sticky',
     right: 0,
     width: '0 !important',
     padding: '0 !important',
+    verticalAlign: 'bottom !important',
     borderLeft: `1px solid ${Colors.primaryLight} !important`,
-  },
-  updatingRow: {
-    position: 'relative',
-    zIndex: 3,
-    outline: `1px solid ${Colors.primaryLight}`,
-    outlineOffset: -1,
   },
 }));

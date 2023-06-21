@@ -1,46 +1,31 @@
-import { get } from 'lodash';
-import React, { ChangeEventHandler } from 'react';
+import { useFormikContext } from 'formik';
+import React from 'react';
 import { translate } from '../../../../common/intl';
-import { FormField, TextField } from '../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 
-export const CommentsCellTemplate: React.FC<CustomTemplateProps> = ({
-  field,
-  dataIndex,
-  dataItem,
-  onChange,
-}) => {
+export const CommentsCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getFieldProps } = useFormikContext();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  const handleChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
-    const value = event.target.value;
-
-    onChange?.({
-      dataItem,
-      dataIndex,
-      syntheticEvent: event,
-      field,
-      value,
-    });
-  };
-
-  const defaultValue = get(dataItem, field, '') as string;
 
   if (isEditMode) {
     return (
-      <FormField>
+      <FormikField
+        name={field}
+      >
         <TextField
+          {...getFieldProps(field)}
           autosize
+          size="small"
           inputProps={{
             rowsMax: 5,
           }}
-          value={defaultValue}
           placeholder={translate('form.builder.lot.transfers.comments')}
-          onChange={handleChange}
         />
-      </FormField>
+      </FormikField>
     );
   }
 

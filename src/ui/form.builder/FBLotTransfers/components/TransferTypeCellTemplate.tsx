@@ -1,41 +1,48 @@
+import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
-import { Autocomplete, FormField } from '../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
-import { ArrayElement, CustomTemplateProps, LotTransferType } from '../types';
+import { ArrayElement, CustomTemplateProps, EditableLotTransfer, LotTransferType } from '../types';
 
-export const TransferTypeCellTemplate: React.FC<CustomTemplateProps> = ({ dataIndex, dataItem, field, onChange }) => {
+const options = Object.values(LotTransferType).map((value) => ({
+  value,
+  label: translate(`form.builder.lot.transfers.type.${value}`),
+}));
+
+export const TransferTypeCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: ArrayElement<typeof options>) => {
-    onChange?.({
-      dataItem,
-      dataIndex,
-      syntheticEvent: event,
-      field,
-      value: value?.value,
-    });
+    setFieldValue(field, value?.value);
   };
 
-  const options = Object.values(LotTransferType).map((value) => ({
-    value,
-    label: translate(`form.builder.lot.transfers.type.${value}`),
-  }));
+  const defaultValue = isEditMode ? values.type : dataItem.type;
+  const value = options.find((option) => option.value === defaultValue);
 
-  const value = options.find((option) => option.value === dataItem.type);
-
-  if (isEditMode) {
+  // TODO recheck isEmpty condition after upgrading MUI Autocomplete
+  if (isEditMode && !isEmpty(values)) {
     return (
-      <FormField>
+      <FormikField
+        name={field}
+        required
+      >
         <Autocomplete
+          {...getFieldProps(field)}
           blurOnSelect
-          value={value}
+          disableClearable
           options={options}
+          value={value}
           getOptionLabel={(option: ArrayElement<typeof options>) => option.label}
           onChange={handleChange}
+          size="small"
         />
-      </FormField>
+      </FormikField>
     );
   }
-  return <>{translate(`form.builder.lot.transfers.type.${dataItem.type}`)}</>;
+
+  return <>{value?.label}</>;
 };

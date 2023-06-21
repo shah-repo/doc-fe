@@ -1,41 +1,46 @@
+import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { Autocomplete, FormField } from '../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CompanyLocation, CustomTemplateProps } from '../types';
+import { CompanyLocation, CustomTemplateProps, EditableLotTransfer } from '../types';
 
 interface Props extends CustomTemplateProps {
   locations: CompanyLocation[]
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataIndex, dataItem, field, locations, onChange }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locations }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: CompanyLocation) => {
-    onChange?.({
-      dataItem,
-      dataIndex,
-      syntheticEvent: event,
-      field,
-      value: value?.id,
-    });
+    setFieldValue(field, value?.id);
   };
 
-  const location = locations.find((loc) => loc.id === dataItem[field]);
+  const defaultValue = (isEditMode ? values[field] : dataItem[field]) as string;
+  const value = locations.find((loc) => loc.id === defaultValue);
 
-  if (isEditMode) {
+  // TODO recheck isEmpty condition after upgrading MUI Autocomplete
+  if (isEditMode && !isEmpty(values)) {
     return (
-      <FormField>
+      <FormikField
+        name={field}
+        required={field === 'from'}
+      >
         <Autocomplete
+          {...getFieldProps(field)}
           blurOnSelect
-          value={location}
           options={locations}
           getOptionLabel={(option: CompanyLocation) => option.name}
+          value={value}
           onChange={handleChange}
+          size="small"
         />
-      </FormField>
+      </FormikField>
     );
   }
 
-  return <>{location?.name ?? EMPTY_VALUE_PLACEHOLDER}</>;
+  return <>{value?.name ?? EMPTY_VALUE_PLACEHOLDER}</>;
 };

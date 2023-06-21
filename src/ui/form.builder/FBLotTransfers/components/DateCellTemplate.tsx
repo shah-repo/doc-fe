@@ -1,40 +1,34 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { useFormikContext } from 'formik';
 import React from 'react';
 import { MomentFormats, getFormattedDateString } from '../../../../common/utils/date';
-import { DatePicker, FormField } from '../../../components/forms/fields-next';
+import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { CustomTemplateProps } from '../types';
 
-export const DateCellTemplate: React.FC<CustomTemplateProps> = ({
-  field,
-  dataIndex,
-  dataItem,
-  onChange,
-}) => {
+export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getFieldProps, setFieldValue } = useFormikContext();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem.date;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    const event = new Event('change') as unknown;
-
-    onChange?.({
-      dataItem,
-      dataIndex,
-      syntheticEvent: event as React.SyntheticEvent<HTMLInputElement>,
-      field,
-      value: date?.toDate(),
-    });
+    setFieldValue(field, date?.toDate());
   };
 
   if (isEditMode) {
     return (
-      <FormField>
+      <FormikField
+        name={field}
+        required
+      >
         <DatePicker
+          {...getFieldProps(field)}
+          size="small"
           onChange={handleChange}
           format={MomentFormats.MonthDateYearTwoDigit}
-          value={value}
         />
-      </FormField>
+      </FormikField>
     );
   }
 

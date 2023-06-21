@@ -4,8 +4,11 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import { SM } from '../../../App';
+import { getHasPermission } from '../../../common/utils/selectors';
 import { authSelectors } from '../../../state/ducks/auth';
+import { Permission } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { BuildOption, FBLotTransactionsProps, LotTransfer } from './types';
 
@@ -16,6 +19,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
 ): React.FC<T> => {
   const Comp = ({
     name = '',
+    disabled,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -23,10 +27,22 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
     const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name)));
+    const canEditLotTransfers = useSelector(getHasPermission(Permission.EDIT_LOT_TRANSFERS));
 
     const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => {
       setTransfers(prepareTransfers(updatedTransfers));
     };
+
+    const isFirstDraft = !disabled && workspaceState?.document?.version === 1;
+    const userCanEditReleased = workspaceState?.document?.status === DocumentRevisionStatus.Released && canEditLotTransfers;
+    const userCanEditNextDraft = (
+      !disabled || (
+        workspaceState?.document?.status === DocumentRevisionStatus.Draft
+        && workspaceState?.document?.version > 1
+        && canEditLotTransfers
+      )
+    );
+    const isEditable = isFirstDraft || userCanEditReleased || userCanEditNextDraft;
 
     SM.reaction(
       () => workspaceState?.formInputSync.get(name) as LotTransfer[],
@@ -72,6 +88,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     return Component({
       ...props as T,
       name,
+      disabled: !isEditable,
       transfers,
       locations,
       employees,

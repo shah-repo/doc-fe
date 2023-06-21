@@ -20,6 +20,7 @@ export const EmployeeCellTemplate: React.FC<Props> = ({ dataItem, employees }) =
       <Autocomplete
         options={[userName]}
         value={userName}
+        size="small"
         disabled
       />
     );
