@@ -99,6 +99,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <Typography component="p" className={`${classes.truncate}`}>{data}</Typography>;
   };
 
+  const getTableItemElementData = () => {
+    return <span>{docTitle.replace(/(Rev [0-9A-Z]*)(.*)/, '$1')}</span>;
+  };
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -121,15 +125,15 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
               event.stopPropagation();
             }}
           >
-            <span>{docTitle}</span>
+            <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={docTitle} childrenElement={getTableItemElementData()} />
           </Link>
           }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange)} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange)} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange)} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange)} />
         </div>
       </div>
       {

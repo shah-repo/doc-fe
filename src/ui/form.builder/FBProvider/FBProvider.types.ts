@@ -11,7 +11,6 @@ import {
   FBEditorCustomControlState,
   FBEditorState,
   FBEQMaintenanceState,
-  FBFieldWrapperState,
   FBFilePresenterState,
   FBFilesPresenterState,
   FBFileUploadState,
@@ -30,7 +29,6 @@ import {
   FBPurchaseOrderState,
   FBSchemaState,
   FBSnackbarState,
-  FBSortableState,
   FBSupplierState,
   FBTaskState,
   FBTextEditorOptionsState,
@@ -46,12 +44,10 @@ export interface FBProviderProps {
   workspaceState?: FBWorkspaceState
   dialogState?: FBDialogState
   leftPanelState?: FBLeftPanelState
-  fieldWrapper?: FBFieldWrapperState
   filePresenterState?: FBFilePresenterState
   mediaAlbumState?: FBMediaAlbumState
   formState?: FBFormState
   schemaState?: FBSchemaState
-  fieldWrapperState?: FBFieldWrapperState
   editorState?: FBEditorState
   fileUploadState?: FBFileUploadState
   docRevState?: FBDocumentRevisionsState
@@ -84,5 +80,4 @@ export interface FBProviderProps {
   datePickerState?: FBDatePickerState
   lhrBuildState?: FBLHRBuildState
   downloadSheetTplState?: FBDownloadSheetTplState
-  sortableState?: FBSortableState
 }

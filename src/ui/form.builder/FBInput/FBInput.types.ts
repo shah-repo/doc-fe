@@ -252,6 +252,11 @@ export const FBAutosave: FBInputType[] = [
   'lotTransfers',
 ];
 
+export const SectionTypeField: FBInputType[] = [
+  'section',
+  'subsection',
+];
+
 export const BlockTypeField: FBInputType[] = [
   'section',
   'approvals',

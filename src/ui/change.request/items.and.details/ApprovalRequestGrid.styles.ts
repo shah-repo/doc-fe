@@ -95,7 +95,7 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
     cellOne: {
-      width: '30%',
+      width: '16%',
       display: 'flex',
       alignItems: 'center',
       columnGap: theme.spacing(1.25),
@@ -105,7 +105,7 @@ export default makeStyles((theme) =>
       },
     },
     cellOther: {
-      width: '35%',
+      width: '42%',
       '& .MuiOutlinedInput-multiline': {
         padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
       },
@@ -286,6 +286,14 @@ export default makeStyles((theme) =>
       '-webkit-line-clamp': 4,
       'line-clamp': 4,
       '-webkit-box-orient': 'vertical',
+    },
+    tooltipBox: {
+      maxHeight: '200px !important',
+      maxWidth: '425px !important',
+      overflow: 'auto',
+      padding: theme.spacing(0.25),
+      fontSize: 12,
+      whiteSpace: 'pre-line',
     },
   }),
 );

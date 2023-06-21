@@ -184,6 +184,17 @@ class FBSchemaState {
     return this.schema && this.schema[index];
   };
 
+  @action public initSchema = (schema?: FBSchemaProps[]): void => {
+    if (schema) {
+      schema
+        .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
+        .forEach((item, index) => {
+          item.index = index;
+        });
+    }
+    set(this, 'schema', schema);
+  };
+
   @action public setSchema = (schema?: FBSchemaProps[]) => {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
       ...schemaItem,
