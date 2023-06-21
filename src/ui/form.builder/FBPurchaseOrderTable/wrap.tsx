@@ -399,6 +399,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleItem,
       dialog,
       isDocumentReleased,
+      isPOEditState,
     });
   };
 
