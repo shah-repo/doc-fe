@@ -1,15 +1,17 @@
 import { differenceBy, orderBy, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import { SM } from '../../../App';
 import { getHasPermission } from '../../../common/utils/selectors';
 import { authSelectors } from '../../../state/ducks/auth';
 import { Permission } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import FBStore from '../FBStore/FBStore';
 import { BuildOption, FBLotTransactionsProps, LotTransfer } from './types';
 
 const prepareTransfers = (transfers: LotTransfer[]) => orderBy(transfers ?? [], 'date', 'desc');
@@ -22,6 +24,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     disabled,
     ...props
   }: T) => {
+    const dispatch = useDispatch();
     const { formState, workspaceState } = FB.useStores();
     const locations = useSelector(companySelectors.getAllLocations);
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
@@ -32,6 +35,8 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => {
       setTransfers(prepareTransfers(updatedTransfers));
     };
+
+    workspaceState?.setLoading(true);
 
     const isFirstDraft = !disabled && workspaceState?.document?.version === 1;
     const userCanEditReleased = workspaceState?.document?.status === DocumentRevisionStatus.Released && canEditLotTransfers;
@@ -53,6 +58,27 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       updateLocalTransfers(updatedTransfers);
       formState?.setFieldValue(name, updatedTransfers);
       formState?.setFieldAutosave(name);
+
+      if (disabled && isEditable) {
+        workspaceState?.setLoading(true);
+        Promise.resolve(
+          workspaceState?.updateDocRevById({
+            formInput: {
+              ...workspaceState?.document?.formInput,
+              [name]: updatedTransfers,
+            },
+          }, workspaceState?.id),
+        ).then(() => {
+          console.log('then');
+          workspaceState?.setFormInputSync(name, updatedTransfers);
+          if (workspaceState?.id && FBStore?.isHistoryTabSelected) {
+            dispatch(documentRevisionsActions.loadAudit(workspaceState?.id));
+          }
+        }).finally(() => {
+          console.log('finally');
+          workspaceState?.setLoading(false);
+        });
+      }
     };
 
     const prepareLotTransfer = (transfer: LotTransfer) => ({
