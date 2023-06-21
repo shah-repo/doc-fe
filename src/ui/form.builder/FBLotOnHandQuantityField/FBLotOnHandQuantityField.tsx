@@ -14,7 +14,7 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
   const { workspaceMode: mode } = formState ?? {};
   const transfers = useObserver(() => workspaceState?.formInputSync.get('lot_transfers') as LotTransfer[]);
   const initialQuantity = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity') as number);
-  const unit = useObserver(() => String(workspaceState?.formInputSync.get('lot_usable_quantity_unit')));
+  const unit = useObserver(() => workspaceState?.formInputSync.get('lot_usable_quantity_unit') as string);
 
   const value = transfers?.reduce((sum, transfer) => {
     const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
@@ -29,7 +29,7 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
   }, initialQuantity) ?? initialQuantity;
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
-    const compoundValue = `${value} ${unit}`;
+    const compoundValue = initialQuantity ? `${value ?? ''} ${unit ?? ''}` : '';
 
     return (
       <FBTextField

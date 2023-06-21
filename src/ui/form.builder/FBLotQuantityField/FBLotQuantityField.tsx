@@ -11,7 +11,7 @@ const FBQuantityField: React.FC<FBInputProps> = ({
   const { workspaceState, formState } = FB.useStores();
   const { workspaceMode: mode } = formState ?? {};
   const value = formState?.getFieldValue(name) as number;
-  const unit = useObserver(() => String(workspaceState?.formInputSync.get(`${name}_unit`)));
+  const unit = useObserver(() => workspaceState?.formInputSync.get(`${name}_unit`) as string);
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
     return (
@@ -19,7 +19,7 @@ const FBQuantityField: React.FC<FBInputProps> = ({
         {...props}
         name={undefined}
         gutter={false}
-        defaultValue={`${value} ${unit}`}
+        defaultValue={`${value ?? ''} ${unit ?? ''}`}
         disabled
       />
     );
