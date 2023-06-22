@@ -18,6 +18,7 @@ export interface BOM {
   attachments?: boolean
   vendor?: boolean
   issues?: boolean
+  comments?: string
   employees?: BOM[]
   inEdit?: boolean
   isNew?: boolean

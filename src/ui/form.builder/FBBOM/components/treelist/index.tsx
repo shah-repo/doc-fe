@@ -8,11 +8,11 @@ import * as React from 'react';
 import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/grid_view.svg';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { columns, expandField, subItemsField } from './constants';
-import employees from './data';
+import bom from './data';
 import { BOM, DataState, FBBOMProps } from './interface';
 import useStyles from './styles';
 
-interface AppState {
+interface BOMState {
   data: BOM[]
   dataState: DataState
   expanded: number[]
@@ -20,8 +20,8 @@ interface AppState {
 
 const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   useStyles();
-  const [state, setState] = React.useState<AppState>({
-    data: [...employees],
+  const [state, setState] = React.useState<BOMState>({
+    data: [...bom],
     dataState: {
       sort: [{ field: 'name', dir: 'asc' }],
       filter: [],

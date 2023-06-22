@@ -1,5 +1,8 @@
 import { ColumnMenuNumericColumn, ColumnMenuTextColumn } from '@progress/kendo-react-data-tools';
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
+import { BooleanCell } from './column.templates/Boolean';
+import { Comments } from './column.templates/Comments';
+import { PrimaryAttachmentsCell } from './column.templates/PrimaryAttachments';
 import { Status } from './column.templates/Status';
 import { Attachments } from './header.templates/Attachments';
 import { Issues } from './header.templates/Issues';
@@ -95,6 +98,7 @@ export const columns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     headerCell: PrimaryAttachments,
     columnMenu: ColumnMenuTextColumn,
+    cell: PrimaryAttachmentsCell,
     show: true,
   },
   {
@@ -104,6 +108,7 @@ export const columns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     headerCell: Attachments,
     columnMenu: ColumnMenuTextColumn,
+    cell: BooleanCell,
     show: true,
   },
   {
@@ -112,6 +117,7 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '200px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
+    cell: BooleanCell,
     headerCell: Issues,
     show: true,
   },
@@ -119,6 +125,7 @@ export const columns: CustomTreeListColumnProps[] = [
     field: 'vendor',
     title: 'VENDORS',
     // width: '200px',
+    cell: BooleanCell,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     headerCell: Vendors,
@@ -128,6 +135,7 @@ export const columns: CustomTreeListColumnProps[] = [
     field: 'comments',
     title: 'COMMENTS',
     // width: '200px',
+    cell: Comments,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     show: true,

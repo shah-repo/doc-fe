@@ -1,6 +1,6 @@
 import { BOM } from './interface';
 
-const employees: BOM[] = [
+const bom: BOM[] = [
   {
     id: 1,
     displayRevision: '1',
@@ -13,6 +13,7 @@ const employees: BOM[] = [
     attachments: true,
     issues: false,
     vendor: false,
+    comments: 'sample comment',
     employees: [
       {
         id: 2,
@@ -26,6 +27,7 @@ const employees: BOM[] = [
         attachments: true,
         issues: false,
         vendor: false,
+        comments: 'Sun glass comment',
         employees: [
           {
             id: 3,
@@ -257,4 +259,4 @@ const employees: BOM[] = [
   },
 ];
 
-export default employees;
+export default bom;

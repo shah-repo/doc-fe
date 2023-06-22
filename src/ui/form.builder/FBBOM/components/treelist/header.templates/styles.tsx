@@ -14,6 +14,8 @@ export const styles = makeStyles((theme) => ({
     color: Colors.statusDraft,
     height: 9,
     width: 11,
-    marginLeft: theme.spacing(3 / 8),
+    marginLeft: theme.spacing(1.875),
+    top: 13,
+    position: 'absolute',
   },
 }));

@@ -31,4 +31,14 @@ export const styles = makeStyles(() => ({
     color: Colors.font_gray,
     border: `1px solid ${Colors.font_gray}`,
   },
+  dot: {
+    height: 10,
+    width: 10,
+  },
+  selectedDot: {
+    color: Colors.almost_black,
+  },
+  deselectedDot: {
+    color: Colors.dark_gray2,
+  },
 }));

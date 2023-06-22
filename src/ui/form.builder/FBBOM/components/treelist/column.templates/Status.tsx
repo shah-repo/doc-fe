@@ -2,8 +2,8 @@ import { Chip, Grid } from '@material-ui/core';
 import React, { ComponentType } from 'react';
 import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
-import { CustomTreeListCellProps } from './interface';
-import { styles } from './Status.styles';
+import { styles } from './styles';
+import { CustomTreeListCellProps } from './types';
 
 export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   dataItem,
@@ -13,8 +13,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   className,
 }) => {
   const classes = styles();
-  const status = dataItem[field ?? ''] as string;
-  const fieldLabel = status;
+  const status = dataItem.displayStatus;
 
   return (
     <td
@@ -30,14 +29,14 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
         justify="flex-start"
       >
         <Tooltip
-          data={fieldLabel}
+          data={status}
           childrenElement={
             <Chip
               size="small"
               className={`${classes.chip} ${
                 classes[statusClassMapping[status]]
               }`}
-              label={fieldLabel}
+              label={status}
             />
           }
         />

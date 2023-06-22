@@ -5,7 +5,7 @@ import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { styles } from './styles';
 
-export const Attachments: React.FC<TreeListHeaderCellProps> = () => {
+export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = () => {
   const classes = styles();
 
   return (
