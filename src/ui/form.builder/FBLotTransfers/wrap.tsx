@@ -26,6 +26,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
   }: T) => {
     const dispatch = useDispatch();
     const { formState, workspaceState } = FB.useStores();
+    const { _formState } = SM.useStores();
     const locations = useSelector(companySelectors.getAllLocations);
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
@@ -35,8 +36,6 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => {
       setTransfers(prepareTransfers(updatedTransfers));
     };
-
-    workspaceState?.setLoading(true);
 
     const isFirstDraft = !disabled && workspaceState?.document?.version === 1;
     const userCanEditReleased = workspaceState?.document?.status === DocumentRevisionStatus.Released && canEditLotTransfers;
@@ -60,7 +59,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       formState?.setFieldAutosave(name);
 
       if (disabled && isEditable) {
-        workspaceState?.setLoading(true);
+        _formState?.setLoading(true);
         Promise.resolve(
           workspaceState?.updateDocRevById({ formInput: { [name]: updatedTransfers } }, workspaceState?.id),
         ).then(() => {
@@ -69,7 +68,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
             dispatch(documentRevisionsActions.loadAudit(workspaceState?.id));
           }
         }).finally(() => {
-          workspaceState?.setLoading(false);
+          _formState?.setLoading(false);
         });
       }
     };

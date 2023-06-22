@@ -176,10 +176,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, 'isDirty', isDirty);
   };
 
-  @action public setLoading = (loading: boolean): void => {
-    set(this, 'loading', loading);
-  };
-
   @action public setFormInputSync = (name: string, value: any) => {
     set(this.formInputSync, name, value);
   };
