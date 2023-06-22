@@ -42,6 +42,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   isPORemoveAction,
   dialog,
   isDocumentReleased,
+  isPOEditState,
 }) => {
   const classes = useStyles();
   const isActionsAllowed = !disabled || isReceivable;
@@ -120,7 +121,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           schema={schema}
           className={cx(classes.grid, { [classes.activeGrid]: !disabled })}
           rowRender={rowRender}
-          onRowClick={isDocumentReleased ? undefined : editItem}
+          onRowClick={isDocumentReleased && !isPOEditState ? undefined : editItem}
           fullWidth
           hasBoxScrollbars
         />

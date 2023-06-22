@@ -4,7 +4,8 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { translate } from '../../../common/intl';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -152,6 +153,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
+      }
+      // LOT QUANTITY
+      if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
+        fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
       }
       // LHRSTEP
       if (fbType === 'lhrstep') {

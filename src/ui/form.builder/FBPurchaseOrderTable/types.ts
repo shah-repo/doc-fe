@@ -22,6 +22,7 @@ export type FBPurchaseOrderTableProps =
     isPORemoveAction?: boolean
     dialog?: DialogHandler
     isDocumentReleased?: boolean
+    isPOEditState?: boolean
   };
 
 export type FBPurchaseOrderTableTotalProps = Pick<FBPurchaseOrderTableProps,
