@@ -70,6 +70,16 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   const { setValues } = formik;
 
+  const existingLocations = transfers.reduce<string[]>((list, transfer) => {
+    if (!list.includes(transfer.from)) {
+      list.push(transfer.from);
+    }
+    if (transfer.to && !list.includes(transfer.to)) {
+      list.push(transfer.to);
+    }
+    return list;
+  }, []);
+
   useEffect(() => {
     setValues(editedLotTransfer ?? {});
   }, [editedLotTransfer, setValues]);
@@ -96,6 +106,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   const schema = buildSchema({
     locations,
+    existingLocations,
     employees,
     builds,
   });
@@ -146,6 +157,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       </FBInput>
       <FormikProvider value={formik}>
         <KendoDataGrid<EditableLotTransfer>
+          filterable
           fullWidth
           hasBoxScrollbars
           data={transferList as EditableLotTransfer[]}

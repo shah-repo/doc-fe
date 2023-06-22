@@ -7,6 +7,7 @@ import { MODE_FIELD, Mode } from './constants';
 export interface CompanyLocation {
   id: string
   name: string
+  active: boolean
 }
 
 type BuildOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId'>;
@@ -53,9 +54,6 @@ export interface EditableLotTransfer extends LotTransfer {
 export interface LotTranferEditEvent {
   dataItem: EditableLotTransfer
 }
-
-export type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends ReadonlyArray<infer ElementType> ? ElementType : never;
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableLotTransfer> {
 }

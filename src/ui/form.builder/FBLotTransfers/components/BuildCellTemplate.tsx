@@ -15,7 +15,7 @@ const getOptionLabel = (option: BuildOption) => {
   return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
 };
 
-export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, builds }) => {
+export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -26,7 +26,7 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, builds }) 
       docId: build.document.docId,
     } : undefined;
 
-    setFieldValue(field, value);
+    setFieldValue('build', value);
   };
 
   const defaultValue = isEditMode ? values.build?.id : dataItem.build?.id;
@@ -36,10 +36,10 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, builds }) 
   if (isEditMode && !isEmpty(values)) {
     return (
       <FormikField
-        name={field}
+        name="build"
       >
         <Autocomplete
-          {...getFieldProps(field)}
+          {...getFieldProps('build')}
           blurOnSelect
           options={builds}
           getOptionLabel={getOptionLabel}

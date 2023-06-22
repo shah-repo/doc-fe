@@ -32,7 +32,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locatio
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect
-          options={locations}
+          options={locations.filter(loc => loc.active)}
           getOptionLabel={(option: CompanyLocation) => option.name}
           value={value}
           onChange={handleChange}
