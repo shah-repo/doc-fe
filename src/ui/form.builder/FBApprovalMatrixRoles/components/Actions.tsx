@@ -1,6 +1,7 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
+import cx from 'classnames';
 import React, { useCallback } from 'react';
 import { translate } from '../../../../common/intl';
 import { IconButton } from '../../../components/forms/fields-next';
@@ -10,16 +11,20 @@ import useStyles from '../styles';
 
 export interface ActionsProps<T> {
   dataItem: T
+  isDeleteDisabled?: boolean
+  deleteTooltipText?: string
+  scrollBehavior?: ScrollBehavior
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void
-  scrollBehavior?: ScrollBehavior
 }
 
 export default function Actions <T> (props: ActionsProps<T>): React.ReactElement | null {
   const {
     dataItem,
     scrollBehavior = 'auto',
+    isDeleteDisabled,
+    deleteTooltipText,
     onConfirm,
     onDiscard,
     onDelete,
@@ -46,18 +51,24 @@ export default function Actions <T> (props: ActionsProps<T>): React.ReactElement
     >
       {onDelete && (
         <Tooltip
-          title={translate('common.delete')}
+          title={deleteTooltipText ?? translate('common.delete')}
           placement="top"
           arrow
         >
-          <IconButton
-            kind="action"
-            size="small"
-            onClick={onDelete}
-            ref={deleteRef}
-          >
-            <FontAwesomeIcon className={classes.deleteIcon} icon={isHovered ? solid('trash-can') : regular('trash-can')} />
-          </IconButton>
+          <div>
+            <IconButton
+              kind="action"
+              size="small"
+              onClick={onDelete}
+              ref={deleteRef}
+              disabled={isDeleteDisabled}
+            >
+              <FontAwesomeIcon
+                className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
+                icon={isHovered ? solid('trash-can') : regular('trash-can')}
+              />
+            </IconButton>
+          </div>
         </Tooltip>
       )}
       <Tooltip

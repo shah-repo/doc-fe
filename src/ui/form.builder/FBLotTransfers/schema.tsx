@@ -59,7 +59,7 @@ export const buildSchema = ({
       title: 'form.builder.lot.transfers.type',
       filterCell: TransferTypeFilter,
       template: TransferTypeCellTemplate,
-      width: 150,
+      width: 140,
     },
     {
       id: 'from',
@@ -91,7 +91,7 @@ export const buildSchema = ({
       filterCell: InputFilter,
       title: 'form.builder.lot.transfers.quantity',
       template: QuantityCellTemplate,
-      width: 100,
+      width: 150,
     },
     {
       id: 'date',

@@ -55,5 +55,7 @@ export interface LotTranferEditEvent {
   dataItem: EditableLotTransfer
 }
 
+export type PredictFunction = (args: { skipTransfer?: LotTransfer, newTransfer?: LotTransfer }) => number;
+
 export interface CustomTemplateProps extends CellTemplateProps<EditableLotTransfer> {
 }

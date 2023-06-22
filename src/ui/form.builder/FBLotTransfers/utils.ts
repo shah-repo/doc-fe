@@ -1,23 +1,23 @@
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
 import { DEDUCTABLE_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, TRANSFERS_FIELD } from './constants';
-import { LotTransfer, LotTransferType } from './types';
+import { LotTransfer, LotTransferType, PredictFunction } from './types';
 
 interface UseOnHandQuantityType {
-  initialQuantity: number | undefined
+  initialQuantity: number
   onHandQuantity: number
-  onHandQuantityFiltered: number
   onHandQuantityUnit: string
+  predictOnHandQuantity: PredictFunction
 }
 
 const calculateSumForTransfer = (transfer: LotTransfer, sum: number) => {
   const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
   const shouldAdd = transfer.type !== LotTransferType.Move;
   if (shouldDeduct) {
-    return sum - transfer.quantity;
+    return sum - Math.abs(transfer.quantity);
   }
   if (shouldAdd) {
-    return sum + transfer.quantity;
+    return sum + Math.abs(transfer.quantity);
   }
   return sum;
 };
@@ -34,18 +34,19 @@ export const useOnHandQuantity = (skipTransfer?: string): UseOnHandQuantityType 
     initialQuantity ?? 0,
   ) ?? initialQuantity;
 
-  const onHandQuantityFiltered
-    = skipTransfer
-      ? transfers?.reduce(
-        (sum, transfer) => skipTransfer === transfer.id ? sum : calculateSumForTransfer(transfer, sum),
-        initialQuantity,
-      ) ?? initialQuantity
-      : onHandQuantity;
+  const predictOnHandQuantity: PredictFunction = ({ skipTransfer, newTransfer }) => {
+    const allTransfers = newTransfer ? [...transfers, newTransfer] : transfers;
+
+    return allTransfers?.reduce(
+      (sum, transfer) => skipTransfer?.id === transfer.id ? sum : calculateSumForTransfer(transfer, sum),
+      initialQuantity,
+    ) ?? initialQuantity;
+  };
 
   return {
     initialQuantity,
     onHandQuantity,
     onHandQuantityUnit,
-    onHandQuantityFiltered,
+    predictOnHandQuantity,
   };
 };

@@ -15,6 +15,7 @@ import { MODE_FIELD, Mode } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
+import { useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
 const ActionsCell: React.FC<ActionsProps<EditableLotTransfer>> = (props) => {
@@ -50,7 +51,8 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 }) => {
   const classes = useStyles();
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
-  const isActive = !disabled;
+  const { initialQuantity, predictOnHandQuantity } = useOnHandQuantity();
+  const isActive = !disabled && initialQuantity;
 
   const formik = useFormik<Partial<EditableLotTransfer>>({
     initialValues: {},
@@ -58,6 +60,21 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       const errors: Record<string, string> = {};
       if (values.from && values.to && values.from === values.to) {
         errors.to = 'validator.lot.transfers.same.location';
+      }
+      if (values.quantity && values.type) {
+        const predictedQuantity = predictOnHandQuantity({
+          newTransfer: values as LotTransfer,
+          skipTransfer: editedLotTransfer as LotTransfer,
+        });
+        if (predictedQuantity < 0) {
+          errors.quantity = 'validator.lot.transfers.quantity.min';
+        }
+        if (predictedQuantity > initialQuantity) {
+          errors.quantity = 'validator.lot.transfers.quantity.max';
+        }
+        if (values.quantity > initialQuantity) {
+          errors.quantity = 'validator.lot.transfers.quantity.max';
+        }
       }
       return errors;
     },
@@ -115,6 +132,18 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     const item = dataItem as EditableLotTransfer;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
 
+    const predictedQuantity = predictOnHandQuantity({
+      skipTransfer: item,
+    });
+
+    const shouldDisableDelete = (predictedQuantity < 0 || predictedQuantity > initialQuantity);
+    const deleteTootltipSuffix = predictedQuantity < 0 ? 'min' : 'max';
+
+    const deleteTootltipText
+      = shouldDisableDelete
+        ? translate(`validator.lot.transfers.quantity.${deleteTootltipSuffix}`)
+        : undefined;
+
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
@@ -122,6 +151,8 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           onConfirm={formik.submitForm}
           onDiscard={discardLotTransfer}
           onDelete={removeLotTransfer}
+          deleteTooltipText={deleteTootltipText}
+          isDeleteDisabled={shouldDisableDelete}
         />
       </td>
     );

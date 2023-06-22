@@ -62,20 +62,13 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       if (disabled && isEditable) {
         workspaceState?.setLoading(true);
         Promise.resolve(
-          workspaceState?.updateDocRevById({
-            formInput: {
-              ...workspaceState?.document?.formInput,
-              [name]: updatedTransfers,
-            },
-          }, workspaceState?.id),
+          workspaceState?.updateDocRevById({ formInput: { [name]: updatedTransfers } }, workspaceState?.id),
         ).then(() => {
-          console.log('then');
           workspaceState?.setFormInputSync(name, updatedTransfers);
           if (workspaceState?.id && FBStore?.isHistoryTabSelected) {
             dispatch(documentRevisionsActions.loadAudit(workspaceState?.id));
           }
         }).finally(() => {
-          console.log('finally');
           workspaceState?.setLoading(false);
         });
       }
@@ -83,6 +76,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
 
     const prepareLotTransfer = (transfer: LotTransfer) => ({
       ...transfer,
+      quantity: Math.abs(transfer.quantity),
       by: currentEmployeeId,
     });
 

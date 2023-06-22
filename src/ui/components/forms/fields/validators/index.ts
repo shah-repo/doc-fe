@@ -20,9 +20,9 @@ export const email: Validator = (value: string) => {
   }
 };
 
-export const greaterThanZero: Validator = (value) => {
-  if (!isNumber(value) || value <= 0) {
-    return 'validator.greater.than.zero';
+export const requiredNumber: Validator = (value) => {
+  if (!isNumber(value)) {
+    return 'validators.required';
   }
 };
 

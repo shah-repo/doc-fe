@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
-import { greaterThanZero, validator } from '../../../components/forms/fields/validators';
+import { requiredNumber, validator } from '../../../components/forms/fields/validators';
 import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { DEDUCTABLE_TRANSFER_TYPES } from '../constants';
 import { CustomTemplateProps } from '../types';
@@ -16,7 +16,7 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, 
     return (
       <FormikField
         name={field}
-        validate={validator(greaterThanZero)}
+        validate={validator(requiredNumber)}
       >
         <TextField
           {...getFieldProps(field)}

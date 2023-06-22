@@ -30,6 +30,7 @@ export default makeStyles(theme => ({
 
     '& td': {
       verticalAlign: 'top !important',
+      whiteSpace: 'normal !important' as 'normal',
     },
   },
   actionsCell: {
