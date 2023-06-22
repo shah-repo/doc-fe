@@ -1,8 +1,8 @@
 import { action } from 'mobx';
 import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState, FBInputType } from '..';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBStore from '../FBStore/FBStore';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 
 class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
   public static omitAudit: FBInputType[] = [
@@ -37,6 +37,7 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     'lhrstep',
     'lhrbuild',
     'supplier',
+    'lotQuantity',
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();
