@@ -2,7 +2,7 @@ import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Ra
 import cx from 'classnames';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import { FBButton, FBTooltip } from '../../../../form.builder';
 
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
@@ -20,18 +20,19 @@ import { Link } from 'react-router-dom';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../components/Text';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import FBVendorDataTable from '../../../../form.builder/FBRelatedPartKendoTable/index';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionStatus';
 import useStyles from './RelatedPart.styles';
 import RelatedPartsState from './RelatedParts.state';
-import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 import RelatedPartsTableHeader from './RelatedPartsTableHeader';
+import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS
@@ -115,6 +116,9 @@ const ParentPartSelector: React.FunctionComponent<{
 
   return (
     <div>
+      <div style={{ margin: '10px 0' }}>
+        <FBVendorDataTable />
+      </div>
       <div className={classes.title}>
         <Typography
           className={cx(classes.titleHeading, {
