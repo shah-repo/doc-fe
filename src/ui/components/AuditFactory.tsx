@@ -2,8 +2,6 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
-import { translate } from '../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
@@ -11,7 +9,6 @@ import { Audit, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
-import { companySelectors } from '../../state/ducks/company';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
@@ -20,11 +17,11 @@ import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { FBPurchaseOrderItemType } from '../form.builder';
-import { LotTransfer } from '../form.builder/FBLotTransfers/types';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditDownloadS3link from './AuditDownloadS3link';
+import AuditLotTransfer from './AuditLotTransfer';
 import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
@@ -119,61 +116,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
       lotTransfers () {
-        const field = audit.field.split('.').at(-1) as string;
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const locations = useSelector(companySelectors.getAllLocations);
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const employees = useSelector(companySelectors.getAllEmployees);
-
-        switch (field) {
-          case 'type':
-            return (
-              <div data-cy={dataCy}>
-                {translate(`form.builder.lot.transfers.type.${String(auditValue)}`)}
-              </div>
-            );
-          case 'by':
-            return (
-              <div data-cy={dataCy}>
-                {employees?.find(employee => employee.id === auditValue)?.user?.name ?? translate('common.not.applicable')}
-              </div>
-            );
-          case 'date':
-            return (
-              <div data-cy={dataCy}>
-                {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYear)}
-              </div>
-            );
-          case 'from':
-          case 'to':
-            return (
-              <div data-cy={dataCy}>
-                {locations.find(location => location.id === auditValue)?.name ?? translate('common.not.applicable')}
-              </div>
-            );
-          case 'lot_transfers':
-            if (audit.type === 'ARRAY_DELETED') {
-              try {
-                const transfer = JSON.parse(auditValue) as LotTransfer;
-                if (transfer) {
-                  return (
-                    <div data-cy={dataCy}>
-                      {translate('form.builder.lot.transfers.audit.transfer', {
-                        type: translate(`form.builder.lot.transfers.type.${transfer.type}`),
-                        quantity: transfer.quantity,
-                        from: locations.find(location => location.id === transfer.from)?.name ?? translate('common.not.applicable'),
-                        to: locations.find(location => location.id === transfer.to)?.name ?? translate('common.not.applicable'),
-                        date: getFormattedDateString(transfer.date, MomentFormats.MonthDateYear),
-                      })}
-                    </div>
-                  );
-                }
-              } catch (err) {}
-            }
-            // falls through
-          default:
-            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
-        }
+        return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
