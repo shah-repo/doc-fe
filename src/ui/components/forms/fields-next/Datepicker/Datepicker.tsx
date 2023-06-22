@@ -13,7 +13,7 @@ import { TextField } from '..';
 import { MomentFormats } from '../../../../../common/utils/date';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { useInputStyles, useStyles } from './Datepicker.styles';
-import { DatePickerProps } from './Datepitcker.types';
+import { DatePickerProps } from './Datepicker.types';
 
 const PROPS_TO_SKIP: Array<keyof TextFieldProps> = [
   'onKeyUp',
