@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Popper } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -18,12 +20,12 @@ import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTr
 import { useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
-const ActionsCell: React.FC<ActionsProps<EditableLotTransfer>> = (props) => {
+const ActionsCell: React.FC<ActionsProps<EditableLotTransfer> & { rootClassName?: string }> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
     <>
-      <div ref={ref} style={{ height: '100%' }} />
+      <div ref={ref} className={props.rootClassName} />
       <Popper
         open
         placement="bottom-end"
@@ -153,6 +155,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           onDelete={removeLotTransfer}
           deleteTooltipText={deleteTootltipText}
           isDeleteDisabled={shouldDisableDelete}
+          rootClassName={classes.popperHolder}
         />
       </td>
     );
@@ -184,7 +187,19 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       <FBInput {...props} type="lotTransfers" name={name}>
         <FBSection
           label="form.builder.lot.transfers.title"
-        />
+        >
+          {isActive && (
+            <Button
+              kind="ghost"
+              size="small"
+              className={classes.addButton}
+              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+              onClick={createDraftLotTransfer}
+            >
+              {translate('form.builder.lot.transfers.add')}
+            </Button>
+          )}
+        </FBSection>
       </FBInput>
       <FormikProvider value={formik}>
         <KendoDataGrid<EditableLotTransfer>

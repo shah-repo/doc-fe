@@ -42,4 +42,10 @@ export default makeStyles(theme => ({
     verticalAlign: 'bottom !important',
     borderLeft: `1px solid ${Colors.primaryLight} !important`,
   },
+  addButton: {
+    float: 'right',
+  },
+  popperHolder: {
+    height: '100%',
+  },
 }));
