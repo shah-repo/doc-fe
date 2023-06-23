@@ -68,7 +68,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           newTransfer: values as LotTransfer,
           skipTransfer: editedLotTransfer as LotTransfer,
         });
-        console.log(predictedQuantity);
         if (predictedQuantity < 0) {
           errors.quantity = 'validator.lot.transfers.quantity.min';
         }
