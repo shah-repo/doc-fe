@@ -6,14 +6,14 @@ import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { companyActions } from '../../../../state/ducks/company';
 import { CompanyLocation } from '../../../../state/ducks/company/types';
+import { Button } from '../../../components/forms/fields-next';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps, DataGridRowClickEvent } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import Text from '../../../components/Text';
-import { Button } from '../../../components/forms/fields-next';
 import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { MODE_FIELD, Mode } from './constants';
+import { Mode, MODE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableCompanyLocation, Props } from './types';
@@ -63,12 +63,12 @@ export const CompanyLocations: React.FC<Props> = ({
     [MODE_FIELD]: Mode.add,
   });
 
-  const mappedLocations = locationsData.map((location) => {
+  const mappedLocations = locationsData?.map((location) => {
     return {
       ...location,
       [MODE_FIELD]: location.id === editedLocation?.id ? Mode.edit : Mode.show,
     };
-  });
+  }) ?? [];
 
   const locationsList
     = editedLocation?.[MODE_FIELD] === Mode.add
