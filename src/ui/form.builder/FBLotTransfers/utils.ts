@@ -1,3 +1,4 @@
+import { unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
 import { DEDUCTABLE_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, TRANSFERS_FIELD } from './constants';
@@ -38,11 +39,12 @@ export const useOnHandQuantity = (skipTransfer?: string): UseOnHandQuantityType 
     if (!transfers?.length) {
       return initialQuantity ?? 0;
     }
-    const allTransfers = newTransfer ? [...transfers, newTransfer] : transfers;
+    const filteredTransfers = transfers?.filter((transfer) => transfer.id !== skipTransfer?.id);
+    const allTransfers = newTransfer ? unionBy([newTransfer], filteredTransfers) : filteredTransfers;
 
     return allTransfers?.reduce(
-      (sum, transfer) => skipTransfer?.id === transfer.id ? sum : calculateSumForTransfer(transfer, sum),
-      initialQuantity,
+      (sum, transfer) => calculateSumForTransfer(transfer, sum),
+      initialQuantity ?? 0,
     ) ?? initialQuantity;
   };
 

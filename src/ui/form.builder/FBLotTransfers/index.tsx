@@ -68,6 +68,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           newTransfer: values as LotTransfer,
           skipTransfer: editedLotTransfer as LotTransfer,
         });
+        console.log(predictedQuantity);
         if (predictedQuantity < 0) {
           errors.quantity = 'validator.lot.transfers.quantity.min';
         }
@@ -134,6 +135,10 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     const item = dataItem as EditableLotTransfer;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
 
+    if (!isUpdating) {
+      return row;
+    }
+
     const predictedQuantity = predictOnHandQuantity({
       skipTransfer: item,
     });
@@ -163,9 +168,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     return React.cloneElement(
       row,
       {
-        className: cx(row.props.className, { [classes.updatingRow]: isUpdating }),
+        className: cx(row.props.className, classes.updatingRow),
       },
-      isUpdating ? [row.props.children, actions] : row.props.children,
+      [row.props.children, actions],
     );
   };
 
