@@ -35,6 +35,9 @@ export const useOnHandQuantity = (skipTransfer?: string): UseOnHandQuantityType 
   ) ?? initialQuantity;
 
   const predictOnHandQuantity: PredictFunction = ({ skipTransfer, newTransfer }) => {
+    if (!transfers?.length) {
+      return initialQuantity ?? 0;
+    }
     const allTransfers = newTransfer ? [...transfers, newTransfer] : transfers;
 
     return allTransfers?.reduce(
