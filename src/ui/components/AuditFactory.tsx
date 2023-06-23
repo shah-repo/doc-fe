@@ -21,6 +21,7 @@ import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditDownloadS3link from './AuditDownloadS3link';
+import AuditLotTransfer from './AuditLotTransfer';
 import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
@@ -113,6 +114,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       mpiprocedure () {
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
+      },
+      lotTransfers () {
+        return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
