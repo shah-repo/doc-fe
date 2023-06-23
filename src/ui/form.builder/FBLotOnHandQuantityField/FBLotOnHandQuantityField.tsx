@@ -14,7 +14,7 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
     const compoundValue = initialQuantity
-      ? `${onHandQuantity} ${onHandQuantityUnit}`
+      ? `${onHandQuantity ?? ''} ${onHandQuantityUnit ?? ''}`
       : '';
 
     return (
