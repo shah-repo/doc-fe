@@ -1,8 +1,14 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
-import { TreeListRowProps } from '@progress/kendo-react-treelist';
+import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FBBOMProps {}
+
+export interface BOMState {
+  data: BOM[]
+  dataState: DataState
+  expanded: number[]
+}
 export interface BOM {
   id: number
   title: string
@@ -44,6 +50,10 @@ export interface AlternatePart {
   isNew?: boolean
 }
 
-export type CustomTreeListRowProps = TreeListRowProps & {
+export interface CustomTreeListRowProps extends TreeListRowProps {
   dataItem: BOM
-};
+}
+
+export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEvent {
+  dataItem: BOM
+}

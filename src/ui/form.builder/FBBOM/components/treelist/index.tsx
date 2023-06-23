@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListDataStateChangeEvent, TreeListExpandChangeEvent, TreeListRowProps,
+  extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListDataStateChangeEvent
 } from '@progress/kendo-react-treelist';
 import { isEmpty } from 'lodash';
 import * as React from 'react';
@@ -9,32 +9,27 @@ import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/gri
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { columns, expandField, subItemsField } from './constants';
 import bom from './data';
-import { BOM, DataState, FBBOMProps } from './interface';
+import { BOM, BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
-
-interface BOMState {
-  data: BOM[]
-  dataState: DataState
-  expanded: number[]
-}
 
 const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   useStyles();
   const [state, setState] = React.useState<BOMState>({
     data: [...bom],
     dataState: {
-      sort: [{ field: 'name', dir: 'asc' }],
+      sort: [],
       filter: [],
     },
-    expanded: [1, 2, 32],
+    expanded: [1, 3],
   });
 
-  const onExpandChange = (e: TreeListExpandChangeEvent) => {
+  const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
+    const expanded = event.value
+      ? state.expanded.filter((id) => id !== event.dataItem.id)
+      : [...state.expanded, event.dataItem.id];
     setState({
       ...state,
-      expanded: e.value
-        ? state.expanded.filter((id) => id !== e.dataItem.id)
-        : [...state.expanded, e.dataItem.id],
+      expanded,
     });
   };
 
@@ -82,12 +77,12 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   //   });
   // };
 
-  const rowRender = (row, props: TreeListRowProps) => {
+  const rowRender = (row, props: CustomTreeListRowProps) => {
     const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
-    return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color, borderBottom: '1px solid red' }} />;
+    return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color }} />;
   };
 
   const renderToolbar = <GridToolbar>

@@ -13,7 +13,7 @@ export const subItemsField = 'employees';
 export const expandField = 'expanded';
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
-  show: boolean
+  hidden: boolean
 }
 
 export const columns: CustomTreeListColumnProps[] = [
@@ -25,7 +25,7 @@ export const columns: CustomTreeListColumnProps[] = [
     columnMenu: ColumnMenuTextColumn,
     expandable: true,
     locked: false,
-    show: true,
+    hidden: true,
   },
   {
     field: 'title',
@@ -33,7 +33,7 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '450px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'displayRevision',
@@ -41,7 +41,7 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '120px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'displayStatus',
@@ -50,7 +50,7 @@ export const columns: CustomTreeListColumnProps[] = [
     cell: Status,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'cost',
@@ -58,14 +58,14 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '200px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuNumericColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'leadTime',
     title: 'LEAD TIME',
     // width: '200px',
     filter: TreeListTextFilter,
-    show: true,
+    hidden: true,
   },
   {
     field: 'quantity',
@@ -73,7 +73,7 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '200px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'unit',
@@ -81,7 +81,7 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '200px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'refDesignator',
@@ -89,7 +89,7 @@ export const columns: CustomTreeListColumnProps[] = [
     // width: '200px',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
   {
     field: 'primaryAttachments',
@@ -99,7 +99,7 @@ export const columns: CustomTreeListColumnProps[] = [
     headerCell: PrimaryAttachments,
     columnMenu: ColumnMenuTextColumn,
     cell: PrimaryAttachmentsCell,
-    show: true,
+    hidden: true,
   },
   {
     field: 'attachments',
@@ -109,7 +109,7 @@ export const columns: CustomTreeListColumnProps[] = [
     headerCell: Attachments,
     columnMenu: ColumnMenuTextColumn,
     cell: BooleanCell,
-    show: true,
+    hidden: true,
   },
   {
     field: 'issues',
@@ -119,7 +119,7 @@ export const columns: CustomTreeListColumnProps[] = [
     columnMenu: ColumnMenuTextColumn,
     cell: BooleanCell,
     headerCell: Issues,
-    show: true,
+    hidden: true,
   },
   {
     field: 'vendor',
@@ -129,7 +129,7 @@ export const columns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     headerCell: Vendors,
-    show: true,
+    hidden: true,
   },
   {
     field: 'comments',
@@ -138,6 +138,6 @@ export const columns: CustomTreeListColumnProps[] = [
     cell: Comments,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
-    show: true,
+    hidden: true,
   },
 ];
