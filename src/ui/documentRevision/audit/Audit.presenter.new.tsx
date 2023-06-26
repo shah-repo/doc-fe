@@ -1,5 +1,5 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
-import { find, has, isEmpty, last, orderBy } from 'lodash';
+import { find, has, isEmpty, last, orderBy, some } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -99,6 +99,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
+    // TODO Find another workaround to avoid unwanted audit entries while deleting lotTransfers item
+    if (some(audits, { type: 'ARRAY_DELETED' })) {
+      audits = audits.filter(audit => audit.type === 'ARRAY_DELETED');
+    }
+
     orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
@@ -154,10 +159,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
       }
-      // LOT QUANTITY
-      if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
-        fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
-      }
       // LHRSTEP
       if (fbType === 'lhrstep') {
         const valueKey = change.field.split('.')[1].split('-');
@@ -170,6 +171,21 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
         }
         fbLabel = `${label} for ${stepLabel}`;
+      }
+      // LOT QUANTITY
+      if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
+        fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
+      }
+      // LOT TRANSFERS
+      if (fbType === 'lotTransfers') {
+        const field = change.field.split('.').at(-1) as string;
+        if (field === 'id') {
+          return;
+        }
+        if (change.type !== 'ARRAY_DELETED') {
+          const fieldName = translate(`form.builder.lot.transfers.${field}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
       }
       // MPIPROCEDURE
       const valueKey = change.field.split('.');
