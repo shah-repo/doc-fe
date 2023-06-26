@@ -6,14 +6,15 @@ export const styles = makeStyles((theme: Theme) =>
     remainderButton: {
       padding: theme.spacing(0, 1.5),
       margin: theme.spacing(0, 1),
-      borderRadius: "10px",
+      borderRadius: 24,
       minWidth: "unset",
-      fontSize: "0.65rem",
+      fontSize: ".65rem",
       color: Colors.white,
+      minHeight: 24,
     },
     triangleDown: {
-      "width": "0.65rem",
-      "marginLeft": "2px",
+      "width": ".65rem",
+      "marginLeft": theme.spacing(.25),
       "&.expanded": {
         transform: "rotate(180deg)",
       },

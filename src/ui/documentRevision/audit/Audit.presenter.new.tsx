@@ -8,6 +8,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { Approval, ApprovalStatus, User } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import AuditFactory from "../../components/AuditFactory";
@@ -43,6 +44,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
+  // Added to exclude few PO line items unwanted audit recrods
+  const excludeFewPOAuditRecords = (change: Audit) => (change.field.includes(PO_ITEMS_COMPONENT_NAME) &&
+   (change.type.includes("OBJECT_NEW")
+  || change.type.includes("ARRAY_NEW")
+  || change.type.includes("STRING_NEW")
+  || change.type.includes("NUMBER_NEW")
+  || change.type.includes("BOOLEAN_NEW")
+  || change.type.includes("BOOLEAN_EDITED")
+  || change.field.includes("items.date")
+  || change.field.includes("items.capitalEquipment")
+  || change.field.includes("totalInUSD")));
+
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
@@ -52,7 +65,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const changeOwner = find([owner, ownerUser, ownerThirdParty], "user.name");
       const finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
 
-      if (change.field.includes("-built-in")) {
+      if (excludeFewPOAuditRecords(change)) {
         return null;
       }
 
@@ -344,6 +357,16 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               });
           }
         }
+
+        if (change.field.includes(PO_ITEMS_COMPONENT_NAME)) {
+          if (excludeFewPOAuditRecords(change)) {
+            return null;
+          }
+          if (change.field.includes("items")) {
+            change.field = change.field.replace(/\[(.+?)\]/g, "");
+          }
+        }
+
         singleFields.push(
           <Box
             mb={1}
@@ -404,7 +427,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     if (!singleFields.length && !attachments.length && !newReferences.length && !deletedReferences.length) {
       return null;
     }
-
     return (
       <>
         {singleFields}

@@ -565,6 +565,7 @@ export enum DisplayFieldType{
   BOOKMARKS = "Q",
   ADD_NEW_BTN = "V",
   UPDATE_NEW_BTN = "V1",
+  UNDO_BTN="V2",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;

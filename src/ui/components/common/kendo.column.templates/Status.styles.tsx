@@ -6,7 +6,6 @@ export const styles = makeStyles((theme: Theme) =>
     chip: {
       display: "flex",
       flexDirection: "row",
-      padding: "0px !important",
       borderRadius: 3,
       border: `1px solid ${Colors.steel_blue}`,
       background: Colors.light_cyan,

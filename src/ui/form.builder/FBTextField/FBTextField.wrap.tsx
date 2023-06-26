@@ -1,9 +1,11 @@
-import { get, isUndefined } from "lodash";
+import { get, isEmpty, isUndefined } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextFieldProps } from "..";
+import { THRESHOLD_KEY } from "../../../state/ducks/documentRevisions/constants";
 import { useFormContext } from "../../components/forms/FormContext";
+import { checkIsDocumentPOAM } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isTranslation } from "../../translations/types";
 
 export const withFBTextField = <T extends FBTextFieldProps>(
@@ -25,6 +27,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     const { submitForm } = useFormContext();
     const { workspaceMode: mode } = formState || {};
     const { id } = workspaceState || {};
+    const isDocumentPOAM = checkIsDocumentPOAM(workspaceState?.document?.document?.documentType?.groupOptions);
     defaultValue = defaultValue || formState?.getFieldValue(name);
 
     if (!["justificationOfChange", "descriptionOfChange"].includes(name)) {
@@ -66,6 +69,10 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.value = Math.abs(ev.target?.value).toFixed(2).toString();
       }
       if (!name) { return; }
+      if (isDocumentPOAM && name === THRESHOLD_KEY && isEmpty(ev.target?.value)) {
+        // Setting POAM Item form value back to 0 If the value is removed
+        formState?.setFieldValue(name, 0, true);
+      }
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
       if (workspaceState?.isChangeRequest && workspaceState?.autosave &&

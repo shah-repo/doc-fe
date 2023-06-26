@@ -4,11 +4,14 @@ import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from "lodash"
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { SM } from "../../../../App";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { getPOIndexDbInstance } from "../../../../indexDb";
+import { GroupTag, Permission } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -21,23 +24,28 @@ import ClonePOButton from "../../../components/forms/ClonePOButton";
 import CloneEBButton from "../../../components/forms/CopyEBButton";
 import StyledSubmitButton from "../../../components/forms/StyledSubmitButton";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../constants/urls";
+import { documentVersionPath } from "../../../document.revision/utils/paths";
 import { FB } from "../../../form.builder";
 import { FBFormStateContext } from "../../../form.builder/FBForm/FBForm.wrap";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
-import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
+import { useApproveAndRelease, useUndoPOChanges } from "../../../hooks/docCustomization/useCustomization";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
+import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
+import { PreviewControlButtons } from "../../PreviewControls.container.types";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.container";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import ExportToEmail from "./export.to.email/ExportToEmail";
+import GenerateHtmlPreview from "./GenerateHtmlPreview";
 import RedlineButton from "./redline/Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
@@ -61,6 +69,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     mode,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
@@ -98,6 +107,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
 
+  const setDocumentRevision = useActionCreator(documentRevisionsActions.documentRevisionSet);
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
@@ -115,7 +125,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
-
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;
@@ -127,9 +138,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
+    const { EDITABLE_SCHEMA, REDLINE } = DOC_TYPE_GROUP_OPTION;
+
     return (
-      (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
-      !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
+      (Boolean(groupOptions?.includes(EDITABLE_SCHEMA) || groupOptions?.includes(REDLINE)))
+      && !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
 
@@ -184,6 +197,27 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", undefined);
     }
   }
+  const {
+    label: undoChangesLabel,
+  } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
+
+  const onUndoChangesClick = async () => {
+    let prevPODoc;
+    try {
+      prevPODoc = await getPOIndexDbInstance().toArray();
+    } catch (e) {}
+
+    if (!prevPODoc.length) {
+      history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
+      return;
+    }
+    const data = await workspaceState?.undoPO(
+      prevPODoc[0] as DocumentRevision);
+
+    history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
+    getPOIndexDbInstance().clear();
+    setDocumentRevision(data);
+  };
   const onFormClick = () => {
     if (redlineActive) {
       formik.setFieldValue("redline", true);
@@ -199,16 +233,20 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       formik.setFieldValue("parentEquipment", null);
     }
     formik.submitForm();
+    if (isPOEditState) {
+      history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
+      dispatch(documentRevisionsActions.load(documentRevision.id));
+      getPOIndexDbInstance().clear();
+    }
   };
 
   React.useEffect(() => {
     // Autosave when record is updated
-    if (isNewVersion && isRecord) {
+    if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce)))  {
       onFormClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const accessableButtons: string[] = [];
   const { status = "", version = 0 } = documentRevision || [];
@@ -216,14 +254,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
+  const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
 
   if (
     !isRecord ||
     (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))
   ) {
     if (
-      isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove) {
-      accessableButtons.push("approveAndReleaseButton");
+      isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove &&
+      !(isPO && isDocumentRevisionHasOutput(documentRevision))) {
+      accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }
   if (
@@ -231,45 +271,48 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     (!isInlineApproval || revisionStage !== 1) &&
     showToOwnerOrOperator
   ) {
-    accessableButtons.push("submitApprovalButton");
+    accessableButtons.push(PreviewControlButtons.SubmitApprovalButton);
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
-    accessableButtons.push("NewCloneEB");
+    accessableButtons.push(PreviewControlButtons.NewCloneEB);
   }
-  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
-    accessableButtons.push("NewClonePO");
+  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO && !isPOEditState) {
+    accessableButtons.push(PreviewControlButtons.NewClonePO);
+  }
+  if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
+    accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
   if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
-    accessableButtons.push("exportCsvButton");
+    accessableButtons.push(PreviewControlButtons.ExportCsvButton);
   }
   if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
-    accessableButtons.push("redlineButton");
+    accessableButtons.push(PreviewControlButtons.RedlineButton);
   }
   if (
     !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
     canShowCancelButton
   ) {
-    accessableButtons.push("cancelButton");
+    accessableButtons.push(PreviewControlButtons.CancelButton);
   }
   if (shouldShowUpgrade) {
-    accessableButtons.push("upgradeContainerButton");
+    accessableButtons.push(PreviewControlButtons.UpgradeContainerButton);
   }
   const docRevGroupOptions =
     documentRevision?.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision?.status);
   if (isDocumentDraft || canCreateInspection) {
-    accessableButtons.push("inspectionControl");
+    accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
   if (canChangeOwnerShip && values.id) {
-    accessableButtons.push("changeOwner");
+    accessableButtons.push(PreviewControlButtons.ChangeOwner);
   }
   if (
     !(isRecord && isInlineApproval) &&
     isUserDocumentOwner &&
     showVoidButton
   ) {
-    accessableButtons.push("voidButton");
+    accessableButtons.push(PreviewControlButtons.VoidButton);
   }
   if (
     isRecord &&
@@ -277,10 +320,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     isUserDocumentOwner &&
     showVoidButtonOnInlineRecords
   ) {
-    accessableButtons.push("voidButton");
+    accessableButtons.push(PreviewControlButtons.VoidButton);
   }
   if (isExportable) {
-    accessableButtons.push("exportButton");
+    accessableButtons.push(PreviewControlButtons.ExportButton);
   }
   const initialButtons =
     accessableButtons.length >= 1
@@ -291,14 +334,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
-      {buttons.includes("cancelButton") && (
+      {buttons.includes(PreviewControlButtons.CancelButton) && (
         <CancelButton
           {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("upgradeContainerButton") && (
+      {buttons.includes(PreviewControlButtons.UpgradeContainerButton) && (
         <UpgradeToLatestContainer
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
@@ -310,7 +353,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("approveAndReleaseButton") && (
+      {buttons.includes(PreviewControlButtons.ApproveAndReleaseButton) && (
         <Observer>
           {() => (
             <ApproveAndRelease
@@ -334,7 +377,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           )}
         </Observer>
       )}
-      {buttons.includes("submitApprovalButton") && (
+      {buttons.includes(PreviewControlButtons.SubmitApprovalButton) && (
         <SubmitForApproval
           docRevId={values.id as string}
           status={values.status}
@@ -348,34 +391,41 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           }}
         />
       )}
-      {buttons.includes("inspectionControl") && (
+      {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("redlineButton") && (
+      {buttons.includes(PreviewControlButtons.GeneratePDF) && (
+        <GenerateHtmlPreview
+          id={documentRevision.id}
+          renderHTMLDefined={isRenderHTMLDefined}
+          showDownloadButton={false}
+        />
+      )}
+      {buttons.includes(PreviewControlButtons.RedlineButton) && (
         <RedlineButton
           {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild, renderAsButton }}
         />
       )}
-      {buttons.includes("NewCloneEB") && (
+      {buttons.includes(PreviewControlButtons.NewCloneEB) && (
         <CloneEBButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("NewClonePO") && (
+      {buttons.includes(PreviewControlButtons.NewClonePO) && (
         <ClonePOButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("exportCsvButton") && (
+      {buttons.includes(PreviewControlButtons.ExportCsvButton) && (
         <ExportToCSVButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("changeOwner") && values.id && (
+      {buttons.includes(PreviewControlButtons.ChangeOwner) && values.id && (
         <OwnerChangerContainer
           requestId={values.id}
           requestType={RequestType.Document}
           renderAsButton={renderAsButton}
         />
       )}
-      {buttons.includes("voidButton") && (
+      {buttons.includes(PreviewControlButtons.VoidButton) && (
         <VoidButton {...{ documentRevision, renderAsButton }} />
       )}
-      {buttons.includes("exportButton") && (
+      {buttons.includes(PreviewControlButtons.ExportButton) && (
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
@@ -386,11 +436,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <>
-        {isPO && documentRevision.poStatus && (
-          <HeaderPOStatus poStatus={documentRevision.poStatus} />
-        )}
-      </>
+      {isPO && documentRevision.poStatus && (
+        <HeaderPOStatus poStatus={documentRevision.poStatus} />
+      )}
+      {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased && (
+        <StyledSubmitButton
+          showNewButton={true}
+          asyncState={asyncState}
+          label={undoChangesLabel ?? ""}
+          onClick={onUndoChangesClick}
+          data-cy={"undo-changes"}
+        />
+      )}
       <Observer>
         {() => (
           <>

@@ -12,6 +12,7 @@ export type FBPurchaseOrderProps =
   dialogState?: FBDialogState;
   mode?: FBPurchaseOrderMode;
   isReceivable?: boolean;
+  isReleased?: boolean;
   receivableName?: string;
   lineItem?: string;
   isPO: boolean;

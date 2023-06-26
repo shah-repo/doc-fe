@@ -69,7 +69,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     filterable: false,
     locked: true,
-    width: "80px",
+    width: "60px",
     reorderable: false,
     resizable: false,
     orderIndex: 7,

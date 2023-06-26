@@ -8,6 +8,7 @@ import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption,
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -168,7 +169,21 @@ export const withFBInput = <T extends FBInputProps>(
           convertedFieldValue = fieldValue;
         }
         const formStateFieldValue = formState?.getFieldValue(fieldName);
-
+        const optionId = find(formState?.workspaceState?.schema, { name: fieldName })?.optionId;
+        if (optionId) {
+          const optionIdString = optionId.toString();
+          if (FBAutocompleteAsyncStore.data.get(optionIdString)) {
+            const arr = Array.from(FBAutocompleteAsyncStore.data.get(optionIdString).values());
+            const originalVal: any = find(arr, { id: formStateFieldValue });
+            let validationString = `${originalVal?.document?.docId} - rev ${originalVal?.displayRevision}`;
+            if (originalVal?.name) {
+              validationString += ` - ${originalVal.name}`;
+            } else if (originalVal?.description) {
+              validationString += ` - ${originalVal.description.replaceAll(/<\/?p>/gi, "")}`;
+            }
+          formState?.setValidationAttributeName(formStateFieldValue, validationString);
+          }
+        }
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
           if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue) && !isNull(formStateFieldValue)) {
             showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :

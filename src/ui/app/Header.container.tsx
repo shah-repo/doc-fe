@@ -1,10 +1,10 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SM } from "../../App";
-import { authActions, authSelectors } from "../../state/ducks/auth";
-import { GroupTag } from "../../state/ducks/auth/types";
-import useGetHasTag from "../hooks/useGetHasTag";
-import HeaderPresenter from "./Header.presenter";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SM } from '../../App';
+import { authActions, authSelectors } from '../../state/ducks/auth';
+import { GroupTag } from '../../state/ducks/auth/types';
+import useGetHasTag from '../hooks/useGetHasTag';
+import HeaderPresenter from './Header.presenter';
 
 const HeaderContainer: React.FC = () => {
   const fullHeight = SM.isHomeURL;
@@ -15,12 +15,14 @@ const HeaderContainer: React.FC = () => {
   const toggleCustomLabels = () => {
     dispatch(authActions.toggleCustomLabels(!customLabelsValue));
   };
+  const isSearchEnabled = true;
 
   return (
     <HeaderPresenter
       {...{
         name,
         fullHeight,
+        isSearchEnabled,
         customLabelsValue,
         toggleCustomLabels,
         canToggleCustomLabels,

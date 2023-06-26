@@ -28,7 +28,7 @@ export default makeStyles((theme) => createStyles({
     },
   },
   boxed: {
-    background: Colors.lightGray,
+    background: Colors.darkGray,
     borderRadius: theme.shape.borderRadius,
   },
   simple: ({ size }) => ({

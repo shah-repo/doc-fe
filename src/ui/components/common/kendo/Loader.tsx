@@ -1,6 +1,7 @@
 import React from "react";
 import { styles } from "./Loader.styles";
 
+// TODO cleanup
 const Loader: React.FunctionComponent = () => {
   const classes = styles();
   return (

@@ -61,5 +61,6 @@ export enum FBEndpoint {
   ZIPStatus = "/attachment_job/connected_to/${attachmentId}",
   Favourites = "/user_favourites",
   ModifyFavourites = "/user_favourites/${id}",
+  ApprovalLevels = "/document_revisions/threshold",
 }
 

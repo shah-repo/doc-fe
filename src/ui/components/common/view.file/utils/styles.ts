@@ -42,4 +42,8 @@ export const styles = makeStyles((theme) => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
+  icon: {
+    height: 17,
+    width: 17,
+  },
 }));

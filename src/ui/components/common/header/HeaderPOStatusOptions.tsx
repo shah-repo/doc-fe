@@ -5,6 +5,7 @@ import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as CaretIcon } from "../../../../assets/images/po_status_dropdown.svg";
+import { GroupTag } from "../../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../ui/components/Text";
@@ -12,6 +13,7 @@ import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toastError } from "../../notifications";
 import useStyles from "./HeaderPOStatus.styles";
 import { VoidPOStatusDialog } from "./VoidDialog";
@@ -41,6 +43,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
   const isVoidedAction = POStatusType.VOIDED === action;
   const isOpenedAction = POStatusType.OPENED === action;
+  const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -144,7 +147,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         disableRipple
         aria-label="split button"
         className={classes.buttonGroup}
-        disabled={!isOwner}
+        disabled={isUserAdminEnforce ? !isUserAdminEnforce : !isOwner}
       >
         <Button
           type="submit"
