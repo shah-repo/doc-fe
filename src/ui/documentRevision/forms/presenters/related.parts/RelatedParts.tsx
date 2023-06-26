@@ -24,7 +24,7 @@ import Text from '../../../../components/Text';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
-import FBVendorDataTable from '../../../../form.builder/FBRelatedPartKendoTable/index';
+import FBVendorDataTable from '../../../../form.builder/FBVendorKendoTable/index';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -534,7 +534,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             </>
             : !isVoided
           && <FBTooltip title="relatedParts.checkbox.hover.msg"
-            placement="top" arrow
+            placement="top-end" arrow
             classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
             <Box

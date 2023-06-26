@@ -2,6 +2,7 @@ import { VendorData } from './types';
 
 const DATA: VendorData[] = [
   {
+    id: '1',
     supplier: 'ProtoLabs',
     status: 'Released',
     partNumber: '12346',
@@ -12,6 +13,7 @@ const DATA: VendorData[] = [
     leadTime: 14,
   },
   {
+    id: '2',
     supplier: 'Qosina',
     status: 'Pending Approval',
     partNumber: '000123',
@@ -22,6 +24,7 @@ const DATA: VendorData[] = [
     leadTime: 5,
   },
   {
+    id: '3',
     supplier: 'Vascular',
     status: 'Released',
     partNumber: '0001',
@@ -32,6 +35,7 @@ const DATA: VendorData[] = [
     leadTime: 4,
   },
   {
+    id: '4',
     supplier: 'Tioga',
     status: 'Released',
     partNumber: '456',

@@ -1174,6 +1174,7 @@
   "form.builder.enter.title": "Click to Enter Title",
   "form.builder.enter.description": "Click to Enter Description",
   "form.builder.select.tab": "Select Tab",
+  "form.builder.new.supplier.add": "Add Supplier",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",
