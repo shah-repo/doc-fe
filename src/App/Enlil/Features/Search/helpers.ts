@@ -9,13 +9,13 @@ import { IStoreMappedDocument, IStoreResult } from './types';
 export const PAGE_SIZE = 25;
 export const MAX_TOP_RESULTS = 5;
 
-export const getSearchResults = async (searchQuery: string, page = 0, limit = PAGE_SIZE) => {
+export const getSearchResults = async (searchText: string, offset = 0, limit = PAGE_SIZE) => {
   return await axios.post<IStoreResult>(
-    `${Config.ApiEndpoint}/global_search/search`,
+    `${Config.ApiEndpoint}/global_search/documents/search`,
     {
-      limit: limit,
-      offset: page,
-      query: searchQuery,
+      searchText,
+      limit,
+      offset,
     },
   );
 };
