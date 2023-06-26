@@ -38,6 +38,7 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     'lhrbuild',
     'supplier',
     'lotQuantity',
+    'lotTransfers',
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();

@@ -15,7 +15,6 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     isFB,
     ...props
   }: T) => {
-
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _tabsState, _formState } = SM.useStores();
@@ -67,6 +66,7 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
               onScroll,
               _documentRevisionFormState,
               _tabsState,
+              _formState,
               documentRevision,
               schema,
               isFB,

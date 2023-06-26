@@ -340,5 +340,15 @@
     "label": "Company Locations",
     "optionValueType": "id",
     "hidden": false
+  },
+  {
+    "id": "44",
+    "label": "EB and LHR",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "includeRevision": "displayRevision",
+    "root": "",
+    "hidden": false
   }
 ]
