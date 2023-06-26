@@ -1,4 +1,4 @@
-import { DEFAULT_EMPLOYEE } from "./ducks/auth/reducers";
+import { DEFAULT_EMPLOYEE } from './ducks/auth/reducers';
 
 export default {
   0: (state: any) => ({

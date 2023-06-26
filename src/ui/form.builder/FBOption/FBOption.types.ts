@@ -1,15 +1,15 @@
 export interface FBOption {
-  text: string;
-  value: string;
-  disabled?: boolean;
+  text: string
+  value: string
+  disabled?: boolean
 }
 
-export type FBOptionValueType =  "object" | "key" | "id";
+export type FBOptionValueType =  'object' | 'key' | 'id';
 
 export interface FBOptionProps {
-  options?: Record<any, any>[] | FBOption[] | string[];
-  optionLabelKey?: string;
-  optionValueKey?: string;
-  optionValueType?: FBOptionValueType;
-  optionId?: string;
+  options?: Record<any, any>[] | FBOption[] | string[]
+  optionLabelKey?: string
+  optionValueKey?: string
+  optionValueType?: FBOptionValueType
+  optionId?: string
 }

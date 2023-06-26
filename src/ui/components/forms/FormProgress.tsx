@@ -1,11 +1,11 @@
-import { LinearProgress, withStyles, WithStyles } from "@material-ui/core";
-import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../state/types";
-import styles from "./FormProgress.styles";
+import { LinearProgress, withStyles, WithStyles } from '@material-ui/core';
+import * as React from 'react';
+import { AsyncState, AsyncStatus } from '../../../state/types';
+import styles from './FormProgress.styles';
 
 export interface FormProgressProps {
-  asyncState: AsyncState;
-  attached?: boolean;
+  asyncState: AsyncState
+  attached?: boolean
 }
 
 type Props = FormProgressProps & WithStyles<typeof styles>;

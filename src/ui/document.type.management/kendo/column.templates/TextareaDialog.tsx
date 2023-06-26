@@ -1,26 +1,26 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { Field, FieldWrapper, FieldWrapperProps, Form, FormElement } from "@progress/kendo-react-form";
-import { TextArea, TextAreaProps } from "@progress/kendo-react-inputs";
-import { isEmpty } from "lodash";
-import PropTypes from "prop-types";
-import React from "react";
-import Text from "../../../components/Text";
-import { FBSchemaProps } from "../../../form.builder";
-import GridCellStyles from "./CellStyles";
-import "./KendoStyles.css";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { Field, FieldWrapper, FieldWrapperProps, Form, FormElement } from '@progress/kendo-react-form';
+import { TextArea, TextAreaProps } from '@progress/kendo-react-inputs';
+import { isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Text from '../../../components/Text';
+import { FBSchemaProps } from '../../../form.builder';
+import GridCellStyles from './CellStyles';
+import './KendoStyles.css';
 
 interface FormAreaProps extends FieldWrapperProps {
-  defaultVal: string;
-  isEdit: boolean;
+  defaultVal: string
+  isEdit: boolean
 }
 interface TextAreaDialogProps extends TextAreaProps {
-  cancelEdit: () => void;
-  addClick: (event) => void;
-  openForm: boolean;
-  fieldName?: string;
-  item: FBSchemaProps;
-  isEdit: boolean;
+  cancelEdit: () => void
+  addClick: (event) => void
+  openForm: boolean
+  fieldName?: string
+  item: FBSchemaProps
+  isEdit: boolean
 }
 const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
   defaultVal,
@@ -28,7 +28,7 @@ const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
   ...others
 }) =>
   <FieldWrapper>
-    <div className={"k-form-field-wrap"}>
+    <div className="k-form-field-wrap">
       <TextArea defaultValue={defaultVal} readOnly={!isEdit}
         rows={17}
         {...others} />
@@ -37,10 +37,10 @@ const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
 ;
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
 }));
@@ -78,7 +78,7 @@ export const TextareaDialog: React.FunctionComponent<TextAreaDialogProps> = ({
   isEdit,
 }) => {
   const classes = GridCellStyles();
-  const field = fieldName || "";
+  const field = fieldName || '';
 
   return (
     <CustomDialog
@@ -95,7 +95,7 @@ export const TextareaDialog: React.FunctionComponent<TextAreaDialogProps> = ({
         onSubmit={addClick}
         render={() => (
           <FormElement>
-            <fieldset className={"k-form-fieldset"}>
+            <fieldset className="k-form-fieldset">
               <DialogContent dividers>
                 <Field
                   id={field}
@@ -105,21 +105,21 @@ export const TextareaDialog: React.FunctionComponent<TextAreaDialogProps> = ({
                   defaultVal={
                     !isEmpty(item)
                       ? JSON.stringify(item, undefined, 4)
-                      : ""
+                      : ''
                   }
                   isEdit={isEdit}
                 />
               </DialogContent>
               <DialogActions>
                 <Button
-                  className={`${"k-button"} ${classes.schemaCancelBtn}`}
+                  className={`${'k-button'} ${classes.schemaCancelBtn}`}
                   onClick={cancelEdit}
                 >
                   <Text translation="common.cancel" />
                 </Button>
                 <Button
                   type="submit"
-                  className={`${"k-button"} ${classes.schemaAddBtn}`}
+                  className={`${'k-button'} ${classes.schemaAddBtn}`}
                   disabled={!isEdit}
                 >
                   <Text translation="common.add" />

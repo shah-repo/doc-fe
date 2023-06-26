@@ -1,10 +1,10 @@
-import { Box, Tooltip, Typography } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import Text from "../../components/Text";
-import ConditionalWrapper from "./ConditionalWrapper";
-import { CustomLabelTooltipProps } from "./types";
+import { Box, Tooltip, Typography } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
+import Text from '../../components/Text';
+import ConditionalWrapper from './ConditionalWrapper';
+import { CustomLabelTooltipProps } from './types';
 
 const CustomLabelTooltip: React.FunctionComponent<CustomLabelTooltipProps> = ({
   tooltipConfig,
@@ -22,10 +22,10 @@ const CustomLabelTooltip: React.FunctionComponent<CustomLabelTooltipProps> = ({
           title={
             <React.Fragment>
               <Typography color="inherit">
-                <Text translation="tooltip.label.name" values={{ labelName: tooltipConfig?.labelName }}/>
+                <Text translation="tooltip.label.name" values={{ labelName: tooltipConfig?.labelName }} />
               </Typography>
               <Typography color="inherit">
-                <Text translation="tooltip.default.label" values={{ defaultLabel: tooltipConfig?.defaultLabel }}/>
+                <Text translation="tooltip.default.label" values={{ defaultLabel: tooltipConfig?.defaultLabel }} />
               </Typography>
               <Typography color="inherit">
                 <Text
@@ -34,10 +34,10 @@ const CustomLabelTooltip: React.FunctionComponent<CustomLabelTooltipProps> = ({
                 />
               </Typography>
               {tooltipConfig?.requiredFlag && <Typography color="inherit">
-                <Text translation="tooltip.required.flag" values={{ requiredFlag: tooltipConfig?.requiredFlag }}/>
+                <Text translation="tooltip.required.flag" values={{ requiredFlag: tooltipConfig?.requiredFlag }} />
               </Typography>}
               {tooltipConfig?.visibilityFlag && <Typography color="inherit">
-                <Text translation="tooltip.visibility.flag" values={{ visibilityFlag: tooltipConfig?.visibilityFlag }}/>
+                <Text translation="tooltip.visibility.flag" values={{ visibilityFlag: tooltipConfig?.visibilityFlag }} />
               </Typography>
               }
             </React.Fragment>

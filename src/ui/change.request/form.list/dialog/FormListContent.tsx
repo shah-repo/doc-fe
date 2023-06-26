@@ -1,21 +1,21 @@
-import { DialogContent } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import React, { useState } from "react";
-import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import { FormContext } from "../../../components/forms/FormContext";
-import { DialogHandler } from "../../../hooks/useDialog";
-import { Translation } from "../../../translations/types";
-import { InDraftAROption, SelectTemplateFormValues, TemplateOption } from "../../form/types";
-import { styles } from "../FormList.styles";
-import FormListActions from "./FormListActions";
+import { DialogContent } from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import React, { useState } from 'react';
+import AutocompleteField from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import { FormContext } from '../../../components/forms/FormContext';
+import { DialogHandler } from '../../../hooks/useDialog';
+import { Translation } from '../../../translations/types';
+import { InDraftAROption, SelectTemplateFormValues, TemplateOption } from '../../form/types';
+import { styles } from '../FormList.styles';
+import FormListActions from './FormListActions';
 
 interface Props {
-  dialog: DialogHandler;
-  templateOptions?: TemplateOption[];
-  inDraftAROptions? : InDraftAROption[];
-  handleTemplateSelection?: (option: TemplateOption) => void;
-  handleExistingARSelection?: (option: InDraftAROption) => void;
-  labelTranslation?: Translation;
+  dialog: DialogHandler
+  templateOptions?: TemplateOption[]
+  inDraftAROptions? : InDraftAROption[]
+  handleTemplateSelection?: (option: TemplateOption) => void
+  handleExistingARSelection?: (option: InDraftAROption) => void
+  labelTranslation?: Translation
 }
 
 const FormListContent: React.FunctionComponent<Props> = ({
@@ -35,12 +35,12 @@ const FormListContent: React.FunctionComponent<Props> = ({
         aria-label="selectForm"
         name="select-form"
         size="sm"
-        label={labelTranslation ?? "common.choose.template"}
-        autocompleteProps={{ id: "FormList-selectForm" }}
+        label={labelTranslation ?? 'common.choose.template'}
+        autocompleteProps={{ id: 'FormList-selectForm' }}
         options={templateOptions ?? inDraftAROptions ?? []}
         onClick={(option) => { setFormValues(option); }}
       />
-      <FormListActions {...{ dialog, confirm }}/>
+      <FormListActions {...{ dialog, confirm }} />
     </DialogContent>
   );
 
@@ -61,7 +61,7 @@ const FormListContent: React.FunctionComponent<Props> = ({
   return (
     <FormContext.Provider value={{ submitOnChange: false }}>
       <Formik
-        initialValues={{ chosenOption: "" }}
+        initialValues={{ chosenOption: '' }}
         onSubmit={setFormValues}
       >
         {renderForm}

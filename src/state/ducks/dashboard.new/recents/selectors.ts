@@ -1,5 +1,5 @@
-import { ApplicationState } from "../../../reducers";
-import { AsyncState } from "../../../types";
+import { ApplicationState } from '../../../reducers';
+import { AsyncState } from '../../../types';
 
 const recentsList = (state: ApplicationState) =>
   state.dashboardNew.recents.recentsList;

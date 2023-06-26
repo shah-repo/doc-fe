@@ -1,28 +1,27 @@
-import { Box, Button, Icon, Typography } from "@material-ui/core";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import { Form, Formik } from "formik";
-import { isEmpty } from "lodash";
-import React, { useState } from "react";
-import { ReactComponent as CloseIcon } from "../../../../assets/images/close_delete.svg";
-import { AsyncState } from "../../../../state/types";
-import { FormContext } from "../../../components/forms/FormContext";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import Text from "../../../components/Text";
-import { Translation } from "../../../translations/types";
-import styles from "./EditRemoveAddFields.styles";
-
+import { Box, Button, Icon, Typography } from '@material-ui/core';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import { Form, Formik } from 'formik';
+import { isEmpty } from 'lodash';
+import React, { useState } from 'react';
+import { ReactComponent as CloseIcon } from '../../../../assets/images/close_delete.svg';
+import { AsyncState } from '../../../../state/types';
+import { FormContext } from '../../../components/forms/FormContext';
+import FormMessage from '../../../components/forms/FormMessage';
+import FormProgress from '../../../components/forms/FormProgress';
+import Text from '../../../components/Text';
+import { Translation } from '../../../translations/types';
+import styles from './EditRemoveAddFields.styles';
 
 interface OwnProps {
-  canUpdateCompany: boolean;
-  noValueLabel: Translation;
-  addLabel: Translation;
-  editLabel: Translation;
-  title: Translation;
-  placeholder: string;
-  fields: any[];
-  saveChanges: (fields) => void;
-  asyncState: AsyncState;
+  canUpdateCompany: boolean
+  noValueLabel: Translation
+  addLabel: Translation
+  editLabel: Translation
+  title: Translation
+  placeholder: string
+  fields: any[]
+  saveChanges: (fields) => void
+  asyncState: AsyncState
 }
 
 type Props = OwnProps;
@@ -43,7 +42,6 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   const [values, saveValues] = useState(fields);
   const [isAdding, toggleAdd] = useState(false);
 
-
   const handleRemove = (idx) => {
     saveValues(values.filter((s, sidx) => idx !== sidx));
   };
@@ -59,13 +57,13 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   };
 
   const handleAdd = () => {
-    saveValues(values.concat([""]));
+    saveValues(values.concat(['']));
   };
 
   const handleOpenEdit = () => {
     toggleAdd(true);
     if (isEmpty(values)) {
-      saveValues(values.concat([""]));
+      saveValues(values.concat(['']));
     }
   };
 
@@ -144,16 +142,16 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
         <Typography variant="h6" className={classes.title}>
           <Text message={title} />
         </Typography>
-        {canUpdateCompany &&
-          <Button
+        {canUpdateCompany
+          && <Button
             variant="text"
             color="primary"
             onClick={!isAdding ? handleOpenEdit : handleAdd}
             id="EditRemoveAddFields-add"
             className={classes.addButton}
           >
-            {(isAdding || isEmpty(values)) &&
-              <Icon style={{ marginRight: "10px" }}>
+            {(isAdding || isEmpty(values))
+              && <Icon style={{ marginRight: '10px' }}>
                 <AddCircleOutlineOutlinedIcon />
               </Icon>
             }
@@ -168,8 +166,8 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
           <Text message={input} />
         </Typography>
       ))}
-      {isEmpty(fields) && !isAdding &&
-        <Typography variant="subtitle1" className={classes.title}>
+      {isEmpty(fields) && !isAdding
+        && <Typography variant="subtitle1" className={classes.title}>
           <Text translation={noValueLabel} />
         </Typography>
       }

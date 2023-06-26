@@ -1,29 +1,29 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../state/reducers";
-import { documentVersionPath } from "../document.revision/utils/paths";
-import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";
-import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../state/reducers';
+import { documentVersionPath } from '../document.revision/utils/paths';
+import DocumentRevisionCreateContainer from './DocumentRevisionCreate.container';
+import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 
-export type DocumentCloneType = "none" | "newVersion" | "newOutput";
+export type DocumentCloneType = 'none' | 'newVersion' | 'newOutput';
 
 export enum DocumentCloneTypeOptions {
-  none = "none",
-  newVersion = "newVersion",
-  newOutput = "newOutput",
+  none = 'none',
+  newVersion = 'newVersion',
+  newOutput = 'newOutput',
 }
 
 interface OwnProps {
-  documentRevision: DocumentRevision;
-  type: DocumentCloneType;
-  isNewVersion: boolean;
+  documentRevision: DocumentRevision
+  type: DocumentCloneType
+  isNewVersion: boolean
 }
 
 interface StateProps {
-  disableCreateNewVersion: boolean;
+  disableCreateNewVersion: boolean
 }
 
 export type CloneContainerProps = OwnProps & StateProps;
@@ -39,8 +39,8 @@ export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   isNewVersion,
 }) => {
   const redirect = (
-    ((type === "newVersion") && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true)) ||
-    ((type === "newOutput") && !canCreateOutput(documentRevision))
+    ((type === 'newVersion') && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true))
+    || ((type === 'newOutput') && !canCreateOutput(documentRevision))
   );
 
   if (redirect) {

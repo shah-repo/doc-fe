@@ -1,28 +1,28 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import cx from "classnames";
-import { Form } from "formik";
-import { isEmpty } from "lodash";
-import React, { Fragment } from "react";
-import { ReactComponent as MigrationIcon } from "../../../../../../src/assets/images/migration.svg";
-import { DocumentTypeByIdForm } from "../../../../../state/ducks/documentRevisions/documentType/types";
-import { AsyncState, AsyncStatus } from "../../../../../state/types";
-import CircularFormProgress from "../../../../components/forms/CircularFormProgress";
-import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
-import Text from "../../../../components/Text";
-import { FBButton, FBSchemaProps } from "../../../../form.builder";
-import useStyles from "./ChangeDocumentForm.styles";
-import { determineLabel, toFieldsOptions, toFormOptions } from "./utils/transform";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import cx from 'classnames';
+import { Form } from 'formik';
+import { isEmpty } from 'lodash';
+import React, { Fragment } from 'react';
+import { ReactComponent as MigrationIcon } from '../../../../../../src/assets/images/migration.svg';
+import { DocumentTypeByIdForm } from '../../../../../state/ducks/documentRevisions/documentType/types';
+import { AsyncState, AsyncStatus } from '../../../../../state/types';
+import CircularFormProgress from '../../../../components/forms/CircularFormProgress';
+import AutocompleteField from '../../../../components/forms/fields/Autocomplete/Autocomplete';
+import Text from '../../../../components/Text';
+import { FBButton, FBSchemaProps } from '../../../../form.builder';
+import useStyles from './ChangeDocumentForm.styles';
+import { determineLabel, toFieldsOptions, toFormOptions } from './utils/transform';
 
 interface Props {
-  availableForms: DocumentTypeByIdForm[];
-  handleFormChange: (value) => void;
-  availableFields: FBSchemaProps[];
-  sourceSchema: FBSchemaProps[];
-  updateFormAsyncState: AsyncState;
-  isDialogOpen: boolean;
-  openDialog: () => void;
-  closeDialog: () => void;
+  availableForms: DocumentTypeByIdForm[]
+  handleFormChange: (value) => void
+  availableFields: FBSchemaProps[]
+  sourceSchema: FBSchemaProps[]
+  updateFormAsyncState: AsyncState
+  isDialogOpen: boolean
+  openDialog: () => void
+  closeDialog: () => void
 }
 
 function renderFields(availableFields: FBSchemaProps[], sourceSchema: FBSchemaProps[]) {
@@ -34,7 +34,7 @@ function renderFields(availableFields: FBSchemaProps[], sourceSchema: FBSchemaPr
         name={String(field.name)}
         label={String(label)}
         autocompleteProps={{
-          id: "formMigrationField",
+          id: 'formMigrationField',
           isClearable: true,
         }}
         options={toFieldsOptions(field, sourceSchema)} />
@@ -85,7 +85,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
                 size="sm"
                 label="common.select.migration.form"
                 autocompleteProps={{
-                  id: "changeDocumentForm",
+                  id: 'changeDocumentForm',
                 }}
                 options={toFormOptions(availableForms)}
                 onChange={handleFormChange}

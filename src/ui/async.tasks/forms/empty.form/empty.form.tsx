@@ -1,10 +1,10 @@
-import { Box, Button } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { styles } from "./empty.form.styles";
+import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../components/Text';
+import { styles } from './empty.form.styles';
 
 interface Props {
-  handleEmptyFormSubmit: () => void;
+  handleEmptyFormSubmit: () => void
 }
 const EmptyAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handleEmptyFormSubmit,
@@ -18,7 +18,7 @@ const EmptyAsyncTaskPresenter: React.FunctionComponent<Props> = ({
           variant="contained"
           color="secondary"
         >
-          <Text translation={"common.submit"} />
+          <Text translation="common.submit" />
         </Button>
       </Box>
     </Box>

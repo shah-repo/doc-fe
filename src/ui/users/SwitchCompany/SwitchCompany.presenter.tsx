@@ -1,10 +1,10 @@
-import * as React from "react";
-import Text from "../../components/Text";
-import rowstyle from "./SwitchCompany.module.css";
-import { styles } from "./SwitchCompany.styles";
+import * as React from 'react';
+import Text from '../../components/Text';
+import rowstyle from './SwitchCompany.module.css';
+import { styles } from './SwitchCompany.styles';
 
 interface Props {
-  numberOfCompanies: number;
+  numberOfCompanies: number
 }
 
 const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numberOfCompanies }) => {
@@ -18,7 +18,7 @@ const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numb
         <div className={classes.subtitle}>
           <Text translation="company.switch.subtitle" />
         </div>
-        <div className={numberOfCompanies > 5 ? rowstyle.customRows : ""}>
+        <div className={numberOfCompanies > 5 ? rowstyle.customRows : ''}>
           {children}
         </div>
       </div>

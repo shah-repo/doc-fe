@@ -1,11 +1,11 @@
-import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
-import { GridCellProps } from "@progress/kendo-react-grid";
-import { get } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../kendo/helpers";
-import Tooltip from "../kendo/Tooltip";
-import { styles } from "./ActiveDropdown.style";
+import { DropDownList } from '@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList';
+import { GridCellProps } from '@progress/kendo-react-grid';
+import { get } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { DisplayText, TranslatedText } from '../kendo/helpers';
+import Tooltip from '../kendo/Tooltip';
+import { styles } from './ActiveDropdown.style';
 
 export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   dataItem,
@@ -30,8 +30,8 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   ];
   const isEdit = dataItem.inEdit;
   const disabled = dataItem.isNewRecord || false;
-  const formattedValue = get(dataItem, field || "");
-  if (rowType === "groupHeader") {
+  const formattedValue = get(dataItem, field || '');
+  if (rowType === 'groupHeader') {
     return null;
   }
   const classes = styles();
@@ -47,8 +47,8 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
       value: e.target.value.value,
     });
   };
-  field = field || "";
-  const dataValue = dataItem[field] === null ? "" : dataItem[field];
+  field = field || '';
+  const dataValue = dataItem[field] === null ? '' : dataItem[field];
   const dropDownValue = intl.formatMessage({
     id: TranslatedText[dataValue ? DisplayText.ACTIVE
       : DisplayText.INACTIVE],
@@ -74,7 +74,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
       ) : (
         <div className={classes.topButton}>
           {dropDownValue}
-          <span className={`${classes.dot} ${classes[formattedValue]}`}></span>
+          <span className={`${classes.dot} ${classes[formattedValue]}`} />
           <Tooltip customClass={classes.value} data={formattedValue} />
         </div>
       )}

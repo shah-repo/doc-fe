@@ -1,10 +1,10 @@
-import { isEmpty } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBMediaAlbumProps, FBMediaAlbumState, FBWorkspaceModeOptions } from "..";
+import { isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBMediaAlbumProps, FBMediaAlbumState, FBWorkspaceModeOptions } from '..';
 
 export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     onClick,
@@ -13,7 +13,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     collection = [],
     hiddenContainer,
     actionsDisabled,
-    title = "",
+    title = '',
     mode,
     name,
     uploadDisabled,
@@ -26,19 +26,19 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
 
     // Handle mode
     setMediaMode = () => {
-      const mode = mediaAlbumState?.mode === "carousel" ? "gallery" : "carousel";
+      const mode = mediaAlbumState?.mode === 'carousel' ? 'gallery' : 'carousel';
       mediaAlbumState?.setMode(mode);
     };
 
     useObserver(() => {
       mode = mediaAlbumState?.mode;
-      uploadDisabled = formState?.locked.get(name || "")?.locked;
-      title = (mode === "carousel")
+      uploadDisabled = formState?.locked.get(name || '')?.locked;
+      title = (mode === 'carousel')
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
-        : "";
-      hiddenContainer = Boolean((workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
-        workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW || actionsDisabled)
-         && isEmpty(collection)
+        : '';
+      hiddenContainer = Boolean((workspaceMode === FBWorkspaceModeOptions.PREVIEW
+        || workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW || actionsDisabled)
+         && isEmpty(collection),
       );
     });
 
@@ -61,7 +61,6 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     if (fileUploadEl) {
       fileUploadEl.onclick = registerCancel;
     }
-
 
     function registerCancel() {
       document.body.onfocus = removeLock;

@@ -5,27 +5,27 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { withStyles, WithStyles } from "@material-ui/core/styles";
-import React from "react";
-import { Nullable } from "../../state/ducks/common/types";
-import UserProfileContainer from "../user.management/profile/UserProfile.container";
-import styles from "./NavigationProfile.styles";
-import UserAvatar from "./UserMenu/UserAvatar";
-import UserMenu from "./UserMenu/UserMenu.container";
+} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { Nullable } from '../../state/ducks/common/types';
+import UserProfileContainer from '../user.management/profile/UserProfile.container';
+import styles from './NavigationProfile.styles';
+import UserAvatar from './UserMenu/UserAvatar';
+import UserMenu from './UserMenu/UserMenu.container';
 
 interface Props extends WithStyles<typeof styles> {
-  email: string;
-  name: string;
-  closeUserProfile: () => void;
-  showUserProfile: boolean;
-  avatar: Nullable<string>;
-  initialColor: string;
-  handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  anchorEl: Nullable<HTMLElement>;
-  handleCloseMenu: () => void;
+  email: string
+  name: string
+  closeUserProfile: () => void
+  showUserProfile: boolean
+  avatar: Nullable<string>
+  initialColor: string
+  handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
+  anchorEl: Nullable<HTMLElement>
+  handleCloseMenu: () => void
 }
 
 const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
@@ -54,7 +54,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         }
         classes={{ root: classes.headerButton }}
       >
-        <List style={{ width: "98%" }}>
+        <List style={{ width: '98%' }}>
           <ListItem style={{ padding: 0 }}>
             <ListItemAvatar>
               <UserAvatar {...{ avatar, initialColor, name }} />

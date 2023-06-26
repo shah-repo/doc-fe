@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { filter, get, isEmpty, join, map, union } from "lodash";
-import { reaction, toJS } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from "..";
-import { companySelectors } from "../../../state/ducks/company";
-import { toastError } from "../../components/notifications";
+import { filter, get, isEmpty, join, map, union } from 'lodash';
+import { reaction, toJS } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from '..';
+import { companySelectors } from '../../../state/ducks/company';
+import { toastError } from '../../components/notifications';
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     mediaAlbumFieldState,
@@ -24,8 +24,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     removeMedia,
     editorConfig,
     index,
-    name = "",
-    qrValue = "",
+    name = '',
+    qrValue = '',
     mode,
     type,
     fieldType,
@@ -34,9 +34,9 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
   }: T) => {
 
     const { workspaceState, formState, mediaAlbumState, dialogState } = FB.useStores();
-    const { document: { id = "" } = {} } = workspaceState || {};
+    const { document: { id = '' } = {} } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) || editorConfig;
-    const ids = map(formValue, "id");
+    const ids = map(formValue, 'id');
     const redlineActive = useSelector(companySelectors.getRedlineActive);
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState, formValue);
 
@@ -55,7 +55,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 
     // Handle mode
     setMediaFieldMode = () => {
-      const mode = mediaAlbumFieldState?.mode === "qr" ? "media" : "qr";
+      const mode = mediaAlbumFieldState?.mode === 'qr' ? 'media' : 'qr';
       mediaAlbumFieldState?.setMode(mode);
     };
 
@@ -75,27 +75,27 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 
     // Handle image upload
     onFileUploadChange = (event: React.FormEvent<HTMLInputElement>) => {
-      const eventFiles = get(event, "currentTarget.files", []);
+      const eventFiles = get(event, 'currentTarget.files', []);
       const invalidFiles: string[] = [];
       const duplicateNamedFiles: string[] = [];
 
       const validFiles: File[] = filter(eventFiles, (file) => {
-        const fileName = get(file, "name", "");
-        const name = fileName.split(".")[0];
+        const fileName = get(file, 'name', '');
+        const name = fileName.split('.')[0];
 
         const fileNameAlreadyExists = mediaAlbumFieldState?.existingFileNames.includes(name);
-        const type = fileName.split(".").pop();
-        (type === "doc") && (invalidFiles.push(fileName));
+        const type = fileName.split('.').pop();
+        (type === 'doc') && (invalidFiles.push(fileName));
         (fileNameAlreadyExists) && (duplicateNamedFiles.push(fileName));
-        return type !== "doc" && !fileNameAlreadyExists;
+        return type !== 'doc' && !fileNameAlreadyExists;
       });
 
       if (!isEmpty(invalidFiles)) {
-        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
+        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ', ')}`);
       }
 
       if (!isEmpty(duplicateNamedFiles)) {
-        toastError(`Files with duplicate names are not accepted. Invalid files: ${join(duplicateNamedFiles, ", ")}`);
+        toastError(`Files with duplicate names are not accepted. Invalid files: ${join(duplicateNamedFiles, ', ')}`);
       }
       mediaAlbumFieldState?.upload(validFiles);
     };
@@ -106,7 +106,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         (value) => {
           const syncIds = value;
           const syncValue = map(syncIds, (syncFile) => syncFile.id ? toJS(syncFile.id) : syncFile);
-          const filesIds = map(mediaAlbumFieldState?.files, "id");
+          const filesIds = map(mediaAlbumFieldState?.files, 'id');
           const addedFiles: string[] = [];
 
           map(union(filesIds, syncValue), (fileId) => {
@@ -119,7 +119,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           });
           if (addedFiles.length === 0) { return; }
           mediaAlbumFieldState?.getFiles(addedFiles);
-        }
+        },
       );
       return () => {
         if (!mediaAlbumFieldState?.previewOnlyIds.length) {
@@ -141,7 +141,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         if (!data) { return; }
         mediaAlbumFieldState?.download(data, dialogState?.open);
         mediaAlbumFieldState!.fromUpload = true;
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -155,7 +155,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           return;
         }
         mediaAlbumFieldState?.getAllAttachments(id);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -179,7 +179,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
               workspaceState?.saveDocRev(formState?.getValues());
             }
           }
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -189,7 +189,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         return ![FBWorkspaceModeOptions.DESIGN, FBWorkspaceModeOptions.FORM]
           .includes(workspaceState?.mode as FBWorkspaceModeOptions);
       }
-      return workspaceState?.mode === "preview" && workspaceState?.isOutput;
+      return workspaceState?.mode === 'preview' && workspaceState?.isOutput;
     }
     useObserver(() => {
       mode = mediaAlbumFieldState?.mode;
@@ -198,7 +198,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     });
 
     if (isPreview() || !isEmpty(collection) || !isEmpty(ids)) {
-      mediaAlbumFieldState?.setMode("media");
+      mediaAlbumFieldState?.setMode('media');
     }
     actionsDisabled = ((reviseDisabled && workspaceState?.isRevised) || isPreview()) && !redlineActive;
 

@@ -1,16 +1,16 @@
-import { Box, Typography } from "@material-ui/core";
-import React, { useMemo } from "react";
-import { trainingActions } from "../../../../state/ducks/training";
-import { TrainingPlanTransition } from "../../../../state/ducks/training/types";
-import { EffectiveDateFormValues } from "../../../change.request/form/types";
-import Text from "../../../components/Text";
-import { PasswordFormValues } from "../../../components/transitionDialog/types";
-import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { TrainingControlProps } from "../../utils/types";
-import TrainingDialog from "./dialog/TrainingDialog";
+import { Box, Typography } from '@material-ui/core';
+import React, { useMemo } from 'react';
+import { trainingActions } from '../../../../state/ducks/training';
+import { TrainingPlanTransition } from '../../../../state/ducks/training/types';
+import { EffectiveDateFormValues } from '../../../change.request/form/types';
+import Text from '../../../components/Text';
+import { PasswordFormValues } from '../../../components/transitionDialog/types';
+import { styles as AutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import { TrainingControlProps } from '../../utils/types';
+import TrainingDialog from './dialog/TrainingDialog';
 
 type Props = TrainingControlProps;
 
@@ -24,8 +24,8 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   const async = useAsync({ onSuccess: dialog.close });
 
   const trainingRecord = useMemo(() =>
-    dataProp &&
-    dataProp.find((record) => !record.completedAt && record.isValid)
+    dataProp
+    && dataProp.find((record) => !record.completedAt && record.isValid)
   , [dataProp]);
 
   if (!trainingRecord) {
@@ -33,7 +33,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   }
 
   const transition = TrainingPlanTransition.Complete;
-  const label = "training.complete";
+  const label = 'training.complete';
 
   const openDialog = () => {
     async.reset();

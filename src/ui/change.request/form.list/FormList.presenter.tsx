@@ -1,25 +1,25 @@
-import { Button, Dialog, Grid } from "@material-ui/core";
-import React from "react";
-import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
-import ExportListIcon from "../../components/common/kendo/ExportListIcon";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import Text from "../../components/Text";
-import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
-import { DialogHandler } from "../../hooks/useDialog";
-import { TemplateOption } from "../form/types";
-import FormListContent from "./dialog/FormListContent";
-import FormListHeader from "./dialog/FormListHeader";
-import { styles } from "./FormList.styles";
+import { Button, Dialog, Grid } from '@material-ui/core';
+import React from 'react';
+import { HeaderTableType } from '../../../state/ducks/documentRevisions/types';
+import ExportListIcon from '../../components/common/kendo/ExportListIcon';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import Text from '../../components/Text';
+import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
+import { DialogHandler } from '../../hooks/useDialog';
+import { TemplateOption } from '../form/types';
+import FormListContent from './dialog/FormListContent';
+import FormListHeader from './dialog/FormListHeader';
+import { styles } from './FormList.styles';
 
 interface Props {
-  templateOptions: TemplateOption[];
-  dialog: DialogHandler;
-  handleCreateButton(): void;
-  handleTemplateSelection: (option: TemplateOption) => void;
-  headers: HeaderTableType[];
-  data: any[];
-  exportDialog: DialogHandler;
-  isGrouped: boolean;
+  templateOptions: TemplateOption[]
+  dialog: DialogHandler
+  handleCreateButton(): void
+  handleTemplateSelection: (option: TemplateOption) => void
+  headers: HeaderTableType[]
+  data: any[]
+  exportDialog: DialogHandler
+  isGrouped: boolean
 }
 
 const FormListPresenter: React.FunctionComponent<Props> = ({
@@ -58,7 +58,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           />
           <Button
             id="ChangeRequest-create"
-            data-cy={"change.request.create"}
+            data-cy="change.request.create"
             onClick={handleCreateButton}
             className={classes.createButton}
           >

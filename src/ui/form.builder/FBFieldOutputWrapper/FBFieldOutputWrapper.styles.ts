@@ -1,8 +1,8 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 interface StylesProps {
-  mt: number;
-  mb: number;
+  mt: number
+  mb: number
 }
 
 export default makeStyles((theme: Theme) =>
@@ -11,5 +11,5 @@ export default makeStyles((theme: Theme) =>
       marginTop: theme.spacing(mt),
       marginBottom: theme.spacing(mb),
     }),
-  })
+  }),
 );

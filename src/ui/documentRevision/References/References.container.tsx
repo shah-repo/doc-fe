@@ -1,6 +1,6 @@
-import React from "react";
-import ReferencesPresenter from "./References.presenter";
-import { ReferencesProps } from "./types";
+import React from 'react';
+import ReferencesPresenter from './References.presenter';
+import { ReferencesProps } from './types';
 
 const ReferencesContainer = ({
   selectedDocument,

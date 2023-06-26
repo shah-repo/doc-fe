@@ -1,6 +1,6 @@
-import { FBRangeValue } from "..";
+import { FBRangeValue } from '..';
 
 export interface FBOutOfRangeProps {
-  pass?: FBRangeValue;
-  parentName?: string;
+  pass?: FBRangeValue
+  parentName?: string
 }

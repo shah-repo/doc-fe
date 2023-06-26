@@ -1,11 +1,11 @@
-import { Grid, Typography } from "@material-ui/core";
-import React from "react";
-import Text from "../../components/Text";
-import { SummaryBaseProps } from "./types";
+import { Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import Text from '../../components/Text';
+import { SummaryBaseProps } from './types';
 
 type Props = SummaryBaseProps;
 
-const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-", labelStyle, valueStyle }) => (
+const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = '-', labelStyle, valueStyle }) => (
   <Grid item={true} xs={12}>
     <Grid container={true} spacing={1}>
       <Grid item={true} xs={12}>

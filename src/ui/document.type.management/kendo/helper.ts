@@ -1,13 +1,13 @@
-import { toastError } from "../../components/notifications";
-import { parseJSON } from "../transform";
+import { toastError } from '../../components/notifications';
+import { parseJSON } from '../transform';
 
 const checkIfJSONObject = (value: string, title: string) => {
-  if (value === "") {
+  if (value === '') {
     return value;
   }
   try {
     const o = parseJSON(value);
-    if (o && typeof o === "object") {
+    if (o && typeof o === 'object') {
       return o;
     }
   }
@@ -17,4 +17,3 @@ const checkIfJSONObject = (value: string, title: string) => {
   }
 };
 export default checkIfJSONObject;
-

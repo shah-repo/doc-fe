@@ -4,28 +4,28 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
+} from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
 import {
   getFormattedDateString,
   MomentFormats,
-} from "../../../../common/utils/date";
-import { Nullable } from "../../../../state/ducks/common/types";
-import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
-import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
-import Text from "../../../components/Text";
-import { styles } from "./TrainingItem.styles";
+} from '../../../../common/utils/date';
+import { Nullable } from '../../../../state/ducks/common/types';
+import { TrainingStatusTypes } from '../../../../state/ducks/dashboard.new/training.stats/types';
+import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
+import Text from '../../../components/Text';
+import { styles } from './TrainingItem.styles';
 
 interface TrainingItemProps {
-  id: string;
-  avatar: Nullable<string>;
-  name: string;
-  initialColor: string;
-  documentId: string;
-  title: string;
-  status: string;
-  date: string;
+  id: string
+  avatar: Nullable<string>
+  name: string
+  initialColor: string
+  documentId: string
+  title: string
+  status: string
+  date: string
 }
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
@@ -48,7 +48,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     status,
     documentId,
     title,
-    date
+    date,
   ) => (
     <>
       <Grid container className={classes.header}>
@@ -84,7 +84,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             variant="body2"
             color="textPrimary"
           >
-            <Text translation={isOverdue ? "common.overdue" : "common.duein7days"} />
+            <Text translation={isOverdue ? 'common.overdue' : 'common.duein7days'} />
           </Typography>
         </Grid>
       </Grid>
@@ -110,7 +110,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.docIdAndTitle}
             color="textPrimary"
             dangerouslySetInnerHTML={{ __html: title }}
-          ></Typography>
+           />
         </Grid>
       </Grid>
       <Grid
@@ -126,7 +126,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.date}
             color="textPrimary"
           >
-            <Text translation="common.due.date" />:{" "}
+            <Text translation="common.due.date" />:{' '}
             {getFormattedDateString(date, MomentFormats.BriefDateTime)}
           </Typography>
         </Grid>
@@ -145,7 +145,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           status,
           documentId,
           title,
-          date
+          date,
         )}
       />
     </ListItem>

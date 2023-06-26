@@ -1,10 +1,10 @@
-import { Button, createStyles, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
+import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
+import React from 'react';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
-  clearFilter?: () => void;
+  clearFilter?: () => void
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -12,8 +12,8 @@ const styles = makeStyles((theme: Theme) =>
     clearButton: {
       margin: theme.spacing(0, 2, 0, 0),
       backgroundColor: Colors.white,
-      borderRadius: "100px", // TODO: Move in specific file for border radius
-      textTransform: "none",
+      borderRadius: '100px', // TODO: Move in specific file for border radius
+      textTransform: 'none',
       fontSize: 12,
       fontWeight: 600,
       color: Colors.navy,

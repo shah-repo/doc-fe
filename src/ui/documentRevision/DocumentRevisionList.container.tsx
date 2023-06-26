@@ -1,23 +1,23 @@
-import { List } from "@material-ui/core";
-import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Nullable } from "../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
-import { styles } from "./DocumentRevisionList.container.styles";
-import DocumentRevisionListPresenter from "./DocumentRevisionList.presenter";
-import { checkIsDocumentPO } from "./helpers/checkDocumentGroup";
+import { List } from '@material-ui/core';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Nullable } from '../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
+import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import { styles } from './DocumentRevisionList.container.styles';
+import DocumentRevisionListPresenter from './DocumentRevisionList.presenter';
+import { checkIsDocumentPO } from './helpers/checkDocumentGroup';
 
 interface OwnProps {
-  documentRevisions: DocumentRevision[];
-  documentId: string;
-  docId: string;
-  selectedDocumentRevision: Nullable<string>;
-  documentRevisionId: Nullable<string>;
-  documentTypeId?: string;
-  isInlineApproval: boolean;
-  isRecord: boolean;
+  documentRevisions: DocumentRevision[]
+  documentId: string
+  docId: string
+  selectedDocumentRevision: Nullable<string>
+  documentRevisionId: Nullable<string>
+  documentTypeId?: string
+  isInlineApproval: boolean
+  isRecord: boolean
 }
 
 type DocumentRevisionListContainerProps = OwnProps;
@@ -44,7 +44,7 @@ DocumentRevisionListContainerProps
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
 
-  const documentTypeGroupOptions = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.groupOptions;
+  const documentTypeGroupOptions = useSelector(documentTypeSelectors.byId)[documentTypeId || '']?.groupOptions;
   const isDocumentPO = checkIsDocumentPO(documentTypeGroupOptions);
 
   return (
@@ -65,7 +65,7 @@ DocumentRevisionListContainerProps
                 isRecord,
               }}
             />
-          )
+          ),
           )
         }
       </List>

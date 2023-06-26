@@ -1,12 +1,12 @@
-import { cloneDeep } from "lodash";
-import { ApplicationState } from "../../reducers";
-import { getAsyncState } from "../../tests/factories";
-import initialStoreState from "../../tests/helpers/initialStoreState";
-import selectors from "./selectors";
-import { getDocument } from "./tests/factories";
-import { DocumentsAllIdsState, DocumentsByIdState, DocumentsReviewIdsState } from "./types";
+import { cloneDeep } from 'lodash';
+import { ApplicationState } from '../../reducers';
+import { getAsyncState } from '../../tests/factories';
+import initialStoreState from '../../tests/helpers/initialStoreState';
+import selectors from './selectors';
+import { getDocument } from './tests/factories';
+import { DocumentsAllIdsState, DocumentsByIdState, DocumentsReviewIdsState } from './types';
 
-describe("document selectors tests", () => {
+describe('document selectors tests', () => {
   let state: ApplicationState;
   const documents = [getDocument(), getDocument()];
   const allIds: DocumentsAllIdsState = [documents[0].id, documents[1].id];
@@ -26,29 +26,29 @@ describe("document selectors tests", () => {
     state.documents.loadReviewListAsyncInfo = getAsyncState();
   });
 
-  it("getDocumentsList", () => {
+  it('getDocumentsList', () => {
     expect(selectors.getDocumentsList(state)).toEqual(documents);
   });
 
-  it("getDocumentsToReviewList", () => {
+  it('getDocumentsToReviewList', () => {
     expect(selectors.getDocumentsToReviewList(state)).toEqual([
       documents[1],
     ]);
   });
 
-  it("getDocument", () => {
+  it('getDocument', () => {
     expect(selectors.getDocument(state, documents[0].id)).toEqual(documents[0]);
   });
 
-  it("getLoadAsyncState", () => {
+  it('getLoadAsyncState', () => {
     expect(selectors.getLoadAsyncState(state)).toBe(state.documents.loadAsyncInfo);
   });
 
-  it("getLoadListAsyncState", () => {
+  it('getLoadListAsyncState', () => {
     expect(selectors.getLoadListAsyncState(state)).toBe(state.documents.loadListAsyncInfo);
   });
 
-  it("getLoadReviewListAsyncState", () => {
+  it('getLoadReviewListAsyncState', () => {
     expect(selectors.getLoadReviewListAsyncState(state)).toBe(state.documents.loadReviewListAsyncInfo);
   });
 });

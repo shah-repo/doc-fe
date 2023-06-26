@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { InDraftAROption, TemplateOption } from "../../../../change.request/form/types";
-import { Dialog } from "../../../../components/dialogs";
-import { Autocomplete, FormField } from "../../../../components/forms/fields-next";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import useStyles from "./ApproveAndRelease.styles";
+import React, { useState } from 'react';
+import { InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
+import { Dialog } from '../../../../components/dialogs';
+import { Autocomplete, FormField } from '../../../../components/forms/fields-next';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import useStyles from './ApproveAndRelease.styles';
 
 type Option = TemplateOption & InDraftAROption;
 
 interface Props {
-  title: string;
-  loading: boolean;
-  handler: DialogHandler;
-  options: TemplateOption[] | InDraftAROption[];
-  confirmLabel: string;
-  onConfirm: (option: Option) => void;
+  title: string
+  loading: boolean
+  handler: DialogHandler
+  options: TemplateOption[] | InDraftAROption[]
+  confirmLabel: string
+  onConfirm: (option: Option) => void
 }
 
 const SelectionForm: React.FC<Props> = ({

@@ -1,13 +1,13 @@
-import { find, isEmpty, some } from "lodash";
-import { SMFormState } from "../../../App";
-import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
-import { FBSchemaProps } from "../../form.builder";
-import { checkIsDocumentRecord } from "./checkDocumentGroup";
+import { find, isEmpty, some } from 'lodash';
+import { SMFormState } from '../../../App';
+import { DocumentRevision, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalStatus } from '../../../state/ducks/documents/types';
+import { FBSchemaProps } from '../../form.builder';
+import { checkIsDocumentRecord } from './checkDocumentGroup';
 
 const getInlineApprovalFields = (schema?: FBSchemaProps[]) => {
   if (!schema) { return []; }
-  return schema.filter((field) => (!field.deleted && field.type === "inlineapproval" as string));
+  return schema.filter((field) => (!field.deleted && field.type === 'inlineapproval' as string));
 };
 
 export const isFormWithInlineApproval = (schema?: FBSchemaProps[]) => {
@@ -26,7 +26,7 @@ export const isInlineFormApproved = (documentRevision, formState, schema) => {
 const isInlineSectionApproved = (documentRevision, formState, schema?: FBSchemaProps[]) => {
   if (!schema) { return false; }
   const inlineApprovalFields = getInlineApprovalFields(schema);
-  return inlineApprovalFields?.every((field) => isSectionApproved(field.name || "", documentRevision, formState));
+  return inlineApprovalFields?.every((field) => isSectionApproved(field.name || '', documentRevision, formState));
 };
 
 /** Function that checks if a form section is approved.
@@ -35,9 +35,9 @@ const isInlineSectionApproved = (documentRevision, formState, schema?: FBSchemaP
 const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision, formState: SMFormState) => {
   const fieldApprovals = getFieldApprovals(fieldName, documentRevision);
   if (
-    documentRevision?.version > 1 &&
-    isEmpty(fieldApprovals) &&
-    Boolean(formState?.getValues()?.formInput?.[fieldName])
+    documentRevision?.version > 1
+    && isEmpty(fieldApprovals)
+    && Boolean(formState?.getValues()?.formInput?.[fieldName])
   ) {
     return some(fieldApprovals, (approval) => approval.status === ApprovalStatus.Approved)
     || !fieldApprovals?.length;

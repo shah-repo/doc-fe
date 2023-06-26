@@ -1,7 +1,7 @@
-import { chain, set } from "lodash";
-import { KendoColumn } from "../../components/common/kendo/types";
+import { chain, set } from 'lodash';
+import { KendoColumn } from '../../components/common/kendo/types';
 
-export const removeLastCharacterIfNotAlphaNumeric = (text = "") => {
+export const removeLastCharacterIfNotAlphaNumeric = (text = '') => {
   if (!text) {
     return text;
   }
@@ -23,6 +23,10 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
     .value();
   fields.forEach((field) => {
     set(schemaObjFieldsObj, field.toString(), true);
+    // To show po amount requires currncy value
+    if (field.toString() === 'precalc.po_amount') {
+      set(schemaObjFieldsObj, 'precalc.po_currency', true);
+    }
   });
   return [schemaObjFieldsObj];
 };

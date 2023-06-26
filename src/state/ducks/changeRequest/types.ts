@@ -1,143 +1,143 @@
-import { FBTaskItem } from "../../../ui/form.builder";
-import { Attachment } from "../attachments/types";
-import { AuditActionPayload } from "../audit/types";
-import { Approval, Id, Owner, User } from "../common/types";
-import { DocumentType } from "../documentRevisions/documentType/types";
-import { FBDocumentRevisionProps } from "../documentRevisions/types";
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
+import { FBTaskItem } from '../../../ui/form.builder';
+import { Attachment } from '../attachments/types';
+import { AuditActionPayload } from '../audit/types';
+import { Approval, Id, Owner, User } from '../common/types';
+import { DocumentType } from '../documentRevisions/documentType/types';
+import { FBDocumentRevisionProps } from '../documentRevisions/types';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from './constants';
 
 export enum ChangeRequestStatus {
-  Approved = "APPROVED",
-  Closed = "CLOSED",
-  Draft = "DRAFT",
-  Implementation = "IMPLEMENTATION",
-  InReview = "IN_REVIEW",
-  Voided = "VOIDED",
+  Approved = 'APPROVED',
+  Closed = 'CLOSED',
+  Draft = 'DRAFT',
+  Implementation = 'IMPLEMENTATION',
+  InReview = 'IN_REVIEW',
+  Voided = 'VOIDED',
 }
 
 interface Justifications {
-  id?: string;
-  description?: string;
-  attachments: Attachment[];
+  id?: string
+  description?: string
+  attachments: Attachment[]
 }
 
 interface Assessment {
-  design: AssessmentItem;
-  process: AssessmentItem;
-  regulatory: AssessmentItem;
+  design: AssessmentItem
+  process: AssessmentItem
+  regulatory: AssessmentItem
 }
 
 interface AssessmentItem {
-  id?: string;
-  reasoning?: string | null;
-  attachments?: Attachment[] | null;
+  id?: string
+  reasoning?: string | null
+  attachments?: Attachment[] | null
 }
 
 interface ImplementationPlanTask {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: Date;
-  assigned?: Owner;
-  createdAt: string;
-  closeDate: Date;
-  status: string;
-  updatedAt: string;
-  closingNote: string | null;
+  id: string
+  title: string
+  description: string
+  dueDate: Date
+  assigned?: Owner
+  createdAt: string
+  closeDate: Date
+  status: string
+  updatedAt: string
+  closingNote: string | null
 }
 
 interface ImplementationPlan {
-  id: string;
-  tasks: ImplementationPlanTask[];
-  attachments: Attachment[];
+  id: string
+  tasks: ImplementationPlanTask[]
+  attachments: Attachment[]
 }
 
 // This needs to be properly cleaned up
 export interface ChangeRequest {
-  createdAt: string;
-  updatedAt?: string;
-  id: string;
-  crId: string;
-  ordinalNumber: number;
-  title: string;
-  description: string;
-  state: ChangeRequestStatus;
-  assessments: Assessment;
-  implementationPlan: ImplementationPlan;
-  justifications: Justifications;
-  effectiveDate: Date;
-  approvals: Approval[];
-  owner: Owner;
-  documentRevisions: any[];
-  closedAt: Date;
-  formInput?: Record<string, any>;
-  formDocument?: FBDocumentRevisionProps;
-  tasks?: FBTaskItem[];
-  documentType: DocumentType;
+  createdAt: string
+  updatedAt?: string
+  id: string
+  crId: string
+  ordinalNumber: number
+  title: string
+  description: string
+  state: ChangeRequestStatus
+  assessments: Assessment
+  implementationPlan: ImplementationPlan
+  justifications: Justifications
+  effectiveDate: Date
+  approvals: Approval[]
+  owner: Owner
+  documentRevisions: any[]
+  closedAt: Date
+  formInput?: Record<string, any>
+  formDocument?: FBDocumentRevisionProps
+  tasks?: FBTaskItem[]
+  documentType: DocumentType
 }
 
 export interface ChangeRequestEditRequestBody {
-  title?: string;
-  description?: string;
-  formInput?: Record<string, any>;
-  formDocument?: FBDocumentRevisionProps;
-  documentType?: Id;
+  title?: string
+  description?: string
+  formInput?: Record<string, any>
+  formDocument?: FBDocumentRevisionProps
+  documentType?: Id
 }
 
 export interface ChangeRequestSetAction {
-  type: typeof CHANGE_REQUEST_SET;
-  payload: ChangeRequest;
+  type: typeof CHANGE_REQUEST_SET
+  payload: ChangeRequest
 }
 
 export interface ChangeRequestListAction {
-  type: typeof CHANGE_REQUEST_LIST;
-  payload: ChangeRequest[];
+  type: typeof CHANGE_REQUEST_LIST
+  payload: ChangeRequest[]
 }
 
 export interface ChangeRequestsByIdState {
-  [key: string]: ChangeRequest;
+  [key: string]: ChangeRequest
 }
 
 export type ChangeRequestsAllIdsState = string[];
 
 export type ChangeRequestTransition =
-  "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
+  'approve' | 'reject' | 'to_review' | 'withdrawn' | 'submitted' | 'in_review' | 'closed';
 
 export interface ChangeRequestTransitionRequestBody {
-  password?: string;
-  effectiveDate?: string;
+  password?: string
+  effectiveDate?: string
 }
 
 export interface ChangeRequestTransitionResponse {
-  id: string;
-  crId: string;
-  title: string;
-  state: string;
+  id: string
+  crId: string
+  title: string
+  state: string
 }
 
 export interface ChangeRequestAvailableApprovers {
-  id: string;
-  user: User;
+  id: string
+  user: User
 }
 
 export interface ChangeRequestAvailableApproversResponse {
-  optionalApprovers: ChangeRequestAvailableApprovers[];
+  optionalApprovers: ChangeRequestAvailableApprovers[]
 }
 
 export interface ChangeRequestsApproversByIdState {
-  [key: string]: ChangeRequestAvailableApprovers;
+  [key: string]: ChangeRequestAvailableApprovers
 }
 
 export type ChangeRequestsApproversAllIdsState = string[];
 
 export interface ChangeRequestListApproversAction {
-  type: typeof CHANGE_REQUEST_LIST_APPROVERS;
-  payload: ChangeRequestAvailableApprovers[];
+  type: typeof CHANGE_REQUEST_LIST_APPROVERS
+  payload: ChangeRequestAvailableApprovers[]
 }
 
 export interface ChangeRequestAuditSetAction {
-  type: typeof CHANGE_REQUEST_AUDIT_SET;
-  payload: AuditActionPayload;
+  type: typeof CHANGE_REQUEST_AUDIT_SET
+  payload: AuditActionPayload
 }
 
 export type allIdsState = string[];

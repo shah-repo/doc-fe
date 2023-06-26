@@ -1,9 +1,9 @@
-import { mount } from "enzyme";
-import React from "react";
-import { act } from "react-dom/test-utils";
-import useDialog, { Dialog } from "./useDialog";
+import { mount } from 'enzyme';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
+import useDialog, { Dialog } from './useDialog';
 
-describe("useDialog hook tests", () => {
+describe('useDialog hook tests', () => {
   let dialog: Dialog;
 
   const TestComponent: React.FunctionComponent = () => {
@@ -15,11 +15,11 @@ describe("useDialog hook tests", () => {
     mount(<TestComponent />);
   });
 
-  it("has initial state", () => {
+  it('has initial state', () => {
     expect(dialog.isOpen).toBe(false);
   });
 
-  it("opens dialog", () => {
+  it('opens dialog', () => {
     act(() => {
       dialog.open();
     });
@@ -27,7 +27,7 @@ describe("useDialog hook tests", () => {
     expect(dialog.isOpen).toBe(true);
   });
 
-  it("closes dialog", () => {
+  it('closes dialog', () => {
     act(() => {
       dialog.open();
       dialog.close();

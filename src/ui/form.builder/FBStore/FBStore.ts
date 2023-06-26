@@ -1,9 +1,9 @@
-import { action, computed, observable, set } from "mobx";
-import { FBApprovalMatrixFieldData, FBAuditData } from "..";
-import { Approval } from "../../../state/ducks/common/types";
-import { SidebarType } from "../../documentRevision/Sidebar/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { action, computed, observable, set } from 'mobx';
+import { FBApprovalMatrixFieldData, FBAuditData } from '..';
+import { Approval } from '../../../state/ducks/common/types';
+import { SidebarType } from '../../documentRevision/Sidebar/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 // TODO: check with Z. Babic if we can avoid global store for reload
 // needs such as audit
@@ -18,13 +18,13 @@ class FBStore {
   public selectedApprover: Approval[] =[] ;
 
   @computed public get isHistoryTabSelected() {
-    return this.selectedTab === "history";
+    return this.selectedTab === 'history';
   }
   @action public setSelectedTab = (tab) => {
-    set(this, "selectedTab", tab);
+    set(this, 'selectedTab', tab);
   };
   @action public setPurchaseOrderValue = (value) => {
-    set(this, "purchaseOrderValue", value);
+    set(this, 'purchaseOrderValue', value);
   };
 
   @computed public get getSelectedTab() { return this.selectedTab; }

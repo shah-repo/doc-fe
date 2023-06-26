@@ -1,53 +1,53 @@
-import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
-import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
-import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import { changeRequestEditPath } from "../../../../change.request/utils/paths";
-import Text from "../../../../components/Text";
-import Colors from "../../../../layout/theme/utils/colors";
-import ApprovalTitle from "../../common/ApprovalTitle/presenter";
-import { getDocIcon } from "../../common/DocIcon";
-import DocId from "../../common/DocId/presenter";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { DocTypeGroups } from "../../common/types";
-import useStyles from "./approvalClosed.styles";
-import { HoverStyleChip } from "./HoverStyleChipApprovalClosed";
-import { NormalStyleChip } from "./NormalStyleChipApprovalClosed";
-import DismissAction from "../../common/DismissAction";
+import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as CloseSolidIcon } from '../../../../../assets/images/close_solid.svg';
+import { ReactComponent as CloseWhiteIcon } from '../../../../../assets/images/close_status_white.svg';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
+import { ReactComponent as PendingReviewIcon } from '../../../../../assets/images/pending_approval.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
+import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
+import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { changeRequestEditPath } from '../../../../change.request/utils/paths';
+import Text from '../../../../components/Text';
+import Colors from '../../../../layout/theme/utils/colors';
+import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import { getDocIcon } from '../../common/DocIcon';
+import DocId from '../../common/DocId/presenter';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { DocTypeGroups } from '../../common/types';
+import useStyles from './approvalClosed.styles';
+import { HoverStyleChip } from './HoverStyleChipApprovalClosed';
+import { NormalStyleChip } from './NormalStyleChipApprovalClosed';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  title: string;
-  arId: string;
-  arChangeRequestId: string;
-  arStatus: string;
-  timestamp: string;
+  id: string
+  type: string
+  title: string
+  arId: string
+  arChangeRequestId: string
+  arStatus: string
+  timestamp: string
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const ApprovalClosedPresenter: React.FC<Props> = ({
   id,
@@ -66,7 +66,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
-  const [viewHoverItem, setViewHoverItem] = React.useState("");
+  const [viewHoverItem, setViewHoverItem] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handleDismiss = () => {
@@ -94,7 +94,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
     setViewHoverItem(id);
   };
   const onMouseLeaveViewIcon = () => {
-    setViewHoverItem("");
+    setViewHoverItem('');
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -180,7 +180,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true}>
                   <Typography
                     component="span"

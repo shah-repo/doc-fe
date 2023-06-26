@@ -10,7 +10,7 @@ import Text from '../../../../components/Text';
 import { styles } from './ExportToEmailModal.styles';
 
 interface ExportToEmailModalProps {
-  value: string
+  value: boolean
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -33,7 +33,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps> = ({
       </Typography>
       <RadioGroup value={value} onChange={handleChange}>
         <FormControlLabel
-          value="true"
+          value={true}
           control={
             <Radio
               classes={{ root: classes.radio }}
@@ -49,7 +49,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps> = ({
           }
         />
         <FormControlLabel
-          value="false"
+          value={false}
           control={
             <Radio
               classes={{ root: classes.radio }}

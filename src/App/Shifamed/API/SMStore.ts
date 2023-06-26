@@ -1,9 +1,9 @@
-import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
-import { action, observable, set } from "mobx";
-import { apiClient, SMStoreError, SMStorePassword, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from "../..";
-import { encodeString } from "../../../common/utils/helpers";
-import { store } from "../../../state/store";
-import { toastError } from "../../../ui/components/notifications";
+import { first, get, has, isArray, isEmpty, isUndefined, join, template } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { apiClient, SMStoreError, SMStorePassword, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from '../..';
+import { encodeString } from '../../../common/utils/helpers';
+import { store } from '../../../state/store';
+import { toastError } from '../../../ui/components/notifications';
 
 class SMStore implements SMStoreProps {
   // MARK: @config
@@ -16,8 +16,8 @@ class SMStore implements SMStoreProps {
   @action public setData = <Data>(url: string, data: Data) => {
     if (isArray(data)) {
       this.data.set(url, observable.map(
-        (data as Data[]).map((rec: Data) => [get(rec, "id"), rec]),
-        { deep: false }
+        (data as Data[]).map((rec: Data) => [get(rec, 'id'), rec]),
+        { deep: false },
       ));
     } else {
       if (JSON.stringify(this.data.get(url)) === JSON.stringify(data)) {
@@ -34,26 +34,26 @@ class SMStore implements SMStoreProps {
 
   public get = <Data, Body>(
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
-  ) => this.start<Data, Body>("get", set, callback);
+    callback?: (data?: Data, error?: SMStoreError) => any,
+  ) => this.start<Data, Body>('get', set, callback);
 
   public post = <Data, Body>(
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
-  ) => this.start<Data, Body>("post", set, callback);
+    callback?: (data?: Data, error?: SMStoreError) => any,
+  ) => this.start<Data, Body>('post', set, callback);
 
   public patch = <Data, Body>(
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
-  ) => this.start<Data, Body>("patch", set, callback);
+    callback?: (data?: Data, error?: SMStoreError) => any,
+  ) => this.start<Data, Body>('patch', set, callback);
 
   private start = <Data, Body>(
     method: SMStoreRequestMethod,
     set: SMStoreRequestSet<Body>,
-    callback?: (data?: Data, error?: SMStoreError) => any
+    callback?: (data?: Data, error?: SMStoreError) => any,
   ) => {
     let urlStr = set.url;
-    const { urlValues, body, mapping = "" } = set;
+    const { urlValues, body, mapping = '' } = set;
 
     if (urlValues) {
       const urlTpl = template(urlStr);
@@ -61,7 +61,7 @@ class SMStore implements SMStoreProps {
     }
 
     if (!urlStr || isEmpty(urlStr)) {
-      return toastError("SMStore Error: Missing url in api call!");
+      return toastError('SMStore Error: Missing url in api call!');
     }
 
     const url = urlStr;
@@ -71,7 +71,7 @@ class SMStore implements SMStoreProps {
       return;
     }
     this.loading.set(url, true);
-    let authorization = "";
+    let authorization = '';
     const { password } = (body as SMStorePassword) || {};
     const { employeeId, sessionId } = store.getState().auth.user;
 
@@ -108,12 +108,12 @@ class SMStore implements SMStoreProps {
         this.loading.set(url, false);
       })
       .catch((error) => {
-        let { message = "" } = error || {};
-        const { statusCode = "" } = error || {};
-        if (isArray(message) && has(first(message), "message")) {
-          message = join(get(first(message), "message"), "\n");
+        let { message = '' } = error || {};
+        const { statusCode = '' } = error || {};
+        if (isArray(message) && has(first(message), 'message')) {
+          message = join(get(first(message), 'message'), '\n');
         } else {
-          message = Array.isArray(message) ? message.join("; ") : message;
+          message = Array.isArray(message) ? message.join('; ') : message;
         }
         this.loading.set(url, false);
         if (callback) {
@@ -130,4 +130,3 @@ class SMStore implements SMStoreProps {
 }
 
 export default new SMStore();
-

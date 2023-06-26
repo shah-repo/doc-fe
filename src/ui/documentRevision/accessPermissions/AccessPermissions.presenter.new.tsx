@@ -1,34 +1,34 @@
-import { Avatar, Box, Collapse, Grid, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
-import { filter, isEmpty, isEqual, some, truncate } from "lodash";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import Select, { components, OptionProps } from "react-select";
-import { ReactComponent as CloseIcon } from "../../../assets/images/trash.svg";
-import { Group } from "../../../state/ducks/auth/types";
-import { Owner, TypographySize } from "../../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_SECURITY_GET_ASYNC } from "../../../state/ducks/documentRevisions/constants";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { getInitalsFromName } from "../../components/icons/avatar/helpers";
-import Text from "../../components/Text";
-import { FBTooltip } from "../../form.builder";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import Colors from "../../layout/theme/utils/colors";
-import { styles } from "./AccessPermissions.styles.new";
+import { Avatar, Box, Collapse, Grid, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import { filter, isEmpty, isEqual, some, truncate } from 'lodash';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import Select, { components, OptionProps } from 'react-select';
+import { ReactComponent as CloseIcon } from '../../../assets/images/trash.svg';
+import { Group } from '../../../state/ducks/auth/types';
+import { Owner, TypographySize } from '../../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOCUMENT_REVISION_SECURITY_GET_ASYNC } from '../../../state/ducks/documentRevisions/constants';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { getInitalsFromName } from '../../components/icons/avatar/helpers';
+import Text from '../../components/Text';
+import { FBTooltip } from '../../form.builder';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import Colors from '../../layout/theme/utils/colors';
+import { styles } from './AccessPermissions.styles.new';
 
 interface OwnProps {
-  availableApprovers: OptionType[];
-  groupOptions: OptionType[];
-  securityEmployees: [];
-  operators: [];
-  securityGroups: [];
-  documentId: string;
-  documentRevisionId: string;
-  isVisible: boolean;
-  label?: string;
+  availableApprovers: OptionType[]
+  groupOptions: OptionType[]
+  securityEmployees: []
+  operators: []
+  securityGroups: []
+  documentId: string
+  documentRevisionId: string
+  isVisible: boolean
+  label?: string
 }
 
 type AccessPermissionsPresenterProps = OwnProps;
@@ -94,7 +94,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
       getList(documentRevisionId, DOCUMENT_REVISION_SECURITY_GET_ASYNC);
     },
   });
-  const initialElements = { value: "", text: "", label: "" };
+  const initialElements = { value: '', text: '', label: '' };
   const [accessElement, saveAccessElement] = React.useState(initialElements);
   const [operator, saveOperator] = React.useState<any>(null);
   const isGroup = some(groupOptions, {
@@ -164,9 +164,9 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
     {...props}
   >
     <button data-cy="add-user" onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
-      {(props.selectProps.menuIsOpen || props.hasValue) ?
-        <AddBoxOutlinedIcon data-cy="add-user" color="primary" fontSize="small" /> :
-        <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
+      {(props.selectProps.menuIsOpen || props.hasValue)
+        ? <AddBoxOutlinedIcon data-cy="add-user" color="primary" fontSize="small" />
+        : <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
     </button>
   </components.DropdownIndicator>);
   const securityGroupsIds = securityGroups.map((e: Group) => e.id);
@@ -188,7 +188,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
     setGroupsOpen(!groupsOpen);
   };
 
-  const truncateLabel = (label) => truncate(label, { length: 30, omission: " ..." });
+  const truncateLabel = (label) => truncate(label, { length: 30, omission: ' ...' });
 
   const Option = (props: OptionProps<OptionType>) => {
     const { data } = props;
@@ -229,17 +229,17 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={employeeSelectOptions}
-                      menuPlacement={"auto"}
+                      menuPlacement="auto"
                       styles={{
-                        option: (style) => ({ ...style, wordWrap: "break-word" }),
+                        option: (style) => ({ ...style, wordWrap: 'break-word' }),
                       }}
                       onChange={(e) => saveValue(e)}
                       placeholder={intl.formatMessage({
-                        id: "document.revision.search.users",
+                        id: 'document.revision.search.users',
                       })}
                       components={{ IndicatorSeparator: () => null, Option }}
                       value={
-                        accessElement.value === "" || isGroup
+                        accessElement.value === '' || isGroup
                           ? null
                           : accessElement
                       }
@@ -309,14 +309,14 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={groupSelectOptions}
-                      menuPlacement={"auto"}
+                      menuPlacement="auto"
                       placeholder={intl.formatMessage({
-                        id: "document.revision.search.groups",
+                        id: 'document.revision.search.groups',
                       })}
                       components={{ IndicatorSeparator: () => null }}
                       onChange={(e) => saveValue(e)}
                       value={
-                        accessElement.value === "" || !isGroup
+                        accessElement.value === '' || !isGroup
                           ? null
                           : accessElement
                       }
@@ -350,17 +350,17 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                 {isVisible && (
                   <>
                     <Typography variant={TypographySize.md} className={classes.itemTitle}>
-                      <Text message={label || "common.operators"} />
+                      <Text message={label || 'common.operators'} />
                     </Typography>
                     <>
                       <Box width={203} fontFamily="Sora" pt={1.825}>
                         <Select
                           id="document.assing.to.sidebar"
-                          menuPlacement={"top"}
+                          menuPlacement="top"
                           options={operatorsSelectOptions}
                           onChange={(e) => saveValueOperator(e)}
                           placeholder={intl.formatMessage({
-                            id: "document.revision.invitation",
+                            id: 'document.revision.invitation',
                           })}
                           components={{ DropdownIndicator }}
                           value={!operator ? null : operator}
@@ -390,7 +390,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               {e.user.name}
                             </Typography>
                           </Grid>
-                          <Grid item className={classes.deleteIcon} data-cy={"operator-ac-" + e.user.name}>
+                          <Grid item className={classes.deleteIcon} data-cy={'operator-ac-' + e.user.name}>
                             <CloseIcon onClick={() => handleDeleteOperatorAccess(e.id)} />
                           </Grid>
                         </Grid>

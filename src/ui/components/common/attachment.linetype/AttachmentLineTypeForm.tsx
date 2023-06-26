@@ -1,27 +1,27 @@
-import { Box, CircularProgress, IconButton, Link } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import NotesIcon from "@material-ui/icons/Notes";
-import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
-import * as React from "react";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import Text from "../../Text";
-import { styles } from "./utils/styles";
+import { Box, CircularProgress, IconButton, Link } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import NotesIcon from '@material-ui/icons/Notes';
+import PublishRoundedIcon from '@material-ui/icons/PublishRounded';
+import * as React from 'react';
+import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
+import Text from '../../Text';
+import { styles } from './utils/styles';
 
 interface Props {
-  onCancel: () => void;
-  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
-  isUploading: boolean;
-  multiple?: boolean;
-  name?: string;
-  disabled?: boolean;
-  documentTypeCanRedline: boolean;
+  onCancel: () => void
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any
+  isUploading: boolean
+  multiple?: boolean
+  name?: string
+  disabled?: boolean
+  documentTypeCanRedline: boolean
 }
 
 const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   onCancel,
   onChange,
   multiple = true,
-  name = "",
+  name = '',
   disabled,
   isUploading,
   documentTypeCanRedline,
@@ -31,8 +31,8 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {!isUploading &&
-    <Box className={classes.Box}>
+      {!isUploading
+    && <Box className={classes.Box}>
       <IconButton
         className={classes.closeRoot}
         onClick={onCancel}
@@ -41,9 +41,9 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       >
         <CloseIcon className={classes.closeIcon} />
       </IconButton>
-      <PublishRoundedIcon fontSize="large"/>
+      <PublishRoundedIcon fontSize="large" />
       <h2 className={classes.h4}>Upload a file</h2>
-      <Text translation="common.attachment.redline.form.prompt"/>
+      <Text translation="common.attachment.redline.form.prompt" />
       <Box style={{ paddingTop: 20 }}>
         <input
           accept="*"
@@ -107,8 +107,8 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
     </Box>
       }
 
-      {isUploading &&
-       <Box className={classes.Box}>
+      {isUploading
+       && <Box className={classes.Box}>
          <CircularProgress color="secondary" />
        </Box>}
     </>

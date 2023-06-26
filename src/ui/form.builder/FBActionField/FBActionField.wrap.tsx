@@ -1,9 +1,9 @@
-import { find, map } from "lodash";
-import React from "react";
-import { FB, FBActionFieldActions, FBActionFieldProps, FBActionOptionProps, FBData, FBDialogState, FBForm } from "..";
+import { find, map } from 'lodash';
+import React from 'react';
+import { FB, FBActionFieldActions, FBActionFieldProps, FBActionOptionProps, FBData, FBDialogState, FBForm } from '..';
 
 export const withFBActionField = <T extends FBActionFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({
@@ -25,7 +25,7 @@ export const withFBActionField = <T extends FBActionFieldProps>(
       const { schema, requestUrl } = option;
       dialogState?.config({
         open: true,
-        content: <FBForm initialValues={{ "documentRevision.id": workspaceState?.id }} {...{ schema }} />,
+        content: <FBForm initialValues={{ 'documentRevision.id': workspaceState?.id }} {...{ schema }} />,
         actions: <FBActionFieldActions {...{ requestUrl }} />,
       });
     };

@@ -1,8 +1,8 @@
-import { assign, first, keys, map, reduce, get } from "lodash";
-import React, { useEffect } from "react";
-import { FB } from "..";
-import { SM, SMStore, SMUrl } from "../../../App";
-import { FBLockBody, FBLockProps } from "./FBLock.types";
+import { assign, first, keys, map, reduce, get } from 'lodash';
+import React, { useEffect } from 'react';
+import { FB } from '..';
+import { SM, SMStore, SMUrl } from '../../../App';
+import { FBLockBody, FBLockProps } from './FBLock.types';
 
 export const withFBLock = <T extends FBLockProps>(
   Component: React.FunctionComponent<T>,
@@ -35,15 +35,15 @@ export const withFBLock = <T extends FBLockProps>(
       if (!formState) { return; }
       formState.expireLocks = {};
       formState.locked.forEach((lockedField) => {
-        formState.locked.set(lockedField.fieldName || "", {
+        formState.locked.set(lockedField.fieldName || '', {
           ...lockedField,
           locked: false,
         });
       });
       const dataArray = Array.from(data.values());
-      const fields = map(dataArray, "fields");
+      const fields = map(dataArray, 'fields');
       const records = reduce(fields, (record: Record<string, any>, field) => {
-        map(first(map(field, "formInput")), (t, index) => {
+        map(first(map(field, 'formInput')), (t, index) => {
           const fieldName = first(keys(t));
           if (!fieldName) { return; }
           const expiresAt = dataArray[index]?.expiresAt;
@@ -96,6 +96,6 @@ export const withFBLock = <T extends FBLockProps>(
     );
   };
 
-  Comp.displayName = "withFBLock";
+  Comp.displayName = 'withFBLock';
   return Comp;
 };

@@ -2,24 +2,26 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
-import { Audit } from '../../state/ducks/audit/types';
+import { Audit, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, Reference } from '../../state/ducks/documentRevisions/types';
+import { DocumentRevision, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
+import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditDownloadS3link from './AuditDownloadS3link';
+import AuditLotTransfer from './AuditLotTransfer';
 import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
@@ -57,6 +59,20 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     return <Fragment>N/A</Fragment>;
   }
 
+  const poDefinePartNumberText = (data: POLineItem) => {
+    const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
+    let partNumberText = '';
+    if (type === FBPurchaseOrderItemType.PRODUCT) {
+      partNumberText = partNumberDocId ?? supplierPartNumber;
+    } else if (type === FBPurchaseOrderItemType.SERVICE) {
+      partNumberText = serviceId !== ''
+        ? serviceId
+        : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+    }
+
+    return partNumberText;
+  };
+
   if (isFBField) {
     const fbValue = {
       texteditor () {
@@ -72,6 +88,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         );
       },
       autocomplete () {
+        return <AuditAutocomplete audit={audit} />;
+      },
+      supplier () {
+        if (audit.fbSchemaItem) {
+          audit.fbSchemaItem.optionId = '5';
+        }
         return <AuditAutocomplete audit={audit} />;
       },
       fileupload () { return (<AuditAttachment audit={audit} />); },
@@ -92,6 +114,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       mpiprocedure () {
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
+      },
+      lotTransfers () {
+        return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
@@ -114,7 +139,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (audit.nextValue as Approval).approver.user.name;
         break;
       case 'approvals.approver':
-        returnValue = (audit.nextValue as Employee).user?.name;
+        returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name} - {(audit.nextValue as Employee).user?.email}</div>);
         break;
       case 'tasks.assigned':
       case 'owner':
@@ -196,6 +221,33 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           </>
         );
         break;
+      case 'EMAIL_SENT':
+        returnValue = (
+          <>
+            <Text
+              dataCy={dataCy}
+              translation="documentRevision.audit.send.to.email"
+              values={{
+                name: audit.ownerName,
+                docId: audit?.docId ?? audit?.crId,
+              }}
+            />
+          </>
+        );
+        break;
+      case 'VIEW_PDF':
+        returnValue = (
+          <>
+            <Text
+              dataCy={dataCy}
+              translation="documentRevision.audit.view.pdf"
+              values={{
+                name: audit.ownerName,
+              }}
+            />
+          </>
+        );
+        break;
       case 'securityGroups':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Group).name}</div>);
         break;
@@ -234,10 +286,77 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               translation="relatedParts.parentPart.answer.yes.separate"
             />
           );
+        } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_NO) {
+          returnValue = (
+            <Text
+              dataCy={`${dataCy}-basepart-status`}
+              translation="relatedParts.parentPart.answer.no"
+            />
+          );
         }
         break;
       case 'subParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
+      case 'subPartObsolete':
+        try {
+          const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
+          if (value) {
+            const text = value === RevisionChangeType.Obsolete
+              ? intl.formatMessage({ id: 'documentRevision.audit.relatedParts.subPart.obsolete.checked' }, { docId })
+              : intl.formatMessage({ id: 'documentRevision.audit.relatedParts.subPart.obsolete.unchecked' }, { docId });
+            returnValue = (<div data-cy={dataCy}>{text}</div>);
+          } else {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+        break;
+      case 'formInput.lineItems':
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const value: POLineItem = JSON.parse(auditValue);
+          const { order, unitPrice } = value;
+          const partNumberText = poDefinePartNumberText(value);
+
+          const text
+            = intl.formatMessage(
+              { id: 'documentRevision.audit.formInput.lineItems.MESSAGE' },
+              { partNumber: partNumberText, order, unitPrice });
+
+          returnValue = (
+            <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
+          );
+        } catch (err) {
+          // do nothing
+        }
+        break;
+      case 'formInput.po-items-built-in.items.order':
+      case 'formInput.po-items-built-in.items.totalAmount':
+      case 'formInput.po-items-built-in.items.supplierPartNumber':
+      case 'formInput.po-items-built-in.items.glCode':
+      case 'formInput.po-items-built-in.items.unitPrice':
+      case 'formInput.po-items-built-in.items.units':
+      case 'formInput.po-items-built-in.items.received':
+      case 'formInput.po-items-built-in.items.serviceId':
+      case 'formInput.po-items-built-in.items.formattedDate':
+      case 'formInput.po-items-built-in.items.partNumberTitle':
+      case 'formInput.po-items-built-in.items.description':
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const entry: POLineItem & { value: string } = JSON.parse(auditValue);
+          const partNumberText = poDefinePartNumberText(entry);
+          if (typeof entry.value !== undefined) {
+            returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
+          } else {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);

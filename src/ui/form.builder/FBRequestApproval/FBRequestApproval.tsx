@@ -1,5 +1,5 @@
-import React from "react";
-import { FBInput, FBInputProps, FBRequestApprovalField } from "..";
+import React from 'react';
+import { FBInput, FBInputProps, FBRequestApprovalField } from '..';
 
 const FBRequestApproval: React.FunctionComponent<FBInputProps> = ({
   label,
@@ -9,6 +9,5 @@ const FBRequestApproval: React.FunctionComponent<FBInputProps> = ({
     <FBRequestApprovalField {...props} {...{ label }} />
   </FBInput>
 );
-
 
 export default FBRequestApproval;

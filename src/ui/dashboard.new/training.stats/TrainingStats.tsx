@@ -1,26 +1,26 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   trainingStatsActions,
   trainingStatsSelectors,
-} from "../../../state/ducks/dashboard.new/training.stats";
-import AsyncGate from "../../components/AsyncGate";
-import useActionCreator from "../../hooks/useActionCreator";
-import TrainingChart from "./training.chart/TrainingChart.container";
-import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
-import useStyles from "./TrainingStats.styles";
+} from '../../../state/ducks/dashboard.new/training.stats';
+import AsyncGate from '../../components/AsyncGate';
+import useActionCreator from '../../hooks/useActionCreator';
+import TrainingChart from './training.chart/TrainingChart.container';
+import TrainingLineItems from './training.line.items/TrainingLineItems.container';
+import useStyles from './TrainingStats.styles';
 
 const TrainingStatsContainer: React.FunctionComponent = () => {
   const classes = useStyles();
 
   // Training Chart
   const loadTrainingStatsChart = useActionCreator(
-    trainingStatsActions.loadTrainingStatsChart
+    trainingStatsActions.loadTrainingStatsChart,
   );
 
   const loadTrainingStatsChartAsyncInfo = useSelector(
-    trainingStatsSelectors.getLoadTrainingStatsChartAsyncInfo
+    trainingStatsSelectors.getLoadTrainingStatsChartAsyncInfo,
   );
 
   const [tabValue, setTabValue] = React.useState(0);

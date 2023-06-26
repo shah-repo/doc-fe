@@ -1,7 +1,7 @@
-import React from "react";
-import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR, FBProvider } from "..";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
+import React from 'react';
+import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR, FBProvider } from '..';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { withFBMediaAlbumField } from './FBMediaAlbumField.wrap';
 
 const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   setMediaFieldMode,
@@ -10,9 +10,9 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   mediaAlbumFieldState,
   actionsDisabled,
   isTemplate,
-  qrValue = "",
+  qrValue = '',
   collection,
-  name = "",
+  name = '',
   loading,
   editorConfig,
   autosave,
@@ -24,7 +24,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
     <FBInput {...{ name, label, gutter, index, editorConfig, autosave }}
       type="mediaalbum" labelProps={FBFontStyle.labelProps}>
-      {mode !== "qr" && (
+      {mode !== 'qr' && (
         <FBMediaAlbum {...{
           collection,
           removeMedia,
@@ -37,7 +37,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
         }}
         />
       )}
-      {mode === "qr" && (
+      {mode === 'qr' && (
         <FBMediaQR
           {...{ qrValue, isTemplate, setMediaFieldMode, loading }}
         />)}

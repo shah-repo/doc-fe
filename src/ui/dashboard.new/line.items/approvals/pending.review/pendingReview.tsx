@@ -1,73 +1,73 @@
-import { Box, Collapse, Grid, IconButton, Link, List, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
-import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status_white.svg";
-import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
-import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import { changeRequestEditPath } from "../../../../change.request/utils/paths";
-import Text from "../../../../components/Text";
-import Colors from "../../../../layout/theme/utils/colors";
-import ApprovalTitle from "../../common/ApprovalTitle/presenter";
-import { getDocIcon } from "../../common/DocIcon";
-import DocId from "../../common/DocId/presenter";
-import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
-import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { DocTypeGroups } from "../../common/types";
-import { getPendingTooltipText } from "../../common/Utils";
-import EmailModal from "../../dialogs/email/EmailDialog";
-import useStyles from "./pendingReview.styles";
-import DismissAction from "../../common/DismissAction";
+import { Box, Collapse, Grid, IconButton, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
+import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status.svg';
+import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_review_status_white.svg';
+import { ReactComponent as PendingReviewIcon } from '../../../../../assets/images/pending_approval.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
+import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
+import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { changeRequestEditPath } from '../../../../change.request/utils/paths';
+import Text from '../../../../components/Text';
+import Colors from '../../../../layout/theme/utils/colors';
+import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import { getDocIcon } from '../../common/DocIcon';
+import DocId from '../../common/DocId/presenter';
+import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
+import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { DocTypeGroups } from '../../common/types';
+import { getPendingTooltipText } from '../../common/Utils';
+import EmailModal from '../../dialogs/email/EmailDialog';
+import useStyles from './pendingReview.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  title: string;
-  arId: string;
-  arChangeRequestId: string;
-  arStatus: string;
-  timestamp: string;
+  id: string
+  type: string
+  title: string
+  arId: string
+  arChangeRequestId: string
+  arStatus: string
+  timestamp: string
   pendingApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   approvedApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  pendingEmailSentAt: Nullable<string>;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  pendingEmailSentAt: Nullable<string>
+  dismissLineItem?: (id: string) => void
 }
 const PendingReviewPresenter: React.FC<Props> = ({
   id,
@@ -90,12 +90,12 @@ const PendingReviewPresenter: React.FC<Props> = ({
   const classes = useStyles();
   const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
-  const [viewHoverItem, setViewHoverItem] = React.useState("");
+  const [viewHoverItem, setViewHoverItem] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
-  const { count, pending, approved, primaryText, secondaryText } =
-    getPendingTooltipText(pendingApprovers, approvedApprovers);
+  const { count, pending, approved, primaryText, secondaryText }
+    = getPendingTooltipText(pendingApprovers, approvedApprovers);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -122,7 +122,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
     setViewHoverItem(id);
   };
   const onMouseLeaveViewIcon = () => {
-    setViewHoverItem("");
+    setViewHoverItem('');
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
@@ -168,13 +168,13 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
-                data-cy={arId + "InReview"}
+                data-cy={arId + 'InReview'}
               >
                 <Grid item={true}>
-                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
+                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title}/>
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title} />
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -263,8 +263,8 @@ const PendingReviewPresenter: React.FC<Props> = ({
                         {pendingApprovers !== undefined
                           ? pendingApprovers
                             .map((approver) => approver.userName)
-                            .join(", ")
-                          : ""}
+                            .join(', ')
+                          : ''}
                       </Typography>
                     </Link>
                   </StyleTooltip>
@@ -272,7 +272,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                ></Grid>
+                 />
                 <Grid item={true}>
                   <Typography
                     component="span"

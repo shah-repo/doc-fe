@@ -1,5 +1,5 @@
-import { FieldProps } from "formik";
+import { FieldProps } from 'formik';
 
 export interface FormikHybridFieldProps extends FieldProps {
-  name?: string;
+  name?: string
 }

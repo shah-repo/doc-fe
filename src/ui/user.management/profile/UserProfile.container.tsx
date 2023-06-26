@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getHasPermission } from "../../../common/utils/selectors";
-import Config from "../../../config";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { companySelectors } from "../../../state/ducks/company";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import UserProfilePresenter from "./UserProfile.presenter";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getHasPermission } from '../../../common/utils/selectors';
+import Config from '../../../config';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import { EmployeeEditRequestBody, GroupTag, Permission } from '../../../state/ducks/auth/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { userManagementActions } from '../../../state/ducks/userManagement';
+import { USER_SLACK_URL } from '../../../state/ducks/userManagement/constants';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import UserProfilePresenter from './UserProfile.presenter';
 
 interface Props {
-  closeUserProfile: () => void;
-  showUserProfile: boolean;
+  closeUserProfile: () => void
+  showUserProfile: boolean
 }
 
 const UserProfileContainer: React.FunctionComponent<Props> = ({
@@ -26,6 +26,7 @@ const UserProfileContainer: React.FunctionComponent<Props> = ({
 
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
+  const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPERS));
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
@@ -43,7 +44,7 @@ const UserProfileContainer: React.FunctionComponent<Props> = ({
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);
-  const [previewAvatar, setPreviewAvatar] = useState("");
+  const [previewAvatar, setPreviewAvatar] = useState('');
 
   const onSubmit = (values: EmployeeEditRequestBody) => dispatch(authActions.editCurrentEmployee(values, async));
 
@@ -68,6 +69,7 @@ const UserProfileContainer: React.FunctionComponent<Props> = ({
       close={closeUserProfile}
       canManageUsers={canManageUsers}
       canUpdateCompany={canUpdateCompany}
+      canUpdateLocations={canUpdateLocations}
       employeeGroups={groups}
       name={name}
       avatar={avatar}

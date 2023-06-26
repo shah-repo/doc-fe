@@ -1,10 +1,10 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles } from '@material-ui/core';
 
 export const styles = makeStyles((theme) =>
   createStyles({
     root: {
-      overflow: "auto",
+      overflow: 'auto',
       margin: theme.spacing(1),
     },
-  })
+  }),
 );

@@ -1,14 +1,14 @@
-import { filter, includes, isEmpty, map, range, size } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from "..";
-import SM from "../../../App/Shifamed/Utils/SM/SM";
-import { intl } from "../../../common/intl";
-import { isTranslation } from "../../translations/types";
-import FBFieldOutputWrapper from "../FBFieldOutputWrapper/FBFieldOutputWrapper";
+import { filter, includes, isEmpty, map, range, size } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from '..';
+import SM from '../../../App/Shifamed/Utils/SM/SM';
+import { intl } from '../../../common/intl';
+import { isTranslation } from '../../translations/types';
+import FBFieldOutputWrapper from '../FBFieldOutputWrapper/FBFieldOutputWrapper';
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     workspaceMode,
@@ -35,10 +35,10 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         if (!schema) { return disabled; }
         const item =  schema[current];
         const { type, name } = item;
-        if (type === "requestapproval" || type === "inlineapproval") {
-          const activeConfig = type === "inlineapproval" ? item : formState?.getFieldValue(name);
+        if (type === 'requestapproval' || type === 'inlineapproval') {
+          const activeConfig = type === 'inlineapproval' ? item : formState?.getFieldValue(name);
           const { approveIsBlocking = false } = activeConfig || {};
-          let hasValue = type === "inlineapproval"
+          let hasValue = type === 'inlineapproval'
             ? formState?.getFieldValue(name)
             : formState?.getFieldValue(FBFieldName.RequestApproval + name);
           hasValue = Boolean(hasValue);
@@ -81,9 +81,9 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       return map(schema, (schemaItem, index, ro) => {
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
         const { disabled, outputDisabled } = schemaItem || {};
-        const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
-        if (schemaItem.deleted || schemaItem.hidden ||
-        ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
+        const reviseDisabled = schemaItem.editorProperties?.includes('reviseDisabled');
+        if (schemaItem.deleted || schemaItem.hidden
+        || ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
         && !_documentRevisionFormState?.leftPanelOpen))
         ) { return; }
 
@@ -98,11 +98,11 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
                   !step.deleted && includes(FBEditorState.pickStepIndex, step.type))),
               },
               disabled: (
-                disabled ||
-                isPreviewOrFormPreview ||
-                isApproved({ ...schemaItem, index }) ||
-                (reviseDisabled && outputRevision) ||
-                (outputDisabled && isOutput && !isEmpty(id))
+                disabled
+                || isPreviewOrFormPreview
+                || isApproved({ ...schemaItem, index })
+                || (reviseDisabled && outputRevision)
+                || (outputDisabled && isOutput && !isEmpty(id))
               ),
               index,
             })}

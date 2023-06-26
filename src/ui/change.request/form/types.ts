@@ -1,60 +1,60 @@
-import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments/types";
-import { Id, Nullable } from "../../../state/ducks/common/types";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FBSchemaProps } from "../../form.builder";
+import { Attachment as AttachmentInterface } from '../../../state/ducks/attachments/types';
+import { Id, Nullable } from '../../../state/ducks/common/types';
+import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FBSchemaProps } from '../../form.builder';
 
 export type Attachment = AttachmentInterface;
 
 export interface ImplementationPlanTaskFormValues {
-  id?: string;
-  title: string;
-  description: string;
-  dueDate?: Date;
-  assigned?: OptionType;
-  status: string;
+  id?: string
+  title: string
+  description: string
+  dueDate?: Date
+  assigned?: OptionType
+  status: string
 }
 
 export interface ChangeRequestFormValues {
-  id?: string;
-  title: string;
-  description: string;
-  formInput?: Record<string, any>;
-  formDocument?: FBDocumentRevisionProps;
-  documentType?: Id;
+  id?: string
+  title: string
+  description: string
+  formInput?: Record<string, any>
+  formDocument?: FBDocumentRevisionProps
+  documentType?: Id
 }
 
 export interface PasswordFormValues {
-  password: string;
+  password: string
 }
 
 export interface EffectiveDateFormValues {
-  effectiveDate: string;
+  effectiveDate: string
 }
 
 export interface SelectTemplateFormValues {
-  chosenOption: string;
+  chosenOption: string
 }
 
 export interface TemplateOption {
-  label: string;
-  value: string;
-  docTypeId: string;
-  schema?: FBSchemaProps[];
-  formInput?: Record<string, any>;
+  label: string
+  value: string
+  docTypeId: string
+  schema?: FBSchemaProps[]
+  formInput?: Record<string, any>
 }
 
 export interface InDraftAROption {
-  label: string;
-  value: string;
-  crId: string;
+  label: string
+  value: string
+  crId: string
 }
 
 export interface ApproverPayload {
   approver: {
-    id: Nullable<string>;
-  };
+    id: Nullable<string>
+  }
   signatureGroupId: {
-    id: Nullable<string>;
-  };
+    id: Nullable<string>
+  }
 }

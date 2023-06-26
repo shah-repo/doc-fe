@@ -1,22 +1,22 @@
-import { AppBar, Box, IconButton, TextField, Toolbar, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { isEmpty } from "lodash";
-import React from "react";
-import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
-import Text from "../../../components/Text";
-import styles from "../UserProfile.styles";
-import { Translation } from "../../../translations/types";
+import { AppBar, Box, IconButton, TextField, Toolbar, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { EmployeeEditRequestBody } from '../../../../state/ducks/auth/types';
+import Text from '../../../components/Text';
+import styles from '../UserProfile.styles';
+import { Translation } from '../../../translations/types';
 
 const MAX_NAME_LENGTH = 100;
 
 interface Props {
-  close: () => void;
-  showEditUser: boolean;
-  name: string;
-  userInfo: EmployeeEditRequestBody;
-  setUserInfo: (values: EmployeeEditRequestBody) => void;
-  setUsernameError: (value: Translation | null) => void;
-  usernameError: Translation | null;
+  close: () => void
+  showEditUser: boolean
+  name: string
+  userInfo: EmployeeEditRequestBody
+  setUserInfo: (values: EmployeeEditRequestBody) => void
+  setUsernameError: (value: Translation | null) => void
+  usernameError: Translation | null
 }
 
 const DialogTitle: React.FunctionComponent<Props> = ({
@@ -34,11 +34,11 @@ const DialogTitle: React.FunctionComponent<Props> = ({
     const value = event.target.value;
 
     if (isEmpty(value)) {
-      return setUsernameError("validator.user.name.required");
+      return setUsernameError('validator.user.name.required');
     }
 
     if (value.length > MAX_NAME_LENGTH) {
-      return setUsernameError("validator.user.name.length");
+      return setUsernameError('validator.user.name.length');
     }
 
     setUserInfo({ ...userInfo, name: value });

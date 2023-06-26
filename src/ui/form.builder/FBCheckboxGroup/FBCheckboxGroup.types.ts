@@ -1,22 +1,22 @@
-import { BoxProps, FormGroupProps } from "@material-ui/core";
-import { FBInputProps, FBOptionProps } from "..";
+import { BoxProps, FormGroupProps } from '@material-ui/core';
+import { FBInputProps, FBOptionProps } from '..';
 
 export type FBCheckboxGroupProps =
   & FBOptionProps
   & Partial<Pick<FBInputProps,
-  | "onChange"
-  | "name"
-  | "label"
-  | "disabled"
-  | "defaultValue"
-  | "applicableValidationSchema"
-  | "isInputOwner"
-  | "rules"
+  | 'onChange'
+  | 'name'
+  | 'label'
+  | 'disabled'
+  | 'defaultValue'
+  | 'applicableValidationSchema'
+  | 'isInputOwner'
+  | 'rules'
   >>
-  & Pick<FormGroupProps, "row">
+  & Pick<FormGroupProps, 'row'>
   & {
-    controls?: React.ReactNode[];
-    className?: string;
-    boxProps?: BoxProps;
-    labelProps?: BoxProps;
+    controls?: React.ReactNode[]
+    className?: string
+    boxProps?: BoxProps
+    labelProps?: BoxProps
   };

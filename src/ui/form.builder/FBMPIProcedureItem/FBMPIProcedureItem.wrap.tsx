@@ -1,16 +1,16 @@
-import { cloneDeep, concat, get, uniqBy } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
-import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { toFixed } from "../../dashboard.new/line.items/common/Utils";
-import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { cloneDeep, concat, get, uniqBy } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from '..';
+import { companySelectors } from '../../../state/ducks/company';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { toFixed } from '../../dashboard.new/line.items/common/Utils';
+import { checkIsDocumentForm, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -51,23 +51,23 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     const docRevSmartRef = document?.smartReferencesTo;
     const docSmartRef = document?.document.smartReferencesTo;
-    const smartRef = isDocPIInstance ? docRevSmartRef : uniqBy(concat(docSmartRef, docRevSmartRef), "id");
+    const smartRef = isDocPIInstance ? docRevSmartRef : uniqBy(concat(docSmartRef, docRevSmartRef), 'id');
 
     const smartReferencesTo = useMemo(() =>
       smartRef?.filter((ref) =>
-      ref?.active &&
-      ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
+      ref?.active
+      && ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
     [smartRef, version]);
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
-    isPreview = isPreview && workspaceState?.mode !== "formPreview";
+    isPreview = isPreview && workspaceState?.mode !== 'formPreview';
     isReleased = status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated;
     // Have to use isDocumentForm instead of isOutput because od MPI
     // ENC-7319
-    isSelectVisible = (!isDocumentForm &&
-      workspaceState?.mode !== "preview" &&
-      workspaceState?.mode !== "formPreview") ||
-      redlineActive;
+    isSelectVisible = (!isDocumentForm
+      && workspaceState?.mode !== 'preview'
+      && workspaceState?.mode !== 'formPreview')
+      || redlineActive;
     redlineActive = useSelector(companySelectors.getRedlineActive);
 
     useEffect(() => {
@@ -81,18 +81,18 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.getInputState("lhrs-start-quantity")?.value,
+        () => formState?.getInputState('lhrs-start-quantity')?.value,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const formValue = cloneDeep(formState?.getFieldValue("lhrs-start-quantity"));
+          const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
           setLhrsQuantity(formValue);
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
-      const formValue = cloneDeep(formState?.getFieldValue("lhrs-start-quantity"));
+      const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
       formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsQuantity]);
@@ -102,12 +102,12 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         () => mpiProcedureState?.deleteLotApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = isDocPIInstance ?
-            data.smartReferencesTo :
-            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), "id");
+          const refs = isDocPIInstance
+            ? data.smartReferencesTo
+            : uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), 'id');
           setFilteredParts(refs);
           id && dispatch(documentRevisionsActions.reload(id));
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -149,7 +149,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         onClose,
         open: true,
         title: {
-          locale: "form.builder.action.mode",
+          locale: 'form.builder.action.mode',
           values: {
             mode: part ? FBFormMode.edit : FBFormMode.add,
             title: `${FBProcedureItemLocale[type]}|s`,
@@ -167,7 +167,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     handleSelect = (item: FBProcedureItemConfig) => {
       dialogState?.config({
         open: true,
-        title: "form.builder.select",
+        title: 'form.builder.select',
         content: <FBMPIProcedureSelect {...{ name, type }} initialValues={item} unitDisabled={!!item.unit} />,
       });
     };
@@ -181,37 +181,37 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     getProcedureLocale = (item: FBProcedureItemConfig) => {
       if (isDocumentMPI) {
-        return item.type ?
-          `form.builder.mpi.procedure.${type}.title.id` :
-          `form.builder.mpi.procedure.${type}.title`;
+        return item.type
+          ? `form.builder.mpi.procedure.${type}.title.id`
+          : `form.builder.mpi.procedure.${type}.title`;
       }
       const usedItem = usedDocumentsInLHRS?.[item.title];
-      return usedItem ?
-        `form.builder.lhrs.procedure.${type}.title` :
-        `form.builder.mpi.procedure.${type}.title`;
+      return usedItem
+        ? `form.builder.lhrs.procedure.${type}.title`
+        : `form.builder.mpi.procedure.${type}.title`;
     };
 
     getProcedureValues = (item: FBProcedureItemConfig) => {
       const id = item.id;
-      const quantity = item.quantity ? toFixed(item.quantity * lhrsQuantity) : "form.builder.none";
+      const quantity = item.quantity ? toFixed(item.quantity * lhrsQuantity) : 'form.builder.none';
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;
 
       if (isDocumentMPI) {
-        return item.type ?
-          { id, title: getItem?.(item.title), quantity, unit } :
-          { title: getItem?.(item.title), quantity, unit };
+        return item.type
+          ? { id, title: getItem?.(item.title), quantity, unit }
+          : { title: getItem?.(item.title), quantity, unit };
       }
 
-      return usedItem ?
-        { title: getItem?.(usedItem?.docRevId), revision, quantity, unit } :
-        { title: getItem?.(item.title), quantity, unit };
+      return usedItem
+        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit }
+        : { title: getItem?.(item.title), quantity, unit };
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
-    getItem = (id: string): string => mpiProcedureState?.getItem(id, type) || "";
-    getLot = (id?: string): string => mpiProcedureState?.getLot(id) || "";
+    getItem = (id: string): string => mpiProcedureState?.getItem(id, type) || '';
+    getLot = (id?: string): string => mpiProcedureState?.getLot(id) || '';
 
     // MARK: @observer
     useObserver(() => {
@@ -221,11 +221,11 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       if (type === FBProcedureItemType.attachments) { return; }
       if (type === FBProcedureItemType.materials) {
         loading = (
-          !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.materialsId || "") ||
-          !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.lotsId || "")
+          !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.materialsId || '')
+          || !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.lotsId || '')
         );
       } else {
-        loading = !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.equipmentId || "");
+        loading = !FBAutocompleteAsyncStore.data.get(mpiProcedureState?.equipmentId || '');
       }
       value = get(mpiProcedureState, type);
     });
@@ -256,6 +256,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     });
   };
 
-  Comp.displayName = "withFBMPIProcedureItem";
+  Comp.displayName = 'withFBMPIProcedureItem';
   return Comp;
 };

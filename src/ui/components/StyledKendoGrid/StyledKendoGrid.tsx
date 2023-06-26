@@ -1,4 +1,4 @@
-import { Grid } from '@progress/kendo-react-grid';
+import { Grid, GridProps } from '@progress/kendo-react-grid';
 import { LocalizationProvider, loadMessages } from '@progress/kendo-react-intl';
 import cx from 'classnames';
 import React, { MutableRefObject, PropsWithChildren, useLayoutEffect, useMemo, useRef } from 'react';
@@ -6,7 +6,7 @@ import { intl } from '../../../common/intl';
 import { withThemeNext } from '../../layout/theme-next';
 import { Translation } from '../../translations/types';
 import useStyles from './StyledKendoGrid.styles';
-import { RowComponent, StyledKendoGridProps } from './StyledKendoGrid.types';
+import { StyledKendoGridProps } from './StyledKendoGrid.types';
 
 const formatMessage = (id: Translation) => intl.formatMessage({ id });
 
@@ -22,12 +22,13 @@ loadMessages({
 const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
   children,
   hasBoxScrollbars,
+  containerRef,
   onRowClick,
   ...props
 }, ref: MutableRefObject<Grid>) => {
   useStyles();
 
-  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const gridContainerRef = containerRef ?? useRef<HTMLDivElement>(null);
   const gridContainer = gridContainerRef.current;
 
   const [gridContent, gridHeader] = useMemo<Array<HTMLDivElement | null>>(
@@ -57,10 +58,13 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
     }
   }, [hasBoxScrollbars, gridContent]);
 
-  const renderRow: RowComponent = (row) =>
-    React.cloneElement(row, {
-      className: cx(row.props.className, { 'k-clickable-row': onRowClick }),
-    });
+  const renderRow: GridProps['rowRender'] = (row, rowProps) => {
+    const rowElement = onRowClick
+      ? React.cloneElement(row, { className: cx(row.props.className, 'k-clickable-row') })
+      : row;
+
+    return props.rowRender?.(rowElement, rowProps) ?? rowElement;
+  };
 
   return (
     <LocalizationProvider language={intl.locale}>
@@ -72,8 +76,8 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
         <Grid
           {...props}
           ref={ref}
+          rowRender={renderRow}
           onRowClick={onRowClick}
-          rowRender={props.rowRender ?? renderRow}
         >
           {children}
         </Grid>

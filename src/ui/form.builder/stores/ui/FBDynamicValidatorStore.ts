@@ -1,15 +1,15 @@
-import { Dictionary, get, isUndefined, join, map, toString } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import Validator from "validatorjs";
-import FBStore from "./FBStore";
-import FBValidatorStore from "./FBValidatorStore";
+import { Dictionary, get, isUndefined, join, map, toString } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import Validator from 'validatorjs';
+import FBStore from './FBStore';
+import FBValidatorStore from './FBValidatorStore';
 
 class FormBuilderDynamicValidatorStore {
   @computed get Validator(): any {
-    return get(window, "EnlilRemoteValidators.validator");
+    return get(window, 'EnlilRemoteValidators.validator');
   }
   public validatorName?: string;
-  @observable public errorMessage = "";
+  @observable public errorMessage = '';
   @observable public helperText: Dictionary<string> = {};
 
   @action public setValidatorName = (name: string) => {
@@ -23,7 +23,7 @@ class FormBuilderDynamicValidatorStore {
 
   @action public reset = () => {
     this.validatorName = undefined;
-    this.errorMessage = "";
+    this.errorMessage = '';
     FBValidatorStore.formValues = {};
   };
 
@@ -33,7 +33,7 @@ class FormBuilderDynamicValidatorStore {
     }
 
     // Clear helper text
-    set(this, "helperText", {});
+    set(this, 'helperText', {});
 
     const rules = FBValidatorStore.getSchemaReleasedRules();
     const values = {};
@@ -55,7 +55,7 @@ class FormBuilderDynamicValidatorStore {
     errors: Validator.ValidationErrors | Dictionary<string>,
   ) => {
     map(errors, (v, k) => {
-      set(this.helperText, k, join(v, "\n"));
+      set(this.helperText, k, join(v, '\n'));
     });
   };
 

@@ -1,11 +1,11 @@
-import { first } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { EBPartRequestBody, FB, FBAutocompleteAsyncOption, FBDialogState, FBEBPartForm, FBEBPartProps, FBEBPartState, PartType } from "..";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { first } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { EBPartRequestBody, FB, FBAutocompleteAsyncOption, FBDialogState, FBEBPartForm, FBEBPartProps, FBEBPartState, PartType } from '..';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBEBPart = <T extends FBEBPartProps>(
   Component: React.FunctionComponent<T>,
@@ -39,7 +39,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     }
     const ebPartState = FB.useRef(
       FBEBPartState,
-      { childrenParts: first(childrenParts)?.id, childrenPartsForRevise: first(childrenPartsForRevise)?.id }
+      { childrenParts: first(childrenParts)?.id, childrenPartsForRevise: first(childrenPartsForRevise)?.id },
     );
     const { id: ebId } = workspaceState || {};
 
@@ -52,15 +52,15 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     useEffect(() => reaction(
       () => ebPartState?.childrenParts,
       (data) => {
-        formState?.setFieldValue("childrenParts", data, true, true);
-      }
+        formState?.setFieldValue('childrenParts', data, true, true);
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => ebPartState?.childrenPartsForRevise,
       (data) => {
-        formState?.setFieldValue("childForRevise", data, true, true);
+        formState?.setFieldValue('childForRevise', data, true, true);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -68,34 +68,34 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     // MARK: @methods
     handleAdd = () => dialogState?.config({
       open: true,
-      title: "form.builder.create.new.part",
+      title: 'form.builder.create.new.part',
       content: <FBEBPartForm { ...{ ebId }}  />,
     });
 
     // MARK: @reactions
     // on existing part autocomplete change
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("childrenParts")?.value,
+      () => formState?.inputState.get('childrenParts')?.value,
       (childPartId: string) => {
         if ((childPartId !== ebPartState.childrenParts && ebPartState.childrenParts)) { return; }
-        const childrenParts = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
+        const childrenParts = childPartId && childPartId !== '' ? [{ id: childPartId }] : [];
         const body = {
           childrenParts,
         };
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          updateAudit
+          updateAudit,
         );
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [ebId]);
 
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("childForRevise")?.value,
+      () => formState?.inputState.get('childForRevise')?.value,
       (childPartId: string) => {
-        const childrenPartsForRevise = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
-        formState?.setFieldValue("childrenPartsForRevise", childrenPartsForRevise);
+        const childrenPartsForRevise = childPartId && childPartId !== '' ? [{ id: childPartId }] : [];
+        formState?.setFieldValue('childrenPartsForRevise', childrenPartsForRevise);
         const body = {
           childrenParts: [],
           formInput: {
@@ -105,9 +105,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.addExistingPartChild(
           ebId,
           body,
-          updateAudit
+          updateAudit,
         );
-      }
+      },
     ));
 
     // on add part
@@ -118,8 +118,8 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         const { id: partId } = data || {};
         FBAutocompleteAsyncStore.add(FBAutocompleteAsyncOption.availableParts, partId, data);
         FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.availablePartDocuments)?.clear();
-        formState?.setFieldValue("childrenParts", partId);
-        formState?.getInputState("childrenParts")?.setRender();
+        formState?.setFieldValue('childrenParts', partId);
+        formState?.getInputState('childrenParts')?.setRender();
         ebPartState?.setChildrenParts(partId);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,23 +127,23 @@ export const withFBEBPart = <T extends FBEBPartProps>(
 
     // on type radio button change
     React.useEffect(() => reaction(
-      () => formState?.getInputState("partType")?.value,
+      () => formState?.getInputState('partType')?.value,
       (value: PartType) => {
-        formState?.getInputState("childrenParts")?.setHidden(value !== PartType.DocumentRevision);
-        formState?.getInputState("childForRevise")?.setHidden(value === PartType.DocumentRevision);
-      }
+        formState?.getInputState('childrenParts')?.setHidden(value !== PartType.DocumentRevision);
+        formState?.getInputState('childForRevise')?.setHidden(value === PartType.DocumentRevision);
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @observer
     useObserver(() => {
       loading = (
-        ebPartState?.newChildApi.loading ||
-        ebPartState?.existingChildApi.loading ||
-        ebPartState?.documentApi.loading
+        ebPartState?.newChildApi.loading
+        || ebPartState?.existingChildApi.loading
+        || ebPartState?.documentApi.loading
       );
       disabled = disabled || loading;
-      partType = formState?.getInputState("partType")?.value;
+      partType = formState?.getInputState('partType')?.value;
     });
 
     return Component({
@@ -164,6 +164,6 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     });
   };
 
-  Comp.displayName = "withFBEBPart";
+  Comp.displayName = 'withFBEBPart';
   return Comp;
 };

@@ -1,7 +1,7 @@
-import { FBInputProps, FBProcedureItemConfig, FBProcedureItemProps } from "..";
-import Colors from "../../layout/theme/utils/colors";
+import { FBInputProps, FBProcedureItemConfig, FBProcedureItemProps } from '..';
+import Colors from '../../layout/theme/utils/colors';
 
-export type FBPartItemStatus = "removed" | "added" | "updated" | "none";
+export type FBPartItemStatus = 'removed' | 'added' | 'updated' | 'none';
 
 export const FBPartItemStatusBorder: Record<FBPartItemStatus, string> = {
   removed: Colors.opal_red,
@@ -18,9 +18,9 @@ export const FBPartItemStatusBg: Record<FBPartItemStatus, string> = {
 };
 
 export type FBPartsItemProps =
-& Pick<FBInputProps, "gutter">
-& Pick<FBProcedureItemProps, "name" | "type" | "getItem" | "getLot" | "loading">
+& Pick<FBInputProps, 'gutter'>
+& Pick<FBProcedureItemProps, 'name' | 'type' | 'getItem' | 'getLot' | 'loading'>
 & {
-  getItemUrl?(id: string): string | undefined;
-  collection?: FBProcedureItemConfig[];
+  getItemUrl?(id: string): string | undefined
+  collection?: FBProcedureItemConfig[]
 };

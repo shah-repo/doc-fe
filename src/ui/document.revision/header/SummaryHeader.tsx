@@ -1,16 +1,16 @@
-import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { statesWithLastSavedEnabled } from "../utils/helpers";
-import SummaryHeaderPresenter from "./SummaryHeader.presenter";
+import React from 'react';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { statesWithLastSavedEnabled } from '../utils/helpers';
+import SummaryHeaderPresenter from './SummaryHeader.presenter';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip?: boolean;
-  canShowCreateVersionButton?: boolean;
-  displayLastSaved?: boolean;
+  documentRevision: DocumentRevision
+  canChangeOwnerShip?: boolean
+  canShowCreateVersionButton?: boolean
+  displayLastSaved?: boolean
 }
 export interface FormHeaderSummaryContext {
-  documentRevisionSummary: DocumentRevision;
+  documentRevisionSummary: DocumentRevision
 }
 export let FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>(undefined);
 

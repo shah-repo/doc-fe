@@ -1,21 +1,21 @@
-import { BoxProps, Grid } from "@material-ui/core";
-import React from "react";
-import { DataProps } from "../../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../components/notifications";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { Translation } from "../../translations/types";
-import BuildsPresenter from "./builds.presenter";
+import { BoxProps, Grid } from '@material-ui/core';
+import React from 'react';
+import { DataProps } from '../../../state/ducks/common/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
+import BuildsPresenter from './builds.presenter';
 
 interface OwnProps {
-  label: Translation;
-  isDraft?: boolean;
-  docRevId?: string;
-  showRemoveButton?: boolean;
-  labelProps?: BoxProps;
-  labelFont?: BoxProps;
+  label: Translation
+  isDraft?: boolean
+  docRevId?: string
+  showRemoveButton?: boolean
+  labelProps?: BoxProps
+  labelFont?: BoxProps
 }
 type Props = OwnProps & DataProps<DocumentRevision[]>;
 
@@ -39,7 +39,7 @@ const BuildsContainer: React.FunctionComponent<Props> = ({
   };
   return (
     <Grid xs={12}>
-      <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }}/>
+      <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }} />
     </Grid>
   );
 };

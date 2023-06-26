@@ -1,10 +1,10 @@
-import { Typography } from "@material-ui/core";
-import classNames from "classnames";
-import React from "react";
-import ReactQuill from "react-quill";
-import Text from "../../components/Text";
-import { styles } from "./utils/Diff.styles";
-import { DiffPresenterProps } from "./utils/types";
+import { Typography } from '@material-ui/core';
+import classNames from 'classnames';
+import React from 'react';
+import ReactQuill from 'react-quill';
+import Text from '../../components/Text';
+import { styles } from './utils/Diff.styles';
+import { DiffPresenterProps } from './utils/types';
 
 type Props = DiffPresenterProps;
 
@@ -19,7 +19,7 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
         ref={refMain}
         readOnly={true}
         modules={{ toolbar: false }}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
       <div
         className={classNames(classes.editorContainer, { [classes.hiddenEditor]: !delta })}
@@ -51,6 +51,6 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-DiffPresenter.displayName = "TextDiffPresenter";
+DiffPresenter.displayName = 'TextDiffPresenter';
 
 export default DiffPresenter;

@@ -1,11 +1,11 @@
-import React from "react";
-import { theme } from "../../../common/utils/helpers";
-import Text from "../../components/Text";
-import styles from "./Logo.styles";
+import React from 'react';
+import { theme } from '../../../common/utils/helpers';
+import Text from '../../components/Text';
+import styles from './Logo.styles';
 
 interface Props {
-  logo: string;
-  showEnvironment: boolean;
+  logo: string
+  showEnvironment: boolean
 }
 
 const Logo: React.FunctionComponent<Props> = ({
@@ -13,7 +13,7 @@ const Logo: React.FunctionComponent<Props> = ({
   showEnvironment,
 }) => {
   const classes = styles();
-  const themeBgClass = theme.toLowerCase().replace(/(_)/g, "");
+  const themeBgClass = theme.toLowerCase().replace(/(_)/g, '');
   return (
     <React.Fragment>
       {showEnvironment && (

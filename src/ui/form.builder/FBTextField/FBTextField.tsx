@@ -1,15 +1,15 @@
-import { Box, TextField } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBInputType, FBTextFieldProps } from "..";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { FBTextFieldStyles } from "../styles/FBTextField.styles";
-import { withFBTextField } from "./FBTextField.wrap";
+import { Box, TextField } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBTextFieldProps } from '..';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { FBTextFieldStyles } from '../styles/FBTextField.styles';
+import { withFBTextField } from './FBTextField.wrap';
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   onBlur,
   onFocus,
-  FBProps: { inputType = "textfield" } = {},
-  placeholder = "",
+  FBProps: { inputType = 'textfield' } = {},
+  placeholder = '',
   multiline,
   defaultValue,
   error,
@@ -24,26 +24,25 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   value,
   customHeight,
   ...props
-}) =>
-{
+}) => {
   const classes = FBTextFieldStyles({ rows, customHeight });
-  className = className ? className : classes.textfield;
+  className = className ?? classes.textfield;
   return (
     <FBInput {...props} {...{ error, defaultValue }}
-      type={inputType as FBInputType} labelProps={FBFontStyle.labelProps}>
-      {mode === "preview" && (
+      type={inputType} labelProps={FBFontStyle.labelProps}>
+      {mode === 'preview' && (
         <Box>{defaultValue}</Box>
       )}
-      {mode !== "preview" && (
+      {mode !== 'preview' && (
         <TextField
-          data-cy={dataCy ? dataCy : props.name}
+          data-cy={dataCy ?? props.name}
           label=""
           variant="outlined"
-          onBlur={(ev) => onBlur?.(ev)}
-          onFocus={(ev) => onFocus?.(ev)}
+          onBlur={onBlur}
+          onFocus={onFocus}
           inputProps={{
             ...inputProps,
-            ...(type === "number") && {
+            ...(type === 'number') && {
               onWheel: (e) => { e.currentTarget.blur(); },
             },
           }}

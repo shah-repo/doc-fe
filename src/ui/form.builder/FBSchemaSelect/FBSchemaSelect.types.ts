@@ -1,11 +1,11 @@
-import { FBAutocompleteProps, FBInputProps, FBInputType, FBSchemaComponentProps, FBSchemaSelectState } from "..";
+import { FBAutocompleteProps, FBInputProps, FBInputType, FBSchemaComponentProps, FBSchemaSelectState } from '..';
 
 export type FBSchemaSelectProps =
-& Omit<FBAutocompleteProps, "autocompleteState">
-& Pick<FBInputProps, "includeSelectedSchema">
-& Pick<FBSchemaComponentProps, "schema">
+& Omit<FBAutocompleteProps, 'autocompleteState'>
+& Pick<FBInputProps, 'includeSelectedSchema'>
+& Pick<FBSchemaComponentProps, 'schema'>
 & {
-  schemaSelectState?: FBSchemaSelectState;
+  schemaSelectState?: FBSchemaSelectState
 };
 
-export const FBSchemeMultuValueTypes: FBInputType[] = ["checkboxgroup"];
+export const FBSchemeMultuValueTypes: FBInputType[] = ['checkboxgroup'];

@@ -1,6 +1,6 @@
-import { reaction } from "mobx";
-import React from "react";
-import { FB, FBInputProps } from "..";
+import { reaction } from 'mobx';
+import React from 'react';
+import { FB, FBInputProps } from '..';
 
 export const withFBRange = <T extends FBInputProps>(
   Component: React.FunctionComponent,
@@ -51,13 +51,12 @@ export const withFBRange = <T extends FBInputProps>(
 
     // MARK: @observer
 
-
     return Component({
       ...(props as T),
       name,
     });
   };
 
-  Comp.displayName = "withFBRange";
+  Comp.displayName = 'withFBRange';
   return Comp;
 };

@@ -1,8 +1,8 @@
-import { useFormikContext } from "formik";
-import { omit, pick } from "lodash";
-import React from "react";
-import { FB, FBClosingNoteProps, FBData, FBFormState, FBTaskActionMode, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from "..";
-import { toastError } from "../../components/notifications";
+import { useFormikContext } from 'formik';
+import { omit, pick } from 'lodash';
+import React from 'react';
+import { FB, FBClosingNoteProps, FBData, FBFormState, FBTaskActionMode, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from '..';
+import { toastError } from '../../components/notifications';
 
 export const withFBTaskForm = <T extends FBTaskFormProps>(
   Component: React.FunctionComponent<T>,
@@ -10,7 +10,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
   const Comp = ({
     formState,
     initialValues,
-    actionMode = "description",
+    actionMode = 'description',
     name,
     ...props
   }: T) => {
@@ -18,7 +18,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     const { dialogState, workspaceState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, {
       initialValues: {
-        ...omit(initialValues, "descriptionInput"),
+        ...omit(initialValues, 'descriptionInput'),
         ...initialValues?.descriptionInput,
       },
     });
@@ -27,7 +27,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
 
     function handleAdd() {
       if (!id) {
-        toastError("Please save the document first.");
+        toastError('Please save the document first.');
         return handleCancel();
       }
       handleCancel();
@@ -44,13 +44,13 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     function handleAddDescription() {
       const formValue = formState?.getValues();
       taskState?.setTask({
-        ...pick(formValue, ["id", "dueDate"]),
+        ...pick(formValue, ['id', 'dueDate']),
         descriptionSchema: FBData.taskSchema,
         closingNoteSchema: FBData.closingTaskSchema,
         descriptionInput: {
-          ...omit(formValue, ["id", "dueDate", "assigned"]),
+          ...omit(formValue, ['id', 'dueDate', 'assigned']),
         },
-        type: "CR_IMPLEMENTATION_PLAN",
+        type: 'CR_IMPLEMENTATION_PLAN',
         assigned: {
           id: formValue?.assigned.id,
         },
@@ -63,7 +63,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
       const formValues = formState?.getValues() as FBClosingNoteProps;
       const task = {
         id: formValues.id,
-        closingNoteInput: omit(formValues, "id"),
+        closingNoteInput: omit(formValues, 'id'),
       };
       taskState?.finishTask(task);
     }
@@ -74,7 +74,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBTaskFormActions {...{ handleAdd, handleCancel }} />
+        <FBTaskFormActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -87,6 +87,6 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     });
   };
 
-  Comp.displayName = "withFBTaskForm";
+  Comp.displayName = 'withFBTaskForm';
   return Comp;
 };

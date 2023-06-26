@@ -2,8 +2,6 @@
 
 set -e
 
-./scripts/cypress/utils/generate_testmail_credentials.sh
-
 secs_to_human() {
     if [[ -z ${1} || ${1} -lt 60 ]] ;then
         min=0 ; secs="${1}"
@@ -30,22 +28,13 @@ export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=${CYPRESS_TAKE_SCREENSHOT_AFTER_EACH:-false}
-# export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
-export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"enlil.testmail+sysadmin@gmail.com"}
-export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!Admin"}
+export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
+export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
 export CYPRESS_VIDEO=${CYPRESS_VIDEO:-false}
 export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"}
 export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"}
 export CYPRESS_TEST_EMAIL=${CYPRESS_TEST_EMAIL:-"enlil.testmail@gmail.com"}
-export CYPRESS_RUN_ENVIRONMENT=${CYPRESS_RUN_ENVIRONMENT:-"LOCALPARALLEL"}
-export CYPRESS_ARROW_DURATION=${CYPRESS_ARROW_DURATION:-40}
-export GENERATE_REPORTS_SEPARATE_RUN=false
-export CYPRESS_NO_COMMAND_LOG=${CYPRESS_NO_COMMAND_LOG:-false}
-
-if [ "${CYPRESS_NO_COMMAND_LOG}" == "false" ]; then
-  unset CYPRESS_NO_COMMAND_LOG
-fi
-
+export CYPRESS_TEST_EMAIL_PASSWORD=${CYPRESS_TEST_EMAIL_PASSWORD:-"shifamed123"}
 
 export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
 
@@ -64,7 +53,6 @@ source ./scripts/cypress/utils/make_results_dir.sh
 
 ./scripts/cypress/utils/run_generate_info_report.sh
 
-export CYPRESS_DOWNLOADS_DIR=$DIR_DOWNLOADS
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
 

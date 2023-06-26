@@ -1,12 +1,12 @@
-import { filter, includes, isString, size, union } from "lodash";
-import React from "react";
-import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType, FBOption } from "..";
-import { SM } from "../../../App";
-import { FBEditorOptionsProps } from "../FBEditorOptions/FBEditorOptions.types";
-import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
+import { filter, includes, isString, size, union } from 'lodash';
+import React from 'react';
+import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType, FBOption } from '..';
+import { SM } from '../../../App';
+import { FBEditorOptionsProps } from '../FBEditorOptions/FBEditorOptions.types';
+import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptionsProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     openEditor,
@@ -76,8 +76,8 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
         leftPanelState.config({
           open: true,
           showLeftPanelEditor: true,
-          title: <FBEditorTitle type={type} onFBEditorClose={onFBEditorClose} underValidation={underValidation}/>,
-          maxWidth: "sm",
+          title: <FBEditorTitle type={type} onFBEditorClose={onFBEditorClose} underValidation={underValidation} />,
+          maxWidth: 'sm',
           content: editorForm,
           actions: (
             <FBEditorActions
@@ -90,8 +90,8 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
       } else {
         dialogState && dialogState.config({
           open: true,
-          title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
-          maxWidth: "sm",
+          title: underValidation ? <FBEditorTitle /> : 'form.builder.create.field',
+          maxWidth: 'sm',
           content: editorForm,
           actions: (
             <FBEditorActions

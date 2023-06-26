@@ -1,12 +1,12 @@
-import { Button } from "@material-ui/core";
-import React from "react";
-import { SMButtonProps, SMText } from "../../..";
+import { Button } from '@material-ui/core';
+import React from 'react';
+import { SMButtonProps, SMText } from '../../..';
 
 const SMButton: React.FunctionComponent<SMButtonProps> = ({
-  label = "",
-  color = "secondary",
-  variant = "contained",
-  dataCy = "fb-control-btn",
+  label = '',
+  color = 'secondary',
+  variant = 'contained',
+  dataCy = 'fb-control-btn',
   hidden,
   style,
   ...props
@@ -18,7 +18,7 @@ const SMButton: React.FunctionComponent<SMButtonProps> = ({
     data-cy={dataCy}
     style={{
       ...style,
-      ...hidden && { display: "none" },
+      ...hidden && { display: 'none' },
     }}
   >
     <SMText label={label} />

@@ -1,14 +1,13 @@
-import { Grid } from "@material-ui/core";
-import { map, startCase } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
-import FormListContainer from "../form.list/FormList.container";
-import { KendoPresenterProps } from "./interfaces";
-
+import { Grid } from '@material-ui/core';
+import { map, startCase } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { CHANGE_REQUEST_ROOT_URL_SEARCH } from '../../../state/ducks/changeRequest/constants';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import FormListContainer from '../form.list/FormList.container';
+import { KendoPresenterProps } from './interfaces';
 
 export function DocumentListPresenter({
   statuses,
@@ -24,7 +23,7 @@ export function DocumentListPresenter({
     setDataToBeExported(dataToBeExported);
   };
   const intl = useIntl();
-  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const headers = map(columns, (column) => ({
     label: startCase(getTranslatedText(column.title)),
     key: column.field,

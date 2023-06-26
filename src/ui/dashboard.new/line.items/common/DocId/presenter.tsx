@@ -1,11 +1,11 @@
-import { Typography } from "@material-ui/core";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { styles } from "./styles";
+import { Typography } from '@material-ui/core';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { styles } from './styles';
 
 interface Props {
-  url: string;
-  docId: string;
+  url: string
+  docId: string
 }
 const DocId: React.FunctionComponent<Props> = ({ url, docId }) => {
   const classes = styles();

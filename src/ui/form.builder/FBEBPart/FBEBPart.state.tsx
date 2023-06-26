@@ -1,11 +1,11 @@
-import { omit } from "lodash";
-import { action, observable, set } from "mobx";
-import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from "..";
-import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
-import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
+import { omit } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from '..';
+import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
+import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 
 class FBEBPartState {
   // MARK: @observables
@@ -22,14 +22,14 @@ class FBEBPartState {
   public documentTypeApi = new FBRequest<DocumentTypeById, null>(FBEndpoint.FetchDocumentType);
 
   // MARK: @constructor
-  public constructor(children: { childrenParts?: string; childrenPartsForRevise?: string }) {
+  public constructor(children: { childrenParts?: string, childrenPartsForRevise?: string }) {
     this.childrenParts = children.childrenParts;
     this.childrenPartsForRevise = children.childrenPartsForRevise;
   }
 
   // MARK: @actions
   @action public setChildrenParts = (childrenParts?: string) =>
-    set(this, "childrenParts", childrenParts);
+    set(this, 'childrenParts', childrenParts);
 
   // MARK: @helpers
   public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody, callback?: () => void) => {
@@ -42,7 +42,7 @@ class FBEBPartState {
       url: FBEndpoint.PatchDocumentRevision,
       urlValues: { docRevId },
       body,
-      method: "patch",
+      method: 'patch',
     }, (data, error) => {
       if (error) {
         this.existingChildApi.onError(error);
@@ -58,7 +58,7 @@ class FBEBPartState {
     body = omit(body,
       Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
     ) as EBPartPostBody;
-    this.newChildApi.set({ body, method: "post" }, (data, error) => {
+    this.newChildApi.set({ body, method: 'post' }, (data, error) => {
       if (error) {
         this.newChildApi.onError(error);
         return;
@@ -74,14 +74,14 @@ class FBEBPartState {
     this.proposedDocIdApi.set({
       url: FBEndpoint.FetchDocId,
       urlValues: { documentTypeId },
-      method: "get",
+      method: 'get',
     });
   };
 
   public fetchDocumentById = (id: string) => this.documentApi.set({
     url: FBEndpoint.Document,
     urlValues: { id },
-    method: "get",
+    method: 'get',
   });
 
   public fetchDocumentType = (documentTypeId: string) => {
@@ -89,7 +89,7 @@ class FBEBPartState {
     this.documentTypeApi.set({
       url: FBEndpoint.FetchDocumentType,
       urlValues: { documentTypeId },
-      method: "get",
+      method: 'get',
     });
   };
 }

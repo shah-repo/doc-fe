@@ -1,8 +1,8 @@
-import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from "lodash";
-import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from "..";
-import FBSchemaState from "../FBSchema/FBSchema.state";
+import { flatten, unflatten } from 'flat';
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
+import { action, computed, get, observable, set } from 'mobx';
+import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
+import FBSchemaState from '../FBSchema/FBSchema.state';
 
 class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
@@ -34,7 +34,7 @@ class FBFormState extends FBSchemaState {
   @observable public locked = new Map<string, FBLockValue>();
   @observable public approvalMap = {};
 
-  public constructor({
+  public constructor ({
     schema,
     initialValues = {},
     workspaceMode, workspaceState,
@@ -51,11 +51,11 @@ class FBFormState extends FBSchemaState {
     this.workspaceState = workspaceState;
   }
 
-  @computed public get Validator(): any {
-    return lodashGet(window, "EnlilRemoteValidators.validator");
+  @computed public get Validator (): any {
+    return lodashGet(window, 'EnlilRemoteValidators.validator');
   }
 
-  public get shouldValidate(): boolean {
+  public get shouldValidate (): boolean {
     return !FBWorkspaceSkipValidationModes.some((mode) => this.workspaceMode === mode);
   }
 
@@ -105,7 +105,7 @@ class FBFormState extends FBSchemaState {
     return lodashGet(this.values, fieldName);
   };
 
-  private setValidationValue = (fieldName: string, value: any) => {
+  private readonly setValidationValue = (fieldName: string, value: any) => {
     if (isBoolean(value)) {
       // validatorjs doesn't validate boolean values
       value = `${value}`;
@@ -143,15 +143,16 @@ class FBFormState extends FBSchemaState {
   };
 
   @action public setApprovalMap = (approvals) => {
-    set(this, "approvalMap", { ...this.approvalMap, ...approvals });
+    set(this, 'approvalMap', { ...this.approvalMap, ...approvals });
   };
+
   @action public setRules = (rules: Dictionary<string>) =>
     set(this.rules, rules);
 
   @action public getRules = () => this.rules;
 
   @action public setErrors = (errors: Dictionary<string>) =>
-    set(this, "errors", errors);
+    set(this, 'errors', errors);
 
   @action public setFieldError = (fieldName: string, error: string) =>
     set(this.errors, fieldName, error);
@@ -160,7 +161,7 @@ class FBFormState extends FBSchemaState {
     get(this.errors, fieldName);
 
   @action public setHelpers = (helpers: Dictionary<string>) => {
-    set(this, "helpers", helpers);
+    set(this, 'helpers', helpers);
   };
 
   @action public setFieldHelper = (fieldName: string, value: string) => {
@@ -242,26 +243,26 @@ class FBFormState extends FBSchemaState {
       () => callback && callback(true),
       () => { // failed
         const errors = validator.errors.all();
-        map(errors, (v, k) => this.setFieldError(k, join(v, "\n")));
+        map(errors, (v, k) => this.setFieldError(k, join(v, '\n')));
         callback && callback(false);
       });
   };
 
-  private parseRules = (rules: Dictionary<string>, values: Dictionary<string>): Dictionary<string> => {
+  private readonly parseRules = (rules: Dictionary<string>, values: Dictionary<string>): Dictionary<string> => {
     const parsedRules = {};
     map(rules, (value, key) => {
       if (!isString(value)) { return; }
-      const rulesArray = value?.split("|");
+      const rulesArray = value?.split('|');
       const valuesArray: any = [];
       map(rulesArray, (val) => {
         if (!val) {
           return;
         }
-        const splitVal = val.split(":");
+        const splitVal = val.split(':');
         if (splitVal.length === 1) {
           parsedRules[key] = val;
         } else {
-          const finalValue = splitVal[1].split(",");
+          const finalValue = splitVal[1].split(',');
           if (finalValue.length === 1) {
             valuesArray.push({
               [splitVal[0]]: finalValue[0],
@@ -274,9 +275,9 @@ class FBFormState extends FBSchemaState {
             });
           } else { // array value (required_if_in validator)
             // const ruleName = splitVal[1].split(",")[0];
-            const splitArray = splitVal[1].split(",");
-            const splitValue = val.split(",");
-            const finalValue = slice(splitValue, 1, splitValue.length).join(",");
+            const splitArray = splitVal[1].split(',');
+            const splitValue = val.split(',');
+            const finalValue = slice(splitValue, 1, splitValue.length).join(',');
             valuesArray.push({
               [splitVal[0]]: [splitArray[0], finalValue],
             });
@@ -291,18 +292,17 @@ class FBFormState extends FBSchemaState {
   // *NOTE: remove this after it is set in be script
   public registerValidator = (validator: any) => {
     this.Validator.registerAsyncImplicit(
-      "required_if_in",
-      function(val: string[], req: string[], attribute: string, passes) {
+      'required_if_in',
+      function (val: string[], req: string[], attribute: string, passes) {
         const reqs = req?.[1];
-        const reqName = req?.[0] || "";
+        const reqName = req?.[0] || '';
         let inputValue = lodashGet(validator.input, reqName);
         // Radio group support
         !isArray(inputValue) && (inputValue = [inputValue]);
         const diff = inputValue && inputValue.filter((inputVal) => {
           try {
             return values(JSON.parse(reqs)).includes(inputVal);
-          }
-          catch {
+          } catch {
             return reqs.includes(inputVal);
           }
         });
@@ -319,23 +319,22 @@ class FBFormState extends FBSchemaState {
         return passes();
       });
     this.Validator.registerAsyncImplicit(
-      "required_if",
-      function(val: string[], req: string[], attribute: string, passes) {
+      'required_if',
+      function (val: string[], req: string[], attribute: string, passes) {
         const reqs = req?.[1];
-        const reqName = req?.[0] || "";
+        const reqName = req?.[0] || '';
         const inputValue = lodashGet(validator.input, reqName);
         const { messages: { attributeNames } } = validator;
-        if (!inputValue) {  return passes(); }
-        if (!val)
-        { return passes(
-          false,
+        if (!inputValue) { return passes(); }
+        if (!val && reqs === inputValue) {
+          return passes(
+            false,
           `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} is 
-          ${attributeNames[reqs]}`); }
+          ${attributeNames[reqs] ?? reqs}`);
+        }
 
         return passes();
-
       });
-
   };
 
   public setFieldAutosave = (name?: string) => {
@@ -348,7 +347,7 @@ class FBFormState extends FBSchemaState {
 
   public lockField = (
     body: Partial<FBLockBody>,
-    fieldName: string
+    fieldName: string,
   ) => {
     // if (!this.includeLocking) { return; }
     // if (this.locked?.get(fieldName)?.locked) { return; }

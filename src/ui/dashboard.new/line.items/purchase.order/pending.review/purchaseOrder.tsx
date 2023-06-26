@@ -1,86 +1,86 @@
-import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
-import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status.svg";
-import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status_white.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
-import { attachmentsActions } from "../../../../../state/ducks/attachments";
-import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { Attachment } from "../../../../change.request/form/types";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import Colors from "../../../../layout/theme/utils/colors";
-import { getStatusLabel } from "../../common/DocIcon";
-import DocId from "../../common/DocId/presenter";
-import DocTitle from "../../common/DocTitle/presenter";
-import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
-import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
-import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { formatCurrency, getPendingTooltipText } from "../../common/Utils";
-import EmailModal from "../../dialogs/email/EmailDialog";
-import useStyles from "./purchaseOrder.styles";
-import DismissAction from "../../common/DismissAction";
+import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
+import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
+import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_review_status.svg';
+import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status_white.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
+import { attachmentsActions } from '../../../../../state/ducks/attachments';
+import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
+import { Attachment } from '../../../../change.request/form/types';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import Colors from '../../../../layout/theme/utils/colors';
+import { getStatusLabel } from '../../common/DocIcon';
+import DocId from '../../common/DocId/presenter';
+import DocTitle from '../../common/DocTitle/presenter';
+import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
+import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
+import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
+import EmailModal from '../../dialogs/email/EmailDialog';
+import useStyles from './purchaseOrder.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  docId: string;
-  docRevId: string;
-  type: string;
-  docRevName: string;
-  docRevVersion: string;
-  purchaseOrderSupplierDocRevId: string;
-  purchaseOrderSupplierDocId: string;
-  status: string;
-  displaystatus: string;
-  docTypeGroup: string;
-  timestamp: string;
+  id: string
+  docDocumentId: string
+  docId: string
+  docRevId: string
+  type: string
+  docRevName: string
+  docRevVersion: string
+  purchaseOrderSupplierDocRevId: string
+  purchaseOrderSupplierDocId: string
+  status: string
+  displaystatus: string
+  docTypeGroup: string
+  timestamp: string
   docRevPendingApprovals: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   docRevApprovedApprovals: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
   purchaseOrderAttachments: {
-    name: string;
-    type: string;
-    id: string;
-  }[];
-  purchaseOrdeLineItemCount: number;
-  purchaseOrderDescription: string;
-  pinned: boolean;
-  purchaseOrderCurrency: string;
-  purchaseOrderTotalAmount: string;
-  purchaseSupplierName: string;
-  hoverItemId: string;
-  pendingEmailSentAt: Nullable<string>;
-  onMouseHoverItem: (id: string) => void;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+    name: string
+    type: string
+    id: string
+  }[]
+  purchaseOrdeLineItemCount: number
+  purchaseOrderDescription: string
+  pinned: boolean
+  purchaseOrderCurrency: string
+  purchaseOrderTotalAmount: string
+  purchaseSupplierName: string
+  hoverItemId: string
+  pendingEmailSentAt: Nullable<string>
+  onMouseHoverItem: (id: string) => void
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 const PurchaseOrderItemPresenter: React.FC<Props> = ({
   id,
@@ -116,35 +116,35 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
 
   const PoItems: any = [
     {
-      id: "id1",
+      id: 'id1',
       isSupplier: true,
-      ltext: "Supplier:",
+      ltext: 'Supplier:',
       rtext: purchaseSupplierName,
     },
     {
-      id: "id2",
+      id: 'id2',
       isRegular: true,
-      ltext: "Total:",
+      ltext: 'Total:',
       rtext: `${purchaseOrderCurrency} ${formatCurrency(
-        purchaseOrderTotalAmount
+        purchaseOrderTotalAmount,
       )}`,
     },
     {
-      id: "id3",
+      id: 'id3',
       isRegular: true,
-      ltext: "Description:",
+      ltext: 'Description:',
       rtext: purchaseOrderDescription,
     },
     {
-      id: "id4",
+      id: 'id4',
       isRegular: true,
-      ltext: "Line Items:",
+      ltext: 'Line Items:',
       rtext: purchaseOrdeLineItemCount,
     },
     {
-      id: "id5",
+      id: 'id5',
       isAttachments: true,
-      ltext: "Attachments",
+      ltext: 'Attachments',
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -156,8 +156,8 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
-  const { count, pending, approved, primaryText, secondaryText } =
-    getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
+  const { count, pending, approved, primaryText, secondaryText }
+    = getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -202,7 +202,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, "_blank");
+      downloadInfo && window.open(downloadInfo.url, '_blank');
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
@@ -233,13 +233,13 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + "InReview"}>
+              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'}>
                 <Grid item={true}>
-                  <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId} />
+                  <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
-                    url={documentVersionPath(docRevId || "", docDocumentId)}
+                    url={documentVersionPath(docRevId || '', docDocumentId)}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />
@@ -342,8 +342,8 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
                             .map((approver) => approver.userName)
-                            .join(", ")
-                          : ""}
+                            .join(', ')
+                          : ''}
                       </Typography>
                     </Link>
                   </StyleTooltip>
@@ -351,7 +351,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                ></Grid>
+                 />
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -382,8 +382,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 />
               </span>
             )}
-            {
-              <StyleTooltip
+            <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
@@ -397,7 +396,6 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   />
                 </span>
               </StyleTooltip>
-            }
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon
@@ -485,10 +483,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                       to={
                         poItem.rtext
                           ? documentVersionPath(
-                            purchaseOrderSupplierDocRevId || "",
-                            purchaseOrderSupplierDocId
+                            purchaseOrderSupplierDocRevId || '',
+                            purchaseOrderSupplierDocId,
                           )
-                          : "#"
+                          : '#'
                       }
                       color="inherit"
                       className={classes.link}

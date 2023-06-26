@@ -1,13 +1,13 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import Title from "../../document.revision/form/Title";
-import Description from "../../documentRevision/forms/presenters/Description";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import Title from '../../document.revision/form/Title';
+import Description from '../../documentRevision/forms/presenters/Description';
 
 interface ChangeRequestFormHeaderProps {
-  title?: string;
-  description?: string;
-  isDisabledInput?: boolean;
-  documentTypeId?: string;
+  title?: string
+  description?: string
+  isDisabledInput?: boolean
+  documentTypeId?: string
 }
 
 const ChangeRequestFormHeader: React.FunctionComponent<ChangeRequestFormHeaderProps> = ({

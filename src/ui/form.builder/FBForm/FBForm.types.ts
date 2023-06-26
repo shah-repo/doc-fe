@@ -1,28 +1,28 @@
-import { Dictionary } from "lodash";
-import { FBFormState, FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
+import { Dictionary } from 'lodash';
+import { FBFormState, FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from '..';
 
 export interface FBValidationRelatedRules {
-  name: string;
-  value: any;
+  name: string
+  value: any
 }
 
 export enum FBFormMode {
-  add = "form.builder.add",
-  edit = "form.builder.edit",
+  add = 'form.builder.add',
+  edit = 'form.builder.edit',
 }
 
 export interface FBFormProps {
-  initialValues?: Dictionary<any>;
-  children?: React.ReactNode | React.ReactNode[];
-  formState?: FBFormState;
-  schema?: FBSchemaProps[];
-  workspaceMode?: FBWorkspaceMode;
-  errorValidation?: boolean;
-  initialValidation?: boolean;
-  includeLocking?: boolean;
+  initialValues?: Dictionary<any>
+  children?: React.ReactNode | React.ReactNode[]
+  formState?: FBFormState
+  schema?: FBSchemaProps[]
+  workspaceMode?: FBWorkspaceMode
+  errorValidation?: boolean
+  initialValidation?: boolean
+  includeLocking?: boolean
 }
 
-export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues" | "workspaceMode">
+export type FBFormConstructor = Pick<FBFormProps, 'schema' | 'initialValues' | 'workspaceMode'>
 & {
-  workspaceState?: FBWorkspaceState;
+  workspaceState?: FBWorkspaceState
 };

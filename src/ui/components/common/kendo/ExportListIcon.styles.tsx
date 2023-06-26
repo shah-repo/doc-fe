@@ -1,5 +1,5 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -11,5 +11,5 @@ export const styles = makeStyles((theme: Theme) =>
       fill: Colors.white,
       marginRight: theme.spacing(0.625),
     },
-  })
+  }),
 );

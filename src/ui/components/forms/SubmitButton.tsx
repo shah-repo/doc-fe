@@ -1,18 +1,18 @@
-import { Button } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import { FormikErrors } from "formik";
-import { isEmpty } from "lodash";
-import * as React from "react";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { AsyncState, AsyncStatus } from "../../../state/types";
-import Text from "../../components/Text";
+import { Button } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import { FormikErrors } from 'formik';
+import { isEmpty } from 'lodash';
+import * as React from 'react';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { AsyncState, AsyncStatus } from '../../../state/types';
+import Text from '../../components/Text';
 
 export interface SubmitButtonProps extends ButtonProps {
-  asyncState: AsyncState;
-  label: string;
-  errors?: FormikErrors<any>;
-  dataCy?: string;
-  showNewButton?: boolean;
+  asyncState: AsyncState
+  label: string
+  errors?: FormikErrors<any>
+  dataCy?: string
+  showNewButton?: boolean
 }
 
 const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({

@@ -1,9 +1,9 @@
-import { isEmpty, isUndefined } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { DocumentRevisionFormHeaderProps, SM } from "../../../../..";
-import { authSelectors } from "../../../../../../state/ducks/auth";
-import { isOperator } from "../../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
+import { isEmpty, isUndefined } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { DocumentRevisionFormHeaderProps, SM } from '../../../../..';
+import { authSelectors } from '../../../../../../state/ducks/auth';
+import { isOperator } from '../../../../../../ui/documentRevision/DocumentRevisionDisplay.container';
 
 export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHeaderProps>(
   Component: React.FunctionComponent<T>,
@@ -27,9 +27,9 @@ export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHea
     }
 
     isDisabledInput = (
-      !isUndefined(_documentRevisionFormState?.documentRevision?.id) &&
-      isCurrentUserOperator &&
-      !isOwner
+      !isUndefined(_documentRevisionFormState?.documentRevision?.id)
+      && isCurrentUserOperator
+      && !isOwner
     );
 
     // MARK: @state
@@ -48,6 +48,6 @@ export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHea
     );
   };
 
-  Comp.displayName = "withDocumentRevisionFormHeaderWrap";
+  Comp.displayName = 'withDocumentRevisionFormHeaderWrap';
   return Comp;
 };

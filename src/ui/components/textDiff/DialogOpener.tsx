@@ -1,8 +1,8 @@
-import React, { Fragment, useMemo } from "react";
-import useDialog from "../../hooks/useDialog";
-import Dialog from "./Dialog.container";
-import { styles } from "./utils/DialogOpener.styles";
-import { DialogOpenerProps } from "./utils/types";
+import React, { Fragment, useMemo } from 'react';
+import useDialog from '../../hooks/useDialog';
+import Dialog from './Dialog.container';
+import { styles } from './utils/DialogOpener.styles';
+import { DialogOpenerProps } from './utils/types';
 
 type Props = DialogOpenerProps;
 
@@ -13,10 +13,10 @@ const DialogOpener: React.FunctionComponent<Props> = ({
 }) => {
   const textToShow = useMemo(() => {
     if (!text) {
-      return "N/A";
+      return 'N/A';
     }
     if (text.trim().length === 0) {
-      return "N/A";
+      return 'N/A';
     }
 
     return text;
@@ -35,8 +35,8 @@ const DialogOpener: React.FunctionComponent<Props> = ({
         {textToShow}
       </div>
       {
-        dialogHandler.isOpen &&
-        <Dialog
+        dialogHandler.isOpen
+        && <Dialog
           auditId={id}
           dialogHandler={dialogHandler}
         />
@@ -45,6 +45,6 @@ const DialogOpener: React.FunctionComponent<Props> = ({
   );
 };
 
-DialogOpener.displayName = "TextDiffDialogOpener";
+DialogOpener.displayName = 'TextDiffDialogOpener';
 
 export default DialogOpener;

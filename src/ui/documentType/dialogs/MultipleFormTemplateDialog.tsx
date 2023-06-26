@@ -1,31 +1,31 @@
-import { Button, Dialog, DialogContent, DialogTitle, Grid, Typography } from "@material-ui/core";
-import PostAddTwoToneIcon from "@material-ui/icons/PostAddTwoTone";
-import { FormikProps } from "formik";
-import React, { useEffect, useState } from "react";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import FormProgress from "../../components/forms/FormProgress";
-import FormWrapper from "../../components/forms/FormWrapper";
-import Text from "../../components/Text";
-import { checkIsDocumentLHRT } from "../../documentRevision/helpers/checkDocumentGroup";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { DialogHandler } from "../../hooks/useDialog";
-import { docIdAsyncContext } from "../list/CreateDocumentByType";
-import { styles } from "./FormListDialog/FormListDialog.styles";
+import { Button, Dialog, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
+import PostAddTwoToneIcon from '@material-ui/icons/PostAddTwoTone';
+import { FormikProps } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import AutocompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
+import FormProgress from '../../components/forms/FormProgress';
+import FormWrapper from '../../components/forms/FormWrapper';
+import Text from '../../components/Text';
+import { checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { DialogHandler } from '../../hooks/useDialog';
+import { docIdAsyncContext } from '../list/CreateDocumentByType';
+import { styles } from './FormListDialog/FormListDialog.styles';
 
 interface DocumentTypeDialogProps extends FormikProps<any> {
-  documentTypes: DocumentType[];
-  formIds: DocumentTypeByIdForm[];
-  areFormIdsLoading?: boolean;
-  dialog: DialogHandler;
-  handleSelection: (id: string) => void;
-  handleTemplateSelection: (id: string) => void;
-  isRecord: boolean;
-  closeMultipleFormDialog: () => void;
-  isLHR: boolean;
+  documentTypes: DocumentType[]
+  formIds: DocumentTypeByIdForm[]
+  areFormIdsLoading?: boolean
+  dialog: DialogHandler
+  handleSelection: (id: string) => void
+  handleTemplateSelection: (id: string) => void
+  isRecord: boolean
+  closeMultipleFormDialog: () => void
+  isLHR: boolean
 }
 
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
@@ -75,7 +75,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
   }, [isLHR]);
 
   const checkForPart = (form: DocumentTypeByIdForm) => {
-    const id = form.formTemplate?.schema?.find((item) => item.name === "lhr-selected-part")?.editorConfig?.id;
+    const id = form.formTemplate?.schema?.find((item) => item.name === 'lhr-selected-part')?.editorConfig?.id;
     return parts.find((part) => part.document.id === id && part.status === DocumentRevisionStatus.Released);
   };
 
@@ -112,8 +112,8 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   return (
     <>
-      {dialog.isOpen &&
-      <Dialog
+      {dialog.isOpen
+      && <Dialog
         open={dialog.isOpen}
         onSubmit={preventPropagation}
         onClose={closeMultipleFormDialog}
@@ -123,20 +123,20 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
           <Grid container className={classes.containerWrap}>
             <Grid item xs={2} className={classes.gridWrap}>
               <span className={classes.iconContainer}>
-                <PostAddTwoToneIcon className={classes.icon}/>
+                <PostAddTwoToneIcon className={classes.icon} />
               </span>
             </Grid>
             <Grid item xs={10}>
               <Typography variant="h6">
-                <Text translation={isRecord ? "record.select.type" : "supplier.select.type" } />
+                <Text translation={isRecord ? 'record.select.type' : 'supplier.select.type' } />
               </Typography>
               <Typography variant="h5">
-                <Text translation={isRecord ? "record.select.create.title" : "document.select.create.title"}/>
+                <Text translation={isRecord ? 'record.select.create.title' : 'document.select.create.title'} />
               </Typography>
             </Grid>
           </Grid>
         </DialogTitle>
-        <DialogContent classes={{ root: classes.dialogContent }} style={{ position: "relative" }}>
+        <DialogContent classes={{ root: classes.dialogContent }} style={{ position: 'relative' }}>
           <FormWrapper
             dirty={dirty}
             initialValues={initialValues}
@@ -147,7 +147,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               name="selectType"
               size="sm"
               autocompleteProps={{
-                id: "MultipleFormTemplate-selectDocForm",
+                id: 'MultipleFormTemplate-selectDocForm',
                 isLoading: areFormIdsLoading,
               }}
               options={activeDocTypes.map((docType) => ({
@@ -155,19 +155,19 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                 value: docType.id,
               }))}
               onClick={(option) => handleSelect(option.value)}
-              label={isRecord ? "record.select.type" : "supplier.select.type" }
-              data-cy={isRecord ? "record.select.type" : "supplier.select.type" }
+              label={isRecord ? 'record.select.type' : 'supplier.select.type' }
+              data-cy={isRecord ? 'record.select.type' : 'supplier.select.type' }
             />
             {formIds.length > 1 && (
               <AutocompleteField
                 isDisabled={areFormIdsLoading}
                 name="selectForm"
                 size="sm"
-                autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
+                autocompleteProps={{ id: 'MultipleFormTemplate-selectDocType' }}
                 options={renderOptions()}
                 onClick={(option) => handleTemplateSelection(option.value)}
-                label={isRecord ? "record.select.template" : "supplier.select.form"}
-                data-cy={isRecord ? "record.select.template" : "supplier.select.form"}
+                label={isRecord ? 'record.select.template' : 'supplier.select.form'}
+                data-cy={isRecord ? 'record.select.template' : 'supplier.select.form'}
               />
             )}
             <Button

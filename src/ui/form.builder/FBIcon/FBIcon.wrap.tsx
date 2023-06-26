@@ -1,9 +1,9 @@
-import { isString } from "lodash";
-import React, { useMemo } from "react";
-import { FBData, FBIconProps, FBIconType } from "..";
+import { isString } from 'lodash';
+import React, { useMemo } from 'react';
+import { FBData, FBIconProps, FBIconType } from '..';
 
 export const withFBIcon = <T extends FBIconProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({
@@ -22,6 +22,6 @@ export const withFBIcon = <T extends FBIconProps>(
     });
   };
 
-  Comp.displayName = "withFBIcon";
+  Comp.displayName = 'withFBIcon';
   return Comp;
 };

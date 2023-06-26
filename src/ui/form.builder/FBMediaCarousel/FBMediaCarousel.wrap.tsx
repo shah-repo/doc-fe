@@ -1,10 +1,10 @@
-import { isEmpty, isEqual, isUndefined, size } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { FB, FBAttachment, FBMediaCarouselProps, FBMediaCarouselState } from "..";
+import { isEmpty, isEqual, isUndefined, size } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { FB, FBAttachment, FBMediaCarouselProps, FBMediaCarouselState } from '..';
 
 export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     removeMedia,
@@ -15,7 +15,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     handleBack,
     collection = [],
     mediaCarouselState,
-    activeMediaPath = "",
+    activeMediaPath = '',
     toolsVisibility,
     activeStep,
     previewType,
@@ -31,7 +31,6 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     function setPreviewType() {
       previewType = mediaAlbumState?.previewType(collection[activeStep || 0]);
@@ -75,8 +74,8 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
 
     useObserver(() => {
       activeStep = mediaAlbumState?.activeMedia || 0;
-      activeMediaPath = collection[activeStep]?.url || "";
-      toolsVisibility = mediaCarouselState?.toolsVisibility || "hidden";
+      activeMediaPath = collection[activeStep]?.url || '';
+      toolsVisibility = mediaCarouselState?.toolsVisibility || 'hidden';
       setPreviewType();
     });
 

@@ -1,6 +1,6 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBTaskFieldProps, FBTaskFieldState, FBTaskFormNote, FBTaskItem } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBTaskFieldProps, FBTaskFieldState, FBTaskFormNote, FBTaskItem } from '..';
 
 export const withFBTaskField = <T extends FBTaskFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -21,16 +21,16 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     const { taskState, dialogState, workspaceState } = FB.useStores();
     const { currentUser } = workspaceState || {};
     taskFieldState = FB.useRef(FBTaskFieldState);
-    canBeDone = currentUser?.id === task.assigned.user?.id && task.status === "PENDING";
+    canBeDone = currentUser?.id === task.assigned.user?.id && task.status === 'PENDING';
 
-    onMouseOver = () => taskFieldState?.setVisibility(task.status === "DRAFT");
+    onMouseOver = () => taskFieldState?.setVisibility(task.status === 'DRAFT');
     onMouseLeave = () => taskFieldState?.setVisibility(false);
     handleRemoveTask = (task?: FBTaskItem) => taskState?.removeTask(task);
 
     handleClosingNote = () => {
       dialogState?.config({
         open: true,
-        title: "form.builder.closing.note.title",
+        title: 'form.builder.closing.note.title',
         content: (
           <FBTaskFormNote
             initialValues={{ id: task.id }}
@@ -59,6 +59,6 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     });
   };
 
-  Comp.displayName = "withFBTaskField";
+  Comp.displayName = 'withFBTaskField';
   return Comp;
 };

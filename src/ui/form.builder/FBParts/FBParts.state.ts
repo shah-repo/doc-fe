@@ -1,7 +1,7 @@
-import { unionBy, values } from "lodash";
-import { computed, observable } from "mobx";
-import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
-import FBProcedureState from "../FBProcedure/FBProcedure.state";
+import { unionBy, values } from 'lodash';
+import { computed, observable } from 'mobx';
+import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from '..';
+import FBProcedureState from '../FBProcedure/FBProcedure.state';
 
 class FBPartsState extends FBProcedureState {
   // MARK: @config
@@ -11,7 +11,7 @@ class FBPartsState extends FBProcedureState {
   @observable public diffParts = new Map<string, FBProcedureValue>();
 
   getNumberOfDigits(number: number): number {
-    return (number.toString().split(".")[1] || "").length;
+    return (number.toString().split('.')[1] || '').length;
   }
 
   // MARK: @computed
@@ -29,7 +29,7 @@ class FBPartsState extends FBProcedureState {
 
       const numberOfDigits = Math.max(
         this.getNumberOfDigits(currentQuantity),
-        this.getNumberOfDigits(quantityToAdd)
+        this.getNumberOfDigits(quantityToAdd),
       );
 
       result[key] = {
@@ -45,7 +45,7 @@ class FBPartsState extends FBProcedureState {
     let equipment: FBProcedureItemConfig[] = [];
     const valueParts = !this.diffParts.size ? this.parts : this.diffParts;
     valueParts.forEach((value) => {
-      equipment = unionBy(equipment, value?.equipment || [], "title");
+      equipment = unionBy(equipment, value?.equipment || [], 'title');
     });
     return equipment;
   }

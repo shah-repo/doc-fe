@@ -1,76 +1,76 @@
-import { ChangeRequest } from "../changeRequest/types";
-import { Employee } from "../company/types";
-import { DocumentRevision } from "../documentRevisions/types";
+import { ChangeRequest } from '../changeRequest/types';
+import { Employee } from '../company/types';
+import { DocumentRevision } from '../documentRevisions/types';
 
 export enum ApprovalStatus {
-  Draft = "DRAFT",
-  Pending = "PENDING",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
-  Abandoned = "ABANDONED",
+  Draft = 'DRAFT',
+  Pending = 'PENDING',
+  Approved = 'APPROVED',
+  Rejected = 'REJECTED',
+  Abandoned = 'ABANDONED',
 }
 
 export interface Owner {
-  id: string;
-  user: User;
+  id: string
+  user: User
 }
 
 export interface User {
-  avatar: string | null;
-  id: string;
-  email: string;
-  name: string;
-  confirmed?: boolean;
-  locked?: boolean;
-  initialColor: string;
+  avatar: string | null
+  id: string
+  email: string
+  name: string
+  confirmed?: boolean
+  locked?: boolean
+  initialColor: string
 }
 
 export interface Approval {
-  updatedAt: string;
-  id: string;
-  status: ApprovalStatus;
-  type: "MASTER" | "SECTION";
-  fieldId?: string;
-  approver: Owner;
-  approverId?: string;
-  approverName?: string;
-  approverEmail?: string;
-  approverGroups?: string[];
-  documentRevision?: DocumentRevision;
-  changeRequest?: ChangeRequest;
-  reviewedAt?: string;
-  assignedAt?: string;
-  assigned: Partial<Employee>;
-  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
-  manually?: boolean;
+  updatedAt: string
+  id: string
+  status: ApprovalStatus
+  type: 'MASTER' | 'SECTION'
+  fieldId?: string
+  approver: Owner
+  approverId?: string
+  approverName?: string
+  approverEmail?: string
+  approverGroups?: string[]
+  documentRevision?: DocumentRevision
+  changeRequest?: ChangeRequest
+  reviewedAt?: string
+  assignedAt?: string
+  assigned: Partial<Employee>
+  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>
+  manually?: boolean
 }
 
 export interface Id {
-  id: string;
+  id: string
 }
 
 export interface DataProps<T> {
-  dataProp: T;
+  dataProp: T
 }
 
-export type RenderSize = "sm" | "md" | "lg";
+export type RenderSize = 'sm' | 'md' | 'lg';
 
 export enum TypographySize {
-  sm = "subtitle1",
-  md = "h6",
-  mdw = "h5",
-  lg = "h4",
+  sm = 'subtitle1',
+  md = 'h6',
+  mdw = 'h5',
+  lg = 'h4',
 }
 
 export enum TypographyColor {
-  primary = "textPrimary",
-  secondary = "textSecondary",
+  primary = 'textPrimary',
+  secondary = 'textSecondary',
 }
 
 export interface TypographyProps {
-  size: keyof typeof TypographySize;
-  color: keyof typeof TypographyColor;
-  variant: string;
+  size: keyof typeof TypographySize
+  color: keyof typeof TypographyColor
+  variant: string
 }
 
 export type Nullable<T> = T | null;

@@ -1,5 +1,5 @@
-import { filter, map, uniqBy } from "lodash";
-import { action, computed, observable, set } from "mobx";
+import { filter, map, uniqBy } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
 import {
   FBAutocompleteAsyncOption,
   FBAutocompleteAsyncState,
@@ -9,10 +9,10 @@ import {
   FBInlineApprovalTransition,
   FBInlineApprovalTransitionBody,
   FBRequestApprovalTransitionBody,
-} from "..";
-import { Document } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+} from '..';
+import { Document } from '../../../state/ducks/documentRevisions/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBInlineApprovalState {
   // MARK: @observables
@@ -40,42 +40,42 @@ class FBInlineApprovalState {
 
   // MARK: @computed
   @computed public get getApprovals(): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => a.status !== "ABANDONED");
+    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
-      canRequest: this.isOwner && a.status === "DRAFT",
+      canRequest: this.isOwner && a.status === 'DRAFT',
     }));
   }
 
   @computed public get getOptions(): FBInlineApprovalOptions[] {
-    return uniqBy(this.options, "user.id");
+    return uniqBy(this.options, 'user.id');
   }
 
   // MARK: @actions
   @action public setOptions = (options?: FBInlineApprovalOptions[]) =>
-    set(this, "options", options);
+    set(this, 'options', options);
 
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
-    set(this, "approvals", approvals);
+    set(this, 'approvals', approvals);
 
   // MARK: @helpers
   public initialApprovals = ({ approvals, isOwner }: FBInlineApprovalConstructor) => {
-    approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.setApprovals(approvals);
     this.isOwner = isOwner;
-    const approvers = map(approvals, "approver");
-    const options = map(approvers, (o) => ({ ...o, listGroup: "Approvers" })) as FBInlineApprovalOptions[];
+    const approvers = map(approvals, 'approver');
+    const options = map(approvers, (o) => ({ ...o, listGroup: 'Approvers' })) as FBInlineApprovalOptions[];
     this.setOptions(options);
   };
 
   public approvalBody = (
     body: Partial<FBInlineApprovalBody>,
-    callback?: () => any
+    callback?: () => any,
   ) => {
     this.approvalApi.set({
       url: FBEndpoint.Approvals,
       body,
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         this.approvalApi.onError(error);
@@ -91,14 +91,14 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
       body,
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         return this.transitionApi.onError(error);
@@ -113,12 +113,12 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id: string,
     body: FBRequestApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => this.requestApprovalApi.set({
     body,
     url: FBEndpoint.ApprovalsTransition,
     urlValues: { id, transition },
-    method: "post",
+    method: 'post',
   }, (data, error) => {
     if (error) {
       return this.requestApprovalApi.onError(error);
@@ -133,7 +133,7 @@ class FBInlineApprovalState {
     this.documentApi.set({
       url: FBEndpoint.Document,
       urlValues: { id },
-      method: "get",
+      method: 'get',
     });
   };
 }

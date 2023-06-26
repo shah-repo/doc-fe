@@ -1,36 +1,36 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import cx from "classnames";
-import { useFormikContext } from "formik";
-import { get, isEmpty } from "lodash";
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { ValueType } from "react-select";
-import { SM } from "../../../../../App";
-import { ReactComponent as PreviewIcon } from "../../../../../assets/images/preview.svg";
-import { Permission } from "../../../../../state/ducks/auth/types";
-import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
-import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
-import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
-import { required, validator } from "../../../../components/forms/fields/validators";
-import Text from "../../../../components/Text";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../../../constants/urls";
-import { FB, FBDialog, FBDialogState, FBProvider } from "../../../../form.builder";
-import useGetHasPermission from "../../../../hooks/useGetHasPermission";
-import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../../../helpers/documentRevisionStatus";
-import { getFBSchemeByDocType } from "../../../helpers/getFBSchemeByDocType";
-import { getActiveDocumentTypes } from "../../transform";
-import RenderHtmlField from "../RenderHtmlField";
-import DocumentPreview from "./components/DocumentPreview";
-import styles from "./styles";
+import { Box, Button, Grid } from '@material-ui/core';
+import cx from 'classnames';
+import { useFormikContext } from 'formik';
+import { get, isEmpty } from 'lodash';
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { ValueType } from 'react-select';
+import { SM } from '../../../../../App';
+import { ReactComponent as PreviewIcon } from '../../../../../assets/images/preview.svg';
+import { Permission } from '../../../../../state/ducks/auth/types';
+import { documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import AutocompleteField from '../../../../components/forms/fields/Autocomplete/Autocomplete';
+import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { required, validator } from '../../../../components/forms/fields/validators';
+import Text from '../../../../components/Text';
+import { DOCUMENT_REVISION_CREATE_URL } from '../../../../constants/urls';
+import { FB, FBDialog, FBDialogState, FBProvider } from '../../../../form.builder';
+import useGetHasPermission from '../../../../hooks/useGetHasPermission';
+import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from '../../../helpers/checkDocumentGroup';
+import { isDocumentRevisionInDraft } from '../../../helpers/documentRevisionStatus';
+import { getFBSchemeByDocType } from '../../../helpers/getFBSchemeByDocType';
+import { getActiveDocumentTypes } from '../../transform';
+import RenderHtmlField from '../RenderHtmlField';
+import DocumentPreview from './components/DocumentPreview';
+import styles from './styles';
 
 interface Props {
-  status: DocumentRevisionStatus;
-  version: number;
-  docRevId?: string;
-  isDisabled: boolean;
-  outputDocs: OptionType[];
+  status: DocumentRevisionStatus
+  version: number
+  docRevId?: string
+  isDisabled: boolean
+  outputDocs: OptionType[]
 }
 
 const FBActiveNoOutput: React.FunctionComponent<Props> = ({
@@ -47,18 +47,18 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
-  const isdocRevStatusDraft =
-    isDocumentRevisionInDraft(status);
+  const isdocRevStatusDraft
+    = isDocumentRevisionInDraft(status);
   const isdocRevVersionOne = version === 1;
-  const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
+  const outputDocEnabled: boolean
+    = (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
 
   const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
 
   React.useEffect(() => {
-    setSelectedValues(get(formik.values, "outputDocumentTypes", []));
+    setSelectedValues(get(formik.values, 'outputDocumentTypes', []));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,8 +94,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const handlePreview: React.MouseEventHandler = () => {
     dialogState?.config({
       open: true,
-      maxWidth: "md",
-      title: "form.builder.form.preview",
+      maxWidth: 'md',
+      title: 'form.builder.form.preview',
       classes: {
         paper: classes.previewDialog,
       },
@@ -118,10 +118,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
               name="outputDocumentTypes"
               label="document.output.type"
               autocompleteProps={{
-                id: "formTemplate.outputDocumentTypes",
+                id: 'formTemplate.outputDocumentTypes',
                 isMulti: false,
                 closeMenuOnSelect: true,
-                className: !outputDocEnabled ? classes.outputGrey : "",
+                className: !outputDocEnabled ? classes.outputGrey : '',
                 isOptionDisabled: () => selectedValues?.length >= 1,
               }}
               options={outputDocumentTypeOptions}
@@ -145,7 +145,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
             </Grid>
           )}
         </Grid>
-        {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled}/>}
+        {canUpdateHTML && docRevId && <RenderHtmlField isDisabled={isDisabled} />}
       </Box>
     </FBProvider>
   );

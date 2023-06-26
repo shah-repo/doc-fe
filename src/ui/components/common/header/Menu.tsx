@@ -1,13 +1,13 @@
-import { IconButton, MenuItem } from "@material-ui/core";
-import Menu from "@material-ui/core/Menu";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import React from "react";
-import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as MoreVerticalIcon } from "../../../../assets/images/more_vertical.svg";
-import { styles } from "./Menu.styles";
+import { IconButton, MenuItem } from '@material-ui/core';
+import Menu from '@material-ui/core/Menu';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import React from 'react';
+import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as MoreVerticalIcon } from '../../../../assets/images/more_vertical.svg';
+import { styles } from './Menu.styles';
 
 interface Props {
-  children: any;
+  children: any
 }
 
 const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
@@ -60,8 +60,8 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         onClose={handleClose}
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         className={classes.menu}
       >
@@ -74,7 +74,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
               onClick={handleClose}
               style={{
                 display:
-                  menuItem.props.shouldDisplay === false ? "none" : "block",
+                  menuItem.props.shouldDisplay === false ? 'none' : 'block',
               }}
               className={classes.menuItem}
               key={index}

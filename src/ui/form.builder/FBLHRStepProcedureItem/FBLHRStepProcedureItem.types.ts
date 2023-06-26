@@ -1,9 +1,9 @@
-import { FBProcedureItemProps } from "..";
+import { FBProcedureItemProps } from '..';
 
 export type FBLHRStepProcedureItemProps =
 & FBProcedureItemProps
 & {
-  multiplier?: number;
-  lhrStepIndex?: number;
-  isPendingChange: boolean;
+  multiplier?: number
+  lhrStepIndex?: number
+  isPendingChange: boolean
 };

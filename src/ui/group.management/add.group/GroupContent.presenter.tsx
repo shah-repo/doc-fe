@@ -1,31 +1,31 @@
-import { Grid } from "@material-ui/core";
-import React from "react";
-import { Permission } from "../../../state/ducks/auth/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { AsyncActionPayload } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import ActionButtons from "./content.components/ActionButtons";
-import JoinedGroups from "./content.components/JoinedGroups";
-import ParentGroups from "./content.components/ParentGroups";
-import Permissions from "./content.components/Permissions";
-import SharedContent from "./content.components/SharedContent";
+import { Grid } from '@material-ui/core';
+import React from 'react';
+import { Permission } from '../../../state/ducks/auth/types';
+import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { AsyncActionPayload } from '../../../state/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import ActionButtons from './content.components/ActionButtons';
+import JoinedGroups from './content.components/JoinedGroups';
+import ParentGroups from './content.components/ParentGroups';
+import Permissions from './content.components/Permissions';
+import SharedContent from './content.components/SharedContent';
 
 interface Props {
-  employees: GetEmployeeResponse[];
-  members: OptionType[];
-  setMembers: (state: any) => void;
-  isCreateMode?: boolean;
-  group: GroupRequestBody;
-  setGroup: (values: GroupRequestBody) => void;
-  handleAsyncState: () => AsyncActionPayload;
-  hasOfficialPermission: boolean;
-  currentEmployeePermissions: Permission[];
-  canCreateOfficialGroup: boolean;
-  parentGroups: any[];
-  setParentGroups: (selectedItems: any) => void;
-  handleReset: () => void;
-  handleSubmit: () => void;
+  employees: GetEmployeeResponse[]
+  members: OptionType[]
+  setMembers: (state: any) => void
+  isCreateMode?: boolean
+  group: GroupRequestBody
+  setGroup: (values: GroupRequestBody) => void
+  handleAsyncState: () => AsyncActionPayload
+  hasOfficialPermission: boolean
+  currentEmployeePermissions: Permission[]
+  canCreateOfficialGroup: boolean
+  parentGroups: any[]
+  setParentGroups: (selectedItems: any) => void
+  handleReset: () => void
+  handleSubmit: () => void
 }
 
 const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -44,7 +44,7 @@ const GroupContentPresenter: React.FunctionComponent<Props> = ({
   handleReset,
   handleSubmit,
 }) => {
-  const { id = "" } = group;
+  const { id = '' } = group;
   return (
     <Grid
       container={true}
@@ -62,14 +62,14 @@ const GroupContentPresenter: React.FunctionComponent<Props> = ({
           handleAsyncState={handleAsyncState}
           hasOfficialPermission={hasOfficialPermission}
         />
-        {canCreateOfficialGroup &&
-        <Permissions
+        {canCreateOfficialGroup
+        && <Permissions
           group={group}
           setGroup={setGroup}
           currentEmployeePermissions={currentEmployeePermissions}
         />}
-        {canCreateOfficialGroup &&
-        <ParentGroups
+        {canCreateOfficialGroup
+        && <ParentGroups
           parentGroups={parentGroups}
           setParentGroups={setParentGroups}
           currentGroupId={id}

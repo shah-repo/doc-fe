@@ -1,8 +1,8 @@
-import { set } from "lodash";
-import { action, computed, observable } from "mobx";
-import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
-import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
-import { Translation } from "../../../../translations/types";
+import { set } from 'lodash';
+import { action, computed, observable } from 'mobx';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
+import { Translation } from '../../../../translations/types';
 
 class RelatedPartsState {
 
@@ -14,9 +14,9 @@ class RelatedPartsState {
   @observable relatedPartsList: RelatedPartsListItem[] = [];
   @observable viewOnlyMode = false;
   @observable loadingState = false;
-  @observable docIdErrorMsg: string | Translation = "";
+  @observable docIdErrorMsg: string | Translation = '';
   @observable listItemBeingEdited: ListItemEdited = {
-    docRevId: "",
+    docRevId: '',
   };
 
   @observable showOnlyActiveSubParts = false;
@@ -32,7 +32,7 @@ class RelatedPartsState {
           return { ...item, ...data };
         }
         return item;
-      }
+      },
     );
     this.clearListItemBeingEdited();
   }
@@ -48,7 +48,7 @@ class RelatedPartsState {
   @computed get relatedSubParts() {
     if (this.showOnlyActiveSubParts) {
       return this.relatedPartsList.filter((part) =>
-        ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status)
+        ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status),
       );
     }
     return this.relatedPartsList;
@@ -58,17 +58,17 @@ class RelatedPartsState {
     this.relatedPartsList.push(createdRelatedPart);
   }
 
-  @action validateDocId(parentPartDocId, userEnteredDocIdPortion, skipId = "") {
-    this.docIdErrorMsg = "";
+  @action validateDocId(parentPartDocId, userEnteredDocIdPortion, skipId = '') {
+    this.docIdErrorMsg = '';
 
     if (!userEnteredDocIdPortion) {
-      this.docIdErrorMsg = "relatedParts.docId.required.msg";
+      this.docIdErrorMsg = 'relatedParts.docId.required.msg';
 
     } else if (userEnteredDocIdPortion.length === 1) {
-      this.docIdErrorMsg = "relatedParts.docId.length.msg";
+      this.docIdErrorMsg = 'relatedParts.docId.length.msg';
 
     } else if (/\D/.test(userEnteredDocIdPortion)) {
-      this.docIdErrorMsg = "relatedParts.docId.onlyNumbers.msg";
+      this.docIdErrorMsg = 'relatedParts.docId.onlyNumbers.msg';
 
     } else {
       const filteredList = this.relatedPartsList.filter(
@@ -76,7 +76,7 @@ class RelatedPartsState {
           listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}` && userEnteredDocIdPortion !== skipId);
 
       if (filteredList.length > 0) {
-        this.docIdErrorMsg = "relatedParts.docId.exists.msg";
+        this.docIdErrorMsg = 'relatedParts.docId.exists.msg';
       }
     }
 
@@ -84,15 +84,15 @@ class RelatedPartsState {
   }
 
   @action resetDocIdErrorMsg() {
-    set(this, "docIdErrorMsg", "");
+    set(this, 'docIdErrorMsg', '');
   }
 
   @action setViewOnlyMode(viewOnly) {
-    set(this, "viewOnlyMode", viewOnly);
+    set(this, 'viewOnlyMode', viewOnly);
   }
 
   @action setLoadingState(isVisible = false) {
-    set(this, "loadingState", isVisible);
+    set(this, 'loadingState', isVisible);
   }
 
   @action setListItemBeingEdited(listItem: RelatedPartsListItem) {
@@ -106,7 +106,7 @@ class RelatedPartsState {
 
   @action clearListItemBeingEdited() {
     this.listItemBeingEdited = {
-      docRevId: "",
+      docRevId: '',
     };
   }
 }

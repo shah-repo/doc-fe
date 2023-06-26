@@ -1,39 +1,54 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from "..";
-import useStyles from "./FBFieldWrapper.styles";
-import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps } from '..';
+import useHover from '../../hooks/useHover';
+import useStyles from './FBFieldWrapper.styles';
+import { withFBFieldWrapper } from './FBFieldWrapper.wrap';
 
-const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
-  fieldWrapperState,
-  inputProps: { index = 0 } = {},
-  toolsVisible = false,
-  markDownVisible = false,
-  onMouseOver,
-  onMouseLeave,
-  addToolVisible,
-  inputProps,
-  isDragged,
+const FBFieldWrapper: React.FC<FBFieldWrapperProps> = ({
+  inputProps = {},
+  isDragging,
+  canUseTools,
+  canAddField,
+  isMarkDownVisible,
+  toggleItemMarkdown,
   mt,
   mb,
   ...props
 }) => {
-  const classes = useStyles({ mt, mb, isDragged });
+  const classes = useStyles();
+  const [ref, isHovered] = useHover<HTMLDivElement>();
+  const { index = 0, name = '' } = inputProps;
 
   return (
-    <FBProvider {...{ fieldWrapperState }}>
-      <Box {...{ onMouseOver, onMouseLeave }} className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}>
-        {<Box className={classes.tools} visibility={toolsVisible}>
-          <FBFieldTopBar {...{ inputProps }} />
-          <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
-        </Box>}
-        <Box className={classes.field}>
-          {props.children}
+    <Box
+      {...{ ref: canUseTools ? ref : null }}
+      className={cx(`fb-field-wrapper-${name}`, classes.root)}
+      mt={mt}
+      mb={mb}
+    >
+      {canUseTools && (
+        <Box
+          className={classes.tools}
+          hidden={!isHovered && !isDragging}
+        >
+          <FBFieldTopBar
+            inputProps={inputProps}
+            toggleItemMarkdown={toggleItemMarkdown}
+          />
+          {canAddField && !isDragging && (
+            <FBFieldBottomBar index={index} />
+          )}
         </Box>
-        {markDownVisible && <FBFieldMarkDown {...{ index }} />}
+      )}
+      <Box className={classes.field}>
+        {props.children}
       </Box>
-    </FBProvider>
+      {isMarkDownVisible && (
+        <FBFieldMarkDown inputProps={inputProps} />
+      )}
+    </Box>
   );
 };
 

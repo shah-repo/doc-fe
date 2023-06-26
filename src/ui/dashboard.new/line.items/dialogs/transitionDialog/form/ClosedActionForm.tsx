@@ -4,21 +4,21 @@ import {
   Typography,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
-import { Form } from "formik";
-import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../../../../state/types";
-import FormMessage from "../../../../../components/forms/FormMessage";
-import SubmitButton from "../../../../../components/forms/SubmitButton";
-import Text from "../../../../../components/Text";
-import { StyleTooltip } from "../../../common/StyleTooltip";
-import styles from "./ClosedActionForm.styles";
+} from '@material-ui/core';
+import { Form } from 'formik';
+import * as React from 'react';
+import { AsyncState, AsyncStatus } from '../../../../../../state/types';
+import FormMessage from '../../../../../components/forms/FormMessage';
+import SubmitButton from '../../../../../components/forms/SubmitButton';
+import Text from '../../../../../components/Text';
+import { StyleTooltip } from '../../../common/StyleTooltip';
+import styles from './ClosedActionForm.styles';
 
 interface ClosedActionFormProps extends WithStyles<typeof styles> {
-  asyncState: AsyncState;
-  cancel: () => void;
-  arId?: string;
-  title?: string;
+  asyncState: AsyncState
+  cancel: () => void
+  arId?: string
+  title?: string
 }
 
 const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({

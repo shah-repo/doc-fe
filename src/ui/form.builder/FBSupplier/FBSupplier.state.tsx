@@ -1,8 +1,8 @@
-import { ProposedDocIdBody, SupplierPostBody } from "..";
-import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { ProposedDocIdBody, SupplierPostBody } from '..';
+import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBSupplierState {
   // MARK: @observables
@@ -20,7 +20,7 @@ class FBSupplierState {
 
   // MARK: @helpers
   public addNewSupplier = (body: SupplierPostBody) => {
-    this.newSupplierApi.set({ body, method: "post" });
+    this.newSupplierApi.set({ body, method: 'post' });
   };
 
   public fetchProposedDocId = (documentTypeId: string) => {
@@ -28,7 +28,7 @@ class FBSupplierState {
     this.proposedDocIdApi.set({
       url: FBEndpoint.FetchDocId,
       urlValues: { documentTypeId },
-      method: "get",
+      method: 'get',
     });
   };
 
@@ -37,7 +37,7 @@ class FBSupplierState {
     this.documentTypeApi.set({
       url: FBEndpoint.FetchDocumentType,
       urlValues: { documentTypeId },
-      method: "get",
+      method: 'get',
     });
   };
 }

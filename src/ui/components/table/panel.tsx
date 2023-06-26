@@ -1,24 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, CircularProgress } from "@material-ui/core";
-import axios, { AxiosRequestConfig } from "axios";
-import { debounce, get, isString, set, sortBy as lodashSortBy } from "lodash";
-import { denormalize } from "normalizr";
-import qs from "query-string";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, Table } from "react-virtualized";
-import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
-import apiClient from "../../../state/apiClient";
-import { authActions } from "../../../state/ducks/auth";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
-import { store } from "../../../state/store";
-import Text from "../../components/Text";
-import useDidMount from "../../hooks/useDidMount";
-import { TableColumn } from "./column/base";
-import { styles } from "./styles";
-import { TablePanelProps, TableSortProps, TableStyleProps } from "./types";
+import { Box, CircularProgress } from '@material-ui/core';
+import axios, { AxiosRequestConfig } from 'axios';
+import { debounce, get, isString, set, sortBy as lodashSortBy } from 'lodash';
+import { denormalize } from 'normalizr';
+import qs from 'query-string';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, Table } from 'react-virtualized';
+import { getTableCriteria, getTableData } from '../../../common/utils/selectors';
+import apiClient from '../../../state/apiClient';
+import { authActions } from '../../../state/ducks/auth';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
+import { store } from '../../../state/store';
+import Text from '../../components/Text';
+import useDidMount from '../../hooks/useDidMount';
+import { TableColumn } from './column/base';
+import { styles } from './styles';
+import { TablePanelProps, TableSortProps, TableStyleProps } from './types';
 
 type Props<T> = TablePanelProps<T>;
 
@@ -26,11 +26,11 @@ let call;
 
 export function TablePanel<T extends any>({
   columns,
-  noRowsTranslation = "table.no.results.found",
+  noRowsTranslation = 'table.no.results.found',
   cellMeasure = false,
   onSelect,
   searchable = true,
-  queryUrl = "",
+  queryUrl = '',
   customQuerySet,
   customDataSet,
   sortBy,
@@ -40,7 +40,7 @@ export function TablePanel<T extends any>({
   normalizrSchema,
 }: Props<T>) {
   const didMount = useDidMount();
-  let lastQueryValue = "";
+  let lastQueryValue = '';
   const headerHeight = searchable ? 117 : 50;
   const styleProps: TableStyleProps = {
     isSelectable: onSelect !== undefined,
@@ -58,24 +58,24 @@ export function TablePanel<T extends any>({
 
   const processData = (
     data: T[],
-    sortBy = "",
-    sortDirection = "DESC",
+    sortBy = '',
+    sortDirection = 'DESC',
   ) => {
     let sortedData = lodashSortBy(
       data,
       (document: DocumentRevision) => {
-        const value = get(document,  sortBy === "docId" ? `document.${sortBy}` : sortBy) || "";
-        if (value === "N/A") { return sortDirection === "DESC" ? "" : null; }
-        if (sortBy === "precalc.po_amount") {
+        const value = get(document,  sortBy === 'docId' ? `document.${sortBy}` : sortBy) || '';
+        if (value === 'N/A') { return sortDirection === 'DESC' ? '' : null; }
+        if (sortBy === 'precalc.po_amount') {
           // remove curreny string and comma
-          const poAmount = document.precalc.po_amount?.replace(/[^0-9.-]+/g, "");
-          return parseFloat(poAmount || "");
+          const poAmount = document.precalc.po_amount?.replace(/[^0-9.-]+/g, '');
+          return parseFloat(poAmount || '');
         }
         return isString(value) ? value.toLowerCase() : value;
       },
     );
 
-    sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
+    sortedData = sortDirection === 'DESC' ? sortedData.reverse() : sortedData;
     setTableSortBy(sortBy);
     return sortedData;
   };
@@ -109,7 +109,7 @@ export function TablePanel<T extends any>({
     call?.cancel();
 
     let dict = { ...tableCriteria.queryDict };
-    value === "" ? delete dict[key] : (dict[key] = value);
+    value === '' ? delete dict[key] : (dict[key] = value);
 
     if (customQuerySet) {
       dict = customQuerySet(dict);
@@ -132,7 +132,7 @@ export function TablePanel<T extends any>({
     }
     Object.entries(tableCriteria.queryDict)
       .forEach(([key, value]) => {
-        if (key.startsWith("dynamicParams")) {
+        if (key.startsWith('dynamicParams')) {
           set(params, key, value);
         } else {
           params[key] = value;
@@ -148,7 +148,7 @@ export function TablePanel<T extends any>({
     call = axios.CancelToken.source();
 
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
+      method: 'get',
       url: queryUrl,
       params: formatParams(),
       paramsSerializer: (params) => qs.stringify(params),
@@ -161,7 +161,7 @@ export function TablePanel<T extends any>({
     }:${store.getState().auth.user.sessionId}`;
 
     if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
+      requestConfig.headers['x-enlil-normalizr-response'] = true;
     }
 
     setIsLoading(true);
@@ -175,7 +175,7 @@ export function TablePanel<T extends any>({
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
-          apiError: "",
+          apiError: '',
           scrollToIndex: 0,
           forceUpdate: false,
         },
@@ -211,7 +211,7 @@ export function TablePanel<T extends any>({
           return;
         }
         setIsLoading(false);
-        let responseMessage = "";
+        let responseMessage = '';
         const isUnauthorizedRequest = exception.response?.status === 401;
 
         if (isUnauthorizedRequest) {
@@ -223,7 +223,7 @@ export function TablePanel<T extends any>({
           const {
             data: { message },
           } = exception.response as AsyncActionErrorResponse;
-          responseMessage = Array.isArray(message) ? message.join("; ") : message;
+          responseMessage = Array.isArray(message) ? message.join('; ') : message;
         }
 
         const errorMessage: string = responseMessage || exception.message;
@@ -232,7 +232,7 @@ export function TablePanel<T extends any>({
           tableSearchActions.setSearchCriteria(
             {
               queryDict: {},
-              apiError: "Error: " + errorMessage,
+              apiError: 'Error: ' + errorMessage,
               forceUpdate: false,
             },
             tableName,
@@ -240,15 +240,13 @@ export function TablePanel<T extends any>({
         );
       });
 
-
   };
 
-  const noRowsRenderer = () => isLoading ?
-    <Box textAlign="center" marginTop="50px">
+  const noRowsRenderer = () => isLoading
+    ? <Box textAlign="center" marginTop="50px">
       <CircularProgress />
     </Box>
-    :
-    <Box className={classes.emptyMsg} data-cy={"no.results.found"}>
+    :    <Box className={classes.emptyMsg} data-cy="no.results.found">
       <Text translation={noRowsTranslation} />
     </Box>;
 
@@ -309,12 +307,11 @@ export function TablePanel<T extends any>({
     );
   };
 
-
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
     <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+      <div style={{ color: 'red' }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>
   );

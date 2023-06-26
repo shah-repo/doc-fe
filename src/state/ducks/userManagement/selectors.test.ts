@@ -1,11 +1,11 @@
-import { cloneDeep } from "lodash";
-import { ApplicationState } from "../../reducers";
-import initialStoreState from "../../tests/helpers/initialStoreState";
-import selectors from "./selectors";
-import { getCompanyGroup } from "./tests/factories";
-import { GroupsByIdState } from "./types";
+import { cloneDeep } from 'lodash';
+import { ApplicationState } from '../../reducers';
+import initialStoreState from '../../tests/helpers/initialStoreState';
+import selectors from './selectors';
+import { getCompanyGroup } from './tests/factories';
+import { GroupsByIdState } from './types';
 
-describe("user management selectors test", () => {
+describe('user management selectors test', () => {
   let state: ApplicationState;
   const companyGroups = [getCompanyGroup()];
   const groupsById: GroupsByIdState = {
@@ -21,7 +21,7 @@ describe("user management selectors test", () => {
     state.userManagement.groupsById = groupsById;
   });
 
-  it("getGroupsOptions", () => {
+  it('getGroupsOptions', () => {
     const expectedGroupOptions = [{
       label: companyGroups[0].name,
       text: companyGroups[0].name,

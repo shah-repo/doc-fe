@@ -1,5 +1,5 @@
 export interface AsyncActionErrorResponse {
   data: {
-    message: string | string[];
-  };
+    message: string | string[]
+  }
 }

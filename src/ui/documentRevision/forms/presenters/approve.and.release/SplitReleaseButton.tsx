@@ -1,33 +1,33 @@
-import { ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as ExistingAR } from "../../../../../assets/images/existing_ar.svg";
-import { ReactComponent as NewARIcon } from "../../../../../assets/images/new_ar.svg";
-import { SplitButton, SplitButtonMenu } from "../../../../components/forms/fields-next";
-import Text from "../../../../components/Text";
-import useMenu from "../../../../hooks/useMenu";
+import { ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ExistingAR } from '../../../../../assets/images/existing_ar.svg';
+import { ReactComponent as NewARIcon } from '../../../../../assets/images/new_ar.svg';
+import { SplitButton, SplitButtonMenu } from '../../../../components/forms/fields-next';
+import Text from '../../../../components/Text';
+import useMenu from '../../../../hooks/useMenu';
 
 export enum ARActions {
-  NEW = "new",
-  EXISTING = "existing"
+  NEW = 'new',
+  EXISTING = 'existing',
 }
 
 const options = [
   {
-    label: "releaseButton.option.newAR",
+    label: 'releaseButton.option.newAR',
     value: ARActions.NEW,
     icon: <NewARIcon />,
   },
   {
-    label: "releaseButton.option.existingAR",
+    label: 'releaseButton.option.existingAR',
     value: ARActions.EXISTING,
     icon: <ExistingAR />,
   },
 ];
 
 const SplitReleaseButton: React.FunctionComponent<{
-  className?: string;
-  disableExpessAR?: boolean;
-  onClick: (value?: ARActions) => void;
+  className?: string
+  disableExpessAR?: boolean
+  onClick: (value?: ARActions) => void
 }> = ({
   className,
   disableExpessAR,
@@ -45,12 +45,12 @@ const SplitReleaseButton: React.FunctionComponent<{
       onToggle={releaseMenu.open}
       kind="white"
       buttonProps={{
-        "disabled": disableExpessAR,
-        "id": "ApproveAndRelease-button",
-        "data-cy": "ApproveAndRelease-button",
+        'disabled': disableExpessAR,
+        'id': 'ApproveAndRelease-button',
+        'data-cy': 'ApproveAndRelease-button',
       }}
       toggleProps={{
-        "data-cy": "dropdown-arrow",
+        'data-cy': 'dropdown-arrow',
       }}
     >
       <SplitButtonMenu

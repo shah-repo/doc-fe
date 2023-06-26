@@ -1,13 +1,13 @@
-import { filter, isUndefined, union } from "lodash";
-import { action, observable, set } from "mobx";
-import { Attachment } from "../../../state/ducks/attachments/types";
-import { Id } from "../../../state/ducks/common/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { filter, isUndefined, union } from 'lodash';
+import { action, observable, set } from 'mobx';
+import { Attachment } from '../../../state/ducks/attachments/types';
+import { Id } from '../../../state/ducks/common/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBFileUploadState {
   @observable public files: Id[] = [];
-  @observable public unzipStatus = "";
+  @observable public unzipStatus = '';
 
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();
   public attachmentsbyIdsApi: FBRequest<Attachment[], null> = new FBRequest();
@@ -18,11 +18,11 @@ class FBFileUploadState {
     this.files = files || [];
   }
 
-  public startUnzipping = (values: {docRevisionId: string; attachmentId: string}) => {
+  public startUnzipping = (values: {docRevisionId: string, attachmentId: string}) => {
     this.startAttachmentUnzippingApi.set({
       url: FBEndpoint.AttachmentUnzipping,
       body: values,
-      method: "post",
+      method: 'post',
     });
   };
 
@@ -30,7 +30,7 @@ class FBFileUploadState {
     this.getZIPStatusApi.set({
       url: FBEndpoint.ZIPStatus,
       urlValues: { attachmentId },
-      method: "get",
+      method: 'get',
     });
   };
 
@@ -41,15 +41,15 @@ class FBFileUploadState {
     // Not sure why we are checking s3link, it is always different
     // const includes = find(this.files, (f) => f.s3link === file.s3link);
     // isUndefined(includes) &&
-    set(this, "files", union(this.files, [{ id: file.id }]));
+    set(this, 'files', union(this.files, [{ id: file.id }]));
   };
 
   @action public removeFile = (file: Attachment) => {
-    set(this, "files", filter(this.files, (f) => f.id !== file.id));
+    set(this, 'files', filter(this.files, (f) => f.id !== file.id));
   };
 
   @action public setUnzipStatus = (status: string) => {
-    set(this, "unzipStatus", status);
+    set(this, 'unzipStatus', status);
   };
 }
 

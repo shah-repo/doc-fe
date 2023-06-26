@@ -1,12 +1,12 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
-import { useIntl } from "react-intl";
-import { SM } from "../../../App";
-import { SMEditorStyles } from "../../../App/Shifamed/Components/SMTextEditor/SMTextEditor.styles";
-import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
-import { styles } from "./newStyles";
-import { SummaryBaseProps } from "./types";
+import { Box, Button, Grid } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import { useIntl } from 'react-intl';
+import { SM } from '../../../App';
+import { SMEditorStyles } from '../../../App/Shifamed/Components/SMTextEditor/SMTextEditor.styles';
+import { convertHtmlToDraft } from '../../components/forms/fields/RichTextEditor/helpers';
+import { styles } from './newStyles';
+import { SummaryBaseProps } from './types';
 
 type Props = SummaryBaseProps;
 
@@ -20,8 +20,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const descriptionClasses = SMEditorStyles();
   const intl = useIntl();
   const [isTextClamped, setIsTextClamped] = useState(false);
-  const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
-  const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
+  const viewMore = intl.formatMessage({ id: 'document.revision.view.more' });
+  const viewLess = intl.formatMessage({ id: 'document.revision.view.less' });
   const [editor, setEditor] = useState();
   const [btnText, setBtnText] = useState(viewMore);
   const [flag, setFlag] = useState(false);
@@ -45,7 +45,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
 
   const showToggleButton = () => {
     setTimeout(() => {
-      const elm = document.querySelector(".rdw-editor-main");
+      const elm = document.querySelector('.rdw-editor-main');
       const isClamped = elm ? elm.scrollHeight > elm.clientHeight : false;
       setIsTextClamped(isClamped);
       _documentRevisionFormState?.setIsDescTextClamped(isClamped);
@@ -61,10 +61,10 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
               readOnly={true}
               editorState={editor}
               toolbarHidden={true}
-              editorClassName={!flag ? descriptionClasses.descriptionEditorClass :
-                descriptionClasses.descriptionSummaryEditorClass}
+              editorClassName={!flag ? descriptionClasses.descriptionEditorClass
+                : descriptionClasses.descriptionSummaryEditorClass}
               editorStyle={{
-                lineHeight: "24px",
+                lineHeight: '24px',
               }}
             />
           </Grid>

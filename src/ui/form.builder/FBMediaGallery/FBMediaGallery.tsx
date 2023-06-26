@@ -1,13 +1,12 @@
-import { Box, CircularProgress, createStyles, GridList, GridListTile, GridListTileBar, IconButton, makeStyles, Theme, Tooltip, Zoom } from "@material-ui/core";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import React from "react";
-import Img from "react-image";
-import LazyLoad from "react-lazy-load";
-import { FBAttachment, FBMapWrapper, FBMediaGalleryProps } from "..";
-import Text from "../../components/Text";
-import { withFBMediaGallery } from "./FBMediaGallery.wrap";
-
+import { Box, CircularProgress, createStyles, GridList, GridListTile, GridListTileBar, IconButton, makeStyles, Theme, Tooltip, Zoom } from '@material-ui/core';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import React from 'react';
+import Img from 'react-image';
+import LazyLoad from 'react-lazy-load';
+import { FBAttachment, FBMapWrapper, FBMediaGalleryProps } from '..';
+import Text from '../../components/Text';
+import { withFBMediaGallery } from './FBMediaGallery.wrap';
 
 const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
   handleDelete,
@@ -19,7 +18,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
   const useStyles = makeStyles((_theme: Theme) =>
     createStyles({
       noMaxWidth: {
-        maxWidth: "none",
+        maxWidth: 'none',
       },
     }),
   );
@@ -37,7 +36,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
       <GridList
         cellHeight={175}
         cols={2}
-        style={{ width: "100%", height: "350px" }}
+        style={{ width: '100%', height: '350px' }}
       >
         <FBMapWrapper<FBAttachment[]> {...{ collection }}>
           {(media: FBAttachment, index, props) => {
@@ -48,11 +47,11 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
               <GridListTile {...props} key={`fb-album-item-${index}`}>
                 {/* Render LazyLoad only with non optional child or it
                 will crash otherwise :/ */}
-                {type === "image" && (
+                {type === 'image' && (
                   <LazyLoad height={175}>
                     <Img
                       {...{ src }}
-                      style={{ objectFit: "cover", width: "100%", height: "175px" }}
+                      style={{ objectFit: 'cover', width: '100%', height: '175px' }}
                       loader={
                         <Box
                           height={175}
@@ -67,14 +66,14 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                     />
                   </LazyLoad>
                 )}
-                {type === "video" && (
+                {type === 'video' && (
                   <LazyLoad height={175}>
                     <video controls={true} width="100%" height="95%" {... { src }}>
                       <Text translation="file.viewer.video.not.supported" />
                     </video>
                   </LazyLoad>
                 )}
-                {type === "pdf" && (
+                {type === 'pdf' && (
                   <LazyLoad height={175}>
                     <object width="100%" height="100%" type="application/pdf" data={src}>
                       <Text translation="common.file.not.loaded" />
@@ -85,7 +84,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                   subtitle={(
                     <Tooltip title={name}>
                       <Box
-                        style={{ whiteSpace: "nowrap" }}
+                        style={{ whiteSpace: 'nowrap' }}
                         textOverflow="ellipsis"
                         overflow="hidden">
                         {name}
@@ -93,7 +92,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                     </Tooltip>
                   )}
                   titlePosition="top"
-                  style={{ height: "35px" }}
+                  style={{ height: '35px' }}
                   actionIcon={
                     <Box display="flex" flexDirection="row-reverse" color="white">
                       <IconButton
@@ -106,7 +105,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                           <DeleteForeverIcon fontSize="small" />
                         </Tooltip>
                       </IconButton>
-                      {type === "image" && (
+                      {type === 'image' && (
                         <Tooltip
                           TransitionComponent={Zoom}
                           enterDelay={300}
@@ -114,7 +113,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                           classes={{ tooltip: classes.noMaxWidth }}
                           title={
                             <img
-                              style={{ objectFit: "cover", maxHeight: "600px", maxWidth: "600px" }}
+                              style={{ objectFit: 'cover', maxHeight: '600px', maxWidth: '600px' }}
                               alt={name}
                               {...{ src }}
                             />
@@ -136,6 +135,5 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
     </Box>
   );
 };
-
 
 export default withFBMediaGallery(FBMediaGallery);

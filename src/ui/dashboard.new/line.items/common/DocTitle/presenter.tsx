@@ -1,15 +1,15 @@
-import { Typography } from "@material-ui/core";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import Text from "../../../../components/Text";
-import { StyleTooltip } from "../StyleTooltip";
-import { styles } from "./styles";
+import { Typography } from '@material-ui/core';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import Text from '../../../../components/Text';
+import { StyleTooltip } from '../StyleTooltip';
+import { styles } from './styles';
 
 interface Props {
-  url: string;
-  docRevVersion: Nullable<string>;
-  docRevName: Nullable<string>;
+  url: string
+  docRevVersion: Nullable<string>
+  docRevName: Nullable<string>
 }
 const DocTitle: React.FunctionComponent<Props> = ({
   url,

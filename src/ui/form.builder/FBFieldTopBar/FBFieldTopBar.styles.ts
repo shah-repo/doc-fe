@@ -1,23 +1,23 @@
-import { makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 const HEIGHT = 35;
 const WIDTH = 128;
 
 export default makeStyles((theme) => ({
   root: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     left: 0,
     top: -HEIGHT,
-    display: "flex",
-    justifyContent: "flex-end",
+    display: 'flex',
+    justifyContent: 'flex-end',
     zIndex: 5,
   },
   tools: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     width: WIDTH,
     height: HEIGHT,
     padding: theme.spacing(1),
@@ -25,6 +25,16 @@ export default makeStyles((theme) => ({
     borderTopRightRadius: theme.shape.borderRadius,
     background: Colors.dodger_blue,
     color: Colors.white,
-    cursor: "pointer",
+
+    '& svg': {
+      cursor: 'pointer',
+    },
+  },
+  dragIcon: {
+    cursor: 'grab !important',
+
+    '.fb-sortable-drag &': {
+      cursor: 'grabbing !important',
+    },
   },
 }));

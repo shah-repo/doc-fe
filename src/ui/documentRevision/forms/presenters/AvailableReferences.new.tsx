@@ -1,35 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
-import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, isArray, map, some } from "lodash";
-import * as React from "react";
-import { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
-import { TypographyProps } from "../../../../state/ducks/common/types";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../../state/types";
-import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
-import { useFormContext } from "../../../components/forms/FormContext";
-import Text from "../../../components/Text";
-import { FBTooltip } from "../../../form.builder";
-import useActionCreator from "../../../hooks/useActionCreator";
-import { isTranslation } from "../../../translations/types";
-import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
-import { getHighestReleasedRevision, getHighestRevision } from "../transform";
-import { styles } from "./AvailableReferences.new.styles";
+import { Box, Chip, CircularProgress, TextField, Typography } from '@material-ui/core';
+import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import { debounce, isArray, map, some } from 'lodash';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { ReactComponent as RemoveReference } from '../../../../assets/images/trash.svg';
+import { TypographyProps } from '../../../../state/ducks/common/types';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
+import { DocRevQueryParam, DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from '../../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../../state/types';
+import Field, { FieldOwnProps } from '../../../components/forms/fields/Field';
+import { useFormContext } from '../../../components/forms/FormContext';
+import Text from '../../../components/Text';
+import { FBTooltip } from '../../../form.builder';
+import useActionCreator from '../../../hooks/useActionCreator';
+import { isTranslation } from '../../../translations/types';
+import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from '../../helpers/checkDocumentGroup';
+import { getHighestReleasedRevision, getHighestRevision } from '../transform';
+import { styles } from './AvailableReferences.new.styles';
 
 interface AvailableReferencesProps extends FieldOwnProps {
-  disabled?: boolean;
-  availableReferences: {label: string; value: string; deleteDisabled?: boolean }[];
-  documentReferences: Reference[];
-  documentGroupOptions?: DocumentGroupOptionsType[];
+  disabled?: boolean
+  availableReferences: {label: string, value: string, deleteDisabled?: boolean }[]
+  documentReferences: Reference[]
+  documentGroupOptions?: DocumentGroupOptionsType[]
 }
 
 type AvailableReferencesPropsWithFormik = AvailableReferencesProps &
@@ -40,7 +40,7 @@ const getReferenceValues = (
   documentRevisions: DocumentRevision[],
   docRevsById: DocumentRevisionsByIdState) => {
   const highestRev = getHighestReleasedRevision(documentRevisions) || getHighestRevision(documentRevisions);
-  const docType = docRevsById[highestRev?.id || ""]?.document?.documentType;
+  const docType = docRevsById[highestRev?.id || '']?.document?.documentType;
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
   return { highestRev, isReferencePart, canReferenceCreateInspection };
@@ -63,7 +63,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
   const [open, setOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState('');
 
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
@@ -86,24 +86,24 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   };
 
   const docRevsById = useSelector(documentRevisionsSelectors.byId);
-  const isDocumentFai =
-    checkIsTypeFaiInspection(documentGroupOptions);
-  const canDocumentCreateInspection =
-    checkCanTypeCreateInspection(documentGroupOptions);
+  const isDocumentFai
+    = checkIsTypeFaiInspection(documentGroupOptions);
+  const canDocumentCreateInspection
+    = checkCanTypeCreateInspection(documentGroupOptions);
 
   const options = some(documentReferences, (ref) => {
     if (!ref.documentRevisions) { return false; }
     const { isReferencePart, canReferenceCreateInspection } = getReferenceValues(ref.documentRevisions, docRevsById);
 
-    return (isReferencePart && canDocumentCreateInspection) ||
-        (canReferenceCreateInspection && isDocumentFai);
+    return (isReferencePart && canDocumentCreateInspection)
+        || (canReferenceCreateInspection && isDocumentFai);
   })
     ? availableReferences.filter((ref) => !ref.deleteDisabled)
     : availableReferences
       .filter((ref) => !ref.deleteDisabled && !documentReferences.find((docRef) => docRef.id === ref.value));
 
   const defaultValue = (refs: Reference[] = []): any => refs?.map((ref) => {
-    if (!ref.documentRevisions) { return { label: "", value: ref.id, deleteDisabled: false }; }
+    if (!ref.documentRevisions) { return { label: '', value: ref.id, deleteDisabled: false }; }
     const {
       highestRev,
       isReferencePart,
@@ -114,11 +114,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       label: `${ref.docId} - ${highestRev?.displayRevision} - ${highestRev?.name}`,
       value: ref.id,
       url: `/document_revision/${ref.docId}/version/${highestRev?.id}`,
-      deleteDisabled: (isReferencePart && canDocumentCreateInspection) ||
-        (canReferenceCreateInspection && isDocumentFai),
+      deleteDisabled: (isReferencePart && canDocumentCreateInspection)
+        || (canReferenceCreateInspection && isDocumentFai),
     };
   });
-
 
   useEffect(() => {
     const value = defaultValue(documentReferences);
@@ -134,7 +133,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     offset,
     limit,
     searchText: null,
-    fields: "name,document.docId",
+    fields: 'name,document.docId',
     status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.PendingChange],
   };
 
@@ -147,7 +146,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const filterOptions = () => {
     if (inputValue) {
       const updatedOptions = availableReferences.filter(
-        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase())
+        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase()),
       );
       setModifiedOptions(updatedOptions);
     } else {
@@ -175,8 +174,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
     if (
-      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) ===
-      listboxNode.clientHeight
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
+      === listboxNode.clientHeight
     ) {
       const nextOffset = offset + limit;
       setOffset(nextOffset);
@@ -218,12 +217,12 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                label={!open && getDisplayText("common.select.placeholder")}
+                label={!open && getDisplayText('common.select.placeholder')}
                 InputProps={{
                   ...params.InputProps,
-                  style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
+                  style: { padding: '0px 30px 0px 9px', height: value.length ? '100%' : '40px' },
                   startAdornment: (
-                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                       {params.InputProps.startAdornment}
                     </div>
                   ),
@@ -238,7 +237,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 }}
                 inputProps={{
                   ...params.inputProps,
-                  style: { padding: "10.5px 0" },
+                  style: { padding: '10.5px 0' },
                 }}
               />
             </Box>
@@ -252,7 +251,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onOpen={onOpen}
         onClose={() => {
           setOpen(false);
-          setInputValue("");
+          setInputValue('');
         }}
         loading={loading}
       />
@@ -273,7 +272,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 </FBTooltip>
               </Link>}
             disabled={option.deleteDisabled}
-            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
+            deleteIcon={<RemoveReference className={classes.deleteIcon} />}
             onDelete={(e) => {
               onChange(e, value.filter((obj) => obj.value !== option.value));
             }}

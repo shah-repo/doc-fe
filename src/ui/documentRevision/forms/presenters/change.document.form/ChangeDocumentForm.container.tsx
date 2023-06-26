@@ -1,25 +1,25 @@
-import { Box } from "@material-ui/core";
-import { Formik } from "formik";
-import { find, isEmpty, isNull, omitBy } from "lodash";
-import React, { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
-import { documentTypeActions, documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
-import { DocumentRevision, UpdateFormFieldMapping } from "../../../../../state/ducks/documentRevisions/types";
-import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
-import { FormContext } from "../../../../components/forms/FormContext";
-import { FBSchemaProps } from "../../../../form.builder";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useDialog from "../../../../hooks/useDialog";
-import ChangeDocumentFormPresenter from "./ChangeDocumentForm.presenter";
-import { toFieldInitialValues, toUpdateFormRequestBody } from "./utils/transform";
+import { Box } from '@material-ui/core';
+import { Formik } from 'formik';
+import { find, isEmpty, isNull, omitBy } from 'lodash';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { documentTypeActions, documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
+import { DocumentRevision, UpdateFormFieldMapping } from '../../../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../../../components/forms/FormContext';
+import { FBSchemaProps } from '../../../../form.builder';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
+import ChangeDocumentFormPresenter from './ChangeDocumentForm.presenter';
+import { toFieldInitialValues, toUpdateFormRequestBody } from './utils/transform';
 
 interface Props {
-  documentTypeId: string;
-  docRevId: string;
-  sourceSchema: FBSchemaProps[];
-  sourceFormId: string;
+  documentTypeId: string
+  docRevId: string
+  sourceSchema: FBSchemaProps[]
+  sourceFormId: string
 }
 
 const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
@@ -30,7 +30,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [template, setTemplate] = useState<UpdateFormFieldMapping[]>([]);
   const [availableFields, setFields] = useState<FBSchemaProps[]>([]);
-  const [base, setBase] = useState<OptionType>({ label: "", value: "" });
+  const [base, setBase] = useState<OptionType>({ label: '', value: '' });
 
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const updateFormAction = useActionCreator(documentRevisionsActions.updateForm);
@@ -47,10 +47,10 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
       }
       window.open(
         `/document_revision/${data.document.id}/version/${data.id}`,
-        "_self"
+        '_self',
       );
     },
-  }
+  },
   );
 
   const getFormMappingTemplateAsync = useAsync({
@@ -60,7 +60,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
       }
       setTemplate(data.mapping);
     },
-  }
+  },
   );
 
   const onSubmit = (values) => {

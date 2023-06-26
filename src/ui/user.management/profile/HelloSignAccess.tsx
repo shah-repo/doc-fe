@@ -1,12 +1,12 @@
-import { Button } from "@material-ui/core";
-import React from "react";
-import { companyActions } from "../../../state/ducks/company";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+import { Button } from '@material-ui/core';
+import React from 'react';
+import { companyActions } from '../../../state/ducks/company';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 
 interface OwnProps {
-  helloSignStatus: boolean;
+  helloSignStatus: boolean
 }
 
 type Props = OwnProps;
@@ -29,7 +29,7 @@ const HelloSignAccess: React.FunctionComponent<Props> = ({
       id="DialogContent-helloSignAccess"
     >
       <Text
-        translation={!helloSignStatus ? "common.hello.sign.enable" : "common.hello.sign.disable"}
+        translation={!helloSignStatus ? 'common.hello.sign.enable' : 'common.hello.sign.disable'}
       />
     </Button>
   );

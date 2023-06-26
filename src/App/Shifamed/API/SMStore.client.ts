@@ -1,7 +1,6 @@
-import axios from "axios";
-import { SMStoreAdapter } from "../..";
-import Config from "../../../config";
-
+import axios from 'axios';
+import { SMStoreAdapter } from '../..';
+import Config from '../../../config';
 
 let currentAdapter: any;
 
@@ -17,14 +16,14 @@ export function apiClient(
   }
 
   if (!currentAdapter) {
-    throw new Error("You must set an adapter first!");
+    throw new Error('You must set an adapter first!');
   }
 
   return currentAdapter;
 }
 
 export const storeClient = (authorization: string) => {
-  const createAdapter: any = require("mobx-rest-axios-adapter").default;
+  const createAdapter: any = require('mobx-rest-axios-adapter').default;
   apiClient(createAdapter(axios), {
     apiPath: Config.ApiEndpoint,
     commonOptions: {

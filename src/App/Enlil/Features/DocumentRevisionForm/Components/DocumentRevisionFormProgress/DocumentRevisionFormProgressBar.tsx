@@ -1,21 +1,21 @@
-import { Box } from "@material-ui/core";
-import { each, isEmpty, uniq } from "lodash";
-import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { Nullable } from "../../../../../../state/ducks/common/types";
+import { Box } from '@material-ui/core';
+import { each, isEmpty, uniq } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Nullable } from '../../../../../../state/ducks/common/types';
 import {
   DocumentRevision,
   SmartReference,
-} from "../../../../../../state/ducks/documentRevisions/types";
+} from '../../../../../../state/ducks/documentRevisions/types';
 import {
   isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased,
-} from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import Colors from "../../../../../../ui/layout/theme/utils/colors";
-import SM from "../../../../../Shifamed/Utils/SM/SM";
-import { BorderLinearProgress } from "./BorderLinearProgress";
+} from '../../../../../../ui/documentRevision/helpers/documentRevisionStatus';
+import Colors from '../../../../../../ui/layout/theme/utils/colors';
+import SM from '../../../../../Shifamed/Utils/SM/SM';
+import { BorderLinearProgress } from './BorderLinearProgress';
 
 interface Props {
-  smartReferencesFrom?: SmartReference[];
+  smartReferencesFrom?: SmartReference[]
 }
 
 const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
@@ -27,11 +27,11 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
   const [completed, setCompleted] = useState<number[]>([]);
   const getLHRStatus = (stepLHRs?: Nullable<DocumentRevision>) => {
     const status = stepLHRs?.status;
-    let lhrstatus = "";
+    let lhrstatus = '';
     if (stepLHRs && isDocumentRevisionReleased(status)) {
-      lhrstatus = "complete";
+      lhrstatus = 'complete';
     } else if (stepLHRs && (isDocumentRevisionInDraft(status) || isDocumentRevisionInReview(status))) {
-      lhrstatus = "inprogress";
+      lhrstatus = 'inprogress';
     }
     return lhrstatus || status;
   };
@@ -43,7 +43,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
       if (e.stepIndex) {
         const completedStepIndexVal = complete.indexOf(e.stepIndex);
         const isInprogressStepExists = inProgress.includes(e.stepIndex);
-        if (getLHRStatus(e?.fromDocRev) === "inprogress") {
+        if (getLHRStatus(e?.fromDocRev) === 'inprogress') {
           if (!isInprogressStepExists) {
             inProgress.push(e.stepIndex);
           }
@@ -91,7 +91,7 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
         {!isEmpty(completed) && (
           <>
             <Box component="span" fontWeight={600} data-cy="completed-steps">
-              Step {uniq(completed)?.sort().map((e) => e + ",")}
+              Step {uniq(completed)?.sort().map((e) => e + ',')}
             </Box>
             <Box component="span" fontWeight={400}>
               &nbsp;completed.&nbsp;
@@ -101,10 +101,10 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
         {!isEmpty(inprogress) && (
           <>
             <Box component="span" fontWeight={600} data-cy="inprogress-steps">
-              Step {uniq(inprogress)?.sort().map((e) => e + ",")}
+              Step {uniq(inprogress)?.sort().map((e) => e + ',')}
             </Box>
             <Box component="span" fontWeight={400}>
-              &nbsp;{intl.formatMessage({ id: `form.builder.step.inprogress` }).toLowerCase()}...
+              &nbsp;{intl.formatMessage({ id: 'form.builder.step.inprogress' }).toLowerCase()}...
             </Box>
           </>
         )}

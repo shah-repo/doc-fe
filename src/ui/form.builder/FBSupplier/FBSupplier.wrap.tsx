@@ -1,15 +1,15 @@
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBAutocompleteAsyncOption, FBDialogState, FBSupplierForm, FBSupplierProps, FBSupplierState } from "..";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBAutocompleteAsyncOption, FBDialogState, FBSupplierForm, FBSupplierProps, FBSupplierState } from '..';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBSupplier = <T extends FBSupplierProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
-    name = "",
+    name = '',
     loading,
     disabled,
     isPreview,
@@ -22,7 +22,7 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     const supplierState = FB.useRef(FBSupplierState);
     const { formState, workspaceState } = FB.useStores();
 
-    isPreview = workspaceState?.mode === "preview";
+    isPreview = workspaceState?.mode === 'preview';
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
@@ -46,16 +46,16 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     // MARK: @methods
     handleAdd = () => dialogState?.config({
       open: true,
-      title: "form.builder.create.new.supplier",
+      title: 'form.builder.create.new.supplier',
       content: <FBSupplierForm />,
     });
 
     // MARK: @observer
     useObserver(() => {
       loading = (
-        supplierState?.newSupplierApi.loading ||
-        supplierState?.proposedDocIdApi.loading ||
-        supplierState?.documentTypeApi.loading
+        supplierState?.newSupplierApi.loading
+        || supplierState?.proposedDocIdApi.loading
+        || supplierState?.documentTypeApi.loading
       );
       disabled = disabled || loading;
     });
@@ -72,6 +72,6 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     });
   };
 
-  Comp.displayName = "withFBSupplier";
+  Comp.displayName = 'withFBSupplier';
   return Comp;
 };

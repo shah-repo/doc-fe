@@ -1,18 +1,18 @@
-import { Collapse, List } from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import "react-toastify/dist/ReactToastify.css";
-import { authSelectors } from "../../state/ducks/auth";
-import { companyActions, companySelectors } from "../../state/ducks/company";
-import { NavigationItem, NavigationItemType } from "../../state/ducks/company/types";
-import { ApplicationState } from "../../state/reducers";
-import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
-import NavigationLinkPresenter from "./NavigationLink.presenter";
-import { updateNavigationItem } from "./NavigationLocalStorageHelpers";
+import { Collapse, List } from '@material-ui/core';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import 'react-toastify/dist/ReactToastify.css';
+import { authSelectors } from '../../state/ducks/auth';
+import { companyActions, companySelectors } from '../../state/ducks/company';
+import { NavigationItem, NavigationItemType } from '../../state/ducks/company/types';
+import { ApplicationState } from '../../state/reducers';
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from '../constants/urls';
+import NavigationLinkPresenter from './NavigationLink.presenter';
+import { updateNavigationItem } from './NavigationLocalStorageHelpers';
 
 interface NavigationLinkContainerProps extends NavigationItem {
-  currentPath: string;
+  currentPath: string
 }
 
 const checkIfItemIsActive = (
@@ -23,11 +23,11 @@ const checkIfItemIsActive = (
   menu?: NavigationItem[],
 ): boolean => {
   switch (type) {
-    case "LINK":
+    case 'LINK':
       return currentPath === path;
-    case "CATEGORY":
+    case 'CATEGORY':
       return currentPath === `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}`;
-    case "MENU":
+    case 'MENU':
       return menu?.some((item) => checkIfItemIsActive(item.type, currentPath, item.path, item.category)) || false;
     default:
       return false;
@@ -63,8 +63,8 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     <Collapse in={isOpenMenu} timeout="auto" unmountOnExit={true}>
       <List disablePadding>
         {menu?.map((ld) => (
-          ld.type !== "MENU" &&
-          <NavigationLinkPresenter
+          ld.type !== 'MENU'
+          && <NavigationLinkPresenter
             {...ld}
             key={ld.path || ld.category}
             isChild={true}
@@ -80,8 +80,8 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
       <NavigationLinkPresenter
         {...{ type }}
         {...rest}
-        ActionIcon={menu?.length ? actionIcon : ""}
-        toggleChildren={type === "MENU" ? toggleChildren : undefined}
+        ActionIcon={menu?.length ? actionIcon : ''}
+        toggleChildren={type === 'MENU' ? toggleChildren : undefined}
         currentPath={currentPath}
         checkIfItemIsActive={checkIfItemIsActive}
       />

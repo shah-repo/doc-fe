@@ -1,14 +1,14 @@
-import { useFormikContext } from "formik";
-import { get, last, remove } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
-import { stripTags } from "../../../common/utils/helpers";
-import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { toastError } from "../../components/notifications";
+import { useFormikContext } from 'formik';
+import { get, last, remove } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from '..';
+import { stripTags } from '../../../common/utils/helpers';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
 
 export const withFBPOReceive = <T extends FBPOReceiveProps>(
   Component: React.FunctionComponent<T>,
@@ -32,7 +32,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
     const { formInput } = workspaceState || {};
-    const { receivedItems } = name && (formInput?.[name] || { receivedItems: "" });
+    const { receivedItems } = name && (formInput?.[name] || { receivedItems: '' });
     const formik = useFormikContext();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
@@ -44,14 +44,14 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         return;
       }
       if (!workspaceState?.documentId) {
-        toastError(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
+        toastError(intl.formatMessage({ id: 'form.builder.save.doc.before.continue' }));
         return;
       }
 
       dialogState?.config({
         open: true,
-        maxWidth: "sm",
-        title: "form.builder.po.items.received",
+        maxWidth: 'sm',
+        title: 'form.builder.po.items.received',
         content: <FBPOReceiveForm {...{ item }} />,
         actions: <FBPOReceiveFormActions {...{ item }} />,
       });
@@ -60,12 +60,12 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const handleLot = (e: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => {
       e.stopPropagation();
       if (item?.status && item?.status !== DocumentRevisionStatus.Released) {
-        toastError(intl.formatMessage({ id: "form.builder.po.create.a.lot.error" }));
+        toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error' }));
       } else {
         dialogState?.config({
           open: true,
-          maxWidth: "sm",
-          title: "form.builder.po.create.a.lot",
+          maxWidth: 'sm',
+          title: 'form.builder.po.create.a.lot',
           content: <FBPOReceiveCreateLot {...{ item }} />,
           actions: <FBPOReceiveCreateLotActions {...{ item }} />,
         });
@@ -77,8 +77,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       return {
         ...item,
         disabled: true,
-        ...(item.type === "purchaseorder") && {
-          mode: "preview",
+        ...(item.type === 'purchaseorder') && {
+          mode: 'preview',
           handleItem,
           handleLot,
           receivableName: name,
@@ -87,21 +87,21 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     }
 
     function setSchemaProps(schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
-      const id = workspaceState?.schema?.find((item) => item.type === "poreceive")?.tabId;
+      const id = workspaceState?.schema?.find((item) => item.type === 'poreceive')?.tabId;
 
-      remove(schema || [], (item) => item?.type === "poapprovals");
+      remove(schema || [], (item) => item?.type === 'poapprovals');
       if (!schema) { return; }
-      const prior: Partial<Record<FBInputType | "other", number>> = {
+      const prior: Partial<Record<FBInputType | 'other', number>> = {
         purchaseorder: 1,
         other: 2,
       };
       schema.sort((a, b) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        prior[get(a, "type", "other")]! - prior[get(b, "type", "other")]!);
+        prior[get(a, 'type', 'other')]! - prior[get(b, 'type', 'other')]!);
 
       schema = schema.reduce((reduced: FBSchemaProps[], item) => {
         if (item.name && !(/requestor|po-supplier-built-in|po-items-built-in/.test(item.name)
-        && item.type !== "section")) {
+        && item.type !== 'section')) {
           return reduced;
         }
 
@@ -110,8 +110,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
           return reduced;
         }
 
-        if (last(reduced)?.type === "purchaseorder" && item.type !== "purchaseorder") {
-          reduced.push({ type: "section", label: "form.builder.purchaseorder" });
+        if (last(reduced)?.type === 'purchaseorder' && item.type !== 'purchaseorder') {
+          reduced.push({ type: 'section', label: 'form.builder.purchaseorder' });
         }
 
         reduced.push(setSchemaItem(item));
@@ -120,7 +120,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
       const modifiedTabIdSchema = schema.map((item) => ({
         ...item, tabId: id,
-      })
+      }),
 
       );
       return modifiedTabIdSchema;
@@ -143,7 +143,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         formState?.setFieldValue(name, { id: value });
         formState?.setFieldAutosave(name);
         formik?.submitForm();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

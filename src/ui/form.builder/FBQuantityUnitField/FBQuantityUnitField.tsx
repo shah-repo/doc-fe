@@ -1,6 +1,6 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBAutocomplete, FBData, FBInput, FBQuantityField, FBQuantityUnitFieldProps } from "..";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBAutocomplete, FBData, FBInput, FBQuantityField, FBQuantityUnitFieldProps } from '..';
 
 const FBQuantityUnitField: React.FunctionComponent<FBQuantityUnitFieldProps> = ({
   name,
@@ -12,12 +12,12 @@ const FBQuantityUnitField: React.FunctionComponent<FBQuantityUnitFieldProps> = (
     <Box display="flex">
       <FBQuantityField
         label="form.builder.quantity"
-        name={`quantity`}
+        name="quantity"
         boxProps={{ mr: 1, flexGrow: 1 }}
       />
       <FBAutocomplete
         label="form.builder.unit"
-        name={`unit`}
+        name="unit"
         boxProps={{ ml: 1, flexGrow: 1 }}
         options={FBData.unitsOptions}
         optionValueKey="value"
@@ -29,7 +29,7 @@ const FBQuantityUnitField: React.FunctionComponent<FBQuantityUnitFieldProps> = (
         inputStyle={{ padding: 0 }}
       />
     </Box>
-  </ FBInput>
+  </FBInput>
 );
 
 export default FBQuantityUnitField;

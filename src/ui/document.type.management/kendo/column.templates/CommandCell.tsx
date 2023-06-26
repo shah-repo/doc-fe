@@ -1,13 +1,13 @@
-import { IconButton } from "@material-ui/core";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/Edit";
-import React from "react";
-import { useIntl } from "react-intl";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import { CellCommandConfig } from "../types";
-import CellStyles from "./CellStyles";
+import { IconButton } from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import { CellCommandConfig } from '../types';
+import CellStyles from './CellStyles';
 
 export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
   dataItem,
@@ -29,7 +29,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const inEdit = dataItem.inEdit;
   const isNewItem = dataItem.id === undefined;
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   return inEdit ? (
@@ -42,7 +42,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
     >
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.add.document.type")}
+        data={getTranslatedText('common.add.document.type')}
         childrenElement={
           <span>
             <IconButton
@@ -55,9 +55,9 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               }
             >
               <AddCircleOutlineIcon
-                className={disabled ? "" : classes.ButtonColor}
+                className={disabled ? '' : classes.ButtonColor}
                 fontSize="small"
-                color={disabled ? "disabled" : "secondary"}
+                color={disabled ? 'disabled' : 'secondary'}
               />
             </IconButton>
           </span>
@@ -65,7 +65,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
       />
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.discard")}
+        data={getTranslatedText('common.discard')}
         childrenElement={
           <span>
             <IconButton
@@ -76,9 +76,9 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               onClick={() => cancel(dataItem)}
             >
               <CancelOutlinedIcon
-                className={disabled ? "" : classes.Cancel}
+                className={disabled ? '' : classes.Cancel}
                 fontSize="small"
-                color={disabled ? "disabled" : "secondary"}
+                color={disabled ? 'disabled' : 'secondary'}
               />
             </IconButton>
           </span>
@@ -95,7 +95,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
     >
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.edit.document.type")}
+        data={getTranslatedText('common.edit.document.type')}
         childrenElement={
           <span>
             <IconButton
@@ -106,9 +106,9 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               onClick={() => edit(dataItem)}
             >
               <EditIcon
-                className={disabled ? "" : classes.ButtonColor}
+                className={disabled ? '' : classes.ButtonColor}
                 fontSize="small"
-                color={disabled ? "disabled" : "secondary"}
+                color={disabled ? 'disabled' : 'secondary'}
               />
             </IconButton>
           </span>
@@ -116,7 +116,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
       />
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.delete.document.type")}
+        data={getTranslatedText('common.delete.document.type')}
         childrenElement={
           <span>
             <IconButton
@@ -127,9 +127,9 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               onClick={() => remove(dataItem)}
             >
               <DeleteIcon
-                className={disabled ? "" : classes.Remove}
+                className={disabled ? '' : classes.Remove}
                 fontSize="small"
-                color={disabled ? "disabled" : "secondary"}
+                color={disabled ? 'disabled' : 'secondary'}
               />
             </IconButton>
           </span>

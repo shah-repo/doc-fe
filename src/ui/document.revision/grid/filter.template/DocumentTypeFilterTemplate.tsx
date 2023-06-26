@@ -2,19 +2,19 @@ import {
   DropDownList,
   DropDownListChangeEvent,
   ListItemProps,
-} from "@progress/kendo-react-dropdowns";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import { map } from "lodash";
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { removeLastCharacterIfNotAlphaNumeric } from "../../../common/utils/helpers";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+} from '@progress/kendo-react-dropdowns';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import { map } from 'lodash';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { removeLastCharacterIfNotAlphaNumeric } from '../../../common/utils/helpers';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
-  defaultItem: string;
-  onStateChange?: (setDefault: boolean) => void;
+  defaultItem: string
+  onStateChange?: (setDefault: boolean) => void
 }
 
 export const DocumentTypeFilterTemplate = ({
@@ -28,8 +28,8 @@ export const DocumentTypeFilterTemplate = ({
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     const isValueExists = hasValue(target.value);
     onChange({
-      value: isValueExists ? target.value : "",
-      operator: isValueExists ? "eq" : "",
+      value: isValueExists ? target.value : '',
+      operator: isValueExists ? 'eq' : '',
       syntheticEvent,
     });
   };
@@ -37,8 +37,8 @@ export const DocumentTypeFilterTemplate = ({
   const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange({
-      value: "",
-      operator: "",
+      value: '',
+      operator: '',
       syntheticEvent: event,
     });
   };

@@ -1,13 +1,13 @@
-import { FBFileUploadState, FBInputProps } from "..";
-import { Id } from "../../../state/ducks/common/types";
+import { FBFileUploadState, FBInputProps } from '..';
+import { Id } from '../../../state/ducks/common/types';
 
 export type FBFileUploadProps =
 & FBInputProps
 & {
-  fileUploadState?: FBFileUploadState;
-  readonly?: boolean;
-  files?: Id[];
-  mode?: FBFileFieldType;
+  fileUploadState?: FBFileUploadState
+  readonly?: boolean
+  files?: Id[]
+  mode?: FBFileFieldType
 };
 
-type FBFileFieldType = "fileUploadIcon" | "fileUpload";
+type FBFileFieldType = 'fileUploadIcon' | 'fileUpload';

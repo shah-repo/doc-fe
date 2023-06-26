@@ -1,29 +1,28 @@
-import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import React, { useMemo, useState } from "react";
-import { useIntl } from "react-intl";
-import { stripTags, convertHtmlEntities } from "../../../../common/utils/helpers";
-import { Attachment } from "../../../../state/ducks/attachments/types";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import Text from "../../../components/Text";
-import { FBPurchaseOrderValue } from "../../../form.builder";
-import POAttachments from "./POAttachments";
-import PODetailItem from "./PODetailItem";
-import POSupplier from "./POSupplier";
+import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React, { useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { stripTags, convertHtmlEntities } from '../../../../common/utils/helpers';
+import { Attachment } from '../../../../state/ducks/attachments/types';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import Text from '../../../components/Text';
+import { FBPurchaseOrderValue } from '../../../form.builder';
+import POAttachments from './POAttachments';
+import PODetailItem from './PODetailItem';
+import POSupplier from './POSupplier';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  purchaseOrder: FBPurchaseOrderValue;
-  supplierId: string;
-  docRevAttachments: Attachment[];
+  documentRevision: DocumentRevision
+  purchaseOrder: FBPurchaseOrderValue
+  supplierId: string
+  docRevAttachments: Attachment[]
 }
-
 
 const styles = makeStyles(() =>
   createStyles({
     hideBorder: {
-      "&.MuiExpansionPanel-root:before": {
-        display: "none",
+      '&.MuiExpansionPanel-root:before': {
+        display: 'none',
       },
     },
   }),
@@ -37,8 +36,8 @@ const PODetails: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const totalAmount = useMemo(() => {
-    const currency = purchaseOrder.currency || "USD";
-    return intl.formatNumber(Number(purchaseOrder.totalAmount), { style: "currency", currency });
+    const currency = purchaseOrder.currency || 'USD';
+    return intl.formatNumber(Number(purchaseOrder.totalAmount), { style: 'currency', currency });
   }, [intl, purchaseOrder.totalAmount, purchaseOrder.currency]);
   const classes = styles();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -60,9 +59,9 @@ const PODetails: React.FunctionComponent<Props> = ({
       <ExpansionPanel expanded={isExpanded} onChange={handleChange} className={classes.hideBorder}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon color="primary" />}
-          style={{ width: "100px" }}
+          style={{ width: '100px' }}
         >
-          <Box color="primary.main" fontWeight="bold" style={{ textTransform: "uppercase" }}>
+          <Box color="primary.main" fontWeight="bold" style={{ textTransform: 'uppercase' }}>
             <Text translation="common.summary" />
           </Box>
         </ExpansionPanelSummary>

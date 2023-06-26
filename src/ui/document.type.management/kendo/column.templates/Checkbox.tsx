@@ -1,13 +1,12 @@
-
-import { GridCellProps } from "@progress/kendo-react-grid";
+import { GridCellProps } from '@progress/kendo-react-grid';
 import {
   Checkbox,
   CheckboxChangeEvent,
-} from "@progress/kendo-react-inputs";
-import { result, set } from "lodash";
-import React, { useEffect } from "react";
-import { DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
-import "./KendoStyles.css";
+} from '@progress/kendo-react-inputs';
+import { result, set } from 'lodash';
+import React, { useEffect } from 'react';
+import { DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import './KendoStyles.css';
 
 export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
   dataItem,
@@ -21,7 +20,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
   columnIndex,
 }) => {
   const editMode = dataItem.inEdit;
-  const path = field || "";
+  const path = field || '';
   const [dataValue, setValue] = React.useState<boolean | null | undefined>(false);
 
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -43,7 +42,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
     }
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   const isLHR = GroupWithGroupOptions[dataItem.group]?.includes(DOC_TYPE_GROUP_OPTION.BASE_LHR);
@@ -57,7 +56,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
       <Checkbox
         value={dataValue}
         onChange={handleChange}
-        disabled={editMode ? field === "equipmentEnforceProd" ? isLHR ? false : true : false : true}/>
+        disabled={editMode ? field === 'equipmentEnforceProd' ? isLHR ? false : true : false : true} />
     </td>
   );
 };

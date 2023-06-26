@@ -1,52 +1,52 @@
-import List from "@material-ui/core/List";
-import React from "react";
-import { useSelector } from "react-redux";
+import List from '@material-ui/core/List';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   getFormattedDateString,
   MomentFormats,
-} from "../../../common/utils/date";
-import { authSelectors } from "../../../state/ducks/auth";
+} from '../../../common/utils/date';
+import { authSelectors } from '../../../state/ducks/auth';
 import {
   ActionTypes,
   LINE_ITEMS_STATUS_TYPES,
-} from "../../../state/ducks/dashboard.new/my.feeds/types";
-import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
-import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
-import { DialogHandler } from "../../hooks/useDialog";
-import useStyles from "../Dashboard.styles";
-import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
-import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
-import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
-import ARApproverActions from "../line.items/approvals/approver.actions/ar.approver/approverActions";
-import DirectApprovalActionItem from "../line.items/approvals/direct.request.owner.actions/default";
-import DirectApprovalActionPRItem from "../line.items/approvals/direct.request.owner.actions/pending.review/pendingReview";
-import PendingReview from "../line.items/approvals/pending.review/pendingReview";
-import ARTaskApproval from "../line.items/approvals/task.approval/taskApproval";
-import CalibrationItem from "../line.items/calibration/calibrationItem";
-import DefaultLineItem from "../line.items/default/defaultLineItem";
-import POApproverActions from "../line.items/purchase.order/approver.actions/approverActions";
-import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
-import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
-import POTaskApproval from "../line.items/purchase.order/task.approval/POTaskApproval";
-import NONPOTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
-import TrainingItem from "../line.items/training/default/DefaultTraining";
-import NoPendingActions from "../NoPendingActions";
+} from '../../../state/ducks/dashboard.new/my.feeds/types';
+import { AsyncState } from '../../../state/types';
+import AsyncGate from '../../components/AsyncGate';
+import LoadMoreButton from '../../components/common/load.more.button/LoadMoreButton';
+import { DialogHandler } from '../../hooks/useDialog';
+import useStyles from '../Dashboard.styles';
+import ApprovalApproved from '../line.items/approvals/approval.approved/approvalApproved';
+import ApprovalClosed from '../line.items/approvals/approval.closed/approvalClosed';
+import NonPOApproverActions from '../line.items/approvals/approver.actions/approverActions';
+import ARApproverActions from '../line.items/approvals/approver.actions/ar.approver/approverActions';
+import DirectApprovalActionItem from '../line.items/approvals/direct.request.owner.actions/default';
+import DirectApprovalActionPRItem from '../line.items/approvals/direct.request.owner.actions/pending.review/pendingReview';
+import PendingReview from '../line.items/approvals/pending.review/pendingReview';
+import ARTaskApproval from '../line.items/approvals/task.approval/taskApproval';
+import CalibrationItem from '../line.items/calibration/calibrationItem';
+import DefaultLineItem from '../line.items/default/defaultLineItem';
+import POApproverActions from '../line.items/purchase.order/approver.actions/approverActions';
+import PurchaseOrder from '../line.items/purchase.order/default/purchaseOrder';
+import PurchaseOrderPendingReview from '../line.items/purchase.order/pending.review/purchaseOrder';
+import POTaskApproval from '../line.items/purchase.order/task.approval/POTaskApproval';
+import NONPOTaskApproval from '../line.items/purchase.order/task.approval/taskApproval';
+import TrainingItem from '../line.items/training/default/DefaultTraining';
+import NoPendingActions from '../NoPendingActions';
 
 interface Props {
-  loadMyFeeds: any;
-  hoverItemId: string;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (pinnedItemId: string) => void;
-  onMouseLeaveItem: (any) => void;
-  onMouseHoverItem: (id: string) => void;
-  loadMyFeedsListAsyncState: AsyncState;
+  loadMyFeeds: any
+  hoverItemId: string
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (pinnedItemId: string) => void
+  onMouseLeaveItem: (any) => void
+  onMouseHoverItem: (id: string) => void
+  loadMyFeedsListAsyncState: AsyncState
   // TO DO:: Needs to add type definitions
-  feedItems: any;
-  overallLimit: number;
-  onLoadMoreData: () => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+  feedItems: any
+  overallLimit: number
+  onLoadMoreData: () => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 
 const LineItemsPresenter: React.FC<Props> = ({
@@ -81,11 +81,11 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   dueOn={getFormattedDateString(
                     pendingAction.dueOn,
-                    MomentFormats.ShortBriefDate
+                    MomentFormats.ShortBriefDate,
                   )}
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
@@ -111,7 +111,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
@@ -160,7 +160,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
@@ -192,7 +192,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
@@ -240,7 +240,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   status={pendingAction.approvalStatusChanged}
                   docRevName={pendingAction.docRevName}
@@ -268,7 +268,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     type={pendingAction.type}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     purchaseOrderSupplierDocRevId={
                       pendingAction.purchaseOrderSupplierDocRevId
@@ -322,7 +322,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   pinned={pendingAction.pinned}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
@@ -358,7 +358,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                 />
               );
             case ActionTypes.DIRECT_APPROVAL_REQ_OWNER:
-              if (pendingAction.docRevStatus === "IN_REVIEW") {
+              if (pendingAction.docRevStatus === 'IN_REVIEW') {
                 return (
                   <DirectApprovalActionPRItem
                     key={pendingAction.id}
@@ -370,7 +370,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     type={pendingAction.type}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     status={pendingAction.docRevStatus}
                     displaystatus={pendingAction.docRevDisplayStatus}
@@ -404,7 +404,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   status={pendingAction.docRevStatus}
                   docRevName={pendingAction.docRevName}
@@ -431,11 +431,11 @@ const LineItemsPresenter: React.FC<Props> = ({
                   status={pendingAction.trainingStatus}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   dueOn={getFormattedDateString(
                     pendingAction.dueOn,
-                    MomentFormats.ShortBriefDate
+                    MomentFormats.ShortBriefDate,
                   )}
                   hoverItemId={hoverItemId}
                   onMouseHoverItem={onMouseHoverItem}
@@ -455,7 +455,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   arId={pendingAction.arId}
                   docRevOwnerName={pendingAction.arOwnerName}
@@ -486,7 +486,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
@@ -498,7 +498,7 @@ const LineItemsPresenter: React.FC<Props> = ({
               );
             case ActionTypes.APPROVED_APPROVAL_REQUESTS:
             case ActionTypes.APPROVAL_REQ_OWNER:
-              if (pendingAction.arStatus === "CLOSED") {
+              if (pendingAction.arStatus === 'CLOSED') {
                 return (
                   <ApprovalClosed
                     key={pendingAction.id}
@@ -511,7 +511,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     arStatus={pendingAction.arStatus}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
@@ -522,7 +522,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   />
                 );
               }
-              if (pendingAction.arStatus === "APPROVED") {
+              if (pendingAction.arStatus === 'APPROVED') {
                 return (
                   <ApprovalApproved
                     key={pendingAction.id}
@@ -535,7 +535,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     arStatus={pendingAction.arStatus}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
@@ -546,7 +546,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   />
                 );
               }
-              if (pendingAction.arStatus === "IN_REVIEW") {
+              if (pendingAction.arStatus === 'IN_REVIEW') {
                 return (
                   <PendingReview
                     key={pendingAction.id}
@@ -559,7 +559,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     arStatus={pendingAction.arStatus}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.BriefDateTime,
                     )}
                     pendingApprovers={pendingAction.pendingApprovers}
                     approvedApprovers={pendingAction.approvedApprovers}

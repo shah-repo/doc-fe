@@ -1,12 +1,12 @@
-import { Box } from "@material-ui/core";
-import { Observer } from "mobx-react";
-import React from "react";
-import { DocumentRevisionFormHeaderProps, SM } from "../../../../..";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../../../../../ui/constants/urls";
-import Title from "../../../../../../ui/document.revision/form/Title";
-import ChangeRequestLink from "../../../../../../ui/document.revision/summary/changeRequestLink";
-import Description from "../../../../../../ui/documentRevision/forms/presenters/Description";
-import { withDocumentRevisionFormHeader } from "./DocumentRevisionFormHeader.wrap";
+import { Box } from '@material-ui/core';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { DocumentRevisionFormHeaderProps, SM } from '../../../../..';
+import { DOCUMENT_REVISION_CREATE_URL } from '../../../../../../ui/constants/urls';
+import Title from '../../../../../../ui/document.revision/form/Title';
+import ChangeRequestLink from '../../../../../../ui/document.revision/summary/changeRequestLink';
+import Description from '../../../../../../ui/documentRevision/forms/presenters/Description';
+import { withDocumentRevisionFormHeader } from './DocumentRevisionFormHeader.wrap';
 
 const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHeaderProps> = ({
   _documentRevisionFormState,
@@ -24,8 +24,8 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
         pr={3.75}
       >
         {
-          type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
-            <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
+          type !== 'newOutput' && _documentRevisionFormState?.documentRevision
+            && <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
         }
         <Box paddingBottom={1.25} paddingTop={1.25}>
           <Title

@@ -25,10 +25,10 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const emailDialog = useDialog();
-  const [value, setValue] = React.useState('false');
+  const [value, setValue] = React.useState(false);
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setValue(event.target.value === 'true');
   };
 
   const async = useAsync({

@@ -1,10 +1,8 @@
-import { get } from "lodash";
-import React from "react";
-import { getFormattedDateString, MomentFormats, toValidateIfDate } from "../../../../common/utils/date";
-import { formatNumberToCurrency } from "../../../dashboard.new/line.items/common/Utils";
-import Tooltip from "../kendo/Tooltip";
-import { CustomGridCellProps } from "../kendo/types";
-
+import { get } from 'lodash';
+import React from 'react';
+import { getFormattedDateString, MomentFormats, toValidateIfDate } from '../../../../common/utils/date';
+import Tooltip from '../kendo/Tooltip';
+import { CustomGridCellProps } from '../kendo/types';
 
 export const CommonCell = ({
   dataItem,
@@ -16,25 +14,19 @@ export const CommonCell = ({
   columnIndex,
   cellRowClick,
 }: CustomGridCellProps) => {
-  const value = get(dataItem, field || "");
+  const value = get(dataItem, field || '');
   const toCheckIfDate = toValidateIfDate(value);
   let formattedValue = toCheckIfDate
     ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
-  if (field === "precalc.lhr_end_accepted_quantity" && value === -1) {
-    formattedValue = "N/A";
-  }
-  if (field === "precalc.po_amount") {
-    if (/N\/A/g.test(formattedValue)) {
-      formattedValue = formatNumberToCurrency(0);
-    }
-    style = { ...style, textAlign: "right" };
+  if (field === 'precalc.lhr_end_accepted_quantity' && value === -1) {
+    formattedValue = 'N/A';
   }
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   return (
@@ -46,7 +38,7 @@ export const CommonCell = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <Tooltip data={formattedValue}/>
+      <Tooltip data={formattedValue} />
     </td>
   );
 };

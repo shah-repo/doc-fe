@@ -1,34 +1,34 @@
-import { isEmpty } from "lodash";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { AsyncTaskActions } from "../../../state/ducks/async.tasks";
-import { ASYNC_TASK_SEARCH } from "../../../state/ducks/async.tasks/constants";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { isEmpty } from 'lodash';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { AsyncTaskActions } from '../../../state/ducks/async.tasks';
+import { ASYNC_TASK_SEARCH } from '../../../state/ducks/async.tasks/constants';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import {
   EffectiveDateFormValues, PasswordFormValues,
-} from "../../change.request/form/types";
-import { getSchemaFromColumns } from "../../common/utils/helpers";
-import { KendoColumn } from "../../components/common/kendo/types";
-import { DataStateProps } from "../../components/KendoGrid/interfaces";
-import { toastError } from "../../components/notifications";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import { SQS_TYPES, TimeTravelProps } from "../types";
-import gridConfiguration from "./column.definition";
-import { AsyncTasksPresenter } from "./presenter";
+} from '../../change.request/form/types';
+import { getSchemaFromColumns } from '../../common/utils/helpers';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import { SQS_TYPES, TimeTravelProps } from '../types';
+import gridConfiguration from './column.definition';
+import { AsyncTasksPresenter } from './presenter';
 
 const AsyncTasksContainer: React.FunctionComponent<
   RouteComponentProps
 > = () => {
-  const TABLE_NAME = "asyncType";
+  const TABLE_NAME = 'asyncType';
   const intl = useIntl();
   const transitionDialog = useDialog();
-  const [type, setType] = React.useState("");
-  const [payload, setPayload] = React.useState("");
+  const [type, setType] = React.useState('');
+  const [payload, setPayload] = React.useState('');
   const [loadTable, setLoadTable] = React.useState(false);
   const executeAsyncTask = useActionCreator(AsyncTaskActions.executeAsyncTask);
   const executeSessionTimeTravelAsyncTask = useActionCreator(AsyncTaskActions.executeSessionTimeTravelAsyncTask);
@@ -39,21 +39,21 @@ const AsyncTasksContainer: React.FunctionComponent<
   const setSearchStatus = (
     dataState: DataStateProps,
     columns: KendoColumn[],
-    forceUpdate
+    forceUpdate,
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
           forceUpdate,
-          apiError: "",
+          apiError: '',
           queryDict: {
             dataState,
           },
           columnConfig: JSON.stringify(columns),
         },
-        TABLE_NAME
-      )
+        TABLE_NAME,
+      ),
     );
   };
 
@@ -61,7 +61,7 @@ const AsyncTasksContainer: React.FunctionComponent<
     if (isEmpty(tableCriteria.queryDict) || loadTable) {
       const dataState: DataStateProps = {
         filter: {
-          logic: "and",
+          logic: 'and',
           filters: [],
         },
         sort: [],
@@ -82,12 +82,12 @@ const AsyncTasksContainer: React.FunctionComponent<
   const async = useAsync({
     onSuccess: () => {
       closeApproveDialog();
-      setType("");
+      setType('');
       setLoadTable(true);
     },
     onError: () => {
       closeApproveDialog();
-      toastError(intl.formatMessage({ id: "common.sqs.task.failed" }));
+      toastError(intl.formatMessage({ id: 'common.sqs.task.failed' }));
     },
   });
   const openApproveDialog = () => {
@@ -98,7 +98,7 @@ const AsyncTasksContainer: React.FunctionComponent<
   };
   const handleEmptyFormSubmit = () => {
     setPayload(JSON.stringify({
-      password: "",
+      password: '',
       taskType: type,
     }));
     openApproveDialog();
@@ -129,7 +129,7 @@ const AsyncTasksContainer: React.FunctionComponent<
       taskType: type,
       passwordUpdatedAt: data?.passwordUpdatedAt,
       passwordLastEmailSentAt: data?.passwordLastEmailSentAt,
-      userEmails: data?.userEmails ? data.userEmails.split(",") : [],
+      userEmails: data?.userEmails ? data.userEmails.split(',') : [],
     }));
     openApproveDialog();
   };
@@ -137,7 +137,7 @@ const AsyncTasksContainer: React.FunctionComponent<
     setPayload(JSON.stringify({
       taskType: type,
       processedAtTimestamp: data?.processedAtTimestamp,
-      userEmails: data?.userEmails ? data.userEmails.split(",") : [],
+      userEmails: data?.userEmails ? data.userEmails.split(',') : [],
     }));
     openApproveDialog();
   };
@@ -170,7 +170,7 @@ const AsyncTasksContainer: React.FunctionComponent<
         JSON.stringify({
           taskType: type,
           timeTravel: values,
-        })
+        }),
       );
     }
     openApproveDialog();
@@ -181,7 +181,7 @@ const AsyncTasksContainer: React.FunctionComponent<
         JSON.stringify({
           taskType: type,
           timeTravel: values,
-        })
+        }),
       );
     }
     openApproveDialog();
@@ -192,7 +192,7 @@ const AsyncTasksContainer: React.FunctionComponent<
       async.start(
         executeSessionTimeTravelAsyncTask,
         { ...updatedPayload, ...values },
-        async
+        async,
       );
     } else {
       async.start(executeAsyncTask, { ...updatedPayload, ...values }, async);

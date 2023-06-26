@@ -1,15 +1,15 @@
 import {
   DropDownList,
   DropDownListChangeEvent,
-} from "@progress/kendo-react-dropdowns";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+} from '@progress/kendo-react-dropdowns';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
-  data: string[];
-  defaultItem: string;
+  data: string[]
+  defaultItem: string
 }
 
 export const AsyncFilterTemplate = ({
@@ -23,8 +23,8 @@ export const AsyncFilterTemplate = ({
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     const isValueExists = hasValue(target.value);
     onChange({
-      value: isValueExists ? target.value : "",
-      operator: isValueExists ? "eq" : "",
+      value: isValueExists ? target.value : '',
+      operator: isValueExists ? 'eq' : '',
       syntheticEvent,
     });
   };
@@ -32,8 +32,8 @@ export const AsyncFilterTemplate = ({
   const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange({
-      value: "",
-      operator: "",
+      value: '',
+      operator: '',
       syntheticEvent: event,
     });
   };

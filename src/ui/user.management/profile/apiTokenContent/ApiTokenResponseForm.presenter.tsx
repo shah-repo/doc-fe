@@ -1,13 +1,13 @@
-import { Box, Button } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as CopyIcon } from "../../../../assets/images/copy.svg";
-import InputField from "../../../components/forms/fields/Input";
-import Text from "../../../components/Text";
-import { styles } from "./ApiToken.style";
+import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as CopyIcon } from '../../../../assets/images/copy.svg';
+import InputField from '../../../components/forms/fields/Input';
+import Text from '../../../components/Text';
+import { styles } from './ApiToken.style';
 
 interface Props {
-  apiTokenKey: string;
-  apiTokenSecret: string;
+  apiTokenKey: string
+  apiTokenSecret: string
 }
 
 const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
@@ -20,7 +20,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
       <InputField
         name="name"
         label="common.name"
-        inputProps={{ id: "ApiTokenDialog-name", disabled: true }}
+        inputProps={{ id: 'ApiTokenDialog-name', disabled: true }}
       />
       <div>
         <Button
@@ -34,7 +34,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
         <InputField
           name="key"
           label="api.token.key"
-          inputProps={{ id: "ApiTokenDialog-key", disabled: true }}
+          inputProps={{ id: 'ApiTokenDialog-key', disabled: true }}
         />
       </div>
       <div>
@@ -49,7 +49,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
         <InputField
           name="secret"
           label="api.token.secret"
-          inputProps={{ id: "ApiTokenDialog-secret", disabled: true }}
+          inputProps={{ id: 'ApiTokenDialog-secret', disabled: true }}
         />
       </div>
     </Box>

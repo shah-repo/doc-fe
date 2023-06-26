@@ -1,14 +1,14 @@
-import { Box, Collapse, List, ListItem, ListItemText } from "@material-ui/core";
-import classNames from "classnames";
-import React, { useState } from "react";
-import { ReactComponent as ListCollapseIcon } from "../../../assets/images/list_collapse.svg";
-import { ReactComponent as ListExpandIcon } from "../../../assets/images/list_expand.svg";
-import Text from "../../../ui/components/Text";
-import useStyles from "./FBPOApprovals.styles";
+import { Box, Collapse, List, ListItem, ListItemText } from '@material-ui/core';
+import classNames from 'classnames';
+import React, { useState } from 'react';
+import { ReactComponent as ListCollapseIcon } from '../../../assets/images/list_collapse.svg';
+import { ReactComponent as ListExpandIcon } from '../../../assets/images/list_expand.svg';
+import Text from '../../../ui/components/Text';
+import useStyles from './FBPOApprovals.styles';
 
 const ApprovalsBlock: React.FC<{
-  headerText: string;
-  itemsCount: number;
+  headerText: string
+  itemsCount: number
 }> = ({
   headerText,
   itemsCount,
@@ -57,6 +57,5 @@ const ApprovalsBlock: React.FC<{
     </List>
   );
 };
-
 
 export default ApprovalsBlock;

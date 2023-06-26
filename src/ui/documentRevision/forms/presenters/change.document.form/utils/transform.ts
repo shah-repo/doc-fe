@@ -1,14 +1,14 @@
-import { filter, find, keyBy, map, omit } from "lodash";
-import { DocumentTypeByIdForm } from "../../../../../../state/ducks/documentRevisions/documentType/types";
-import { UpdateFormFieldMapping, UpdateFormRequestBody } from "../../../../../../state/ducks/documentRevisions/types";
-import { OptionType } from "../../../../../components/forms/fields/Autocomplete/types";
-import { FBSchemaProps } from "../../../../../form.builder";
-import { MigrationSpecialFields } from "./constants";
+import { filter, find, keyBy, map, omit } from 'lodash';
+import { DocumentTypeByIdForm } from '../../../../../../state/ducks/documentRevisions/documentType/types';
+import { UpdateFormFieldMapping, UpdateFormRequestBody } from '../../../../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { FBSchemaProps } from '../../../../../form.builder';
+import { MigrationSpecialFields } from './constants';
 
 export const toFormOptions = (forms: DocumentTypeByIdForm[]): OptionType[] => forms.map((form) => ({
   label: `${form.document.docId} - ${form.name}`,
   value: form.id,
-})
+}),
 );
 
 export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSchema: FBSchemaProps[] ): any => {
@@ -20,7 +20,7 @@ export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSch
       targetId: field.targetId,
     };
   });
-  return keyBy(transformed, "targetId");
+  return keyBy(transformed, 'targetId');
 };
 
 const checkSpecialFields = (item, targetField) => {
@@ -61,9 +61,9 @@ export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSche
 
 export const determineLabel = (field) => {
   let label;
-  if (field.type === "paragraph") {
-    label = "Paragraph";
-  } else if (field.type === "procedure") {
+  if (field.type === 'paragraph') {
+    label = 'Paragraph';
+  } else if (field.type === 'procedure') {
     label = `Step #${field.stepIndex}`;
   } else {
     label = field.label;
@@ -73,7 +73,7 @@ export const determineLabel = (field) => {
 
 export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => {
   // Map only form fields
-  const mappedFields: UpdateFormFieldMapping[] = map(omit(values, "changeDocumentForm"), (value) => ({
+  const mappedFields: UpdateFormFieldMapping[] = map(omit(values, 'changeDocumentForm'), (value) => ({
     targetId: value.targetId,
     sourceId: value.value,
   }));
@@ -84,4 +84,3 @@ export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => {
       id: values.changeDocumentForm.value,
     },
   }); };
-

@@ -1,15 +1,15 @@
-import { Box, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { Link } from "react-router-dom";
-import { DataProps } from "../../../state/ducks/common/types";
-import Text from "../../components/Text";
-import { ReferenceSummary as Model } from "../utils/types";
-import { styles } from "./references.styles";
+import { Box, Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { DataProps } from '../../../state/ducks/common/types';
+import Text from '../../components/Text';
+import { ReferenceSummary as Model } from '../utils/types';
+import { styles } from './references.styles';
 
 interface OwnProps {
-  label: string;
-  fromReferencedBy?: boolean;
-  canEdit?: boolean;
+  label: string
+  fromReferencedBy?: boolean
+  canEdit?: boolean
 }
 
 type Props = OwnProps & DataProps<Model[]>;
@@ -37,8 +37,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               variant="body2"
               color="textPrimary"
             >
-              {
-                <Link
+              <Link
                   className={classes.link}
                   to={reference.url}
                   target="_blank"
@@ -46,7 +45,6 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
                 >
                   {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
                 </Link>
-              }
             </Typography>
           </Grid>
         </Grid>
@@ -56,13 +54,13 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   const referencesEmptyRenderer = () => (
     <>
       <Typography variant="h5" className={classes.noHeader} >
-        <Text message="common.none"/>
+        <Text message="common.none" />
       </Typography>
     </>
   );
   return (
     <Box mb={2.5}>
-      <Box display={!canEdit && !fromReferencedBy ? "block" : "none"}>
+      <Box display={!canEdit && !fromReferencedBy ? 'block' : 'none'}>
         <Typography variant="h6" className={classes.header}>
           <Text message={label} />
         </Typography>

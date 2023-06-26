@@ -1,6 +1,5 @@
-
-import { changeRequestsActions, changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
+import { changeRequestsActions, changeRequestsSelectors } from '../../../../../state/ducks/changeRequest';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 
 export const getUrlandActions = (requestType) => {
   const urlAction = {

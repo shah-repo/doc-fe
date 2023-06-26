@@ -1,25 +1,25 @@
-import { Box, CircularProgress, Drawer, IconButton } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { isEmpty, map, values } from "lodash";
-import qs from "query-string";
-import React, { useState } from "react";
-import { useIntl } from "react-intl";
-import apiClient from "../../../state/apiClient";
-import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from "../../../state/ducks/userManagement/constants";
-import { AuditDetailsProps, UMAuditProps } from "../../../state/ducks/userManagement/types";
-import { store } from "../../../state/store";
-import Default from "../../components/common/audit.history/Cards/Default";
-import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "./styles";
+import { Box, CircularProgress, Drawer, IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
+import { isEmpty, map, values } from 'lodash';
+import qs from 'query-string';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import apiClient from '../../../state/apiClient';
+import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from '../../../state/ducks/userManagement/constants';
+import { AuditDetailsProps, UMAuditProps } from '../../../state/ducks/userManagement/types';
+import { store } from '../../../state/store';
+import Default from '../../components/common/audit.history/Cards/Default';
+import LoadMoreButton from '../../components/common/load.more.button/LoadMoreButton';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
+import styles from './styles';
 
 let call: CancelTokenSource;
 interface OwnProps {
-  openHistoryPanel: boolean;
-  closeHistoryPanel: (panel: boolean) => void;
-  getCardGroups: (auditRecords: UMAuditProps[]) => object;
+  openHistoryPanel: boolean
+  closeHistoryPanel: (panel: boolean) => void
+  getCardGroups: (auditRecords: UMAuditProps[]) => object
 }
 
 const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
@@ -32,7 +32,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
   const classes = styles();
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
   const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
   const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
@@ -54,10 +54,10 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
      call = axios.CancelToken.source();
      setIsLoading(true);
      setLoadMore(true);
-     setErrorMessage("");
+     setErrorMessage('');
      setOverallLimit(overallLimit + UM_AUDIT_HISTORY_LIMIT);
      const requestConfig: AxiosRequestConfig = {
-       method: "get",
+       method: 'get',
        url: UM_AUDIT_URL,
        params: { offset: page, limit },
        paramsSerializer: (params) => qs.stringify(params),
@@ -87,7 +87,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
            return;
          }
          if (exception?.response?.status === 504) {
-           setErrorMessage(intl.formatMessage({ id: "api.error.gateway.timeout" }));
+           setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
          }
        });
   };
@@ -101,7 +101,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           </div>
           <div className={classes.iconContainer} >
             <IconButton
-              style={{ width: "23px" }}
+              style={{ width: '23px' }}
               color="default"
               onClick={() => closeDrawer()}
               aria-label="Close"
@@ -119,8 +119,8 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
       <Box className={classes.listItemContainer}>
         {map(Items, (auditDetails, groupKey) => (
           <Box key={groupKey} style={{ padding: 0 }}>
-            {<Default auditDetails={auditDetails} />}
-          </Box>)
+            <Default auditDetails={auditDetails} />
+          </Box>),
         )}
       </Box>
     </>
@@ -130,7 +130,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
     <Drawer anchor="right" open={openDrawer.right} onClose={closeDrawer}>
       <Box className={classes.root}>
         {renderAuditRecords()}
-        {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
+        {!isEmpty(errorMessage) && <div style={{ color: 'red' }}>{errorMessage}</div>}
         {showLoadMoreButton && (
           <Box className={classes.listActions}>
             <LoadMoreButton

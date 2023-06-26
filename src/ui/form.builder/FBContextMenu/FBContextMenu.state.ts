@@ -1,5 +1,5 @@
-import { PopoverPosition } from "@material-ui/core";
-import { action, computed, observable, set } from "mobx";
+import { PopoverPosition } from '@material-ui/core';
+import { action, computed, observable, set } from 'mobx';
 
 class FBContextMenuState {
   @observable public mouseX: number | undefined;
@@ -10,8 +10,8 @@ class FBContextMenuState {
   }
 
   @action public setPosition = (top: number | undefined = undefined, left: number | undefined = undefined) => {
-    set(this, "mouseX", left);
-    set(this, "mouseY", top);
+    set(this, 'mouseX', left);
+    set(this, 'mouseY', top);
   };
 }
 

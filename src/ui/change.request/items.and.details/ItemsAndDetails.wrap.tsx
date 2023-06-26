@@ -1,17 +1,17 @@
-import { cloneDeep, map } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { AsyncStatus } from "../../../state/types";
-import { useFormContext } from "../../components/forms/FormContext";
-import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from "../../form.builder";
-import { formDataToStoreData, storeDataToFormData } from "./helpers";
-import ItemsAndDetails from "./ItemsAndDetails";
-import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
+import { cloneDeep, map } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useRef } from 'react';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../state/types';
+import { useFormContext } from '../../components/forms/FormContext';
+import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from '../../form.builder';
+import ItemsAndDetailsState from '../items.and.details/ItemsAndDetails.state';
+import { formDataToStoreData, storeDataToFormData } from './helpers';
+import ItemsAndDetails from './ItemsAndDetails';
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from './ItemsAndDetails.types';
 
 const ItemsAndDetailsContainer: React.FunctionComponent<
-  ItemsAndDetailsWrapperProps & {name: string}
+ItemsAndDetailsWrapperProps & {name: string}
 > = ({
   currentDocRevId,
   changeRequest,
@@ -20,9 +20,9 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   mode,
   asyncState,
 }) => {
-
   const { formState: parentFormState } = FB.useStores();
   const formState = FB.useRef(FBFormState, {});
+  const initialAsyncStatus = useRef(asyncState?.status);
 
   const { submitForm } = useFormContext();
 
@@ -36,8 +36,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       formState?.omitFieldValue(key);
     });
 
-    const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
+    const dataToSend: FBDocumentRevisionsValue[]
+      = storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
     dataToSend.push(formValue);
 
     submitData(dataToSend);
@@ -46,8 +46,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   const handleRemove = (docRevId: string) => {
     const orderItemsFiltered = itemsAndDetailsState.approvalRequestItemsList
       .filter((item: ApprovalRequestGridItem) => item.docRevId !== docRevId);
-    const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(orderItemsFiltered);
+    const dataToSend: FBDocumentRevisionsValue[]
+      = storeDataToFormData(orderItemsFiltered);
 
     submitData(dataToSend);
   };
@@ -64,8 +64,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
         return { ...item, justificationOfChange, descriptionOfChange };
       });
 
-    const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(orderItemsUpdated);
+    const dataToSend: FBDocumentRevisionsValue[]
+      = storeDataToFormData(orderItemsUpdated);
     submitData(dataToSend);
   };
 
@@ -74,6 +74,13 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (autosave) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
+      initialAsyncStatus.current = asyncState?.status;
+      setTimeout(() => {
+        if (asyncState?.status === initialAsyncStatus.current) {
+          itemsAndDetailsState.setLoadingState(false);
+          itemsAndDetailsState.setViewItemActionsVisibility(true);
+        }
+      }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
       const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
@@ -82,8 +89,9 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   };
 
   useEffect(() => {
-    if (asyncState && (asyncState.status === AsyncStatus.Success ||
-      asyncState.status === AsyncStatus.Error)) {
+    initialAsyncStatus.current = asyncState?.status;
+    if (asyncState && (asyncState.status === AsyncStatus.Success
+      || asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
@@ -119,7 +127,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (changeRequest && !currentDocRevPresent && currentDocRevId) {
       itemsAndDetailsState.setApprovalRequestItemInEditMode(currentDocRevId);
     } else {
-      itemsAndDetailsState.setApprovalRequestItemInEditMode("");
+      itemsAndDetailsState.setApprovalRequestItemInEditMode('');
     }
 
     itemsAndDetailsState.setApprovalRequestItemsList(entries);
@@ -134,9 +142,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       itemsAndDetailsState = {itemsAndDetailsState}
     />
   ));
-
 };
-
 
 const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProps> = ({
   changeRequest,

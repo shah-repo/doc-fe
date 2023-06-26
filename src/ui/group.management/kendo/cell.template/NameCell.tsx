@@ -1,14 +1,14 @@
-import { TextField } from "@material-ui/core";
-import React from "react";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import { TextField } from '@material-ui/core';
+import React from 'react';
+import Tooltip from '../../../components/common/kendo/Tooltip';
 
 interface NameCellProps {
-  dataItem: any;
-  rowType?: string;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
+  dataItem: any
+  rowType?: string
+  colSpan?: number
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
 }
 
 export const NameCell = ({
@@ -19,13 +19,13 @@ export const NameCell = ({
   className,
   columnIndex,
 }: NameCellProps) => {
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState('');
   const updateNameField = ({ target }) => {
     setName(target?.value);
     dataItem.name = target?.value;
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 
@@ -39,7 +39,7 @@ export const NameCell = ({
           className={className}
           data-grid-col-index={columnIndex}
         >
-          <Tooltip data ={dataItem.name}/>
+          <Tooltip data ={dataItem.name} />
         </td>
       )}
       {dataItem.inEdit && (

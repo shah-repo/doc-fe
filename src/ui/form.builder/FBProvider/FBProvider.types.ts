@@ -1,7 +1,5 @@
 import {
   FBApprovalMatrixFieldState,
-  FBApprovalMatrixState,
-  FBApprovalMatrixTableState,
   FBApprovalsState,
   FBApproversState,
   FBBookmarkState,
@@ -13,7 +11,6 @@ import {
   FBEditorCustomControlState,
   FBEditorState,
   FBEQMaintenanceState,
-  FBFieldWrapperState,
   FBFilePresenterState,
   FBFilesPresenterState,
   FBFileUploadState,
@@ -32,62 +29,55 @@ import {
   FBPurchaseOrderState,
   FBSchemaState,
   FBSnackbarState,
-  FBSortableState,
   FBSupplierState,
   FBTaskState,
   FBTextEditorOptionsState,
   FBTextEditorState,
   FBTextFieldWithRangeState,
   FBWorkspaceState,
-} from "..";
-import FBLeftPanelState from "../FBLeftPanel/FBLeftPanel.state";
-import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
-import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
-
+} from '..';
+import FBLeftPanelState from '../FBLeftPanel/FBLeftPanel.state';
+import FBLHRBuildState from '../FBLHRBuild/FBLHRBuild.state';
+import FBMPIProcedureSelectState from '../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
 
 export interface FBProviderProps {
-  workspaceState?: FBWorkspaceState;
-  dialogState?: FBDialogState;
-  leftPanelState?: FBLeftPanelState;
-  fieldWrapper?: FBFieldWrapperState;
-  filePresenterState?: FBFilePresenterState;
-  mediaAlbumState?: FBMediaAlbumState;
-  formState?: FBFormState;
-  schemaState?: FBSchemaState;
-  fieldWrapperState?: FBFieldWrapperState;
-  editorState?: FBEditorState;
-  fileUploadState?: FBFileUploadState;
-  amState?: FBApprovalMatrixState;
-  docRevState?: FBDocumentRevisionsState;
-  poamState?: FBPOApprovalMatrixState;
-  snackbarState?: FBSnackbarState;
-  customControlState?: FBEditorCustomControlState;
-  poReceiveState?: FBPOReceiveState;
-  purchaseOrderState?: FBPurchaseOrderState;
-  approvalMatrixFieldState?: FBApprovalMatrixFieldState;
-  approvalMatrixTableState?: FBApprovalMatrixTableState;
-  taskState?: FBTaskState;
-  approversState?: FBApproversState;
-  approvalsState?: FBApprovalsState;
-  bookmarkState?: FBBookmarkState;
-  inlineApprovalState?: FBInlineApprovalState;
-  textEditorState?: FBTextEditorState;
-  textEditorOptionsState?: FBTextEditorOptionsState;
-  procedureState?: FBProcedureState;
-  procedureFormState?: FBProcedureFormState;
-  procedureDiffState?: FBProcedureDiffState;
-  partsState?: FBPartsState;
-  eqMaintenanceState?: FBEQMaintenanceState;
-  ebPartState?: FBEBPartState;
-  textFieldWithRangeState?: FBTextFieldWithRangeState;
-  filesPresenterState?: FBFilesPresenterState;
-  supplierState?: FBSupplierState;
-  mpiProcedureState?: FBMPIProcedureState;
-  lhrStepState?: FBLHRStepState;
-  mpiProcedureSelectState?: FBMPIProcedureSelectState;
-  poApprovalsState?: FBPOApprovalsState;
-  datePickerState?: FBDatePickerState;
-  lhrBuildState?: FBLHRBuildState;
-  downloadSheetTplState?: FBDownloadSheetTplState;
-  sortableState?: FBSortableState;
+  workspaceState?: FBWorkspaceState
+  dialogState?: FBDialogState
+  leftPanelState?: FBLeftPanelState
+  filePresenterState?: FBFilePresenterState
+  mediaAlbumState?: FBMediaAlbumState
+  formState?: FBFormState
+  schemaState?: FBSchemaState
+  editorState?: FBEditorState
+  fileUploadState?: FBFileUploadState
+  docRevState?: FBDocumentRevisionsState
+  poamState?: FBPOApprovalMatrixState
+  snackbarState?: FBSnackbarState
+  customControlState?: FBEditorCustomControlState
+  poReceiveState?: FBPOReceiveState
+  purchaseOrderState?: FBPurchaseOrderState
+  approvalMatrixFieldState?: FBApprovalMatrixFieldState
+  taskState?: FBTaskState
+  approversState?: FBApproversState
+  approvalsState?: FBApprovalsState
+  bookmarkState?: FBBookmarkState
+  inlineApprovalState?: FBInlineApprovalState
+  textEditorState?: FBTextEditorState
+  textEditorOptionsState?: FBTextEditorOptionsState
+  procedureState?: FBProcedureState
+  procedureFormState?: FBProcedureFormState
+  procedureDiffState?: FBProcedureDiffState
+  partsState?: FBPartsState
+  eqMaintenanceState?: FBEQMaintenanceState
+  ebPartState?: FBEBPartState
+  textFieldWithRangeState?: FBTextFieldWithRangeState
+  filesPresenterState?: FBFilesPresenterState
+  supplierState?: FBSupplierState
+  mpiProcedureState?: FBMPIProcedureState
+  lhrStepState?: FBLHRStepState
+  mpiProcedureSelectState?: FBMPIProcedureSelectState
+  poApprovalsState?: FBPOApprovalsState
+  datePickerState?: FBDatePickerState
+  lhrBuildState?: FBLHRBuildState
+  downloadSheetTplState?: FBDownloadSheetTplState
 }

@@ -3,13 +3,13 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import { Slide, toast } from "react-toastify";
-import { ReactComponent as InfoIcon } from "../../../assets/images/po_status_info.svg";
-import Text from "../Text";
-import POStatusToastrStyles from "./POStatus.styles";
-import "./styles.css";
+} from '@material-ui/core';
+import React from 'react';
+import { Slide, toast } from 'react-toastify';
+import { ReactComponent as InfoIcon } from '../../../assets/images/po_status_info.svg';
+import Text from '../Text';
+import POStatusToastrStyles from './POStatus.styles';
+import './styles.css';
 
 const DashboardToastr: React.FC = () => {
   const classes = POStatusToastrStyles();
@@ -31,7 +31,7 @@ const DashboardToastr: React.FC = () => {
             color="textPrimary"
             className={classes.secondaryText}
           >
-            <Text translation="dashboard.lineItems.status"/>
+            <Text translation="dashboard.lineItems.status" />
           </Typography>
         }
         className={classes.listItemText}
@@ -41,11 +41,11 @@ const DashboardToastr: React.FC = () => {
 };
 
 export const openDashboardToastr = ( options = {}) =>
-  toast(<DashboardToastr/>, {
+  toast(<DashboardToastr />, {
     ...{
-      toastId: "dashboardStatusToast",
-      bodyClassName: "dashboardStatusToastrBody",
-      position: "top-center",
+      toastId: 'dashboardStatusToast',
+      bodyClassName: 'dashboardStatusToastrBody',
+      position: 'top-center',
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,

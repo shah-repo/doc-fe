@@ -1,10 +1,10 @@
-import { Button, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
-import React from "react";
-import { Formik, Form } from "formik";
-import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import Text from "../../../components/Text";
-import { InspectionDialogProps } from "../InspectionControls.types";
-import { emptyFunction } from "../../../../common/utils/helpers";
+import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import React from 'react';
+import { Formik, Form } from 'formik';
+import AutocompleteField from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import Text from '../../../components/Text';
+import { InspectionDialogProps } from '../InspectionControls.types';
+import { emptyFunction } from '../../../../common/utils/helpers';
 
 /** For selecting a form and a document type of Inspection/FAI inspection record.
  * @param onFormSelect Action executed when user chooses a desired form.
@@ -40,7 +40,7 @@ const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
               size="md"
               data-cy="inspection-form-autocomplete"
               options={formOptions}
-              autocompleteProps={{ id: "inspection-form-autocomplete", maxMenuHeight: 130 }}
+              autocompleteProps={{ id: 'inspection-form-autocomplete', maxMenuHeight: 130 }}
               name="inspection-form-autocomplete"
               onClick={(option) => onFormSelect(option.value, option.outputDocumentTypes)}
             />
@@ -49,7 +49,7 @@ const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
               size="md"
               data-cy="inspection-type-autocomplete"
               options={docTypeOptions}
-              autocompleteProps={{ id: "inspection-type-autocomplete", maxMenuHeight: 90 }}
+              autocompleteProps={{ id: 'inspection-type-autocomplete', maxMenuHeight: 90 }}
               name="inspection-type-autocomplete"
               onClick={(option) => onDocTypeSelect(option.value, option.formId)}
               isDisabled={isDocTypeInputDisabled}

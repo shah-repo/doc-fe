@@ -1,22 +1,22 @@
-import { Box, Button, createStyles, InputLabel, makeStyles, RadioGroup, Theme } from "@material-ui/core";
-import { Field, FormikProps } from "formik";
-import React from "react";
-import { AsyncState } from "../../../../state/types";
-import RadioButton from "../../../components/forms/fields/RadioButton";
-import FormProgress from "../../../components/forms/FormProgress";
-import FormWrapper from "../../../components/forms/FormWrapper";
-import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
+import { Box, Button, createStyles, InputLabel, makeStyles, RadioGroup, Theme } from '@material-ui/core';
+import { Field, FormikProps } from 'formik';
+import React from 'react';
+import { AsyncState } from '../../../../state/types';
+import RadioButton from '../../../components/forms/fields/RadioButton';
+import FormProgress from '../../../components/forms/FormProgress';
+import FormWrapper from '../../../components/forms/FormWrapper';
+import Text from '../../../components/Text';
+import Colors from '../../../layout/theme/utils/colors';
 
 interface Props extends FormikProps<any> {
-  asyncState: AsyncState;
+  asyncState: AsyncState
 }
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     label: {
       margin: theme.spacing(3, 0, 3, 0),
-      fontWeight: "bold",
+      fontWeight: 'bold',
       color: Colors.dark_gray,
     },
   },
@@ -34,7 +34,7 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
     <FormWrapper
       {...{ dirty, initialValues, resetForm }}
     >
-      <Field name={"numOfRevStages"}>
+      <Field name="numOfRevStages">
         {({
           field,
         }) => (
@@ -46,14 +46,14 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
               <RadioButton
                 // has to be string
                 // if value is number, cheking radio buttons doesn't work correctly
-                label={"2"}
-                value={"2"}
+                label="2"
+                value="2"
               />
               <RadioButton
                 // has to be string
                 // if value is number, cheking radio buttons doesn't work correctly
-                label={"3"}
-                value={"3"}
+                label="3"
+                value="3"
               />
             </RadioGroup>
           </>
@@ -64,7 +64,7 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
       </Box>
       <Box display="flex" justifyContent="flex-end">
         <Button type="submit" variant="outlined">
-          <Text translation={"common.save"} />
+          <Text translation="common.save" />
         </Button>
       </Box>
     </FormWrapper>

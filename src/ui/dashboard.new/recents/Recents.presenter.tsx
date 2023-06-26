@@ -1,17 +1,17 @@
-import { List } from "@material-ui/core";
-import React from "react";
-import { ActionCreator } from "redux";
-import { getHumanizedFormat } from "../../../common/utils/date";
-import { RecentItems, RecentTypes } from "../../../state/ducks/dashboard.new/recents/types";
-import { ApiAction, AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
-import Text from "../../components/Text";
-import RecentsItem from "./Recents.item";
+import { List } from '@material-ui/core';
+import React from 'react';
+import { ActionCreator } from 'redux';
+import { getHumanizedFormat } from '../../../common/utils/date';
+import { RecentItems, RecentTypes } from '../../../state/ducks/dashboard.new/recents/types';
+import { ApiAction, AsyncState } from '../../../state/types';
+import AsyncGate from '../../components/AsyncGate';
+import Text from '../../components/Text';
+import RecentsItem from './Recents.item';
 
 interface Props {
-  loadRecents: ActionCreator<ApiAction<RecentItems[], any>>;
-  loadRecentsListAsyncState: AsyncState;
-  recents: RecentItems[];
+  loadRecents: ActionCreator<ApiAction<RecentItems[], any>>
+  loadRecentsListAsyncState: AsyncState
+  recents: RecentItems[]
 }
 
 const RecentsPresenter: React.FC<Props> = ({

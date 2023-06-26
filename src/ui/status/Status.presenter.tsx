@@ -1,19 +1,19 @@
 /* eslint-disable no-console */
-import React from "react";
-import Config from "../../config";
-import { fetchRemoteValidatorsStatus } from "./../remoteValidators/RemoteValidators";
+import React from 'react';
+import Config from '../../config';
+import { fetchRemoteValidatorsStatus } from './../remoteValidators/RemoteValidators';
 
 const API = Config.ApiEndpoint;
 const WORKER_API = Config.WorkerApiEndpoint;
-const STATUS_QUERY = "/status";
-const MICRO_STATUS_QUERY = "/micro/status";
-const DOC_EXPORT_QUERY = "/export/status";
+const STATUS_QUERY = '/status';
+const MICRO_STATUS_QUERY = '/micro/status';
+const DOC_EXPORT_QUERY = '/export/status';
 
 interface StatusState {
-  backend: object;
-  bgWorker: object;
-  remoteJS: object;
-  docExport: object;
+  backend: object
+  bgWorker: object
+  remoteJS: object
+  docExport: object
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -28,7 +28,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
   }
 
   toSnakeCase(str) {
-    return str.trim().toLowerCase().split(/[ ]+/).join("-");
+    return str.trim().toLowerCase().split(/[ ]+/).join('-');
   }
 
   public componentDidMount() {
@@ -85,27 +85,27 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
         <tr
           key={index} data-cy={`status-${name}-${this.toSnakeCase(key)}`}>
           <td style={{
-            paddingRight: "1em",
+            paddingRight: '1em',
           }}><b>{key}: </b></td>
           <td>{dict[key]}</td>
         </tr>
-      )
+      ),
     );
   }
 
   renderTable(title, dict = {}) {
     return (
       <table style={{
-        fontSize: "14px",
-        marginBottom: "1.2em",
+        fontSize: '14px',
+        marginBottom: '1.2em',
       }}>
         <thead>
           <td
             colSpan={2}
             style={{
-              fontSize: "18px",
-              fontWeight: "bold",
-              paddingBottom: "0.8em",
+              fontSize: '18px',
+              fontWeight: 'bold',
+              paddingBottom: '0.8em',
             }}>
             {title}
           </td>
@@ -119,16 +119,16 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
 
   public render() {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const feStatusJson = require("../../data/buildInfo.json");
+    const feStatusJson = require('../../data/buildInfo.json');
     // if the line above is failing when you want to run `yarn start`,
     // copy src/data/buildInfo.json.example to src/data/buildInfo.json
     return (
-      <div style={{ padding: "10px", backgroundColor: "white", lineHeight: 1.2, overflowY: "scroll", height: "100vh" }}>
-        { this.renderTable("Frontend", feStatusJson)}
-        { this.renderTable("Backend", this.state.backend)}
-        { this.renderTable("Background Worker Service", this.state.bgWorker)}
-        { this.renderTable("Remote JS Validators", this.state.remoteJS)}
-        { this.renderTable("DOC-EXPORT", this.state.docExport)}
+      <div style={{ padding: '10px', backgroundColor: 'white', lineHeight: 1.2, overflowY: 'scroll', height: '100vh' }}>
+        { this.renderTable('Frontend', feStatusJson)}
+        { this.renderTable('Backend', this.state.backend)}
+        { this.renderTable('Background Worker Service', this.state.bgWorker)}
+        { this.renderTable('Remote JS Validators', this.state.remoteJS)}
+        { this.renderTable('DOC-EXPORT', this.state.docExport)}
       </div>
     );
   }

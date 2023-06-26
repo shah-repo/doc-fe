@@ -1,36 +1,36 @@
-import { Button, Dialog, DialogContent, DialogTitle, withStyles, WithStyles } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
-import { Formik, FormikProps } from "formik";
-import moment from "moment";
-import React from "react";
-import { SM } from "../../../App";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
-import { AsyncState } from "../../../state/types";
-import AlertDialog from "../../app/alert.dialog/AlertDialog";
-import { EffectiveDateFormValues } from "../../change.request/form/types";
-import Text from "../../components/Text";
-import { DialogHandler } from "../../hooks/useDialog";
-import EffectiveDateForm from "../effectiveDate/form/EffectiveDateForm";
-import { FormContext } from "../forms/FormContext";
-import PasswordForm from "../password/form/PasswordForm";
-import styles from "./TransitionDialog.styles";
-import { PasswordFormValues, Transition } from "./types";
+import { Button, Dialog, DialogContent, DialogTitle, withStyles, WithStyles } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core/Button';
+import { Formik, FormikProps } from 'formik';
+import moment from 'moment';
+import React from 'react';
+import { SM } from '../../../App';
+import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { AsyncState } from '../../../state/types';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { EffectiveDateFormValues } from '../../change.request/form/types';
+import Text from '../../components/Text';
+import { DialogHandler } from '../../hooks/useDialog';
+import EffectiveDateForm from '../effectiveDate/form/EffectiveDateForm';
+import { FormContext } from '../forms/FormContext';
+import PasswordForm from '../password/form/PasswordForm';
+import styles from './TransitionDialog.styles';
+import { PasswordFormValues, Transition } from './types';
 
 interface TransitionDialogProps {
-  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
-  openDialog: () => void;
-  asyncState: AsyncState;
-  buttonProps?: ButtonProps;
-  transition: Transition;
-  label: string;
-  transitionDialog: DialogHandler;
-  effectiveDateDialog?: DialogHandler;
+  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
+  openDialog: () => void
+  asyncState: AsyncState
+  buttonProps?: ButtonProps
+  transition: Transition
+  label: string
+  transitionDialog: DialogHandler
+  effectiveDateDialog?: DialogHandler
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;
 
-const TransitionDialog: React.FunctionComponent<Props> =
-  ({
+const TransitionDialog: React.FunctionComponent<Props>
+  = ({
     classes,
     onSubmit,
     openDialog,
@@ -83,9 +83,9 @@ const TransitionDialog: React.FunctionComponent<Props> =
               effectiveDateDialog.close();
               transitionDialog.open();
             }}
-            message={"transition.action.effective.date.message"}
-            confirmLabel={"common.true"}
-            cancelLabel={"common.false"}
+            message="transition.action.effective.date.message"
+            confirmLabel="common.true"
+            cancelLabel="common.false"
           />
         )}
         <Dialog
@@ -95,15 +95,15 @@ const TransitionDialog: React.FunctionComponent<Props> =
           onSubmit={preventPropagation}
         >
           <DialogTitle>
-            <Text translation={transition === "closed" ? "transition.action.close.date" : "transition.action.title"} />
+            <Text translation={transition === 'closed' ? 'transition.action.close.date' : 'transition.action.title'} />
           </DialogTitle>
           <DialogContent>
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={transition === "closed" ? { effectiveDate: "" } : { password: "" }}
+                initialValues={transition === 'closed' ? { effectiveDate: '' } : { password: '' }}
                 onSubmit={onSubmit}
               >
-                {transition === "closed" ? renderCloseForm : renderPasswordForm}
+                {transition === 'closed' ? renderCloseForm : renderPasswordForm}
               </Formik>
             </FormContext.Provider>
           </DialogContent>

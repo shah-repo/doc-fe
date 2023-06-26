@@ -1,6 +1,6 @@
-import { reaction } from "mobx";
-import React, { useEffect } from "react";
-import { FB, FBEditorTextFieldWithRangeProps, FBFormState, FBPassType } from "..";
+import { reaction } from 'mobx';
+import React, { useEffect } from 'react';
+import { FB, FBEditorTextFieldWithRangeProps, FBFormState, FBPassType } from '..';
 
 export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRangeProps>(
   Component: React.FunctionComponent<T>,
@@ -15,68 +15,68 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
 
     // MARK: @reactions
     useEffect(() => reaction(
-      () => formState?.getInputState("editorConfig.rangeOption")?.value,
+      () => formState?.getInputState('editorConfig.rangeOption')?.value,
       (value: boolean | undefined) => setRange(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
-      () => formState?.getInputState("editorConfig.inspection")?.value,
+      () => formState?.getInputState('editorConfig.inspection')?.value,
       (value: boolean) => setInspection(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
-      () => formState?.getInputState("editorConfig.passValue")?.value,
+      () => formState?.getInputState('editorConfig.passValue')?.value,
       (value: boolean) => setPassValue(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
-      () => formState?.getInputState("editorConfig.pass.type")?.value,
+      () => formState?.getInputState('editorConfig.pass.type')?.value,
       (value: string | undefined) => setPassType(value),
-      { fireImmediately: true }
+      { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @helpers
     function setRange(value?: boolean) {
-      formState.getInputState("editorConfig.range")?.setHidden(!value);
+      formState.getInputState('editorConfig.range')?.setHidden(!value);
       if (!value) {
-        formState.omitFieldValue("editorConfig.range");
+        formState.omitFieldValue('editorConfig.range');
       }
     }
 
     function setPassValue(value?: boolean) {
-      formState.getInputState("editorConfig.pass.type")?.setHidden(!value);
+      formState.getInputState('editorConfig.pass.type')?.setHidden(!value);
       const typeValue = value
         ? inputProps?.editorConfig?.pass.type || FBPassType.value
         : undefined;
-      formState.setFieldValue("editorConfig.pass.type", typeValue, true);
+      formState.setFieldValue('editorConfig.pass.type', typeValue, true);
     }
 
     function setInspection(value?: boolean) {
-      formState.getInputState("editorConfig.passValue")?.setHidden(!value);
-      formState.getInputState("editorConfig.aql")?.setHidden(!value);
-      formState.getInputState("editorConfig.fai")?.setHidden(!value);
+      formState.getInputState('editorConfig.passValue')?.setHidden(!value);
+      formState.getInputState('editorConfig.aql')?.setHidden(!value);
+      formState.getInputState('editorConfig.fai')?.setHidden(!value);
     }
 
     function setPassType(value?: string) {
       if (!value) {
-        formState.getInputState("editorConfig.pass.percentage")?.setHidden(true);
-        formState.getInputState("editorConfig.pass.value")?.setHidden(true);
-        formState.omitFieldValue("editorConfig.pass");
+        formState.getInputState('editorConfig.pass.percentage')?.setHidden(true);
+        formState.getInputState('editorConfig.pass.value')?.setHidden(true);
+        formState.omitFieldValue('editorConfig.pass');
         return;
       }
       const isPercentage = (value === FBPassType.percentage);
-      formState.getInputState("editorConfig.pass.percentage")?.setHidden(!isPercentage);
-      formState.getInputState("editorConfig.pass.value")?.setHidden(isPercentage);
+      formState.getInputState('editorConfig.pass.percentage')?.setHidden(!isPercentage);
+      formState.getInputState('editorConfig.pass.value')?.setHidden(isPercentage);
       const omitFieldName = isPercentage
-        ? "editorConfig.pass.value"
-        : "editorConfig.pass.percentage";
+        ? 'editorConfig.pass.value'
+        : 'editorConfig.pass.percentage';
       formState.omitFieldValue(omitFieldName);
     }
 
@@ -91,6 +91,6 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     });
   };
 
-  Comp.displayName = "withFBEditorTextFieldWithRange";
+  Comp.displayName = 'withFBEditorTextFieldWithRange';
   return Comp;
 };

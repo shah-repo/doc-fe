@@ -1,5 +1,5 @@
-import React from "react";
-import { FBCheckbox, FBEditorLabel, FBEditorProps } from "..";
+import React from 'react';
+import { FBCheckbox, FBEditorLabel, FBEditorProps } from '..';
 
 const FBEditorApprovals: React.FunctionComponent<FBEditorProps> = ({
   children,

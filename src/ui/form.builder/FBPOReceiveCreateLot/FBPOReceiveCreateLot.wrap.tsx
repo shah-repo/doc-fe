@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FB, FBPOReceiveCreateLotProps } from "..";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentTypeById, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import FBPOReceiveCreateLotState from "./FBPOReceiveCreateLot.state";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FB, FBPOReceiveCreateLotProps } from '..';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DocumentTypeById, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import FBPOReceiveCreateLotState from './FBPOReceiveCreateLot.state';
 
 export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
   Component: React.FunctionComponent<T>,
@@ -19,13 +19,12 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
   }: T) => {
     const dispatch = useDispatch();
 
-
     const { dialogState, formState, workspaceState, poReceiveState } = FB.useStores();
     const receivableId = workspaceState?.document?.id as string;
 
     const createLotState = FB.useRef<FBPOReceiveCreateLotState>(
       FBPOReceiveCreateLotState,
-      { receivableId, item }
+      { receivableId, item },
     );
 
     handleCreateLot = async ()  => {
@@ -49,7 +48,7 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
     const categoryAsync = useAsync<DocumentType[]>();
 
     const getDocTypes = () => {
-      categoryAsync.start(getDocTypesByCategory, { category: "Lot" }, categoryAsync);
+      categoryAsync.start(getDocTypesByCategory, { category: 'Lot' }, categoryAsync);
     };
 
     const handleDocTypeSelection = (e, value) => {

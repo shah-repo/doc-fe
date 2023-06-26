@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useIntl } from "react-intl";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { changeRequestEditPath } from "../../change.request/utils/paths";
-import DashboardActionTypeBase from "./DashboardActionTypeBase";
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { changeRequestEditPath } from '../../change.request/utils/paths';
+import DashboardActionTypeBase from './DashboardActionTypeBase';
 
 interface Props {
-  index: number;
-  changeRequest: ChangeRequest;
+  index: number
+  changeRequest: ChangeRequest
 }
 
 const TaskApproval: React.FunctionComponent<Props> = ({
@@ -14,8 +14,8 @@ const TaskApproval: React.FunctionComponent<Props> = ({
   changeRequest,
 }) => {
   const intl = useIntl();
-  const [title] = useState(intl.formatMessage({ id: "dashboard.title.task" }, { crId: changeRequest.crId }));
-  const [description] = useState(intl.formatMessage({ id: "dashboard.assigned.task" }));
+  const [title] = useState(intl.formatMessage({ id: 'dashboard.title.task' }, { crId: changeRequest.crId }));
+  const [description] = useState(intl.formatMessage({ id: 'dashboard.assigned.task' }));
 
   return (
     <DashboardActionTypeBase

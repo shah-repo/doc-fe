@@ -1,9 +1,9 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBEditorTitleProps } from "..";
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBEditorTitleProps } from '..';
 
 export const withFBEditorTitle = <T extends FBEditorTitleProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     mode,
@@ -13,13 +13,13 @@ export const withFBEditorTitle = <T extends FBEditorTitleProps>(
     const { editorState, formState } = FB.useStores();
 
     const handleMode = () => {
-      const mode = editorState?.mode === "config" ? "validation" : "config";
+      const mode = editorState?.mode === 'config' ? 'validation' : 'config';
       editorState?.setMode(mode);
     };
 
     useObserver(() => {
       mode = editorState?.mode;
-      (mode === "validation") && formState && formState.validate();
+      (mode === 'validation') && formState && formState.validate();
     });
 
     return Component({

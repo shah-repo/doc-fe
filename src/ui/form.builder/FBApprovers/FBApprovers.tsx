@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import React from "react";
-import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from "..";
-import Approvers from "../../change.request/summary/approvers";
-import { withFBApprovers } from "./FBApprovers.wrap";
+import { Box } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import React from 'react';
+import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from '..';
+import Approvers from '../../change.request/summary/approvers';
+import { withFBApprovers } from './FBApprovers.wrap';
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   renderOption,
@@ -37,8 +37,8 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
           {(group: FBRequiredApprover, id) => (
             <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
               <CheckCircleIcon
-                data-cy={`fb-approvers-${group.name}-check-${isIncluded?.(group) ? "marked" : "disabled"}`}
-                color={isIncluded?.(group) ? "primary" : "disabled"} />
+                data-cy={`fb-approvers-${group.name}-check-${isIncluded?.(group) ? 'marked' : 'disabled'}`}
+                color={isIncluded?.(group) ? 'primary' : 'disabled'} />
               <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
             </Box>
           )}
@@ -46,7 +46,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       </Box>
       <Box flexBasis="100%" >
         {changeRequestApprovals && changeRequestApprovals.length > 0
-      && <Approvers dataProp={changeRequestApprovals}/>
+      && <Approvers dataProp={changeRequestApprovals} />
         }
       </Box>
     </Box>

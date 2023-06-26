@@ -1,5 +1,5 @@
-import React from "react";
-import { FB, FBAttachment, FBFileDescriptionActions, FBFileDescriptionProps, FBFormState } from "..";
+import React from 'react';
+import { FB, FBAttachment, FBFileDescriptionActions, FBFileDescriptionProps, FBFormState } from '..';
 
 export const withFBFileDescription = <T extends FBFileDescriptionProps>(
   Component: React.FunctionComponent<T>,
@@ -17,7 +17,7 @@ export const withFBFileDescription = <T extends FBFileDescriptionProps>(
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBFileDescriptionActions {...{ handleAdd, handleCancel }} />
+        <FBFileDescriptionActions {...{ handleAdd, handleCancel }} />,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -42,6 +42,6 @@ export const withFBFileDescription = <T extends FBFileDescriptionProps>(
     });
   };
 
-  Comp.displayName = "withFBProcedureForm";
+  Comp.displayName = 'withFBProcedureForm';
   return Comp;
 };

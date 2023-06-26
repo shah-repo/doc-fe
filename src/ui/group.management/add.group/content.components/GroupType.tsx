@@ -1,11 +1,11 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography } from "@material-ui/core";
-import React from "react";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
-import Text from "../../../components/Text";
+import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@material-ui/core';
+import React from 'react';
+import { GroupRequestBody } from '../../../../state/ducks/groupManagement/types';
+import Text from '../../../components/Text';
 
 interface Props {
-  group: GroupRequestBody;
-  setGroup: (values: GroupRequestBody) => void;
+  group: GroupRequestBody
+  setGroup: (values: GroupRequestBody) => void
 }
 
 const GroupType: React.FunctionComponent<Props> = ({
@@ -14,7 +14,7 @@ const GroupType: React.FunctionComponent<Props> = ({
 }) => {
 
   const handleGroupTypeChange = (event: any) => {
-    const isOfficial = event.target.value === "official";
+    const isOfficial = event.target.value === 'official';
 
     setGroup({
       ...group,
@@ -27,14 +27,14 @@ const GroupType: React.FunctionComponent<Props> = ({
 
   return (
     <Box width={700} mt={-6} mb={2}>
-      <Typography variant="h4" style={{ marginBottom: "16px" }}>
-        <Text message={"group.management.group.type"} />
+      <Typography variant="h4" style={{ marginBottom: '16px' }}>
+        <Text message="group.management.group.type" />
       </Typography>
       <RadioGroup
         id="Group-groupType"
         name="groupType"
         onChange={handleGroupTypeChange}
-        value={group.isOfficial ? "official" : "unofficial"}
+        value={group.isOfficial ? 'official' : 'unofficial'}
       >
         <FormControlLabel
           id="Group-officialOption"

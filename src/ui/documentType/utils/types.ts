@@ -1,4 +1,4 @@
 export interface RouteParams {
-  docTypeId: string;
-  categoryName: string;
+  docTypeId: string
+  categoryName: string
 }

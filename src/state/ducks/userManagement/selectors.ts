@@ -1,6 +1,6 @@
-import { createSelector } from "reselect";
-import { ApplicationState } from "../../reducers";
-import { AsyncState } from "../../types";
+import { createSelector } from 'reselect';
+import { ApplicationState } from '../../reducers';
+import { AsyncState } from '../../types';
 
 const groupsById = (state: ApplicationState) => state.userManagement.groupsById;
 const groupsAllIds = (state: ApplicationState) => state.userManagement.groupsAllIds;

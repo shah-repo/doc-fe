@@ -1,17 +1,17 @@
-import { Avatar, Box, createStyles, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
-import { Nullable } from "../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../components/icons/avatar/helpers";
-import Colors from "../../layout/theme/utils/colors";
+import { Avatar, Box, createStyles, makeStyles, Theme } from '@material-ui/core';
+import React from 'react';
+import { Nullable } from '../../../state/ducks/common/types';
+import { getInitalsFromName } from '../../components/icons/avatar/helpers';
+import Colors from '../../layout/theme/utils/colors';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: ({ initialColor }) => ({
-      width: "48px",
-      height: "48px",
-      borderRadius: "50%",
+      width: '48px',
+      height: '48px',
+      borderRadius: '50%',
       margin: theme.spacing(0, 1, 0, 1),
-      fontSize: "18px",
+      fontSize: '18px',
       color: Colors.white,
       background: `${initialColor}`,
       fontWeight: 600,
@@ -19,9 +19,9 @@ const styles = makeStyles((theme: Theme) =>
   }));
 
 interface Props {
-  avatar: Nullable<string>;
-  initialColor: string;
-  name: string;
+  avatar: Nullable<string>
+  initialColor: string
+  name: string
 }
 
 const UserAvatar: React.FunctionComponent<Props> = ({
@@ -33,9 +33,9 @@ const UserAvatar: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      {avatar ?
-        <Avatar className={classes.avatar} alt={name} src={avatar} /> :
-        <Avatar className={classes.avatar} data-cy="header-userInitials">
+      {avatar
+        ? <Avatar className={classes.avatar} alt={name} src={avatar} />
+        : <Avatar className={classes.avatar} data-cy="header-userInitials">
           {getInitalsFromName(name)}
         </Avatar>
       }

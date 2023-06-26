@@ -1,20 +1,20 @@
-import { Box, IconButton } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import React from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Box, IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
   FBDialog,
   FBMapWrapper,
   FBProcedureItemConfig,
   FBProcedureItemLocale,
   FBText,
-} from "..";
-import { toFixed } from "../../dashboard.new/line.items/common/Utils";
-import Colors from "../../layout/theme/utils/colors";
-import { FBClasses } from "../defaults/layout";
-import FBProvider from "../FBProvider/FBProvider";
-import { FBLHRStepProcedureItemProps } from "./FBLHRStepProcedureItem.types";
-import { withFBLHRStepProcedureItem } from "./FBLHRStepProcedureItem.wrap";
+} from '..';
+import { toFixed } from '../../dashboard.new/line.items/common/Utils';
+import Colors from '../../layout/theme/utils/colors';
+import { FBClasses } from '../defaults/layout';
+import FBProvider from '../FBProvider/FBProvider';
+import { FBLHRStepProcedureItemProps } from './FBLHRStepProcedureItem.types';
+import { withFBLHRStepProcedureItem } from './FBLHRStepProcedureItem.wrap';
 
 const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProps> = ({
   onClick,
@@ -43,7 +43,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           {...{ loading }}
           boxProps={{
             flexGrow: 1,
-            display: "flex",
+            display: 'flex',
             py: 1.7,
             pl: 2,
           }}
@@ -72,20 +72,20 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
               >
                 <Box flexGrow={1}>
                   <FBText
-                    locale={item.type ?
-                      `form.builder.mpi.procedure.${type}.title.id` :
-                      `form.builder.mpi.procedure.${type}.title`
+                    locale={item.type
+                      ? `form.builder.mpi.procedure.${type}.title.id`
+                      : `form.builder.mpi.procedure.${type}.title`
                     }
-                    values={item.type ?
-                      {
+                    values={item.type
+                      ? {
                         id: item.id,
                         title: getItem?.(item.title),
-                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : "form.builder.none",
+                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
                         unit: item.unit,
-                      } :
-                      {
+                      }
+                      : {
                         title: getItem?.(item.title),
-                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : "form.builder.none",
+                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
                         unit: item.unit,
                       }
                     }

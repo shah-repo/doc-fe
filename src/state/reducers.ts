@@ -1,52 +1,52 @@
-import { combineReducers } from "redux";
-import { createMigrate, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import attachments from "./ducks/attachments";
-import auth from "./ducks/auth";
-import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from "./ducks/auth/constants";
-import changeRequests from "./ducks/changeRequest";
-import company from "./ducks/company";
-import dashboard from "./ducks/dashboard";
-import dashboardNew from "./ducks/dashboard.new";
-import documentRevisions from "./ducks/documentRevisions";
-import documentType from "./ducks/documentRevisions/documentType";
-import documents from "./ducks/documents";
-import pageDetails from "./ducks/pageDetails";
-import supplierSurvey from "./ducks/supplierSurvey";
-import tableSearch from "./ducks/tableSearch";
-import userManagement from "./ducks/userManagement";
-import migrations from "./migrations";
+import { combineReducers } from 'redux';
+import { createMigrate, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import attachments from './ducks/attachments';
+import auth from './ducks/auth';
+import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from './ducks/auth/constants';
+import changeRequests from './ducks/changeRequest';
+import company from './ducks/company';
+import dashboard from './ducks/dashboard';
+import dashboardNew from './ducks/dashboard.new';
+import documentRevisions from './ducks/documentRevisions';
+import documentType from './ducks/documentRevisions/documentType';
+import documents from './ducks/documents';
+import pageDetails from './ducks/pageDetails';
+import supplierSurvey from './ducks/supplierSurvey';
+import tableSearch from './ducks/tableSearch';
+import userManagement from './ducks/userManagement';
+import migrations from './migrations';
 
 const authPersistConfig = {
-  key: "auth",
+  key: 'auth',
   storage,
   version: 2,
-  whitelist: ["user", "groups"],
+  whitelist: ['user', 'groups'],
   migrate: createMigrate(migrations),
 };
 
 const companyPersistConfig = {
-  key: "company",
+  key: 'company',
   storage,
-  whitelist: ["selectedCompany"],
+  whitelist: ['selectedCompany'],
 };
 
 const documentTypePersistConfig = {
-  key: "documentType",
+  key: 'documentType',
   storage,
-  whitelist: ["byId"],
+  whitelist: ['byId'],
 };
 
 const tableSearchPersistConfig = {
-  key: "tableSearch",
+  key: 'tableSearch',
   storage,
-  whitelist: ["criteria"],
+  whitelist: ['criteria'],
 };
 
 const pageDetailsPersistConfig = {
-  key: "pageDetails",
+  key: 'pageDetails',
   storage,
-  whitelist: ["byCategory"],
+  whitelist: ['byCategory'],
 };
 
 const appReducer = combineReducers({

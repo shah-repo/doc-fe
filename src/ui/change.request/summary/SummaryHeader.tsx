@@ -1,23 +1,23 @@
-import { Grid } from "@material-ui/core";
-import { FormikErrors, useFormikContext } from "formik";
-import React from "react";
-import { SM } from "../../../App";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { DataProps } from "../../../state/ducks/common/types";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { AsyncState } from "../../../state/types";
-import Header from "../../components/common/header/Header";
-import HeaderInfo from "../../components/common/header/HeaderInfo";
-import HeaderLastSaved from "../../components/common/header/HeaderLastSaved";
-import SubmitButton from "../../components/forms/SubmitButton";
-import ControlsContainer from "../form/assessmentForm/AssessmentFormControls.container";
+import { Grid } from '@material-ui/core';
+import { FormikErrors, useFormikContext } from 'formik';
+import React from 'react';
+import { SM } from '../../../App';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { DataProps } from '../../../state/ducks/common/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { AsyncState } from '../../../state/types';
+import Header from '../../components/common/header/Header';
+import HeaderInfo from '../../components/common/header/HeaderInfo';
+import HeaderLastSaved from '../../components/common/header/HeaderLastSaved';
+import SubmitButton from '../../components/forms/SubmitButton';
+import ControlsContainer from '../form/assessmentForm/AssessmentFormControls.container';
 
 interface Props extends DataProps<ChangeRequest> {
-  asyncState: AsyncState;
-  canChangeOwnership: boolean;
-  errors: FormikErrors<any>;
-  canEdit: boolean;
-  displayLastSaved: boolean;
+  asyncState: AsyncState
+  canChangeOwnership: boolean
+  errors: FormikErrors<any>
+  canEdit: boolean
+  displayLastSaved: boolean
 }
 
 const SummaryHeader: React.FunctionComponent<Props> = ({
@@ -44,7 +44,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   return (
     <Header status={state as unknown as DocumentRevisionStatus}>
       <HeaderInfo status={state} id={crId} name={title}
-        documentTypeAcronym={dataProp?.documentType?.documentTypeAcronym}/>
+        documentTypeAcronym={dataProp?.documentType?.documentTypeAcronym} />
       <Grid item={true} xs={6} justify="center">
         <Grid container={true} alignItems="center" justify="flex-end">
           {displayLastSaved && dataProp?.updatedAt && (

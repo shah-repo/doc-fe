@@ -1,9 +1,9 @@
-import { getEmployeeNavigation } from "../../../ui/app/NavigationLocalStorageHelpers";
-import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
-import { apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
-import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
+import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
+import { COMPANY_MINE_URL } from '../../../ui/constants/urls';
+import { apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from './constants';
+import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
@@ -13,7 +13,7 @@ const selectCompany = (company: Company): SelectCompanyAction => ({
 const setCompanyMine = (
   company: Company,
   navigationMenu?: NavigationMenu,
-  currentEmployeeId?: string
+  currentEmployeeId?: string,
 ): CompanyMineAction => ({
   type: SET_COMPANY_MINE,
   payload: company,
@@ -24,7 +24,7 @@ const setCompanyMine = (
 const getCompanyMine = (currentEmployeeId: string, handlers: Handlers) =>
   apiActionWithCallbacks({
     url: COMPANY_MINE_URL,
-    method: "get",
+    method: 'get',
     onSuccess: (data: any, dispatch) => {
       dispatch(setCompanyMine(data, getEmployeeNavigation(currentEmployeeId), currentEmployeeId));
     },
@@ -34,7 +34,7 @@ const getCompanyMine = (currentEmployeeId: string, handlers: Handlers) =>
 const updateCompanyMine = (body: CompanyMineRequest, handlers: Handlers):
 ApiAction<Company> => apiActionWithCallbacks({
   url: COMPANY_MINE_URL,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (data, dispatch) => {
     dispatch(setCompanyMine(data));
@@ -50,7 +50,6 @@ const updateNavigationMenuItem = ( label: string, isOpen: boolean): UpdateNaviga
 const autosaveConfig = () => ({
   type: AUTOSAVE_CONFIG,
 });
-
 
 const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,

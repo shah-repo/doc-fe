@@ -1,26 +1,26 @@
-import { Dictionary, filter, first, get, isUndefined, map, set as lodashSet, uniqBy } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import { FBFormValues } from "../../defaults/formik";
-import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBInputProps } from "../../types/common";
-import { FBTemplateSchema } from "../../types/store";
-import { FBWorkspaceMode } from "../../types/workspace";
-import FBDRStore from "./FBDRStore";
-import editorStore from "./FBEditorStore";
-import FBValidatorStore from "./FBValidatorStore";
+import { Dictionary, filter, first, get, isUndefined, map, set as lodashSet, uniqBy } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { FBFormValues } from '../../defaults/formik';
+import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBInputProps } from '../../types/common';
+import { FBTemplateSchema } from '../../types/store';
+import { FBWorkspaceMode } from '../../types/workspace';
+import FBDRStore from './FBDRStore';
+import editorStore from './FBEditorStore';
+import FBValidatorStore from './FBValidatorStore';
 
 class FormBuilderStore {
 
   @computed public get active(): boolean {
-    return this.mode !== "none";
+    return this.mode !== 'none';
   }
 
   @computed public get isStarter(): boolean {
-    return (this.mode === "design") && (this.schema.length === 0);
+    return (this.mode === 'design') && (this.schema.length === 0);
   }
 
-  @computed public get fieldMode(): Pick<FBInputProps, "disabled"> {
+  @computed public get fieldMode(): Pick<FBInputProps, 'disabled'> {
     return {
       disabled: this.isDisabled(),
       // readOnly: this.isReadonly(),
@@ -31,9 +31,9 @@ class FormBuilderStore {
   @observable public name?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: Dictionary<any> = {};
-  @observable public mode: FBWorkspaceMode = "none";
-  public docId = "";
-  public documentId = "";
+  @observable public mode: FBWorkspaceMode = 'none';
+  public docId = '';
+  public documentId = '';
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
   public document: Partial<DocumentRevision> = {};
 
@@ -100,7 +100,7 @@ class FormBuilderStore {
     editorStore.editorTypeEdit(schema);
   };
 
-  @action public getSchema = (): FBTemplateSchema[] => uniqBy(this.schema || [], "name");
+  @action public getSchema = (): FBTemplateSchema[] => uniqBy(this.schema || [], 'name');
 
   @action public getSectionStepReg = (label: string): string | undefined => {
     const reg = this.stepSectionReg.exec(label);
@@ -122,21 +122,21 @@ class FormBuilderStore {
       // }
       return o;
     });
-    set(this, "schema", newSchema);
+    set(this, 'schema', newSchema);
   };
 
   @action public clearSchema = () => {
-    set(this, "schema", []);
+    set(this, 'schema', []);
   };
 
   @action public resetSchema = () => {
     const schema = this.schema;
     this.clearSchema();
-    set(this, "schema", schema);
+    set(this, 'schema', schema);
   };
 
   @action public setFormSchema = (newSchema: FBTemplateSchema[]) => {
-    const filtered = filter(newSchema, (schemaItem) => schemaItem.type !== "action");
+    const filtered = filter(newSchema, (schemaItem) => schemaItem.type !== 'action');
     filtered.map((o, i) => o.index = i);
     this.schema = filtered;
   };
@@ -144,7 +144,7 @@ class FormBuilderStore {
   @action public getValues = () => {
     const initialValues: Dictionary<any> = {};
     map(this.getSchema(), (schemaItem) => {
-      initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
+      initialValues[schemaItem.name || ''] = FBFormValues[schemaItem.type || ''];
     });
     return {
       ...initialValues,
@@ -152,16 +152,16 @@ class FormBuilderStore {
     };
   };
 
-  @action public getValue = (name?: string): any => get(this.getValues(), name || "");
+  @action public getValue = (name?: string): any => get(this.getValues(), name || '');
 
   @action public getValidationAttribute = () => {
     const attributes: Dictionary<string> = {};
     map(this.getSchema(), (schemaItem) => {
-      attributes[schemaItem.name || ""] =
-          (schemaItem.label as string) ||
-          schemaItem.placeholder ||
-          schemaItem.name ||
-          "";
+      attributes[schemaItem.name || '']
+          = (schemaItem.label as string)
+          || schemaItem.placeholder
+          || schemaItem.name
+          || '';
     });
     return attributes;
   };
@@ -179,8 +179,8 @@ class FormBuilderStore {
 
   @action private setModeConfig = () => {
     switch (this.mode) {
-      case "none":
-      case "design":
+      case 'none':
+      case 'design':
         this.schema = FBDRStore.docSchema;
         this.values = {};
         break;
@@ -189,7 +189,7 @@ class FormBuilderStore {
     }
   };
 
-  @action private isDisabled = (): boolean => this.mode !== "form";
+  @action private isDisabled = (): boolean => this.mode !== 'form';
 }
 
 const FBStore = new FormBuilderStore();

@@ -1,18 +1,18 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Typography, withStyles, WithStyles } from "@material-ui/core";
-import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
-import React from "react";
-import Text from "../../../../components/Text";
-import { DialogHandler } from "../../../../hooks/useDialog";
-import { Translation } from "../../../../translations/types";
-import styles from "./TransitionDialog.styles";
+import { Box, Button, Dialog, DialogContent, DialogContentText, Typography, withStyles, WithStyles } from '@material-ui/core';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import React from 'react';
+import Text from '../../../../components/Text';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import { Translation } from '../../../../translations/types';
+import styles from './TransitionDialog.styles';
 
 interface PoRejectDialogProps {
-  onSubmit: () => void;
-  cancelAction?: () => void;
-  message: Translation;
-  dialog: DialogHandler;
-  confirmLabel?: Translation;
-  cancelLabel?: Translation;
+  onSubmit: () => void
+  cancelAction?: () => void
+  message: Translation
+  dialog: DialogHandler
+  confirmLabel?: Translation
+  cancelLabel?: Translation
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -24,7 +24,6 @@ interface PoRejectDialogProps {
  * @param cancelLabel Cancel button text (optional).
  */
 
-
 type Props = PoRejectDialogProps & WithStyles<typeof styles>;
 
 const PoRejectDialog: React.FunctionComponent<Props> = ({
@@ -33,17 +32,17 @@ const PoRejectDialog: React.FunctionComponent<Props> = ({
   message,
   onSubmit,
   cancelAction = dialog.close,
-  confirmLabel = "common.yes.im.sure",
-  cancelLabel = "common.cancel",
+  confirmLabel = 'common.yes.im.sure',
+  cancelLabel = 'common.cancel',
 }) => (
   <>
     {
-      dialog.isOpen &&
-        <Dialog
+      dialog.isOpen
+        && <Dialog
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"
-          PaperProps={{ id: "PoRejectDialog" }}
+          PaperProps={{ id: 'PoRejectDialog' }}
         >
           <DialogContent>
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">

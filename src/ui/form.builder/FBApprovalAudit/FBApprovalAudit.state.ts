@@ -1,53 +1,55 @@
-import { action } from "mobx";
-import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState, FBInputType } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import FBStore from "../FBStore/FBStore";
+import { action } from 'mobx';
+import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState, FBInputType } from '..';
+import FBRequest from '../FBApi/FBApi.request';
+import FBStore from '../FBStore/FBStore';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 
 class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
-
   public static omitAudit: FBInputType[] = [
-    "instructionsdocument",
-    "selectdocument",
-    "autocompleteasync",
-    "poreceive",
-    "evidencemediaupload",
-    "instructionsdocument",
-    "hellosign",
-    "approvalMatrix",
-    "approvalRoles",
-    "poApprovalMatrix",
+    'instructionsdocument',
+    'selectdocument',
+    'autocompleteasync',
+    'poreceive',
+    'evidencemediaupload',
+    'instructionsdocument',
+    'hellosign',
+    'approvalMatrix',
+    'approvalRoles',
+    'poApprovalMatrix',
   ];
 
   public static docAudit: FBInputType[] = [
-    "number",
-    "textfield",
-    "checkbox",
-    "checkboxgroup",
-    "datepicker",
-    "texteditor",
-    "select",
-    "radio",
-    "radiogroup",
-    "autocomplete",
-    "autocompleteasync",
-    "fileupload",
-    "quantity",
-    "procedure",
-    "mpiprocedure",
-    "lhrstep",
-    "lhrbuild",
+    'number',
+    'textfield',
+    'checkbox',
+    'checkboxgroup',
+    'datepicker',
+    'texteditor',
+    'select',
+    'radio',
+    'radiogroup',
+    'autocomplete',
+    'autocompleteasync',
+    'fileupload',
+    'quantity',
+    'procedure',
+    'mpiprocedure',
+    'lhrstep',
+    'lhrbuild',
+    'supplier',
+    'lotQuantity',
+    'lotTransfers',
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();
 
-  public constructor({ documentId, isOutput }: FBApprovalAuditConstructor) {
+  public constructor ({ documentId, isOutput }: FBApprovalAuditConstructor) {
     super();
     if (!documentId || !isOutput || FBStore.audit.loading) { return; }
     FBStore.audit.set({
       url: FBEndpoint.DocumentRevisionAudit,
       urlValues: { documentId },
-      method: "get",
+      method: 'get',
     });
   }
 
@@ -61,4 +63,3 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
 }
 
 export default FBApprovalAuditState;
-

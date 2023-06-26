@@ -1,72 +1,71 @@
-import { Box, Button, Dialog, DialogContent, Link, makeStyles } from "@material-ui/core";
-import { AttachFile } from "@material-ui/icons";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
-import { FieldInputProps, Formik, FormikProps } from "formik";
-import React from "react";
-import { useSelector } from "react-redux";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
-import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { ApplicationState } from "../../../../state/reducers";
-import { changeRequestFormOnScreenContext } from "../../../change.request/form/ChangeRequestForm.container";
-import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentRevision/DocumentRevisionsManager.container";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import Colors from "../../../layout/theme/utils/colors";
-import { FormContext, useFormContext } from "../../forms/FormContext";
-import Text from "../../Text";
-import { AttachmentStyleProps } from "../attachment.field/utils/types";
-import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
+import { Box, Button, Dialog, DialogContent, Link, makeStyles } from '@material-ui/core';
+import { AttachFile } from '@material-ui/icons';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import { FieldInputProps, Formik, FormikProps } from 'formik';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { attachmentsActions } from '../../../../state/ducks/attachments';
+import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { ApplicationState } from '../../../../state/reducers';
+import { changeRequestFormOnScreenContext } from '../../../change.request/form/ChangeRequestForm.container';
+import { documentRevisionTypeGroupsFromDocListContext } from '../../../documentRevision/DocumentRevisionsManager.container';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import Colors from '../../../layout/theme/utils/colors';
+import { FormContext, useFormContext } from '../../forms/FormContext';
+import Text from '../../Text';
+import { AttachmentStyleProps } from '../attachment.field/utils/types';
+import AttachmentLineTypeForm from './AttachmentLineTypeForm';
 
 interface Props {
-  upload: typeof attachmentsActions.upload;
-  field: FieldInputProps<any>;
-  form: FormikProps<any>;
-  multiple?: boolean;
-  name?: string;
-  disabled?: boolean;
-  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
-  isField: boolean;
-  isUploading: boolean;
+  upload: typeof attachmentsActions.upload
+  field: FieldInputProps<any>
+  form: FormikProps<any>
+  multiple?: boolean
+  name?: string
+  disabled?: boolean
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any
+  isField: boolean
+  isUploading: boolean
 }
-
 
 const styles = makeStyles((theme) => {
   const linkStyle = {
-    "padding": 0,
-    "fontSize": theme.typography.fontSize,
-    "color": Colors.navy,
-    "textTransform": "capitalize" as const,
-    "fontWeight": 400,
-    "cursor": "pointer",
-    "&:hover": {
-      backgroundColor: "transparent",
-      textDecoration: "none" as const,
+    'padding': 0,
+    'fontSize': theme.typography.fontSize,
+    'color': Colors.navy,
+    'textTransform': 'capitalize' as const,
+    'fontWeight': 400,
+    'cursor': 'pointer',
+    '&:hover': {
+      backgroundColor: 'transparent',
+      textDecoration: 'none' as const,
     },
   };
 
   return {
     dialogPaper: {
-      overflowY: "unset",
+      overflowY: 'unset',
     },
     dialogContent: {
-      overflowY: "unset",
+      overflowY: 'unset',
       maxWidth: 400,
     },
     root: ({ isField }: AttachmentStyleProps) => ({
       padding: isField ? theme.spacing(1, 0.5) : 0,
     }),
     link: ({ isField }: AttachmentStyleProps) => ({
-      display: isField ? "flex" : "block",
-      alignItems: isField ? "center" : "",
+      display: isField ? 'flex' : 'block',
+      alignItems: isField ? 'center' : '',
       ...linkStyle,
     }),
     input: {
-      display: "none",
+      display: 'none',
     },
     icon: ({ isField }: AttachmentStyleProps) => ({
-      display: isField ? "inherited" : "none",
+      display: isField ? 'inherited' : 'none',
       marginRight: theme.spacing(1),
       width: 20,
       height: 20,
@@ -76,7 +75,6 @@ const styles = makeStyles((theme) => {
     },
   };
 });
-
 
 const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   upload,
@@ -119,8 +117,8 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {(isChangeRequestFormOnScreenContext || isRecord) &&
-        <Box className={classes.root} id="AttachmentFieldPresenter-field">
+      {(isChangeRequestFormOnScreenContext || isRecord)
+        && <Box className={classes.root} id="AttachmentFieldPresenter-field">
           <input
             accept="*"
             className={classes.input}
@@ -146,8 +144,8 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         </Box>
       }
 
-      {(!isChangeRequestFormOnScreenContext && !isRecord) &&
-        <Button
+      {(!isChangeRequestFormOnScreenContext && !isRecord)
+        && <Button
           color="primary"
           disableRipple
           startIcon={<AttachFileIcon />}
@@ -160,8 +158,8 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         </Button>
       }
 
-      {dialog.isOpen &&
-        <Dialog
+      {dialog.isOpen
+        && <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           fullWidth={true}

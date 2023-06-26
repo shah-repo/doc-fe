@@ -1,25 +1,25 @@
-import { Button, createStyles, Grid, makeStyles } from "@material-ui/core";
-import { Form, FormikProps } from "formik";
-import React from "react";
-import { connect } from "react-redux";
-import { toStartOfDay } from "../../../../../common/utils/date";
-import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
-import { ApplicationState } from "../../../../../state/reducers";
-import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
-import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
-import DatePickerField from "../../../../components/forms/fields/DatePicker";
-import InputField from "../../../../components/forms/fields/Input";
-import TextEditorField from "../../../../components/forms/fields/RichTextEditor";
-import { required, validator } from "../../../../components/forms/fields/validators";
-import Text from "../../../../components/Text";
-import { ImplementationPlanTaskFormValues } from "../../types";
+import { Button, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Form, FormikProps } from 'formik';
+import React from 'react';
+import { connect } from 'react-redux';
+import { toStartOfDay } from '../../../../../common/utils/date';
+import { changeRequestsSelectors } from '../../../../../state/ducks/changeRequest';
+import { ApplicationState } from '../../../../../state/reducers';
+import AutocompleteField from '../../../../components/forms/fields/Autocomplete/Autocomplete';
+import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import DatePickerField from '../../../../components/forms/fields/DatePicker';
+import InputField from '../../../../components/forms/fields/Input';
+import TextEditorField from '../../../../components/forms/fields/RichTextEditor';
+import { required, validator } from '../../../../components/forms/fields/validators';
+import Text from '../../../../components/Text';
+import { ImplementationPlanTaskFormValues } from '../../types';
 
 interface OwnProps extends FormikProps<ImplementationPlanTaskFormValues> {
-  cancel: () => void;
+  cancel: () => void
 }
 
 interface StateProps {
-  availableAssignees: OptionType[];
+  availableAssignees: OptionType[]
 }
 
 export type TaskFormProps = OwnProps & StateProps;
@@ -31,11 +31,11 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 const styles = makeStyles(() =>
   createStyles({
     submitBtn: {
-      float: "right",
-      clear: "right",
+      float: 'right',
+      clear: 'right',
     },
     cancelBtn: {
-      float: "right",
+      float: 'right',
     },
   },
   ));
@@ -51,7 +51,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         name="title"
         size="sm"
         label="common.title"
-        inputProps={{ id: "title" }}
+        inputProps={{ id: 'title' }}
         validate={validator(required)}
       />
       <div className="task-description">
@@ -69,7 +69,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             name="assigned"
             size="sm"
             label="common.assigned.to"
-            autocompleteProps={{ id: "assigned", isClearable: true }}
+            autocompleteProps={{ id: 'assigned', isClearable: true }}
             options={availableAssignees}
           />
         </Grid>
@@ -78,7 +78,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             name="dueDate"
             label="common.due.date"
             size="sm"
-            datePickerProps={{ id: "dueDate", minDate: toStartOfDay(undefined) }}
+            datePickerProps={{ id: 'dueDate', minDate: toStartOfDay(undefined) }}
             validate={validator(required)}
           />
         </Grid>
@@ -87,8 +87,8 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             name="status"
             label="common.status"
             inputProps={{
-              id: "statusId",
-              value: "PENDING",
+              id: 'statusId',
+              value: 'PENDING',
               disabled: true,
             }}
           />

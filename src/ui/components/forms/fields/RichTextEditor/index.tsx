@@ -1,42 +1,42 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box } from "@material-ui/core";
-import classNames from "classnames";
-import { convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import React, { useEffect, useState } from "react";
-import { Editor, EditorProps } from "react-draft-wysiwyg";
-import useDebounce from "use-debounce/lib/useDebounce";
-import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { RenderSize } from "../../../../../state/ducks/common/types";
-import useDidMount from "../../../../hooks/useDidMount";
-import { useFormContext } from "../../FormContext";
-import Field, { FieldOwnProps } from "../Field";
-import { convertHtmlToDraft } from "./helpers";
-import "./rte.css";
+import { Box } from '@material-ui/core';
+import classNames from 'classnames';
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { Editor, EditorProps } from 'react-draft-wysiwyg';
+import useDebounce from 'use-debounce/lib/useDebounce';
+import '../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { RenderSize } from '../../../../../state/ducks/common/types';
+import useDidMount from '../../../../hooks/useDidMount';
+import { useFormContext } from '../../FormContext';
+import Field, { FieldOwnProps } from '../Field';
+import { convertHtmlToDraft } from './helpers';
+import './rte.css';
 
 const toolbarOptions = [
-  "inline",
-  "blockType",
-  "fontSize",
-  "fontFamily",
-  "list",
-  "textAlign",
-  "colorPicker",
-  "link",
-  "remove",
-  "history",
+  'inline',
+  'blockType',
+  'fontSize',
+  'fontFamily',
+  'list',
+  'textAlign',
+  'colorPicker',
+  'link',
+  'remove',
+  'history',
 ];
 
-const inline = { options: ["bold", "italic", "underline", "monospace"] };
+const inline = { options: ['bold', 'italic', 'underline', 'monospace'] };
 
 interface RichTextEditorOwnProps extends FieldOwnProps {
-  size?: RenderSize;
-  customToolbarAction?: () => void;
-  actionsRenderer?: () => any;
-  hidden?: boolean;
-  editorProps?: EditorProps;
-  toggleToolbar?: boolean;
+  size?: RenderSize
+  customToolbarAction?: () => void
+  actionsRenderer?: () => any
+  hidden?: boolean
+  editorProps?: EditorProps
+  toggleToolbar?: boolean
 }
 
 type RichTextEditorPropsWithFormik = RichTextEditorOwnProps & FormikFieldProps;
@@ -86,7 +86,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     }
 
     const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
-    const fieldValue = html === "<p></p>" ? "" : html.replace(/ins>/g, "u>");
+    const fieldValue = html === '<p></p>' ? '' : html.replace(/ins>/g, 'u>');
     form.setFieldValue(field.name, fieldValue);
   }, [debouncedUpdate]);
 
@@ -145,9 +145,9 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
           onFocus={handleFocus}
           toolbarClassName={
             classNames(
-              "rte-toolbar",
+              'rte-toolbar',
               {
-                "rte-toolbar-hide": toolbarHiddenDebounced,
+                'rte-toolbar-hide': toolbarHiddenDebounced,
               },
             )
           }

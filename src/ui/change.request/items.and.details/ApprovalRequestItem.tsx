@@ -1,20 +1,20 @@
-import { isEmpty } from "lodash";
-import { useObserver } from "mobx-react";
-import React, { useState } from "react";
-import { FBFormState } from "../../form.builder";
-import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
-import ApprovalRequestViewGridItem from "./ApprovalRequestViewGridItem";
-import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
+import { isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { useState } from 'react';
+import { FBFormState } from '../../form.builder';
+import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
+import ApprovalRequestViewGridItem from './ApprovalRequestViewGridItem';
+import ItemsAndDetailsState from './ItemsAndDetails.state';
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 const ApprovalRequestItem: React.FunctionComponent<{
-  entry: ApprovalRequestGridItem;
-  formState: FBFormState;
-  disabledOptions: () => string[];
-  handleRemove: (docRevId: string) => void;
-  handleUpdate: () => void;
-  viewItemActionsVisible: boolean;
-  itemsAndDetailsState: ItemsAndDetailsState;
+  entry: ApprovalRequestGridItem
+  formState: FBFormState
+  disabledOptions: () => string[]
+  handleRemove: (docRevId: string) => void
+  handleUpdate: () => void
+  viewItemActionsVisible: boolean
+  itemsAndDetailsState: ItemsAndDetailsState
 }> = ({
   entry,
   formState,
@@ -46,9 +46,9 @@ const ApprovalRequestItem: React.FunctionComponent<{
 
   function editItem() {
     const values = [
-      { key: "proposedDocumentRevision", value: { id: entry.docRevId } },
-      { key: "descriptionOfChange", value: entry.descriptionOfChange },
-      { key: "justificationOfChange", value: entry.justificationOfChange },
+      { key: 'proposedDocumentRevision', value: { id: entry.docRevId } },
+      { key: 'descriptionOfChange', value: entry.descriptionOfChange },
+      { key: 'justificationOfChange', value: entry.justificationOfChange },
     ];
     values.forEach((item) => {
       formState.setFieldValue(item.key, item.value);
@@ -60,8 +60,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
   return useObserver(() => (
     <>
       {
-        isEditMode &&
-          <ApprovalRequestEditGridItem {...{ formState }}
+        isEditMode
+          && <ApprovalRequestEditGridItem {...{ formState }}
             disabledOptions={disabledOptions()}
             addRevisionToChangeRequest={addRevisionToChangeRequest}
             resetAndCancelEdit={resetAndCancelEdit}
@@ -71,8 +71,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
             entry={entry}
           />
       }
-      { !isEditMode &&
-        <ApprovalRequestViewGridItem
+      { !isEditMode
+        && <ApprovalRequestViewGridItem
           entry={entry}
           editItem={editItem}
           handleRemove={handleRemove}

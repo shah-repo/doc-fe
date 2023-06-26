@@ -1,20 +1,20 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   dashboardMyFeedsActions,
   dashboardMyFeedsSelectors,
-} from "../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
-import { openDashboardToastr } from "../../components/notifications/DashboardStatus";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import { scrollToBottom } from "../line.items/common/Utils";
-import LineItemsPresenter from "./LineItems.presenter";
+} from '../../../state/ducks/dashboard.new/my.feeds';
+import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from '../../../state/ducks/dashboard.new/my.feeds/constants';
+import { openDashboardToastr } from '../../components/notifications/DashboardStatus';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import { scrollToBottom } from '../line.items/common/Utils';
+import LineItemsPresenter from './LineItems.presenter';
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
-  const [hoverItemId, setHoverItemId] = React.useState("");
+  const [hoverItemId, setHoverItemId] = React.useState('');
   const [offset, setOffset] = React.useState(MY_FEEDS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(MY_FEEDS_LIMIT);
   const dialogPDF = useDialog();
@@ -28,11 +28,11 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     if (dialogPDF.isOpen) {
       return;
     }
-    setHoverItemId("");
+    setHoverItemId('');
   };
   const loadMyFeeds = useActionCreator(dashboardMyFeedsActions.loadMyFeedsList);
   const loadMyFeedsListAsyncState = useSelector(
-    dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo
+    dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo,
   );
   const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
   const pinnedOrUnPinnedAsync = useAsync({
@@ -42,9 +42,9 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
-  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
+  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem,
   );
-  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem
+  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem,
   );
   const pinLineItem = (id: string) => {
     pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);
@@ -77,7 +77,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     };
     async.start(loadMyFeeds, updatedPageSize);
     setTimeout(() => {
-      scrollToBottom("#myFeedBoxLoadMore");
+      scrollToBottom('#myFeedBoxLoadMore');
     }, 2000);
   };
   return (

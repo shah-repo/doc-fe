@@ -1,29 +1,29 @@
-import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
-import { lowerCase } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
+import { lowerCase } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import {
   DocumentRevision,
   DocumentRevisionStatus, FBOutputDocumentType,
   RevisionChangeType,
-} from "../../../state/ducks/documentRevisions/types";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { toastError } from "../../components/notifications";
-import { documentVersionPath } from "../../document.revision/utils/paths";
-import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
-import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+} from '../../../state/ducks/documentRevisions/types';
+import { userManagementSelectors } from '../../../state/ducks/userManagement';
+import { toastError } from '../../components/notifications';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
+import { filterSecurityGroupsForQms } from '../../documentType/list/helpers';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
@@ -31,7 +31,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     isNewPMDisabled,
     isNewPMLoading,
     pmFormId,
-    name = "",
+    name = '',
     editorConfig,
     availableMaintenanceForms,
     preventativeFormOptions,
@@ -42,9 +42,9 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
 
     const { workspaceState, formState } = FB.useStores();
-    const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
+    const { id: docRevId, document: { status = '' } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
-    const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
+    const isTypePM = editorConfig.type?.includes('preventativeMaintenance');
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
@@ -68,20 +68,20 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // Set new pm button disabled status.
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
-      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.frequency`)?.value,
-      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     function newPMDisabled(): boolean {
       return !(
-        formState?.getFieldValue(`${name}.preventativeForm`) &&
-        formState?.getFieldValue(`${name}.frequency`)
+        formState?.getFieldValue(`${name}.preventativeForm`)
+        && formState?.getFieldValue(`${name}.frequency`)
       ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm
         || Boolean(eqMaintenanceState?.newPMLoading);
     }
@@ -95,7 +95,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
         window.open(
           documentVersionPath(data?.id as string, data?.document?.id as string),
-          "_blank"
+          '_blank',
         );
         eqMaintenanceState?.setNewPMLoading(false);
         eqMaintenanceState?.setNewPMDisabled(newPMDisabled());
@@ -119,8 +119,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         parentEquipment: { id: docRevId },
         equipmentSection: name,
         revisionChangeType: RevisionChangeType.NextRevision,
-        name: "",
-        description: "",
+        name: '',
+        description: '',
         revisionStage: 3,
         retrain: false,
         attachments: [],
@@ -158,8 +158,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string ) => {
       const filterValue = lowerCase(inputValue);
 
-      return lowerCase(docRev.name).includes(filterValue) ||
-             lowerCase(docRev.docId).includes(filterValue);
+      return lowerCase(docRev.name).includes(filterValue)
+             || lowerCase(docRev.docId).includes(filterValue);
     };
 
     function handleFilter(
@@ -167,10 +167,10 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       state: FilterOptionsState,
     ) {
       const typeValue = formState?.getFieldValue(`${name}.preventativeForm`);
-      const { inputValue = "" } = state || {};
+      const { inputValue = '' } = state || {};
       const options = data?.filter((form) =>
-        filterOutOption(form, inputValue) &&
-        form.documentRevisions.some((doc) =>
+        filterOutOption(form, inputValue)
+        && form.documentRevisions.some((doc) =>
           doc.status === DocumentRevisionStatus.Released && form.id !== typeValue ));
       return options;
     }
@@ -211,6 +211,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     });
   };
 
-  Comp.displayName = "withFBEQMaintenance";
+  Comp.displayName = 'withFBEQMaintenance';
   return Comp;
 };

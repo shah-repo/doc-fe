@@ -1,24 +1,24 @@
-import { filterBy } from "@progress/kendo-data-query";
-import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { isEmpty, sortBy } from "lodash";
-import React from "react";
-import { GetEmployeeResponse, LoadCompanyGroup } from "../../../../state/ducks/userManagement/types";
-import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
-import { toMembersOptions } from "../../utils/transform";
+import { filterBy } from '@progress/kendo-data-query';
+import { MultiSelect, MultiSelectFilterChangeEvent } from '@progress/kendo-react-dropdowns';
+import { isEmpty, sortBy } from 'lodash';
+import React from 'react';
+import { GetEmployeeResponse, LoadCompanyGroup } from '../../../../state/ducks/userManagement/types';
+import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
+import { toMembersOptions } from '../../utils/transform';
 
 interface LoadMemberGroupExt extends LoadCompanyGroup {
-  memberNames: string;
+  memberNames: string
 }
 
 interface EmployeeCellProps {
-  dataItem: LoadMemberGroupExt;
-  rowType?: string;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  className?: string;
-  columnIndex?: number;
-  employees: GetEmployeeResponse[];
-  field?: string;
+  dataItem: LoadMemberGroupExt
+  rowType?: string
+  colSpan?: number
+  style?: React.CSSProperties
+  className?: string
+  columnIndex?: number
+  employees: GetEmployeeResponse[]
+  field?: string
 }
 
 export const EmployeesCell = ({
@@ -31,25 +31,25 @@ export const EmployeesCell = ({
   columnIndex,
   field,
 }: EmployeeCellProps) => {
-  const employeesData = dataItem[field || ""];
+  const employeesData = dataItem[field || ''];
   const [result, setResult] = React.useState([]);
-  const [data, setData] = React.useState(sortBy(toMembersOptions(employees), "label"));
+  const [data, setData] = React.useState(sortBy(toMembersOptions(employees), 'label'));
   const updateMembersField = ({ target }) => {
     dataItem.employees = target?.value.map((item: { value: string }) => ({
-      id: item?.value || "",
+      id: item?.value || '',
     }));
     setResult(target.value);
   };
 
   const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
     const newData = filterBy(toMembersOptions(employees), filter);
-    setData(sortBy(newData, "label"));
+    setData(sortBy(newData, 'label'));
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
-  const employeesList = isEmpty(employeesData) ? [] : employeesData.split(",");
+  const employeesList = isEmpty(employeesData) ? [] : employeesData.split(',');
   return (
     <td
       id="kendo-expandable-column"
@@ -59,8 +59,8 @@ export const EmployeesCell = ({
       className={className}
       data-grid-col-index={columnIndex}
     >
-      {dataItem.inEdit ?
-        <MultiSelect
+      {dataItem.inEdit
+        ? <MultiSelect
           data={data}
           value={result}
           filterable={true}

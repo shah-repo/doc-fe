@@ -1,9 +1,9 @@
-import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from "../../../../ui/form.builder/FBApprovalMatrix/constants";
-import { ApprovalMatrix } from "../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types";
-import { apiAction, apiActionWithCallbacks } from "../../../factories";
-import { ApiAction, Handlers } from "../../../types";
-import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST, TAB_CONFIGURATION_LIST_ASYNC, TAB_CONFIGURATION_URL } from "./constants";
-import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction, TabConfiguration, TabConfigurationListAction } from "./types";
+import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from '../../../../ui/form.builder/FBApprovalMatrix/constants';
+import { apiAction, apiActionWithCallbacks } from '../../../factories';
+import { ApiAction, Handlers } from '../../../types';
+import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST, TAB_CONFIGURATION_LIST_ASYNC, TAB_CONFIGURATION_URL } from './constants';
+import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction, TabConfiguration, TabConfigurationListAction } from './types';
+import { FBApprovalMatrixFieldData } from '../../../../ui/form.builder';
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({
   type: DOCUMENT_TYPE_LIST,
@@ -22,7 +22,7 @@ const tabConfigurationList = (data: TabConfiguration[]): TabConfigurationListAct
 
 const loadList = (): ApiAction<DocumentType[]> => apiAction({
   url: DOCUMENT_TYPE_ROOT_URL,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENT_TYPE_LIST_ASYNC,
   onSuccess: (documentTypes, dispatch) => {
     dispatch(documentTypesList(documentTypes));
@@ -31,7 +31,7 @@ const loadList = (): ApiAction<DocumentType[]> => apiAction({
 
 const loadTabConfiguration = (): ApiAction<TabConfiguration[]> => apiAction({
   url: TAB_CONFIGURATION_URL,
-  method: "get",
+  method: 'get',
   asyncType: TAB_CONFIGURATION_LIST_ASYNC,
   onSuccess: (data, dispatch) => {
     dispatch(tabConfigurationList(data));
@@ -40,7 +40,7 @@ const loadTabConfiguration = (): ApiAction<TabConfiguration[]> => apiAction({
 
 const getDocTypeIds = (id: string, handlers: Handlers): ApiAction<DocumentTypeById> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/${id}`,
-  method: "get",
+  method: 'get',
   asyncType: DOCUMENT_TYPE_BY_ID_ASYNC,
   onSuccess: (documentTypes, dispatch) => {
     dispatch(docTypeIds(documentTypes));
@@ -55,7 +55,7 @@ const getDocTypesByCategory = (
   apiActionWithCallbacks({
     url: DOCUMENT_TYPE_ROOT_URL,
     asyncType: DOCUMENT_TYPE_BY_CATEGORY_ASYNC,
-    method: "get",
+    method: 'get',
     params,
     handlers,
     onSuccess: (documentTypes, dispatch) => {
@@ -75,30 +75,30 @@ const getDocTypeByGroup = (
   apiActionWithCallbacks({
     url: `${DOCUMENT_TYPE_ROOT_URL}/with_forms`,
     asyncType: DOCUMENT_TYPE_BY_GROUP_ASYNC,
-    method: "get",
+    method: 'get',
     params,
     handlers,
   });
 
-const getApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+const getApprovalMatrix = (handlers: Handlers): ApiAction<FBApprovalMatrixFieldData> => apiActionWithCallbacks({
   url: APPROVAL_MATRIX_URL,
-  method: "get",
+  method: 'get',
   handlers,
 });
 
-const getPOApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+const getPOApprovalMatrix = (handlers: Handlers): ApiAction<FBApprovalMatrixFieldData> => apiActionWithCallbacks({
   url: PO_APPROVAL_MATRIX_URL,
-  method: "get",
+  method: 'get',
   handlers,
 });
 
 const updateDocumentType = (
   id: string,
   body: DocumentType,
-  handlers: Handlers
+  handlers: Handlers,
 ): ApiAction<DocumentType[]> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/${id}`,
-  method: "patch",
+  method: 'patch',
   data: body,
   onSuccess: (m, dispatch) => {
     dispatch(loadList());
@@ -108,7 +108,7 @@ const updateDocumentType = (
 
 const deleteDocumentType = (id: string): ApiAction<DocumentType[]> => apiAction({
   url: `${DOCUMENT_TYPE_ROOT_URL}/remove/${id}`,
-  method: "delete",
+  method: 'delete',
   onSuccess: (m, dispatch) => {
     dispatch(loadList());
   },
@@ -119,7 +119,7 @@ const addDocumentType = (
   handlers: Handlers,
 ): ApiAction<DocumentType[]> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/add`,
-  method: "post",
+  method: 'post',
   data: body,
   onSuccess: (m, dispatch) => {
     dispatch(loadList());
@@ -131,7 +131,7 @@ const getApprovalMatrixNco = (
   handlers: Handlers,
 ): ApiAction<DocumentType[]> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/export_approval_matrix_nco`,
-  method: "get",
+  method: 'get',
   handlers,
 });
 
@@ -139,7 +139,7 @@ const getGroupWithGroupOptions = (
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/group_with_group_options`,
-  method: "get",
+  method: 'get',
   handlers,
 });
 

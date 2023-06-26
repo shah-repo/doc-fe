@@ -1,11 +1,11 @@
-import { filter, isEmpty, map } from "lodash";
-import { action, computed, observable, set } from "mobx";
-import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from "..";
-import { Approval } from "../../../state/ducks/common/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+import { filter, isEmpty, map } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
+import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from '..';
+import { Approval } from '../../../state/ducks/common/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
-class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approval> {
+class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
 
@@ -18,7 +18,7 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
 
   public constructor({ id, approvals, isOwner }: FBApprovalsConstructor) {
     super();
-    this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.isOwner = isOwner;
     if (!id) {
       return;
@@ -28,10 +28,10 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
 
   // MARK: @computed
   @computed public get getApprovals(): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => a.status !== "ABANDONED" && a.type === "MASTER");
+    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
-      canRequest: this.isOwner && a.status === "DRAFT",
+      canRequest: this.isOwner && a.status === 'DRAFT',
     }));
   }
 
@@ -41,7 +41,7 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
       return;
     }
     this.setUrl(FBEndpoint.RequiredApprovers);
-    this.setBody({ "ids[]": documentRevisions });
+    this.setBody({ 'ids[]': documentRevisions });
     this.fetch();
   };
 
@@ -54,23 +54,23 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,
-        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], "id"),
+        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], 'id'),
       };
       return group;
     }, {});
   };
 
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
-    set(this, "approvals", approvals);
+    set(this, 'approvals', approvals);
 
   public addApproval = (
     approval: Partial<FBInlineApprovalBody>,
-    callback?: () => any
+    callback?: () => any,
   ) => {
     this.approvalApi.set({
       url: FBEndpoint.Approvals,
       body: approval,
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         this.approvalApi.onError(error);
@@ -86,14 +86,14 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       body,
-      method: "post",
+      method: 'post',
     }, (data, error) => {
       if (error) {
         return this.transitionApi.onError(error);

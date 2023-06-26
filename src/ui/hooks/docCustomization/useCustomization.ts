@@ -1,55 +1,55 @@
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DisplayFieldType, FieldType, InputFieldType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { required, validator } from "../../components/forms/fields/validators";
-import { UIConfig } from "./types";
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DisplayFieldType, FieldType, InputFieldType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { required, validator } from '../../components/forms/fields/validators';
+import { UIConfig } from './types';
 
-const configureStatus = (status: string) => status && status.replace(" ", "_").toUpperCase();
+const configureStatus = (status: string) => status && status.replace(' ', '_').toUpperCase();
 
-export const useAdministrativeChange = (documentTypeId = "",): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.ADM_CHANGE, "documentRevision.form.administrativeChange");
-export const useApproveAndRelease = (documentTypeId = "",): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType.APPROVE_RELEASE_BTN, "common.approve.and.release");
-export const useCRLink = (documentTypeId = ""): UIConfig =>
+export const useAdministrativeChange = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.ADM_CHANGE, 'documentRevision.form.administrativeChange');
+export const useApproveAndRelease = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.APPROVE_RELEASE_BTN, 'common.approve.and.release');
+export const useCRLink = (documentTypeId = ''): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.CR_ID);
-export const useDocId = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.DOC_ID, "common.documentId");
-export const useDocumentStatus = (documentTypeId = "", status: string): UIConfig =>
+export const useDocId = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.DOC_ID, 'common.documentId');
+export const useDocumentStatus = (documentTypeId = '', status: string): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType[`STATUS_${configureStatus(status)}`], status);
-export const useDocumentTypeSelect = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.DOC_TYPE, "document.type");
-export const useNextRevision = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.NEXT_REVISION, "documentRevision.form.nextRevision");
-export const useNextRevisionStage = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.NEXT_REVISION_STAGE, "documentRevision.form.nextRevisionStage");
-export const useObsolete = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.OBSOLETE, "documentRevision.form.obsolete");
-export const useReviseDocument = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType.REVISE_BTN, "documentRevision.revise");
-export const useUpdateDocument = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType.UPDATE_NEW_BTN, "documentRevision.update.PO");
-export const useUndoPOChanges = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType.UNDO_BTN, "documentRevision.update.undo.changes");
-export const useRevisionSelect = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.REVISION_CHANGE_SELECTION, "document.revision.stage");
-export const useTraining = (documentTypeId = ""): UIConfig =>
+export const useDocumentTypeSelect = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.DOC_TYPE, 'document.type');
+export const useNextRevision = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.NEXT_REVISION, 'documentRevision.form.nextRevision');
+export const useNextRevisionStage = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.NEXT_REVISION_STAGE, 'documentRevision.form.nextRevisionStage');
+export const useObsolete = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.OBSOLETE, 'documentRevision.form.obsolete');
+export const useReviseDocument = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.REVISE_BTN, 'documentRevision.revise');
+export const useUpdateDocument = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.UPDATE_NEW_BTN, 'documentRevision.update.PO');
+export const useUndoPOChanges = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.UNDO_BTN, 'documentRevision.update.undo.changes');
+export const useRevisionSelect = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.REVISION_CHANGE_SELECTION, 'document.revision.stage');
+export const useTraining = (documentTypeId = ''): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TRAINING);
-export const useTitle = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.TITLE, "common.title");
-export const useAssignOperatorsToDocument = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.OPERATORS, "", false);
-export const useCreateDocumentByTypeButton = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType.ADD_NEW_BTN, "document.add");
-export const useRevisionStageSelect = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "document.revision.stage");
-export const useAttachments = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.ATTACHMENTS, "common.attachments");
+export const useTitle = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.TITLE, 'common.title');
+export const useAssignOperatorsToDocument = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.OPERATORS, '', false);
+export const useCreateDocumentByTypeButton = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.ADD_NEW_BTN, 'document.add');
+export const useRevisionStageSelect = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, 'document.revision.stage');
+export const useAttachments = (documentTypeId = ''): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.ATTACHMENTS, 'common.attachments');
 
 const useCustomization = (
-  documentTypeId = "",
+  documentTypeId = '',
   fieldType: FieldType,
-  defaultLabel = "",
+  defaultLabel = '',
   defaultVisibility = true,
 ): UIConfig => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];

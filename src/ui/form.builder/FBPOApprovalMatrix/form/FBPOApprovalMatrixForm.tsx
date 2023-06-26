@@ -1,9 +1,9 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import * as generateUuid from "uuid/v4";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBTextField } from "../..";
-import Text from "../../../components/Text";
-import { FBPOApprovalMatrixFormProps } from "../FBPOApprovalMatrix.types";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import * as generateUuid from 'uuid/v4';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBTextField } from '../..';
+import Text from '../../../components/Text';
+import { FBPOApprovalMatrixFormProps } from '../FBPOApprovalMatrix.types';
 
 const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProps> = ({
   initialValues = {},
@@ -22,13 +22,13 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
       rules="required"
     />
     <FBTextField
-      inputProps={{ type: "number" }}
+      inputProps={{ type: 'number' }}
       label="form.builder.field.limit"
       name="limit"
       rules="required"
     />
     <FBTextField
-      inputProps={{ type: "number" }}
+      inputProps={{ type: 'number' }}
       label="form.builder.field.threshold"
       name="threshold"
     />
@@ -63,7 +63,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
           optionValueType="id"
           defaultValue={[]}
         />
-      </Box>) )}
+      </Box>))}
     {children}
   </FBForm>
 );

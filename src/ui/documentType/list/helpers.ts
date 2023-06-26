@@ -1,5 +1,5 @@
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 
 export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
   if (!isQms) {
@@ -12,4 +12,3 @@ export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
     return acc;
   }, [] as OptionType[]);
 };
-

@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBPOReceiveCreateLotProps, FBSubmitButton } from "..";
-import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
-import { withFBPOReceiveCreateLot } from "./FBPOReceiveCreateLot.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBPOReceiveCreateLotProps, FBSubmitButton } from '..';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
+import { withFBPOReceiveCreateLot } from './FBPOReceiveCreateLot.wrap';
 
 const FBPOReceiveCreateLotActions: React.FunctionComponent<FBPOReceiveCreateLotProps> = ({
   handleCancel,

@@ -1,43 +1,43 @@
-import { BoxProps } from "@material-ui/core";
-import { FormikProps } from "formik";
-import { cloneDeep, map } from "lodash";
-import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from "../../../App";
-import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { TabInfo, TabTypeOptions } from "../../../state/ducks/documentRevisions/documentType/types";
-import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
-import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
-import { FBWorkspaceMode } from "../../form.builder/types/workspace";
-import Colors from "../../layout/theme/utils/colors";
-import ItemsAndDetailsWrapper from "../items.and.details/ItemsAndDetails.wrap";
-import FormHeader from "./assessmentForm/FormHeader";
-import ChangeRequestSidebar from "./ChangeRequest.sidebar";
-import ChangeRequestFormHeader from "./ChangeRequestFormHeader";
-import { ChangeRequestFormValues } from "./types";
+import { BoxProps } from '@material-ui/core';
+import { FormikProps } from 'formik';
+import { cloneDeep, map } from 'lodash';
+import { Observer } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
+import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { ApplicationState } from '../../../state/reducers';
+import { AsyncState } from '../../../state/types';
+import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
+import { FBWorkspaceMode } from '../../form.builder/types/workspace';
+import Colors from '../../layout/theme/utils/colors';
+import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
+import FormHeader from './assessmentForm/FormHeader';
+import ChangeRequestSidebar from './ChangeRequest.sidebar';
+import ChangeRequestFormHeader from './ChangeRequestFormHeader';
+import { ChangeRequestFormValues } from './types';
 
 type ChangeRequestFormProps =
-& Pick<SMProviderProps, "_formState" | "_documentRevisionFormState">
+& Pick<SMProviderProps, '_formState' | '_documentRevisionFormState'>
 & SMTabsHOCProps
-& Pick<BoxProps, "onScroll">
+& Pick<BoxProps, 'onScroll'>
 & {
-  formValues: FormikProps<ChangeRequestFormValues>;
-  asyncState: AsyncState;
-  changeRequest?: ChangeRequest;
-  doNotPrompt?: boolean;
-  changeOpenStatus: (status: boolean) => void;
-  schema?: FBSchemaProps[];
-  mode: FBWorkspaceMode;
-  withoutBottomBar: boolean;
-  autosave: boolean;
-  formInput?: Record<string, any>;
-  hideSideBar: boolean;
-  currentDocRevId?: string;
-  inDialog: boolean;
+  formValues: FormikProps<ChangeRequestFormValues>
+  asyncState: AsyncState
+  changeRequest?: ChangeRequest
+  doNotPrompt?: boolean
+  changeOpenStatus: (status: boolean) => void
+  schema?: FBSchemaProps[]
+  mode: FBWorkspaceMode
+  withoutBottomBar: boolean
+  autosave: boolean
+  formInput?: Record<string, any>
+  hideSideBar: boolean
+  currentDocRevId?: string
+  inDialog: boolean
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -69,14 +69,13 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     changeOpenStatus(status);
   };
 
-  const docTypeGroup = changeRequest?.documentType.group ?? "OTHER";
+  const docTypeGroup = changeRequest?.documentType.group ?? 'OTHER';
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-
-  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.items') === -1) {
     tabConfig.splice(1, 0, {
-      labelId: "tabId.items",
+      labelId: 'tabId.items',
       tabId: TabTypeOptions.ITEMS.toLowerCase(),
       type: TabTypeOptions.ITEMS,
     });
@@ -91,17 +90,17 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
   return (
     <SMForm
-      templateBoxProps={{ stretchY: "100%", width: "100%" }}
+      templateBoxProps={{ stretchY: '100%', width: '100%' }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
       header= {
-        <FormHeader {...{ changeRequest, asyncState }}/>
+        <FormHeader {...{ changeRequest, asyncState }} />
       }
     >
       <SMTemplate
-        boxProps={{ className: "hide-scroll" }}
-        templateBoxProps={{ stretchY: "100%" }}
-        contentBoxProps={{ stretchY: "100%" }}
+        boxProps={{ className: 'hide-scroll' }}
+        templateBoxProps={{ stretchY: '100%' }}
+        contentBoxProps={{ stretchY: '100%' }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {...changeRequest && changeRequest.crId && !hideSideBar && {
           rightSidebar: (
@@ -115,9 +114,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         <Observer>
           {() => (
             <SMTemplate
-              templateBoxProps={{ stretchY: "100%" }}
+              templateBoxProps={{ stretchY: '100%' }}
               contentBoxProps={{
-                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
+                overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
               }}
               header={<ChangeRequestFormHeader
                 title={changeRequest?.title}
@@ -129,7 +128,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                 {() => (
                   <SMTabs
                     tabs={tabConfig}
-                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
@@ -138,8 +137,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
                       return (
                         <SMBox key={index} pt={.25}>
-                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
-                              <FBWorkspace
+                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
+                              && <FBWorkspace
                                 isPortal={false}
                                 initialValues={formInput}
                                 changeRequest={cloneDeep(changeRequest)}
@@ -149,9 +148,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
-                          {tabType === TabTypeOptions.ITEMS &&
-                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
-                            changeRequest && (
+                          {tabType === TabTypeOptions.ITEMS
+                            && _tabsState?.isTabActive(TabTypeOptions.ITEMS)
+                            && changeRequest && (
                             <ItemsAndDetailsWrapper
                               currentDocRevId={currentDocRevId}
                               changeRequest={cloneDeep(changeRequest)}
@@ -161,9 +160,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
-                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
-                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
-                            <FBWorkspace
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                            && _formState?.mode !== FBWorkspaceModeOptions.NONE
+                            && <FBWorkspace
                               isPortal={false}
                               initialValues={formInput}
                               changeRequest={cloneDeep(changeRequest)}
@@ -186,6 +185,5 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     </SMForm>
   );
 };
-
 
 export default withSMTabs(ChangeRequestForm);

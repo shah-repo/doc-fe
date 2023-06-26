@@ -1,13 +1,13 @@
-import { Box, Grid, Typography } from "@material-ui/core";
-import { isEmpty, uniqBy } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Text from "../../../components/Text";
-import GroupInfoPresenter from "./GroupInfo.presenter";
+import { Box, Grid, Typography } from '@material-ui/core';
+import { isEmpty, uniqBy } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import Text from '../../../components/Text';
+import GroupInfoPresenter from './GroupInfo.presenter';
 
 interface Props {
-  parentGroups: any[];
+  parentGroups: any[]
 }
 
 const JoinedGroups: React.FunctionComponent<Props> = ({
@@ -19,7 +19,7 @@ const JoinedGroups: React.FunctionComponent<Props> = ({
     if (!isEmpty(parentGroup.parents)) {
       return `inherits from ${parentGroup.parents.map((parent) => parent.name)}`;
     }
-    return "";
+    return '';
   };
 
   const renderParentContainer = (parentGroup) => parentGroup.map((p) => (
@@ -28,10 +28,10 @@ const JoinedGroups: React.FunctionComponent<Props> = ({
         variant="h6"
         style={{
           marginBottom: 5,
-          borderBottom: "solid",
-          borderColor: "grey",
+          borderBottom: 'solid',
+          borderColor: 'grey',
         }}>
-        <Text message={`${p.name} ${inheritText(p)}`}/>
+        <Text message={`${p.name} ${inheritText(p)}`} />
       </Typography>
       <GroupInfoPresenter
         items={p.permissions}
@@ -41,14 +41,14 @@ const JoinedGroups: React.FunctionComponent<Props> = ({
         items={p.tags}
         title="common.tags"
       />
-    </Box>)
+    </Box>),
   );
 
   const renderSelectedGroupInfo = (parentGroups) => {
     const arrayOfIds = parentGroups.map((p) => p.value);
     const savedParents = allGroups.filter((group) => arrayOfIds.includes(group.value));
     const ids = savedParents.map((s) => s.joinedParents.map((e) => e));
-    return renderParentContainer(uniqBy(ids.flat(), "id"));
+    return renderParentContainer(uniqBy(ids.flat(), 'id'));
   };
 
   return (

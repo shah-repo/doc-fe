@@ -1,33 +1,33 @@
-import { get } from "lodash";
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { Redirect, RouteComponentProps, useParams } from "react-router-dom";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { supplierSurveyActions, supplierSurveySelectors } from "../../../../state/ducks/supplierSurvey";
-import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey/types";
-import { ApplicationState } from "../../../../state/reducers";
-import { AsyncState } from "../../../../state/types";
-import AsyncGate from "../../../components/AsyncGate";
-import { HOME_URL } from "../../../constants/urls";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import useAsync from "../../../hooks/useAsync";
-import SupplierSurveyPresenter from "./SupplierSurvey.presenter";
-import SupplierSurveySubmitMessage from "./SupplierSurveySubmitMessage.presenter";
+import { get } from 'lodash';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect, RouteComponentProps, useParams } from 'react-router-dom';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { supplierSurveyActions, supplierSurveySelectors } from '../../../../state/ducks/supplierSurvey';
+import { SupplierSurveyForm } from '../../../../state/ducks/supplierSurvey/types';
+import { ApplicationState } from '../../../../state/reducers';
+import { AsyncState } from '../../../../state/types';
+import AsyncGate from '../../../components/AsyncGate';
+import { HOME_URL } from '../../../constants/urls';
+import FBStore from '../../../form.builder/stores/ui/FBStore';
+import useAsync from '../../../hooks/useAsync';
+import SupplierSurveyPresenter from './SupplierSurvey.presenter';
+import SupplierSurveySubmitMessage from './SupplierSurveySubmitMessage.presenter';
 
 interface StateProps {
-  isUserAuthenticated: boolean;
-  loadSupplierSurveyListAsyncState: AsyncState;
-  supplierSurvey: SupplierSurveyForm;
+  isUserAuthenticated: boolean
+  loadSupplierSurveyListAsyncState: AsyncState
+  supplierSurvey: SupplierSurveyForm
 }
 
 interface DispatchProps {
-  loadSupplierSurvey: typeof supplierSurveyActions.loadSupplierSurveyList;
-  submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey;
+  loadSupplierSurvey: typeof supplierSurveyActions.loadSupplierSurveyList
+  submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey
 }
 
 type SupplierSurveyContainerProps = StateProps &
 DispatchProps &
-Pick<RouteComponentProps, "location">;
+Pick<RouteComponentProps, 'location'>;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isUserAuthenticated: authSelectors.isAuthenticated(state),
@@ -68,9 +68,9 @@ SupplierSurveyContainerProps
     }, async);
   };
 
-  const schema =
-  get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema") ||
-  get(supplierSurvey, "surveyFormDocumentRevision.formDocument.formTemplate.schema", []);
+  const schema
+  = get(supplierSurvey, 'surveyFormDocumentRevision.formTemplate.schema')
+  || get(supplierSurvey, 'surveyFormDocumentRevision.formDocument.formTemplate.schema', []);
   FBStore.setFormSchema(schema);
 
   return (

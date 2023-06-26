@@ -1,8 +1,8 @@
-import { FBAttachment } from "..";
+import { FBAttachment } from '..';
 
-export type FBFilePreviewType = "video" | "image" | "pdf";
+export type FBFilePreviewType = 'video' | 'image' | 'pdf';
 
 export interface FBFilePreviewProps {
-  file: FBAttachment;
-  previewType?: FBFilePreviewType;
+  file: FBAttachment
+  previewType?: FBFilePreviewType
 }

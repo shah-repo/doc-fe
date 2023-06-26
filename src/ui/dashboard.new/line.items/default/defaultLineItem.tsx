@@ -1,12 +1,12 @@
-import { Grid, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { StyledListItem } from "../common/StyledListItem";
-import useStyles from "./defaultLineItem.styles";
+import { Grid, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { StyledListItem } from '../common/StyledListItem';
+import useStyles from './defaultLineItem.styles';
 
 interface Props {
-  type: string;
-  status?: string;
-  onMouseHoverItem: (id: string) => void;
+  type: string
+  status?: string
+  onMouseHoverItem: (id: string) => void
 }
 
 const ApprovalChangePresenter: React.FC<Props> = ({
@@ -17,7 +17,7 @@ const ApprovalChangePresenter: React.FC<Props> = ({
   const classes = useStyles();
 
   const onMouseHoverListItem = () => {
-    onMouseHoverItem("");
+    onMouseHoverItem('');
   };
 
   return (

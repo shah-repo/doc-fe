@@ -1,19 +1,19 @@
-import { orderBy } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
-import Config from "../../../config";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { companyActions } from "../../../state/ducks/company";
-import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
-import { toastInfo, toastSuccess } from "../../components/notifications";
-import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from "../../constants/urls";
-import { ThemeEnv } from "../../layout/theme/utils/types";
-import { LoginContainerProps } from "../Login.container";
-import SwitchCompanyPresenter from "./SwitchCompany.presenter";
-import { styles } from "./SwitchCompany.styles";
+import { orderBy } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
+import Config from '../../../config';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import { companyActions } from '../../../state/ducks/company';
+import { Employee, WhiteLabelingEnv } from '../../../state/ducks/company/types';
+import { toastInfo, toastSuccess } from '../../components/notifications';
+import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from '../../constants/urls';
+import { ThemeEnv } from '../../layout/theme/utils/types';
+import { LoginContainerProps } from '../Login.container';
+import SwitchCompanyPresenter from './SwitchCompany.presenter';
+import { styles } from './SwitchCompany.styles';
 
 type Props = LoginContainerProps;
 
@@ -26,7 +26,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
   const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
-
 
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
@@ -41,21 +40,21 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       </div>,
       { autoClose: 10000 });
 
-    employee.company.scheduledForDeletion &&
-    toastSuccess(
+    employee.company.scheduledForDeletion
+    && toastSuccess(
       <div>
-        {intl.formatMessage({ id: "toast.notification.deletion" })}
+        {intl.formatMessage({ id: 'toast.notification.deletion' })}
         <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
       </div>,
       { autoClose: 15000 });
   };
-  const companies = orderBy(employees, ["company.name"], ["asc"])
+  const companies = orderBy(employees, ['company.name'], ['asc'])
     .filter((employee) => employee.active)
     .map(
       (employee: Employee) => {
         const { company } = employee;
-        const whiteLabeling =
-          ((company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+        const whiteLabeling
+          = ((company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
 
         return (
           <button

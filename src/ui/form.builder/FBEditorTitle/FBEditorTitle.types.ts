@@ -1,7 +1,7 @@
-import { FBEditorProps } from "..";
+import { FBEditorProps } from '..';
 
 export type FBEditorTitleProps =
-& Pick<FBEditorProps, "mode">
+& Pick<FBEditorProps, 'mode'>
 & {
-  handleMode?: () => any;
+  handleMode?: () => any
 };

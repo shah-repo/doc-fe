@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { attachmentsActions, attachmentsSelectors } from "../../../state/ducks/attachments";
-import WatermarkFooterPresenter from "./presenter";
-import WatermarkFooterRequest from "./request";
-import { WatermarkResponse } from "./types";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { attachmentsActions, attachmentsSelectors } from '../../../state/ducks/attachments';
+import WatermarkFooterPresenter from './presenter';
+import WatermarkFooterRequest from './request';
+import { WatermarkResponse } from './types';
 
 const WatermarkFooterContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const WatermarkFooterContainer: React.FunctionComponent = () => {
   };
   const downloadWatermark = () => {
     const file = requestResults[0];
-    window.open(file.data.presignedUrl, "_blank");
+    window.open(file.data.presignedUrl, '_blank');
     closeMessage();
   };
   const watermarkIds = useSelector(attachmentsSelectors.getWatermarks);

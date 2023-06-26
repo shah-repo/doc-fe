@@ -1,14 +1,14 @@
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { changeRequestsSelectors } from "../../../../state/ducks/changeRequest";
-import { ApplicationState } from "../../../../state/reducers";
-import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import { useAssignOperatorsToDocument } from "../../../hooks/docCustomization/useCustomization";
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { changeRequestsSelectors } from '../../../../state/ducks/changeRequest';
+import { ApplicationState } from '../../../../state/reducers';
+import AutocompleteField from '../../../components/forms/fields/Autocomplete/Autocomplete';
+import { useAssignOperatorsToDocument } from '../../../hooks/docCustomization/useCustomization';
 
 interface Props {
-  documentTypeId: string;
-  isDisabled?: boolean;
+  documentTypeId: string
+  isDisabled?: boolean
 }
 
 const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId, isDisabled }) => {
@@ -16,7 +16,7 @@ const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId, isDisa
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
       state,
-      currentUserId
+      currentUserId,
     );
   });
   const { isVisible } = useAssignOperatorsToDocument(documentTypeId);
@@ -30,7 +30,7 @@ const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId, isDisa
       name="operators"
       label="document.assign.to"
       autocompleteProps={{
-        id: "operators",
+        id: 'operators',
         isMulti: true,
         closeMenuOnSelect: false,
       }}

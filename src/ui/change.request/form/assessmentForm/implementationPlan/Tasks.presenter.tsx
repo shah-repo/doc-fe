@@ -1,18 +1,18 @@
-import React from "react";
-import { ImplementationPlanTaskFormValues } from "../../types";
-import TaskPresenter from "./Task.presenter";
-import TaskFormDialog from "./TaskFormDialog";
+import React from 'react';
+import { ImplementationPlanTaskFormValues } from '../../types';
+import TaskPresenter from './Task.presenter';
+import TaskFormDialog from './TaskFormDialog';
 
 interface OwnProps {
-  tasks: ImplementationPlanTaskFormValues[];
-  openDialog: () => void;
-  closeDialog: () => void;
-  onSubmit: (values: ImplementationPlanTaskFormValues) => void;
-  selectedTask: ImplementationPlanTaskFormValues | null;
-  isDialogOpen: boolean;
-  numberOfTasks: number;
-  removeTask: (index: number) => () => void;
-  editTask: (task: ImplementationPlanTaskFormValues, index: number) => () => void;
+  tasks: ImplementationPlanTaskFormValues[]
+  openDialog: () => void
+  closeDialog: () => void
+  onSubmit: (values: ImplementationPlanTaskFormValues) => void
+  selectedTask: ImplementationPlanTaskFormValues | null
+  isDialogOpen: boolean
+  numberOfTasks: number
+  removeTask: (index: number) => () => void
+  editTask: (task: ImplementationPlanTaskFormValues, index: number) => () => void
 }
 
 export type Props = OwnProps;

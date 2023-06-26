@@ -1,7 +1,7 @@
-import { Box, Link } from "@material-ui/core";
-import React from "react";
-import { FBHyperlinkProps, FBInput } from "..";
-import { withFBHyperlink } from "./FBHyperlink.wrap";
+import { Box, Link } from '@material-ui/core';
+import React from 'react';
+import { FBHyperlinkProps, FBInput } from '..';
+import { withFBHyperlink } from './FBHyperlink.wrap';
 
 const FBHyperlink: React.FunctionComponent<FBHyperlinkProps> = ({
   linkUrl,

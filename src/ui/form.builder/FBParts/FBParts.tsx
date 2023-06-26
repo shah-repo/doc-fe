@@ -1,6 +1,6 @@
-import React from "react";
-import { FBInput, FBPartsItem, FBPartsProps, FBProcedureItemType, FBProvider } from "..";
-import { withFBParts } from "./FBParts.wrap";
+import React from 'react';
+import { FBInput, FBPartsItem, FBPartsProps, FBProcedureItemType, FBProvider } from '..';
+import { withFBParts } from './FBParts.wrap';
 
 const FBParts: React.FunctionComponent<FBPartsProps> = ({
   partsState,

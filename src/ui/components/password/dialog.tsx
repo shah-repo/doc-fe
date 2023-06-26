@@ -1,23 +1,23 @@
-import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { AsyncState } from "../../../state/types";
-import { Translation } from "../../translations/types";
-import { FormContext } from "../forms/FormContext";
-import Text from "../Text";
-import PasswordForm from "./form/PasswordForm";
-import { Password } from "./types";
+import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { AsyncState } from '../../../state/types';
+import { Translation } from '../../translations/types';
+import { FormContext } from '../forms/FormContext';
+import Text from '../Text';
+import PasswordForm from './form/PasswordForm';
+import { Password } from './types';
 
 interface Props {
-  onSubmit: (values: Password) => void;
-  closeDialog: () => void;
-  isDialogOpen: boolean;
-  asyncState: AsyncState;
-  dialogTitle?: Translation;
+  onSubmit: (values: Password) => void
+  closeDialog: () => void
+  isDialogOpen: boolean
+  asyncState: AsyncState
+  dialogTitle?: Translation
 }
 
 const PasswordDialog: React.FunctionComponent<Props> = ({
-  dialogTitle = "transition.action.title",
+  dialogTitle = 'transition.action.title',
   asyncState,
   closeDialog,
   isDialogOpen,
@@ -41,7 +41,7 @@ const PasswordDialog: React.FunctionComponent<Props> = ({
       <DialogContent>
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
-            initialValues={{ password: "" }}
+            initialValues={{ password: '' }}
             onSubmit={onSubmit}
           >
             {renderForm}

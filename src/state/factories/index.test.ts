@@ -1,14 +1,14 @@
-import { apiAction, apiActionWithCallbacks } from ".";
-import { getCallbackHandler } from "../../common/tests/factories";
-import { CALL_API } from "../middlewares/api";
-import { Handlers } from "../types";
+import { apiAction, apiActionWithCallbacks } from '.';
+import { getCallbackHandler } from '../../common/tests/factories';
+import { CALL_API } from '../middlewares/api';
+import { Handlers } from '../types';
 
-describe("apiAction factory tests", () => {
-  it("returns default values", () => {
+describe('apiAction factory tests', () => {
+  it('returns default values', () => {
     const action = apiAction({});
     expect(action).toMatchObject({
       type: CALL_API,
-      url: "/",
+      url: '/',
       includeAuthorization: true,
     });
 
@@ -17,18 +17,18 @@ describe("apiAction factory tests", () => {
     expect(action.onCompleted).toBeDefined();
   });
 
-  it("overrides default values", () => {
-    const action = apiAction({ url: "test" });
-    expect(action.url).toEqual("test");
+  it('overrides default values', () => {
+    const action = apiAction({ url: 'test' });
+    expect(action.url).toEqual('test');
   });
 
-  it("does not allow type to be overriden", () => {
-    const action = apiAction({ type: "test" });
+  it('does not allow type to be overriden', () => {
+    const action = apiAction({ type: 'test' });
     expect(action.type).toEqual(CALL_API);
   });
 });
 
-describe("apiActionWithCallbacks factory tests", () => {
+describe('apiActionWithCallbacks factory tests', () => {
   const handlers: Handlers<string> = {
     successHandler: getCallbackHandler<string>(),
     errorHandler: getCallbackHandler<string>(),
@@ -45,19 +45,19 @@ describe("apiActionWithCallbacks factory tests", () => {
     onFailure,
   });
 
-  it("calls success handler", () => {
-    action.onSuccess("test", dispatch);
+  it('calls success handler', () => {
+    action.onSuccess('test', dispatch);
 
-    expect(onSuccess).toHaveBeenCalledWith("test", dispatch);
+    expect(onSuccess).toHaveBeenCalledWith('test', dispatch);
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(handlers.successHandler.execute).toHaveBeenCalledWith("test");
+    expect(handlers.successHandler.execute).toHaveBeenCalledWith('test');
   });
 
-  it("calls error handler", () => {
-    action.onFailure("test", dispatch);
+  it('calls error handler', () => {
+    action.onFailure('test', dispatch);
 
-    expect(onFailure).toHaveBeenCalledWith("test", dispatch);
+    expect(onFailure).toHaveBeenCalledWith('test', dispatch);
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(handlers.errorHandler.execute).toHaveBeenCalledWith("test");
+    expect(handlers.errorHandler.execute).toHaveBeenCalledWith('test');
   });
 });

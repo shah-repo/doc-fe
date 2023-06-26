@@ -1,24 +1,24 @@
-import { Dialog } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getTableCriteria } from "../../../common/utils/selectors";
-import { authSelectors } from "../../../state/ducks/auth";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import DialogTitle from "../dialog/DialogTitle";
-import { getHasOfficialPermissions } from "../utils/helpers";
-import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
-import GroupContentContainer from "./GroupContent.container";
+import { Dialog } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTableCriteria } from '../../../common/utils/selectors';
+import { authSelectors } from '../../../state/ducks/auth';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { userManagementActions } from '../../../state/ducks/userManagement';
+import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import DialogTitle from '../dialog/DialogTitle';
+import { getHasOfficialPermissions } from '../utils/helpers';
+import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
+import GroupContentContainer from './GroupContent.container';
 
 interface Props {
-  isOpen: boolean;
-  closeDialog: (flag?: boolean) => void;
-  selectedGroup?: LoadCompanyGroup;
-  title: any;
-  isCreateMode?: boolean;
+  isOpen: boolean
+  closeDialog: (flag?: boolean) => void
+  selectedGroup?: LoadCompanyGroup
+  title: any
+  isCreateMode?: boolean
 }
 
 const AddGroup: React.FunctionComponent<Props> = ({
@@ -30,7 +30,7 @@ const AddGroup: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useDispatch();
 
-  const TABLE_NAME = "groupManagement";
+  const TABLE_NAME = 'groupManagement';
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
@@ -64,7 +64,7 @@ const AddGroup: React.FunctionComponent<Props> = ({
         {
           ...tableCriteria,
           queryDict: {
-            groupName: "",
+            groupName: '',
           },
         },
         TABLE_NAME,

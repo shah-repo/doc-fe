@@ -1,12 +1,12 @@
-import { Box, IconButton } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import { get, isEmpty } from "lodash";
-import React from "react";
-import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps, FBText } from "..";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBTaskField } from "./FBTaskField.wrap";
+import { Box, IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import { get, isEmpty } from 'lodash';
+import React from 'react';
+import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps, FBText } from '..';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBTaskField } from './FBTaskField.wrap';
 
 const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   onClick,
@@ -101,7 +101,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
         boxProps={{ mr: 3 }}
         locale="form.builder.status"
         values={{
-          status: `: ${task.status || "DRAFT"}`,
+          status: `: ${task.status || 'DRAFT'}`,
         }}
       />
     </Box>
@@ -144,7 +144,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
           gutter={false}
           readonly={true}
           disabled={true}
-          defaultValue={get(task, "closingNoteInput.attachments", [])}
+          defaultValue={get(task, 'closingNoteInput.attachments', [])}
         />
       </Box>
     )}

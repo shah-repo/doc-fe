@@ -1,9 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBCheckbox, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from "..";
-import { withFBProcedureForm } from "./FBProcedureForm.wrap";
-
+import { Box } from '@material-ui/core';
+import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBCheckbox, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from '..';
+import { withFBProcedureForm } from './FBProcedureForm.wrap';
 
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   lotFilterOptions,
@@ -15,7 +14,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   partLoading,
   lotLoading,
   optionId,
-  mode = "eb",
+  mode = 'eb',
   type,
   disabled,
   isDocumentMPI,
@@ -26,8 +25,8 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       name="id"
       defaultValue={FB.uniqid}
     />
-    {type === FBProcedureItemType.materials &&
-    <>
+    {type === FBProcedureItemType.materials
+    && <>
       <FBAutocompleteAsync
         name="title"
         label="form.builder.part"
@@ -37,11 +36,11 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         loading={partLoading}
         disabled={partLoading}
         {...{ disabledOptions }}
-        freeSolo={mode !== "eb" ? disabled : true}
+        freeSolo={mode !== 'eb' ? disabled : true}
         withState
         shouldReloadOnInit
       />
-      {mode !== "mpi" && mode !== "lhr" && (
+      {mode !== 'mpi' && mode !== 'lhr' && (
         <FBAutocompleteAsync
           name="partLot"
           label="form.builder.part.lot"
@@ -56,13 +55,13 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       )}
     </>
     }
-    {type === FBProcedureItemType.equipment &&
-    <FBAutocompleteAsync
+    {type === FBProcedureItemType.equipment
+    && <FBAutocompleteAsync
       name="title"
       label="form.builder.title"
       rules="required"
       {...{ optionId, disabledOptions }}
-      freeSolo={mode !== "eb" ? disabled : true}
+      freeSolo={mode !== 'eb' ? disabled : true}
     />
     }
     {/* Do not show cb when user is editing item */}
@@ -92,11 +91,11 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
               optionLabelKey="text"
               {...{ disabled }}
               customStyles = {{ height: 40 }}
-              inputStyle={{ padding: "2px" }}
+              inputStyle={{ padding: '2px' }}
             />
           </Box>
         </Box>
-        {mode !== "mpi" && mode !== "lhr" && (
+        {mode !== 'mpi' && mode !== 'lhr' && (
           <FBFileUpload label="form.builder.attachments" name="attachments" />
         )}
       </>

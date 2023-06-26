@@ -1,11 +1,11 @@
-import { Box, Button, Dialog, DialogContent } from "@material-ui/core";
-import React from "react";
-import Text from "../../../../components/Text";
-import { DialogHandler } from "../../../../hooks/useDialog";
+import { Box, Button, Dialog, DialogContent } from '@material-ui/core';
+import React from 'react';
+import Text from '../../../../components/Text';
+import { DialogHandler } from '../../../../hooks/useDialog';
 
 interface Props {
-  dialog: DialogHandler;
-  onUpgradeClick: () => void;
+  dialog: DialogHandler
+  onUpgradeClick: () => void
 }
 
 export const UpgradeToLatestDialog: React.FunctionComponent<Props> = ({
@@ -13,8 +13,8 @@ export const UpgradeToLatestDialog: React.FunctionComponent<Props> = ({
   onUpgradeClick,
 }) => (
   <>
-    {dialog.isOpen &&
-      <Dialog
+    {dialog.isOpen
+      && <Dialog
         disableEscapeKeyDown={true}
         disableBackdropClick={true}
         fullWidth={true}
@@ -26,7 +26,7 @@ export const UpgradeToLatestDialog: React.FunctionComponent<Props> = ({
           id="UpgradeToLatest-content"
         >
           <Box padding={3}>
-            <Text translation="document.revision.upgrade.alert"/>
+            <Text translation="document.revision.upgrade.alert" />
           </Box>
           <Box display="flex" justifyContent="flex-end">
             <Button
@@ -34,14 +34,14 @@ export const UpgradeToLatestDialog: React.FunctionComponent<Props> = ({
               onClick={onUpgradeClick}
               id="UpgradeToLatest-proceed"
             >
-              <Text translation="common.proceed"/>
+              <Text translation="common.proceed" />
             </Button>
             <Button
               variant="outlined"
               onClick={dialog.close}
               id="UpgradeToLatest-cancel"
             >
-              <Text translation="common.cancel"/>
+              <Text translation="common.cancel" />
             </Button>
           </Box>
         </DialogContent>

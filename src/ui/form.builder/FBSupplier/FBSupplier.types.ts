@@ -1,24 +1,24 @@
-import { FBInputProps, FBProviderProps } from "..";
+import { FBInputProps, FBProviderProps } from '..';
 
 export type FBSupplierProps =
-& Pick<FBProviderProps, "dialogState" | "supplierState">
-& Pick<FBInputProps, "name" | "label" | "disabled" | "loading" | "isInputOwner">
+& Pick<FBProviderProps, 'dialogState' | 'supplierState'>
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'loading' | 'isInputOwner'>
 & {
-  handleAdd(): void;
-  isPreview?: boolean;
+  handleAdd(): void
+  isPreview?: boolean
 };
 
 export interface SupplierPostBody {
-  description: string;
+  description: string
   document: {
-    docId: string;
+    docId: string
     documentType: {
-      id: string;
-    };
-  };
+      id: string
+    }
+  }
   formDocument: {
-    id: string;
-  };
-  name: string;
-  revisionStage: number;
+    id: string
+  }
+  name: string
+  revisionStage: number
 }

@@ -1,15 +1,15 @@
-import { Box, Button } from "@material-ui/core";
-import React from "react";
-import Text from "../../components/Text";
-import AuditItemsContainer from "../audit.panel/container";
-import AddEmployeeDialogPresenter from "./dialog.presenter";
-import AddEmployeeFormContainer from "./form.container";
-import styles from "./styles";
+import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import Text from '../../components/Text';
+import AuditItemsContainer from '../audit.panel/container';
+import AddEmployeeDialogPresenter from './dialog.presenter';
+import AddEmployeeFormContainer from './form.container';
+import styles from './styles';
 
 interface Props {
-  isOpen: boolean;
-  openDialog: () => void;
-  closeDialog: () => void;
+  isOpen: boolean
+  openDialog: () => void
+  closeDialog: () => void
 }
 
 const AddEmployeePresenter: React.FunctionComponent<Props> = ({
@@ -39,8 +39,8 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
       >
         <Text message="user.management.add.employee" />
       </Button>
-      {openHistoryPanel &&
-        <AuditItemsContainer
+      {openHistoryPanel
+        && <AuditItemsContainer
           openHistoryPanel={openHistoryPanel}
           closeHistoryPanel={onHistoryPanelClick}
         />

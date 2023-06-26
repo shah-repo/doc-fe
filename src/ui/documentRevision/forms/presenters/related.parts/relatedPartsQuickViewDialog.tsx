@@ -1,23 +1,23 @@
-import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 
-import CloseIcon from "@material-ui/icons/Close";
-import { ReactComponent as NewTabIcon } from "../../../../../assets/images/new_tab.svg";
+import CloseIcon from '@material-ui/icons/Close';
+import { ReactComponent as NewTabIcon } from '../../../../../assets/images/new_tab.svg';
 
-import { DocumentRevisionSummary } from "../../../../../App";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
-import Text from "../../../../components/Text";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useStyles from "./RelatedPart.styles";
+import { DocumentRevisionSummary } from '../../../../../App';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
+import Text from '../../../../components/Text';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useStyles from './RelatedPart.styles';
 
 interface Props {
-  documentId: string;
-  isOpen: boolean;
-  onDialogClose: () => void;
-  onNewTabOpen: () => void;
-  documentRevisionId: string;
+  documentId: string
+  isOpen: boolean
+  onDialogClose: () => void
+  onNewTabOpen: () => void
+  documentRevisionId: string
 }
 
 const Loader = () => {
@@ -105,8 +105,8 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
       </DialogTitle>
       <DialogContent dividers>
         {isLoading && <Loader />}
-        {!isLoading && documentRevision &&
-            <DocumentRevisionSummary {...{ documentRevision, isSideBarHidden: true, canChangeOwnerShip: false }}/> }
+        {!isLoading && documentRevision
+            && <DocumentRevisionSummary {...{ documentRevision, isSideBarHidden: true, canChangeOwnerShip: false }} /> }
       </DialogContent>
     </Dialog>
   );

@@ -1,16 +1,16 @@
-import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useIntl } from "react-intl";
-import { Link } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { dashboardActions } from "../../../state/ducks/dashboard";
-import ChangeRequestTransitionDialogContainer from "../../change.request/dialogs/ChangeRequestTransitionDialog.container";
-import { changeRequestEditPath } from "../../change.request/utils/paths";
+import { Box, createStyles, Grid, makeStyles, Theme } from '@material-ui/core';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { dashboardActions } from '../../../state/ducks/dashboard';
+import ChangeRequestTransitionDialogContainer from '../../change.request/dialogs/ChangeRequestTransitionDialog.container';
+import { changeRequestEditPath } from '../../change.request/utils/paths';
 
 interface Props {
-  index: number;
-  changeRequest: ChangeRequest;
+  index: number
+  changeRequest: ChangeRequest
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -21,12 +21,12 @@ const styles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     itemWrap: {
-      display: "flex",
-      justifyContent: "flex-end",
+      display: 'flex',
+      justifyContent: 'flex-end',
     },
     link: {
-      textDecoration: "none",
-      color: "inherit",
+      textDecoration: 'none',
+      color: 'inherit',
     },
   }));
 
@@ -36,7 +36,7 @@ const CloseApprovalRequest: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const [crTitle] = useState(intl.formatMessage(
-    { id: "dashboard.title.task" },
+    { id: 'dashboard.title.task' },
     { crId: changeRequest.crId },
   ));
   const classes = styles();

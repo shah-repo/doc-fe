@@ -1,8 +1,8 @@
-import { FBFormProps, FBInputProps } from "..";
+import { FBFormProps, FBInputProps } from '..';
 
 export type FBQuantityUnitFieldProps =
 & FBInputProps
-& Pick<FBFormProps, "initialValues">
+& Pick<FBFormProps, 'initialValues'>
 & {
-  unitDisabled?: boolean;
+  unitDisabled?: boolean
 };

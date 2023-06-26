@@ -2,21 +2,20 @@ import {
   GridColumnMenuGroup,
   GridColumnMenuItem,
   GridColumnMenuProps,
-} from "@progress/kendo-react-grid";
-import { filter, find, findIndex } from "lodash";
-import React, { useState } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { getTableCriteria } from "../../../../common/utils/selectors";
-import { tableSearchActions } from "../../../../state/ducks/tableSearch";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import { KendoColumn } from "../../../components/common/kendo/types";
-import { toastError } from "../../../components/notifications";
-
+} from '@progress/kendo-react-grid';
+import { filter, find, findIndex } from 'lodash';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTableCriteria } from '../../../../common/utils/selectors';
+import { tableSearchActions } from '../../../../state/ducks/tableSearch';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
+import { KendoColumn } from '../../../components/common/kendo/types';
+import { toastError } from '../../../components/notifications';
 
 interface CustomColumnMenuProps extends GridColumnMenuProps {
-  columns: KendoColumn[];
-  tableName: string;
+  columns: KendoColumn[]
+  tableName: string
 }
 
 export const ColumnMenu = (props: CustomColumnMenuProps) => {
@@ -29,14 +28,14 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   const onChange = (field: string | undefined) => {
     const isGrouped = findIndex(kendoConfig.group, { field });
     if (isGrouped > -1) {
-      toastError(getTranslatedText("common.no.hide"));
+      toastError(getTranslatedText('common.no.hide'));
       return;
     }
     columns.forEach((c, i) => {
       if (c.field === field) {
         c.show = !c.show;
       }
-      if (!filter(columns, "show").length) {
+      if (!filter(columns, 'show').length) {
         columns[i].show = true;
       }
     });
@@ -49,8 +48,8 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
             ...tableCriteria,
             columnConfig,
           },
-          props.tableName
-        )
+          props.tableName,
+        ),
       );
     }
     if (props.onCloseMenu) {
@@ -59,7 +58,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   };
   const columnDef = find(columns, { field: props.column.field });
   const [columnLock, setColumnLock] = useState<KendoColumn[]>(
-    props.columns
+    props.columns,
   );
   const handleColumnLockToggle = (field) => {
     columnLock.forEach((c, i) => {
@@ -77,8 +76,8 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
             ...tableCriteria,
             columnConfig,
           },
-          props.tableName
-        )
+          props.tableName,
+        ),
       );
     }
     if (props.onCloseMenu) {
@@ -99,7 +98,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
       )}
       <GridColumnMenuItem
         {...props}
-        iconClass={`k-icon k-grid-menu-icon ${columnDef?.locked ? "k-i-unlock" : "k-i-lock"}`}
+        iconClass={`k-icon k-grid-menu-icon ${columnDef?.locked ? 'k-i-unlock' : 'k-i-lock'}`}
         onClick={() => handleColumnLockToggle(props.column.field)}
         title={
           columnDef?.locked

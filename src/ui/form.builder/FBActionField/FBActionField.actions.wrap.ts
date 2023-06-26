@@ -1,8 +1,8 @@
-import React from "react";
-import { FB, FBActionFieldActionsProps, FBActionFieldState } from "..";
+import React from 'react';
+import { FB, FBActionFieldActionsProps, FBActionFieldState } from '..';
 
 export const withFBActionFieldActions = <T extends FBActionFieldActionsProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({

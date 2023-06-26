@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback } from "react";
-import { isEmpty } from "lodash";
-import { SM, SMTabsProps } from "../../..";
+import React, { useEffect, useCallback } from 'react';
+import { isEmpty } from 'lodash';
+import { SM, SMTabsProps } from '../../..';
 
 export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {
   const Comp = (props: T) => {
@@ -16,15 +16,15 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
 
         _tabsState?.setActiveTabId(tabs[0].tabId);
       },
-      [_tabsState, tabs]
+      [_tabsState, tabs],
     );
 
-    const handleChange: SMTabsProps["onChange"] = useCallback(
+    const handleChange: SMTabsProps['onChange'] = useCallback(
       (event, newValue) => {
         _tabsState?.setActiveTabId(newValue);
         return onChange?.(event, newValue);
       },
-      [_tabsState, onChange]
+      [_tabsState, onChange],
     );
 
     return (
@@ -36,7 +36,7 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
     );
   };
 
-  Comp.displayName = "withSMTabsWrap";
+  Comp.displayName = 'withSMTabsWrap';
 
   return Comp;
 };

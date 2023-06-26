@@ -1,7 +1,7 @@
-import { filter, map } from "lodash";
-import { reaction } from "mobx";
-import React from "react";
-import { FB, FBFieldName, FBPartsProps, FBPartsState } from "..";
+import { filter, map } from 'lodash';
+import { reaction } from 'mobx';
+import React from 'react';
+import { FB, FBFieldName, FBPartsProps, FBPartsState } from '..';
 
 export const withFBParts = <T extends FBPartsProps>(
   Component: React.FunctionComponent<T>,
@@ -15,15 +15,14 @@ export const withFBParts = <T extends FBPartsProps>(
     const { workspaceState, formState } = FB.useStores();
     partsState = FB.useRef(FBPartsState);
 
-
     // MARK: Reactions
     // On schema change. This will register reaction for
     // each procedure added and it's value change.
     React.useEffect(() => reaction(
       () => workspaceState?.schema,
       (schema) => {
-        const procedureItems = filter(schema, { type: "procedure" });
-        const procedureNames = map(procedureItems, "name");
+        const procedureItems = filter(schema, { type: 'procedure' });
+        const procedureNames = map(procedureItems, 'name');
         map(procedureNames, (procedure) => {
           if (!procedure) { return; }
           if (partsState?.parts.get(procedure)) { return; }
@@ -31,7 +30,7 @@ export const withFBParts = <T extends FBPartsProps>(
         });
       }, {
         fireImmediately: true,
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -42,7 +41,7 @@ export const withFBParts = <T extends FBPartsProps>(
         () => formState?.newValues.get(name),
         (data) => {
           partsState?.parts.set(name, data);
-        }
+        },
       );
 
       reaction(
@@ -52,7 +51,7 @@ export const withFBParts = <T extends FBPartsProps>(
             return partsState?.diffParts.clear();
           }
           partsState?.diffParts.set(name, data);
-        }
+        },
       );
     }
 
@@ -66,6 +65,6 @@ export const withFBParts = <T extends FBPartsProps>(
     });
   };
 
-  Comp.displayName = "withFBParts";
+  Comp.displayName = 'withFBParts';
   return Comp;
 };

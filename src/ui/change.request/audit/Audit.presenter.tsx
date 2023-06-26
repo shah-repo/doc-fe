@@ -1,19 +1,19 @@
-import { Box, List, Typography } from "@material-ui/core";
-import { orderBy } from "lodash";
-import React from "react";
-import { MomentFormats } from "../../../common/utils/date";
-import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
-import AuditFactory from "../../components/AuditFactory";
-import DateTime from "../../components/DateTime";
-import Text from "../../components/Text";
-import UserAvatarListItem from "../../documentRevision/Sidebar/common/UserAvatarListItem";
-import { styles } from "./Audit.presenter.styles";
+import { Box, List, Typography } from '@material-ui/core';
+import { orderBy } from 'lodash';
+import React from 'react';
+import { MomentFormats } from '../../../common/utils/date';
+import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
+import { Approval, ApprovalStatus } from '../../../state/ducks/common/types';
+import AuditFactory from '../../components/AuditFactory';
+import DateTime from '../../components/DateTime';
+import Text from '../../components/Text';
+import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatarListItem';
+import { styles } from './Audit.presenter.styles';
 
 interface OwnProps {
-  audit: AuditGroupType;
-  approvals: Approval[];
-  isDrawerOpen: boolean;
+  audit: AuditGroupType
+  approvals: Approval[]
+  isDrawerOpen: boolean
 }
 
 type AuditPresenterProps = OwnProps;
@@ -55,18 +55,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    orderBy(audits, ["field"]).forEach((change, index) => {
-      if (change.field.includes("attachments")) {
+    orderBy(audits, ['field']).forEach((change, index) => {
+      if (change.field.includes('attachments')) {
         attachments.push(change);
-      } else if (change.field.includes("referenceTo")) {
+      } else if (change.field.includes('referenceTo')) {
         references.push(change);
         // } else if (change.field.includes("approvals")) {
         //   // This is a hack to not display approvers twice in history
         //   // Until BE removes field approvals
         //   return;
-      } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
+      } else if (change.field !== 'effectiveDate' || change.nextValue !== 'null') {
         const isRemovingApproverAction = (
-          change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
+          change.field === 'approvals.status' && change.nextValue === ApprovalStatus.Abandoned
         );
         if (isRemovingApproverAction) {
           const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
@@ -99,7 +99,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 message={
                   isRemovingApproverAction
                   // hack, since BE cannot make correct data for removing approvers
-                    ? "changeRequest.audit.approvers.ARRAY_DELETED"
+                    ? 'changeRequest.audit.approvers.ARRAY_DELETED'
                     : `changeRequest.audit.${change.field}.${change.type}`
                 }
               />

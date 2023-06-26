@@ -1,20 +1,20 @@
-import { reaction } from "mobx";
-import React, { useEffect } from "react";
-import { FB, FBDialogState } from "..";
-import FBPOApprovalMatrixState from "./FBPOApprovalMatrix.state";
-import { FBPOApprovalMatrixFieldProps, POApprovalMatrix } from "./FBPOApprovalMatrix.types";
-import FBPOApprovalMatrixForm from "./form/FBPOApprovalMatrixForm";
-import FBPOApprovalMatrixFormActions from "./form/FBPOApprovalMatrixForm.actions";
+import { reaction } from 'mobx';
+import React, { useEffect } from 'react';
+import { FB, FBDialogState } from '..';
+import FBPOApprovalMatrixState from './FBPOApprovalMatrix.state';
+import { FBPOApprovalMatrixFieldProps, POApprovalMatrix } from './FBPOApprovalMatrix.types';
+import FBPOApprovalMatrixForm from './form/FBPOApprovalMatrixForm';
+import FBPOApprovalMatrixFormActions from './form/FBPOApprovalMatrixForm.actions';
 
 export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
 
   const Comp = ({
     handleAdd,
     poamState,
     dialogState,
-    name = "",
+    name = '',
     handleRevert,
     disabled,
     isInputOwner,
@@ -37,7 +37,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       isOutput,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-
 
     // const stages = [1, 2, 3];
     // const approvalLevel: POApprovalMatrixLevel[] = [];
@@ -91,7 +90,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     handleAdd = () => {
       dialogState?.config({
         open: true,
-        title: "form.builder.add.item",
+        title: 'form.builder.add.item',
         content: <FBPOApprovalMatrixForm initialValues={{ threshold: 0 }}
           signatureStages={[1, 2, 3]} {...{ disabled }} />,
         actions: <FBPOApprovalMatrixFormActions />,
@@ -103,7 +102,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     React.useEffect(() => {
       reaction(
         () => poamState?.approvalLevels,
-        () => formState?.setFieldAutosave(name)
+        () => formState?.setFieldAutosave(name),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -119,6 +118,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     });
   };
 
-  Comp.displayName = "withFBPOApprovalMatrix";
+  Comp.displayName = 'withFBPOApprovalMatrix';
   return Comp;
 };

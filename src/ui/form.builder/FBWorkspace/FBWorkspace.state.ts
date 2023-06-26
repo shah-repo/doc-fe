@@ -1,19 +1,19 @@
-import { includes, isArray, isEmpty, isUndefined, map, omit, size } from "lodash";
-import { action, computed, get, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
-import { appGlobals } from "../../../appGlobals";
-import { GroupTag, UserState } from "../../../state/ducks/auth/types";
-import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
-import FBDataStore from "../FBStore/FBDataStore";
-import FBStore from "../FBStore/FBStore";
+import { includes, isArray, isEmpty, isUndefined, map, omit, size } from 'lodash';
+import { action, computed, get, observable, set } from 'mobx';
+import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { appGlobals } from '../../../appGlobals';
+import { GroupTag, UserState } from '../../../state/ducks/auth/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import FBRequest from '../FBApi/FBApi.request';
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
+import FBDataStore from '../FBStore/FBDataStore';
+import FBStore from '../FBStore/FBStore';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 
 class FBWorkspaceState extends FBSchemaState {
-  @observable public mode: FBWorkspaceMode = "none";
+  @observable public mode: FBWorkspaceMode = 'none';
   @observable approvals?: FBInlineApprovalBody[];
   @observable loadAudit = false;
   @observable revisionChangeType?: RevisionChangeType;
@@ -38,122 +38,120 @@ class FBWorkspaceState extends FBSchemaState {
 
   public omitAutosave = false;
 
-  public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
+  public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
     this.schema = schema || [];
-    this.mode = mode || "none";
+    this.mode = mode || 'none';
     this.autosave = autosave;
   }
 
-  public get auth(): FBWorkspaceExternalState["auth"] | undefined {
+  public get auth (): FBWorkspaceExternalState['auth'] | undefined {
     return this.externalState?.auth;
   }
 
-  public get currentUser(): UserState | undefined {
+  public get currentUser (): UserState | undefined {
     return this.auth?.user;
   }
 
-  public get userTags(): GroupTag[] | undefined {
+  public get userTags (): GroupTag[] | undefined {
     return this.auth?.groups.tags;
   }
 
-  public get company(): FBWorkspaceExternalState["company"] | undefined {
+  public get company (): FBWorkspaceExternalState['company'] | undefined {
     return this.externalState?.company;
   }
 
-  public get id(): string | undefined {
+  public get id (): string | undefined {
     return this.document?.id || this.changeRequest?.id;
   }
 
-  public get documentId(): string | undefined {
+  public get documentId (): string | undefined {
     return this.document?.document?.id;
   }
 
-  public get documentStatus(): DocumentRevisionStatus {
+  public get documentStatus (): DocumentRevisionStatus {
     return this.document?.status || DocumentRevisionStatus.Draft;
   }
 
-  public get changeRequestStatus(): ChangeRequestStatus {
+  public get changeRequestStatus (): ChangeRequestStatus {
     return this.changeRequest?.state || ChangeRequestStatus.Draft;
   }
 
-  public get isReleased(): boolean {
+  public get isReleased (): boolean {
     return this.document?.status === DocumentRevisionStatus.Released;
   }
 
-  public get isDraft(): boolean {
+  public get isDraft (): boolean {
     return this.document?.status === DocumentRevisionStatus.Draft;
   }
 
-  public get isPendingChange(): boolean {
+  public get isPendingChange (): boolean {
     return this.document?.status === DocumentRevisionStatus.PendingChange;
   }
 
-  public get isDeprecated(): boolean {
+  public get isDeprecated (): boolean {
     return this.document?.status === DocumentRevisionStatus.Deprecated;
   }
 
-  public get isOutput(): boolean {
+  public get isOutput (): boolean {
     const { id } = this.document?.formDocument || {};
     return !isEmpty(id);
   }
 
-  public get isLHRProductionBuild(): boolean {
+  public get isLHRProductionBuild (): boolean {
     return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
-      toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
   }
 
-  public get isChangeRequest(): boolean {
+  public get isChangeRequest (): boolean {
     return !isEmpty(this.changeRequest);
   }
 
-  public get isOutputSchema(): boolean {
+  public get isOutputSchema (): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
   }
 
-  public get isRevised(): boolean | undefined {
+  public get isRevised (): boolean | undefined {
     const { version = 0, revision = 0, outputRevision = false } = this.document || {};
     return ((version > 1) && (revision > 1)) || outputRevision;
   }
 
-
-  @computed public get active(): boolean {
-    return this.mode !== "none";
+  @computed public get active (): boolean {
+    return this.mode !== 'none';
   }
 
-  @computed public get isStarter() {
+  @computed public get isStarter () {
     return (
-      (this.mode === "design" || this.mode === "formDesign") &&
-      !size(this.schema?.filter((item) => !item.deleted))
+      (this.mode === 'design' || this.mode === 'formDesign')
+      && !size(this.schema?.filter((item) => !item.deleted))
     );
   }
 
   // TO BE REMOVED!!
   @action public resetSchema = () => {
     const schema = this.schema;
-    set(this, "schema", []);
-    set(this, "schema", schema);
+    set(this, 'schema', []);
+    set(this, 'schema', schema);
   };
 
   @action public setMode = (mode: FBWorkspaceMode) => {
-    set(this, "mode", mode);
+    set(this, 'mode', mode);
   };
 
   @action public setIsPreview = (isPreview: boolean) => {
-    set(this, "isPreview", isPreview);
+    set(this, 'isPreview', isPreview);
   };
 
   @action public setAutosave = (autosave: boolean) => {
-    set(this, "autosave", autosave);
+    set(this, 'autosave', autosave);
   };
 
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
-    set(this, "revisionChangeType", revisionChangeType);
+    set(this, 'revisionChangeType', revisionChangeType);
   };
 
-  @action public getMode = (): FBWorkspaceMode => get(this, "mode");
+  @action public getMode = (): FBWorkspaceMode => get(this, 'mode');
 
   @action public getFieldByName = (name: string) => this.document?.formInput?.[name];
 
@@ -164,10 +162,10 @@ class FBWorkspaceState extends FBSchemaState {
     return this.mode === mode;
   };
 
-  @action public getIsInputOwner = ( name: string ): boolean => {
+  @action public getIsInputOwner = (name: string): boolean => {
     const {
       document,
-      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
+      externalState: { auth: { user: { employeeId = '' } = {} } = {} } = {},
     } = this || {};
     const inputOwner = document?.inputOwners?.[name];
 
@@ -175,7 +173,7 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   @action public setDirty = (isDirty: boolean) => {
-    set(this, "isDirty", isDirty);
+    set(this, 'isDirty', isDirty);
   };
 
   @action public setFormInputSync = (name: string, value: any) => {
@@ -184,31 +182,30 @@ class FBWorkspaceState extends FBSchemaState {
 
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
-    const { id, mode, autosave } = this;
-    if (this.isPreview) { return; }
-    if ((mode === "form") && !values) { return; }
-    if (!autosave && !excludeAutoSave) { return; }
-    if (!id) { return; }
+    const { id, mode, autosave, isPreview } = this;
+    if (!id || (mode === 'form' && !values) || (!autosave && !excludeAutoSave) || isPreview) {
+      return;
+    }
     this.loading = true;
-    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
     let body = {};
     switch (mode) {
-      case "design":
+      case 'design':
         body = {
           formTemplate: { schema },
         };
         break;
-      case "form":
-      case "formDesign":
+      case 'form':
+      case 'formDesign':
         if (values) {
           body = {
             formInput: omit(values,
               Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
-            ...mode === "formDesign" && this.isOutputSchema && { schema },
+            ...mode === 'formDesign' && this.isOutputSchema && { schema },
           };
         } else {
           body = {
-            ...mode === "formDesign" && this.isOutputSchema && { schema },
+            ...mode === 'formDesign' && this.isOutputSchema && { schema },
           };
         }
         break;
@@ -222,7 +219,7 @@ class FBWorkspaceState extends FBSchemaState {
       url,
       urlValues: { id },
       body,
-      method: "patch",
+      method: 'patch',
     }, (data, error) => {
       this.omitAutosave = false;
       if (error) {
@@ -231,11 +228,11 @@ class FBWorkspaceState extends FBSchemaState {
       } else {
         this.setDirty(false);
         this.setFormInputData(data);
-        if (!isEmpty(this.getItemsByType("inlineapproval"))) {
+        if (!isEmpty(this.getItemsByType('inlineapproval'))) {
           FBStore.audit.set({
             url: FBEndpoint.DocumentRevisionAudit,
             urlValues: { documentId: id },
-            method: "get",
+            method: 'get',
           });
         }
         if (FBStore?.isHistoryTabSelected) {
@@ -249,7 +246,6 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   public undoPO = (prevDocumentRevision?: DocumentRevision) => {
-
     this.loadAudit = false;
     this.loading = true;
     this.omitAutosave = true;
@@ -257,6 +253,7 @@ class FBWorkspaceState extends FBSchemaState {
     const body = {
       formInput: prevDocumentRevision?.formInput,
       description: prevDocumentRevision?.description,
+      attachments: prevDocumentRevision?.attachments,
     };
     const { id } = this;
 
@@ -302,7 +299,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.loadDocumentRevApi.set({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
-      method: "get",
+      method: 'get',
     }, (data, error) => {
       if (error) {
         this.loadDocumentRevApi.onError(error);
@@ -310,6 +307,18 @@ class FBWorkspaceState extends FBSchemaState {
         this.loadDocumentRevApi.onSuccess();
         this.setFormInputData(data);
       }
+    });
+  };
+
+  public updateDocRevById = (documentRevision?: Partial<DocumentRevision>, id?: string) => {
+    return this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      body: {
+        formInput: documentRevision?.formInput,
+        description: documentRevision?.description,
+      },
+      method: 'patch',
     });
   };
 

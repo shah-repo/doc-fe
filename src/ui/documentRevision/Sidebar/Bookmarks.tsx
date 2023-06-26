@@ -1,14 +1,14 @@
-import { Box, IconButton } from "@material-ui/core";
-import copy from "copy-to-clipboard";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { Link } from "react-router-dom";
-import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
+import { Box, IconButton } from '@material-ui/core';
+import copy from 'copy-to-clipboard';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ReactComponent as CopyIcon } from '../../../assets/images/copy_outlined.svg';
+import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from '../../form.builder';
+import Colors from '../../layout/theme/utils/colors';
 
 interface SidebarPresenterProps {
-  bookmarks?: FBBookmarkItem[];
+  bookmarks?: FBBookmarkItem[]
 }
 
 const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
@@ -24,14 +24,14 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
     <Box pt={0.4}>
       <FBMapWrapper<FBBookmarkItem[]> collection={bookmarks || []}>
         {(bookmark: FBBookmarkItem, index) => {
-          const { name: hash, label = "" } = bookmark;
-          const link = window.location.href.split("#");
+          const { name: hash, label = '' } = bookmark;
+          const link = window.location.href.split('#');
           return (
             <Box display="flex" py={0.3} pl={1} key={`fb-bookmark-${hash}-${index}`}>
               <Box flexGrow={1}>
                 <Link
                   to={{ hash }}
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: 'none' }}
                   onClick={() => setSelectedIndex(index)}
                 >
                   <Box
@@ -45,7 +45,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
               <Box mr={3.5}>
                 <IconButton size="small" onClick={() => copy(`${link[0]}#${hash}`)}>
                   <FBTooltip title="common.copy.link">
-                    <CopyIcon/>
+                    <CopyIcon />
                   </FBTooltip>
                 </IconButton>
               </Box>

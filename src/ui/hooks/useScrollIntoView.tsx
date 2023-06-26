@@ -1,6 +1,6 @@
-import { useLayoutEffect } from "react";
-import { useLocation } from "react-router-dom";
-import useDidMount from "./useDidMount";
+import { useLayoutEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import useDidMount from './useDidMount';
 
 export const useScrollIntoView = () => {
   const location = useLocation();
@@ -13,6 +13,6 @@ export const useScrollIntoView = () => {
     }
     const selector = `[id="${hash.substring(1)}"]`;
     const element = document.querySelector(selector) as HTMLElement;
-    element && element.scrollIntoView({ behavior: "smooth" });
+    element && element.scrollIntoView({ behavior: 'smooth' });
   }, [didMount, location.hash]);
 };

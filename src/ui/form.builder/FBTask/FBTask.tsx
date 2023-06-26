@@ -1,9 +1,8 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTaskField, FBTaskItem, FBTaskProps, FBText } from "..";
-import Colors from "../../layout/theme/utils/colors";
-import { withFBTask } from "./FBTask.wrap";
-
+import { Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTaskField, FBTaskItem, FBTaskProps, FBText } from '..';
+import Colors from '../../layout/theme/utils/colors';
+import { withFBTask } from './FBTask.wrap';
 
 const FBTask: React.FunctionComponent<FBTaskProps> = ({
   onClick,
@@ -34,8 +33,8 @@ const FBTask: React.FunctionComponent<FBTaskProps> = ({
         endIcon={loading && <CircularProgress size={16} />}
         {...{ disabled }}
       />
-      {!canAddTask &&
-      <FBText locale="form.builder.warning.tasks" boxProps={{ my: 4, color: Colors.error_red }} />
+      {!canAddTask
+      && <FBText locale="form.builder.warning.tasks" boxProps={{ my: 4, color: Colors.error_red }} />
       }
     </Box>
   </FBProvider>

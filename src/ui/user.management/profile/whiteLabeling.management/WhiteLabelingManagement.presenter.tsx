@@ -1,30 +1,30 @@
-import { Box, Button, createStyles, InputLabel, Link, makeStyles, TextareaAutosize, Theme } from "@material-ui/core";
-import { Field, FormikProps } from "formik";
-import React from "react";
-import { Nullable } from "../../../../state/ducks/common/types";
-import { AsyncState } from "../../../../state/types";
-import FormProgress from "../../../components/forms/FormProgress";
-import FormWrapper from "../../../components/forms/FormWrapper";
-import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
+import { Box, Button, createStyles, InputLabel, Link, makeStyles, TextareaAutosize, Theme } from '@material-ui/core';
+import { Field, FormikProps } from 'formik';
+import React from 'react';
+import { Nullable } from '../../../../state/ducks/common/types';
+import { AsyncState } from '../../../../state/types';
+import FormProgress from '../../../components/forms/FormProgress';
+import FormWrapper from '../../../components/forms/FormWrapper';
+import Text from '../../../components/Text';
+import Colors from '../../../layout/theme/utils/colors';
 
 interface Props extends FormikProps<any>{
-  onChange: (event: React.FormEvent<HTMLInputElement>) => void;
-  s3link: Nullable<string>;
-  asyncState: AsyncState;
+  onChange: (event: React.FormEvent<HTMLInputElement>) => void
+  s3link: Nullable<string>
+  asyncState: AsyncState
 }
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     textautosizer: {
-      width: "-webkit-fill-available",
+      width: '-webkit-fill-available',
       borderRadius: theme.spacing(0.5),
       borderColor: Colors.hint_gray,
       color: Colors.dark_gray,
     },
     label: {
       margin: theme.spacing(3, 0, 3, 0),
-      fontWeight: "bold",
+      fontWeight: 'bold',
       color: Colors.dark_gray,
     },
   },
@@ -45,13 +45,13 @@ const WhiteLabelingManagementPresenter: React.FunctionComponent<Props> = ({
       <InputLabel className={classes.label}>White Labeling</InputLabel>
       <Box mb={2}>
         <input
-          id={"whiteLabelingLogo"}
+          id="whiteLabelingLogo"
           accept="image/png, image/jpeg"
           type="file"
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           onChange={onChange}
         />
-        <label htmlFor={"whiteLabelingLogo"}>
+        <label htmlFor="whiteLabelingLogo">
           <Link variant="button" id="whiteLabelingLogo-uploadPhoto">
             Click here to upload photo to generate logo link
           </Link>
@@ -65,7 +65,7 @@ const WhiteLabelingManagementPresenter: React.FunctionComponent<Props> = ({
       <FormWrapper
         {...{ dirty, initialValues, resetForm }}
       >
-        <Field name={"whiteLabeling"}>
+        <Field name="whiteLabeling">
           {({
             field,
           }) => (
@@ -84,7 +84,7 @@ const WhiteLabelingManagementPresenter: React.FunctionComponent<Props> = ({
         </Box>
         <Box display="flex" justifyContent="flex-end">
           <Button type="submit" variant="outlined">
-            <Text translation={"common.save"} />
+            <Text translation="common.save" />
           </Button>
         </Box>
       </FormWrapper>

@@ -1,5 +1,5 @@
 export interface FBPassPercentageValue {
-  decrease?: number;
-  increase?: number;
-  value?: string;
+  decrease?: number
+  increase?: number
+  value?: string
 }

@@ -1,33 +1,33 @@
-import React, { useMemo } from "react";
-import { connect } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
-import { DocumentRevision, RevisionChangeType } from "../../state/ducks/documentRevisions/types";
-import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
-import { ApplicationState } from "../../state/reducers";
-import { documentVersionPath } from "../document.revision/utils/paths";
-import FBDataStore from "../form.builder/FBStore/FBDataStore";
-import useAsync from "../hooks/useAsync";
-import { DocumentCloneType } from "./Clone.container";
-import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
-import { DocumentRevisionFormValues } from "./forms/types";
+import React, { useMemo } from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
+import { DocumentRevision, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
+import { documentsActions, documentsSelectors } from '../../state/ducks/documents';
+import { ApplicationState } from '../../state/reducers';
+import { documentVersionPath } from '../document.revision/utils/paths';
+import FBDataStore from '../form.builder/FBStore/FBDataStore';
+import useAsync from '../hooks/useAsync';
+import { DocumentCloneType } from './Clone.container';
+import DocumentRevisionForm from './forms/DocumentRevisionForm.container';
+import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from './forms/transform';
+import { DocumentRevisionFormValues } from './forms/types';
 
 interface DispatchProps {
-  create: typeof documentRevisionsActions.create;
-  setDocId: typeof documentsActions.setDocumentProposedId;
-  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
-  loadDocument: typeof documentRevisionsActions.loadDocument;
+  create: typeof documentRevisionsActions.create
+  setDocId: typeof documentsActions.setDocumentProposedId
+  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId
+  loadDocument: typeof documentRevisionsActions.loadDocument
 }
 
 interface OwnProps {
-  documentRevision: DocumentRevision;
-  type?: DocumentCloneType;
-  isNewVersion: boolean;
+  documentRevision: DocumentRevision
+  type?: DocumentCloneType
+  isNewVersion: boolean
 }
 
 interface StateProps {
-  proposedDocId: string;
+  proposedDocId: string
 }
 
 type DocumentRevisionCreateContainerProps =
@@ -41,14 +41,14 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   attachments: [],
   referenceTo: [],
   revisionChangeType: RevisionChangeType.NextRevision,
   document: {
-    docId: "",
-    documentType: { id: "" },
+    docId: '',
+    documentType: { id: '' },
   },
 
   formTemplate: { outputDocumentTypes: [], schema: [] },
@@ -62,7 +62,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   history,
   documentRevision,
   setDocId,
-  type = "none",
+  type = 'none',
   loadDocumentProposedId,
   proposedDocId,
   loadDocument,
@@ -71,10 +71,10 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
 
   const initialValues = useMemo(() => {
-    if (type === "newVersion") {
+    if (type === 'newVersion') {
       return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
     }
-    if (type === "newOutput") {
+    if (type === 'newOutput') {
       return toDocumentRevisionFormValuesForOutput(documentRevision);
     }
     if (history.location.state) {
@@ -83,7 +83,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
     return DEFAULT_INITIAL_VALUES();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevision?.id, type, history.location.state]);
-  type = history.location.state ?? false ? "newOutput" : type;
+  type = history.location.state ?? false ? 'newOutput' : type;
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
@@ -107,7 +107,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
     });
   };
 
-  const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
+  const showRevisionTypeChange = type === 'newVersion' && !!documentRevision;
 
   return (
     <DocumentRevisionForm

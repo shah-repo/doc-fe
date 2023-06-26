@@ -1,21 +1,21 @@
-import { Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { PendingAction, PendingActionType } from "../../state/ducks/dashboard/types";
-import { AsyncState } from "../../state/types";
-import AsyncGate from "../components/AsyncGate";
-import Text from "../components/Text";
-import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
-import CloseApprovalRequest from "./action.types/CloseApprovalRequest";
-import DocumentRevisionApproval from "./action.types/DocumentRevisionApproval";
-import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApproval";
-import TaskApproval from "./action.types/TaskApproval";
-import TrainingRequest from "./action.types/TrainingRequest";
-import { styles } from "./Dashboard.styles";
+import { Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { PendingAction, PendingActionType } from '../../state/ducks/dashboard/types';
+import { AsyncState } from '../../state/types';
+import AsyncGate from '../components/AsyncGate';
+import Text from '../components/Text';
+import ChangeRequestApproval from './action.types/ChangeRequestApproval';
+import CloseApprovalRequest from './action.types/CloseApprovalRequest';
+import DocumentRevisionApproval from './action.types/DocumentRevisionApproval';
+import PurchaseOrderApproval from './action.types/purchaseOrder/PurchaseOrderApproval';
+import TaskApproval from './action.types/TaskApproval';
+import TrainingRequest from './action.types/TrainingRequest';
+import { styles } from './Dashboard.styles';
 
 interface Props {
-  loadPendingActions: any;
-  loadPendingActionsListAsyncState: AsyncState ;
-  pendingActions: PendingAction[];
+  loadPendingActions: any
+  loadPendingActionsListAsyncState: AsyncState
+  pendingActions: PendingAction[]
 }
 
 const DashboardPresenter: React.FunctionComponent<Props> = ({
@@ -31,30 +31,30 @@ const DashboardPresenter: React.FunctionComponent<Props> = ({
               if (pendingAction.changeReq) {
                 return <ChangeRequestApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
               }
-              return pendingAction.docRev && pendingAction.approval &&
-                <DocumentRevisionApproval
+              return pendingAction.docRev && pendingAction.approval
+                && <DocumentRevisionApproval
                   key={index}
                   index={index}
                   documentRevision={pendingAction.docRev}
                   approval={pendingAction.approval}
                 />;
             case PendingActionType.PENDING_TRAINING_RECORDS:
-              return pendingAction.trainingRecord &&
-                <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;
+              return pendingAction.trainingRecord
+                && <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;
             case PendingActionType.PURCHASE_ORDERS:
-              return pendingAction.documentRevision &&
-                <PurchaseOrderApproval
+              return pendingAction.documentRevision
+                && <PurchaseOrderApproval
                   key={index}
                   index={index}
                   documentRevision={pendingAction.documentRevision}
-                  docRevAttachments={pendingAction.docRevAttachments || []}/>;
+                  docRevAttachments={pendingAction.docRevAttachments || []} />;
             case PendingActionType.PENDING_DOC_CONTROL:
             case PendingActionType.PENDING_TASK:
-              return pendingAction.changeReq &&
-                <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
+              return pendingAction.changeReq
+                && <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
             case PendingActionType.APPROVED_APPROVAL_REQUESTS:
-              return pendingAction.changeReq &&
-                <CloseApprovalRequest key={index} index={index} changeRequest={pendingAction.changeReq} />;
+              return pendingAction.changeReq
+                && <CloseApprovalRequest key={index} index={index} changeRequest={pendingAction.changeReq} />;
             default:
               return <Text key={index} translation="common.undefined" />;
           }
@@ -64,7 +64,7 @@ const DashboardPresenter: React.FunctionComponent<Props> = ({
   );
   const renderNoPendingActions = pendingActions.length === 0 && (
     <Typography className={classes.noPendingActions}>
-      <Text translation="dashboard.noPendingActions" dataCy="dashboard.noPendingActions"/>
+      <Text translation="dashboard.noPendingActions" dataCy="dashboard.noPendingActions" />
     </Typography>
   );
 

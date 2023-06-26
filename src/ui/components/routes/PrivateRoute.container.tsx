@@ -1,13 +1,13 @@
-import queryString from "query-string";
-import React, { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, RouteProps, useHistory, useLocation } from "react-router-dom";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { companyActions } from "../../../state/ducks/company";
-import PrivateRoutePresenter from "./PrivateRoute.presenter";
+import queryString from 'query-string';
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, RouteProps, useHistory, useLocation } from 'react-router-dom';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
+import { companyActions } from '../../../state/ducks/company';
+import PrivateRoutePresenter from './PrivateRoute.presenter';
 
 interface OwnProps extends RouteProps {
-  component: React.ComponentType;
+  component: React.ComponentType
 }
 
 type Props = OwnProps;

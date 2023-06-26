@@ -1,0 +1,109 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { v4 as generateUuid } from 'uuid';
+import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDialog, FBDialogState, FBDocTypeGroup, FBProvider } from '..';
+import { translate } from '../../../common/intl';
+import { IconButton } from '../../components/forms/fields-next';
+import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import Grid from './components/Grid';
+import { GridProps } from './components/Grid/types';
+import { DEFAULT_CATEGORY_LABEL } from './constants';
+import createSchema from './schema';
+import useStyles from './styles';
+import { withFBApprovalMatrix } from './wrap';
+
+const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
+
+const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
+  const { data, handleSave, disabled, withoutStatus, size } = props;
+  const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
+  const classes = useStyles();
+
+  const schema = createSchema({
+    data,
+    withoutStatus,
+    clearRightBorderClassName: classes.clearRightBorder,
+    cellARClassName: classes.cellAR,
+    cellARHeaderClassName: classes.cellARHeader,
+  });
+
+  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
+    id: generateUuid(),
+    docType: {
+      name: '',
+      group: FBDocTypeGroup.OTHER,
+      active: true,
+      acronym: '',
+      category: '',
+      needsSignature: false,
+      defaultTraining: false,
+    },
+    approvalRoles: Object.keys(FBApprovalMatrixRoleTitles).reduce(
+      (acc, key) => {
+        acc[key] = new Array(approvalRoles.length).fill(false);
+        return acc;
+      },
+      {},
+    ) as FBApprovalRolesStages,
+  });
+
+  approvalMatrix?.forEach((am) => {
+    am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
+  });
+
+  const renderTable = () => (
+    <GridTable
+      data={approvalMatrix}
+      schema={schema}
+      disabled={disabled}
+      generateNewItem={generateNewItem}
+      onSave={handleSave}
+      withoutStatus={withoutStatus}
+    />
+  );
+
+  const dialogState = FB.useRef(FBDialogState);
+  const handleFullscreenClick = () => {
+    dialogState.config({
+      title: 'tabId.matrixdetails',
+      content: (
+        <Box className={cx(classes.container, classes.fullScreen)}>
+          {renderTable()}
+        </Box>
+      ),
+      open: true,
+    });
+  };
+
+  return (
+    <FBProvider dialogState={dialogState}>
+      <FBDialog fullscreen />
+      <Box
+        className={classes.container}
+        {...size && { height: size.height - 80 }}
+      >
+        <StyleTooltip
+          title={translate('form.builder.fullscreen.mode')}
+          placement="top"
+          arrow
+        >
+          <IconButton
+            className={classes.buttonFullscreen}
+            kind="ghost"
+            data-cy="button-fullscreen"
+            onClick={handleFullscreenClick}
+          >
+            <FontAwesomeIcon icon={solid('expand')} />
+          </IconButton>
+        </StyleTooltip>
+        {renderTable()}
+      </Box>
+    </FBProvider>
+  );
+};
+
+export default withFBApprovalMatrix(FBApprovalMatrix);

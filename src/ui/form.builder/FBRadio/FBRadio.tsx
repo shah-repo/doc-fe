@@ -1,8 +1,8 @@
-import { FormControlLabel, Radio } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBInputProps } from "..";
-import Text from "../../components/Text";
-import { withFBCheckbox } from "../FBCheckbox/FBCheckbox.wrap";
+import { FormControlLabel, Radio } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBInputProps } from '..';
+import Text from '../../components/Text';
+import { withFBCheckbox } from '../FBCheckbox/FBCheckbox.wrap';
 
 const FBRadio: React.FunctionComponent<FBInputProps> = ({
   label,

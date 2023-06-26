@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBInput, FBInputProps, FBTextField } from "..";
-import { styles } from "../styles/FBEditorCheckbox.styles";
-import { withFBRange } from "./FBRange.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBInput, FBInputProps, FBTextField } from '..';
+import { styles } from '../styles/FBEditorCheckbox.styles';
+import { withFBRange } from './FBRange.wrap';
 
 const FBRange: React.FunctionComponent<FBInputProps> = ({
   name,
@@ -33,7 +33,7 @@ const FBRange: React.FunctionComponent<FBInputProps> = ({
           gutter={false}
         />
       </Box>
-    </ FBInput>
+    </FBInput>
   );
 };
 

@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch } from "react-redux";
-import { attachmentsActions } from "../../../../../state/ducks/attachments";
-import { WatermarkRequest } from "../../../../../state/ducks/attachments/types";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import useDialog from "../../../../hooks/useDialog";
-import Text from "../../../Text";
-import WatermarkPresenter from "./presenter";
+import { Button } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { attachmentsActions } from '../../../../../state/ducks/attachments';
+import { WatermarkRequest } from '../../../../../state/ducks/attachments/types';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import useDialog from '../../../../hooks/useDialog';
+import Text from '../../../Text';
+import WatermarkPresenter from './presenter';
 
 interface Props {
-  newWatermarkRequest: Nullable<WatermarkRequest>;
-  newWatermarkError: string;
+  newWatermarkRequest: Nullable<WatermarkRequest>
+  newWatermarkError: string
 }
 
 const WatermarkContainer: React.FunctionComponent<Props> = ({
@@ -20,7 +20,7 @@ const WatermarkContainer: React.FunctionComponent<Props> = ({
   newWatermarkError,
 }) => {
   const intl = useIntl();
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [content, setContent] = useState({});
   const [requestedWatermarks, setRequestedWatermarks] = useState<WatermarkRequest[]>([]);
   const dialog = useDialog();
@@ -34,14 +34,14 @@ const WatermarkContainer: React.FunctionComponent<Props> = ({
 
     dispatch(attachmentsActions.addWatermark(newWatermarkRequest.id));
     setRequestedWatermarks([...requestedWatermarks, newWatermarkRequest]);
-    setTitle("common.success");
+    setTitle('common.success');
     setContent({
-      translation: "watermark.successfully.requested",
+      translation: 'watermark.successfully.requested',
       values: {
         fileType: newWatermarkRequest.hasWatermarks ? intl.formatMessage({
-          id: "watermark.file",
+          id: 'watermark.file',
         }) : intl.formatMessage({
-          id: "pdf.file",
+          id: 'pdf.file',
         }),
         file: newWatermarkRequest.attachment.name,
         type: newWatermarkRequest.attachment.type,
@@ -54,7 +54,7 @@ const WatermarkContainer: React.FunctionComponent<Props> = ({
       return;
     }
 
-    setTitle("common.error");
+    setTitle('common.error');
     setContent({ message: newWatermarkError });
     dialog.open();
   }, [newWatermarkError]);

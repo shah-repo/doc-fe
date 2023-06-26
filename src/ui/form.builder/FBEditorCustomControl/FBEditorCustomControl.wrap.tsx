@@ -1,9 +1,8 @@
-import { map } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBEditorCustomControlProps, FBEditorCustomControlState, FBSchemaProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-
+import { map } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBEditorCustomControlProps, FBEditorCustomControlState, FBSchemaProps } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
 export const withFBEditorCustomControl = <T extends FBEditorCustomControlProps>(
   Component: React.FunctionComponent<T>,

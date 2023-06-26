@@ -1,21 +1,21 @@
-import { Box, BoxProps, Grid, IconButton, ListItem, Tooltip, Typography } from "@material-ui/core";
-import { HighlightOffOutlined } from "@material-ui/icons";
-import React from "react";
-import { Link } from "react-router-dom";
-import { stripTags } from "../../../common/utils/helpers";
-import { DataProps } from "../../../state/ducks/common/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import { documentVersionPath } from "../utils/paths";
-import { styles } from "./builds.presenter.styles";
+import { Box, BoxProps, Grid, IconButton, ListItem, Tooltip, Typography } from '@material-ui/core';
+import { HighlightOffOutlined } from '@material-ui/icons';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { stripTags } from '../../../common/utils/helpers';
+import { DataProps } from '../../../state/ducks/common/types';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../components/Text';
+import Colors from '../../layout/theme/utils/colors';
+import { documentVersionPath } from '../utils/paths';
+import { styles } from './builds.presenter.styles';
 
 interface OwnProps {
-  label: string;
-  isDraft?: boolean;
-  handleRemoveBuild: () => void;
-  showRemoveButton?: boolean;
-  labelFont?: BoxProps;
+  label: string
+  isDraft?: boolean
+  handleRemoveBuild: () => void
+  showRemoveButton?: boolean
+  labelFont?: BoxProps
 }
 
 type Props = OwnProps & DataProps<DocumentRevision[]>;
@@ -59,8 +59,8 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
             {`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
           </Typography>
         </Link>
-        {showRemoveButton &&
-        (<Tooltip id="tooltip-removeBuild" title={<Text translation="common.remove" />}>
+        {showRemoveButton
+        && (<Tooltip id="tooltip-removeBuild" title={<Text translation="common.remove" />}>
           <IconButton
             id="removeBuild"
             aria-label="removeBuild"
@@ -77,7 +77,7 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
   const buildsEmptyRenderer = () => (
     <Box pb={2}>
       <Typography variant="h5" className={classes.labelFont}>
-        <Text message="common.none"/>
+        <Text message="common.none" />
       </Typography>
     </Box>
   );

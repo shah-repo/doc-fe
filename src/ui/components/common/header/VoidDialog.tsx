@@ -1,21 +1,21 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from "@material-ui/core";
-import moment from "moment";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { ReactComponent as AlertIcon } from "../../../../assets/images/alert.svg";
-import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
-import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { styles } from "../../../app/alert.dialog/AlertDialog.styles";
-import Text from "../../../components/Text";
-import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { DialogHandler } from "../../../hooks/useDialog";
+import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import moment from 'moment';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { ReactComponent as AlertIcon } from '../../../../assets/images/alert.svg';
+import { MomentFormats, TIME_ZONE } from '../../../../common/utils/date';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { styles } from '../../../app/alert.dialog/AlertDialog.styles';
+import Text from '../../../components/Text';
+import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from '../../../form.builder';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { DialogHandler } from '../../../hooks/useDialog';
 
 interface Props {
-  dialog: DialogHandler;
-  docRevId: string;
-  docRevOwner: string;
+  dialog: DialogHandler
+  docRevId: string
+  docRevOwner: string
 }
 
 export const VoidPOStatusDialog: React.FunctionComponent<Props> = ({

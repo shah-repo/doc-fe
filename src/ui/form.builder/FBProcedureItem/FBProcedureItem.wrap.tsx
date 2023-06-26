@@ -1,8 +1,8 @@
-import { cloneDeep, get } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProcedureItemType } from "..";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { cloneDeep, get } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProcedureItemType } from '..';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBProcedureItem = <T extends FBProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -57,7 +57,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
         onClose,
         open: true,
         title: {
-          locale: "form.builder.action.mode",
+          locale: 'form.builder.action.mode',
           values: {
             mode: part ? FBFormMode.edit : FBFormMode.add,
             title: `${FBProcedureItemLocale[type]}|s`,
@@ -68,8 +68,8 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     };
 
     handleRemove = (id: string) => procedureState?.removeItem(id, type);
-    getItem = (id: string): string => procedureState?.getItem(id, type) || "";
-    getLot = (id?: string): string => procedureState?.getLot(id) || "";
+    getItem = (id: string): string => procedureState?.getItem(id, type) || '';
+    getLot = (id?: string): string => procedureState?.getLot(id) || '';
 
     // MARK: @observer
     useObserver(() => {
@@ -79,11 +79,11 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       if (type === FBProcedureItemType.attachments) { return; }
       if (type === FBProcedureItemType.materials) {
         loading = (
-          !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || "") ||
-          !FBAutocompleteAsyncStore.data.get(procedureState?.lotsId || "")
+          !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || '')
+          || !FBAutocompleteAsyncStore.data.get(procedureState?.lotsId || '')
         );
       } else {
-        loading = !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || "");
+        loading = !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || '');
       }
       value = get(procedureState, type);
       disabled = disabled || formState?.locked.get(`${name}.${type}`)?.locked || formState?.isBackdropOpen;
@@ -106,6 +106,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     });
   };
 
-  Comp.displayName = "withFBProcedureItem";
+  Comp.displayName = 'withFBProcedureItem';
   return Comp;
 };

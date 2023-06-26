@@ -1,13 +1,13 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import React from "react";
-import Text from "../../components/Text";
-import { Translation } from "../../translations/types";
-import styles from "./styles";
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import React from 'react';
+import Text from '../../components/Text';
+import { Translation } from '../../translations/types';
+import styles from './styles';
 
 interface OwnProps {
-  closeDialog: () => void;
-  title: Translation;
+  closeDialog: () => void
+  title: Translation
 }
 
 type Props = OwnProps;
@@ -18,7 +18,7 @@ const DialogTitle: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   return (
-    <AppBar style={{ position: "relative" }}>
+    <AppBar style={{ position: 'relative' }}>
       <Toolbar>
         <IconButton
           className={classes.closeIcon}

@@ -1,42 +1,42 @@
 /* eslint-disable no-case-declarations */
-import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from "lodash";
-import { action, computed, set } from "mobx";
-import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from "..";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
-import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
+import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
+import { action, computed, set } from 'mobx';
+import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import FBRequest from '../FBApi/FBApi.request';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 class FBAutocompleteAsyncState extends FBRequest<any, any> {
-  private optionId: string | undefined;
+  private readonly optionId: string | undefined;
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
-  private urlValues?: Record<string, any> = {};
+  private readonly urlValues?: Record<string, any> = {};
 
-  public constructor({ optionId, urlValues }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.setOptionId(optionId);
   }
 
-  public setAdditionalData = (data?: any[]) => set(this, "additionalData", data);
+  public setAdditionalData = (data?: any[]) => set(this, 'additionalData', data);
 
   public fetchAutocompleteOption = (id: string, optionId?: string) => {
     this.autocompleteValueApi.set({
       url: FBEndpoint.FetchAutocompleteValue,
       urlValues: { id, optionId },
-      method: "get",
+      method: 'get',
     });
   };
 
-  @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
+  @computed public get optionConfig (): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
       return;
     }
     return find(FBData.autocompleteOptions, { id: this.optionId });
   }
 
-  @computed public get sliceData(): any {
+  @computed public get sliceData (): any {
     if (!this.optionId) {
       return;
     }
@@ -60,7 +60,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   };
 
   @action public setOptionId = (id?: string) => {
-    set(this, "optionId", id);
+    set(this, 'optionId', id);
     this.load();
   };
 
@@ -88,7 +88,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
         return map(
-          groupBy(union(data, this.additionalData), "document.docId"), (recs) => last(sortBy(recs, "version"))
+          groupBy(union(data, this.additionalData), 'document.docId'), (recs) => last(sortBy(recs, 'version')),
         );
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
@@ -96,7 +96,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
         return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions:
-            some(doc.documentRevisions, ["status", DocumentRevisionStatus.Released])
+            some(doc.documentRevisions, ['status', DocumentRevisionStatus.Released])
               ? doc.documentRevisions : null,
           // the 0th entry is always the released / most recent released version
         })).filter((item) => item.documentRevisions);
@@ -113,17 +113,17 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
           return ({
             ...option,
-            name: releasedForm?.name || "",
-            displayRevision: releasedForm?.displayRevision || "",
+            name: releasedForm?.name || '',
+            displayRevision: releasedForm?.displayRevision || '',
           });
         });
       case FBAutocompleteAsyncOption.parts:
-        return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== "OBSOLETE");
+        return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== 'OBSOLETE');
       default: return union(data, this.additionalData);
     }
   };
 
-  public onSuccess() {
+  public onSuccess () {
     super.onSuccess();
     if (!this.optionId) {
       return;
@@ -133,20 +133,20 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!data) {
       return;
     }
-    if (data.some && !data.some((value) => typeof value === "object")) {
+    if (data.some && !data.some((value) => typeof value === 'object')) {
       data = map(this.data, (d) => ({ id: d, name: d }));
       return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
     }
     data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());
   }
 
-  protected loadInternal() {
+  protected loadInternal () {
     if (!this.optionConfig) {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
-    const { id, root = "", publicApi } = this.optionConfig;
+    const { id, root = '', publicApi } = this.optionConfig;
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
@@ -154,17 +154,16 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       this.set({
         url: FBEndpoint.FetchAutocompleteValue,
         urlValues: { id: this.urlValues, optionId: id },
-        method: "get",
+        method: 'get',
       });
       return;
     }
     this.set({
       url: FBEndpoint.AutocompleteByOptionId,
       urlValues: { optionId: id },
-      method: "get",
+      method: 'get',
     });
   }
 }
 
 export default FBAutocompleteAsyncState;
-

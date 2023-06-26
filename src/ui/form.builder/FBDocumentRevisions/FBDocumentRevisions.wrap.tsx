@@ -1,11 +1,11 @@
-import { cloneDeep, filter, map } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBAutocompleteAsyncOption, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { useFormContext } from "../../components/forms/FormContext";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { cloneDeep, filter, map } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBAutocompleteAsyncOption, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { useFormContext } from '../../components/forms/FormContext';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
   Component: React.FunctionComponent<T>,
@@ -21,7 +21,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     dialogState,
     formState,
     collection,
-    name = "",
+    name = '',
     index = 0,
     ...props
   }: T) => {
@@ -51,13 +51,13 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
         }
 
         submitForm();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions),
-      () => mapCollection()
+      () => mapCollection(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -90,12 +90,12 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       bookmarkState?.addBookmark({
         name: `fb-docrev-section-${name}-${documentRevision.id}`,
         label: `${docId} - ${docName}`,
-        tabId: "documents",
+        tabId: 'documents',
       }, at);
     }
 
     function disabledOptions(): string[] | undefined {
-      return map(docRevState?.value, "proposedDocumentRevision.id");
+      return map(docRevState?.value, 'proposedDocumentRevision.id');
     }
 
     function getIdBy(index: number): string {
@@ -106,7 +106,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       formState?.reset();
       dialogState?.config({
         open: true,
-        title: "form.builder.add.document",
+        title: 'form.builder.add.document',
         content: <FBDocumentRevisionsForm
           {...{ formState }}
           disabledOptions={disabledOptions()}
@@ -131,7 +131,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
         getIdBy(index),
       );
       if (!rec) { return; }
-      const { document: { id: documentId = "" } = {}, id: docRevId } = rec;
+      const { document: { id: documentId = '' } = {}, id: docRevId } = rec;
       window.open(`/document_revision/${documentId}/version/${docRevId}`);
     };
 
@@ -162,6 +162,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     });
   };
 
-  Comp.displayName = "withFBDocumentRevisions";
+  Comp.displayName = 'withFBDocumentRevisions';
   return Comp;
 };

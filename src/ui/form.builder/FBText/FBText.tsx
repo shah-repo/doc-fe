@@ -1,8 +1,7 @@
-
-import { Box, CircularProgress } from "@material-ui/core";
-import React from "react";
-import { FBTextProps } from "..";
-import Text from "../../components/Text";
+import { Box, CircularProgress } from '@material-ui/core';
+import React from 'react';
+import { FBTextProps } from '..';
+import Text from '../../components/Text';
 
 const FBText: React.FunctionComponent<FBTextProps> = ({
   boxProps,

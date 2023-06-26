@@ -1,40 +1,35 @@
-import { Box } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import React from "react";
-import { FBButton, FBFieldBottomBarProps } from "..";
-import { SM } from "../../../App";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
-import { withFBStarter } from "../FBStarter/FBStarter.wrap";
-import useStyles from "./FBFieldBottomBar.styles";
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box } from '@material-ui/core';
+import React, { useCallback } from 'react';
+import { FBFieldBottomBarProps } from '..';
+import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
+import { withFBStarter } from '../FBStarter/FBStarter.wrap';
+import useStyles from './FBFieldBottomBar.styles';
 
-const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
-  visibility,
+const FBFieldBottomBar: React.FC<FBFieldBottomBarProps> = ({
   onClick,
   index = 0,
+  label = 'form.builder.add.field',
 }) => {
-  const { _tabsState } = SM.useStores();
-  const { _documentRevisionFormState } = SM.useStores();
   const classes = useStyles();
 
-  const isEQ = checkIsDocumentEquipment(
-    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions
-  );
+  const handleAddClick = useCallback(() => {
+    onClick?.(index + 1);
+  }, [index, onClick]);
 
   return (
-    <Box visibility={visibility} className={classes.root}>
-      <FBButton
-        label={
-          (_tabsState?.isTabActive("specification") && isEQ)
-            ? "form.builder.addEquiSpec"
-            : "form.builder.add.field"
-        }
-        dataCy="form.builder.add.field"
-        size="medium"
-        variant="contained"
+    <Box className={classes.root}>
+      <Button
+        attached
+        data-cy="form.builder.add.field"
         className={classes.button}
-        startIcon={<AddIcon fontSize="small" />}
-        onClick={() => onClick && onClick(index + 1)}
-      />
+        startIcon={<FontAwesomeIcon icon={solid('plus')} />}
+        onClick={handleAddClick}
+      >
+        {translate(label)}
+      </Button>
     </Box>
   );
 };

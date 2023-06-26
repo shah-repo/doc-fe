@@ -1,42 +1,41 @@
-import { Avatar, Box, Button, Collapse, Grid, IconButton, List, ListItemText, Modal, Typography } from "@material-ui/core";
-import React from "react";
-import { useIntl } from "react-intl";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow_down.svg";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
-import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
-import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
-import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { emailAllActions } from "../../../../../state/ducks/email.all";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import { toastError } from "../../../../components/notifications";
-import Text from "../../../../components/Text";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import { styles } from "./EmailModal.styles";
-import { StyledListItem } from "./StyledListItem";
+import { Avatar, Box, Button, Collapse, Grid, IconButton, List, ListItemText, Modal, Typography } from '@material-ui/core';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/arrow_down.svg';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/arrow_up.svg';
+import { ReactComponent as EmailSuccessIcon } from '../../../../../assets/images/email_success.svg';
+import { ReactComponent as ModelCloseIcon } from '../../../../../assets/images/model_close.svg';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { emailAllActions } from '../../../../../state/ducks/email.all';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import { styles } from './EmailModal.styles';
+import { StyledListItem } from './StyledListItem';
 
 interface EmailModalProps {
-  id: string;
-  handleEmailModelClose: () => void;
-  setLastEmailSent: (flag: boolean) => void;
+  id: string
+  handleEmailModelClose: () => void
+  setLastEmailSent: (flag: boolean) => void
   pendingApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
-  pendingEmailSentAt?: Nullable<string>;
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
+  pendingEmailSentAt?: Nullable<string>
   approvedApprovers: {
-    userName: string;
-    employeeId: string;
-    userAvatar: Nullable<string>;
-    userInitialColor: string;
-    approvalStatus: string;
-  }[];
+    userName: string
+    employeeId: string
+    userAvatar: Nullable<string>
+    userInitialColor: string
+    approvalStatus: string
+  }[]
 }
-
 
 const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
   id,
@@ -83,7 +82,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
       handleApiAlertModelOpen();
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: "common.falied.email" }));
+      toastError(intl.formatMessage({ id: 'common.falied.email' }));
     },
   });
 
@@ -203,7 +202,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
                     noWrap
                   >
                     <Text translation="modal.title.pending" />
-                    {` `}({pendingApprovers?.length})
+                    {' '}({pendingApprovers?.length})
                   </Typography>
                 </Grid>
                 {emailSuccess ? (
@@ -230,7 +229,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
                           <Text translation="email.last.sent" />:&nbsp;
                           {getFormattedDateString(
                             pendingEmailSentAt,
-                            MomentFormats.BriefDate
+                            MomentFormats.BriefDate,
                           )}
                         </Typography>
                       )}
@@ -267,9 +266,9 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
           <List dense disablePadding>
             {pendingApprovers.map((pending, index) => (
               <StyledListItem button key={index}>
-                {pending.userAvatar ?
-                  <Avatar className={classes.listitemicon} alt={pending.userName} src={pending.userAvatar} /> :
-                  <Avatar className={classes.listitemicon} style={{ backgroundColor: pending.userInitialColor }}>
+                {pending.userAvatar
+                  ? <Avatar className={classes.listitemicon} alt={pending.userName} src={pending.userAvatar} />
+                  : <Avatar className={classes.listitemicon} style={{ backgroundColor: pending.userInitialColor }}>
                     {getInitalsFromName(pending.userName)}
                   </Avatar>
                 }
@@ -316,7 +315,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
                     noWrap
                   >
                     <Text translation="modal.title.approved" />
-                    {` `}({approvedApprovers?.length || 0})
+                    {' '}({approvedApprovers?.length || 0})
                   </Typography>
                 </Grid>
               </Grid>
@@ -336,7 +335,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
                   style={{ backgroundColor: `${approved.userInitialColor}` }}
                   className={classes.listitemicon}
                   alt={approved.userName}
-                  src={approved.userAvatar || "."}
+                  src={approved.userAvatar || '.'}
                 />
                 <ListItemText
                   id={approved.employeeId}

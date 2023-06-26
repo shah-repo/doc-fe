@@ -1,5 +1,5 @@
-import { isEmpty, map } from "lodash";
-import { action, observable, ObservableMap } from "mobx";
+import { isEmpty, map } from 'lodash';
+import { action, observable, ObservableMap } from 'mobx';
 
 class FBAutocompleteAsyncStore {
   @observable public data = new Map<string, any>();
@@ -8,7 +8,7 @@ class FBAutocompleteAsyncStore {
   @action public setOptionData = (optionId: string, data: any) => {
     this.data.set(optionId, observable.map(
       (data as any[]).map((show: any) => [show.id || show.value, show]),
-      { deep: false }
+      { deep: false },
     ));
   };
 
@@ -38,7 +38,7 @@ class FBAutocompleteAsyncStore {
     optionsMap.set(key, value);
   };
 
-  public reset = <T>(optionId: string) => {
+  public reset = (optionId: string) => {
     if (!optionId) { return; }
     this.data.set(optionId, undefined);
   };

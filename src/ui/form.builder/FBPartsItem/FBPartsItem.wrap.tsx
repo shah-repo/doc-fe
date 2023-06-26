@@ -1,8 +1,7 @@
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBPartsItemProps, FBProcedureItemType } from "..";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBPartsItemProps, FBProcedureItemType } from '..';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBPartsItem = <T extends FBPartsItemProps>(
   Component: React.FunctionComponent<T>,
@@ -22,13 +21,11 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
 
     // MARK: Reactions
 
-
     // MARK: @helpers
 
-
     // MARK: @methods
-    getItem = (id: string): string => partsState?.getItem(id, type) || "";
-    getLot = (id?: string): string => partsState?.getLot(id) || "";
+    getItem = (id: string): string => partsState?.getItem(id, type) || '';
+    getLot = (id?: string): string => partsState?.getLot(id) || '';
 
     getItemUrl = (id: string) => partsState?.getItemUrl(id, type);
 
@@ -36,11 +33,11 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
     useObserver(() => {
       const observables: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
         materials: () => {
-          loading = !FBAutocompleteAsyncStore.data.get(partsState?.materialsId || "");
+          loading = !FBAutocompleteAsyncStore.data.get(partsState?.materialsId || '');
           collection = partsState?.materials;
         },
         equipment: () => {
-          loading = !FBAutocompleteAsyncStore.data.get(partsState?.equipmentId || "");
+          loading = !FBAutocompleteAsyncStore.data.get(partsState?.equipmentId || '');
           collection = partsState?.equipment;
         },
       };
@@ -57,6 +54,6 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
     });
   };
 
-  Comp.displayName = "withFBPartsItem";
+  Comp.displayName = 'withFBPartsItem';
   return Comp;
 };

@@ -1,13 +1,13 @@
-import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isUndefined, map, omit, pick, toInteger, toString, union } from "lodash";
-import React from "react";
-import { FB, FBButton } from "../..";
-import FBTextField from "../../components/inputs/FBTextField";
-import { StyledCancelFBButton } from "../../FBButton/StyledCancelFBButton";
-import { FBFieldName } from "../../helpers/FBFieldName";
-import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
-import FBStore from "../../stores/ui/FBStore";
-import { FBInputProps } from "../../types/common";
-import { FBTemplateSchema } from "../../types/store";
+import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isUndefined, map, omit, pick, toInteger, toString, union } from 'lodash';
+import React from 'react';
+import { FB, FBButton } from '../..';
+import FBTextField from '../../components/inputs/FBTextField';
+import { StyledCancelFBButton } from '../../FBButton/StyledCancelFBButton';
+import { FBFieldName } from '../../helpers/FBFieldName';
+import FBDynamicValidatorStore from '../../stores/ui/FBDynamicValidatorStore';
+import FBStore from '../../stores/ui/FBStore';
+import { FBInputProps } from '../../types/common';
+import { FBTemplateSchema } from '../../types/store';
 
 export const withOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -29,22 +29,22 @@ export const withOnChange = <T extends FBInputProps>(
 
   const { dialogState } = FB.useStores();
   function contextState(): boolean {
-    const fieldName = field?.name || "";
+    const fieldName = field?.name || '';
     const fieldValue = FBStore.getValue(fieldName);
 
-    const isFieldValue =
-        Boolean(toInteger(fieldValue)) ||
-        isEqual(fieldValue, `context-${fieldName}`);
+    const isFieldValue
+        = Boolean(toInteger(fieldValue))
+        || isEqual(fieldValue, `context-${fieldName}`);
     const isFormValue = get(
       FBStore.getValues(),
       `context-${fieldName}`,
     ) as boolean;
     const contextChecked: boolean = isFieldValue || isFormValue;
 
-    const isContextActive =
-        contextChecked &&
-        includeContext &&
-        (FBStore.mode === "form" || FBStore.mode === "preview");
+    const isContextActive
+        = contextChecked
+        && includeContext
+        && (FBStore.mode === 'form' || FBStore.mode === 'preview');
     return isContextActive || false;
   }
 
@@ -57,9 +57,9 @@ export const withOnChange = <T extends FBInputProps>(
 
     if (includeContext) {
       switch (true) {
-        case type !== "checkboxgroup" && value !== `context-${field.name}`:
+        case type !== 'checkboxgroup' && value !== `context-${field.name}`:
         case fieldName === `context-${field.name}` && !value:
-          form?.setFieldValue(inputContextName, "");
+          form?.setFieldValue(inputContextName, '');
           FBStore.setValues(omit(FBStore.getValues(), inputContextName));
           break;
         default:
@@ -67,7 +67,7 @@ export const withOnChange = <T extends FBInputProps>(
       }
     }
 
-    if (FBStore.mode === "form") {
+    if (FBStore.mode === 'form') {
       let values: Partial<FBTemplateSchema> = {
         ...FBStore.values,
         [fieldName]: value,
@@ -86,7 +86,7 @@ export const withOnChange = <T extends FBInputProps>(
   }
 
   const handleChange = (
-    ev: React.ChangeEvent<{ value: any; checked: boolean }>,
+    ev: React.ChangeEvent<{ value: any, checked: boolean }>,
     value: any = undefined,
   ) => {
     // TODO: refactoring needed
@@ -95,7 +95,7 @@ export const withOnChange = <T extends FBInputProps>(
     if (approved && !approveIsBlocking && !form?.values[reasonName]) {
       dialogState?.config({
         open: true,
-        maxWidth: "md",
+        maxWidth: 'md',
         content: (
           <FBTextField
             label="form.builder.change.reasoning"
@@ -122,12 +122,12 @@ export const withOnChange = <T extends FBInputProps>(
       return;
     }
 
-    if (type !== "autocomplete") {
-      value = get(ev, "target.value", "");
+    if (type !== 'autocomplete') {
+      value = get(ev, 'target.value', '');
     }
 
     function isChecked() {
-      return get(ev.target, "checked");
+      return get(ev.target, 'checked');
     }
 
     function isString() {
@@ -143,7 +143,7 @@ export const withOnChange = <T extends FBInputProps>(
 
     let fieldValue = {
       checkboxgroup() {
-        const checked = get(ev.target, "checked");
+        const checked = get(ev.target, 'checked');
         storeValue(value as string, checked);
         let groupValue: string[] = get(form, `values.${name}`) || [];
         groupValue = checked
@@ -151,8 +151,8 @@ export const withOnChange = <T extends FBInputProps>(
           : filter(groupValue, (v) => v !== (value as string));
         storeValue(name, groupValue);
 
-        if (isEqual(value as string, "includeContext")) {
-          storeValue("contextLabel", contextLabel);
+        if (isEqual(value as string, 'includeContext')) {
+          storeValue('contextLabel', contextLabel);
         }
       },
       checkbox: isChecked,
@@ -160,11 +160,11 @@ export const withOnChange = <T extends FBInputProps>(
       texteditor: isString,
       datepicker: isDate,
       autocomplete() {
-        const { optionValueKey = "id", optionValueType = "key", optionObjectKeys } = props;
+        const { optionValueKey = 'id', optionValueType = 'key', optionObjectKeys } = props;
         if (isArray(value)) {
-          if (optionValueType === "object") {
-            return optionObjectKeys ?
-              map(value, (v) => pick(v, optionObjectKeys as string[]))
+          if (optionValueType === 'object') {
+            return optionObjectKeys
+              ? map(value, (v) => pick(v, optionObjectKeys as string[]))
               : value;
           }
           return map(value, (v) => (lodashIsString(v) ? v : get(v, optionValueKey)));
@@ -172,14 +172,14 @@ export const withOnChange = <T extends FBInputProps>(
         return get(value, optionValueKey);
       },
       default() {
-        return get(ev.target, "value");
+        return get(ev.target, 'value');
       },
     };
 
-    if (type === "checkboxgroup") {
+    if (type === 'checkboxgroup') {
       return fieldValue.checkboxgroup();
     }
-    fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
+    fieldValue = fieldValue[type || ''] ? fieldValue[type || '']() : fieldValue.default();
     storeValue(name, fieldValue);
   };
 

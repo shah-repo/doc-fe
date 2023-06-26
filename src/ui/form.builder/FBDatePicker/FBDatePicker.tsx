@@ -1,16 +1,16 @@
-import MomentUtils from "@date-io/moment";
-import { TextField } from "@material-ui/core";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { Observer } from "mobx-react";
-import moment from "moment";
-import React from "react";
-import { FBInput } from "..";
-import { ReactComponent as DatePickerIcon } from "../../../assets/images/formBuilder/DatePickerIcon.svg";
-import { getStartOfDayDateString, TIME_ZONE } from "../../../common/utils/date";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { FBTextFieldStyles } from "../styles/FBTextField.styles";
-import { FBDatePickerProps } from "./FBDatePicker.types";
-import { withDatePicker } from "./FBDatePicker.wrap";
+import MomentUtils from '@date-io/moment';
+import { TextField } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Observer } from 'mobx-react';
+import moment from 'moment';
+import React from 'react';
+import { FBInput } from '..';
+import { ReactComponent as DatePickerIcon } from '../../../assets/images/formBuilder/DatePickerIcon.svg';
+import { getStartOfDayDateString, TIME_ZONE } from '../../../common/utils/date';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { FBTextFieldStyles } from '../styles/FBTextField.styles';
+import { FBDatePickerProps } from './FBDatePicker.types';
+import { withDatePicker } from './FBDatePicker.wrap';
 
 const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
   datePickerState,
@@ -40,7 +40,7 @@ const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
               autoOk={true}
               disablePast={disablePastDates}
               label=""
-              value={datePickerState?.date || ""}
+              value={datePickerState?.date || ''}
               initialFocusedDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
               onChange={(date, value) => onChange?.(date, value)}
               TextFieldComponent={(props) => (
@@ -59,6 +59,5 @@ const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
     </FBInput>
   );
 };
-
 
 export default withDatePicker(FBDatePicker);

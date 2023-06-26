@@ -1,12 +1,12 @@
-import { Card, CardActions, CardContent, Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
-import React from "react";
-import { Attachment } from "../../../state/ducks/attachments/types";
-import DownloadButtonContainer from "./DownloadButton.container";
+import { Card, CardActions, CardContent, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
+import React from 'react';
+import { Attachment } from '../../../state/ducks/attachments/types';
+import DownloadButtonContainer from './DownloadButton.container';
 
 export interface FileCardProps {
-  removeAttachment?: () => void;
-  attachment: Attachment;
+  removeAttachment?: () => void
+  attachment: Attachment
 }
 
 const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, attachment }) => {

@@ -1,25 +1,25 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   dashboardMyFeedsActions,
-} from "../../../state/ducks/dashboard.new/my.feeds";
+} from '../../../state/ducks/dashboard.new/my.feeds';
 import {
   trainingActions,
   trainingSelectors,
-} from "../../../state/ducks/dashboard.new/training";
-import { TRAINING_INITIAL_OFFSET, TRAINING_INITIAL_PAYLOAD, TRAINING_LIMIT } from "../../../state/ducks/dashboard.new/training/constants";
-import AsyncGate from "../../components/AsyncGate";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { scrollToBottom } from "../line.items/common/Utils";
-import TrainingsLineItemPresenter from "./Trainings.presenter";
+} from '../../../state/ducks/dashboard.new/training';
+import { TRAINING_INITIAL_OFFSET, TRAINING_INITIAL_PAYLOAD, TRAINING_LIMIT } from '../../../state/ducks/dashboard.new/training/constants';
+import AsyncGate from '../../components/AsyncGate';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { scrollToBottom } from '../line.items/common/Utils';
+import TrainingsLineItemPresenter from './Trainings.presenter';
 
 const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const [offset, setOffset] = React.useState(TRAINING_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(TRAINING_LIMIT);
   const loadTrainingList = useActionCreator(trainingActions.loadTrainingList);
   const loadTrainingListAsyncInfo = useSelector(
-    trainingSelectors.getLoadTrainingListAsyncInfo
+    trainingSelectors.getLoadTrainingListAsyncInfo,
   );
   const dispatch = useDispatch();
   const pinnedOrUnPinnedAsync = useAsync({
@@ -29,9 +29,9 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       dispatch(trainingActions.loadTrainingList(TRAINING_INITIAL_PAYLOAD));
     },
   });
-  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
+  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem,
   );
-  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem
+  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem,
   );
   const pinLineItem = (id: string) => {
     pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);
@@ -52,7 +52,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
     };
     async.start(loadTrainingList, updatedPageSize);
     setTimeout(() => {
-      scrollToBottom("#trainingBoxLoadMore");
+      scrollToBottom('#trainingBoxLoadMore');
     }, 2000);
   };
 
@@ -62,7 +62,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       asyncState={loadTrainingListAsyncInfo}
       startActionOnMount={true}
     >
-      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem, overallLimit }} onLoadMoreData={onLoadMoreData}/>
+      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem, overallLimit }} onLoadMoreData={onLoadMoreData} />
     </AsyncGate>
   );
 };

@@ -1,13 +1,13 @@
-import { Nullable, User } from "../common/types";
+import { Nullable, User } from '../common/types';
 
 export interface PasswordType {
-  password: string;
+  password: string
 }
 export interface GetAsyncTaskResponse {
-  id: string;
-  taskType: string;
-  duration: number;
-  nextTaskTypes: Nullable<string[]>;
-  status: string;
-  user?: User;
+  id: string
+  taskType: string
+  duration: number
+  nextTaskTypes: Nullable<string[]>
+  status: string
+  user?: User
 }

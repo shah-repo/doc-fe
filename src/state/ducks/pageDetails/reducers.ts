@@ -1,7 +1,7 @@
-import { keyBy } from "lodash";
-import { combineReducers } from "redux";
-import { ALL_PAGE_DETAILS_FETCHED } from "./constants";
-import { PageDetailsAction, PageDetailsState } from "./types";
+import { keyBy } from 'lodash';
+import { combineReducers } from 'redux';
+import { ALL_PAGE_DETAILS_FETCHED } from './constants';
+import { PageDetailsAction, PageDetailsState } from './types';
 
 const byCategory = (
   state: PageDetailsState = {},

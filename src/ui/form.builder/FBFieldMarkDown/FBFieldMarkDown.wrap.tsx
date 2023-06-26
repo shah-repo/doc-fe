@@ -1,34 +1,33 @@
-import { get, template as lodashTemplate } from "lodash";
-import React from "react";
-import { FB, FBFieldMarkDownProps } from "..";
+import { get, template as lodashTemplate } from 'lodash';
+import React from 'react';
+import { FB, FBFieldMarkDownProps } from '..';
+
+const TEMPLATE = `<%= label %>
+========================
+- type:  <%= type %>
+- name:  <%= name %>
+- rules:  <%= rules %>
+- value:  <%= value %>
+`;
 
 export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
-    index = 0,
+    inputProps = {},
     ...props
   }: T) => {
+    const { formState } = FB.useStores();
 
-    const { workspaceState, formState } = FB.useStores();
-    const schemaItem = workspaceState?.getSchemaItemAt(index) || {};
+    const { name = '' } = inputProps;
 
-    const { name } = schemaItem;
-
-    const template = lodashTemplate(`
-      <%= label %>
-      ========================
-      - type:  <%= type %>
-      - name:  <%= name %>
-      - rules:  <%= rules %>
-      - value:  <%= value %>
-    `);
+    const template = lodashTemplate(TEMPLATE);
 
     const source = template({
-      ...schemaItem,
-      label: get(schemaItem, "label") || "",
-      rules: get(schemaItem, "rules", ""),
-      value: formState?.getFieldValue(name, ""),
+      ...inputProps,
+      label: get(inputProps, 'label', ''),
+      rules: get(inputProps, 'rules', '') as unknown,
+      value: JSON.stringify(formState?.getFieldValue(name, ''), null, '  '),
     });
 
     return Component({

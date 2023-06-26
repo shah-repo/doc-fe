@@ -1,46 +1,47 @@
-import { Dialog, makeStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
-import { companyActions } from "../../../state/ducks/company";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { AsyncState } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import AvatarContainer from "../../components/icons/avatar/avatar.container";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import DialogContent from "./dialog/DialogContent";
-import DialogTitle from "./dialog/DialogTitle";
-import { Translation } from "../../translations/types";
+import { Dialog, makeStyles } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
+import { EmployeeEditRequestBody } from '../../../state/ducks/auth/types';
+import { companyActions } from '../../../state/ducks/company';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
+import { AsyncState } from '../../../state/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import AvatarContainer from '../../components/icons/avatar/avatar.container';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
+import DialogContent from './dialog/DialogContent';
+import DialogTitle from './dialog/DialogTitle';
 
 interface OwnProps {
-  isOpen: boolean;
-  close: () => void;
-  canManageUsers: boolean;
-  employeeGroups: OptionType[];
-  name: string;
-  avatar: string | null;
-  email: string;
-  editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
-  showEditUser: boolean;
-  showEdit: () => void;
-  closeEdit: () => void;
-  employeeId: string;
-  callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
-  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
-  callbackUpdateWithUpload?: (avatar: string, name: string) => void;
-  asyncState: AsyncState;
-  getUrl: () => void;
-  slackIntegrationEnabled: boolean;
-  slackTeamId: string;
-  slackUserId: string;
-  previewAvatar: string;
-  setPreviewAvatar: (value: string) => void;
-  activeStatus: boolean;
-  userId: string;
-  isDeveloper: boolean;
-  canUpdateCompany: boolean;
+  isOpen: boolean
+  close: () => void
+  canManageUsers: boolean
+  employeeGroups: OptionType[]
+  name: string
+  avatar: string | null
+  email: string
+  editCurrentEmployee: (values: EmployeeEditRequestBody) => void
+  showEditUser: boolean
+  showEdit: () => void
+  closeEdit: () => void
+  employeeId: string
+  callbackUpdateGroups?: (values: GetEmployeeResponse) => void
+  callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void
+  callbackUpdateWithUpload?: (avatar: string, name: string) => void
+  asyncState: AsyncState
+  getUrl: () => void
+  slackIntegrationEnabled: boolean
+  slackTeamId: string
+  slackUserId: string
+  previewAvatar: string
+  setPreviewAvatar: (value: string) => void
+  activeStatus: boolean
+  userId: string
+  isDeveloper: boolean
+  canUpdateCompany: boolean
+  canUpdateLocations: boolean
 }
 
 type Props = OwnProps;
@@ -72,6 +73,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   callbackUpdateWithUpload,
   isDeveloper,
   canUpdateCompany,
+  canUpdateLocations,
 }) => {
   const [usernameError, setUsernameError] = useState<Translation | null>(null);
   const currentUserId = useSelector(authSelectors.currentUserId);
@@ -91,7 +93,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
 
   const handleCloseEdit = () => {
     closeEdit();
-    setPreviewAvatar("");
+    setPreviewAvatar('');
     setUsernameError(null);
     async.start(getCompanyMine, currentEmployeeId, async);
   };
@@ -101,8 +103,8 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   };
   const styles = makeStyles(() => ({
     dialogPaper: {
-      height: "90%",
-      width: "90%",
+      height: '90%',
+      width: '90%',
     },
   }));
   const classes = styles();
@@ -155,6 +157,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         usernameError={usernameError}
         isDeveloper={isDeveloper}
         canUpdateCompany={canUpdateCompany}
+        canUpdateLocations={canUpdateLocations}
       />
     </Dialog>
   );

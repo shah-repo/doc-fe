@@ -1,7 +1,7 @@
-import { Menu } from "@material-ui/core";
-import React from "react";
-import { withThemeNext } from "../../../../layout/theme-next";
-import { SplitButtonMenuProps } from "./SplitButton.types";
+import { Menu } from '@material-ui/core';
+import React from 'react';
+import { withThemeNext } from '../../../../layout/theme-next';
+import { SplitButtonMenuProps } from './SplitButton.types';
 
 const SplitButtonMenu: React.FC<SplitButtonMenuProps> = ({
   anchorEl,
@@ -15,15 +15,15 @@ const SplitButtonMenu: React.FC<SplitButtonMenuProps> = ({
     anchorEl={anchorEl}
     getContentAnchorEl={null}
     anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "right",
+      vertical: 'bottom',
+      horizontal: 'right',
     }}
     transformOrigin={{
-      vertical: "top",
-      horizontal: "right",
+      vertical: 'top',
+      horizontal: 'right',
     }}
     onClose={onClose}
-    onClick={(e) => onClose && onClose(e, "itemClick")}
+    onClick={(e) => onClose && onClose(e, 'itemClick')}
   >
     {children}
   </Menu>

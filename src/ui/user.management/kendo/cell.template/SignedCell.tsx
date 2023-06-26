@@ -1,15 +1,15 @@
-import { Link } from "@material-ui/core";
-import { GridCellProps } from "@progress/kendo-react-grid";
-import React from "react";
-import { useIntl } from "react-intl";
-import { authActions } from "../../../../state/ducks/auth";
-import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import { toastInfo } from "../../../components/notifications";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { styles } from "./styles";
+import { Link } from '@material-ui/core';
+import { GridCellProps } from '@progress/kendo-react-grid';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { authActions } from '../../../../state/ducks/auth';
+import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import { toastInfo } from '../../../components/notifications';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { styles } from './styles';
 
 export const SignedCell = ({
   rowType,
@@ -23,21 +23,21 @@ export const SignedCell = ({
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const getResendSignupEmailAction = useActionCreator(
-    authActions.resendSignupEmail
+    authActions.resendSignupEmail,
   );
   const getSendPasswordResetEmailAction = useActionCreator(
-    authActions.sendPasswordResetEmail
+    authActions.sendPasswordResetEmail,
   );
 
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
-      toastInfo(getTranslatedText("user.management.signup.email.sent"));
+      toastInfo(getTranslatedText('user.management.signup.email.sent'));
     },
   });
 
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
-      toastInfo(getTranslatedText("user.management.reset.password.email.sent"));
+      toastInfo(getTranslatedText('user.management.reset.password.email.sent'));
     },
   });
 
@@ -46,16 +46,16 @@ export const SignedCell = ({
       ? asyncSignUpEmail.start(
         getResendSignupEmailAction,
           user?.email,
-          asyncSignUpEmail
+          asyncSignUpEmail,
       )
       : asyncResetPasswordEmail.start(
         getSendPasswordResetEmailAction,
         id,
-        asyncResetPasswordEmail
+        asyncResetPasswordEmail,
       );
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
   const getChildrenElement = (
@@ -69,9 +69,9 @@ export const SignedCell = ({
           onClick={() => handleResendEmail(dataItem)}
         >
           <span className={classes.link}>
-            <Text translation={!dataItem?.user?.confirmed ?
-              "user.management.resend.signup.email" :
-              "reset.password"
+            <Text translation={!dataItem?.user?.confirmed
+              ? 'user.management.resend.signup.email'
+              : 'reset.password'
             } />
           </span>
         </Link>
@@ -90,9 +90,9 @@ export const SignedCell = ({
         <Tooltip
           data={
             dataItem?.user?.confirmed && !dataItem?.user?.locked
-              ? getTranslatedText("user.management.signed.up")
-              : !dataItem?.user?.confirmed ? getTranslatedText("user.management.resend.signup.email") :
-                getTranslatedText("reset.password")
+              ? getTranslatedText('user.management.signed.up')
+              : !dataItem?.user?.confirmed ? getTranslatedText('user.management.resend.signup.email')
+                : getTranslatedText('reset.password')
           }
           childrenElement={getChildrenElement}
         />

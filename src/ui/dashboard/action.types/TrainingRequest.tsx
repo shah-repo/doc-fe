@@ -1,14 +1,14 @@
-import moment from "moment";
-import React, { useMemo, useState } from "react";
-import { useIntl } from "react-intl";
-import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
-import { TrainingRecord } from "../../../state/ducks/training/types";
-import { documentVersionPath } from "../../document.revision/utils/paths";
-import DashboardActionTypeBase from "./DashboardActionTypeBase";
+import moment from 'moment';
+import React, { useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { getFormattedStartOfDayDateString } from '../../../common/utils/date';
+import { TrainingRecord } from '../../../state/ducks/training/types';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import DashboardActionTypeBase from './DashboardActionTypeBase';
 
 interface Props {
-  index: number;
-  trainingRecord: TrainingRecord;
+  index: number
+  trainingRecord: TrainingRecord
 }
 
 const TrainingRequest: React.FunctionComponent<Props> = ({
@@ -18,11 +18,11 @@ const TrainingRequest: React.FunctionComponent<Props> = ({
   const isDue = useMemo(() => moment().isAfter(trainingRecord.dueOn), [trainingRecord.dueOn]);
   const intl = useIntl();
 
-  const docRevId = trainingRecord.documentRevision.id || "";
-  const docId = trainingRecord.trainingPlan?.document.id || "";
+  const docRevId = trainingRecord.documentRevision.id || '';
+  const docId = trainingRecord.trainingPlan?.document.id || '';
 
   const [title] = useState(intl.formatMessage(
-    { id: "dashboard.title.training" },
+    { id: 'dashboard.title.training' },
     {
       docId: trainingRecord?.trainingPlan?.document.docId,
       version: trainingRecord?.documentRevision?.displayRevision,
@@ -31,17 +31,17 @@ const TrainingRequest: React.FunctionComponent<Props> = ({
   ));
 
   const [description] = useState(intl.formatMessage(
-    { id: "dashboard.assigned.training" },
+    { id: 'dashboard.assigned.training' },
     { dueDate: getFormattedStartOfDayDateString(trainingRecord.dueOn) },
   ));
 
   const [alertMessage] = useState(() => {
     if (!isDue) {
-      return "";
+      return '';
     }
     return ` - ${
       intl.formatMessage(
-        { id: "common.overdue" },
+        { id: 'common.overdue' },
       )
     }`;
   });

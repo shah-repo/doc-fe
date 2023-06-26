@@ -1,29 +1,29 @@
-import { Box, Typography } from "@material-ui/core";
-import cx from "classnames";
-import React, { FC, ComponentProps, useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ReactComponent as TodoIcon } from "../../../assets/images/todo.svg";
-import { ReactComponent as MyFeedIcon } from "../../../assets/images/my_feed.svg";
-import { ReactComponent as TrainingIcon } from "../../../assets/images/training_tab.svg";
-import { ReactComponent as RecentIcon } from "../../../assets/images/recent.svg";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { dashboardTodoSelectors } from "../../../state/ducks/dashboard.new/todo";
-import { dashboardMyFeedsActions, dashboardMyFeedsSelectors } from "../../../state/ducks/dashboard.new/my.feeds";
-import Text from "../../components/Text";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import useStyles from "./Tabs.styles";
-import StyledTabs from "./common/StyledTabs";
-import StyledTab from "./common/StyledTab";
-import { DashboardTabValues } from "./Tabs.types";
-import Todo from "../my.feeds/Todo.container";
-import MyFeeds from "../my.feeds/MyFeeds.container";
-import Recents from "../recents/Recents.container";
-import Trainings from "../trainings/Trainings.container";
-import { Translation } from "../../translations/types";
+import { Box, Typography } from '@material-ui/core';
+import cx from 'classnames';
+import React, { FC, ComponentProps, useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReactComponent as TodoIcon } from '../../../assets/images/todo.svg';
+import { ReactComponent as MyFeedIcon } from '../../../assets/images/my_feed.svg';
+import { ReactComponent as TrainingIcon } from '../../../assets/images/training_tab.svg';
+import { ReactComponent as RecentIcon } from '../../../assets/images/recent.svg';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { dashboardTodoSelectors } from '../../../state/ducks/dashboard.new/todo';
+import { dashboardMyFeedsActions, dashboardMyFeedsSelectors } from '../../../state/ducks/dashboard.new/my.feeds';
+import Text from '../../components/Text';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import useStyles from './Tabs.styles';
+import StyledTabs from './common/StyledTabs';
+import StyledTab from './common/StyledTab';
+import { DashboardTabValues } from './Tabs.types';
+import Todo from '../my.feeds/Todo.container';
+import MyFeeds from '../my.feeds/MyFeeds.container';
+import Recents from '../recents/Recents.container';
+import Trainings from '../trainings/Trainings.container';
+import { Translation } from '../../translations/types';
 
 type TabProps = ComponentProps<typeof StyledTab> & {
-  title: Translation;
-  count?: number;
+  title: Translation
+  count?: number
 };
 
 const Tab: FC<TabProps> = (props) => {
@@ -88,7 +88,7 @@ const Tabs: FC = () => {
 
   const handleChange = useCallback(
     (event: any, newValue: DashboardTabValues) => setValue(newValue),
-    []
+    [],
   );
 
   return (
@@ -123,7 +123,7 @@ const Tabs: FC = () => {
           title="common.recent"
         />
       </StyledTabs>
-      <Box className={cx(classes.tabs, "containing-box-scrollbar")}>
+      <Box className={cx(classes.tabs, 'containing-box-scrollbar')}>
         <div
           role="tabpanel"
           id={`scrollable-auto-tabpanel-${value}`}

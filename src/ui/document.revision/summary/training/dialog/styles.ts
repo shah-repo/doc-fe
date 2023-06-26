@@ -1,5 +1,5 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -7,21 +7,21 @@ export const styles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(4),
     },
     label: {
-      fontSize: "1rem",
-      color: "#737674",
-      fontWeight: "bold",
-      letterSpacing: "1px",
+      fontSize: '1rem',
+      color: '#737674',
+      fontWeight: 'bold',
+      letterSpacing: '1px',
       marginBottom: theme.spacing(1),
     },
     itemContentBlue: {
-      fontSize: "1rem",
+      fontSize: '1rem',
       color: Colors.blue,
       fontWeight: 700,
     },
     root: {
-      "label + &": {
+      'label + &': {
         marginTop: theme.spacing(1),
       },
     },
-  })
+  }),
 );

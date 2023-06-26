@@ -1,281 +1,280 @@
-import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
-import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBNoteItem, FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
-import { Attachment } from "../attachments/types";
-import { AuditActionPayload } from "../audit/types";
-import { Group } from "../auth/types";
-import { ChangeRequest } from "../changeRequest/types";
-import { Approval, Id, Nullable, Owner, User } from "../common/types";
-import { Employee } from "../company/types";
-import { RELATED_PARTS_STATUS } from "../relatedParts/types";
-import { TrainingRecord } from "../training/types";
-import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
+import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
+import { TableColumnActionType } from '../../../ui/components/table/column/types';
+import { FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
+import { Attachment } from '../attachments/types';
+import { AuditActionPayload } from '../audit/types';
+import { Group } from '../auth/types';
+import { ChangeRequest } from '../changeRequest/types';
+import { Approval, Id, Nullable, Owner, User } from '../common/types';
+import { Employee } from '../company/types';
+import { RELATED_PARTS_STATUS } from '../relatedParts/types';
+import { TrainingRecord } from '../training/types';
+import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from './constants';
+import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from './documentType/types';
 
 export enum DocumentRevisionStatus {
-  Draft = "DRAFT",
-  PendingChange = "PENDING_CHANGE",
-  InReview = "IN_REVIEW",
-  Released = "RELEASED",
-  Approved = "APPROVED",
-  Deprecated = "DEPRECATED",
-  Obsolete = "OBSOLETE",
-  Canceled = "CANCELED",
-  Voided = "VOIDED",
+  Draft = 'DRAFT',
+  PendingChange = 'PENDING_CHANGE',
+  InReview = 'IN_REVIEW',
+  Released = 'RELEASED',
+  Approved = 'APPROVED',
+  Deprecated = 'DEPRECATED',
+  Obsolete = 'OBSOLETE',
+  Canceled = 'CANCELED',
+  Voided = 'VOIDED',
 }
 
 export enum DocumentRevisionStatusDisplay {
-  Draft = "Draft",
-  PendingChange = "PendingChange",
-  InReview = "InReview",
-  Released = "Released",
-  Approved = "Approved",
-  Deprecated = "Deprecated",
-  Obsolete = "Obsolete",
-  Canceled = "Canceled",
-  Voided = "Voided",
+  Draft = 'Draft',
+  PendingChange = 'PendingChange',
+  InReview = 'InReview',
+  Released = 'Released',
+  Approved = 'Approved',
+  Deprecated = 'Deprecated',
+  Obsolete = 'Obsolete',
+  Canceled = 'Canceled',
+  Voided = 'Voided',
 }
 
 export enum POStatusType {
-  OPENED = "OPENED",
-  CLOSED = "CLOSED",
-  VOIDED = "VOIDED"
+  OPENED = 'OPENED',
+  CLOSED = 'CLOSED',
+  VOIDED = 'VOIDED',
 }
 
 export enum POStatusLabelMapping {
-  OPENED = "Open",
-  CLOSED = "Closed",
-  VOIDED = "Voided"
+  OPENED = 'Open',
+  CLOSED = 'Closed',
+  VOIDED = 'Voided',
 }
 
 export enum DocumentCategory {
-  PurchaseOrder = "Purchase Order",
+  PurchaseOrder = 'Purchase Order',
 }
 
 export enum RevisionChangeType {
-  NextRevision = "NEXT_REVISION",
-  NextRevisionStage = "NEXT_REVISION_STAGE",
-  Obsolete = "OBSOLETE",
-  AdministrativeChange = "ADMINISTRATIVE_CHANGE",
-  Void = "VOID",
+  NextRevision = 'NEXT_REVISION',
+  NextRevisionStage = 'NEXT_REVISION_STAGE',
+  Obsolete = 'OBSOLETE',
+  AdministrativeChange = 'ADMINISTRATIVE_CHANGE',
+  Void = 'VOID',
 }
 
 export interface DocumentRevisionDocument {
-  children: DocumentRevision[];
-  parent: DocumentRevision;
-  id: string;
-  docId: string;
-  documentType: Partial<DocumentType>;
-  referencedBy: DocumentRevision[];
-  canAccess: boolean;
-  securityList: SecurityList;
+  children: DocumentRevision[]
+  parent: DocumentRevision
+  id: string
+  docId: string
+  documentType: Partial<DocumentType>
+  referencedBy: DocumentRevision[]
+  canAccess: boolean
+  securityList: SecurityList
   lot?: {
-    lotId: string;
-  };
-  smartReferencesTo?: SmartReference[];
-  smartReferencesFrom?: SmartReference[];
-  typeSpecificConfig?: TypeSpecificConfig;
-  operators?: Employee[];
+    lotId: string
+  }
+  smartReferencesTo?: SmartReference[]
+  smartReferencesFrom?: SmartReference[]
+  typeSpecificConfig?: TypeSpecificConfig
+  operators?: Employee[]
 }
 
 export interface SecurityList {
-  securityGroups: Group[];
-  securityEmployees: User[];
-  operators: User[];
+  securityGroups: Group[]
+  securityEmployees: User[]
+  operators: User[]
 }
 
 export interface Document {
-  id: string;
-  docId: string;
-  documentType: DocumentType;
-  documentRevisions: DocumentRevision[];
-  securityList: SecurityList;
+  id: string
+  docId: string
+  documentType: DocumentType
+  documentRevisions: DocumentRevision[]
+  securityList: SecurityList
 }
 
 export interface Reference {
-  id: string;
-  name: string;
-  docId?: string;
-  documentRevisions?: DocumentRevision[];
-  document: DocumentRevisionDocument;
+  id: string
+  name: string
+  docId?: string
+  documentRevisions?: DocumentRevision[]
+  document: DocumentRevisionDocument
 }
 
 export interface PDF {
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-  s3Url: string;
-  name: string;
-  type: string;
+  createdAt: string
+  updatedAt: string
+  id: string
+  s3Url: string
+  name: string
+  type: string
 }
 
 interface LHR{
-  docRevId: string;
-  documentId: string;
-  label: string;
+  docRevId: string
+  documentId: string
+  label: string
 }
 
 interface LOT{
-  label: string;
+  label: string
 }
 
 interface Part{
-  docRevId: string;
-  documentId: string;
-  label: string;
+  docRevId: string
+  documentId: string
+  label: string
 }
 
 export interface RelatedParentPartDetails {
-  parentDocId: string;
-  documentId: string;
-  docRevId: string;
+  parentDocId: string
+  documentId: string
+  docRevId: string
 }
 
 interface LSHS{
-  lhr: LHR;
-  lot: LOT;
-  part: Part;
+  lhr: LHR
+  lot: LOT
+  part: Part
 }
 
 interface Precalc {
-  formDocId: string;
-  revision: number;
-  po_amount?: string;
-  cali_due_date?: string;
-  pm_due_date?: string;
-  lshs_subtitle?: LSHS;
+  formDocId: string
+  revision: number
+  po_amount?: string
+  cali_due_date?: string
+  pm_due_date?: string
+  lshs_subtitle?: LSHS
 }
 
 interface DocumentsInLHRS {
-  displayRevision: string;
-  displayStatus: DocumentRevisionStatus;
-  docId?: string;
-  docRevId?: string;
-  docRevTitle?: string;
-  documentId?: string;
+  displayRevision: string
+  displayStatus: DocumentRevisionStatus
+  docId?: string
+  docRevId?: string
+  docRevTitle?: string
+  documentId?: string
 }
 
 export interface UsedDocumentsInLHRS {
-  [key: string]: DocumentsInLHRS;
+  [key: string]: DocumentsInLHRS
 }
 
 export interface DocumentRevision extends FBDocumentRevisionProps {
-  displayStatus: DocumentRevisionStatus;
-  children?: DocumentRevision[];
-  parent?: DocumentRevision;
-  precalc: Precalc;
-  id: string;
-  docId?: string;
-  typePrefix?: string;
-  version: number;
-  revision: number;
-  subRevision?: number;
-  revisionStage: number;
-  revisionChangeType: RevisionChangeType;
-  name: string;
-  description: string;
-  displayRevision: string;
-  owner: Owner;
-  attachments: Attachment[];
-  status: DocumentRevisionStatus;
-  document: DocumentRevisionDocument;
-  released: Date;
-  referenceTo: Reference[];
-  createdAt?: string;
-  changeRequest?: ChangeRequest;
-  actions?: TableColumnActionType[];
-  deprecatedAt?: string;
-  obsoletedAt?: string;
-  releasedAt?: string;
-  voidedAt?: string;
-  trainingRecords: TrainingRecord[];
-  effectiveDate?: Date;
-  retrain?: boolean;
-  grantAccess?: boolean;
-  renderHTML?: string;
-  renderHTMLDefined?: boolean;
-  pdf?: PDF;
-  outputRevision?: boolean;
-  primaryAttachment?: Attachment;
-  approvals?: Approval[];
-  updatedAt?: string;
-  schema?: FBSchemaProps[];
-  parentParts?: DocumentRevision[];
-  parentEquipment?: Id;
-  equipmentSection?: string;
+  displayStatus: DocumentRevisionStatus
+  children?: DocumentRevision[]
+  parent?: DocumentRevision
+  precalc: Precalc
+  id: string
+  docId?: string
+  typePrefix?: string
+  version: number
+  revision: number
+  subRevision?: number
+  revisionStage: number
+  revisionChangeType: RevisionChangeType
+  name: string
+  description: string
+  displayRevision: string
+  owner: Owner
+  attachments: Attachment[]
+  status: DocumentRevisionStatus
+  document: DocumentRevisionDocument
+  released: Date
+  referenceTo: Reference[]
+  createdAt?: string
+  changeRequest?: ChangeRequest
+  actions?: TableColumnActionType[]
+  deprecatedAt?: string
+  obsoletedAt?: string
+  releasedAt?: string
+  voidedAt?: string
+  trainingRecords: TrainingRecord[]
+  effectiveDate?: Date
+  retrain?: boolean
+  grantAccess?: boolean
+  renderHTML?: string
+  renderHTMLDefined?: boolean
+  pdf?: PDF
+  outputRevision?: boolean
+  primaryAttachment?: Attachment
+  approvals?: Approval[]
+  updatedAt?: string
+  schema?: FBSchemaProps[]
+  parentParts?: DocumentRevision[]
+  parentEquipment?: Id
+  equipmentSection?: string
   // there can currently be only one child part
-  childrenParts?: DocumentRevision[];
-  outputDocumentTypes?: any;
-  inputOwners?: InputOwner[];
-  documentId?: string;
-  smartReferencesFrom?: SmartReference[];
-  smartReferencesTo?: SmartReference[];
-  usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
-  redline?: boolean;
-  poStatus?: POStatusType;
-  relatedPartsStatus?: RELATED_PARTS_STATUS;
-  relatedParentPartDetails?: RelatedParentPartDetails;
+  childrenParts?: DocumentRevision[]
+  outputDocumentTypes?: any
+  inputOwners?: InputOwner[]
+  documentId?: string
+  smartReferencesFrom?: SmartReference[]
+  smartReferencesTo?: SmartReference[]
+  usedDocumentsInLHRS?: UsedDocumentsInLHRS[]
+  redline?: boolean
+  poStatus?: POStatusType
+  relatedPartsStatus?: RELATED_PARTS_STATUS
+  relatedParentPartDetails?: RelatedParentPartDetails
 }
 
 export interface SmartReference {
-  fromDocRev?: Nullable<DocumentRevision>;
-  fromDocRevId?: Nullable<string>;
-  fromDocumentId?: Nullable<string>;
-  fromDocument?: Nullable<DocumentRevision>;
-  id: string;
+  fromDocRev?: Nullable<DocumentRevision>
+  fromDocRevId?: Nullable<string>
+  fromDocumentId?: Nullable<string>
+  fromDocument?: Nullable<DocumentRevision>
+  id: string
   metadata: {
-    fieldId: string;
-    lotDocId?: string;
-    startedBy: string;
-    completedBy: string;
-    materialId?: string;
-    equipmentId?: string;
-    quantity?: number;
-    unit?: string;
-    lotPart?: string;
-  };
-  toDocRevId?: Nullable<string>;
-  toDocRev?: Nullable<DocumentRevision>;
-  toDocumentId?: Nullable<string>;
-  type: SmartReferenceType;
-  active?: boolean;
-  stepIndex?: Nullable<number>;
+    fieldId: string
+    lotDocId?: string
+    startedBy: string
+    completedBy: string
+    materialId?: string
+    equipmentId?: string
+    quantity?: number
+    unit?: string
+    lotPart?: string
+  }
+  toDocRevId?: Nullable<string>
+  toDocRev?: Nullable<DocumentRevision>
+  toDocumentId?: Nullable<string>
+  type: SmartReferenceType
+  active?: boolean
+  stepIndex?: Nullable<number>
 }
 
 export enum SmartReferenceType {
-  HiddenPiInstance = "HIDDEN_PI_INSTANCE",
-  General = "GENERAL",
-  EquipmentReplacement = "EQUIPMENT_REPLACEMENT",
-  LotUsage = "LOT_USAGE",
-  LotSoruce = "LOT_SOURCE",
+  HiddenPiInstance = 'HIDDEN_PI_INSTANCE',
+  General = 'GENERAL',
+  EquipmentReplacement = 'EQUIPMENT_REPLACEMENT',
+  LotUsage = 'LOT_USAGE',
+  LotSoruce = 'LOT_SOURCE',
 }
 
 interface InputOwner {
-  [key: string]: string;
+  [key: string]: string
 }
 
-
 export const RevisionStageOptions = [
-  { value: 1, text: "common.Numeric" },
-  { value: 2, text: "common.NumericAlpha" },
-  { value: 3, text: "common.Alpha" },
+  { value: 1, text: 'common.Numeric' },
+  { value: 2, text: 'common.NumericAlpha' },
+  { value: 3, text: 'common.Alpha' },
 ];
 
 export interface ReferenceToEditRequest {
-  id: string;
+  id: string
 }
 
 interface SecurityListRequest {
-  securityEmployees: Id[];
-  securityGroups: Id[];
-  operators: Id[];
+  securityEmployees: Id[]
+  securityGroups: Id[]
+  operators: Id[]
 }
 
 export interface DocumentRevisionDocumentRequest {
-  docId?: string;
-  id?: string;
-  documentType?: Partial<DocumentType>;
-  securityList: SecurityListRequest;
+  docId?: string
+  id?: string
+  documentType?: Partial<DocumentType>
+  securityList: SecurityListRequest
 }
 
 export interface ExportToEmailRequest {
@@ -283,139 +282,139 @@ export interface ExportToEmailRequest {
 }
 
 export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps {
-  name: string;
-  docId?: string;
-  description: string;
-  attachments: Attachment[];
-  type?: string;
-  referenceTo: ReferenceToEditRequest[];
-  document?: Partial<DocumentRevisionDocumentRequest>;
-  revisionChangeType?: RevisionChangeType;
-  revisionStage?: number;
-  retrain?: boolean;
-  renderHTML?: string;
-  status?: DocumentRevisionStatus;
-  parentEquipment?: Id;
-  equipmentSection?: string;
-  redline?: boolean;
-  tabId?: string;
+  name: string
+  docId?: string
+  description: string
+  attachments: Attachment[]
+  type?: string
+  referenceTo: ReferenceToEditRequest[]
+  document?: Partial<DocumentRevisionDocumentRequest>
+  revisionChangeType?: RevisionChangeType
+  revisionStage?: number
+  retrain?: boolean
+  renderHTML?: string
+  status?: DocumentRevisionStatus
+  parentEquipment?: Id
+  equipmentSection?: string
+  redline?: boolean
+  tabId?: string
 }
 
 export interface DocumentRevisionSetAction {
-  type: typeof DOCUMENT_REVISION_SET;
+  type: typeof DOCUMENT_REVISION_SET
   payload?: {
-    documentRevision?: DocumentRevision;
-    requestBody?: any;
-    docRevId?: string;
-  };
+    documentRevision?: DocumentRevision
+    requestBody?: any
+    docRevId?: string
+  }
 }
 
 export interface DocumentSetAction {
-  type: typeof DOCUMENT_SET;
-  payload: Document;
+  type: typeof DOCUMENT_SET
+  payload: Document
 }
 
 export interface DocumentRevisionsListAction {
-  type: typeof DOCUMENT_REVISION_LIST;
-  payload: DocumentRevision[];
+  type: typeof DOCUMENT_REVISION_LIST
+  payload: DocumentRevision[]
 }
 
 export interface DocumentRevisionsByIdState {
-  [key: string]: DocumentRevision;
+  [key: string]: DocumentRevision
 }
 
 export interface DocumentByIdState {
-  [key: string]: Document;
+  [key: string]: Document
 }
 
 export type DocumentRevisionsAllIdsState = string[];
 
-export type DocumentRevisionTransition = "pending_submission";
+export type DocumentRevisionTransition = 'pending_submission';
 
 export interface DocumentRevisionTransitionRequestBody {
-  password: string;
+  password: string
 }
 
 export interface DocumentRevisionTransitionResponse {
-  id: string;
+  id: string
 }
 
 export interface DocumentRevisionAuditSetAction {
-  type: typeof DOCUMENT_REVISION_AUDIT_SET;
-  payload: AuditActionPayload;
+  type: typeof DOCUMENT_REVISION_AUDIT_SET
+  payload: AuditActionPayload
 }
 
 export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
-  approvers: Id[];
-  effectiveDate?: string;
-  documentType: Id;
-  formDocument: Id;
+  approvers: Id[]
+  effectiveDate?: string
+  documentType: Id
+  formDocument: Id
 }
 
 export interface FinalizeAndReleaseRequest {
-  approvers: Id[];
-  effectiveDate?: string;
+  approvers: Id[]
+  effectiveDate?: string
 }
 
 export interface CreateAndReleaseRequest {
-  releasedDocumentRevision: DocumentRevision;
-  releaseDto: CreateAndReleaseRequest;
+  releasedDocumentRevision: DocumentRevision
+  releaseDto: CreateAndReleaseRequest
 }
 
 export interface FBFormTemplateProps {
-  outputDocumentTypes: FBOutputDocumentType[] | OptionType[];
-  schema: FBSchemaProps[];
-  helloSignTemplateId?: string;
+  outputDocumentTypes: FBOutputDocumentType[] | OptionType[]
+  schema: FBSchemaProps[]
+  helloSignTemplateId?: string
 }
 
 export interface FBDocumentRevisionProps {
-  id?: string;
-  formTemplate?: FBFormTemplateProps;
-  formDocument?: FBDocumentRevisionProps;
-  formInput?: Record<string, any>;
-  document?: Partial<DocumentRevisionDocumentRequest>;
-  revision?: number;
-  subRevision?: number;
-  revisionStage?: string | number;
-  revisionChangeType?: RevisionChangeType;
-  releasedAt?: string;
-  effectiveDate?: Date;
-  renderHTML?: string;
-  renderHTMLDefined?: boolean;
-  status?: DocumentRevisionStatus;
-  tasks?: FBTaskItem[];
-  notes?: FBNoteItem[];
+  id?: string
+  formTemplate?: FBFormTemplateProps
+  formDocument?: FBDocumentRevisionProps
+  formInput?: Record<string, any>
+  document?: Partial<DocumentRevisionDocumentRequest>
+  revision?: number
+  subRevision?: number
+  revisionStage?: string | number
+  revisionChangeType?: RevisionChangeType
+  releasedAt?: string
+  effectiveDate?: Date
+  renderHTML?: string
+  renderHTMLDefined?: boolean
+  status?: DocumentRevisionStatus
+  tasks?: FBTaskItem[]
+  notes?: FBNoteItem[]
 }
 
 export interface FBOutputDocumentType {
-  id: string;
-  documentTypeName?: string;
-  groupOptions?: DocumentGroupOptionsType[];
-  active?: boolean;
-  group?: DocumentGroupType;
+  id: string
+  documentTypeName?: string
+  groupOptions?: DocumentGroupOptionsType[]
+  active?: boolean
+  group?: DocumentGroupType
 
 }
 
 export interface HeaderTableType {
-  label: string;
-  key: string;
+  label: string
+  key: string
 }
 
 export interface UpdateFormFieldMapping {
-  sourceId: string;
-  targetId: string;
+  sourceId: string
+  targetId: string
 }
 
 export interface UpdateFormRequestBody {
-  mapping: UpdateFormFieldMapping[];
-  formToBeUsed: Id;
+  mapping: UpdateFormFieldMapping[]
+  formToBeUsed: Id
 }
 
 interface TypeSpecificConfig {
   eqProdEnforceConfig: {
-    date: string;
-    value: boolean;
-  };
+    date: string
+    value: boolean
+  }
 }

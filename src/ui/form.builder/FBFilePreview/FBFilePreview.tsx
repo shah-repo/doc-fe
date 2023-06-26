@@ -1,32 +1,32 @@
-import React from "react";
-import PrismaZoom from "react-prismazoom";
-import { FBFilePreviewProps } from "..";
-import Text from "../../components/Text";
-import { withFBFilePreview } from "./FBFilePreview.wrap";
+import React from 'react';
+import PrismaZoom from 'react-prismazoom';
+import { FBFilePreviewProps } from '..';
+import Text from '../../components/Text';
+import { withFBFilePreview } from './FBFilePreview.wrap';
 
 const FBFilePreview: React.FunctionComponent<FBFilePreviewProps> = ({
   file: { url },
   previewType,
 }) => (
   <>
-    {previewType === "video" && (
+    {previewType === 'video' && (
       <video controls={true} width="100%" height="95%" src={url}>
         <Text translation="file.viewer.video.not.supported" />
       </video>
     )}
-    {previewType === "pdf" && (
-      <object width="100%" style={{ height: "90vh" }} type="application/pdf" data={url}>
+    {previewType === 'pdf' && (
+      <object width="100%" style={{ height: '90vh' }} type="application/pdf" data={url}>
         <Text translation="common.file.not.loaded" />
       </object>
     )}
-    {previewType === "image" && (
+    {previewType === 'image' && (
       <PrismaZoom
         topBoundary={180}
         style={{
-          maxWidth: "50vw",
-          width: "100%",
-          maxHeight: "95vh",
-          margin: "0 auto",
+          maxWidth: '50vw',
+          width: '100%',
+          maxHeight: '95vh',
+          margin: '0 auto',
         }}>
         <img src={url} alt={url} width="100%" />
       </PrismaZoom>

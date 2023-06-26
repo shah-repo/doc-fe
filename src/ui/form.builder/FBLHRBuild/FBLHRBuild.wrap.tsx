@@ -1,11 +1,11 @@
-import { get } from "lodash";
-import { reaction } from "mobx";
-import React, { useEffect } from "react";
-import { FB, FBLHRBuildOptions, FBLHRBuildProps, FBLHRBuildState } from "..";
-import { SMDialogAction } from "../../../App";
-import { withSMDialog } from "../../../App/Shifamed/Components/SMDialog/SMDialog.hoc";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { useFormContext } from "../../components/forms/FormContext";
+import { get } from 'lodash';
+import { reaction } from 'mobx';
+import React, { useEffect } from 'react';
+import { FB, FBLHRBuildOptions, FBLHRBuildProps, FBLHRBuildState } from '..';
+import { SMDialogAction } from '../../../App';
+import { withSMDialog } from '../../../App/Shifamed/Components/SMDialog/SMDialog.hoc';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { useFormContext } from '../../components/forms/FormContext';
 
 export const withFBLHRBuild = <T extends FBLHRBuildProps>(
   Component: React.FunctionComponent<T>,
@@ -16,7 +16,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     inputState,
     lhrBuildState,
     dialogState,
-    name = "",
+    name = '',
     disabled,
     buildValidationRules,
     ...props
@@ -26,8 +26,8 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, document } = workspaceState || {};
     const formContext = useFormContext();
-    buildValidationRules = isOutput || (!isOutput && document?.status === DocumentRevisionStatus.Released) ?
-      "required" : null;
+    buildValidationRules = isOutput || (!isOutput && document?.status === DocumentRevisionStatus.Released)
+      ? 'required' : null;
 
     lhrBuildState = FB.useRef(FBLHRBuildState, {
       value: formState?.getFieldValue(name),
@@ -39,7 +39,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       const savedData = get(workspaceState?.document?.formInput, name);
       formState?.validate();
 
-      if (isOutput && savedData === FBLHRBuildOptions["R&D"]) {
+      if (isOutput && savedData === FBLHRBuildOptions['R&D']) {
         lhrBuildState?.setDisabled(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,7 +56,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       (value) => {
         formState?.setFieldValue(name, value);
         workspaceState?.formInputSync.set(name, value);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -64,16 +64,16 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       () => workspaceState?.formInputSync.get(name),
       (value) => {
         const { autosave } = workspaceState || {};
-        const isDisabled = (autosave && (value === FBLHRBuildOptions["R&D"])) || disabled;
+        const isDisabled = (autosave && (value === FBLHRBuildOptions['R&D'])) || disabled;
         lhrBuildState?.setDisabled(isDisabled);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @methods
     onChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
       const formValue = formState?.getFieldValue(name);
-      if (value === FBLHRBuildOptions["R&D"] && formValue === FBLHRBuildOptions.Production) {
+      if (value === FBLHRBuildOptions['R&D'] && formValue === FBLHRBuildOptions.Production) {
         lhrBuildState?.setValue(FBLHRBuildOptions.Production);
         dialogState?.setOpen?.(true);
         return;
@@ -89,7 +89,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         return;
       }
       const { autosave } = workspaceState || {};
-      lhrBuildState?.setValue(FBLHRBuildOptions["R&D"]);
+      lhrBuildState?.setValue(FBLHRBuildOptions['R&D']);
       lhrBuildState?.setDisabled(autosave);
       save();
     };
@@ -104,6 +104,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     });
   };
 
-  Comp.displayName = "withFBLHRBuild";
+  Comp.displayName = 'withFBLHRBuild';
   return withSMDialog((props: T) => Comp(props));
 };

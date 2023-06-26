@@ -1,9 +1,9 @@
-import { isEmpty } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useMemo } from "react";
-import { useIntl } from "react-intl";
-import { FB, FBDialogState, FBFileDescription, FBFilePresenterColor, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
+import { isEmpty } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useMemo } from 'react';
+import { useIntl } from 'react-intl';
+import { FB, FBDialogState, FBFileDescription, FBFilePresenterColor, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from '..';
 
 export const withFBFilePresenter = <T extends FBFilePresenterProps>(
   Component: React.FunctionComponent<T>,
@@ -41,17 +41,17 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       const size = filePresenterState?.fileSize;
       if (!size) { return; }
       const i = Math.floor( Math.log(size) / Math.log(1024) );
-      return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
+      return `${(size / Math.pow(1024, i)).toFixed(2)} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`;
     }, [filePresenterState]);
 
     fileExtension = useMemo(() => {
-      const microsoftFiles = ["XLSX", "XLS", "DOCX", "DOC"];
+      const microsoftFiles = ['XLSX', 'XLS', 'DOCX', 'DOC'];
       const type = fileType?.toUpperCase();
       if (!type) { return; }
       if (microsoftFiles.includes(type)) {
         return intl.formatMessage({ id: `file.type.${type}` });
       }
-      return intl.formatMessage({ id: "file.type" }, { type });
+      return intl.formatMessage({ id: 'file.type' }, { type });
     }, [fileType, intl]);
 
     fileType && (fileColor = FBFilePresenterColor[fileType.toUpperCase()]);
@@ -61,8 +61,8 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     });
 
     const fileDescriptionTitle = isEmpty(fileDescription)
-      ? "form.builder.add.description"
-      : "form.builder.edit.description";
+      ? 'form.builder.add.description'
+      : 'form.builder.edit.description';
 
     React.useEffect(() => {
       reaction(
@@ -71,17 +71,17 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
           if (!data?.url) { return; }
           file.url = filePresenterState?.data?.url;
           handleLoaded();
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleLoaded() {
       switch (filePresenterState?.downloadType) {
-        case "view":
+        case 'view':
           dialogState?.config({
             open: true,
-            maxWidth: "lg",
+            maxWidth: 'lg',
             title: fileName,
             content: <FBFilePreview {...{ file }} />,
           });
@@ -96,7 +96,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       fileUploadState?.removeFile(file);
     };
 
-    handleDownload = (type: FBFilePresenterDownloadType = "download") => {
+    handleDownload = (type: FBFilePresenterDownloadType = 'download') => {
       filePresenterState?.setDownloadType(type);
       if (!file.url) { return; }
       handleLoaded();
@@ -104,9 +104,9 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 
     handleIconClick = () => {
       if (filePresenterState?.isFileViewable) {
-        return handleDownload?.("view");
+        return handleDownload?.('view');
       }
-      handleDownload?.("download");
+      handleDownload?.('download');
     };
 
     onMouseOver = () => filePresenterState?.setToolsVisible(true);
@@ -115,11 +115,11 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     function handleDescription() {
       dialogState?.config({
         open: true,
-        maxWidth: "sm",
+        maxWidth: 'sm',
         title: fileDescriptionTitle,
         content: (
           <FBFileDescription
-            boxProps={{ width: "100%" }}
+            boxProps={{ width: '100%' }}
             omitDescription={true}
             {...{
               file,
@@ -141,18 +141,18 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       text: fileDescriptionTitle,
       onClick: () => handleDescription(),
     }, {
-      text: "form.builder.download.file",
+      text: 'form.builder.download.file',
       textValues: { fileShortName },
-      onClick: () => handleDownload?.("download"),
+      onClick: () => handleDownload?.('download'),
     }, {
-      text: "form.builder.download.clean.copy",
+      text: 'form.builder.download.clean.copy',
       textValues: { fileShortName },
       hidden: !filePresenterState?.isCleanCopy,
-      onClick: () => handleDownload?.("download"),
+      onClick: () => handleDownload?.('download'),
     }, {
-      text: "common.view.file",
+      text: 'common.view.file',
       hidden: !filePresenterState?.isFileViewable,
-      onClick: () => handleDownload?.("view"),
+      onClick: () => handleDownload?.('view'),
     }];
 
     return Component({

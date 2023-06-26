@@ -3,29 +3,29 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import { useIntl } from "react-intl";
-import { Nullable } from "../../../../../../state/ducks/common/types";
-import styles from "./common.styles";
-import UserCard from "./UserCard";
+} from '@material-ui/core';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Nullable } from '../../../../../../state/ducks/common/types';
+import styles from './common.styles';
+import UserCard from './UserCard';
 
 interface Props {
-  timestamp: string;
+  timestamp: string
   userDetails: {
     user: {
-      avatar: Nullable<string>;
-      initialColor: string;
-      name: string;
-    };
-  };
+      avatar: Nullable<string>
+      initialColor: string
+      name: string
+    }
+  }
 }
 
 const UserAvatarCard: React.FunctionComponent<Props> = ({ timestamp, userDetails }) => {
   const intl = useIntl();
   const { avatar, initialColor, name } = { ...userDetails.user };
-  const updatedName = ["Admin", "unknown", "EnlilMail SysAdmin"].includes(name)
-    ? intl.formatMessage({ id: "common.server.automation" })
+  const updatedName = ['Admin', 'unknown', 'EnlilMail SysAdmin'].includes(name)
+    ? intl.formatMessage({ id: 'common.server.automation' })
     : name;
   const classes = styles();
   return (

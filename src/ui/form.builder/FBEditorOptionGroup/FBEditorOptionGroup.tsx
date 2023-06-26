@@ -1,8 +1,8 @@
-import React from "react";
-import { FBEditor, FBEditorOptions, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
-import { styles as AutoCompleteStyles } from "../styles/FBAutocomplete.styles";
-import { editorOptionStyles } from "../styles/FBEditorOptions.styles";
-import { styles } from "../styles/FBEditorTextField.styles";
+import React from 'react';
+import { FBEditor, FBEditorOptions, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
+import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import { editorOptionStyles } from '../styles/FBEditorOptions.styles';
+import { styles } from '../styles/FBEditorTextField.styles';
 
 const FBEditorOptionGroup: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -17,14 +17,14 @@ const FBEditorOptionGroup: React.FunctionComponent<FBEditorProps> = ({
       <FBTextField label="form.builder.label" name="label" rules="required"
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
-        labelProps={AutoCompleteStyles.labelProps}/>
-      {type === "select" && (
+        labelProps={AutoCompleteStyles.labelProps} />
+      {type === 'select' && (
         <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`}
           boxProps={{ mb: 3.125, className: classes.error }}
           labelProps={AutoCompleteStyles.labelProps}
-          className={classes.textfield}/>
+          className={classes.textfield} />
       )}
-      <FBEditorOptions key={`fb-editor-options-${type}-${index}`} className={editorOptionClasses.textfield}/>
+      <FBEditorOptions key={`fb-editor-options-${type}-${index}`} className={editorOptionClasses.textfield} />
       {children}
     </FBEditor>
   ); };

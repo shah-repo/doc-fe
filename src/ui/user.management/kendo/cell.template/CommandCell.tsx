@@ -1,33 +1,33 @@
-import { IconButton } from "@material-ui/core";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
-import EditIcon from "@material-ui/icons/Edit";
-import { get, set } from "lodash";
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { userManagementActions } from "../../../../state/ducks/userManagement";
-import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
-import Tooltip from "../../../components/common/kendo/Tooltip";
-import { toastError } from "../../../components/notifications";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { enterUserInfo } from "../column.definition";
-import { UserManage } from "../types";
-import Commandstyles from "./CommandCell.styles";
+import { IconButton } from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import { get, set } from 'lodash';
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { userManagementActions } from '../../../../state/ducks/userManagement';
+import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
+import Tooltip from '../../../components/common/kendo/Tooltip';
+import { toastError } from '../../../components/notifications';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { enterUserInfo } from '../column.definition';
+import { UserManage } from '../types';
+import Commandstyles from './CommandCell.styles';
 
 interface CommandCellProps {
-  dataItem: UserManage | GetEmployeeResponse;
-  editField: string;
-  add: (dataItem: UserManage) => void;
-  cancel: (dataItem: UserManage) => void;
-  edit: (dataItem: GetEmployeeResponse) => void;
-  colSpan?: number;
-  style?: React.CSSProperties;
-  ariaColumnIndex?: number;
-  className?: string;
-  columnIndex?: number;
-  role?: string;
-  rowType?: string;
+  dataItem: UserManage | GetEmployeeResponse
+  editField: string
+  add: (dataItem: UserManage) => void
+  cancel: (dataItem: UserManage) => void
+  edit: (dataItem: GetEmployeeResponse) => void
+  colSpan?: number
+  style?: React.CSSProperties
+  ariaColumnIndex?: number
+  className?: string
+  columnIndex?: number
+  role?: string
+  rowType?: string
 }
 
 export const CommandCell = ({
@@ -51,22 +51,22 @@ export const CommandCell = ({
   const asyncName = useAsync<GetEmployeeResponse[]>({
     onSuccess: (data: GetEmployeeResponse[] = []) => {
       if (data.length === 0) {
-        set(dataItem, "id", null);
+        set(dataItem, 'id', null);
         add(dataItem as UserManage);
         return;
       }
-      set(dataItem, "name", data[0].user.name);
+      set(dataItem, 'name', data[0].user.name);
       dataItem.id = data[0].user.id;
       add(dataItem as UserManage);
     },
   });
   const fetchUseInfo = () => {
-    const name = get(dataItem, "name");
-    const email = get(dataItem, "email");
+    const name = get(dataItem, 'name');
+    const email = get(dataItem, 'email');
     const userName = name || enterUserInfo.name;
     const userEmail = email || enterUserInfo.email;
     if (!userEmail || !userName) {
-      toastError(intl.formatMessage({ id: "user.management.name.email.required" }));
+      toastError(intl.formatMessage({ id: 'user.management.name.email.required' }));
       return;
     }
     if (!name) {
@@ -78,7 +78,7 @@ export const CommandCell = ({
     asyncName.start(getEmployeeAction, { email: userEmail }, asyncName );
   };
 
-  if (rowType === "groupHeader") {
+  if (rowType === 'groupHeader') {
     return null;
   }
 
@@ -92,7 +92,7 @@ export const CommandCell = ({
     >
       <Tooltip
         placement="top"
-        data={getTranslatedText("user.management.add.employee")}
+        data={getTranslatedText('user.management.add.employee')}
         childrenElement={
           <IconButton
             disableRipple={true}
@@ -109,7 +109,7 @@ export const CommandCell = ({
       />
       <Tooltip
         placement="top"
-        data={getTranslatedText("common.discard")}
+        data={getTranslatedText('common.discard')}
         childrenElement={
           <IconButton
             disableRipple={true}
@@ -132,7 +132,7 @@ export const CommandCell = ({
     >
       <Tooltip
         placement="top"
-        data={getTranslatedText("user.management.edit.employee")}
+        data={getTranslatedText('user.management.edit.employee')}
         childrenElement={
           <IconButton
             disableRipple={true}
@@ -147,4 +147,3 @@ export const CommandCell = ({
     </td>
   );
 };
-

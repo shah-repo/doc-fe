@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
-import cx from "classnames";
-import React from "react";
-import { ReactComponent as LinkOutArrowIcon } from "../../../../../../assets/images/link-out-arrow.svg";
-import { ReactComponent as LinkOutIcon } from "../../../../../../assets/images/link-out.svg";
-import useStyles from "./HelpCenterOutLink.styles";
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { ReactComponent as LinkOutArrowIcon } from '../../../../../../assets/images/link-out-arrow.svg';
+import { ReactComponent as LinkOutIcon } from '../../../../../../assets/images/link-out.svg';
+import useStyles from './HelpCenterOutLink.styles';
 
 const Icon: React.FC = () => {
   const classes = useStyles();
@@ -17,8 +17,8 @@ const Icon: React.FC = () => {
 };
 
 interface Props {
-  className?: string;
-  children?: React.ReactNode;
+  className?: string
+  children?: React.ReactNode
 }
 
 const HelpCenterOutLink: React.FC<Props> = ({ className, children }) => {

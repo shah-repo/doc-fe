@@ -1,12 +1,12 @@
-import * as React from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
-import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import * as React from 'react';
+import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { userManagementSelectors } from '../../../../state/ducks/userManagement';
+import AutocompleteField from '../../../components/forms/fields/Autocomplete/Autocomplete';
 
 interface Props {
-  portal?: boolean;
-  isDisabled?: boolean;
+  portal?: boolean
+  isDisabled?: boolean
 }
 
 const SecurityGroups: React.FunctionComponent<Props> = ({ portal, isDisabled }) => {
@@ -18,11 +18,11 @@ const SecurityGroups: React.FunctionComponent<Props> = ({ portal, isDisabled }) 
       name="securityGroups"
       label="document.revision.selected.groups"
       autocompleteProps={{
-        id: "securityGroups",
+        id: 'securityGroups',
         isMulti: true,
         closeMenuOnSelect: false,
         placeholder: intl.formatMessage({
-          id: "document.revision.selected.groups.placeholder",
+          id: 'document.revision.selected.groups.placeholder',
         }),
       }}
       options={groupOptions}

@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import FBStore from "../../form.builder/FBStore/FBStore";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { SIDE_BAR_TAB_INDEX } from "./constants";
-import SidebarPresenter from "./Sidebar.presenter.new";
-import { Sidebar } from "./types.new";
+import React, { useEffect, useRef, useState } from 'react';
+import FBStore from '../../form.builder/FBStore/FBStore';
+import { useScrollIntoView } from '../../hooks/useScrollIntoView';
+import { SIDE_BAR_TAB_INDEX } from './constants';
+import SidebarPresenter from './Sidebar.presenter.new';
+import { Sidebar } from './types.new';
 
 interface SidebarContainerProps {
-  sidebarList: Sidebar[];
-  isDrawerOpen?: boolean;
-  setOpen?: (value: boolean) => void;
-  setTab?: (value: number) => void;
+  sidebarList: Sidebar[]
+  isDrawerOpen?: boolean
+  setOpen?: (value: boolean) => void
+  setTab?: (value: number) => void
 }
 
 const SidebarContainer: React.FunctionComponent<

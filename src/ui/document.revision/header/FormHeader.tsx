@@ -1,13 +1,13 @@
-
-import React from "react";
-import FormHeaderPresenter from "./FormHeader.presenter";
+import React from 'react';
+import FormHeaderPresenter from './FormHeader.presenter';
 
 interface Props {
-  isCreateDocumentDisabled: boolean;
+  isCreateDocumentDisabled: boolean
+  setDoNotPrompt?: (value: boolean) => void
 }
 
-const FormHeader: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => (
-  <FormHeaderPresenter {...{ isCreateDocumentDisabled }}/>
+const FormHeader: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled, setDoNotPrompt }) => (
+  <FormHeaderPresenter {...{ isCreateDocumentDisabled, setDoNotPrompt }} />
 );
 
 export default FormHeader;

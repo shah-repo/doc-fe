@@ -1,19 +1,19 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { approvalsActions } from "../../../../state/ducks/approvals";
-import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
-import AlertDialog from "../../../app/alert.dialog/AlertDialog";
-import { toastError } from "../../../components/notifications";
-import Text from "../../../components/Text";
-import { FBInlineApprovalTransition } from "../../../form.builder";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { DocumentRevisionApprovalDialog } from "../DocumentRevisionApprovalDialog";
+import { Box, Button, Grid } from '@material-ui/core';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { approvalsActions } from '../../../../state/ducks/approvals';
+import { dashboardMyFeedsActions } from '../../../../state/ducks/dashboard.new/my.feeds';
+import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
+import { FBInlineApprovalTransition } from '../../../form.builder';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import { DocumentRevisionApprovalDialog } from '../DocumentRevisionApprovalDialog';
 
 interface Props {
-  approvalId: string;
+  approvalId: string
 }
 
 const POApproveOrReject: React.FunctionComponent<Props> = ({
@@ -53,7 +53,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
             data-cy="transition-reject"
             onClick={alertDialog.open}
           >
-            <Text translation="transition.action.reject"/>
+            <Text translation="transition.action.reject" />
           </Button>
           <Button
             variant="outlined"
@@ -62,7 +62,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
             data-cy="transition-approve"
             onClick={() => passwordDialog.open()}
           >
-            <Text translation="transition.action.approve"/>
+            <Text translation="transition.action.approve" />
           </Button>
         </Grid>
       </Box>
@@ -74,7 +74,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
       <AlertDialog
         dialog={alertDialog}
         message="dashboard.po.reject.alert"
-        confirmAction={() => changeApprovalStatus("reject", approvalId)}
+        confirmAction={() => changeApprovalStatus('reject', approvalId)}
         cancelAction={alertDialog.close}
       />
     </>

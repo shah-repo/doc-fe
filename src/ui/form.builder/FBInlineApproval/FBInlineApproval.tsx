@@ -1,18 +1,18 @@
-import { Box } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ErrorIcon from "@material-ui/icons/Error";
-import React from "react";
-import { FB, FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
-import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
-import Colors from "../../layout/theme/utils/colors";
-import { FBFontStyle } from "../styles/FBFont.styles";
-import { withFBInlineApproval } from "./FBInlineApproval.wrap";
-import FBInlinePendingApprovalSocket from "./FBInlinePendingApproval.socket";
+import { Box } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import React from 'react';
+import { FB, FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from '..';
+import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
+import Colors from '../../layout/theme/utils/colors';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import { withFBInlineApproval } from './FBInlineApproval.wrap';
+import FBInlinePendingApprovalSocket from './FBInlinePendingApproval.socket';
 
 const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
   requestAllApprovals,
-  label = "form.builder.approvers",
+  label = 'form.builder.approvers',
   approvals = [],
   currentUser,
   isApproved,
@@ -38,24 +38,23 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       borderTop={0}
       borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
     >
-      {isApproved ?
-        (<>
+      {isApproved
+        ? (<>
           <CheckCircleIcon style={{ color: Colors.light_green }} />
           <FBText locale="form.builder.approved" />
         </>)
-        :
-        (<>
+        :        (<>
           <ErrorIcon style={{ color: Colors.latest_red_varient }} />
           <Box ml={1} width="100%" display="flex" mt={0.3}>
             <FBText
               boxProps={{
-                flexGrow: 1, fontSize: "14px", fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px",
+                flexGrow: 1, fontSize: '14px', fontWeight: '600', color: Colors.latest_red_varient, lineHeight: '15px',
               }}
               locale="form.builder.approval.pending"
             />
             <FBText
               boxProps={{
-                fontSize: "12px", fontWeight: "400", color: Colors.almost_black, lineHeight: "15px",
+                fontSize: '12px', fontWeight: '400', color: Colors.almost_black, lineHeight: '15px',
               }}
               locale="form.builder.approval.instruction"
             />
@@ -95,11 +94,11 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   flexDirection="row"
                   alignItems="center"
                 >
-                  {<Box fontWeight="bold">{
+                  <Box fontWeight="bold">{
                     isApproved ? approval.approverName :  approval.approver?.user.name
-                  }</Box>}
+                  }</Box>
                   {approval.status && approval.approverGroup && (
-                    <Box>&nbsp;| {approval.approverGroup?.join(", ")}</Box>
+                    <Box>&nbsp;| {approval.approverGroup?.join(', ')}</Box>
                   )}
                   {approval.status && (
                     <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
@@ -108,11 +107,11 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   && (
                     <Box flexGrow={1} textAlign="right">
                       <FBButton
-                        disabled={disabled || approval.status === "APPROVED"}
+                        disabled={disabled || approval.status === 'APPROVED'}
                         label="form.builder.request.approve"
                         size="small"
-                        style={{ fontSize: "11px" }}
-                        onClick={() => onApproveClick?.(approval.id || "")}
+                        style={{ fontSize: '11px' }}
+                        onClick={() => onApproveClick?.(approval.id || '')}
                       />
                     </Box>
                   )}
@@ -120,8 +119,8 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                 <Box mt={1}>
                   { isApproved ? approval.approverEmail : approval.approver?.user.email }
                 </Box>
-                {shouldShowRequestAllApprovals &&
-                  <Box flexGrow={1} textAlign="right">
+                {shouldShowRequestAllApprovals
+                  && <Box flexGrow={1} textAlign="right">
                     <FBButton
                       style={{ margin: 0 }}
                       label="form.builder.request.approval"
@@ -138,7 +137,6 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       </Box>
     )}</>;
 
-
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   dialogState,
   name,
@@ -148,17 +146,17 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
 }) => {
   const  { workspaceState } = FB.useStores();
   const { document } = workspaceState || {};
-  const EQname = document?.formInput?.["fb-requipment-maintenance-section"];
-  const isPMform = Boolean(document?.["parentEquipment"]?.["formInput"]?.[EQname]?.preventativeForm);
+  const EQname = document?.formInput?.['fb-requipment-maintenance-section'];
+  const isPMform = Boolean(document?.['parentEquipment']?.['formInput']?.[EQname]?.preventativeForm);
 
   props.disabled =  props.disabled && !isPMform;
   return (
     <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
       <FBDialog />
-      <FBInlinePendingApprovalSocket/>
+      <FBInlinePendingApprovalSocket />
       <FBInlineApprovalSocket {...{ name }} />
       <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
-        <FBInlineApprovalChild {...props} {...{ name }}/>
+        <FBInlineApprovalChild {...props} {...{ name }} />
       </FBInput>
     </FBProvider>
   );

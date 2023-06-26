@@ -1,66 +1,66 @@
-import { Box, Button } from "@material-ui/core";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import cx from "classnames";
-import { camelCase, sortBy } from "lodash";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
-import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
-import Text from "../../components/Text";
-import { HOME_URL } from "../../constants/urls";
-import useDialog from "../../hooks/useDialog";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import Colors from "../../layout/theme/utils/colors";
-import { PageDetailsForm } from "../add.page.details/container";
-import { PageDetailsFormContainer } from "../form/container";
+import { Box, Button } from '@material-ui/core';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import cx from 'classnames';
+import { camelCase, sortBy } from 'lodash';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { PageDetails } from '../../../state/ducks/documentRevisions/documentType/types';
+import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
+import Text from '../../components/Text';
+import { HOME_URL } from '../../constants/urls';
+import useDialog from '../../hooks/useDialog';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import Colors from '../../layout/theme/utils/colors';
+import { PageDetailsForm } from '../add.page.details/container';
+import { PageDetailsFormContainer } from '../form/container';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: theme.spacing(6, 6, 2),
-      height: "100%",
-      overflow: "auto",
-      display: "flex",
-      flexDirection: "column",
+      height: '100%',
+      overflow: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
     },
     header: {
       height: theme.spacing(7.5),
       fontSize: theme.spacing(2),
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
     row: {
       height: theme.spacing(6),
       fontSize: theme.spacing(2.5),
-      fontWeight: "bold",
+      fontWeight: 'bold',
       backgroundColor: Colors.light_gray,
-      cursor: "pointer",
+      cursor: 'pointer',
     },
     cell: {
       padding: theme.spacing(0),
     },
     containingBox: {
-      overflow: "auto",
+      overflow: 'auto',
       flexGrow: 1,
     },
     thead: {
-      "& th": {
-        position: "sticky",
+      '& th': {
+        position: 'sticky',
         top: 0,
         zIndex: 1000,
       },
     },
-  })
+  }),
 );
 
 function Row(props: { row: PageDetails }) {
@@ -83,7 +83,7 @@ function Row(props: { row: PageDetails }) {
       <TableRow>
         <TableCell className={classes.cell} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <PageDetailsFormContainer pageDetails={row}/>
+            <PageDetailsFormContainer pageDetails={row} />
           </Collapse>
         </TableCell>
       </TableRow>
@@ -107,25 +107,25 @@ const PageDetailsManagementContainer: React.FC = () => {
     <Box className={classes.root}>
       <Box display="flex" justifyContent="flex-end">
         <Button onClick={dialog.open} variant="outlined">
-          <Text translation={"common.add.page.details"} />
+          <Text translation="common.add.page.details" />
         </Button>
       </Box>
-      <Box width="100%" className={cx(classes.containingBox, "containing-box-scrollbar")}>
+      <Box width="100%" className={cx(classes.containingBox, 'containing-box-scrollbar')}>
         <Table>
           <TableHead className={classes.thead}>
             <TableRow>
               <TableCell />
               <TableCell className={classes.header}>
-                <Text translation={"page.details"} />
+                <Text translation="page.details" />
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortBy(pageDetails, "category").map((row) => <Row key={row.category} row={row} />)}
+            {sortBy(pageDetails, 'category').map((row) => <Row key={row.category} row={row} />)}
           </TableBody>
         </Table>
       </Box>
-      <PageDetailsForm {...{ dialog }}/>
+      <PageDetailsForm {...{ dialog }} />
     </Box>
 
   );

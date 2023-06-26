@@ -3,16 +3,16 @@ import axios from 'axios';
 import { intl } from '../../../common/intl';
 import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
-import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, PO_ROOT_URL } from './constants';
-import { DOC_TYPE_GROUP_OPTION, DocRevQueryParam, DocumentGroupOptionsType } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentRevisionsListAction, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -66,7 +66,7 @@ const loadList = (
   });
 };
 
-const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC): ApiAction<DocumentRevision> => apiAction({
+const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: 'get',
   asyncType,

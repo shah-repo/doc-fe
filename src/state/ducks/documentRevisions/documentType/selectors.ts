@@ -1,10 +1,10 @@
-import { get, orderBy } from "lodash";
-import { createSelector } from "reselect";
-import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
-import { checkIfDocumentHasOptions } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { ApplicationState } from "../../../reducers";
-import { AsyncState } from "../../../types";
-import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from "./types";
+import { get, orderBy } from 'lodash';
+import { createSelector } from 'reselect';
+import { removeLastCharacterIfNotAlphaNumeric } from '../../../../ui/common/utils/helpers';
+import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { ApplicationState } from '../../../reducers';
+import { AsyncState } from '../../../types';
+import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -37,7 +37,7 @@ const getDocumentTypeFormOptions = createSelector(
       ids.map((id) => ({
         ...documentTypes[id],
       }))
-      , ["documentTypeName"], ["asc"]),
+      , ['documentTypeName'], ['asc']),
 );
 
 const getDocumentTypeOptions = createSelector(
@@ -48,7 +48,7 @@ const getDocumentTypeOptions = createSelector(
         value: documentTypes[id].id,
         text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
       }))
-      , ["text"], ["asc"]),
+      , ['text'], ['asc']),
 );
 
 const getDocumentTypeOptionsForDocumentList = createSelector(
@@ -66,14 +66,14 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
             DOC_TYPE_GROUP_OPTION.PO,
             DOC_TYPE_GROUP_OPTION.RECEIVABLE,
           ],
-          documentTypes[id].groupOptions
-        )
+          documentTypes[id].groupOptions,
+        ),
       )
         .map((id) => ({
           value: documentTypes[id].id,
           text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
         }))
-      , ["text"], ["asc"]),
+      , ['text'], ['asc']),
 );
 
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentType.loadListAsyncInfo;
@@ -86,8 +86,8 @@ const getDocumentTypeByAcronym = createSelector(
       .values(docTypesById)
       .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
 );
-const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
-  state.documentType.docRevTypeId.forms[0].id : "";
+const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0]
+  ? state.documentType.docRevTypeId.forms[0].id : '';
 
 const docRevTypeForms = (state: ApplicationState) => state.documentType.docRevTypeId.forms;
 
@@ -99,7 +99,7 @@ const getTabConfiguration = (state: ApplicationState, group: DocumentGroupType):
 const getDocTypeName = createSelector(
   byId,
   (state, docTypeId) => docTypeId,
-  (byIds, docTypeId) => get(byIds[docTypeId], "documentTypeName", "N/A"),
+  (byIds, docTypeId) => get(byIds[docTypeId], 'documentTypeName', 'N/A'),
 );
 
 const makeGetDocTypeByAcronym = () => createSelector(
@@ -107,7 +107,6 @@ const makeGetDocTypeByAcronym = () => createSelector(
   (state: ApplicationState, acronym: string) => acronym,
   (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
 );
-
 
 export default {
   byId,

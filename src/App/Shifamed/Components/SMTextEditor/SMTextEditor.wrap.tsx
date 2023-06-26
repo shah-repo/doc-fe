@@ -1,13 +1,13 @@
-import { ContentState, convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import { useFormikContext } from "formik";
-import htmlToDraft from "html-to-draftjs";
-import { map } from "lodash";
-import React, { useMemo, useState } from "react";
-import { useIntl } from "react-intl";
-import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from "../../..";
-import { FB } from "../../../../ui/form.builder";
-import { useFormContext } from "../../../../ui/components/forms/FormContext";
+import { ContentState, convertToRaw, EditorState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { useFormikContext } from 'formik';
+import htmlToDraft from 'html-to-draftjs';
+import { map } from 'lodash';
+import React, { useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from '../../..';
+import { FB } from '../../../../ui/form.builder';
+import { useFormContext } from '../../../../ui/components/forms/FormContext';
 
 export const withSMTextEditor = <T extends SMTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -24,7 +24,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     formValue,
     toolbar,
     masked,
-    name = "",
+    name = '',
     ...props
   }: T) => {
     // MARK: @config
@@ -36,27 +36,27 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     const { workspaceState } = FB.useStores();
     formValue = _formState?.getValue(name);
     _textEditorState = SM.useRef(SMTextEditorState, htmlToEditorState(formValue));
-    const emptyHtmlContent = "<p></p>";
+    const emptyHtmlContent = '<p></p>';
 
     !toolbar && (toolbar = {
       options: [
-        "inline",
-        "blockType",
-        "fontSize",
-        "fontFamily",
-        "list",
-        "textAlign",
-        "colorPicker",
-        "link",
-        "remove",
-        "history",
+        'inline',
+        'blockType',
+        'fontSize',
+        'fontFamily',
+        'list',
+        'textAlign',
+        'colorPicker',
+        'link',
+        'remove',
+        'history',
       ],
-      inline: { options: ["bold", "italic", "underline", "monospace"] },
+      inline: { options: ['bold', 'italic', 'underline', 'monospace'] },
     });
 
     showToggleButton = () => {
       setTimeout(() => {
-        const elm = document.querySelector(".rdw-editor-main");
+        const elm = document.querySelector('.rdw-editor-main');
         const isClamped = elm ? elm.scrollHeight > elm.clientHeight : false;
         setIsTextClamped(isClamped);
         _documentRevisionFormState?.setIsDescTextClamped(isClamped);
@@ -76,7 +76,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       () => _documentRevisionFormState?.isDirty,
       (isDirty: boolean | undefined) => {
         workspaceState?.setDirty(isDirty || false);
-      }
+      },
     );
 
     // MARK: @state
@@ -88,7 +88,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
         const editorState = htmlToEditorState(value);
         _textEditorState?.setEditorState(editorState);
         showToggleButton && showToggleButton();
-      }
+      },
     );
     // MARK: @helpers
     // Creates editor state with initial value
@@ -115,7 +115,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       if (!editorState) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       let htmlContent = draftToHtml(convertToRaw(editorState.getCurrentContent())).trim();
-      (htmlContent === emptyHtmlContent) && (htmlContent = "");
+      (htmlContent === emptyHtmlContent) && (htmlContent = '');
       if (_formState?.getValue(name) === htmlContent) { return; }
       formik.setFieldValue(name, htmlContent);
       _formState?.setValue(name, htmlContent);
@@ -142,6 +142,6 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       _documentRevisionFormState,
     });
   };
-  Comp.displayName = "withSMTextEditor";
+  Comp.displayName = 'withSMTextEditor';
   return Comp;
 };

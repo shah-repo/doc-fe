@@ -1,44 +1,43 @@
-import { Avatar, createStyles, ListItem, ListItemAvatar, ListItemText, makeStyles, Theme, Typography } from "@material-ui/core";
-import React from "react";
-import { useIntl } from "react-intl";
-import { User } from "../../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
-import Colors from "../../../layout/theme/utils/colors";
+import { Avatar, createStyles, ListItem, ListItemAvatar, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { User } from '../../../../state/ducks/common/types';
+import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
+import Colors from '../../../layout/theme/utils/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     auditListItem: {
-      margin: "0px",
-      padding: "0px",
-      marginBottom: "12px",
+      margin: '0px',
+      padding: '0px',
+      marginBottom: '12px',
     },
     primaryText: {
       fontWeight: 600,
-      fontSize: "14px",
-      lineHeight: "21px",
+      fontSize: '14px',
+      lineHeight: '21px',
       color: Colors.dark_jungle_green,
     },
     secondaryText: {
-      fontSize: "12px",
+      fontSize: '12px',
       color: Colors.font_gray,
     },
     avatar: ({ initialColor }) => ({
-      width: "35px",
-      height: "35px",
+      width: '35px',
+      height: '35px',
       fontWeight: 600,
       color: Colors.white,
-      borderRadius: "50%",
-      fontSize: "12px",
+      borderRadius: '50%',
+      fontSize: '12px',
       background: `${initialColor}`,
     }),
   }));
 
 interface Props {
-  user: User;
-  secondaryComponent: JSX.Element;
-  name: string | JSX.Element;
+  user: User
+  secondaryComponent: JSX.Element
+  name: string | JSX.Element
 }
-
 
 const UserAvatarListItem: React.FunctionComponent<Props> = ({
   user,
@@ -48,7 +47,7 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
   const classes = useStyles({ initialColor: user?.initialColor });
 
   const intl = useIntl();
-  const defaultName = intl.formatMessage({ id: "user.management.audit.history.Unknown" });
+  const defaultName = intl.formatMessage({ id: 'user.management.audit.history.Unknown' });
 
   return (
     <>
@@ -58,7 +57,7 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
             <Avatar
               className={classes.avatar}
               alt={user?.name}
-              src={user?.avatar || ""}
+              src={user?.avatar || ''}
             />
           ) : (
             <Avatar

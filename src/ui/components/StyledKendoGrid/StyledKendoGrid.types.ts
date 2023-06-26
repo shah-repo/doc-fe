@@ -1,7 +1,7 @@
-import { GridProps, GridRowProps } from '@progress/kendo-react-grid';
+import { GridProps } from '@progress/kendo-react-grid';
+import { RefObject } from 'react';
 
 export interface StyledKendoGridProps extends GridProps {
   hasBoxScrollbars?: boolean
+  containerRef?: RefObject<HTMLDivElement>
 }
-
-export type RowComponent = (row: React.ReactElement<HTMLTableRowElement>, props: GridRowProps) => React.ReactNode;

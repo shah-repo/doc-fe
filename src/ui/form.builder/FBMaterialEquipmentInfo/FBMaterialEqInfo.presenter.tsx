@@ -1,21 +1,21 @@
-import { Box, Button, Chip, CircularProgress, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControlLabel, Grid, List, ListItem, ListItemText, MenuItem, MenuList, Switch } from "@material-ui/core";
-import cx from "classnames";
-import { remove } from "lodash";
-import React, { useState } from "react";
-import { useIntl } from "react-intl";
-import { SMText } from "../../../App";
-import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { toFixed } from "../../dashboard.new/line.items/common/Utils";
-import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
-import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
+import { Box, Button, Chip, CircularProgress, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControlLabel, Grid, List, ListItem, ListItemText, MenuItem, MenuList, Switch } from '@material-ui/core';
+import cx from 'classnames';
+import { remove } from 'lodash';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { SMText } from '../../../App';
+import { ReactComponent as ExpandIcon } from '../../../assets/images/tabExpand.svg';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { toFixed } from '../../dashboard.new/line.items/common/Utils';
+import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from './FBMaterailEqInfo.types';
+import useStyles, { useItemStatusStyles } from './FBMaterialEqInfo.styles';
 
 const DATE_FORMAT = MomentFormats.BriefDate;
 
 const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
   <ListItemText>
     {item.docId && `${item.docId} -`} {item.title} | {`${item.unit}: `}
-    {toFixed(item?.totalQuantity ?? item?.quantity) || "None"}
+    {toFixed(item?.totalQuantity ?? item?.quantity) || 'None'}
   </ListItemText>
   <ListItemText>
     {item.lots && item.lots.map((lot: LotItem) => (
@@ -23,7 +23,7 @@ const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
         className={classes.chip}
         key={lot.lotId}
         size="small"
-        label={`Lot ${lot.lotId ?? ""} | ${lot.partId ?? "N/A"} | ${lot.quantity ?? ""} ${lot.unit ?? ""}`}
+        label={`Lot ${lot.lotId ?? ''} | ${lot.partId ?? 'N/A'} | ${lot.quantity ?? ''} ${lot.unit ?? ''}`}
       />
     ))}
   </ListItemText>
@@ -43,7 +43,7 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
             className={classes.chip}
             size="small"
             label={
-              intl.formatMessage({ id: "meq.chip.nextCalDate" })
+              intl.formatMessage({ id: 'meq.chip.nextCalDate' })
               + getFormattedDateString(item.nextCalibration, DATE_FORMAT)
             }
           />
@@ -53,7 +53,7 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
             className={classes.chip}
             size="small"
             label={
-              intl.formatMessage({ id: "meq.chip.prevMaintance" })
+              intl.formatMessage({ id: 'meq.chip.prevMaintance' })
               + getFormattedDateString(item.nextPm, DATE_FORMAT)
             }
           />
@@ -84,7 +84,7 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
           {!loading && haveData && (
             <SMText
               label={{
-                locale: "common.items.count",
+                locale: 'common.items.count',
                 values: {
                   count: String(data.length),
                 },
@@ -96,19 +96,19 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
-            {haveData ?
-              data.map((item, pos) => (
+            {haveData
+              ? data.map((item, pos) => (
                 <ListItem
                   key={`${item.docId}-${item.title}`}
                   divider={pos < data.length - 1}
                   className={cx(classes.panelDetailsListItem, {
-                    [itemClasses[item.status ?? ""]]: item.status,
+                    [itemClasses[item.status ?? '']]: item.status,
                   })}
                 >
                   <PanelItem item={item} classes={classes} />
                 </ListItem>
-              )) :
-              <ListItem className={classes.panelDetailsListItem}><SMText label="common.none" /></ListItem>
+              ))
+              : <ListItem className={classes.panelDetailsListItem}><SMText label="common.none" /></ListItem>
             }
           </List>
         </ExpansionPanelDetails>
@@ -119,13 +119,13 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
 
 const panels: PanelData[] = [
   {
-    dataKey: "materials",
-    title: "form.builder.materials",
+    dataKey: 'materials',
+    title: 'form.builder.materials',
     itemComponent: MaterialItem,
   },
   {
-    dataKey: "equipment",
-    title: "form.builder.equipment",
+    dataKey: 'equipment',
+    title: 'form.builder.equipment',
     itemComponent: EquipmentItem,
   },
 ];
@@ -181,7 +181,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
         <Grid item xs={9}>
           <Box mb={1}>
             <Button variant="text" disableRipple className={classes.expandButton} onClick={toggleAllPanels}>
-              <SMText label={allPanelsExpaned ? "common.collapse.all" : "common.expand.all"} />
+              <SMText label={allPanelsExpaned ? 'common.collapse.all' : 'common.expand.all'} />
             </Button>
           </Box>
           {panels.map((panel) => (
@@ -197,7 +197,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
           ))}
         </Grid>
         <Grid item xs={3}>
-          <SMText label={"common.jump.to"} boxProps={{ className: classes.navTitle }} />
+          <SMText label="common.jump.to" boxProps={{ className: classes.navTitle }} />
           <MenuList>
             {panels.map((panel) => (
               <MenuItem

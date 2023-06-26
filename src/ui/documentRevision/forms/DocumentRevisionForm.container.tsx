@@ -1,44 +1,44 @@
-import { Grid } from "@material-ui/core";
-import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, isEmpty } from "lodash";
-import { useObserver } from "mobx-react";
-import moment from "moment";
-import React, { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { DocumentRevisionForm, SMFormHOCProps } from "../../../App";
-import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
-import { authSelectors } from "../../../state/ducks/auth";
-import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Approval } from "../../../state/ducks/common/types";
-import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { documentsActions } from "../../../state/ducks/documents";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FBWorkspaceMode } from "../../form.builder";
-import FBDataStore from "../../form.builder/FBStore/FBDataStore";
-import useDidMount from "../../hooks/useDidMount";
-import useGetHasPermission from "../../hooks/useGetHasPermission";
-import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
-import Colors from "../../layout/theme/utils/colors";
-import { DocumentCloneType } from "../Clone.container";
-import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from "../helpers/records";
-import { isDocumentAlphaReleased } from "../helpers/revisionStage";
-import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from "./types";
+import { Grid } from '@material-ui/core';
+import { Formik, FormikHelpers as FormikActions, FormikProps } from 'formik';
+import { cloneDeep, filter, isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
+import moment from 'moment';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { DocumentRevisionForm, SMFormHOCProps } from '../../../App';
+import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
+import { authSelectors } from '../../../state/ducks/auth';
+import { GroupTag, Permission } from '../../../state/ducks/auth/types';
+import { Approval } from '../../../state/ducks/common/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { documentsActions } from '../../../state/ducks/documents';
+import { userManagementSelectors } from '../../../state/ducks/userManagement';
+import { ApplicationState } from '../../../state/reducers';
+import { AsyncState } from '../../../state/types';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FBWorkspaceMode } from '../../form.builder';
+import FBDataStore from '../../form.builder/FBStore/FBDataStore';
+import useDidMount from '../../hooks/useDidMount';
+import useGetHasPermission from '../../hooks/useGetHasPermission';
+import useShouldUpgradeToLatest from '../../hooks/useShouldUpgradeToLatest';
+import Colors from '../../layout/theme/utils/colors';
+import { DocumentCloneType } from '../Clone.container';
+import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord } from '../helpers/checkDocumentGroup';
+import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from '../helpers/records';
+import { isDocumentAlphaReleased } from '../helpers/revisionStage';
+import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
 
 export interface FormHeaderContext {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip: boolean;
-  values: DocumentRevisionFormValues;
-  isDisabled: boolean;
-  mode: FBWorkspaceMode;
-  asyncState: AsyncState;
-  type?: DocumentCloneType;
+  documentRevision: DocumentRevision
+  canChangeOwnerShip: boolean
+  values: DocumentRevisionFormValues
+  isDisabled: boolean
+  mode: FBWorkspaceMode
+  asyncState: AsyncState
+  type?: DocumentCloneType
 }
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
@@ -46,23 +46,24 @@ export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 interface OwnProps {
-  initialValues: DocumentRevisionFormValues;
-  asyncState: AsyncState;
+  initialValues: DocumentRevisionFormValues
+  asyncState: AsyncState
   onSubmit: (
     values: DocumentRevisionFormValues,
     actions: FormikActions<DocumentRevisionFormValues>,
     cleanInitialValues?: DocumentRevisionFormValues,
-  ) => void;
-  showRevisionTypeChange?: boolean;
-  setDocId?: typeof documentsActions.setDocumentProposedId;
-  doNotPrompt?: boolean;
-  onDirtyFlagChange?: (dirty: boolean) => void;
-  documentRevision: DocumentRevision;
-  proposedDocId?: string;
-  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
-  canChangeOwnerShip?: boolean;
-  type?: DocumentCloneType;
-  isNewVersion?: boolean;
+  ) => void
+  showRevisionTypeChange?: boolean
+  setDocId?: typeof documentsActions.setDocumentProposedId
+  doNotPrompt?: boolean
+  setDoNotPrompt?: (value: boolean) => void
+  onDirtyFlagChange?: (dirty: boolean) => void
+  documentRevision: DocumentRevision
+  proposedDocId?: string
+  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId
+  canChangeOwnerShip?: boolean
+  type?: DocumentCloneType
+  isNewVersion?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -79,6 +80,7 @@ DocumentRevisionFormContainerProps
   proposedDocId,
   setDocId,
   doNotPrompt,
+  setDoNotPrompt,
   onDirtyFlagChange,
   documentRevision,
   canChangeOwnerShip = false,
@@ -94,7 +96,7 @@ DocumentRevisionFormContainerProps
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
+    documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ''));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -117,12 +119,12 @@ DocumentRevisionFormContainerProps
       });
     }
 
-    const retrain = initialValues.id ?
-      initialValues.retrain :
-      initialValues.document?.documentType?.defaultTraining || false;
+    const retrain = initialValues.id
+      ? initialValues.retrain
+      : initialValues.document?.documentType?.defaultTraining || false;
 
     const attachments = outputRevision
-      ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
+      ? filter(initialValues.attachments, (file) => file.lineType !== 'RED_LINE')
       : initialValues.attachments;
 
     return {
@@ -146,10 +148,10 @@ DocumentRevisionFormContainerProps
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     if (didMount) {
       if (
-        documentRevision?.updatedAt &&
-        FBDataStore?.refreshData?.updatedAt &&
-        moment(FBDataStore?.refreshData?.updatedAt).diff(
-          moment(documentRevision?.updatedAt)
+        documentRevision?.updatedAt
+        && FBDataStore?.refreshData?.updatedAt
+        && moment(FBDataStore?.refreshData?.updatedAt).diff(
+          moment(documentRevision?.updatedAt),
         ) >= 0
       ) {
         documentRevision.updatedAt = FBDataStore?.refreshData?.updatedAt;
@@ -182,7 +184,7 @@ DocumentRevisionFormContainerProps
   }, [documentRevision]);
 
   useEffect(() => {
-    if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
+    if (type !== 'newVersion' && !docId && loadDocumentProposedId && documentTypeAcronym) {
       loadDocumentProposedId(documentType?.id as string);
     }
     if (setDocId && docId) {
@@ -196,22 +198,22 @@ DocumentRevisionFormContainerProps
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
-  let mode: Partial<FBWorkspaceMode> = "none";
+  let mode: Partial<FBWorkspaceMode> = 'none';
 
   let { schema: originScheme = [] } = (
-    (cleanInitialValues)?.formTemplate ||
-    (cleanInitialValues)?.formDocument?.formTemplate ||
-    {}
+    (cleanInitialValues)?.formTemplate
+    || (cleanInitialValues)?.formDocument?.formTemplate
+    || {}
   );
   originScheme = cleanInitialValues?.schema || originScheme;
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
 
-  if (formGroupOptions && formGroupOptions.includes("FORM")) {
-    mode = "design";
+  if (formGroupOptions && formGroupOptions.includes('FORM')) {
+    mode = 'design';
   } else if (outputGroup || !isEmpty(originScheme)) {
-    mode = isEditableSchema ? "formDesign" : "form";
+    mode = isEditableSchema ? 'formDesign' : 'form';
   }
   useEffect(() => {
     _formState?.setMode(mode);
@@ -240,12 +242,12 @@ DocumentRevisionFormContainerProps
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
     documentRevision?.status,
     documentRevision?.formDocument?.status,
-    documentRevision?.formDocument?.document?.id
+    documentRevision?.formDocument?.document?.id,
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
 
-  const shouldShowUpgrade =
-    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
+  const shouldShowUpgrade
+    = ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isMPIOutput && !isLHR;
   const isDAM = checkIsDocumentDAM(formGroupOptions);
 
@@ -264,6 +266,7 @@ DocumentRevisionFormContainerProps
         proposedDocId,
         setDocId,
         doNotPrompt,
+        setDoNotPrompt,
         onDirtyFlagChange,
         documentTypesById,
         canChangeOwnerShip,
@@ -286,7 +289,7 @@ DocumentRevisionFormContainerProps
     <>
       <Grid ref={bannerPortal} />
       {/* TODO Get rid of inline styles */}
-      <Grid style={{ background: Colors.alabaster, height: "100%" }}>
+      <Grid style={{ background: Colors.alabaster, height: '100%' }}>
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

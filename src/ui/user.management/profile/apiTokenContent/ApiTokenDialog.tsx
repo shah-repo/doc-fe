@@ -1,18 +1,18 @@
-import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { Form, Formik } from "formik";
-import React from "react";
-import { FormContext } from "../../../components/forms/FormContext";
-import Text from "../../../components/Text";
-import { DialogHandler } from "../../../hooks/useDialog";
-import { styles } from "./ApiToken.style";
-import ApiTokenResponseFormPresenter from "./ApiTokenResponseForm.presenter";
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { FormContext } from '../../../components/forms/FormContext';
+import Text from '../../../components/Text';
+import { DialogHandler } from '../../../hooks/useDialog';
+import { styles } from './ApiToken.style';
+import ApiTokenResponseFormPresenter from './ApiTokenResponseForm.presenter';
 
 interface Props {
-  dialog: DialogHandler;
-  apiTokenName: string;
-  apiTokenKey: string;
-  apiTokenSecret: string;
+  dialog: DialogHandler
+  apiTokenName: string
+  apiTokenKey: string
+  apiTokenSecret: string
 }
 
 const ApiTokenDialog: React.FunctionComponent<Props> = ({

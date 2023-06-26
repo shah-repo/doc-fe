@@ -1,30 +1,30 @@
-import { Box, Button, Grid, Typography } from "@material-ui/core";
-import { Form } from "formik";
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../../state/ducks/auth";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import { AsyncState, AsyncStatus } from "../../../../../state/types";
-import InputField from "../../../../components/forms/fields/Input";
-import { required, validator } from "../../../../components/forms/fields/validators";
-import FormMessage from "../../../../components/forms/FormMessage";
-import FormProgress from "../../../../components/forms/FormProgress";
-import SubmitButton from "../../../../components/forms/SubmitButton";
-import Text from "../../../../components/Text";
-import { styles } from "./styles";
+import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { Form } from 'formik';
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../../state/ducks/auth';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { AsyncState, AsyncStatus } from '../../../../../state/types';
+import InputField from '../../../../components/forms/fields/Input';
+import { required, validator } from '../../../../components/forms/fields/validators';
+import FormMessage from '../../../../components/forms/FormMessage';
+import FormProgress from '../../../../components/forms/FormProgress';
+import SubmitButton from '../../../../components/forms/SubmitButton';
+import Text from '../../../../components/Text';
+import { styles } from './styles';
 
 interface Props {
-  asyncState: AsyncState;
-  cancel: () => void;
-  docDetails: Partial<DocumentRevision>;
-  trId?: string;
+  asyncState: AsyncState
+  cancel: () => void
+  docDetails: Partial<DocumentRevision>
+  trId?: string
 }
 
 const TrainingForm: React.FunctionComponent<Props> = ({
   cancel,
   asyncState,
   docDetails,
-  trId = "-",
+  trId = '-',
 }) => {
   const currentUser = useSelector(authSelectors.currentUserName);
   const classes = styles();
@@ -64,7 +64,7 @@ const TrainingForm: React.FunctionComponent<Props> = ({
         <Grid item xs={6} >
           <Grid item xs={12} className={classes.item}>
             <span className={classes.label}>
-              <Text translation="training.acknowledge.statement"/>
+              <Text translation="training.acknowledge.statement" />
             </span>
             <span className={classes.itemContentBlue}>
              &nbsp; {docDetails.docId}&nbsp;
@@ -84,7 +84,7 @@ const TrainingForm: React.FunctionComponent<Props> = ({
               name="password"
               label="training.acknowladge.password"
               dataCy="training.acknowladge.password"
-              inputProps={{ type: "password", className: classes.root }}
+              inputProps={{ type: 'password', className: classes.root }}
               validate={validator(required)}
               size="sm"
             />

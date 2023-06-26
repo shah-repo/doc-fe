@@ -1,24 +1,24 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import { map, pick } from "lodash";
-import React, { useState } from "react";
-import { useIntl } from "react-intl";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { Attachment } from "../../../../state/ducks/attachments/types";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import { useFormContext } from "../../forms/FormContext";
-import { withFormik } from "../../hoc/formik";
-import { toastError } from "../../notifications";
-import Presenter from "./presenter";
-import { AttachmentContainerProps } from "./utils/types";
+import { Box, CircularProgress } from '@material-ui/core';
+import { map, pick } from 'lodash';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { attachmentsActions } from '../../../../state/ducks/attachments';
+import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
+import { Attachment } from '../../../../state/ducks/attachments/types';
+import FBDynamicValidatorStore from '../../../form.builder/stores/ui/FBDynamicValidatorStore';
+import FBStore from '../../../form.builder/stores/ui/FBStore';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { useFormContext } from '../../forms/FormContext';
+import { withFormik } from '../../hoc/formik';
+import { toastError } from '../../notifications';
+import Presenter from './presenter';
+import { AttachmentContainerProps } from './utils/types';
 
 const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
-  name = "",
+  name = '',
   upload,
-  component = "button",
+  component = 'button',
   multiple = true,
   field,
   form,
@@ -45,15 +45,15 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
       FBStore.setValues({
         ...FBStore.values,
         [name]: map(attachments, (attach) =>
-          pick(attach, ["id", "name", "s3link", "type"]),
+          pick(attach, ['id', 'name', 's3link', 'type']),
         ),
       });
 
-      if (FBStore.mode === "form") {
+      if (FBStore.mode === 'form') {
         FBStore.setValues({
           ...FBStore.values,
           [name]: map(attachments, (attach) =>
-            pick(attach, ["id", "name", "s3link", "type"]),
+            pick(attach, ['id', 'name', 's3link', 'type']),
           ),
         });
         FBDynamicValidatorStore.validate();
@@ -91,17 +91,17 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
     let isUserAlrtedCleanCopyMismatch = false;
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
-        const type = file.name.split(".").pop();
-        if (type === "doc") {
-          !isUserAlertedNoDocFiles &&
-           toastError(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
+        const type = file.name.split('.').pop();
+        if (type === 'doc') {
+          !isUserAlertedNoDocFiles
+           && toastError(intl.formatMessage({ id: 'common.attachment.form.DOCERROR' }));
           isUserAlertedNoDocFiles = true;
           return false;
         }
 
-        if (type !== "docx" && cleanCopyRequired) {
-          !isUserAlrtedCleanCopyMismatch &&
-          toastError(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
+        if (type !== 'docx' && cleanCopyRequired) {
+          !isUserAlrtedCleanCopyMismatch
+          && toastError(intl.formatMessage({ id: 'common.attachment.form.Create.Clean.Copy.Error' }));
           isUserAlrtedCleanCopyMismatch = true;
           return false;
         }
@@ -118,13 +118,13 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
 
   return (
     <>
-      {isUploading &&
-      <Box>
+      {isUploading
+      && <Box>
         <CircularProgress color="secondary" />
       </Box>}
 
-      {!isUploading &&
-      <Box>
+      {!isUploading
+      && <Box>
         <Presenter
           {
             ...{

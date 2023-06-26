@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { AuditGroupType } from "../../../state/ducks/audit/types";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { AuditGroupType } from '../../../state/ducks/audit/types';
 import {
   changeRequestsActions,
   changeRequestsSelectors,
-} from "../../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { ApplicationState } from "../../../state/reducers";
-import AuditPresenter from "./Audit.presenter";
+} from '../../../state/ducks/changeRequest';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { ApplicationState } from '../../../state/reducers';
+import AuditPresenter from './Audit.presenter';
 
 interface Props {
-  changeRequest: ChangeRequest;
-  isDrawerOpen: boolean;
+  changeRequest: ChangeRequest
+  isDrawerOpen: boolean
 }
 
 type OwnProps = Props;
 
 interface StateProps {
-  audit: AuditGroupType;
+  audit: AuditGroupType
 }
 
 interface DispatchProps {
-  loadAudit: typeof changeRequestsActions.loadAudit;
+  loadAudit: typeof changeRequestsActions.loadAudit
 }
 
 type AuditContainerProps = OwnProps & StateProps & DispatchProps;

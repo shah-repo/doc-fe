@@ -1,5 +1,5 @@
-import { Dictionary } from "lodash";
+import { Dictionary } from 'lodash';
 
 export interface FBValidationProps {
-  toStringRules?: (validators: Dictionary<any>) => string | undefined;
+  toStringRules?: (validators: Dictionary<any>) => string | undefined
 }

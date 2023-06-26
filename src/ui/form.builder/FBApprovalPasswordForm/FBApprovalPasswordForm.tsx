@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBForm, FBTextField } from "..";
-import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
-import { withFBApprovalPasswordForm } from "./FBApprovalPasswordForm.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBForm, FBTextField } from '..';
+import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
+import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
 
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   formState,
@@ -11,7 +11,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
   // Prevent form submitting.
   const submitHandler: React.FormEventHandler = React.useCallback(
     (event) => event.preventDefault(),
-    []
+    [],
   );
 
   return (
@@ -22,7 +22,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
           rules="required"
           name="password"
           inputProps={{
-            type: "password",
+            type: 'password',
           }}
           label="form.builder.password"
         />

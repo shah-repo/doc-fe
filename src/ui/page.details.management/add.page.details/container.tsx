@@ -1,26 +1,26 @@
-import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { pageDetailsActions } from "../../../state/ducks/pageDetails";
-import { toastError } from "../../components/notifications";
-import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { DialogHandler } from "../../hooks/useDialog";
-import { PageDetailsFormPresenter } from "../form/presenter";
-import { toPageDetailsBodyValues } from "../transform";
-import { PageDetailsCategory, PageDetailsCategoryValues } from "../types";
+import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { pageDetailsActions } from '../../../state/ducks/pageDetails';
+import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { DialogHandler } from '../../hooks/useDialog';
+import { PageDetailsFormPresenter } from '../form/presenter';
+import { toPageDetailsBodyValues } from '../transform';
+import { PageDetailsCategory, PageDetailsCategoryValues } from '../types';
 
 interface Props {
-  dialog: DialogHandler;
+  dialog: DialogHandler
 }
 
 export const PageDetailsForm: React.FunctionComponent<Props> = ({
   dialog,
 }) => {
   const initialValues = {
-    category: "",
-    addNewBtnLabel: "",
+    category: '',
+    addNewBtnLabel: '',
     columns: null,
     config: null,
     helpModule: null,
@@ -48,7 +48,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
   const render = (props: FormikProps<PageDetailsCategory>) => (
     <PageDetailsFormPresenter
       handleTransition={dialog.close}
-      transitionLabel={"common.close"}
+      transitionLabel="common.close"
       {...props}
     />
   );
@@ -60,7 +60,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
       maxWidth="md"
     >
       <DialogTitle>
-        <Text translation={"common.add.document.type"} />
+        <Text translation="common.add.document.type" />
       </DialogTitle>
       <DialogContent>
         <Formik

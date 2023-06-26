@@ -1,9 +1,9 @@
-import * as React from "react";
-import { FormatDateOptions, FormattedDate } from "react-intl";
-import { TIME_ZONE } from "../../common/utils/date";
+import * as React from 'react';
+import { FormatDateOptions, FormattedDate } from 'react-intl';
+import { TIME_ZONE } from '../../common/utils/date';
 
 export interface DateFormatterProps extends Partial<FormatDateOptions> {
-  value?: Date | string | number;
+  value?: Date | string | number
 }
 
 const DateFormatter: React.FunctionComponent<DateFormatterProps> = ({

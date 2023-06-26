@@ -1,15 +1,15 @@
-import { Button } from "@material-ui/core";
-import cx from "classnames";
-import { hasIn, isString } from "lodash";
-import React from "react";
-import { FBButtonProps, FBLabelLocaleProps, FBText } from "..";
-import FBButtonStyles from "./FBButton.styles";
+import { Button } from '@material-ui/core';
+import cx from 'classnames';
+import { hasIn, isString } from 'lodash';
+import React from 'react';
+import { FBButtonProps, FBLabelLocaleProps, FBText } from '..';
+import FBButtonStyles from './FBButton.styles';
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
-  label = "",
-  color = "secondary",
-  variant = "contained",
-  dataCy = "fb-control-btn",
+  label = '',
+  color = 'secondary',
+  variant = 'contained',
+  dataCy = 'fb-control-btn',
   gutter,
   hidden,
   isHover = false,
@@ -26,11 +26,11 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
       <Button
         {...{ color, variant }}
         {...props}
-        type={props.type ?? "button"}
+        type={props.type ?? 'button'}
         data-cy={dataCy}
         style={{
           ...style,
-          ...hidden && { display: "none" },
+          ...hidden && { display: 'none' },
         }}
         classes={{
           root: classes.root,
@@ -41,7 +41,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
         {isString(label) && (
           <FBText locale={label} />
         )}
-        {hasIn(label, "locale") && (
+        {hasIn(label, 'locale') && (
           <FBText
             locale={(label as FBLabelLocaleProps).locale}
             values={(label as FBLabelLocaleProps).values}
@@ -55,18 +55,18 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
     <Button
       {...{ color, variant, size }}
       {...props}
-      type={props.type ?? "button"}
+      type={props.type ?? 'button'}
       data-cy={dataCy}
       style={{
         ...style,
-        ...hidden && { display: "none" },
+        ...hidden && { display: 'none' },
       }}
       className={cx(classes.fbBtn, className)}
     >
       {isString(label) && (
         <FBText locale={label} />
       )}
-      {hasIn(label, "locale") && (
+      {hasIn(label, 'locale') && (
         <FBText
           locale={(label as FBLabelLocaleProps).locale}
           values={(label as FBLabelLocaleProps).values}

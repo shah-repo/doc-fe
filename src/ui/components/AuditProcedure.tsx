@@ -1,16 +1,16 @@
-import { Box, CircularProgress } from "@material-ui/core";
-import { last } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { Audit } from "../../state/ducks/audit/types";
-import { getAuditDefaultValue } from "../common/utils/audit";
-import { FB, FBProcedureItemType, FBProcedureState } from "../form.builder";
-import AuditAttachment from "./AuditAttachment";
+import { Box, CircularProgress } from '@material-ui/core';
+import { last } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { Audit } from '../../state/ducks/audit/types';
+import { getAuditDefaultValue } from '../common/utils/audit';
+import { FB, FBProcedureItemType, FBProcedureState } from '../form.builder';
+import AuditAttachment from './AuditAttachment';
 
 interface OwnProps {
-  audit: Audit;
-  dataCy?: string;
-  auditValue?: string;
+  audit: Audit
+  dataCy?: string
+  auditValue?: string
 }
 
 type Props = OwnProps;
@@ -21,37 +21,37 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
   auditValue,
 }) => useObserver(() => {
   const procedureState = FB.useRef(FBProcedureState);
-  let valueKey = last(audit.field.split(".")) ?? "";
-  if (valueKey === "title") {
-    valueKey = audit.field.split(".")[2].split("[")[0] ?? "";
+  let valueKey = last(audit.field.split('.')) ?? '';
+  if (valueKey === 'title') {
+    valueKey = audit.field.split('.')[2].split('[')[0] ?? '';
   }
-  if (audit.field.includes("attachments")) {
-    valueKey = "attachments";
+  if (audit.field.includes('attachments')) {
+    valueKey = 'attachments';
   }
 
   const el = {
     description() {
       return (
-        <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: auditValue as string }}/>
+        <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: auditValue as string }} />
       );
     },
     partLot() {
-      auditValue = procedureState.getLot(auditValue ?? "");
-      if (FB.isUUID(auditValue ?? "")) {
+      auditValue = procedureState.getLot(auditValue ?? '');
+      if (FB.isUUID(auditValue ?? '')) {
         return <CircularProgress size={12} />;
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
     materials() {
-      auditValue = procedureState.getItem(auditValue ?? "", FBProcedureItemType.materials);
-      if (FB.isUUID(auditValue ?? "")) {
+      auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
+      if (FB.isUUID(auditValue ?? '')) {
         return <CircularProgress size={12} />;
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
     equipment() {
-      auditValue = procedureState.getItem(auditValue ?? "", FBProcedureItemType.equipment);
-      if (FB.isUUID(auditValue ?? "")) {
+      auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.equipment);
+      if (FB.isUUID(auditValue ?? '')) {
         return <CircularProgress size={12} />;
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);

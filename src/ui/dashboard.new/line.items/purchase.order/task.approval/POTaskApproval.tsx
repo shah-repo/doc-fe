@@ -1,70 +1,70 @@
-import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
-import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
-import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
-import { attachmentsActions } from "../../../../../state/ducks/attachments";
-import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
-import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { Attachment } from "../../../../change.request/form/types";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useDialog, { DialogHandler } from "../../../../hooks/useDialog";
-import Colors from "../../../../layout/theme/utils/colors";
-import DocId from "../../common/DocId/presenter";
-import DocTitle from "../../common/DocTitle/presenter";
-import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
-import { StyledListItem } from "../../common/StyledListItem";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { formatCurrency } from "../../common/Utils";
-import ApproveDialogueContainer from "./POApprovalDialogContainer";
-import useStyles from "./taskApproval.styles";
-import DismissAction from "../../common/DismissAction";
+import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
+import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
+import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
+import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
+import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
+import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
+import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
+import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
+import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
+import { attachmentsActions } from '../../../../../state/ducks/attachments';
+import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
+import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { Attachment } from '../../../../change.request/form/types';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
+import Colors from '../../../../layout/theme/utils/colors';
+import DocId from '../../common/DocId/presenter';
+import DocTitle from '../../common/DocTitle/presenter';
+import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
+import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { formatCurrency } from '../../common/Utils';
+import ApproveDialogueContainer from './POApprovalDialogContainer';
+import useStyles from './taskApproval.styles';
+import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  docDocumentId: string;
-  type: string;
-  docId: string;
-  docRevId: string;
-  approvalId: string;
-  timestamp: string;
-  docRevOwnerAvatar: Nullable<string>;
-  docRevOwnerInitialColor: string;
-  docRevOwnerName: string;
-  docRevName: string;
-  docRevVersion: string;
-  purchaseOrderSupplierDocRevId: string;
-  purchaseOrderSupplierDocId: string;
-  purchaseOrderCurrency: string;
-  purchaseSupplierName: string;
-  purchaseOrderTotalAmount: string;
-  purchaseOrderDescription: string;
-  purchaseOrdeLineItemCount: string;
+  id: string
+  docDocumentId: string
+  type: string
+  docId: string
+  docRevId: string
+  approvalId: string
+  timestamp: string
+  docRevOwnerAvatar: Nullable<string>
+  docRevOwnerInitialColor: string
+  docRevOwnerName: string
+  docRevName: string
+  docRevVersion: string
+  purchaseOrderSupplierDocRevId: string
+  purchaseOrderSupplierDocId: string
+  purchaseOrderCurrency: string
+  purchaseSupplierName: string
+  purchaseOrderTotalAmount: string
+  purchaseOrderDescription: string
+  purchaseOrdeLineItemCount: string
   purchaseOrderAttachments: {
-    name: string;
-    type: string;
-    id: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dialogPDF: DialogHandler;
-  dismissLineItem?: (id: string) => void;
+    name: string
+    type: string
+    id: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dialogPDF: DialogHandler
+  dismissLineItem?: (id: string) => void
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -105,35 +105,35 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const hoverItem = hoverItemId === id;
   const PoItems: any = [
     {
-      id: "id1",
+      id: 'id1',
       isSupplier: true,
-      ltext: "Supplier:",
+      ltext: 'Supplier:',
       rtext: purchaseSupplierName,
     },
     {
-      id: "id2",
+      id: 'id2',
       isRegular: true,
-      ltext: "Total:",
+      ltext: 'Total:',
       rtext: `${purchaseOrderCurrency} ${formatCurrency(
-        purchaseOrderTotalAmount
+        purchaseOrderTotalAmount,
       )}`,
     },
     {
-      id: "id3",
+      id: 'id3',
       isRegular: true,
-      ltext: "Description:",
+      ltext: 'Description:',
       rtext: purchaseOrderDescription,
     },
     {
-      id: "id4",
+      id: 'id4',
       isRegular: true,
-      ltext: "Line Items:",
+      ltext: 'Line Items:',
       rtext: purchaseOrdeLineItemCount,
     },
     {
-      id: "id5",
+      id: 'id5',
       isAttachments: true,
-      ltext: "Attachments",
+      ltext: 'Attachments',
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -212,7 +212,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const downloadAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, "_blank");
+      downloadInfo && window.open(downloadInfo.url, '_blank');
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
@@ -287,13 +287,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <DocId
-                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docId={docId}
                   />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
-                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />
@@ -305,7 +305,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"
@@ -336,8 +336,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 />
               </span>
             )}
-            {
-              <StyleTooltip
+            <StyleTooltip
                 title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
@@ -351,7 +350,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </span>
               </StyleTooltip>
-            }
             <span className={classes.actionIcon}>
               {!rejectHover && (
                 <RejectIcon
@@ -485,10 +483,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                       to={
                         poItem.rtext
                           ? documentVersionPath(
-                            purchaseOrderSupplierDocRevId || "",
-                            purchaseOrderSupplierDocId || ""
+                            purchaseOrderSupplierDocRevId || '',
+                            purchaseOrderSupplierDocId || '',
                           )
-                          : "#"
+                          : '#'
                       }
                       color="inherit"
                       className={classes.link}

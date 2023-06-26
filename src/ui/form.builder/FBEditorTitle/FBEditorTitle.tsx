@@ -1,23 +1,23 @@
-import { Box, IconButton, Typography } from "@material-ui/core";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import React from "react";
-import { useIntl } from "react-intl";
+import { Box, IconButton, Typography } from '@material-ui/core';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import React from 'react';
+import { useIntl } from 'react-intl';
 import {
   FBEditorModeProps,
   FBEditorTitleProps,
   FBEditorTitleState,
   FBMapWrapper,
-} from "..";
-import Text from "../../../../src/ui/components/Text";
-import { ReactComponent as CaretIcon } from "../../../assets/images/leftPanel/caret.svg";
-import styles from "./FBEditorTitle.styles";
-import { withFBEditorTitle } from "./FBEditorTitle.wrap";
+} from '..';
+import Text from '../../../../src/ui/components/Text';
+import { ReactComponent as CaretIcon } from '../../../assets/images/leftPanel/caret.svg';
+import styles from './FBEditorTitle.styles';
+import { withFBEditorTitle } from './FBEditorTitle.wrap';
 
 interface FBEditorTitlePropsIncludesType extends FBEditorTitleProps {
-  type?: string;
-  onFBEditorClose?: () => void;
-  underValidation?: boolean;
+  type?: string
+  onFBEditorClose?: () => void
+  underValidation?: boolean
 }
 
 const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = ({
@@ -31,7 +31,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = (
   const classes = styles();
   const formattedTitle = intl.formatMessage({
     id: `form.builder.${type}`,
-  }) || "";
+  }) || '';
   return (
     <>
       {!underValidation &&  <Box

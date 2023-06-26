@@ -1,8 +1,8 @@
-import { isEmpty } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBFileUploadProps, FBFileUploadState } from "..";
+import { isEmpty } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBFileUploadProps, FBFileUploadState } from '..';
 
 export const withFBFileUpload = <T extends FBFileUploadProps>(
   Component: React.FunctionComponent<T>,
@@ -10,7 +10,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
   const Comp = ({
     fileUploadState,
     disabled,
-    name = "",
+    name = '',
     defaultValue,
     withState,
     files,
@@ -36,7 +36,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
         (files) => {
           if (!fileUploadState) { return; }
           fileUploadState.files = formState?.inputState.get(name)?.value;
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -54,7 +54,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
             if (!isUnderWorkspace) { return; }
             workspaceState?.saveDocRev(formState?.getValues());
           }
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

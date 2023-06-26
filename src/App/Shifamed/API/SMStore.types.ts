@@ -1,22 +1,21 @@
-
 export interface SMStoreProps {
-  data: Map<string, any>;
-  loading: Map<string, boolean>;
+  data: Map<string, any>
+  loading: Map<string, boolean>
 }
 
-export type SMStoreRequestMethod = "get" | "post" | "patch" | "delete";
+export type SMStoreRequestMethod = 'get' | 'post' | 'patch' | 'delete';
 
 interface SMStoreResponse {
-  abort: () => void;
-  promise: Promise<any>;
+  abort: () => void
+  promise: Promise<any>
 }
 
 export interface SMStoreAdapter {
-  get(path: string, data?: {}, options?: {}): SMStoreResponse;
-  patch(path: string, data?: {}, options?: {}): SMStoreResponse;
-  post(path: string, data?: {}, options?: {}): SMStoreResponse;
-  put(path: string, data?: {}, options?: {}): SMStoreResponse;
-  del(path: string, data?: {}, options?: {}): SMStoreResponse;
+  get(path: string, data?: {}, options?: {}): SMStoreResponse
+  patch(path: string, data?: {}, options?: {}): SMStoreResponse
+  post(path: string, data?: {}, options?: {}): SMStoreResponse
+  put(path: string, data?: {}, options?: {}): SMStoreResponse
+  del(path: string, data?: {}, options?: {}): SMStoreResponse
 }
 
 // interface SMStoreRequestProps<Response, Body> {
@@ -49,18 +48,18 @@ export interface SMStoreAdapter {
 // }
 
 export interface SMStoreRequestSet<Body> {
-  url?: string;
-  urlValues?: Record<string, any>;
-  body?: Body;
-  mapping?: string;
-  persist?: boolean;
+  url?: string
+  urlValues?: Record<string, any>
+  body?: Body
+  mapping?: string
+  persist?: boolean
 }
 
 export interface SMStorePassword {
-  password?: string;
+  password?: string
 }
 
 export interface SMStoreError {
-  statusCode?: number;
-  message: string;
+  statusCode?: number
+  message: string
 }

@@ -1,38 +1,38 @@
-import { Button } from "@material-ui/core";
-import { mount } from "enzyme";
-import React from "react";
-import { AsyncStatus } from "../../../state/types";
-import SubmitButton, { SubmitButtonProps } from "./SubmitButton";
+import { Button } from '@material-ui/core';
+import { mount } from 'enzyme';
+import React from 'react';
+import { AsyncStatus } from '../../../state/types';
+import SubmitButton, { SubmitButtonProps } from './SubmitButton';
 
-jest.mock("../Text");
+jest.mock('../Text');
 
-describe("SubmitButton component unit tests", () => {
+describe('SubmitButton component unit tests', () => {
   const getWrapper = (props: SubmitButtonProps) => mount(
     <SubmitButton {...props} />,
   );
 
-  it("displays label", () => {
+  it('displays label', () => {
     const wrapper = getWrapper({
       asyncState: {
         status: AsyncStatus.Idle,
-        message: "",
+        message: '',
       },
-      label: "login.title",
+      label: 'login.title',
     });
 
-    expect(wrapper.text()).toContain("login.title");
-    expect(wrapper.find(Button).prop("disabled")).toBeFalsy();
+    expect(wrapper.text()).toContain('login.title');
+    expect(wrapper.find(Button).prop('disabled')).toBeFalsy();
   });
 
-  it("sets disabled flag", () => {
+  it('sets disabled flag', () => {
     const wrapper = getWrapper({
       asyncState: {
         status: AsyncStatus.Active,
-        message: "",
+        message: '',
       },
-      label: "login.title",
+      label: 'login.title',
     });
 
-    expect(wrapper.find(Button).prop("disabled")).toBeTruthy();
+    expect(wrapper.find(Button).prop('disabled')).toBeTruthy();
   });
 });

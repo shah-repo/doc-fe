@@ -1,22 +1,22 @@
-import React, { FC, useCallback, memo } from "react";
-import { useIntl } from "react-intl";
-import CreatableField from "../../../components/forms/fields/Autocomplete/Creatable";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
-import { useTitle } from "../../../hooks/docCustomization/useCustomization";
-import { FB } from "../../../form.builder";
-import TitleState from "./state";
-import { asyncDebounce } from "../../../../common/utils/helpers";
+import React, { FC, useCallback, memo } from 'react';
+import { useIntl } from 'react-intl';
+import CreatableField from '../../../components/forms/fields/Autocomplete/Creatable';
+import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
+import { useTitle } from '../../../hooks/docCustomization/useCustomization';
+import { FB } from '../../../form.builder';
+import TitleState from './state';
+import { asyncDebounce } from '../../../../common/utils/helpers';
 
 interface TitleProps {
-  name: string;
-  documentTypeId?: string;
-  disabled?: boolean;
-  value?: string;
+  name: string
+  documentTypeId?: string
+  disabled?: boolean
+  value?: string
 }
 
 const Index: FC<TitleProps> = ({
-  documentTypeId = "",
-  name = "name",
+  documentTypeId = '',
+  name = 'name',
   ...props
 }) => {
   const intl = useIntl();
@@ -35,7 +35,7 @@ const Index: FC<TitleProps> = ({
       },
       300,
     ),
-    [titleState]
+    [titleState],
   );
 
   if (!isVisible) {
@@ -48,10 +48,10 @@ const Index: FC<TitleProps> = ({
         name={name}
         creatableProps={{
           loadOptions,
-          id: "Title-field",
+          id: 'Title-field',
         }}
         isDisabled={props.disabled}
-        placeholder={intl.formatMessage({ id: "form.builder.enter.title" })}
+        placeholder={intl.formatMessage({ id: 'form.builder.enter.title' })}
         labelProps={{ margin: 0 }}
         {...{ label }}
       />

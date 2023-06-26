@@ -1,14 +1,14 @@
-import { Grid } from "@material-ui/core";
-import React, { useState } from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import { KendoPresenterProps } from "../../components/KendoGrid/interfaces";
-import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
-import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { documentRevisionQueryStatus } from "../utils/helpers";
-import CreateButton from "./CreateButton/presenter";
-import ExportButton from "./ExportButton/presenter";
+import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import { KendoPresenterProps } from '../../components/KendoGrid/interfaces';
+import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import { DOCUMENT_REVISION_CREATE_URL } from '../../constants/urls';
+import { documentRevisionQueryStatus } from '../utils/helpers';
+import CreateButton from './CreateButton/presenter';
+import ExportButton from './ExportButton/presenter';
 
 export function DocumentListPresenter({
   statuses,
@@ -33,7 +33,7 @@ export function DocumentListPresenter({
             <GridTitle translation="navigation.document.list" />
           </Grid>
           <Grid item>
-            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped}/>
+            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
             <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
           </Grid>
         </Grid>
@@ -48,7 +48,7 @@ export function DocumentListPresenter({
           onRowClick={onRowClick}
           queryUrl={queryUrl}
           defaultPayloadData={{
-            documentTypeWithoutCategory: "true",
+            documentTypeWithoutCategory: 'true',
             status: documentRevisionQueryStatus(),
           }}
         />

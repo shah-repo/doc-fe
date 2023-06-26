@@ -1,29 +1,29 @@
-import { Button, ButtonGroup, withStyles } from "@material-ui/core";
-import Menu, { MenuProps } from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import { default as classNames, default as cx } from "classnames";
-import { default as React } from "react";
-import { useIntl } from "react-intl";
-import { ReactComponent as CaretIcon } from "../../../../assets/images/po_status_dropdown.svg";
-import { GroupTag } from "../../../../state/ducks/auth/types";
-import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
-import Text from "../../../../ui/components/Text";
-import AlertDialog from "../../../app/alert.dialog/AlertDialog";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import useGetHasTag from "../../../hooks/useGetHasTag";
-import { toastError } from "../../notifications";
-import useStyles from "./HeaderPOStatus.styles";
-import { VoidPOStatusDialog } from "./VoidDialog";
+import { Button, ButtonGroup, withStyles } from '@material-ui/core';
+import Menu, { MenuProps } from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { default as classNames, default as cx } from 'classnames';
+import { default as React } from 'react';
+import { useIntl } from 'react-intl';
+import { ReactComponent as CaretIcon } from '../../../../assets/images/po_status_dropdown.svg';
+import { GroupTag } from '../../../../state/ducks/auth/types';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
+import Text from '../../../../ui/components/Text';
+import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
+import useGetHasTag from '../../../hooks/useGetHasTag';
+import { toastError } from '../../notifications';
+import useStyles from './HeaderPOStatus.styles';
+import { VoidPOStatusDialog } from './VoidDialog';
 
 interface Props {
-  poStatus: POStatusType;
-  docId: string;
-  docRevOwner: string;
-  updatedAt: string;
-  isOwner: boolean;
+  poStatus: POStatusType
+  docId: string
+  docRevOwner: string
+  updatedAt: string
+  isOwner: boolean
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
@@ -34,7 +34,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const async = useAsync({
     onError: () => {
-      toastError(intl.formatMessage({ id: "documentRevision.po.status.update.failed" }));
+      toastError(intl.formatMessage({ id: 'documentRevision.po.status.update.failed' }));
     },
   });
   const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
@@ -80,24 +80,24 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       elevation={0}
       getContentAnchorEl={null}
       anchorOrigin={{
-        vertical: "bottom",
+        vertical: 'bottom',
         horizontal: 94,
       }}
       transformOrigin={{
-        vertical: "top",
+        vertical: 'top',
         horizontal: 94,
       }}
       {...props}
     />
   ));
   const getPOStatusMenuItemLabel = (poStatus) => {
-    let label = "form.builder.header.po.status.open";
+    let label = 'form.builder.header.po.status.open';
     switch (poStatus) {
       case POStatusType.CLOSED:
-        label = "form.builder.header.po.status.close";
+        label = 'form.builder.header.po.status.close';
         break;
       case POStatusType.VOIDED:
-        label = "form.builder.header.po.status.void";
+        label = 'form.builder.header.po.status.void';
         break;
       default:
     }
@@ -110,7 +110,6 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     />
     <Text message={getPOStatusMenuItemLabel(POStatusType[status])} />
   </>;
-
 
   const getMenuOptions = () => (
     <>
@@ -156,13 +155,13 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           disableRipple
           onClick={handleClick}
         >
-          <div className={classNames(classes.statusIcon, classes[poStatus])}/>
+          <div className={classNames(classes.statusIcon, classes[poStatus])} />
           <Text message={POStatusLabelMapping[poStatus]} />
         </Button>
         <Button
           onClick={handleClick}
           data-cy="po-status-menu"
-          aria-owns={anchorEl ? "po-status-menu" : undefined}
+          aria-owns={anchorEl ? 'po-status-menu' : undefined}
           aria-haspopup="true"
           className={cx(classes.defaultGroupButton, classes.iconBtn)}
         >
@@ -177,8 +176,8 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         onClose={handleClose}
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         className={classes.menu}
       >

@@ -1,37 +1,37 @@
-import { debounce, get, has, isEmpty, set } from "lodash";
-import React, { useMemo } from "react";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { authSelectors } from "../../state/ducks/auth";
-import { changeRequestsActions } from "../../state/ducks/changeRequest";
-import { ChangeRequest, ChangeRequestEditRequestBody } from "../../state/ducks/changeRequest/types";
-import { ApplicationState } from "../../state/reducers";
-import ChangeRequestFormContainer from "../change.request/form/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../change.request/form/transform";
-import { ChangeRequestFormValues } from "../change.request/form/types";
-import { changeRequestPreviewPath } from "../change.request/utils/paths";
-import { FormContext } from "../components/forms/FormContext";
-import { compareValuesToSubmit } from "../components/forms/helpers";
-import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
-import FBDataStore from "../form.builder/FBStore/FBDataStore";
-import useAsync from "../hooks/useAsync";
-import { canEditChangeRequest } from "./helpers";
-import ChangeRequestSummaryContainer from "./summary/container";
+import { debounce, get, has, isEmpty, set } from 'lodash';
+import React, { useMemo } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { authSelectors } from '../../state/ducks/auth';
+import { changeRequestsActions } from '../../state/ducks/changeRequest';
+import { ChangeRequest, ChangeRequestEditRequestBody } from '../../state/ducks/changeRequest/types';
+import { ApplicationState } from '../../state/reducers';
+import ChangeRequestFormContainer from '../change.request/form/ChangeRequestForm.container';
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../change.request/form/transform';
+import { ChangeRequestFormValues } from '../change.request/form/types';
+import { changeRequestPreviewPath } from '../change.request/utils/paths';
+import { FormContext } from '../components/forms/FormContext';
+import { compareValuesToSubmit } from '../components/forms/helpers';
+import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
+import FBDataStore from '../form.builder/FBStore/FBDataStore';
+import useAsync from '../hooks/useAsync';
+import { canEditChangeRequest } from './helpers';
+import ChangeRequestSummaryContainer from './summary/container';
 
 interface StateProps {
-  currentUserEmail: string;
+  currentUserEmail: string
 }
 
 interface DispatchProps {
-  save: typeof changeRequestsActions.save;
-  loadAudit: typeof changeRequestsActions.loadAudit;
+  save: typeof changeRequestsActions.save
+  loadAudit: typeof changeRequestsActions.loadAudit
 }
 
 interface OwnProps {
-  changeRequest: ChangeRequest;
-  hideSideBar?: boolean;
-  inDialog?: boolean;
-  currentDocRevId?: string;
+  changeRequest: ChangeRequest
+  hideSideBar?: boolean
+  inDialog?: boolean
+  currentDocRevId?: string
 }
 
 type ChangeRequestUpdateContainerProps = OwnProps &
@@ -44,7 +44,6 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
   { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, inDialog = false, currentDocRevId }) => {
-
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -79,7 +78,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     const dataToSubmit = compareValuesToSubmit(
       initialValues,
       { ...values, formInput: formStateContext?._currentValue },
-      toChangeRequestEditRequestBody
+      toChangeRequestEditRequestBody,
     );
 
     if (isEmpty(dataToSubmit)) {
@@ -87,7 +86,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     }
 
     // Update form input with the hidden field data
-    const currentFormInputData = get(dataToSubmit, "formInput", {});
+    const currentFormInputData = get(dataToSubmit, 'formInput', {});
     if (!isEmpty(currentFormInputData)) {
       for (const [key, value] of Object.entries(initialValues?.formInput || {})) {
         if (!has(currentFormInputData, key)) {

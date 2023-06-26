@@ -1,14 +1,14 @@
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { isEmpty } from "lodash";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { FB } from "..";
-import { SM } from "../../../App";
-import { TIME_ZONE } from "../../../common/utils/date";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { useFormContext } from "../../components/forms/FormContext";
-import FBDatePickerState from "./FBDatePicker.state";
-import { FBDatePickerProps } from "./FBDatePicker.types";
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { isEmpty } from 'lodash';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { FB } from '..';
+import { SM } from '../../../App';
+import { TIME_ZONE } from '../../../common/utils/date';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { useFormContext } from '../../components/forms/FormContext';
+import FBDatePickerState from './FBDatePicker.state';
+import { FBDatePickerProps } from './FBDatePicker.types';
 
 export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
@@ -19,7 +19,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     onDatePickerClose,
     onChange,
     editorProperties,
-    name = "",
+    name = '',
     defaultValue,
     ...props
   }: T) => {
@@ -27,8 +27,8 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { submitForm } = useFormContext();
     const initialValue = formState?.getFieldValue(name);
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
-    const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
-    const disablePastDates = editorProperties?.includes("disablePastDates") || false;
+    const defaultCurrentDate = editorProperties?.includes('defaultCurrentDate') || false;
+    const disablePastDates = editorProperties?.includes('disablePastDates') || false;
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
 
@@ -47,24 +47,23 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       workspaceState?.saveDocRev(formState?.getValues());
     }
 
-
     SM.reaction(
       () => workspaceState?.changeRequest,
       (value?: ChangeRequest) => {
         if (value) {
           setApprovalRequest(value);
         }
-      }
+      },
     );
 
     useEffect(() => {
       // Populate with a default value if there is no default value, no initialValue, the editorProperties has
       //  defaultCurrentDate & the documentRevision is an output
-      const isUnderDefault =
-        !defaultValue &&
-        !initialValue &&
-        defaultCurrentDate &&
-        (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
+      const isUnderDefault
+        = !defaultValue
+        && !initialValue
+        && defaultCurrentDate
+        && (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
 
       if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();
@@ -96,7 +95,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
       datePickerState?.setValue(value);
-      save(moment.tz(value || "", "MM/DD/YYYY", TIME_ZONE).startOf("day").toISOString());
+      save(moment.tz(value || '', 'MM/DD/YYYY', TIME_ZONE).startOf('day').toISOString());
     };
 
     return Component({

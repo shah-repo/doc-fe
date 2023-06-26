@@ -1,23 +1,23 @@
-import { has, isEmpty, isEqual, omit } from "lodash";
-import { toJS } from "mobx";
+import { has, isEmpty, isEqual, omit } from 'lodash';
+import { toJS } from 'mobx';
 
-const clearMobxObject = (value) => typeof value === "object" ?
-  toJS(value) :
-  value;
+const clearMobxObject = (value) => typeof value === 'object'
+  ? toJS(value)
+  : value;
 
 const getDiff = (transformedValues, transformedInitialValues) => {
   const diff = {};
   for (const [key, value] of Object.entries(transformedValues)) {
-    if (key === "formInput") {
+    if (key === 'formInput') {
       continue;
     }
-    if (key === "formDocument") {
+    if (key === 'formDocument') {
       if ((value as any)?.id !== transformedInitialValues.formDocument?.id) {
         diff[key] = value;
       }
       continue;
     }
-    if (key === "formTemplate") {
+    if (key === 'formTemplate') {
       const initialFormTemplate = {
         outputDocumentTypes: (transformedInitialValues?.formTemplate?.outputDocumentTypes || [])
           .map((outputDoc) => ({ id: outputDoc.value }) ),
@@ -35,13 +35,13 @@ const getDiff = (transformedValues, transformedInitialValues) => {
     if (!isEqual(value, transformedInitialValues[key])) {
       diff[key] = value;
     }
-    if (key === "referenceTo" && diff[key]) {
+    if (key === 'referenceTo' && diff[key]) {
       diff[key] = diff[key]?.filter((referenceValue) => {
         if (isEmpty(referenceValue)) {
           return false;
         }
         return Boolean(
-          Object.values(referenceValue).find((dataKeys) => !isEmpty(dataKeys))
+          Object.values(referenceValue).find((dataKeys) => !isEmpty(dataKeys)),
         );
       });
     }
@@ -78,16 +78,16 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     };
   }
 
-  const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput ?
-    Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :
-    false;
+  const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput
+    ? Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput))
+    : false;
 
   if (isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
     return diff;
   }
 
-  const updatedFormInput = has(transformedValues.formInput, "formInput") ?
-    transformedValues.formInput.formInput : transformedValues.formInput;
+  const updatedFormInput = has(transformedValues.formInput, 'formInput')
+    ? transformedValues.formInput.formInput : transformedValues.formInput;
 
   return {
     ...diff,
@@ -95,7 +95,7 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     // formInput: transformedValues.formInput,
     formInput: omit(
       updatedFormInput,
-      ["partType", "childForRevise"]
+      ['partType', 'childForRevise'],
     ),
   };
 };

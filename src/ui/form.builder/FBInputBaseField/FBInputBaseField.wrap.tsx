@@ -1,9 +1,9 @@
-import { get, isUndefined } from "lodash";
-import React from "react";
-import { useIntl } from "react-intl";
-import { FB } from "..";
-import { isTranslation } from "../../translations/types";
-import { FBInputBaseFieldProps } from "./FBInputBaseField.types";
+import { get, isUndefined } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { FB } from '..';
+import { isTranslation } from '../../translations/types';
+import { FBInputBaseFieldProps } from './FBInputBaseField.types';
 
 export const withFBInputBaseField = <T extends FBInputBaseFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -11,7 +11,7 @@ export const withFBInputBaseField = <T extends FBInputBaseFieldProps>(
   const Comp = ({
     multiline,
     rows = 1,
-    placeholder = "",
+    placeholder = '',
     defaultValue,
     disabled,
     name,
@@ -23,9 +23,9 @@ export const withFBInputBaseField = <T extends FBInputBaseFieldProps>(
     defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
-      disabled ||
-      get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
-      formState?.getFieldValue("signatureRequestId")
+      disabled
+      || get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD'
+      || formState?.getFieldValue('signatureRequestId')
     );
 
     (isUndefined(multiline)) && (

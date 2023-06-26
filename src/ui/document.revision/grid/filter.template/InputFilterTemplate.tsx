@@ -1,33 +1,33 @@
-import { Menu, MenuItem } from "@material-ui/core";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
-import { debounce, isEmpty } from "lodash";
-import React, { useRef, useState } from "react";
-import { useIntl } from "react-intl";
-import { KendoGridFilterCellOperators } from "../../../components/KendoGrid/interfaces";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+import { Menu, MenuItem } from '@material-ui/core';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
+import { debounce, isEmpty } from 'lodash';
+import React, { useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { KendoGridFilterCellOperators } from '../../../components/KendoGrid/interfaces';
+import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 const valueOperators = [
-  "contains",
-  "doesnotcontain",
-  "eq",
-  "neq",
-  "startswith",
-  "endswith",
+  'contains',
+  'doesnotcontain',
+  'eq',
+  'neq',
+  'startswith',
+  'endswith',
 ];
 
 const soloOperators = [
-  "isnull",
-  "isnotnull",
-  "isempty",
-  "isnotempty",
+  'isnull',
+  'isnotnull',
+  'isempty',
+  'isnotempty',
 ];
 
 const operatorsList = [...valueOperators, ...soloOperators];
 
 export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
-  value = "",
-  operator = "contains",
+  value = '',
+  operator = 'contains',
   onChange,
 }) => {
   const intl = useIntl();
@@ -43,9 +43,9 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
     newValue,
     newOperator,
   }: {
-    event: Parameters<GridFilterCellProps["onChange"]>[0]["syntheticEvent"];
-    newValue?: GridFilterCellProps["value"];
-    newOperator?: GridFilterCellProps["operator"];
+    event: Parameters<GridFilterCellProps['onChange']>[0]['syntheticEvent']
+    newValue?: GridFilterCellProps['value']
+    newOperator?: GridFilterCellProps['operator']
   }) => {
     onChange({
       value: newValue ?? value,
@@ -55,7 +55,7 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
   };
 
   const clearFilter = (event: React.MouseEvent<HTMLButtonElement>) => {
-    updateFilter({ event, newValue: "", newOperator: "" });
+    updateFilter({ event, newValue: '', newOperator: '' });
   };
 
   const updateValue = debounce((e: InputChangeEvent) => {
@@ -82,12 +82,12 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
       <Menu
         anchorEl={buttonRef.current}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         getContentAnchorEl={null}
         keepMounted

@@ -1,29 +1,29 @@
-import { ListItemIcon } from "@material-ui/core";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import classNames from "classnames";
-import { camelCase } from "lodash";
-import React, { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
-import { NavigationItem, NavigationItemType } from "../../state/ducks/company/types";
-import Text from "../components/Text";
-import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
-import { SIDE_BAR_TAB_INDEX } from "../documentRevision/Sidebar/constants";
-import styles from "./NavigationLink.styles";
+import { ListItemIcon } from '@material-ui/core';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import classNames from 'classnames';
+import { camelCase } from 'lodash';
+import React, { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
+import { NavigationItem, NavigationItemType } from '../../state/ducks/company/types';
+import Text from '../components/Text';
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from '../constants/urls';
+import { SIDE_BAR_TAB_INDEX } from '../documentRevision/Sidebar/constants';
+import styles from './NavigationLink.styles';
 
 interface NavigationLinkPresenterProps extends
   NavigationItem {
-  ActionIcon?: ReactNode;
-  isChild?: boolean;
-  toggleChildren?: (event: React.MouseEvent) => void;
-  currentPath: string;
+  ActionIcon?: ReactNode
+  isChild?: boolean
+  toggleChildren?: (event: React.MouseEvent) => void
+  currentPath: string
   checkIfItemIsActive: (
     type: NavigationItemType,
     currentPath: string,
     path?: string,
     category?: string,
     menu?: NavigationItem[],
-  ) => boolean;
+  ) => boolean
 }
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
@@ -48,18 +48,18 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         className={
           classNames(classes.link, {
             [classes.childLink]: isChild,
-            [classes.menu]: type === "MENU",
+            [classes.menu]: type === 'MENU',
             [classes.activeLink]: isItemActive,
           })}
-        to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
-        onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, "0")}
+        to={type === 'CATEGORY' ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
+        onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, '0')}
       >
         <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
           <div
             className={classNames(
               classes.icon, {
-                [classes.iconActive]: type !== "MENU" && isItemActive,
-              }
+                [classes.iconActive]: type !== 'MENU' && isItemActive,
+              },
             )}
           />
         </ListItemIcon>

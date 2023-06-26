@@ -1,11 +1,11 @@
-import { BoxProps } from "@material-ui/core";
-import { Props } from "react-intl/lib/components/message";
+import { BoxProps } from '@material-ui/core';
+import { Props } from 'react-intl/lib/components/message';
 
 export type FBTextProps =
-& Pick<Props, "values">
+& Pick<Props, 'values'>
 & {
-  locale?: string;
-  boxProps?: BoxProps;
-  loading?: boolean;
-  labelProps?: BoxProps;
+  locale?: string
+  boxProps?: BoxProps
+  loading?: boolean
+  labelProps?: BoxProps
 };

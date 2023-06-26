@@ -1,9 +1,9 @@
-import { isEqual, keys, omit } from "lodash";
-import { reaction } from "mobx";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { FB, FBMediaProps, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
-import { companySelectors } from "../../../state/ducks/company";
+import { isEqual, keys, omit } from 'lodash';
+import { reaction } from 'mobx';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { FB, FBMediaProps, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from '..';
+import { companySelectors } from '../../../state/ducks/company';
 
 export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -12,7 +12,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     handleAdd,
     onKeyDown,
     mpiProcedureState,
-    name = "",
+    name = '',
     isInputOwner,
     isOutput,
     isPreview,
@@ -29,8 +29,8 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     const redlineActive = useSelector(companySelectors.getRedlineActive);
 
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
-    isPreview = (isOutput || workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview") &&
-    !redlineActive;
+    isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview')
+    && !redlineActive;
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
@@ -51,7 +51,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
           };
           workspaceState.saveDocRev(formState?.getValues());
         }
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -66,7 +66,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
             ...mpiProcedureState.value,
             attachments,
           };
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -79,12 +79,11 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
           ...mpiProcedureState.value,
           description,
         };
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @helpers
-
 
     // MARK: @methods
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
@@ -92,7 +91,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       const newName = FB.uniqid;
       let schemaItem = workspaceState.getSchemaItemAt(index);
       if (!isClone) {
-        schemaItem = omit(schemaItem, "editorConfig");
+        schemaItem = omit(schemaItem, 'editorConfig');
       }
       const newItem = {
         ...schemaItem,
@@ -105,7 +104,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     };
 
     onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter" && e.ctrlKey) {
+      if (e.key === 'Enter' && e.ctrlKey) {
         handleAdd?.(false, true);
       }
     };
@@ -124,6 +123,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     });
   };
 
-  Comp.displayName = "withFBMPIProcedure";
+  Comp.displayName = 'withFBMPIProcedure';
   return Comp;
 };

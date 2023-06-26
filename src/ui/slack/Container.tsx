@@ -1,8 +1,8 @@
-import React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
-import Switch from "../app/Switch";
-import { SLACK_COMPANY_URL, SLACK_USER_URL } from "../constants/urls";
-import SlackLandingContainer from "./landing/Container";
+import React from 'react';
+import { Route, RouteComponentProps } from 'react-router-dom';
+import Switch from '../app/Switch';
+import { SLACK_COMPANY_URL, SLACK_USER_URL } from '../constants/urls';
+import SlackLandingContainer from './landing/Container';
 
 type Props = RouteComponentProps;
 

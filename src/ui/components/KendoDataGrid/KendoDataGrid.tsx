@@ -1,41 +1,126 @@
-import { Box, CircularProgress } from '@material-ui/core';
 import { State, process } from '@progress/kendo-data-query';
-import { Grid, GridCell, GridColumn, GridColumnReorderEvent, GridDataStateChangeEvent, GridNoRecords } from '@progress/kendo-react-grid';
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
+import invariant from 'invariant';
+import { flatMapDeep, kebabCase } from 'lodash';
+import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
-import { ColumnDefinition, CustomGridCellProps, DataGridProps, GenericColumn, WidthCalculator } from './KendoDataGrid.types';
+import Loader from '../common/kendo/Loader';
+import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
 
-const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, ...props }) => (
-  column.cell
-    ? <column.cell {...props} column={column} />
-    : (
-      <GridCell
-        {...props}
-        render={(element, props) => {
-          if (React.isValidElement(element) && column.template) {
-            return React.cloneElement(element, {}, column.template({ ...props, column }));
-          }
-          return element;
-        }}
-      />
-    )
-);
+const DEFAULT_DATA_STATE: State = {
+  filter: {
+    logic: 'and',
+    filters: [],
+  },
+};
 
-function isGenericColumns (columns: GenericColumn['children']): columns is GenericColumn[] {
+const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick, ...props }) => {
+  const onCellClick = (e: GridRowClickEvent) => {
+    onClick?.({
+      ...e,
+      dataItem: props.dataItem,
+    });
+  };
+  return (
+    column.cell
+      ? <column.cell {...props} column={column} field={field} onClick={onCellClick} />
+      : (
+        <GridCell
+          {...props}
+          field={field}
+          render={(element, props) => {
+            if (React.isValidElement(element)) {
+              return React.cloneElement(
+                element,
+                {
+                  ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
+                },
+                column.template
+                  ? column.template({ ...props, column, field, onClick: onCellClick })
+                  : undefined,
+              );
+            }
+            return element;
+          }}
+        />
+      )
+  );
+};
+
+const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...props }) => {
+  if (column.headerCell) {
+    return <column.headerCell {...props} column={column} />;
+  }
+  return column.title ? <GridHeaderCell {...props} /> : null;
+};
+
+function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
   return Array.isArray(columns) && columns.every((item) => 'id' in item);
 }
 
-const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateColumWidth?: WidthCalculator) =>
-  columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
+const GridContext = React.createContext<{
+  columns: GenericColumnDefinition[]
+  onRowClick?: GridProps['onRowClick']
+}>({
+  columns: [],
+  onRowClick: undefined,
+});
+
+function processSchema<T> (schema: Array<ColumnDefinition<T>>): Array<ColumnDefinition<T>> {
+  return schema.map((column) => {
+    const field = column.field ?? `custom-${column.id}`;
+
+    return {
+      ...column,
+      field,
+    };
+  });
+}
+
+const CellWrapper = (props: GridCellProps) => {
+  const { columns, onRowClick } = useContext(GridContext);
+
+  invariant(props.field, 'Field is required when using custom cell');
+
+  const allColumns = useMemo(
+    () => flatMapDeep(columns, (column) => (column?.children ? [column, ...column?.children] : [column])),
+    [columns],
+  );
+
+  const column = allColumns.find(({ field }) => field === props.field);
+
+  invariant(column, `Column with field ${props.field} not found`);
+
+  if (!column) {
+    return null;
+  }
+  return (
+    <CustomGridCell
+      {...props}
+      column={column}
+      field={props.field}
+      onClick={onRowClick}
+    />
+  );
+};
+
+const renderColumns = (
+  columns: GenericColumnDefinition[],
+  gridWidth: number,
+  calculateColumWidth?: WidthCalculator,
+) => {
+  return columns.filter(({ hidden }) => !hidden).map(({ children, ...column }) => {
+    const shouldUseCustomCell = column.cell ?? column.template;
+
     return (
       <GridColumn
         {...column}
         key={column.id}
-        field={column.field ?? `custom-${column.id}`}
-        title={column.title ? translate(column.title) : undefined}
-        cell={(props) => <CustomGridCell { ...props} column={column} />}
+        title={translate(column.title)}
+        cell={shouldUseCustomCell ? CellWrapper : undefined}
+        headerCell={(props) => <CustomHeaderCell {...props} column={column} />}
         resizable={column.resizable && !column.fitContent}
         width={
           calculateColumWidth && typeof column.width === 'number'
@@ -51,35 +136,32 @@ const renderColumns = (columns: GenericColumn[], gridWidth: number, calculateCol
       </GridColumn>
     );
   });
-
-const defaultDataState: State = {
-  filter: {
-    logic: 'and',
-    filters: [],
-  },
-  group: [],
-  sort: [],
 };
 
 function KendoDataGrid<T> ({
   data,
-  filter = defaultDataState.filter,
-  group = defaultDataState.group,
-  sort = defaultDataState.sort,
+  defaultDataState = DEFAULT_DATA_STATE,
+  filter,
+  group,
+  sort,
   noDataProcessing,
   loading,
   schema,
   fullWidth,
   fullHeight,
   fallback,
+  onRowClick,
   onColumnReorder,
   onDataStateChange,
   calculateColumWidth,
   ref,
+  containerRef,
+  style,
   ...props
-}: DataGridProps<T>): React.ReactElement | null {
+}: DataGridProps<T>): React.ReactElement {
   const gridRef = ref ?? useRef<Grid>();
-  const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(schema);
+  const gridContainerRef = containerRef ?? useRef<HTMLDivElement>(null);
+  const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(processSchema(schema));
   const [dataState, setDataState] = useState<State>({
     ...defaultDataState,
     filter,
@@ -88,7 +170,7 @@ function KendoDataGrid<T> ({
   });
 
   useEffect(() => {
-    setColumnsSchema(schema);
+    setColumnsSchema(processSchema(schema));
   }, [schema]);
 
   useEffect(() => {
@@ -129,12 +211,14 @@ function KendoDataGrid<T> ({
   });
 
   const updateDataState = (event: GridDataStateChangeEvent) => {
-    onDataStateChange
-      ? setDataState(onDataStateChange(event))
-      : setDataState(event.dataState);
+    setDataState(
+      onDataStateChange
+        ? onDataStateChange(event)
+        : event.dataState,
+    );
   };
 
-  const reorderColumns = (event: GridColumnReorderEvent) => {
+  const reorderColumns: GridProps['onColumnReorder'] = (event) => {
     if (onColumnReorder) {
       return setColumnsSchema(onColumnReorder(event));
     }
@@ -150,37 +234,40 @@ function KendoDataGrid<T> ({
 
   return (
     <AutoSizer
-      {...{
-        disableWidth: !fullWidth,
-        disableHeight: !fullHeight,
-      }}
+      disableWidth={!fullWidth}
+      disableHeight={!fullHeight}
     >
       {({ width, height }) => (
-        <>
+        <GridContext.Provider
+          value={{
+            columns: columnsSchema as GenericColumnDefinition[],
+            onRowClick,
+          }}
+        >
           <StyledKendoGrid
             {...props}
             style={{
               width: fullWidth ? `${width}px` : undefined,
               height: fullHeight ? `${height}px` : undefined,
+              ...style,
             }}
             data={resultData}
             onDataStateChange={updateDataState}
             onColumnReorder={reorderColumns}
             ref={gridRef}
+            containerRef={containerRef}
+            onRowClick={onRowClick}
             {...dataState}
           >
-            {renderColumns(columnsSchema as GenericColumn[], width, calculateColumWidth)}
+            {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth)}
             {fallback && (
               <GridNoRecords>{fallback}</GridNoRecords>
             )}
           </StyledKendoGrid>
           {loading && (
-            <Box className="k-loading-mask" display="flex" alignItems="center" justifyContent="center">
-              <CircularProgress size={20} />
-              <Box className="k-loading-color" />
-            </Box>
+            <Loader gridRef={gridContainerRef} />
           )}
-        </>
+        </GridContext.Provider>
       )}
     </AutoSizer>
   );

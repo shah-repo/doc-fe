@@ -1,17 +1,17 @@
-import { Formik, FormikProps } from "formik";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
-import { pageDetailsActions } from "../../../state/ducks/pageDetails";
-import { toastError } from "../../components/notifications";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import { toPageDetailsBodyValues, toPageDetailsInitialValues } from "../transform";
-import { PageDetailsCategory, PageDetailsCategoryValues } from "../types";
-import { PageDetailsFormPresenter } from "./presenter";
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { PageDetails } from '../../../state/ducks/documentRevisions/documentType/types';
+import { pageDetailsActions } from '../../../state/ducks/pageDetails';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import { toPageDetailsBodyValues, toPageDetailsInitialValues } from '../transform';
+import { PageDetailsCategory, PageDetailsCategoryValues } from '../types';
+import { PageDetailsFormPresenter } from './presenter';
 
 interface Props {
-  pageDetails: PageDetails;
+  pageDetails: PageDetails
 }
 
 export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
@@ -25,7 +25,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
   });
   const { id } = pageDetails;
   const initialValues = toPageDetailsInitialValues(pageDetails);
-  const transitionLabel =  "common.delete";
+  const transitionLabel =  'common.delete';
 
   const updatePageDetailsAction = useActionCreator(pageDetailsActions.updatePageDetails);
 
@@ -34,7 +34,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
       updatePageDetailsAction,
       id,
       toPageDetailsBodyValues(values),
-      async
+      async,
     );
   };
 

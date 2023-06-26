@@ -1,18 +1,18 @@
-import { Avatar, Box } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { Nullable } from "../../../../state/ducks/common/types";
-import AvatarUploadContainer from "../../common/avatar.field/container";
-import styles from "./avatar.styles";
+import { Avatar, Box } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../state/ducks/auth';
+import { Nullable } from '../../../../state/ducks/common/types';
+import AvatarUploadContainer from '../../common/avatar.field/container';
+import styles from './avatar.styles';
 
 interface OwnProps {
-  avatar: Nullable<string>;
-  showEditUser: boolean;
-  previewAvatar: string;
-  setPreviewAvatar: (value: string) => void;
-  setFile: (value: Nullable<File>) => void;
-  userInitials: string;
+  avatar: Nullable<string>
+  showEditUser: boolean
+  previewAvatar: string
+  setPreviewAvatar: (value: string) => void
+  setFile: (value: Nullable<File>) => void
+  userInitials: string
 }
 
 type Props = OwnProps;
@@ -30,9 +30,9 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
 
   const avatarRenderer = () => (
     <Box zIndex="modal" position="absolute" alignSelf="baseline">
-      {avatar ?
-        <img src={previewAvatar || avatar } className={classes.image} alt="Profile" /> :
-        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.image} data-cy="header-userInitials">
+      {avatar
+        ? <img src={previewAvatar || avatar } className={classes.image} alt="Profile" />
+        : <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.image} data-cy="header-userInitials">
           {userInitials}
         </Avatar>
       }

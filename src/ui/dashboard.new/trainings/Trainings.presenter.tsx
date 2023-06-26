@@ -1,23 +1,23 @@
-import { Divider, List } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
+import { Divider, List } from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   getFormattedDateString,
   MomentFormats,
-} from "../../../common/utils/date";
-import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
-import { ActionTypes } from "../../../state/ducks/dashboard/types";
-import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
-import Text from "../../components/Text";
-import useStyles from "../Dashboard.styles";
-import NewTraining from "../line.items/training/new.training/newTraining";
-import NoPendingActions from "../NoPendingActions";
+} from '../../../common/utils/date';
+import { trainingSelectors } from '../../../state/ducks/dashboard.new/training';
+import { ActionTypes } from '../../../state/ducks/dashboard/types';
+import LoadMoreButton from '../../components/common/load.more.button/LoadMoreButton';
+import Text from '../../components/Text';
+import useStyles from '../Dashboard.styles';
+import NewTraining from '../line.items/training/new.training/newTraining';
+import NoPendingActions from '../NoPendingActions';
 
 interface Props {
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
-  onLoadMoreData: () => void;
-  overallLimit: number;
+  pinLineItem: (id: string) => void
+  unPinLineItem: (id: string) => void
+  onLoadMoreData: () => void
+  overallLimit: number
 }
 
 const TrainingsLineItemPresenter: React.FC<Props> = ({
@@ -27,12 +27,12 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
   overallLimit,
 }) => {
   const classes = useStyles();
-  const [hoverItemId, setHoverItemId] = React.useState("");
+  const [hoverItemId, setHoverItemId] = React.useState('');
   const onMouseHoverItem = (id) => {
     setHoverItemId(id);
   };
   const onMouseLeaveItem = () => {
-    setHoverItemId("");
+    setHoverItemId('');
   };
   const trainingItems: any = useSelector(trainingSelectors.trainingList);
 
@@ -55,7 +55,7 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
                   pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
+                    MomentFormats.BriefDateTime,
                   )}
                   pendingTrainees={pendingAction.pendingTrainees}
                   hoverItemId={hoverItemId}

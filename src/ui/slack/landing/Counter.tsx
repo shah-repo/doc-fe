@@ -1,10 +1,10 @@
-import { Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import Text from "../../components/Text";
-import useInterval from "../../hooks/useInterval";
+import { Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import Text from '../../components/Text';
+import useInterval from '../../hooks/useInterval';
 
 interface Props {
-  onCounterFinish: () => void;
+  onCounterFinish: () => void
 }
 
 const SlackLandingCounter: React.FunctionComponent<Props> = ({

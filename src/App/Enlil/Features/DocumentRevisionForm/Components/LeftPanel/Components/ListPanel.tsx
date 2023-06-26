@@ -7,25 +7,25 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import { ChevronRight, ExpandMore } from "@material-ui/icons";
-import { each } from "lodash";
-import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
-import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
-import Text from "../../../../../../../ui/components/Text";
+} from '@material-ui/core';
+import { ChevronRight, ExpandMore } from '@material-ui/icons';
+import { each } from 'lodash';
+import { Observer } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { ReactComponent as FavoriteIcon } from '../../../../../../../assets/images/favorite.svg';
+import { ReactComponent as StarIcon } from '../../../../../../../assets/images/starIcon.svg';
+import Text from '../../../../../../../ui/components/Text';
 import {
   FB, FBEditorState, FBInputType, FBMapWrapper,
-} from "../../../../../../../ui/form.builder";
+} from '../../../../../../../ui/form.builder';
 import {
   FBControlPickerDataProps,
   FBControlPickerProps,
-} from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
-import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
-import styles from "./ListPanel.styles";
-import SearchBox from "./SearchBox";
+} from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types';
+import { withFBControlPicker } from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap';
+import styles from './ListPanel.styles';
+import SearchBox from './SearchBox';
 
 const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   controlPickerState,
@@ -66,8 +66,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
             onClick={() => {
               handleClick(section);
             }}
-            data-cy={intl.formatMessage({ id: `form.builder.${section}` }) + "-btn"}
-            className={`${classes.listItemBtn} ${ section === "section" ? "firstItem" : ""}`}
+            data-cy={intl.formatMessage({ id: `form.builder.${section}` }) + '-btn'}
+            className={`${classes.listItemBtn} ${ section === 'section' ? 'firstItem' : ''}`}
           >
             <ListItemText key={section}>
               <Typography className={classes.listItemText}
@@ -96,7 +96,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                       <ListItem
                         key={index}
                         className={`${classes.listItemStyle} ${
-                          editors.length - 1 === i ? "lastItem" : ""
+                          editors.length - 1 === i ? 'lastItem' : ''
                         }`}
                         disableGutters
                       >
@@ -104,8 +104,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           disableRipple={true}
                           className={classes.iconBtn}
                           onClick={
-                            openEditor &&
-                            openEditor({ type: picker.key, index, isAddAction: true })
+                            openEditor
+                            && openEditor({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           {FBEditorState.editorTypeIconMapping[
@@ -117,13 +117,13 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           {!FBEditorState.editorTypeIconMapping[
                             picker.key
                           ] && React.createElement(
-                            FBEditorState.editorTypeIconMapping.default
+                            FBEditorState.editorTypeIconMapping.default,
                           )}
                         </IconButton>
                         <ListItemText key={index} data-cy={picker.label}
                           onClick={
-                            openEditor &&
-                            openEditor({ type: picker.key, index, isAddAction: true })
+                            openEditor
+                            && openEditor({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           <Typography className={classes.listSubItem}>
@@ -164,7 +164,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     each(Object.keys(pickers), (value) => {
       const filteredList = pickers[value]
         .filter((el) =>
-          el.label.toLowerCase().includes(searchString.toLowerCase())
+          el.label.toLowerCase().includes(searchString.toLowerCase()),
         );
       if (filteredList.length) {
         filteredData[value] = filteredList;
@@ -189,7 +189,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
           <>
             {controlPickerState?.loading && (
               <Box width="100%" pt={1}>
-                <LinearProgress style={{ width: "100%" }} />
+                <LinearProgress style={{ width: '100%' }} />
               </Box>
             )}
           </>

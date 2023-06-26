@@ -1,11 +1,10 @@
-
-import React from "react";
-import { FBInputProps } from "../../types/common";
+import React from 'react';
+import { FBInputProps } from '../../types/common';
 
 export const withValidation = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
 ) => ({
-  name = "",
+  name = '',
   rules,
   label,
   placeholder,

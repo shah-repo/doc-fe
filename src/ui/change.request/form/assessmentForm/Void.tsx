@@ -1,23 +1,23 @@
-import { Box, Button } from "@material-ui/core";
-import React from "react";
-import { SM } from "../../../../App";
-import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
-import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
-import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
-import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
-import { AsyncStatus } from "../../../../state/types";
-import AlertDialog from "../../../app/alert.dialog/AlertDialog";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
+import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import { SM } from '../../../../App';
+import { StyledMenuListIcon } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
+import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { ReactComponent as VoidDocumentIcon } from '../../../../assets/images/void_document.svg';
+import { changeRequestsActions } from '../../../../state/ducks/changeRequest';
+import { ChangeRequest } from '../../../../state/ducks/changeRequest/types';
+import { AsyncStatus } from '../../../../state/types';
+import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import FormMessage from '../../../components/forms/FormMessage';
+import FormProgress from '../../../components/forms/FormProgress';
+import Text from '../../../components/Text';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
 
 interface Props {
-  changeRequest: ChangeRequest | undefined;
+  changeRequest: ChangeRequest | undefined
 }
 const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
   changeRequest,
@@ -30,8 +30,8 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
     && async.start(
       appyTransitionAction,
       changeRequest.id,
-      { password: "" },
-      "void",
+      { password: '' },
+      'void',
       async,
     );
   };
@@ -77,7 +77,7 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
       )}
       <AlertDialog
         confirmAction={voidDocument}
-        message={"change.request.void.alert"}
+        message="change.request.void.alert"
         {...{ dialog }}
       />
     </>

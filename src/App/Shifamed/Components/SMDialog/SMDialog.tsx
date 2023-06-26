@@ -1,15 +1,15 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import { Observer } from "mobx-react";
-import React from "react";
-import { SMButton, SMDialogAction, SMDialogProps, SMMap, SMText } from "../../..";
-import { withSMDialogWrap } from "./SMDialog.wrap";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import { isEmpty } from 'lodash';
+import { Observer } from 'mobx-react';
+import React from 'react';
+import { SMButton, SMDialogAction, SMDialogProps, SMMap, SMText } from '../../..';
+import { withSMDialogWrap } from './SMDialog.wrap';
 
 const SMDialog: React.FunctionComponent<SMDialogProps> = ({
   onDialogActionClick,
   dialogState,
   actions = [],
-  maxWidth = "sm",
+  maxWidth = 'sm',
   title,
   children,
 }) =>  (

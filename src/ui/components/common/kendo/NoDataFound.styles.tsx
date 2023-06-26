@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles } from '@material-ui/core';
 
 export const styles = makeStyles(() =>
   createStyles({
@@ -6,5 +6,5 @@ export const styles = makeStyles(() =>
       fontSize: 12,
       fontWeight: 600,
     },
-  })
+  }),
 );

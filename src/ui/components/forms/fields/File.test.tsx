@@ -1,13 +1,13 @@
-import { mount, ReactWrapper } from "enzyme";
-import { Form, Formik, FormikProps } from "formik";
-import React from "react";
-import FileField, { FileOwnProps } from "./File";
+import { mount, ReactWrapper } from 'enzyme';
+import { Form, Formik, FormikProps } from 'formik';
+import React from 'react';
+import FileField, { FileOwnProps } from './File';
 
-jest.mock("../../Text");
+jest.mock('../../Text');
 
-describe("File component tests", () => {
+describe('File component tests', () => {
   interface TestFormValues {
-    test: File | null;
+    test: File | null
   }
   let formProps: FormikProps<TestFormValues>;
 
@@ -32,29 +32,29 @@ describe("File component tests", () => {
     );
   };
 
-  it("displays default messages when file is not set", () => {
+  it('displays default messages when file is not set', () => {
     const wrapper = getWrapper({});
     const text = wrapper.text();
 
-    expect(text).toContain("document.file.selectText");
-    expect(text).toContain("document.file.select");
+    expect(text).toContain('document.file.selectText');
+    expect(text).toContain('document.file.select');
   });
 
-  it("sets file value and shows file info", () => {
+  it('sets file value and shows file info', () => {
     const wrapper = getWrapper({});
-    const input = wrapper.find("input");
-    const file = new File(["asdasda"], "test.pdf");
+    const input = wrapper.find('input');
+    const file = new File(['asdasda'], 'test.pdf');
     const event: any = {
       currentTarget: {
         files: [file],
       },
     };
 
-    (input.prop("onChange") as (arg: any) => void)(event);
+    (input.prop('onChange') as (arg: any) => void)(event);
 
     const text = wrapper.text();
-    expect(text).not.toContain("document.file.selectText");
-    expect(text).toContain("test.pdf");
+    expect(text).not.toContain('document.file.selectText');
+    expect(text).toContain('test.pdf');
 
     expect(formProps.values.test).toEqual(file);
   });

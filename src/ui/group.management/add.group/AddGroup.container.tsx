@@ -1,9 +1,9 @@
-import React from "react";
-import useDialog from "../../hooks/useDialog";
-import AddGroupPresenter from "./AddGroup.presenter";
+import React from 'react';
+import useDialog from '../../hooks/useDialog';
+import AddGroupPresenter from './AddGroup.presenter';
 
 interface Props {
-  addGroup?: () => void;
+  addGroup?: () => void
 }
 const AddGroupContainer: React.FunctionComponent <Props> = ({ addGroup }) => {
   const dialog = useDialog();

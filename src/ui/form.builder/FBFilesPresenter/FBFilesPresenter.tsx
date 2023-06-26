@@ -1,7 +1,7 @@
-import { Box } from "@material-ui/core";
-import React from "react";
-import { FBAttachment, FBFilePresenter, FBFilesPresenterProps, FBMapWrapper } from "..";
-import { withFBFilesPresenter } from "./FBFilesPresenter.wrap";
+import { Box } from '@material-ui/core';
+import React from 'react';
+import { FBAttachment, FBFilePresenter, FBFilesPresenterProps, FBMapWrapper } from '..';
+import { withFBFilesPresenter } from './FBFilesPresenter.wrap';
 
 const FBFilesPresenter: React.FunctionComponent<FBFilesPresenterProps> = ({
   attachments = [],

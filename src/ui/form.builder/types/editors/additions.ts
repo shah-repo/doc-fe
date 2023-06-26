@@ -1,3 +1,3 @@
-import { FBInputProps } from "../common";
+import { FBInputProps } from '../common';
 
-export type FBAdditionEditorProps = Pick<FBInputProps, "type" | "contextLabel">;
+export type FBAdditionEditorProps = Pick<FBInputProps, 'type' | 'contextLabel'>;

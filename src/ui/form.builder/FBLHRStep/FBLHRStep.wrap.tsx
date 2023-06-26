@@ -1,13 +1,13 @@
-import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
-import { find, flattenDeep, lowerCase, omit } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
-import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
-import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
+import { find, flattenDeep, lowerCase, omit } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
@@ -15,7 +15,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
   const Comp = ({
     filterOptions,
     startMpi,
-    name = "",
+    name = '',
     index,
     loading,
     stepLHRs,
@@ -47,12 +47,12 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
-    const lhrBuildTypeExist = formState?.getFieldValue("lhr-build-type");
+    const lhrBuildTypeExist = formState?.getFieldValue('lhr-build-type');
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
     const isPendingChange = isDocumentRevisionPendingChange(workspaceState?.document?.status);
 
     // TO DO: Find another way with BE to chechk if doc is LHRT
-    isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
+    isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === 'LHRT-';
 
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
@@ -75,7 +75,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => formState?.inputState.get(name)?.value,
       (value) => {
         if (!stepLHRs) { // don't trigger if it is LHR/MPI hover toggle
-          const editorConfig = !value ? omit(schemaItem?.editorConfig, "parameters") : schemaItem?.editorConfig;
+          const editorConfig = !value ? omit(schemaItem?.editorConfig, 'parameters') : schemaItem?.editorConfig;
           workspaceState?.setSchemaItem({
             ...schemaItem,
             editorConfig: {
@@ -84,7 +84,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
             },
           });
         }
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -104,7 +104,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           .setLHRs(docRev);
         setDisplayToLHRs();
         openLHRs(docRev);
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -117,9 +117,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         if (!highestRev) { return; }
         window.open(
           `/document_revision/${highestRev.documentId}/version/${highestRev.id}`,
-          "_self"
+          '_self',
         );
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -131,7 +131,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
         const editorCfg = mpiDocument?.formTemplate?.schema.filter((item) =>
-          item.type === "mpiprocedure" && !item.deleted) || [];
+          item.type === 'mpiprocedure' && !item.deleted) || [];
         const editorMaterials = editorCfg.filter((item) => item.editorConfig?.materials).map(
           (item) => item.editorConfig.materials);
         const editorEquipment = editorCfg.filter((item) => item.editorConfig?.equipment).map(
@@ -154,7 +154,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
         lhrStepState.setMaterials(flattenDeep([editorMaterials]));
         lhrStepState.setEquipment(flattenDeep([editorEquipment]));
-      }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -180,7 +180,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         FBAutocompleteAsyncStore.add(
           FBAutocompleteAsyncOption.mpiDocuments,
           lhrStepState.stepLHRs.id,
-          lhrStepState.stepLHRs
+          lhrStepState.stepLHRs,
         );
       formState?.setFieldValue(name, lhrStepState.stepLHRs.id);
       formState?.getInputState(name)?.setRender();
@@ -190,19 +190,19 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const filterOutOption = (docRev: DocumentRevision, inputValue: string ) => {
       const filterValue = lowerCase(inputValue);
 
-      return lowerCase(docRev.name).includes(filterValue) ||
-        lowerCase(docRev.document.docId).includes(filterValue);
+      return lowerCase(docRev.name).includes(filterValue)
+        || lowerCase(docRev.document.docId).includes(filterValue);
     };
 
     function handleFilter(
       data: DocumentRevision[],
       state: FilterOptionsState,
     ) {
-      const { inputValue = "" } = state || {};
+      const { inputValue = '' } = state || {};
 
-      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft ||
-        docRev.status === DocumentRevisionStatus.Released) &&
-          filterOutOption(docRev, inputValue));
+      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft
+        || docRev.status === DocumentRevisionStatus.Released)
+          && filterOutOption(docRev, inputValue));
 
       return options;
     }
@@ -216,7 +216,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       materials = lhrStepState?.materials;
       equipment = lhrStepState?.equipment;
     });
-
 
     return Component({
       ...(props as T),
@@ -242,6 +241,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       lhrBuildTypeExist,
     }); };
 
-  Comp.displayName = "withFBLHRStep";
+  Comp.displayName = 'withFBLHRStep';
   return Comp;
 };

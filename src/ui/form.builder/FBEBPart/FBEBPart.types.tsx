@@ -1,52 +1,52 @@
-import { FBAutocompleteAsyncProps, FBInputProps, FBProviderProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import { Document } from "../../../state/ducks/documents/types";
+import { FBAutocompleteAsyncProps, FBInputProps, FBProviderProps } from '..';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { Document } from '../../../state/ducks/documents/types';
 
 export type FBEBPartProps =
-& Pick<FBProviderProps, "dialogState" | "ebPartState" | "formState">
-& Pick<FBInputProps, "name" | "label" | "disabled" | "loading" | "defaultValue">
+& Pick<FBProviderProps, 'dialogState' | 'ebPartState' | 'formState'>
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'loading' | 'defaultValue'>
 & FBAutocompleteAsyncProps
 & {
-  handleAdd?: () => void;
-  partType?: "document" | "documentRevision";
-  childrenParts?: DocumentRevision[];
-  childrenPartsForRevise?: Document[];
-  partTypeDefaultValue?: string;
-  childForReviseValue?: string;
-  childrenPartsValue?: string;
+  handleAdd?: () => void
+  partType?: 'document' | 'documentRevision'
+  childrenParts?: DocumentRevision[]
+  childrenPartsForRevise?: Document[]
+  partTypeDefaultValue?: string
+  childForReviseValue?: string
+  childrenPartsValue?: string
 };
 
 export interface EBPartPatchBody {
-  childrenParts: EBPartRequestBody[];
+  childrenParts: EBPartRequestBody[]
   formInput?: {
-    childrenPartsForRevise?: EBPartRequestBody[];
-  };
+    childrenPartsForRevise?: EBPartRequestBody[]
+  }
 }
 
 export interface EBPartRequestBody {
-  id: string;
+  id: string
 }
 
 export interface EBPartPostBody {
-  description: string;
+  description: string
   document: {
-    docId: string;
+    docId: string
     documentType: {
-      id: string;
-    };
-  };
-  name: string;
-  revisionStage: number;
+      id: string
+    }
+  }
+  name: string
+  revisionStage: number
   parentParts: {
-    id: string;
-  }[];
+    id: string
+  }[]
 }
 
 export interface ProposedDocIdBody {
-  docId: string;
+  docId: string
 }
 
 export enum PartType {
-  Document = "document",
-  DocumentRevision = "documentRevision",
+  Document = 'document',
+  DocumentRevision = 'documentRevision',
 }

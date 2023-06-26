@@ -1,62 +1,62 @@
-import { Dictionary } from "lodash";
-import { FBInputProps, FBSchemaState, FBWorkspaceMode } from "..";
+import { Dictionary } from 'lodash';
+import { FBInputProps, FBSchemaState, FBWorkspaceMode } from '..';
 
 export type FBSchemaProps = Pick<FBInputProps,
-  | "label"
-  | "name"
-  | "type"
-  | "disabled"
-  | "index"
-  | "placeholder"
-  | "rows"
-  | "editorProperties"
-  | "options"
-  | "optionId"
-  | "optionValueKey"
-  | "optionLabelKey"
-  | "optionValueType"
-  | "linkUrl"
-  | "multiple"
-  | "defaultChecked"
-  | "rules"
-  | "validationMode"
-  | "paragraph"
-  | "isTemplate"
-  | "stepIndex"
-  | "includeQRScan"
-  | "instructionsDocument"
-  | "reviseDisabled"
-  | "outputDisabled"
-  | "includeNotes"
-  | "defaultValue"
-  | "approvers"
-  | "approverGroups"
-  | "approvalRoles"
-  | "approveIsBlocking"
-  | "applicableOn"
-  | "actions"
-  | "transform"
-  | "bookmarked"
-  | "uniqueSchemaItem"
-  | "applicableValidationSchema"
-  | "editorConfig"
-  | "inspectionSection"
-  | "validationAttribute"
-  | "deleteDisabled"
-  | "hidden"
-  | "deleted"
-  | "deleteInFormDisabled"
-  | "isInputOwner"
-  | "autoScrollTo"
-  | "autoFocus"
-  | "tabId"
+  | 'label'
+  | 'name'
+  | 'type'
+  | 'disabled'
+  | 'index'
+  | 'placeholder'
+  | 'rows'
+  | 'editorProperties'
+  | 'options'
+  | 'optionId'
+  | 'optionValueKey'
+  | 'optionLabelKey'
+  | 'optionValueType'
+  | 'linkUrl'
+  | 'multiple'
+  | 'defaultChecked'
+  | 'rules'
+  | 'validationMode'
+  | 'paragraph'
+  | 'isTemplate'
+  | 'stepIndex'
+  | 'includeQRScan'
+  | 'instructionsDocument'
+  | 'reviseDisabled'
+  | 'outputDisabled'
+  | 'includeNotes'
+  | 'defaultValue'
+  | 'approvers'
+  | 'approverGroups'
+  | 'approvalRoles'
+  | 'approveIsBlocking'
+  | 'applicableOn'
+  | 'actions'
+  | 'transform'
+  | 'bookmarked'
+  | 'uniqueSchemaItem'
+  | 'applicableValidationSchema'
+  | 'editorConfig'
+  | 'inspectionSection'
+  | 'validationAttribute'
+  | 'deleteDisabled'
+  | 'hidden'
+  | 'deleted'
+  | 'deleteInFormDisabled'
+  | 'isInputOwner'
+  | 'autoScrollTo'
+  | 'autoFocus'
+  | 'tabId'
 > & {
-  validators?: Dictionary<any>;
-  tabId?: string;
+  validators?: Dictionary<any>
+  tabId?: string
 };
 
 export interface FBSchemaComponentProps {
-  workspaceMode?: FBWorkspaceMode;
-  schema?: FBSchemaProps[];
-  schemaState?: FBSchemaState;
+  workspaceMode?: FBWorkspaceMode
+  schema?: FBSchemaProps[]
+  schemaState?: FBSchemaState
 }

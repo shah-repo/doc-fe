@@ -1,28 +1,28 @@
-import { Box, Paper, Typography } from "@material-ui/core";
-import moment from "moment";
-import queryString from "query-string";
-import React, { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Text from "../components/Text";
-import { Translation } from "../translations/types";
-import { downloadURI, logo, useDebouncedEffect } from "./../../common/utils/helpers";
-import apiClient from "./../../state/apiClient";
-import { styles } from "./ExportFileDownload.styles";
+import { Box, Paper, Typography } from '@material-ui/core';
+import moment from 'moment';
+import queryString from 'query-string';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import Text from '../components/Text';
+import { Translation } from '../translations/types';
+import { downloadURI, logo, useDebouncedEffect } from './../../common/utils/helpers';
+import apiClient from './../../state/apiClient';
+import { styles } from './ExportFileDownload.styles';
 
 enum States {
   PREPARING,
   EXPIRED,
   DOWNLOADING,
   DOWNLOAD_STARTED,
-  ERROR
+  ERROR,
 }
 
 const StateMessages: {[Key in States]: Translation} = {
-  [States.PREPARING]: "exportFileDownload.preparing",
-  [States.EXPIRED]: "exportFileDownload.expired",
-  [States.DOWNLOADING]: "exportFileDownload.downloading",
-  [States.DOWNLOAD_STARTED]: "exportFileDownload.downloaded",
-  [States.ERROR]: "exportFileDownload.error",
+  [States.PREPARING]: 'exportFileDownload.preparing',
+  [States.EXPIRED]: 'exportFileDownload.expired',
+  [States.DOWNLOADING]: 'exportFileDownload.downloading',
+  [States.DOWNLOAD_STARTED]: 'exportFileDownload.downloaded',
+  [States.ERROR]: 'exportFileDownload.error',
 };
 
 const ExportFileDownload: React.FunctionComponent = () => {
@@ -38,7 +38,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
     */
     apiClient
       .request({
-        method: "GET",
+        method: 'GET',
         url: `short_url/${downloadUrlUUID}`,
         headers: {},
       })
@@ -65,19 +65,19 @@ const ExportFileDownload: React.FunctionComponent = () => {
       return;
     }
 
-    const urlParams = new URLSearchParams(s3Url.split("?").slice(1).join("?"));
-    const date = urlParams.get("X-Amz-Date")?.replace(
+    const urlParams = new URLSearchParams(s3Url.split('?').slice(1).join('?'));
+    const date = urlParams.get('X-Amz-Date')?.replace(
       /^(.{4})(.{2})(.{2})T(.{2})(.{2})(.{2})Z$/,
-      (match, year, month, day, hour, minute, second) => `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`
+      (match, year, month, day, hour, minute, second) => `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`,
       );
-    const duration = parseInt(urlParams.get("X-Amz-Expires") || "", 10);
+    const duration = parseInt(urlParams.get('X-Amz-Expires') || '', 10);
 
     if (!date || isNaN(duration)) {
       setStatus(States.ERROR);
       return;
     }
 
-    if (moment().isAfter(moment(date).add(duration, "second"))) {
+    if (moment().isAfter(moment(date).add(duration, 'second'))) {
       setStatus(States.EXPIRED);
       return;
     }
@@ -85,7 +85,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
     setStatus(States.DOWNLOADING);
 
     setTimeout(() => {
-      downloadURI(s3Url, "file");
+      downloadURI(s3Url, 'file');
       setTimeout(() => setStatus(States.DOWNLOAD_STARTED), 1 * 1000);
     }, 2 * 1000);
   }, [s3Url], 1 * 1000);
@@ -99,7 +99,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
       />
       <Box display="flex" textAlign="center" mb={5} data-cy="ExportFileDownload-info">
         <Typography variant="h5"className={classes.info}>
-          <Text translation={StateMessages[status]}/>
+          <Text translation={StateMessages[status]} />
         </Typography>
       </Box>
     </Paper>

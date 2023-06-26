@@ -1,23 +1,23 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
+import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme) =>
   createStyles({
     chip: {
-      "border": `1px solid ${Colors.medium_blue}`,
-      "borderRadius": "3px",
-      "background": Colors.light_blue,
-      "&:hover": {
-        cursor: "pointer",
+      'border': `1px solid ${Colors.medium_blue}`,
+      'borderRadius': '3px',
+      'background': Colors.light_blue,
+      '&:hover': {
+        cursor: 'pointer',
       },
-      "marginTop": theme.spacing(2),
+      'marginTop': theme.spacing(2),
     },
     link: {
-      "textDecoration": "none",
-      "marginRight": "8px",
-      "&:hover": {
-        cursor: "pointer",
-        textDecoration: "underline",
+      'textDecoration': 'none',
+      'marginRight': '8px',
+      '&:hover': {
+        cursor: 'pointer',
+        textDecoration: 'underline',
       },
     },
     labelProps: {
@@ -37,4 +37,3 @@ export const styles = makeStyles((theme) =>
       color: Colors.navy,
     },
   }));
-

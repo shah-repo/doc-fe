@@ -1,18 +1,18 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { ReactComponent as AlertIcon } from "../../../assets/images/alert.svg";
-import Text from "../../components/Text";
-import { DialogHandler } from "../../hooks/useDialog";
-import { Translation } from "../../translations/types";
-import { styles } from "./AlertDialog.styles";
+import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
+import Text from '../../components/Text';
+import { DialogHandler } from '../../hooks/useDialog';
+import { Translation } from '../../translations/types';
+import { styles } from './AlertDialog.styles';
 
 interface Props {
-  confirmAction: (values?) => void;
-  cancelAction?: (e: React.MouseEvent<HTMLElement>) => void;
-  message: Translation;
-  dialog: DialogHandler;
-  confirmLabel?: Translation;
-  cancelLabel?: Translation;
+  confirmAction: (values?) => void
+  cancelAction?: (e: React.MouseEvent<HTMLElement>) => void
+  message: Translation
+  dialog: DialogHandler
+  confirmLabel?: Translation
+  cancelLabel?: Translation
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -28,19 +28,19 @@ const AlertDialog: React.FunctionComponent<Props> = ({
   message,
   confirmAction,
   cancelAction = dialog.close,
-  confirmLabel = "common.yes.im.sure",
-  cancelLabel = "common.cancel",
+  confirmLabel = 'common.yes.im.sure',
+  cancelLabel = 'common.cancel',
 }) => {
   const classes = styles();
   return (
     <>
       {
-        dialog.isOpen &&
-        <Dialog
+        dialog.isOpen
+        && <Dialog
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"
-          PaperProps={{ id: "alertDialog" }}
+          PaperProps={{ id: 'alertDialog' }}
         >
           <DialogContent>
             <DialogContentText>
@@ -49,10 +49,10 @@ const AlertDialog: React.FunctionComponent<Props> = ({
                   <AlertIcon />
                 </Grid>
                 <Grid item >
-                  <Typography className={classes.alertTitle}>
+                  <Typography data-cy="dialog-header" className={classes.alertTitle}>
                     <Text translation="common.alert" />!
                   </Typography>
-                  <Typography className={classes.contentText}>
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text translation={message} />
                   </Typography>
                 </Grid>

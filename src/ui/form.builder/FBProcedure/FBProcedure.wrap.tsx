@@ -1,8 +1,8 @@
-import { differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
-import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBMediaProps, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { differenceBy, filter, find, isEqual, keys, map, union, unionBy } from 'lodash';
+import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBMediaProps, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from '..';
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -15,7 +15,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isOutput,
     index = 0,
     types,
-    name = "",
+    name = '',
     disabled,
     isInputOwner,
     ...props
@@ -27,7 +27,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = isOutput || Boolean(workspaceState?.isOutput && workspaceState?.id);
-    isPreview = workspaceState?.mode === "preview";
+    isPreview = workspaceState?.mode === 'preview';
     const diffValue = formState?.inputState.get(FBFieldName.ProcedureDiff)?.value;
     procedureState?.setDiffPreview(diffValue);
     const inputState = FB.useRef<FBInputState>(FBInputState, {});
@@ -45,7 +45,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         if (isEqual(formState?.getFieldValue(name), data)) { return; }
         formState?.setFieldValue(name, data);
         workspaceState?.saveDocRev(formState?.getValues());
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -65,7 +65,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
             ...procedureState.value,
             attachments,
           };
-        }
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -79,7 +79,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
           description,
         };
         workspaceState?.saveDocRev(formState?.getValues());
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -92,12 +92,12 @@ export const withFBProcedure = <T extends FBProcedureProps>(
           if (isEqual(formState?.getFieldValue(name), formValue)) { return; }
           formState?.setFieldValue(`${name}.description`, formValue.description);
           workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
-          workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, "id"));
+          workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, 'id'));
           procedureState.setValue({
             ...procedureState.value,
             ...formValue,
           });
-        }
+        },
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -115,14 +115,14 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         formState?.setFieldValue(diffInput, diffCollection, true, true);
       }, {
         fireImmediately: true,
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @helpers
     function getDiffValue(): FBProcedureValue {
       const { document: { parent: { formInput = {} } = {} } = {} } = workspaceState || {};
-      const parentValue = (formInput[name || ""] || {}) as FBProcedureValue;
+      const parentValue = (formInput[name || ''] || {}) as FBProcedureValue;
       const childValue =  procedureState?.value || {};
       const valueKeys = union(keys(parentValue), keys(childValue));
       let diffValue = {};
@@ -132,9 +132,9 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         const parentKeyValue: FBProcedureItemConfig[] = parentValue[key];
         const childKeyValue: FBProcedureItemConfig[] = childValue[key];
 
-        const unionParts = unionBy(childKeyValue, parentKeyValue, "id");
-        const removedParts: string[] = map(differenceBy(parentKeyValue, childKeyValue || [], "id"), "id");
-        const addedParts: string[] = map(differenceBy(childKeyValue, parentKeyValue || [], "id"), "id");
+        const unionParts = unionBy(childKeyValue, parentKeyValue, 'id');
+        const removedParts: string[] = map(differenceBy(parentKeyValue, childKeyValue || [], 'id'), 'id');
+        const addedParts: string[] = map(differenceBy(childKeyValue, parentKeyValue || [], 'id'), 'id');
 
         diffValue = {
           ...diffValue,
@@ -142,16 +142,16 @@ export const withFBProcedure = <T extends FBProcedureProps>(
             const { id } = part;
             switch (true) {
               case removedParts.includes(id):
-                return { ...part, status: "removed" };
+                return { ...part, status: 'removed' };
               case addedParts.includes(id):
-                return { ...part, status: "added" };
+                return { ...part, status: 'added' };
               default: {
                 const parentPart = find(parentKeyValue, { id });
                 const childPart = find(childKeyValue, { id });
                 if (!isEqual(parentPart, childPart)) {
-                  return { ...part, status: "updated" };
+                  return { ...part, status: 'updated' };
                 }
-                return { ...part, status: "none" };
+                return { ...part, status: 'none' };
               }
             }
           }),
@@ -178,7 +178,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     onKeyDown = (e: KeyboardEvent) => {
       if (!workspaceState?.isOutputSchema) { return; }
-      if (e.key === "Enter" && e.ctrlKey) {
+      if (e.key === 'Enter' && e.ctrlKey) {
         handleAdd?.(false, true);
       }
     };
@@ -186,8 +186,8 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @observer
     useObserver(() => {
       const attach = FBMediaAlbumFieldStore.data.get(`${name}.attachments`);
-      if ((mode === "preview" || mode === "formPreview") && attach?.size === 0) {
-        types = filter(types, (type) => type !== "attachments");
+      if ((mode === 'preview' || mode === 'formPreview') && attach?.size === 0) {
+        types = filter(types, (type) => type !== 'attachments');
       }
     });
 
@@ -206,6 +206,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     });
   };
 
-  Comp.displayName = "withFBProcedure";
+  Comp.displayName = 'withFBProcedure';
   return Comp;
 };

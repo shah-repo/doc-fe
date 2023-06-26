@@ -1,12 +1,12 @@
-import { Box, Button, TextField } from "@material-ui/core";
-import moment from "moment";
-import React from "react";
-import { MomentFormats } from "../../../../common/utils/date";
-import Text from "../../../components/Text";
-import { styles } from "./date.form.styles";
+import { Box, Button, TextField } from '@material-ui/core';
+import moment from 'moment';
+import React from 'react';
+import { MomentFormats } from '../../../../common/utils/date';
+import Text from '../../../components/Text';
+import { styles } from './date.form.styles';
 
 interface Props {
-  handleDateFormSubmit: (selectedDate: string) => void;
+  handleDateFormSubmit: (selectedDate: string) => void
 }
 const DateFormAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handleDateFormSubmit,
@@ -16,7 +16,7 @@ const DateFormAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   const getUtcFormattedString = (date: string) =>
     moment(date, MomentFormats.AsyncTasksDefaultDateTimeFormatter).toISOString();
   const [selectedDate, setSelectedDate] = React.useState(
-    getUtcFormattedString(defaultDate)
+    getUtcFormattedString(defaultDate),
   );
   const handleDateChange = (event: any) => {
     setSelectedDate(getUtcFormattedString(event?.target?.value));
@@ -44,7 +44,7 @@ const DateFormAsyncTaskPresenter: React.FunctionComponent<Props> = ({
             handleDateFormSubmit(selectedDate);
           }}
         >
-          <Text translation={"common.submit"} />
+          <Text translation="common.submit" />
         </Button>
       </Box>
     </Box>

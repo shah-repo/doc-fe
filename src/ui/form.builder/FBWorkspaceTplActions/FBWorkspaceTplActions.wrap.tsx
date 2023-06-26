@@ -1,9 +1,9 @@
-import { map } from "lodash";
-import React from "react";
-import { FB, FBFieldName, FBWorkspaceTplActionsProps } from "..";
+import { map } from 'lodash';
+import React from 'react';
+import { FB, FBFieldName, FBWorkspaceTplActionsProps } from '..';
 
 export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleCancel,
@@ -18,10 +18,10 @@ export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
       exportTemplate(name);
     };
 
-    const exportTemplate = (name = "template") => {
+    const exportTemplate = (name = 'template') => {
       const items = map(workspaceState?.getSchema(), (schemaItem) => {
         const { type } = schemaItem;
-        if (type === "inlineapproval") {
+        if (type === 'inlineapproval') {
           schemaItem.editorConfig = {};
         }
         return schemaItem;
@@ -29,8 +29,8 @@ export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
       const schema = JSON.stringify(items);
       const dataStr = `data:text/json;charset=utf-8, ${encodeURIComponent(schema)}`;
 
-      const anchor = document.createElement("a");
-      anchor.style.display = "none";
+      const anchor = document.createElement('a');
+      anchor.style.display = 'none';
       document.body.appendChild(anchor);
       anchor.download = `${name}.json`;
       anchor.href = dataStr;

@@ -1,13 +1,13 @@
-import { Box, Typography } from "@material-ui/core";
-import React from "react";
-import { SMText } from "../../../App";
-import { styles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.new.styles";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
-import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
+import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { SMText } from '../../../App';
+import { styles } from '../../../App/Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.new.styles';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
+import { generateRevisionNumber } from '../helpers/generateRevisionNumber';
 
 interface Props {
-  formDocument?: FBDocumentRevisionProps;
+  formDocument?: FBDocumentRevisionProps
 }
 
 const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({

@@ -1,19 +1,19 @@
-import { Box, Typography } from "@material-ui/core";
-import { FormikProps } from "formik";
-import * as React from "react";
-import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions/types";
-import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey/types";
-import { AsyncState } from "../../../../state/types";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import FormWrapper from "../../../components/forms/FormWrapper";
-import SubmitButton from "../../../components/forms/SubmitButton";
-import { FBWorkspace } from "../../../form.builder";
+import { Box, Typography } from '@material-ui/core';
+import { FormikProps } from 'formik';
+import * as React from 'react';
+import { FBDocumentRevisionProps } from '../../../../state/ducks/documentRevisions/types';
+import { SupplierSurveyForm } from '../../../../state/ducks/supplierSurvey/types';
+import { AsyncState } from '../../../../state/types';
+import FormMessage from '../../../components/forms/FormMessage';
+import FormProgress from '../../../components/forms/FormProgress';
+import FormWrapper from '../../../components/forms/FormWrapper';
+import SubmitButton from '../../../components/forms/SubmitButton';
+import { FBWorkspace } from '../../../form.builder';
 
 interface Props extends FormikProps<FBDocumentRevisionProps> {
-  asyncState: AsyncState;
-  supplierSurvey: SupplierSurveyForm;
-  name?: string;
+  asyncState: AsyncState
+  supplierSurvey: SupplierSurveyForm
+  name?: string
 }
 
 const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
@@ -45,7 +45,7 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
       <Box width="700px" display="flex" justifyContent="flex-end">
         <SubmitButton
           asyncState={asyncState}
-          label={"common.save"}
+          label="common.save"
           id="SupplierSurveyFormBuild-saveSurveyForm"
         />
       </Box>

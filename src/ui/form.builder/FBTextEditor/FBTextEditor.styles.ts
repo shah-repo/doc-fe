@@ -1,10 +1,10 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles } from '@material-ui/core';
 
 export default makeStyles(() =>
   createStyles({
     marginBStyle: {
-      "& p":
-      { marginBottom: "0px" },
+      '& p':
+      { marginBottom: '0px' },
     },
-  })
+  }),
 );

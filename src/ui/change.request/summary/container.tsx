@@ -1,34 +1,34 @@
-import { Formik, FormikProps } from "formik";
-import { isEmpty } from "lodash";
-import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { SMFormHOCProps } from "../../../App";
-import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
-import { authSelectors } from "../../../state/ducks/auth";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
-import { companySelectors } from "../../../state/ducks/company";
-import styles from "../../common/style/styles";
-import { FormContext } from "../../components/forms/FormContext";
-import { compareValuesToSubmit } from "../../components/forms/helpers";
-import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from "../../form.builder";
-import { FBFormStateContext } from "../../form.builder/FBForm/FBForm.wrap";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDocumentTitle from "../../hooks/useDocumentTitle";
-import useGetHasTag from "../../hooks/useGetHasTag";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../form/transform";
-import { ChangeRequestFormValues } from "../form/types";
-import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from "../utils/helpers";
-import { changeRequestEditPath } from "../utils/paths";
-import ChangeSummaryForm from "./ChangeSummaryForm";
+import { Formik, FormikProps } from 'formik';
+import { isEmpty } from 'lodash';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { SMFormHOCProps } from '../../../App';
+import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
+import { authSelectors } from '../../../state/ducks/auth';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { ChangeRequest, ChangeRequestEditRequestBody } from '../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../state/ducks/company';
+import styles from '../../common/style/styles';
+import { FormContext } from '../../components/forms/FormContext';
+import { compareValuesToSubmit } from '../../components/forms/helpers';
+import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from '../../form.builder';
+import { FBFormStateContext } from '../../form.builder/FBForm/FBForm.wrap';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
+import useGetHasTag from '../../hooks/useGetHasTag';
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../form/transform';
+import { ChangeRequestFormValues } from '../form/types';
+import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from '../utils/helpers';
+import { changeRequestEditPath } from '../utils/paths';
+import ChangeSummaryForm from './ChangeSummaryForm';
 
 interface OwnProps {
-  changeRequest: ChangeRequest;
-  currentUserEmail: string;
-  hideSideBar?: boolean;
+  changeRequest: ChangeRequest
+  currentUserEmail: string
+  hideSideBar?: boolean
 }
 type Props = OwnProps & SMFormHOCProps;
 
@@ -76,7 +76,7 @@ const Container: React.FunctionComponent<Props> = ({
     const dataToSubmit = compareValuesToSubmit(
       initialValues,
       { ...values, formInput: formStateContext?._currentValue },
-      toChangeRequestEditRequestBody
+      toChangeRequestEditRequestBody,
     );
 
     if (isEmpty(dataToSubmit)) {
@@ -113,7 +113,6 @@ const Container: React.FunctionComponent<Props> = ({
     />
   );
 
-
   return (
     <FBProvider {...{ bookmarkState }}>
       <div className={classes.root}>
@@ -133,5 +132,5 @@ const Container: React.FunctionComponent<Props> = ({
   );
 };
 
-Container.displayName = "ChangeRequestSummaryContainer";
+Container.displayName = 'ChangeRequestSummaryContainer';
 export default withSMForm(Container);

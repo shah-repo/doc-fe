@@ -1,15 +1,15 @@
-import { omit } from "lodash";
-import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBEditorState, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState, FBSchemeMultuValueTypes } from "..";
+import { omit } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBEditorState, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState, FBSchemeMultuValueTypes } from '..';
 
 export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     options,
-    optionValueKey = "name",
-    optionLabelKey = "label",
+    optionValueKey = 'name',
+    optionLabelKey = 'label',
     includeSelectedSchema = false,
     defaultValue,
     schemaSelectState,
@@ -26,11 +26,11 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
 
     function getOptions(): FBSchemaProps[] {
       const scheme: FBSchemaProps[] = workspaceState?.getSchema() || workspaceState?.getValidationSchema();
-      const fieldName = formState?.getFieldValue("name");
+      const fieldName = formState?.getFieldValue('name');
       const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
         const { type, deleted, multiple, label, name: schemaName } = item || {};
-        const isExludedFromValidation =
-          type && (
+        const isExludedFromValidation
+          = type && (
             FBEditorState.omitFinalValidation.includes(type)
             || !FBEditorState.underValidation(type)
           );
@@ -41,14 +41,14 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
         }
 
         // Use only multi value fields for required if in validator
-        if (name === "validators.required_if_in.name") {
+        if (name === 'validators.required_if_in.name') {
           if (multiple || FBSchemeMultuValueTypes.includes(type)) {
             reduced.push(item);
           }
           return reduced;
         }
         // Use only sigle value fields for required if validator
-        if (name === "validators.required_if.name") {
+        if (name === 'validators.required_if.name') {
           if (!multiple && !FBSchemeMultuValueTypes.includes(type)) {
             reduced.push(item);
           }
@@ -66,10 +66,10 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       }
       const { type } = value;
       schemaState?.setSchemaItemAt({
-        ...omit(value, ["validationMode"]),
-        name: name?.replace("name", "value"),
-        ...(type === "checkbox" && { defaultChecked: false }),
-        ...(type === "radiogroup" && { type: "checkboxgroup" }),
+        ...omit(value, ['validationMode']),
+        name: name?.replace('name', 'value'),
+        ...(type === 'checkbox' && { defaultChecked: false }),
+        ...(type === 'radiogroup' && { type: 'checkboxgroup' }),
         rules: `required_with:${name}`,
       }, index + 1);
     }
@@ -112,7 +112,6 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       name,
     });
   };
-
 
   return (props: T) => Comp(props);
 };

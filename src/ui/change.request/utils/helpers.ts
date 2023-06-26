@@ -1,6 +1,6 @@
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { SelectOption } from "../../components/forms/fields/Select";
-import { ChangeRequestUserProps } from "./types";
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { SelectOption } from '../../components/forms/fields/Select';
+import { ChangeRequestUserProps } from './types';
 
 export const canEditChangeRequest = ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) => (
   currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.Draft
@@ -11,22 +11,22 @@ export const canChangeCROwner = (
   currentEmployeeId: string,
   ownerId: string,
   isCompanyAdmin: boolean,
-  hasOwnerShipTag: boolean
+  hasOwnerShipTag: boolean,
 ) =>
   ((
-    state === ChangeRequestStatus.Draft ||
-    state === ChangeRequestStatus.InReview ||
-    state === ChangeRequestStatus.Implementation ||
-    state === ChangeRequestStatus.Approved
+    state === ChangeRequestStatus.Draft
+    || state === ChangeRequestStatus.InReview
+    || state === ChangeRequestStatus.Implementation
+    || state === ChangeRequestStatus.Approved
   )
-  && currentEmployeeId === ownerId) ||
-  isCompanyAdmin ||
-  hasOwnerShipTag;
+  && currentEmployeeId === ownerId)
+  || isCompanyAdmin
+  || hasOwnerShipTag;
 
-export const canEditApprovers =
-  ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) =>
-    canEditChangeRequest({ dataProp: changeRequest, currentUserEmail }) ||
-    (currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.InReview);
+export const canEditApprovers
+  = ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) =>
+    canEditChangeRequest({ dataProp: changeRequest, currentUserEmail })
+    || (currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.InReview);
 
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];
