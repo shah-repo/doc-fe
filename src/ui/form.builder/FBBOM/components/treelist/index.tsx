@@ -1,13 +1,11 @@
 import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import {
-  extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListDataStateChangeEvent
-} from '@progress/kendo-react-treelist';
-import { isEmpty } from 'lodash';
+import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
+import { isEmpty, map } from 'lodash';
 import * as React from 'react';
-import { ReactComponent as ViewGridIcon } from '../../../../../assets/images/grid_view.svg';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
-import { columns, expandField, subItemsField } from './constants';
+import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
+import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_REORDERABLE, TREELIST_RESIZABLE } from './constants';
 import bom from './data';
 import { BOM, BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
@@ -22,6 +20,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     },
     expanded: [1, 3],
   });
+  const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
     const expanded = event.value
@@ -64,48 +63,61 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     return addExpandField(sortedData as BOM[]);
   };
 
-  // const clearFilter = () => {
-  //   const { dataState } = state;
-  //   set(dataState, 'filter.filters', []);
-  // };
-
-  // const onColumnShowHide = ({ field }) => {
-  //   each(columns, (column) => {
-  //     if (column.field === field) {
-  //       column.show = !column.show;
-  //     }
-  //   });
-  // };
+  const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
+    const dataColumns = map(columns, (column: CustomTreeListColumnProps) => {
+      if (column.field === field) {
+        column.hidden = !column.hidden;
+      }
+      return column;
+    });
+    setColumns(dataColumns);
+  };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
-    return <tr {...row.props} style={{ ...row.props.style, backgroundColor: color }} />;
+    return React.cloneElement(row, {
+      style: {
+        backgroundColor: color,
+      },
+    });
   };
 
   const renderToolbar = <GridToolbar>
-    <Grid container data-cy="toolbar-treelist">
-      <Grid item={true} xs={12} style={{ textAlign: 'right' }}>
-        <ViewGridIcon />
-      </Grid>
+    <Grid container data-cy="toolbar-treelist" justify="flex-end">
+      <ColumnShowHideTreeMenu
+        columnDefinition={columns}
+        onChange={onColumnShowHide}
+      />
     </Grid>
   </GridToolbar>;
+
+  const getColumns = () => {
+    return columns.filter(({ hidden }) => !hidden);
+  };
+
+  const onColumnReorder = (event: TreeListColumnReorderEvent) => {
+    setColumns(event.columns as CustomTreeListColumnProps[]);
+  };
 
   return (<Grid container>
     <Grid item xs={12}>
       <TreeList
         style={{ width: '100%', overflow: 'scroll' }}
-        expandField={expandField}
-        subItemsField={subItemsField}
+        expandField={EXPAND_FIELD}
+        subItemsField={SUB_ITEMS_FIELD}
         onExpandChange={onExpandChange}
         rowRender={rowRender}
         sortable={{ mode: 'multiple' }}
         {...state.dataState}
         data={processData()}
         onDataStateChange={handleDataStateChange}
-        columns={columns}
+        columns={getColumns()}
+        onColumnReorder={onColumnReorder}
+        resizable={TREELIST_RESIZABLE}
+        reorderable={TREELIST_REORDERABLE}
         toolbar={renderToolbar}
       />
     </Grid>
