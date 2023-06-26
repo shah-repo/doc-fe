@@ -21,30 +21,30 @@ interface Props {
 const SideBar: React.FC<Props> = ({ onChange, options }) => {
   const classes = useStyles();
 
-  const [openedItems, setOpenedItems] = useState<string[]>([]);
+  // const [openedItems, setOpenedItems] = useState<string[]>([]);
   const [checkedItems, setCheckedItems] = useState<FacetOption[]>([]);
 
-  const isItemOpened = (id: string) => openedItems.includes(id);
+  // const isItemOpened = (id: string) => openedItems.includes(id);
   const isItemChecked = (group: string) => checkedItems.some(item => item.group === group);
 
   useEffect(() => {
     setCheckedItems(options);
   }, [options]);
 
-  useEffect(() => {
-    if (checkedItems && onChange) {
-      onChange(checkedItems);
-    }
-  }, [checkedItems]);
+  // useEffect(() => {
+  //   if (checkedItems && onChange) {
+  //     onChange(checkedItems);
+  //   }
+  // }, [checkedItems]);
 
-  const toggleOpened = (id: string) => {
-    setOpenedItems(
-      (prevState) =>
-        isItemOpened(id)
-          ? prevState.filter((item) => item !== id)
-          : [...prevState, id],
-    );
-  };
+  // const toggleOpened = (id: string) => {
+  //   setOpenedItems(
+  //     (prevState) =>
+  //       isItemOpened(id)
+  //         ? prevState.filter((item) => item !== id)
+  //         : [...prevState, id],
+  //   );
+  // };
 
   const allowMultiple = true;
 
