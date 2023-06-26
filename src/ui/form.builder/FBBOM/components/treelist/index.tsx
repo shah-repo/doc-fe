@@ -5,7 +5,7 @@ import { isEmpty, map } from 'lodash';
 import * as React from 'react';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_REORDERABLE, TREELIST_RESIZABLE } from './constants';
+import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import bom from './data';
 import { BOM, BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
@@ -41,9 +41,9 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
 
   const addExpandField = (dataTree: BOM[]) => {
     const expanded: number[] = state.expanded;
-    return mapTree(dataTree, subItemsField, (item) =>
-      extendDataItem(item, subItemsField, {
-        [expandField]: expanded.includes(item.id),
+    return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
+      extendDataItem(item, SUB_ITEMS_FIELD, {
+        [EXPAND_FIELD]: expanded.includes(item.id),
       }),
     );
   };
@@ -53,12 +53,12 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     const filteredData = dataState.filter && filterBy(
       data,
       dataState.filter,
-      subItemsField,
+      SUB_ITEMS_FIELD,
     );
     const sortedData = dataState.sort && filteredData && orderBy(
       filteredData,
       dataState.sort,
-      subItemsField,
+      SUB_ITEMS_FIELD,
     );
     return addExpandField(sortedData as BOM[]);
   };
@@ -110,14 +110,14 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
         subItemsField={SUB_ITEMS_FIELD}
         onExpandChange={onExpandChange}
         rowRender={rowRender}
-        sortable={{ mode: 'multiple' }}
         {...state.dataState}
         data={processData()}
         onDataStateChange={handleDataStateChange}
         columns={getColumns()}
         onColumnReorder={onColumnReorder}
-        resizable={TREELIST_RESIZABLE}
-        reorderable={TREELIST_REORDERABLE}
+        resizable={TREELIST_CONFIG.resizable}
+        reorderable={TREELIST_CONFIG.reorderable}
+        sortable={TREELIST_CONFIG.sortable}
         toolbar={renderToolbar}
       />
     </Grid>

@@ -11,8 +11,11 @@ import { Vendors } from './header.templates/Vendors';
 
 export const SUB_ITEMS_FIELD = 'employees';
 export const EXPAND_FIELD = 'expanded';
-export const TREELIST_RESIZABLE = true;
-export const TREELIST_REORDERABLE = true;
+export const TREELIST_CONFIG = {
+  sortable: true,
+  reorderable: true,
+  resizable: true,
+};
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
   hidden: boolean
@@ -104,6 +107,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     columnMenu: ColumnMenuTextColumn,
     cell: PrimaryAttachmentsCell,
     hidden: false,
+    sortable: false,
   },
   {
     field: 'attachments',
@@ -114,6 +118,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     columnMenu: ColumnMenuTextColumn,
     cell: BooleanCell,
     hidden: false,
+    sortable: false,
   },
   {
     field: 'issues',
@@ -124,6 +129,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: BooleanCell,
     headerCell: Issues,
     hidden: false,
+    sortable: false,
   },
   {
     field: 'vendor',
@@ -134,6 +140,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     columnMenu: ColumnMenuTextColumn,
     headerCell: Vendors,
     hidden: false,
+    sortable: false,
   },
   {
     field: 'comments',
@@ -143,5 +150,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
+    sortable: false,
   },
 ];
