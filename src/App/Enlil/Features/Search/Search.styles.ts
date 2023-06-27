@@ -29,9 +29,9 @@ export default makeStyles((theme) => ({
   },
   listGroupLabel: {
     ...theme.typography.h6,
-    margin: theme.spacing(0, 2),
-    padding: theme.spacing(1.25, 0),
+    padding: theme.spacing(1.25, 2),
     borderTop: `1px solid ${Colors.stroke}`,
+    backgroundColor: Colors.white,
   },
   listGroupAllLabel: {
     height: 0,
