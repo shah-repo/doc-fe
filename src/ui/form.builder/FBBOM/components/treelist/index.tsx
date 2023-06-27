@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
+import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
+import cx from 'classnames';
 import { isEmpty, map } from 'lodash';
 import * as React from 'react';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
@@ -11,7 +12,7 @@ import { BOM, BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps,
 import useStyles from './styles';
 
 const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
-  useStyles();
+  const classes = useStyles();
   const [state, setState] = React.useState<BOMState>({
     data: [...bom],
     dataState: {
@@ -94,6 +95,12 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     </Grid>
   </GridToolbar>;
 
+  const cellRender = (tdElement: React.ReactElement<HTMLTableCellElement, string | React.JSXElementConstructor<any>> | null, cellProps: TreeListCellProps): React.ReactElement<HTMLTableCellElement> => {
+    const props = { ...tdElement?.props, className: cx(tdElement?.props.className, classes.borderBottom) };
+    const defaultRendering = { ...tdElement, props: props };
+    return defaultRendering as React.ReactElement<HTMLTableCellElement>;
+  };
+
   const getColumns = () => {
     return columns.filter(({ hidden }) => !hidden);
   };
@@ -119,6 +126,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
         reorderable={TREELIST_CONFIG.reorderable}
         sortable={TREELIST_CONFIG.sortable}
         toolbar={renderToolbar}
+        cellRender={cellRender}
       />
     </Grid>
   </Grid>);

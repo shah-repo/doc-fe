@@ -18,6 +18,7 @@ enum Colors {
   lily_white='#F8F9F9',
   light_cyan='#DCF4FD',
   light_gray = '#8A9DAD',
+  alice_blue='#E2E8F0',
 
   // Primary
   primary='#011FBB',

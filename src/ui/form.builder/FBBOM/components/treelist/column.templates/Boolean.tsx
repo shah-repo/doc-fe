@@ -24,7 +24,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
       colSpan={colSpan}
       style={style}
       role="gridcell"
-      className={className}
+      className={cx(className, classes.cellborderBottom)}
     >
       <div onClick={handleToggle}>
         <FontAwesomeIcon

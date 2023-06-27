@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../../../layout/theme/utils/colors';
 
-export const styles = makeStyles(() => ({
+export const styles = makeStyles((theme) => ({
   chip: {
     display: 'flex',
     flexDirection: 'row',
@@ -40,5 +40,19 @@ export const styles = makeStyles(() => ({
   },
   deselectedDot: {
     color: Colors.dark_gray2,
+  },
+  nameCell: (props) => ({
+    'vertical-align': 'middle',
+    marginLeft: theme.spacing(1.875),
+  }),
+  titleInfoCell: (props) => ({
+    fontWeight: props?.hasChildren ? 600 : 400,
+    fontFamily: 'Sora',
+    fontSize: 14,
+    lineHeight: '17.64px',
+  }),
+  cellborderBottom: {
+    borderBottom: `1px solid ${Colors.alice_blue} !important`,
+    borderLeft: '0 !important',
   },
 }));

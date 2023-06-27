@@ -1,4 +1,5 @@
 import { Chip, Grid } from '@material-ui/core';
+import cx from 'classnames';
 import React, { ComponentType } from 'react';
 import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
@@ -20,7 +21,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
       colSpan={colSpan}
       style={style}
       role="gridcell"
-      className={className}
+      className={cx(className, classes.cellborderBottom)}
     >
       <Grid
         container

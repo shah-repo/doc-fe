@@ -42,7 +42,7 @@ export default makeStyles((theme) => ({
     },
     '.k-grid-toolbar': {
       padding: theme.spacing(1.25, 2, 0),
-      backgroundColor: BASE_COLOR,
+      backgroundColor: Colors.hover,
       border: 'none',
       overflow: 'hidden',
 
@@ -90,7 +90,7 @@ export default makeStyles((theme) => ({
       },
     },
     '.k-grid-header': {
-      backgroundColor: BASE_COLOR,
+      backgroundColor: Colors.hover,
       border: 'none',
       paddingInlineEnd: 0,
       overflow: 'hidden',
@@ -602,5 +602,9 @@ export default makeStyles((theme) => ({
         content: "'\\f105'",
       },
     },
+  },
+  borderBottom: {
+    borderBottom: `1px solid ${Colors.alice_blue} !important`,
+    borderLeft: '0 !important',
   },
 }));

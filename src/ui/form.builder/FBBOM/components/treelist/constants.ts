@@ -2,8 +2,10 @@ import { ColumnMenuNumericColumn, ColumnMenuTextColumn } from '@progress/kendo-r
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { BooleanCell } from './column.templates/Boolean';
 import { Comments } from './column.templates/Comments';
+import NameCell from './column.templates/NameCell';
 import { PrimaryAttachmentsCell } from './column.templates/PrimaryAttachments';
 import { Status } from './column.templates/Status';
+import TextInfoCell from './column.templates/TextInfoCell';
 import { Attachments } from './header.templates/Attachments';
 import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
@@ -33,6 +35,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     hidden: false,
     disableShowOrHideSelection: true,
+    cell: NameCell,
   },
   {
     field: 'title',
@@ -41,6 +44,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
+    cell: TextInfoCell,
   },
   {
     field: 'displayRevision',
@@ -49,6 +53,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
+    cell: TextInfoCell,
   },
   {
     field: 'displayStatus',
