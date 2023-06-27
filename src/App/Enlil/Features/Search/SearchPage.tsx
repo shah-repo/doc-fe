@@ -3,22 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { State } from '@progress/kendo-data-query';
 import { GridDataStateChangeEvent } from '@progress/kendo-react-grid';
-import { clone, concat, get, map, startCase } from 'lodash';
+import { clone, map, startCase } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import Text from '../../../../../src/ui/components/Text';
 import { pagerSettings } from '../../../../ui/components/common/kendo/helpers';
 import KendoDataGrid from '../../../../ui/components/KendoDataGrid/KendoDataGrid';
-import { toastError } from '../../../../ui/components/notifications';
 import ExportListDialog from '../../../../ui/document.revision/list/ExportListDialog/ExportListDialog';
 import useDialog from '../../../../ui/hooks/useDialog';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
-import { columnsSchema, PAGE_SIZE, searchResultsDraft, useSearchQuery } from './helpers';
+import { columnsSchema, PAGE_SIZE, useSearchQuery } from './helpers';
 import useStyles from './SearchPage.styles';
-import Sidebar from './SideBar';
+// import Sidebar from './SideBar';
 import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
+import { observer } from 'mobx-react';
 
 const SearchPage: React.FC = () => {
   const history = useHistory();
@@ -26,7 +26,6 @@ const SearchPage: React.FC = () => {
   const classes = useStyles();
   const searchQuery = useSearchQuery();
   const dialog = useDialog();
-  const [filterData, setFilterData] = useState([]);
   const [dataState, setDataState] = useState<State>({
     filter: {
       logic: 'and',
@@ -37,7 +36,6 @@ const SearchPage: React.FC = () => {
     group: [],
     sort: [],
   });
-  const [searchResults, setSearchResults] = useState(searchResultsDraft);
   const searchState = FB.useRef(SearchState);
 
   useEffect(() => {
@@ -46,30 +44,11 @@ const SearchPage: React.FC = () => {
         searchText: searchQuery,
         offset: dataState.skip,
         limit: dataState.take,
-      }).then(({ data }) => {
-        setSearchResults({
-          results: data.results,
-          page_total: data.page_total,
-          total: data.total,
-        });
-        let tempData = [];
-        data.results.map((documents) => {
-          tempData = concat(tempData, get(documents, 'documents'));
-        });
-        setFilterData(tempData);
-      }).catch((error) => {
-        toastError(error);
       });
     }
-  }, [searchQuery, dataState]);
+  }, [searchState, searchQuery, dataState]);
 
-  const updateFilter = (data) => {
-    let tempData = [];
-    data.map((documents) => {
-      tempData = concat(tempData, get(documents, 'documents'));
-    });
-    setFilterData(tempData);
-  };
+  const searchData = searchState.data;
 
   const updateResults = ({ dataState }: GridDataStateChangeEvent) => {
     setDataState(dataState);
@@ -83,7 +62,7 @@ const SearchPage: React.FC = () => {
     key: column.field,
   }));
 
-  const resultText = searchQuery ? `${searchResults.total} results found for "${searchQuery}"` : 'Search';
+  const resultText = searchQuery ? `${searchData?.total} results found for "${searchQuery}"` : 'Search';
 
   const handleRowClick = (values) => {
     const { dataItem } = values;
@@ -92,7 +71,7 @@ const SearchPage: React.FC = () => {
     }
   };
 
-  const exportData = clone(filterData).map(item => {
+  const exportData = clone(searchData?.documents ?? []).map(item => {
     const data = {
       ID: item.docId,
       Revision: item.displayRevision,
@@ -109,7 +88,7 @@ const SearchPage: React.FC = () => {
         {resultText}
       </Box>
       <Box className={classes.sidebar}>
-        <Sidebar options={searchResults.results} onChange={updateFilter} />
+        {/* <Sidebar options={searchData?.documents} onChange={console.log} /> */}
       </Box>
       <Box className={classes.topbar}>
         <Box className={classes.toolbar}>
@@ -128,8 +107,8 @@ const SearchPage: React.FC = () => {
       <Box className={classes.grid}>
         <KendoDataGrid
           schema={columnsSchema}
-          data={filterData}
-          total={searchResults.total}
+          data={searchData?.documents}
+          total={searchData?.total}
           pageable={pagerSettings}
           pageSize={PAGE_SIZE}
           {...dataState}
@@ -152,4 +131,4 @@ const SearchPage: React.FC = () => {
   );
 };
 
-export default withThemeNext(SearchPage);
+export default withThemeNext(observer(SearchPage));
