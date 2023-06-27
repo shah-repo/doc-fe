@@ -50,6 +50,6 @@ export interface IStoreMappedDocument {
 
 export interface IStoreResult {
   page_total: number
-  results: IStoreMappedDocument[]
+  documents: IStoreMappedDocument[]
   total: number
 }

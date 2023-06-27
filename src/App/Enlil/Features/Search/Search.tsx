@@ -3,18 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InputAdornment, ListSubheader, Popper } from '@material-ui/core';
 import { RenderGroupParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
-import { concat, get, isEmpty } from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { Autocomplete } from '../../../../ui/components/forms/fields-next';
-import { toastError } from '../../../../ui/components/notifications';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
-import { MAX_TOP_RESULTS, recentSearches, searchPath, searchResultsDraft, useSearchQuery } from './helpers';
+import { MAX_TOP_RESULTS, recentSearches, searchPath, useSearchQuery } from './helpers';
 import useStyles from './Search.styles';
 import { GroupedOption, OptionType } from './types';
 import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
+import { observer } from 'mobx-react';
 
 const Search: React.FC = () => {
   const intl = useIntl();
@@ -24,7 +23,6 @@ const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState(useSearchQuery());
   const [isFocused, setIsFocused] = useState(false);
   const [popperClass, setPopperClass] = useState<string>();
-  const [searchResults, setSearchResults] = useState(searchResultsDraft);
   const [savedQuery, setSavedQuery] = useState(searchQuery);
   const inputField = fieldRef.current?.querySelector('input');
   const searchState = FB.useRef(SearchState);
@@ -77,12 +75,7 @@ const Search: React.FC = () => {
     if ('query' in option) {
       return option.query;
     }
-    if (option?.documents) {
-      if (!isEmpty(option?.documents)) {
-        return `${option?.documents[0].docId} - ${option?.documents[0].revisionName} - ${option?.documents[0].companyName}`;
-      } else return null;
-    }
-    return `${option.docId} - ${option.revisionName} - ${option.companyName}`;
+    return [option.docId, option.revisionName, option.companyName].filter(Boolean).join(' - ');
   };
 
   const handleQueryChange = (event: React.ChangeEvent<unknown>, value: string) => {
@@ -98,42 +91,32 @@ const Search: React.FC = () => {
         searchText: searchQuery,
         offset: 0,
         limit: MAX_TOP_RESULTS,
-      }).then(({ data }) => {
-        setSearchResults({
-          results: data.results,
-          page_total: data.page_total,
-          total: data.total,
-        });
-      }).catch((error) => {
-        toastError(error);
       });
     }
   }, [searchQuery, isFocused]);
 
+  const searchResults = searchState.data;
+
   const options = useMemo(() => {
-    if (searchQuery.length <= 3 && searchResults.total === 0) {
+    if (searchQuery.length <= 3 && !searchResults?.total) {
       return recentSearches.map((el) => ({
         query: el,
         group: intl.formatMessage({ id: 'search.recent' }),
       }));
     }
 
-    let tempData = [];
-    searchResults.results.map((documents) => {
-      tempData = concat(tempData, get(documents, 'documents'));
-    });
-
-    const topResults: OptionType[] = tempData.map((el) => ({
+    const topResults: OptionType[] = searchResults?.documents.map((el) => ({
       ...el,
       group: intl.formatMessage({ id: 'search.found.count' }, { count: searchResults.total }),
-    }));
+    })) ?? [];
 
-    if (searchResults.total > MAX_TOP_RESULTS) {
+    if (searchResults?.total && searchResults.total > MAX_TOP_RESULTS) {
       topResults.push({
         label: intl.formatMessage({ id: 'search.view.all' }, { count: searchResults.total }),
         query: searchQuery,
       });
     }
+
     return topResults;
   }, [intl, searchQuery, searchResults]);
 
@@ -190,4 +173,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default withThemeNext(Search);
+export default withThemeNext(observer(Search));

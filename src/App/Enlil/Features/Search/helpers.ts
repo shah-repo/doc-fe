@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { ColumnDefinition } from '../../../../ui/components/KendoDataGrid/KendoDataGrid.types';
 import { Status } from '../../../../ui/components/common/kendo.column.templates/Status';
 import { GLOBAL_SEARCH_URL } from '../../../../ui/constants/urls';
-import { IStoreMappedDocument, IStoreResult } from './types';
+import { IStoreMappedDocument } from './types';
 
 export const PAGE_SIZE = 25;
 export const MAX_TOP_RESULTS = 5;
@@ -137,12 +137,6 @@ export const sidebarOptions = [
     ],
   },
 ];
-
-export const searchResultsDraft: IStoreResult = {
-  page_total: 0,
-  results: [],
-  total: 0,
-};
 
 export const useSearchQuery = (): string => {
   const location = useLocation();
