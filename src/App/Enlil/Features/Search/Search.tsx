@@ -14,6 +14,7 @@ import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
 import { observer } from 'mobx-react';
 import { translate } from '../../../../common/intl';
+import { debounce } from 'lodash';
 
 const Search: React.FC = () => {
   const history = useHistory();
@@ -77,15 +78,25 @@ const Search: React.FC = () => {
     setSearchQuery(value);
   };
 
+  const requestSearch = useMemo(
+    () => debounce(
+      (searchText: string) => {
+        searchState.request({
+          searchText,
+          offset: 0,
+          limit: MAX_TOP_RESULTS,
+        });
+      },
+      300,
+    ),
+    [searchState],
+  );
+
   useEffect(() => {
     if (searchQuery.length >= 3 && isFocused) {
-      searchState.request({
-        searchText: searchQuery,
-        offset: 0,
-        limit: MAX_TOP_RESULTS,
-      });
+      requestSearch(searchQuery);
     }
-  }, [searchState, searchQuery, isFocused]);
+  }, [requestSearch, searchQuery, isFocused]);
 
   const searchData = searchState.data;
 
