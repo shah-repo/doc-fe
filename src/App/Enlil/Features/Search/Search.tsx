@@ -4,26 +4,24 @@ import { InputAdornment, ListSubheader, Popper } from '@material-ui/core';
 import { RenderGroupParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { Autocomplete } from '../../../../ui/components/forms/fields-next';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
 import { MAX_TOP_RESULTS, recentSearches, searchPath, useSearchQuery } from './helpers';
 import useStyles from './Search.styles';
-import { GroupedOption, OptionType } from './types';
+import { Option } from './types';
 import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
 import { observer } from 'mobx-react';
+import { translate } from '../../../../common/intl';
 
 const Search: React.FC = () => {
-  const intl = useIntl();
   const history = useHistory();
   const classes = useStyles();
   const fieldRef = useRef<HTMLDivElement>();
   const [searchQuery, setSearchQuery] = useState(useSearchQuery());
   const [isFocused, setIsFocused] = useState(false);
   const [popperClass, setPopperClass] = useState<string>();
-  const [savedQuery, setSavedQuery] = useState(searchQuery);
   const inputField = fieldRef.current?.querySelector('input');
   const searchState = FB.useRef(SearchState);
 
@@ -31,51 +29,45 @@ const Search: React.FC = () => {
     setPopperClass(isFocused ? classes.popperFocused : undefined);
   }, [isFocused, classes.popperFocused]);
 
-  const unfocusField = () => {
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => {
     setIsFocused(false);
-    setSavedQuery(searchQuery);
     if (inputField) {
       inputField.blur();
     }
   };
 
-  useEffect(() => {
-    if (inputField && !isFocused) {
-      setSearchQuery(savedQuery);
-    }
-  }, [inputField, isFocused, savedQuery]);
-
-  const handleSearch = (event: React.ChangeEvent<unknown>, value: OptionType) => {
+  const handleSearch = (event: React.ChangeEvent<unknown>, value: Option) => {
     if (!value || !event) {
       return;
     }
-    if (typeof value === 'string' || 'query' in value) {
-      const query = typeof value === 'string' ? value : value.query;
-      setSearchQuery(query);
-      unfocusField();
-      return history.push(searchPath(query));
+
+    handleBlur();
+
+    if (value?.document?.id && value?.document?.revisionId) {
+      return history.push(`/document_revision/${value.document.id}/version/${value.document.revisionId}`);
     }
 
-    if (value.id && value.revisionId) {
-      return history.push(`/document_revision/${value.id}/version/${value.revisionId}`);
+    if (value?.query) {
+      setSearchQuery(value.query);
+      return history.push(searchPath(value.query));
     }
-    unfocusField();
+
     return history.push(searchPath(searchQuery));
   };
 
-  const handleFocusChange = (focused: boolean) => () => setIsFocused(focused);
-
-  const formatOptionLabel = (option: OptionType) => {
-    if (typeof option === 'string') {
-      return option;
-    }
-    if ('label' in option) {
+  const formatOptionLabel = (option: Option) => {
+    if (option?.label) {
       return option.label;
     }
-    if ('query' in option) {
+    if (option?.query) {
       return option.query;
     }
-    return [option.docId, option.revisionName, option.companyName].filter(Boolean).join(' - ');
+    return [
+      option?.document?.docId,
+      option?.document?.revisionName,
+      option?.document?.companyName,
+    ].filter(Boolean).join(' - ');
   };
 
   const handleQueryChange = (event: React.ChangeEvent<unknown>, value: string) => {
@@ -93,32 +85,32 @@ const Search: React.FC = () => {
         limit: MAX_TOP_RESULTS,
       });
     }
-  }, [searchQuery, isFocused]);
+  }, [searchState, searchQuery, isFocused]);
 
-  const searchResults = searchState.data;
+  const searchData = searchState.data;
 
   const options = useMemo(() => {
-    if (searchQuery.length <= 3 && !searchResults?.total) {
-      return recentSearches.map((el) => ({
-        query: el,
-        group: intl.formatMessage({ id: 'search.recent' }),
+    if (searchQuery.length <= 3 && !searchData?.total) {
+      return recentSearches.map((query) => ({
+        query,
+        group: translate('search.recent'),
       }));
     }
 
-    const topResults: OptionType[] = searchResults?.documents.map((el) => ({
-      ...el,
-      group: intl.formatMessage({ id: 'search.found.count' }, { count: searchResults.total }),
+    const topResults: Option[] = searchData?.documents.map((document) => ({
+      document,
+      group: translate('search.found.count', { count: searchData.total }),
     })) ?? [];
 
-    if (searchResults?.total && searchResults.total > MAX_TOP_RESULTS) {
+    if (searchData?.total && searchData.total > MAX_TOP_RESULTS) {
       topResults.push({
-        label: intl.formatMessage({ id: 'search.view.all' }, { count: searchResults.total }),
+        label: translate('search.view.all', { count: searchData.total }),
         query: searchQuery,
       });
     }
 
     return topResults;
-  }, [intl, searchQuery, searchResults]);
+  }, [searchQuery, searchData]);
 
   const renderGroup = (params: RenderGroupParams) => (
     <li key={params.key}>
@@ -135,19 +127,18 @@ const Search: React.FC = () => {
     </li>
   );
 
-  const placeholder = intl.formatMessage({ id: isFocused ? 'keyword.to.search' : 'common.search' });
   return (
     <Autocomplete
       disablePortal
       options={options}
+      filterOptions={(options: Option[]) => options}
       ref={fieldRef}
-      filterOptions={(options: OptionType[]) => options}
-      placeholder={placeholder}
+      placeholder={translate(isFocused ? 'keyword.to.search' : 'common.search')}
       className={cx(classes.root, { [classes.rootFocused]: isFocused })}
-      onFocus={handleFocusChange(true)}
-      onBlur={handleFocusChange(false)}
-      noOptionsText={intl.formatMessage({ id: 'nothing.found' })}
-      groupBy={(option: GroupedOption) => option.group}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      noOptionsText={translate('nothing.found')}
+      groupBy={(option: Option) => option?.group as string}
       getOptionLabel={formatOptionLabel}
       PopperComponent={(props) => <Popper {...props} className={popperClass} />}
       renderGroup={renderGroup}
@@ -159,7 +150,7 @@ const Search: React.FC = () => {
             <FontAwesomeIcon icon={regular('search')} />
           </InputAdornment>
         ),
-        onKeyDown: (event) => { event.key === 'Enter' && handleSearch(event, searchQuery); },
+        onKeyDown: (event) => { event.key === 'Enter' && handleSearch(event, { query: searchQuery }); },
       }}
       onInputChange={handleQueryChange}
       inputValue={searchQuery}

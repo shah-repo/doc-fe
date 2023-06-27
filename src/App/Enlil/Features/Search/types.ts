@@ -1,17 +1,9 @@
-interface RecentSearch {
-  query: string
-  group: string
+export interface Option {
+  group?: string
+  label?: string
+  query?: string
+  document?: IStoreMappedDocument
 }
-
-interface AllResultsOption {
-  query: string
-  label: string
-}
-
-export type OptionType = IStoreMappedDocument | RecentSearch | AllResultsOption | string;
-export type GroupedOption = OptionType & {
-  group: string
-};
 
 interface FacetFilter {
   field: string
