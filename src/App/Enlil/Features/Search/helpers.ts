@@ -1,6 +1,4 @@
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import Config from '../../../../config';
 import { ColumnDefinition } from '../../../../ui/components/KendoDataGrid/KendoDataGrid.types';
 import { Status } from '../../../../ui/components/common/kendo.column.templates/Status';
 import { GLOBAL_SEARCH_URL } from '../../../../ui/constants/urls';
@@ -8,17 +6,6 @@ import { IStoreMappedDocument, IStoreResult } from './types';
 
 export const PAGE_SIZE = 25;
 export const MAX_TOP_RESULTS = 5;
-
-export const getSearchResults = async (searchText: string, offset = 0, limit = PAGE_SIZE) => {
-  return await axios.post<IStoreResult>(
-    `${Config.ApiEndpoint}/global_search/documents/search`,
-    {
-      searchText,
-      limit,
-      offset,
-    },
-  );
-};
 
 export const recentSearches = [
   'demo',

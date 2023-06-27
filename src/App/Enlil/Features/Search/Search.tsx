@@ -10,9 +10,11 @@ import { useHistory } from 'react-router-dom';
 import { Autocomplete } from '../../../../ui/components/forms/fields-next';
 import { toastError } from '../../../../ui/components/notifications';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
-import { getSearchResults, MAX_TOP_RESULTS, recentSearches, searchPath, searchResultsDraft, useSearchQuery } from './helpers';
+import { MAX_TOP_RESULTS, recentSearches, searchPath, searchResultsDraft, useSearchQuery } from './helpers';
 import useStyles from './Search.styles';
 import { GroupedOption, OptionType } from './types';
+import { FB } from '../../../../ui/form.builder';
+import SearchState from './Search.state';
 
 const Search: React.FC = () => {
   const intl = useIntl();
@@ -25,6 +27,7 @@ const Search: React.FC = () => {
   const [searchResults, setSearchResults] = useState(searchResultsDraft);
   const [savedQuery, setSavedQuery] = useState(searchQuery);
   const inputField = fieldRef.current?.querySelector('input');
+  const searchState = FB.useRef(SearchState);
 
   useEffect(() => {
     setPopperClass(isFocused ? classes.popperFocused : undefined);
@@ -91,17 +94,19 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     if (searchQuery.length >= 3 && isFocused) {
-      getSearchResults(searchQuery, 0, MAX_TOP_RESULTS)
-        .then(({ data }) => {
-          setSearchResults({
-            results: data.results,
-            page_total: data.page_total,
-            total: data.total,
-          });
-        })
-        .catch((error) => {
-          toastError(error);
+      searchState.request({
+        searchText: searchQuery,
+        offset: 0,
+        limit: MAX_TOP_RESULTS,
+      }).then(({ data }) => {
+        setSearchResults({
+          results: data.results,
+          page_total: data.page_total,
+          total: data.total,
         });
+      }).catch((error) => {
+        toastError(error);
+      });
     }
   }, [searchQuery, isFocused]);
 

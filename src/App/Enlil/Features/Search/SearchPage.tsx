@@ -14,9 +14,11 @@ import { toastError } from '../../../../ui/components/notifications';
 import ExportListDialog from '../../../../ui/document.revision/list/ExportListDialog/ExportListDialog';
 import useDialog from '../../../../ui/hooks/useDialog';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
-import { columnsSchema, getSearchResults, PAGE_SIZE, searchResultsDraft, useSearchQuery } from './helpers';
+import { columnsSchema, PAGE_SIZE, searchResultsDraft, useSearchQuery } from './helpers';
 import useStyles from './SearchPage.styles';
 import Sidebar from './SideBar';
+import { FB } from '../../../../ui/form.builder';
+import SearchState from './Search.state';
 
 const SearchPage: React.FC = () => {
   const history = useHistory();
@@ -36,25 +38,28 @@ const SearchPage: React.FC = () => {
     sort: [],
   });
   const [searchResults, setSearchResults] = useState(searchResultsDraft);
+  const searchState = FB.useRef(SearchState);
 
   useEffect(() => {
     if (searchQuery) {
-      getSearchResults(searchQuery, dataState.skip, dataState.take)
-        .then(({ data }) => {
-          setSearchResults({
-            results: data.results,
-            page_total: data.page_total,
-            total: data.total,
-          });
-          let tempData = [];
-          data.results.map((documents) => {
-            tempData = concat(tempData, get(documents, 'documents'));
-          });
-          setFilterData(tempData);
-        })
-        .catch((error) => {
-          toastError(error);
+      searchState.request({
+        searchText: searchQuery,
+        offset: dataState.skip,
+        limit: dataState.take,
+      }).then(({ data }) => {
+        setSearchResults({
+          results: data.results,
+          page_total: data.page_total,
+          total: data.total,
         });
+        let tempData = [];
+        data.results.map((documents) => {
+          tempData = concat(tempData, get(documents, 'documents'));
+        });
+        setFilterData(tempData);
+      }).catch((error) => {
+        toastError(error);
+      });
     }
   }, [searchQuery, dataState]);
 
