@@ -271,7 +271,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
-        <CompanyLocations isActive={canUpdateLocations || canUpdateCompany} locations={companyMine.locations} />
+        <CompanyLocations isActive={canUpdateLocations} locations={companyMine.locations} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
         {isDeveloper && <ApiTokenContent />}
