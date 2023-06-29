@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Popper } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -19,26 +19,6 @@ import useStyles from './styles';
 import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
 import { useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
-
-const ActionsCell: React.FC<ActionsProps<EditableLotTransfer> & { rootClassName?: string }> = (props) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  return (
-    <>
-      <div ref={ref} className={props.rootClassName} />
-      <Popper
-        open
-        placement="bottom-end"
-        anchorEl={ref.current}
-      >
-        <Actions
-          scrollBehavior="smooth"
-          {...props}
-        />
-      </Popper>
-    </>
-  );
-};
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   transfers = [],
