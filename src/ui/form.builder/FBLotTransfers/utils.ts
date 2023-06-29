@@ -1,8 +1,8 @@
-import { unionBy } from 'lodash';
+import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
-import { DEDUCTABLE_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, TRANSFERS_FIELD } from './constants';
-import { LotTransfer, LotTransferType, PredictFunction } from './types';
+import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
+import { LotTransfer, PredictFunction } from './types';
 
 interface UseOnHandQuantityType {
   initialQuantity: number
@@ -13,14 +13,15 @@ interface UseOnHandQuantityType {
 
 const calculateSumForTransfer = (transfer: LotTransfer, sum: number) => {
   const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
-  const shouldAdd = transfer.type !== LotTransferType.Move;
+  const shouldAdd = INCREMENTABLE_LOT_TRANSFER_TYPES.includes(transfer.type);
+  let result = sum;
   if (shouldDeduct) {
-    return sum - Math.abs(transfer.quantity);
+    result -= Math.abs(transfer.quantity);
   }
   if (shouldAdd) {
-    return sum + Math.abs(transfer.quantity);
+    result += Math.abs(transfer.quantity);
   }
-  return sum;
+  return round(result, MAX_DECIMALS);
 };
 
 export const useOnHandQuantity = (skipTransfer?: string): UseOnHandQuantityType => {
@@ -36,9 +37,6 @@ export const useOnHandQuantity = (skipTransfer?: string): UseOnHandQuantityType 
   ) ?? initialQuantity;
 
   const predictOnHandQuantity: PredictFunction = ({ skipTransfer, newTransfer }) => {
-    if (!transfers?.length) {
-      return initialQuantity ?? 0;
-    }
     const filteredTransfers = transfers?.filter((transfer) => transfer.id !== skipTransfer?.id);
     const allTransfers = newTransfer ? unionBy([newTransfer], filteredTransfers) : filteredTransfers;
 

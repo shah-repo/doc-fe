@@ -63,6 +63,16 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       if (values.from && values.to && values.from === values.to) {
         errors.to = 'validator.lot.transfers.same.location';
       }
+
+      if (values.quantity) {
+        if (values.quantity === 0) {
+          errors.quantity = 'validator.lot.transfers.quantity.null';
+        }
+
+        if (values.quantity > initialQuantity) {
+          errors.quantity = 'validator.lot.transfers.quantity.limit';
+        }
+      }
       if (values.quantity && values.type) {
         const predictedQuantity = predictOnHandQuantity({
           newTransfer: values as LotTransfer,
@@ -72,9 +82,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           errors.quantity = 'validator.lot.transfers.quantity.min';
         }
         if (predictedQuantity > initialQuantity) {
-          errors.quantity = 'validator.lot.transfers.quantity.max';
-        }
-        if (values.quantity > initialQuantity) {
           errors.quantity = 'validator.lot.transfers.quantity.max';
         }
       }
@@ -142,7 +149,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       skipTransfer: item,
     });
 
-    const shouldDisableDelete = (predictedQuantity < 0 || predictedQuantity > initialQuantity);
+    const shouldDisableDelete = item[MODE_FIELD] === Mode.edit && (predictedQuantity < 0 || predictedQuantity > initialQuantity);
     const deleteTootltipSuffix = predictedQuantity < 0 ? 'min' : 'max';
 
     const deleteTootltipText
