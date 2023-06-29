@@ -5,7 +5,6 @@ import { State } from '@progress/kendo-data-query';
 import { GridDataStateChangeEvent } from '@progress/kendo-react-grid';
 import { clone, map, startCase } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import Text from '../../../../../src/ui/components/Text';
 import { pagerSettings } from '../../../../ui/components/common/kendo/helpers';
@@ -19,13 +18,14 @@ import Sidebar from './SideBar';
 import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
 import { observer } from 'mobx-react';
+import { translate } from '../../../../common/intl';
 
 const SearchPage: React.FC = () => {
   const history = useHistory();
-  const intl = useIntl();
   const classes = useStyles();
   const searchQuery = useSearchQuery();
   const dialog = useDialog();
+  const [facets, setFacets] = useState<string[]>([]);
   const [dataState, setDataState] = useState<State>({
     filter: {
       logic: 'and',
@@ -44,9 +44,10 @@ const SearchPage: React.FC = () => {
         searchText: searchQuery,
         offset: dataState.skip,
         limit: dataState.take,
+        facets,
       });
     }
-  }, [searchState, searchQuery, dataState]);
+  }, [searchState, searchQuery, facets, dataState]);
 
   const searchData = searchState.data;
 
@@ -55,10 +56,8 @@ const SearchPage: React.FC = () => {
     return dataState;
   };
 
-  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
-
   const headers = map(columnsSchema, (column) => ({
-    label: startCase(getTranslatedText(column?.title)),
+    label: startCase(translate(column?.title)),
     key: column.field,
   }));
 
@@ -88,7 +87,7 @@ const SearchPage: React.FC = () => {
         {resultText}
       </Box>
       <Box className={classes.sidebar}>
-        <Sidebar facets={searchData?.facets} onChange={console.log} />
+        <Sidebar facets={searchData?.facets} onChange={setFacets} />
       </Box>
       <Box className={classes.topbar}>
         <Box className={classes.toolbar}>
@@ -114,7 +113,7 @@ const SearchPage: React.FC = () => {
           {...dataState}
           onDataStateChange={updateResults}
           noDataProcessing
-          fallback={intl.formatMessage({ id: 'nothing.found' })}
+          fallback={translate('nothing.found')}
           sortable
           resizable
           fullWidth
