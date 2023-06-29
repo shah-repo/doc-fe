@@ -5,25 +5,11 @@ export interface Option {
   document?: IStoreMappedDocument
 }
 
-interface FacetFilter {
-  field: string
-  operator: string
-  value: string
-}
-
-export interface FacetPayload {
-  filters?: FacetFilter[]
-  [key: string]: unknown
-}
-
-export interface FacetOption {
+export interface Facet {
   id: string
   label: string
-  group: string
-  count?: number
-  total?: number
-  payload?: FacetPayload
-  items?: FacetOption[]
+  count: number
+  children?: Facet[]
 }
 
 export interface IStoreMappedDocument {
@@ -41,7 +27,8 @@ export interface IStoreMappedDocument {
 }
 
 export interface IStoreResult {
-  page_total: number
   documents: IStoreMappedDocument[]
+  facets: Facet[]
+  limit: number
   total: number
 }

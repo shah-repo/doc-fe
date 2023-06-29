@@ -15,7 +15,7 @@ import useDialog from '../../../../ui/hooks/useDialog';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
 import { columnsSchema, PAGE_SIZE, useSearchQuery } from './helpers';
 import useStyles from './SearchPage.styles';
-// import Sidebar from './SideBar';
+import Sidebar from './SideBar';
 import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
 import { observer } from 'mobx-react';
@@ -88,7 +88,7 @@ const SearchPage: React.FC = () => {
         {resultText}
       </Box>
       <Box className={classes.sidebar}>
-        {/* <Sidebar options={searchData?.documents} onChange={console.log} /> */}
+        <Sidebar facets={searchData?.facets} onChange={console.log} />
       </Box>
       <Box className={classes.topbar}>
         <Box className={classes.toolbar}>
