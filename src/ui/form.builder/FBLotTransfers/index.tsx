@@ -4,7 +4,8 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import PopperJs from 'popper.js';
+import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
@@ -12,8 +13,8 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { Button } from '../../components/forms/fields-next';
-import Actions, { ActionsProps } from '../FBApprovalMatrixRoles/components/Actions';
 import FBInput from '../FBInput/FBInput';
+import { ActionsCell } from './components/ActionsCell';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
@@ -34,6 +35,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const classes = useStyles();
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
   const { initialQuantity, predictOnHandQuantity } = useOnHandQuantity();
+  const actionsRef = React.useRef<PopperJs>(null);
   const isActive = !disabled && initialQuantity !== null && initialQuantity > 0;
 
   const formik = useFormik<Partial<EditableLotTransfer>>({
@@ -154,6 +156,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           deleteTooltipText={deleteTootltipText}
           isDeleteDisabled={shouldDisableDelete}
           rootClassName={classes.popperHolder}
+          popperRef={actionsRef}
         />
       </td>
     );
