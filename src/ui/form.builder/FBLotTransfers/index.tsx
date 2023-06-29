@@ -12,6 +12,7 @@ import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
@@ -83,7 +84,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     },
   });
 
-  const { setValues } = formik;
+  const { resetForm, setValues, dirty } = formik;
 
   const existingLocations = transfers.reduce<string[]>((list, transfer) => {
     if (!list.includes(transfer.from)) {
@@ -96,8 +97,8 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   }, []);
 
   useEffect(() => {
-    setValues(editedLotTransfer ?? {});
-  }, [editedLotTransfer, setValues]);
+    resetForm({ values: editedLotTransfer ?? {} });
+  }, [editedLotTransfer, setValues, resetForm]);
 
   const createDraftLotTransfer = () => setEditedLotTransfer({
     id: uuidv4(),
@@ -189,6 +190,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   return (
     <Box position="relative">
+      <PromptIfDirty
+        dirty={dirty}
+      />
       <FBInput {...props} type="lotTransfers" name={name}>
         <FBSection
           label="form.builder.lot.transfers.title"
