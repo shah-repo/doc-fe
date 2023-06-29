@@ -2,12 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Employee } from '../../../../state/ducks/company/types';
-import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../constants';
-import { EditableLotTransfer } from '../types';
+import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { CustomTemplateProps } from '../types';
 
-interface Props extends CellTemplateProps<EditableLotTransfer> {
+interface Props extends CustomTemplateProps {
   employees: Employee[]
 }
 
