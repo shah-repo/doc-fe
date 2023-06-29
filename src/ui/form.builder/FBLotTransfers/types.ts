@@ -60,4 +60,5 @@ export type PredictFunction = (args: { skipTransfer?: LotTransfer, newTransfer?:
 export type PredictFactory = (initialQuanity: number, transfers?: LotTransfer[]) => PredictFunction;
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableLotTransfer> {
+  onClick?: (e: LotTranferEditEvent) => void
 }

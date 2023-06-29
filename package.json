@@ -160,6 +160,7 @@
     "@types/react-select": "3.0.8",
     "@types/react-table": "^7.0.16",
     "@types/react-virtualized": "9.21.7",
+    "@types/resize-observer-browser": "^0.1.7",
     "@types/unzipper": "^0.10.5",
     "@types/uuid": "^9.0.1",
     "@types/validatorjs": "^3.15.0",
