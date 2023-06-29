@@ -13,7 +13,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const value = dataItem.date;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue(field, date?.toDate());
+    setFieldValue(field, date?.toISOString());
   };
 
   if (isEditMode) {
