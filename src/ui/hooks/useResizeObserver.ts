@@ -1,3 +1,4 @@
+// TODO - fix types with newer version of react/typescript
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 export type ObserverRect = Omit<DOMRectReadOnly, 'toJSON'>;
@@ -15,7 +16,7 @@ const DEFAULT_STATE: ObserverRect = {
 
 type UseResizeObserverType<T> = [RefObject<T>, ObserverRect];
 
-export function useResizeObserver<T extends HTMLElement> (): UseResizeObserverType<T> {
+function useResizeObserver<T extends HTMLElement> (): UseResizeObserverType<T> {
   const frameID = useRef(0);
   const ref = useRef<T>(null);
 
@@ -53,3 +54,5 @@ export function useResizeObserver<T extends HTMLElement> (): UseResizeObserverTy
 
   return [ref, rect];
 }
+
+export default useResizeObserver;

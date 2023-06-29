@@ -1,10 +1,10 @@
 import { RefObject } from 'react';
-import { useResizeObserver } from './useResizeObserver';
+import useElementSize from './useElementSize';
 
 type UseOverfowType<T> = [RefObject<T>, boolean, { x: boolean, y: boolean }];
 
-export function useOverflow<T extends HTMLElement> (): UseOverfowType<T> {
-  const [ref, { width, height }] = useResizeObserver<T>();
+function useOverflow<T extends HTMLElement> (): UseOverfowType<T> {
+  const [ref, { width, height }] = useElementSize<T>();
 
   const isOverflowing = ref.current ? {
     x: width < ref.current.scrollWidth,
