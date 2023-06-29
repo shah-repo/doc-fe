@@ -2,7 +2,7 @@ import { FBInputProps } from '..';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from './constants';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 
 export interface CompanyLocation {
   id: string
