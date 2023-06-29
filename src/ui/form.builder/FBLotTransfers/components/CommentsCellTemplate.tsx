@@ -1,8 +1,8 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { translate } from '../../../../common/intl';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
-import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 

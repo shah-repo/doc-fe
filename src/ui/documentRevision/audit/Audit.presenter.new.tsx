@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -392,7 +392,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             }
           >
             <>
-              {!isFBField && !isSmartRef && (
+              {!isFBField && !isSmartRef && change.field !== 'displayStatus' && (
                 <Typography
                   variant="subtitle1"
                   className={classes.auditKey}
@@ -400,10 +400,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   <Text
                     dataCy={`change-key-${groupKey}-${key}`}
                     message={`documentRevision.audit.${change.field}.${change.type}`}
-                    values={{
-                      name: change.ownerName,
-                      nextStatus: change.nextValue,
-                    }}
                   />
                 </Typography>
               )}

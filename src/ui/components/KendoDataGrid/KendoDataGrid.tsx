@@ -8,6 +8,7 @@ import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
 import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
+import { MODE_FIELD, Mode, SOLO_OPERATORS } from './constants';
 
 const DEFAULT_DATA_STATE: State = {
   filter: {
@@ -195,7 +196,35 @@ function KendoDataGrid<T> ({
   }, [sort]);
 
   const resultData = useMemo(
-    () => noDataProcessing ? data : process(data, dataState),
+    () => {
+      if (noDataProcessing) {
+        return data;
+      }
+      const finalDataState: State = {
+        ...dataState,
+        filter: {
+          logic: 'or',
+          filters: [
+            {
+              logic: dataState.filter?.logic ?? 'and',
+              filters: dataState.filter?.filters ?? [],
+            },
+            {
+              field: MODE_FIELD,
+              operator: 'eq',
+              value: Mode.add,
+            },
+            {
+              field: MODE_FIELD,
+              operator: 'eq',
+              value: Mode.edit,
+            },
+          ],
+        },
+      };
+      const processedData = process(data, finalDataState);
+      return processedData;
+    },
     [data, noDataProcessing, dataState],
   );
 
@@ -211,6 +240,20 @@ function KendoDataGrid<T> ({
   });
 
   const updateDataState = (event: GridDataStateChangeEvent) => {
+    if (event.dataState.filter?.filters) {
+      event.dataState.filter.filters = event.dataState.filter.filters
+        .filter((item) => {
+          if ('value' in item && 'operator' in item) {
+            return (
+              item.value !== undefined
+              || (typeof item.operator === 'string' && SOLO_OPERATORS.includes(item.operator))
+            );
+          }
+
+          return true;
+        });
+    }
+
     setDataState(
       onDataStateChange
         ? onDataStateChange(event)
