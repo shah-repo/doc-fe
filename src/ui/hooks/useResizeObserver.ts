@@ -1,4 +1,3 @@
-// TODO - fix types with newer version of react/typescript
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 export type ObserverRect = Omit<DOMRectReadOnly, 'toJSON'>;
@@ -50,7 +49,7 @@ function useResizeObserver<T extends HTMLElement> (): UseResizeObserverType<T> {
         cancelAnimationFrame(frameID.current);
       }
     };
-  }, [ref.current, observer]);
+  }, [observer]);
 
   return [ref, rect];
 }
