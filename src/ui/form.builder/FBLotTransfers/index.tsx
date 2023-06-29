@@ -55,7 +55,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
   const { initialQuantity, predictOnHandQuantity } = useOnHandQuantity();
   const isActive = !disabled && initialQuantity !== null && initialQuantity > 0;
-  const actionsRef = React.useRef<PopperJs>(null);
 
   const formik = useFormik<Partial<EditableLotTransfer>>({
     initialValues: {},
