@@ -54,17 +54,20 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const classes = useStyles();
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
   const { initialQuantity, predictOnHandQuantity } = useOnHandQuantity();
-  const isActive = !disabled && initialQuantity;
+  const isActive = !disabled && initialQuantity !== null && initialQuantity > 0;
+  const actionsRef = React.useRef<PopperJs>(null);
 
   const formik = useFormik<Partial<EditableLotTransfer>>({
     initialValues: {},
     validate: (values) => {
       const errors: Record<string, string> = {};
+      const isInitialQuantityValid = initialQuantity !== null;
+
       if (values.from && values.to && values.from === values.to) {
         errors.to = 'validator.lot.transfers.same.location';
       }
 
-      if (values.quantity) {
+      if (isInitialQuantityValid && values.quantity) {
         if (values.quantity === 0) {
           errors.quantity = 'validator.lot.transfers.quantity.null';
         }
@@ -73,11 +76,16 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           errors.quantity = 'validator.lot.transfers.quantity.limit';
         }
       }
-      if (values.quantity && values.type) {
-        const predictedQuantity = predictOnHandQuantity({
-          newTransfer: values as LotTransfer,
-          skipTransfer: editedLotTransfer as LotTransfer,
-        });
+
+      const predictedQuantity
+        = values.type && values.quantity
+          ? predictOnHandQuantity({
+            newTransfer: values as LotTransfer,
+            skipTransfer: editedLotTransfer as LotTransfer,
+          })
+          : null;
+
+      if (isInitialQuantityValid && predictedQuantity !== null) {
         if (predictedQuantity < 0) {
           errors.quantity = 'validator.lot.transfers.quantity.min';
         }
@@ -145,12 +153,12 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       return row;
     }
 
-    const predictedQuantity = predictOnHandQuantity({
-      skipTransfer: item,
-    });
+    const predictedQuantity = predictOnHandQuantity({ skipTransfer: item });
 
-    const shouldDisableDelete = item[MODE_FIELD] === Mode.edit && (predictedQuantity < 0 || predictedQuantity > initialQuantity);
-    const deleteTootltipSuffix = predictedQuantity < 0 ? 'min' : 'max';
+    const isQuantityPredicted = predictedQuantity !== null && initialQuantity !== null;
+    const isPredictedQuantityValid = isQuantityPredicted && predictedQuantity >= 0 && predictedQuantity <= initialQuantity;
+    const shouldDisableDelete = isQuantityPredicted && item[MODE_FIELD] === Mode.edit && !isPredictedQuantityValid;
+    const deleteTootltipSuffix = isQuantityPredicted && predictedQuantity < 0 ? 'min' : 'max';
 
     const deleteTootltipText
       = shouldDisableDelete

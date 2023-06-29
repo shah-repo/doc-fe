@@ -13,9 +13,7 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
   const { initialQuantity, onHandQuantity, onHandQuantityUnit } = useOnHandQuantity();
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
-    const compoundValue = initialQuantity
-      ? `${onHandQuantity ?? ''} ${onHandQuantityUnit ?? ''}`
-      : '';
+    const compoundValue = initialQuantity ? `${onHandQuantity ?? ''} ${onHandQuantityUnit}` : '';
 
     return (
       <FBTextField
@@ -36,7 +34,7 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
           label={label}
           name={undefined}
           gutter={false}
-          value={onHandQuantity}
+          value={onHandQuantity ?? ''}
           disabled
         />
       </Grid>
