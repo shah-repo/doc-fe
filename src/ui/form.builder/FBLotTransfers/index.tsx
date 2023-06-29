@@ -119,6 +119,10 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     discardLotTransfer();
   };
 
+  const handleResize = () => {
+    actionsRef.current?.scheduleUpdate();
+  };
+
   const schema = buildSchema({
     locations,
     existingLocations,
@@ -212,6 +216,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           rowRender={rowRender}
           onRowClick={isActive ? editLotTransfer : undefined}
           className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+          onResize={handleResize}
         />
       </FormikProvider>
       {isActive && (
