@@ -124,11 +124,14 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     actionsRef.current?.scheduleUpdate();
   };
 
+  const handleRowClick = isActive ? editLotTransfer : undefined;
+
   const schema = buildSchema({
     locations,
     existingLocations,
     employees,
     builds,
+    onRowClick: handleRowClick,
   });
 
   const rowRender: DataGridProps<EditableLotTransfer>['rowRender'] = (row, { dataItem }) => {
@@ -218,7 +221,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           data={transferList as EditableLotTransfer[]}
           schema={schema}
           rowRender={rowRender}
-          onRowClick={isActive ? editLotTransfer : undefined}
+          onRowClick={handleRowClick}
           className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
           onResize={handleResize}
         />
