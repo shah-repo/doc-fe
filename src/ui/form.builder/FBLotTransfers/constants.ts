@@ -3,18 +3,12 @@ import { LotTransferType } from './types';
 
 export const INITIAL_QUANTITY_FIELD = 'lot_usable_quantity';
 export const TRANSFERS_FIELD = 'lot_transfers';
-
-export const MODE_FIELD = '_mode';
-
-export enum Mode {
-  show = 'show',
-  add = 'add',
-  edit = 'edit',
-}
+export const MAX_DECIMALS = 12;
 
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 
 export const DEDUCTABLE_TRANSFER_TYPES = [LotTransferType.Allocate, LotTransferType.Transfer];
+export const INCREMENTABLE_LOT_TRANSFER_TYPES = [LotTransferType.Return];
 
 export const TRANSFER_TYPE_OPTIONS = Object.values(LotTransferType).map((value) => ({
   value,
