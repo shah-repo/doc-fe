@@ -28,7 +28,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'docId',
     title: 'ID',
-    // width: '250px',
+    width: '12.57%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     expandable: true,
@@ -40,7 +40,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'title',
     title: 'TITLE',
-    // width: '450px',
+    width: '11.29%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
@@ -49,7 +49,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'displayRevision',
     title: 'REV',
-    // width: '120px',
+    width: '3.86%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
@@ -58,7 +58,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'displayStatus',
     title: 'STATUS',
-    // width: '200px',
+    width: '8.81%',
     cell: Status,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
@@ -67,7 +67,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'cost',
     title: 'COST',
-    // width: '200px',
+    width: '5.94%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuNumericColumn,
     hidden: false,
@@ -75,14 +75,14 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'leadTime',
     title: 'LEAD TIME',
-    // width: '200px',
+    width: '6.34%',
     filter: TreeListTextFilter,
     hidden: false,
   },
   {
     field: 'quantity',
     title: 'QUANTITY',
-    // width: '200px',
+    width: '5.35%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
@@ -90,7 +90,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'unit',
     title: 'UNIT',
-    // width: '200px',
+    width: '5.35%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
@@ -98,7 +98,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'refDesignator',
     title: 'REF. DESIGNATOR',
-    // width: '200px',
+    width: '8.81%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     hidden: false,
@@ -106,7 +106,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'primaryAttachments',
     title: 'PRIMARY ATTACHMENTS',
-    // width: '200px',
+    width: '4.06%',
     filter: TreeListTextFilter,
     headerCell: PrimaryAttachments,
     columnMenu: ColumnMenuTextColumn,
@@ -117,7 +117,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'attachments',
     title: 'ATTACHMENTS',
-    // width: '200px',
+    width: '3.96%',
     filter: TreeListTextFilter,
     headerCell: Attachments,
     columnMenu: ColumnMenuTextColumn,
@@ -128,7 +128,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'issues',
     title: 'ISSUES',
-    // width: '200px',
+    width: '3.96%',
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
     cell: BooleanCell,
@@ -139,7 +139,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'vendor',
     title: 'VENDORS',
-    // width: '200px',
+    width: '3.96%',
     cell: BooleanCell,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,
@@ -150,7 +150,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'comments',
     title: 'COMMENTS',
-    // width: '200px',
+    width: '15.64%',
     cell: Comments,
     filter: TreeListTextFilter,
     columnMenu: ColumnMenuTextColumn,

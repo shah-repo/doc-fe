@@ -113,6 +113,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     <Grid item xs={12}>
       <TreeList
         style={{ width: '100%', overflow: 'scroll' }}
+        tableProps={{ style: { width: '2100px' } }}
         expandField={EXPAND_FIELD}
         subItemsField={SUB_ITEMS_FIELD}
         onExpandChange={onExpandChange}
