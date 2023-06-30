@@ -95,12 +95,12 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     setExpanded(!isExpanded);
   };
 
-  const getTableElementData = (data) => {
-    return <Typography component="p" className={`${classes.truncate}`}>{data}</Typography>;
+  const getTableElementData = (data, dataCy) => {
+    return <Typography component="p" data-cy={`view-${dataCy}`} className={`${classes.truncate}`}>{data}</Typography>;
   };
 
   const getTableItemElementData = () => {
-    return <span>{docTitle.replace(/(Rev [0-9A-Z]*)(.*)/, '$1')}</span>;
+    return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z]*)(.*)/, '$1')}</span>;
   };
 
   return (
@@ -130,10 +130,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange)} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange)} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
       </div>
       {
