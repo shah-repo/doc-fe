@@ -1,3 +1,4 @@
+import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
 import { FBInputProps } from '../FBInput/FBInput.types';
 import { MODE_FIELD, Mode } from './constants';
 
@@ -5,11 +6,13 @@ export type VendorDataProps =
 & Pick<FBInputProps, 'name' | 'disabled'>
 & {
   items?: VendorData[]
+  vendors?: VendorOption[]
+  deleteLotTransfer?: (transfer: VendorData) => void
 };
 
 export interface VendorData {
   id: string
-  supplier: string
+  vendor: string
   status: string
   partNumber: string
   cost: string
@@ -27,3 +30,11 @@ export interface EditableVendorData extends VendorData {
 export interface VendorDataEditEvent {
   dataItem: EditableVendorData
 }
+
+type VendorOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId'>;
+
+export type VendorOption =
+& Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'status' | 'displayRevision'>
+& {
+  document: VendorOptionDocument
+};

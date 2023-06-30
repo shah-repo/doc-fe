@@ -1,30 +1,37 @@
-import { Box } from '@material-ui/core';
-import React from 'react';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Popper } from '@material-ui/core';
+import cx from 'classnames';
+import React, { useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { Button } from '../../components/forms/fields-next';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
+import Actions, { ActionsProps } from '../FBApprovalMatrixRoles/components/Actions';
+import FBInput from '../FBInput/FBInput';
+import FBSection from '../FBSection/FBSection';
 import { ConversionCellTemplate } from './components/ConversionCellTemplate';
 import { LeadTimeCellTemplate } from './components/LeadTimeCellTemplate';
 import { SupplierCellTemplate } from './components/SupplierCellTemplate';
 import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
+import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
 import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
 import { UnitsBuyCellTemplate } from './components/UnitsBuyCellTemplate';
 import { UnitsUseCellTemplate } from './components/UnitsUseCellTemplate';
 import { MODE_FIELD, Mode } from './constants';
-// import useStyles from './styles';
-import { v4 as uuidv4 } from 'uuid';
-import { translate } from '../../../common/intl';
-import { Button } from '../../components/forms/fields-next';
+import useStyles from './styles';
 import { EditableVendorData, VendorData, VendorDataEditEvent, VendorDataProps } from './types';
 import { withFBVendorData } from './wrap';
 
-const vendorDataSchema = (items) => ([
+const vendorDataSchema = (vendors) => ([
   {
     id: 'supplier',
     field: 'supplier',
     title: 'Supplier',
     filterCell: InputFilter,
-    template: SupplierCellTemplate,
+    template: (props) => <SupplierCellTemplate {...props} vendors={vendors} />,
     width: 150,
   },
   {
@@ -32,7 +39,7 @@ const vendorDataSchema = (items) => ([
     field: 'status',
     title: 'Supplier Status',
     filterCell: InputFilter,
-    template: ({ dataItem }) => <>{dataItem.status}</>,
+    template: SupplierStatusCellTemplate,
     width: 150,
   },
   {
@@ -86,15 +93,38 @@ const vendorDataSchema = (items) => ([
 
 ]);
 
+const ActionsCell: React.FC<ActionsProps<EditableVendorData> & { rootClassName?: string }> = (props) => {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <>
+      <div ref={ref} className={props.rootClassName} />
+      <Popper
+        open
+        placement="bottom-end"
+        anchorEl={ref.current}
+      >
+        <Actions
+          scrollBehavior="smooth"
+          {...props}
+        />
+      </Popper>
+    </>
+  );
+};
+
 const FBVendorDataTable: React.FC<VendorDataProps> = ({
   items = [],
+  vendors = [],
+  name,
   disabled,
+  deleteLotTransfer,
   addVendorData,
 }) => {
-  // const classes = useStyles();
+  const classes = useStyles();
   const [editedVendorData, setEditedVendorData] = React.useState<Partial<EditableVendorData>>();
 
   const isActive = true;
+
   const editVendorData = ({ dataItem }: VendorDataEditEvent) => setEditedVendorData(dataItem);
 
   const createDraftVendorData = () => setEditedVendorData({
@@ -102,11 +132,59 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
     [MODE_FIELD]: Mode.add,
   });
 
-  const schema = vendorDataSchema(items);
+  /// ///////////////////////////
+
+  const discardLotTransfer = () => {
+    setEditedVendorData(undefined);
+  };
+  const removeLotTransfer = () => {
+    if (!editedVendorData) {
+      return;
+    }
+    deleteLotTransfer?.(editedVendorData as VendorData);
+    discardLotTransfer();
+  };
+
+  const submitForm = () => {
+    console.log('submitForm');
+  };
+
+  const shouldDisableDelete = true;
+  const deleteTootltipSuffix = 'min';
+
+  const deleteTootltipText
+      = shouldDisableDelete
+        ? translate(`validator.lot.transfers.quantity.${deleteTootltipSuffix}`)
+        : undefined;
+
+  /// ///////////////////////////
+  const schema = vendorDataSchema(vendors);
 
   const rowRender: DataGridProps<EditableVendorData>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableVendorData;
+    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
+    if (!isUpdating) {
+      return row;
+    }
+    const actions = (
+      <td className={classes.actionsCell}>
+        <ActionsCell
+          dataItem={item}
+          onConfirm={submitForm}
+          onDiscard={discardLotTransfer}
+          onDelete={removeLotTransfer}
+          deleteTooltipText={deleteTootltipText}
+          isDeleteDisabled={false}
+          rootClassName={classes.popperHolder}
+        />
+      </td>
+    );
     return React.cloneElement(
       row,
+      {
+        className: cx(row.props.className, classes.updatingRow),
+      },
+      [row.props.children, actions],
     );
   };
 
@@ -125,6 +203,23 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
 
   return (
     <Box position="relative">
+      <FBInput type="vendorData" name={name}>
+        <FBSection
+          label="form.builder.new.supplier.add"
+        >
+          {isActive && (
+            <Button
+              kind="ghost"
+              size="small"
+              className={classes.addButton}
+              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+              onClick={createDraftVendorData}
+            >
+              {translate('form.builder.new.supplier.add')}
+            </Button>
+          )}
+        </FBSection>
+      </FBInput>
       <KendoDataGrid<VendorData>
         fullWidth
         filterable

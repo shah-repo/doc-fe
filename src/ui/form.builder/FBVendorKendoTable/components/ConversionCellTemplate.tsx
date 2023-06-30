@@ -1,5 +1,5 @@
 import { get } from 'lodash';
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, useState } from 'react';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { TextField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../constants';
@@ -13,31 +13,34 @@ export const ConversionCellTemplate: React.FC<Props> = ({
   dataItem,
   onChange,
 }) => {
-  const isEditMode = (
-    dataItem[MODE_FIELD] === Mode.add || (dataItem[MODE_FIELD] === Mode.edit)
-  );
+  const isEditMode
+    = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
 
-  const handleChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
-    const value = event.target.value;
+  const [value, setValue] = useState(get(dataItem, field) as number);
+
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (
+    event,
+  ) => {
+    const newValue = event.target.value as unknown as number;
+    setValue(newValue);
     onChange?.({
       dataItem,
       dataIndex,
       syntheticEvent: event,
       field,
-      value,
+      value: newValue,
     });
+    console.log('value', newValue);
   };
-
-  const defaultValue = get(dataItem, field) as number;
 
   if (isEditMode) {
     return (
       <TextField
+        name="conversion"
         type="number"
-        name="day"
         size="small"
         onChange={handleChange}
-        value={defaultValue}
+        value={value}
       />
     );
   }
