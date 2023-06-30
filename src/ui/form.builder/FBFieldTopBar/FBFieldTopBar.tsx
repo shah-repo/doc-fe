@@ -23,7 +23,7 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
   return (
     <Box className={classes.root}>
       <Grid container className={classes.tools}>
-        <DragHandleIcon className={classes.dragIcon} {...listeners} data-cy="delete-schema-item" />
+        <DragHandleIcon className={classes.dragIcon} {...listeners} data-cy="drag-schema-item" />
         <CodeIcon onClick={toggleItemMarkdown} data-cy="view-schema-item-markdown" />
         <EditIcon onClick={editSchemaItem} data-cy="edit-schema-item" />
         <RemoveIcon

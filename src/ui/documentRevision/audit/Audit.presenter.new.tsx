@@ -1,11 +1,11 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
-import { find, has, isEmpty, last, orderBy } from 'lodash';
+import { find, has, isEmpty, last, orderBy, some } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -99,6 +99,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
+    // TODO Find another workaround to avoid unwanted audit entries while deleting lotTransfers item
+    if (some(audits, { type: 'ARRAY_DELETED' })) {
+      audits = audits.filter(audit => audit.type === 'ARRAY_DELETED');
+    }
+
     orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
@@ -154,10 +159,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
       }
-      // LOT QUANTITY
-      if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
-        fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
-      }
       // LHRSTEP
       if (fbType === 'lhrstep') {
         const valueKey = change.field.split('.')[1].split('-');
@@ -170,6 +171,21 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
         }
         fbLabel = `${label} for ${stepLabel}`;
+      }
+      // LOT QUANTITY
+      if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
+        fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
+      }
+      // LOT TRANSFERS
+      if (fbType === 'lotTransfers') {
+        const field = change.field.split('.').at(-1) as string;
+        if (field === 'id') {
+          return;
+        }
+        if (change.type !== 'ARRAY_DELETED') {
+          const fieldName = translate(`form.builder.lot.transfers.${field}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
       }
       // MPIPROCEDURE
       const valueKey = change.field.split('.');
@@ -376,7 +392,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             }
           >
             <>
-              {!isFBField && !isSmartRef && (
+              {!isFBField && !isSmartRef && change.field !== 'displayStatus' && (
                 <Typography
                   variant="subtitle1"
                   className={classes.auditKey}
@@ -384,10 +400,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   <Text
                     dataCy={`change-key-${groupKey}-${key}`}
                     message={`documentRevision.audit.${change.field}.${change.type}`}
-                    values={{
-                      name: change.ownerName,
-                      nextStatus: change.nextValue,
-                    }}
                   />
                 </Typography>
               )}

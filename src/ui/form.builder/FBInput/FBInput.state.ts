@@ -3,7 +3,7 @@ import { action, observable, set } from 'mobx';
 import { FBInputConstructor, FBInputType } from '..';
 
 class FBInputState {
-  public static omitLabel: FBInputType[] = ['checkbox', 'radio', 'hyperlink', 'section'];
+  public static omitLabel: FBInputType[] = ['checkbox', 'radio', 'hyperlink', 'section', 'lotTransfers'];
   // Set value on blur
   public static omitOnChange: FBInputType[] = ['textfield', 'texteditor', 'purchaseorder'];
   public autosavePrevValue?: any;
@@ -15,7 +15,7 @@ class FBInputState {
   @observable public forceRender?: boolean = false;
   @observable public includeNotes = false;
 
-  public constructor({ value, hidden }: FBInputConstructor) {
+  public constructor ({ value, hidden }: FBInputConstructor) {
     this.value = value;
     this.hidden = hidden;
   }

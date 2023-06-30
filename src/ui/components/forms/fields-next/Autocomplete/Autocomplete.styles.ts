@@ -3,7 +3,7 @@ import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   inputRoot: {
-    padding: theme.spacing(0, 7, 0, 0.75),
+    padding: theme.spacing(0, 4.5, 0, 0.75),
   },
   root: {
     ...theme.overrides?.MuiInputBase?.input,
@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
   },
   focused: {
     ...theme.overrides?.MuiInputBase?.input?.['&:focus'],
+
     '&:hover': {
       background: Colors.white,
     },
@@ -33,7 +34,13 @@ export default makeStyles((theme) => ({
     },
   },
   sizeSmall: {
-    padding: theme.spacing(0, 7.5, 0, 0.25),
+    padding: theme.spacing(0, 4, 0, 0.25),
+  },
+  withClearIcon: {
+    padding: theme.spacing(0, 7, 0, 0.75),
+  },
+  smallWithClearIcon: {
+    padding: theme.spacing(0, 6.5, 0, 0.25),
   },
   popupIndicator: {
     fontSize: 14,

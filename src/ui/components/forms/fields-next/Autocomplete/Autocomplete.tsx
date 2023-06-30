@@ -70,6 +70,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const [blurEvent, setBlurEvent] = useState<React.FocusEvent<HTMLUnknownElement>>();
 
   const isSmall = size === 'small';
+  const hasClearIcon = !props.disableClearable;
 
   useEffect(() => {
     if (blurEvent && onBlur) {
@@ -87,7 +88,15 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       classes={{
         ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall'),
         ...classes,
-        inputRoot: cx(baseClasses.inputRoot, { [baseClasses.sizeSmall]: isSmall }),
+        inputRoot: cx(
+          baseClasses.inputRoot,
+          {
+            [baseClasses.sizeSmall]: isSmall,
+            [baseClasses.withClearIcon]: hasClearIcon,
+            [baseClasses.sizeSmall]: isSmall,
+            [baseClasses.smallWithClearIcon]: hasClearIcon && isSmall,
+          },
+        ),
         option: cx(baseClasses.option, { [baseClasses.optionSmall]: isSmall }),
       }}
       size={size}
