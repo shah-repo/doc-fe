@@ -109,7 +109,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         [classes.enclosingDivOpened]: isExpanded,
       })}
       data-cy="enclosing-div-view-item">
-      <div className={classes.itemRow}>
+      <div className={classes.itemRow} data-cy="ar-item-view-row">
         <div className={classes.cellOne}>
           {
             docRelatedParts.length > 0

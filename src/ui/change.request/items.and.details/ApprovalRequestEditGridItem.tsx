@@ -37,7 +37,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
-        <div className={cx(classes.itemRow, classes.editItemRow)}>
+        <div className={cx(classes.itemRow, classes.editItemRow)} data-cy="ar-item-edit-row">
           <div className={cx(classes.cellOne, classes.hiddenLegend)}>
             { showAutoComplete
               && <FBAutocompleteAsync
