@@ -72,7 +72,7 @@ const FacetItem: React.FC<{ facet: OwnFacet, onChange?: (item: ItemChange) => vo
         )}
         <ListItemIcon className={classes.listCheckboxWrap}>
           <Checkbox
-            checked={Boolean(isChecked || children?.some(item => item.checked))}
+            checked={isChecked}
             onClick={handleItemClick}
             className={classes.listCheckbox}
             color="default"
@@ -154,11 +154,15 @@ const SideBar: React.FC<{ facets?: Facet[], onChange?: (data: string[]) => void 
     });
   };
 
-  const mapOwnFacets = (facets: Facet[]): OwnFacet[] => facets.map(facet => ({
-    ...facet,
-    checked: checkedFacetIds.includes(facet.id),
-    ...facet.children && { children: mapOwnFacets(facet.children) },
-  } as OwnFacet));
+  const mapOwnFacets = (facets: Facet[]): OwnFacet[] => facets.map(facet => {
+    const mappedChildren = facet.children ? mapOwnFacets(facet.children) : undefined;
+
+    return ({
+      ...facet,
+      checked: checkedFacetIds.includes(facet.id) || Boolean(mappedChildren?.some(item => item.checked)),
+      ...mappedChildren && { children: mappedChildren },
+    } as OwnFacet);
+  });
 
   const ownFacets = mapOwnFacets(facets);
 
