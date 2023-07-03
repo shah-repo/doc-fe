@@ -110,7 +110,11 @@ const SearchPage: React.FC = () => {
         )}
       </Box>
       <Box className={classes.sidebar}>
-        <Sidebar facets={queryFacets} onChange={setFacets} />
+        <Sidebar
+          facets={queryFacets}
+          onChange={setFacets}
+          query={searchQuery}
+        />
       </Box>
       <Box className={classes.topbar}>
         <Box className={classes.toolbar}>

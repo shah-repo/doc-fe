@@ -125,10 +125,14 @@ const FacetsList: React.FC<{ facets: OwnFacet[], isChild?: boolean, onChange?: (
   );
 };
 
-const SideBar: React.FC<{ facets?: Facet[], onChange?: (data: string[]) => void }> = ({ onChange, facets = [] }) => {
+const SideBar: React.FC<{ query?: string, facets?: Facet[], onChange?: (data: string[]) => void }> = ({ query, onChange, facets = [] }) => {
   const classes = useStyles();
 
   const [checkedFacetIds, setCheckedFacetIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCheckedFacetIds([]);
+  }, [query]);
 
   useEffect(() => {
     if (checkedFacetIds && onChange) {
