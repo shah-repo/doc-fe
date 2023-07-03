@@ -15,6 +15,7 @@ import SearchState from './Search.state';
 import { observer } from 'mobx-react';
 import { translate } from '../../../../common/intl';
 import { debounce } from 'lodash';
+import Text from '../../../../../src/ui/components/Text';
 
 const Search: React.FC = () => {
   const history = useHistory();
@@ -140,7 +141,10 @@ const Search: React.FC = () => {
             to={searchPath(searchQuery)}
             onClick={handleBlur}
           >
-            {translate('search.view.all', { count: searchData?.total })}
+            <Text
+              message="search.view.all"
+              values={{ count: searchData?.total }}
+            />
           </Link>
         )}
       </li>

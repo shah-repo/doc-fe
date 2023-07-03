@@ -169,7 +169,9 @@ const SideBar: React.FC<{ facets?: Facet[], onChange?: (data: string[]) => void 
   return (
     <Box>
       <Box className={classes.toolbar}>
-        <Box>Refine By</Box>
+        <Box>
+          <Text message="search.facets.header" />
+        </Box>
         {checkedFacetIds.length > 0 && (
           <Box
             className={classes.selectButton}

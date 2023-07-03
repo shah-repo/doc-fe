@@ -76,8 +76,6 @@ const SearchPage: React.FC = () => {
     key: column.field,
   }));
 
-  const resultText = searchQuery ? `${searchData?.total} results found for "${searchQuery}"` : 'Search';
-
   const handleRowClick = (values) => {
     const { dataItem } = values;
     if (dataItem?.id && dataItem?.revisionId) {
@@ -99,7 +97,16 @@ const SearchPage: React.FC = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.title}>
-        {resultText}
+        {!searchQuery && <Text translation="common.search" />}
+        {searchQuery && (
+          <Text
+            translation="search.results"
+            values={{
+              count: searchData?.total ?? 0,
+              query: searchQuery,
+            }}
+          />
+        )}
       </Box>
       <Box className={classes.sidebar}>
         <Sidebar facets={queryFacets} onChange={setFacets} />
