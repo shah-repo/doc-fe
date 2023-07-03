@@ -51,6 +51,7 @@ const SearchPage: React.FC = () => {
         searchText: searchQuery,
         offset: dataState.skip,
         limit: dataState.take,
+        sort: dataState.sort,
         facets,
       });
     }
