@@ -1,6 +1,7 @@
 import { State } from '@progress/kendo-data-query';
 import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataStateChangeEvent, GridHeaderCellProps, GridItemChangeEvent, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import React, { ComponentType, ReactElement } from 'react';
+import { Size } from 'react-virtualized';
 import { StyledKendoGridProps } from '../StyledKendoGrid/StyledKendoGrid.types';
 
 export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
@@ -50,6 +51,7 @@ export interface DataGridProps<T> extends StyledKendoGridProps {
   fallback?: React.ReactNode
   onDataStateChange?: (event: GridDataStateChangeEvent) => State
   onColumnReorder?: (event: GridColumnReorderEvent) => Array<ColumnDefinition<T>>
+  onResize?: (info: Size) => unknown
   calculateColumWidth?: WidthCalculator
   ref?: React.MutableRefObject<Grid>
   defaultDataState?: State

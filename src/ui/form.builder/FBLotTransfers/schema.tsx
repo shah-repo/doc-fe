@@ -14,13 +14,14 @@ import { LocationCellTemplate } from './components/LocationCellTemplate';
 import { QuantityCellTemplate } from './components/QuantityCellTemplate';
 import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
 import { TRANSFER_TYPE_OPTIONS } from './constants';
-import { BuildOption, CompanyLocation, EditableLotTransfer } from './types';
+import { BuildOption, CompanyLocation, EditableLotTransfer, LotTranferEditEvent } from './types';
 
 interface SchemaOptions {
   locations: CompanyLocation[]
   existingLocations: string[]
   employees: Employee[]
   builds: BuildOption[]
+  onRowClick?: (e: LotTranferEditEvent) => void
 }
 
 export const buildSchema = ({
@@ -28,6 +29,7 @@ export const buildSchema = ({
   existingLocations = [],
   employees,
   builds,
+  onRowClick,
 }: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => {
   const transferTypeOptions = TRANSFER_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
 
@@ -66,7 +68,7 @@ export const buildSchema = ({
       field: 'from',
       title: 'form.builder.lot.transfers.from',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} locations={locations} />,
+      template: (props) => <LocationCellTemplate {...props} locations={locations} onClick={onRowClick} />,
       width: 180,
     },
     {
@@ -74,7 +76,7 @@ export const buildSchema = ({
       field: 'to',
       title: 'form.builder.lot.transfers.to',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} locations={locations} />,
+      template: (props) => <LocationCellTemplate {...props} locations={locations} onClick={onRowClick} />,
       width: 180,
     },
     {
@@ -82,7 +84,7 @@ export const buildSchema = ({
       field: 'build.docId',
       title: 'form.builder.lot.transfers.build',
       filterCell: InputFilter,
-      template: (props) => <BuildCellTemplate {...props} builds={builds} />,
+      template: (props) => <BuildCellTemplate {...props} builds={builds} onClick={onRowClick} />,
       width: 200,
     },
     {
@@ -106,7 +108,7 @@ export const buildSchema = ({
       field: 'by',
       title: 'form.builder.lot.transfers.by',
       filterCell: InputFilter,
-      template: (props) => <EmployeeCellTemplate {...props} employees={employees} />,
+      template: (props) => <EmployeeCellTemplate {...props} employees={employees} onClick={onRowClick} />,
       width: 200,
     },
     {
@@ -114,7 +116,7 @@ export const buildSchema = ({
       field: 'comments',
       title: 'form.builder.lot.transfers.comments',
       filterCell: InputFilter,
-      template: CommentsCellTemplate,
+      template: (props) => <CommentsCellTemplate {...props} onClick={onRowClick} />,
       width: 250,
     },
   ];

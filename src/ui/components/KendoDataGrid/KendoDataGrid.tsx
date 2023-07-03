@@ -158,6 +158,7 @@ function KendoDataGrid<T> ({
   ref,
   containerRef,
   style,
+  onResize,
   ...props
 }: DataGridProps<T>): React.ReactElement {
   const gridRef = ref ?? useRef<Grid>();
@@ -279,6 +280,7 @@ function KendoDataGrid<T> ({
     <AutoSizer
       disableWidth={!fullWidth}
       disableHeight={!fullHeight}
+      onResize={onResize}
     >
       {({ width, height }) => (
         <GridContext.Provider

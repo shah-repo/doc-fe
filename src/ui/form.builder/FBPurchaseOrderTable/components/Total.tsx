@@ -25,7 +25,7 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
     <Observer>
       {() => (
         <Box className={classes.calculation}>
-          <Box className={cx({ [classes.calculationFields]: !disabled })}>
+          <Box data-cy ="po-calculation-items" className={cx({ [classes.calculationFields]: !disabled })}>
             <Box className={classes.calculationItem}>
               <Box className={classes.calculationLabel}>
                 <Text message="form.builder.currency" />
