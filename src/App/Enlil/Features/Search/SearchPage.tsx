@@ -61,10 +61,11 @@ const SearchPage: React.FC = () => {
 
   // Store all possible facets for query from first response.
   useEffect(() => {
-    if (!facets.length && searchData) {
+    if (!facets.length && searchData?.facets) {
       setQueryFacets(searchData.facets);
     }
-  }, [facets, searchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchData]);
 
   const updateResults = ({ dataState }: GridDataStateChangeEvent) => {
     setDataState(dataState);
