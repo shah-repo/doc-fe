@@ -19,12 +19,14 @@ import { FB } from '../../../../ui/form.builder';
 import SearchState from './Search.state';
 import { observer } from 'mobx-react';
 import { translate } from '../../../../common/intl';
+import { Facet } from './types';
 
 const SearchPage: React.FC = () => {
   const history = useHistory();
   const classes = useStyles();
   const searchQuery = useSearchQuery();
   const dialog = useDialog();
+  const [queryFacets, setQueryFacets] = useState<Facet[]>([]);
   const [facets, setFacets] = useState<string[]>([]);
   const [dataState, setDataState] = useState<State>({
     filter: {
@@ -39,6 +41,11 @@ const SearchPage: React.FC = () => {
   const searchState = FB.useRef(SearchState);
 
   useEffect(() => {
+    setQueryFacets([]);
+    setFacets([]);
+  }, [searchQuery]);
+
+  useEffect(() => {
     if (searchQuery) {
       searchState.request({
         searchText: searchQuery,
@@ -50,6 +57,13 @@ const SearchPage: React.FC = () => {
   }, [searchState, searchQuery, facets, dataState]);
 
   const searchData = searchState.data;
+
+  // Store all possible facets for query from first response.
+  useEffect(() => {
+    if (!facets.length && searchData) {
+      setQueryFacets(searchData.facets);
+    }
+  }, [facets, searchData]);
 
   const updateResults = ({ dataState }: GridDataStateChangeEvent) => {
     setDataState(dataState);
@@ -87,7 +101,7 @@ const SearchPage: React.FC = () => {
         {resultText}
       </Box>
       <Box className={classes.sidebar}>
-        <Sidebar facets={searchData?.facets} onChange={setFacets} />
+        <Sidebar facets={queryFacets} onChange={setFacets} />
       </Box>
       <Box className={classes.topbar}>
         <Box className={classes.toolbar}>
