@@ -392,7 +392,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             }
           >
             <>
-              {!isFBField && !isSmartRef && change.field !== 'displayStatus' && (
+              {!isFBField && !isSmartRef && (
                 <Typography
                   variant="subtitle1"
                   className={classes.auditKey}
