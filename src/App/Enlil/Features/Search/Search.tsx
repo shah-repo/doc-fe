@@ -38,7 +38,7 @@ const Search: React.FC = () => {
     }
   };
 
-  const handleSearch = (event: React.ChangeEvent<unknown>, value: Option) => {
+  const handleSearch = (event: React.ChangeEvent<unknown>, value: Option): void => {
     if (!value || !event) {
       return;
     }
@@ -46,17 +46,20 @@ const Search: React.FC = () => {
     handleBlur();
 
     if (value?.document?.id && value?.document?.revisionId) {
-      return history.push(`/document_revision/${value.document.id}/version/${value.document.revisionId}`);
+      history.push(`/document_revision/${value.document.id}/version/${value.document.revisionId}`);
+      return;
     }
 
     if (value?.query) {
       setLastRecentSearch(value.query);
 
       setSearchQuery(value.query);
-      return history.push(searchPath(value.query));
+      history.push(searchPath(value.query));
+      return;
     }
 
-    return history.push(searchPath(searchQuery));
+    setSearchQuery(searchQuery);
+    history.push(searchPath(searchQuery));
   };
 
   const formatOptionLabel = (option: Option) => {
@@ -74,7 +77,7 @@ const Search: React.FC = () => {
   };
 
   const handleQueryChange = (event: React.ChangeEvent<unknown>, value: string) => {
-    if (!event || !isFocused) {
+    if (event?.type === 'blur') {
       return;
     }
     setSearchQuery(value);
