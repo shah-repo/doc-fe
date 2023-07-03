@@ -37,13 +37,13 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         spacing={2}
       >
         <Grid item xs>
-          {!fullHeight && isSearchEnabled && (
+          {isSearchEnabled && (
             <Search />
           )}
         </Grid>
         <Grid item>
           {fullHeight && (
-            <Typography variant="caption" className={classes.welcomeText}>
+            <Typography variant="caption" className={classes.welcomeText} component="div">
               <Text translation="header.welcome.back" />,
               {' '}
               <b className={classes.welcomeTextName}>{name}!</b>
