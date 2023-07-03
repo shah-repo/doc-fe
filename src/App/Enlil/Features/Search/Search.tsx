@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Autocomplete } from '../../../../ui/components/forms/fields-next';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
-import { MAX_TOP_RESULTS, recentSearches, searchPath, useSearchQuery } from './helpers';
+import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from './helpers';
 import useStyles from './Search.styles';
 import { Option } from './types';
 import { FB } from '../../../../ui/form.builder';
@@ -50,6 +50,8 @@ const Search: React.FC = () => {
     }
 
     if (value?.query) {
+      setLastRecentSearch(value.query);
+
       setSearchQuery(value.query);
       return history.push(searchPath(value.query));
     }
@@ -102,7 +104,7 @@ const Search: React.FC = () => {
 
   const options = useMemo(() => {
     if (searchQuery.length <= 3 && !searchData?.total) {
-      return recentSearches.map((query) => ({
+      return getRecentSearch().map((query) => ({
         query,
         group: translate('search.recent'),
       }));
