@@ -45,6 +45,7 @@ export default makeStyles((theme) => ({
   },
   selectButton: {
     cursor: 'pointer',
+    textDecoration: 'underline',
   },
   exportButton: {
     // color: Colors.textDisabled,
