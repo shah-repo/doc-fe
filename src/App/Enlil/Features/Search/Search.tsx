@@ -4,7 +4,7 @@ import { InputAdornment, ListSubheader, Popper } from '@material-ui/core';
 import { RenderGroupParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Autocomplete } from '../../../../ui/components/forms/fields-next';
 import { withThemeNext } from '../../../../ui/layout/theme-next';
 import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from './helpers';
@@ -115,30 +115,34 @@ const Search: React.FC = () => {
       group: translate('search.found.count', { count: searchData.total }),
     })) ?? [];
 
-    if (searchData?.total && searchData.total > MAX_TOP_RESULTS) {
-      topResults.push({
-        label: translate('search.view.all', { count: searchData.total }),
-        query: searchQuery,
-      });
-    }
-
     return topResults;
   }, [searchQuery, searchData]);
 
-  const renderGroup = (params: RenderGroupParams) => (
-    <li key={params.key}>
-      <ListSubheader
-        className={cx(classes.listGroupLabel, { [classes.listGroupAllLabel]: !params.key })}
-      >
-        {params.key}
-      </ListSubheader>
-      <ul
-        className={cx(classes.listGroup, { [classes.listGroupAll]: !params.key })}
-      >
-        {params.children}
-      </ul>
-    </li>
-  );
+  const renderGroup = (params: RenderGroupParams) => {
+    return (
+      <li key={params.key}>
+        <ListSubheader
+          className={cx(classes.listGroupLabel, { [classes.listGroupAllLabel]: !params.key })}
+        >
+          {params.key}
+        </ListSubheader>
+        <ul
+          className={cx(classes.listGroup, { [classes.listGroupAll]: !params.key })}
+        >
+          {params.children}
+        </ul>
+        {(searchData?.total ?? 0) > MAX_TOP_RESULTS && (
+          <Link
+            className={classes.viewAll}
+            to={searchPath(searchQuery)}
+            onClick={handleBlur}
+          >
+            {translate('search.view.all', { count: searchData?.total })}
+          </Link>
+        )}
+      </li>
+    );
+  };
 
   return (
     <Autocomplete

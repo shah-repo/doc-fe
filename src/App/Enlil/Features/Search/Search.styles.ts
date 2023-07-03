@@ -38,6 +38,12 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(0.25, 0),
     margin: theme.spacing(0.25, 2, 0),
   },
+  viewAll: {
+    ...theme.typography.h6,
+    padding: theme.spacing(0.5, 0),
+    margin: theme.spacing(0.25, 2, 0),
+    color: Colors.textGray,
+  },
   listGroup: {
     padding: 0,
   },
