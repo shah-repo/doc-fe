@@ -204,7 +204,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             dataCy={dataCy}
             translation="changeRequest.audit.status.updated.by"
             values={{
-              status: <Text translation={audit.nextValue as Translation} />,
+              status: audit.nextValue,
               name: audit.owner?.user.name,
             }}
           />
