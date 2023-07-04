@@ -37,7 +37,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         spacing={2}
       >
         <Grid item xs>
-          {isSearchEnabled && (
+          {!fullHeight && isSearchEnabled && (
             <Search />
           )}
         </Grid>
