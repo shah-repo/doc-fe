@@ -202,10 +202,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (
           <Text
             dataCy={dataCy}
-            translation="documentRevision.audit.displayStatus.STRING_EDITED"
+            translation="changeRequest.audit.status.updated.by"
             values={{
-              name: audit.ownerName,
-              nextStatus: audit.nextValue,
+              status: audit.nextValue,
+              name: audit.owner?.user.name,
             }}
           />
         );
