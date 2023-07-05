@@ -3,6 +3,7 @@ import { ColumnDefinition } from '../../../../ui/components/KendoDataGrid/KendoD
 import { Status } from '../../../../ui/components/common/kendo.column.templates/Status';
 import { GLOBAL_SEARCH_URL } from '../../../../ui/constants/urls';
 import { IStoreMappedDocument } from './types';
+import qs from 'query-string';
 
 export const PAGE_SIZE = 25;
 export const MAX_TOP_RESULTS = 5;
@@ -142,7 +143,7 @@ export const useSearchQuery = (): string => {
 
 export const searchPath = (query: string) => ({
   pathname: GLOBAL_SEARCH_URL,
-  search: `?q=${query}`,
+  search: '?' + qs.stringify({ q: query }),
 });
 
 export const getRecentSearch = (): string[] => {
