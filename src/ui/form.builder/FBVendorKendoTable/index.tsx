@@ -9,9 +9,9 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { Button } from '../../components/forms/fields-next';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import Actions, { ActionsProps } from '../FBApprovalMatrixRoles/components/Actions';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import Actions, { ActionsProps } from './components/Actions';
 import { ConversionCellTemplate } from './components/ConversionCellTemplate';
 import { LeadTimeCellTemplate } from './components/LeadTimeCellTemplate';
 import { SupplierCellTemplate } from './components/SupplierCellTemplate';
@@ -25,7 +25,11 @@ import useStyles from './styles';
 import { EditableVendorData, VendorData, VendorDataEditEvent, VendorDataProps } from './types';
 import { withFBVendorData } from './wrap';
 
-const vendorDataSchema = (vendors) => ([
+interface SchemaOptions {
+  vendors
+}
+
+const vendorDataSchema = (vendors: SchemaOptions) => ([
   {
     id: 'supplier',
     field: 'supplier',
@@ -39,7 +43,8 @@ const vendorDataSchema = (vendors) => ([
     field: 'status',
     title: 'Supplier Status',
     filterCell: InputFilter,
-    template: SupplierStatusCellTemplate,
+    template: (props) => <SupplierStatusCellTemplate {...props} vendors={vendors} />,
+
     width: 150,
   },
   {
@@ -117,7 +122,7 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
   vendors = [],
   name,
   disabled,
-  deleteLotTransfer,
+  deleteVendorData,
   addVendorData,
 }) => {
   const classes = useStyles();
@@ -134,15 +139,15 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
 
   /// ///////////////////////////
 
-  const discardLotTransfer = () => {
+  const discardLotVendorData = () => {
     setEditedVendorData(undefined);
   };
-  const removeLotTransfer = () => {
+  const removeVendorData = () => {
     if (!editedVendorData) {
       return;
     }
-    deleteLotTransfer?.(editedVendorData as VendorData);
-    discardLotTransfer();
+    deleteVendorData?.(editedVendorData as VendorData);
+    discardLotVendorData();
   };
 
   const submitForm = () => {
@@ -150,14 +155,12 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
   };
 
   const shouldDisableDelete = true;
-  const deleteTootltipSuffix = 'min';
 
   const deleteTootltipText
       = shouldDisableDelete
-        ? translate(`validator.lot.transfers.quantity.${deleteTootltipSuffix}`)
+        ? translate('Delete')
         : undefined;
 
-  /// ///////////////////////////
   const schema = vendorDataSchema(vendors);
 
   const rowRender: DataGridProps<EditableVendorData>['rowRender'] = (row, { dataItem }) => {
@@ -171,8 +174,8 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
         <ActionsCell
           dataItem={item}
           onConfirm={submitForm}
-          onDiscard={discardLotTransfer}
-          onDelete={removeLotTransfer}
+          onDiscard={discardLotVendorData}
+          onDelete={removeVendorData}
           deleteTooltipText={deleteTootltipText}
           isDeleteDisabled={false}
           rootClassName={classes.popperHolder}
@@ -220,6 +223,7 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
           )}
         </FBSection>
       </FBInput>
+
       <KendoDataGrid<VendorData>
         fullWidth
         filterable

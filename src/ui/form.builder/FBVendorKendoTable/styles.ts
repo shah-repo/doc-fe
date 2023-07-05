@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
+
 const ROW_HEIGHT = 40;
 export default makeStyles(theme => ({
   root: {
@@ -20,15 +21,6 @@ export default makeStyles(theme => ({
     borderBottomRightRadius: 0,
     borderBottom: 'none',
   },
-  // updatingRow: {
-  //   position: 'relative',
-  //   zIndex: 3,
-  //   outline: `1px solid ${Colors.dodger_blue}`,
-  //   outlineOffset: -1,
-  //   '& td': {
-  //     verticalAlign: 'top !important',
-  //   },
-  // },
   updatingRow: {
     position: 'relative',
     zIndex: 3,
@@ -91,5 +83,8 @@ export default makeStyles(theme => ({
   },
   popperHolder: {
     height: '100%',
+  },
+  deleteIcon: {
+    color: Colors.latest_red_varient,
   },
 }));

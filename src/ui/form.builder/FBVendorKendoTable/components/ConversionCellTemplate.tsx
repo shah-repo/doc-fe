@@ -30,7 +30,6 @@ export const ConversionCellTemplate: React.FC<Props> = ({
       field,
       value: newValue,
     });
-    console.log('value', newValue);
   };
 
   if (isEditMode) {
@@ -39,6 +38,7 @@ export const ConversionCellTemplate: React.FC<Props> = ({
         name="conversion"
         type="number"
         size="small"
+        inputProps={{ min: 0 }}
         onChange={handleChange}
         value={value}
       />

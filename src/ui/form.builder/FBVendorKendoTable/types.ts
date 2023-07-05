@@ -7,7 +7,8 @@ export type VendorDataProps =
 & {
   items?: VendorData[]
   vendors?: VendorOption[]
-  deleteLotTransfer?: (transfer: VendorData) => void
+  deleteVendorData?: (item: VendorData) => void
+  updateLotTransfer?: (item: VendorData) => void
 };
 
 export interface VendorData {
@@ -31,7 +32,7 @@ export interface VendorDataEditEvent {
   dataItem: EditableVendorData
 }
 
-type VendorOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId'>;
+type VendorOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId' >;
 
 export type VendorOption =
 & Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'status' | 'displayRevision'>

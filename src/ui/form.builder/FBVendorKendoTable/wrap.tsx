@@ -20,7 +20,7 @@ export const withFBVendorData = <T extends VendorDataProps>(
 
     const [items, setItems] = useState<VendorData[]>(getVendorData());
 
-    const deleteLotTransfer = (item: VendorData) => {
+    const deleteVendorData = (item: VendorData) => {
       console.log('item-delete', item);
     };
 
@@ -61,7 +61,7 @@ export const withFBVendorData = <T extends VendorDataProps>(
       disabled: !isEditable,
       addVendorData,
       vendors,
-      deleteLotTransfer,
+      deleteVendorData,
     });
   };
 

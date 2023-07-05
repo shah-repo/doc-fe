@@ -62,7 +62,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       const predictedQuantity
         = values.type && values.quantity
           ? predictOnHandQuantity({
-            newTransfer: values as LotTransfer,
+            newTransfer: values,
             skipTransfer: editedLotTransfer as LotTransfer,
           })
           : null;

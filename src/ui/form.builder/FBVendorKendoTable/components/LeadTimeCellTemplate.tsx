@@ -30,7 +30,6 @@ export const LeadTimeCellTemplate: React.FC<Props> = ({
       field,
       value: newValue,
     });
-    console.log('value', newValue);
   };
 
   if (isEditMode) {

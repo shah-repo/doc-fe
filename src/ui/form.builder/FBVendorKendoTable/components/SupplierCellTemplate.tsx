@@ -19,11 +19,13 @@ export const SupplierCellTemplate: React.FC<Props> = ({ dataItem, vendors }) => 
 
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  // const isPrimaryVendor = <FBTooltip
-  //   title="Primary Vendor"
-  // >
-  //   {dataItem.supplier === 'ProtoLabs' ? <div style={{ height: 10, width: 10, borderRadius: '50%', backgroundColor: Colors.dodger_blue, marginRight: 8 }} /> : ''}
-  // </FBTooltip>;
+  /* TODO Find - Primary Vendor
+   const isPrimaryVendor = <FBTooltip
+     title="Primary Vendor"
+   >
+     {dataItem.supplier === 'ProtoLabs' ? <div style={{ height: 10, width: 10, borderRadius: '50%', backgroundColor: Colors.dodger_blue, marginRight: 8 }} /> : ''}
+   </FBTooltip>;
+   */
 
   const handleChange = (event: ChangeEvent<unknown>, vendor?: VendorOption) => {
     const value = vendor ? {
@@ -32,13 +34,11 @@ export const SupplierCellTemplate: React.FC<Props> = ({ dataItem, vendors }) => 
     } : undefined;
     setFieldValue('vendor', value);
   };
-
   const defaultValue = isEditMode ? values.vendor?.id : dataItem.vendor?.id;
   const value = vendors?.find((vendor) => vendor.id === defaultValue);
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
-
       <Autocomplete
         {...getFieldProps('vendor')}
         blurOnSelect
