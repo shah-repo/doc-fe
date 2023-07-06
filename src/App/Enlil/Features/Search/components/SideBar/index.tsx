@@ -10,7 +10,7 @@ import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import Text from '../../../../../../ui/components/Text';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
-import useStyles from '../SearchPage/styles';
+import useStyles from './styles';
 import { Facet } from '../../types';
 import { IconButton } from '../../../../../../ui/components/forms/fields-next';
 
