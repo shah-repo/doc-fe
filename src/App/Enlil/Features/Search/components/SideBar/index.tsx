@@ -8,11 +8,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
-import Text from '../../../../../src/ui/components/Text';
-import { withThemeNext } from '../../../../ui/layout/theme-next';
-import useStyles from './SearchPage.styles';
-import { Facet } from './types';
-import { IconButton } from '../../../../ui/components/forms/fields-next';
+import Text from '../../../../../../ui/components/Text';
+import { withThemeNext } from '../../../../../../ui/layout/theme-next';
+import useStyles from '../SearchPage/styles';
+import { Facet } from '../../types';
+import { IconButton } from '../../../../../../ui/components/forms/fields-next';
 
 interface ItemChange {
   id: string

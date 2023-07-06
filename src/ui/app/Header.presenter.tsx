@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
-import Search from '../../App/Enlil/Features/Search/Search';
+import { SearchBar } from '../../App/Enlil/Features/Search';
 import Text from '../components/Text';
 import styles from './Header.styles';
 import AutosaveToggle from './autosave/autosave';
@@ -38,7 +38,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
       >
         <Grid item xs>
           {!fullHeight && isSearchEnabled && (
-            <Search />
+            <SearchBar />
           )}
         </Grid>
         <Grid item>

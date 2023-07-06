@@ -2,7 +2,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
-import SearchPage from '../../App/Enlil/Features/Search/SearchPage';
+import { SearchPage } from '../../App/Enlil/Features/Search';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
 import ChangeRequestContainer from '../change.request/Container';

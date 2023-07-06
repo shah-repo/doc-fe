@@ -5,7 +5,7 @@ import useGetHasTag from '../hooks/useGetHasTag';
 import useStyles from './Dashboard.styles';
 import Tabs from './tabs/Tabs';
 import TrainingStats from './training.stats/TrainingStats';
-import Search from '../../App/Enlil/Features/Search/Search';
+import { SearchBar } from '../../App/Enlil/Features/Search';
 
 const DashboardLayout: React.FC = () => {
   const classes = useStyles();
@@ -15,7 +15,7 @@ const DashboardLayout: React.FC = () => {
     <Box className={classes.box}>
       <Grid container>
         <Grid item xs className={classes.searchContainer}>
-          <Search />
+          <SearchBar />
         </Grid>
       </Grid>
       <Grid container className={classes.root}>

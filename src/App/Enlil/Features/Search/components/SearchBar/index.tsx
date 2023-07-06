@@ -5,19 +5,19 @@ import { RenderGroupParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { Autocomplete } from '../../../../ui/components/forms/fields-next';
-import { withThemeNext } from '../../../../ui/layout/theme-next';
-import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from './helpers';
-import useStyles from './Search.styles';
-import { Option } from './types';
-import { FB } from '../../../../ui/form.builder';
-import SearchState from './Search.state';
+import { Autocomplete } from '../../../../../../ui/components/forms/fields-next';
+import { withThemeNext } from '../../../../../../ui/layout/theme-next';
+import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
+import useStyles from './styles';
+import { Option } from '../../types';
+import { FB } from '../../../../../../ui/form.builder';
+import SearchState from '../../state';
 import { observer } from 'mobx-react';
-import { translate } from '../../../../common/intl';
+import { translate } from '../../../../../../common/intl';
 import { debounce } from 'lodash';
-import Text from '../../../../../src/ui/components/Text';
+import Text from '../../../../../../ui/components/Text';
 
-const Search: React.FC = () => {
+const SearchBar: React.FC = () => {
   const history = useHistory();
   const classes = useStyles();
   const fieldRef = useRef<HTMLDivElement>();
@@ -188,4 +188,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default withThemeNext(observer(Search));
+export default withThemeNext(observer(SearchBar));

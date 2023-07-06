@@ -13,7 +13,7 @@ interface Body {
   sort?: SortDescriptor[]
 }
 
-class SearchState extends FBRequest<IStoreResult, Body> {
+export default class SearchState extends FBRequest<IStoreResult, Body> {
   public constructor () {
     super(FBEndpoint.GlobalSearch);
   }
@@ -31,5 +31,3 @@ class SearchState extends FBRequest<IStoreResult, Body> {
     });
   };
 }
-
-export default SearchState;

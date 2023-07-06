@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { omit } from 'lodash';
-import { Colors } from '../../../../ui/layout/theme-next';
+import { Colors } from '../../../../../../ui/layout/theme-next';
 
 export default makeStyles((theme) => ({
   root: {
