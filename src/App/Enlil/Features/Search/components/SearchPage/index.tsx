@@ -74,7 +74,7 @@ const SearchPage: React.FC = () => {
 
   const headers = map(columnsSchema, (column) => ({
     label: startCase(translate(column?.title)),
-    key: column.field,
+    key: column.field ?? '',
   }));
 
   const handleRowClick = (values) => {
@@ -133,7 +133,7 @@ const SearchPage: React.FC = () => {
       <Box className={classes.grid}>
         <KendoDataGrid
           schema={columnsSchema}
-          data={searchData?.documents}
+          data={searchData?.documents ?? []}
           total={searchData?.total}
           pageable={pagerSettings}
           pageSize={PAGE_SIZE}
