@@ -613,4 +613,14 @@ export default makeStyles((theme) => ({
     fontWeight: 400,
     cursor: 'pointer',
   },
+  header: {
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.textBlack,
+    height: 28,
+    padding: theme.spacing(0.31, 0, 1.31, 0),
+  },
+  tableContainer: {
+    paddingTop: theme.spacing(2.5),
+  },
 }));
