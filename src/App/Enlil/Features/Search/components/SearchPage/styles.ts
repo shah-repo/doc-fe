@@ -43,4 +43,8 @@ export default makeStyles((theme) => ({
     fontSize: 16,
     margin: theme.spacing(0, 1, 0, 0),
   },
+  selectButton: {
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
 }));

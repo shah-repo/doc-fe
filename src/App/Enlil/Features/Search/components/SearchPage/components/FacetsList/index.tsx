@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { withThemeNext } from '../../../../../../../../ui/layout/theme-next';
 import useStyles from './styles';
 import { IconButton } from '../../../../../../../../ui/components/forms/fields-next';
-import { FacetItemProps, FacetsListProps } from '.';
+import { FacetItemProps, FacetsListProps } from './index';
 
 const FacetItem: React.FC<FacetItemProps> = (props) => {
   const { facet: { id, count, label, children, checked }, onChange } = props;
