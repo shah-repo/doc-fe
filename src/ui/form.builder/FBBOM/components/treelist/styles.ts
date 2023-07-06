@@ -607,4 +607,10 @@ export default makeStyles((theme) => ({
     borderBottom: `1px solid ${Colors.alice_blue} !important`,
     borderLeft: '0 !important',
   },
+  toggleExpandCollapse: {
+    color: Colors.primary,
+    fontSize: 12,
+    fontWeight: 400,
+    cursor: 'pointer',
+  },
 }));

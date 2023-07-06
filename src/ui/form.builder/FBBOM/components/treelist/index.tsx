@@ -4,6 +4,7 @@ import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps
 import cx from 'classnames';
 import { isEmpty, map } from 'lodash';
 import * as React from 'react';
+import { translate } from '../../../../../common/intl';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
@@ -86,12 +87,46 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     });
   };
 
+  const getAllItemIds = (items: BOM[]) => {
+    if (!items) return [];
+    const ids: number[] = [];
+    items.forEach((item) => {
+      ids.push(item.id);
+      if (item.employees) {
+        ids.push(...getAllItemIds(item.employees));
+      }
+    });
+    return ids;
+  };
+
+  const handleExpandAll = () => {
+    const { data } = state;
+    const expanded = getAllItemIds(data);
+    setState({
+      ...state,
+      expanded,
+    });
+  };
+
+  const handleCollapseAll = () => {
+    setState({
+      ...state,
+      expanded: [],
+    });
+  };
+
   const renderToolbar = <GridToolbar>
-    <Grid container data-cy="toolbar-treelist" justify="flex-end">
-      <ColumnShowHideTreeMenu
-        columnDefinition={columns}
-        onChange={onColumnShowHide}
-      />
+    <Grid container justify="space-between">
+      <Grid item data-cy="collapse-expand-collapse" className={classes.toggleExpandCollapse}>
+        <span onClick={handleExpandAll}>{translate('common.expand.all')} / </span>
+        <span onClick={handleCollapseAll}>{translate('common.collapse.all')}</span>
+      </Grid>
+      <Grid item data-cy="show-hide-columns">
+        <ColumnShowHideTreeMenu
+          columnDefinition={columns}
+          onChange={onColumnShowHide}
+        />
+      </Grid>
     </Grid>
   </GridToolbar>;
 
@@ -112,13 +147,13 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   return (<Grid container>
     <Grid item xs={12}>
       <TreeList
+        {...state.dataState}
         style={{ width: '100%', overflow: 'scroll' }}
         tableProps={{ style: { width: '2100px' } }}
         expandField={EXPAND_FIELD}
         subItemsField={SUB_ITEMS_FIELD}
         onExpandChange={onExpandChange}
         rowRender={rowRender}
-        {...state.dataState}
         data={processData()}
         onDataStateChange={handleDataStateChange}
         columns={getColumns()}
