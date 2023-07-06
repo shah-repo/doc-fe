@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Text from '../../../../../../ui/components/Text';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
 import useStyles from './styles';
@@ -8,27 +8,16 @@ import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/Face
 import { SideBarProps } from './types';
 
 const SideBar: React.FC<SideBarProps> = (props) => {
-  const { query, onChange, facets = [] } = props;
+  const { onChange, checkedFacets, facets } = props;
 
   const classes = useStyles();
-  const [checkedFacetIds, setCheckedFacetIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    setCheckedFacetIds([]);
-  }, [query]);
-
-  useEffect(() => {
-    if (checkedFacetIds && onChange) {
-      onChange(checkedFacetIds);
-    }
-  }, [onChange, checkedFacetIds]);
 
   const handleDeselect = () => {
-    setCheckedFacetIds([]);
+    onChange([]);
   };
 
   const handleFacetsChange: FacetOnChangeHandler = ({ id, checked }) => {
-    setCheckedFacetIds(checkedIds => {
+    onChange(checkedIds => {
       if (checked && !checkedIds.includes(id)) {
         return [...checkedIds, id];
       }
@@ -46,7 +35,7 @@ const SideBar: React.FC<SideBarProps> = (props) => {
 
     return ({
       ...facet,
-      checked: checkedFacetIds.includes(facet.id) || Boolean(mappedChildren?.some(item => item.checked)),
+      checked: checkedFacets.includes(facet.id) || Boolean(mappedChildren?.some(item => item.checked)),
       ...mappedChildren && { children: mappedChildren },
     } as MappedFacet);
   });
@@ -59,7 +48,7 @@ const SideBar: React.FC<SideBarProps> = (props) => {
         <Box>
           <Text message="search.facets.header" />
         </Box>
-        {checkedFacetIds.length > 0 && (
+        {checkedFacets.length > 0 && (
           <Box
             className={classes.selectButton}
             onClick={handleDeselect}

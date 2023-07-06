@@ -51,9 +51,6 @@ export default makeStyles((theme) => ({
     color: Colors.white,
     fontSize: 12,
   },
-  listRoot: {
-
-  },
   listChild: {
     marginLeft: 32,
   },

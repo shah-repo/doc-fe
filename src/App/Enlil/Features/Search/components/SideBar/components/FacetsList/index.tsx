@@ -103,7 +103,7 @@ const FacetsList: React.FC<FacetsListProps> = (props) => {
     <List
       dense
       disablePadding
-      className={isChild ? classes.listChild : classes.listRoot}
+      className={cx({ [classes.listChild]: isChild })}
     >
       {facets.map(facet => (
         <FacetItem
