@@ -9,6 +9,7 @@ import { ReactComponent as RemoveIcon } from '../../../assets/images/remove.svg'
 import Colors from '../../layout/theme/utils/colors';
 import useStyles from './FBFieldTopBar.styles';
 import { withFBFieldTopBar } from './FBFieldTopBar.wrap';
+import cx from 'classnames';
 
 const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
   editSchemaItem,
@@ -23,7 +24,7 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
   return (
     <Box className={classes.root}>
       <Grid container className={classes.tools}>
-        <DragHandleIcon className={classes.dragIcon} {...listeners} data-cy="delete-schema-item" />
+        <DragHandleIcon className={cx(classes.dragIcon, 'drag-handle')} {...listeners} data-cy="drag-schema-item" />
         <CodeIcon onClick={toggleItemMarkdown} data-cy="view-schema-item-markdown" />
         <EditIcon onClick={editSchemaItem} data-cy="edit-schema-item" />
         <RemoveIcon

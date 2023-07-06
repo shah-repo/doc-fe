@@ -48,4 +48,12 @@ export default makeStyles(theme => ({
   popperHolder: {
     height: '100%',
   },
+  tooltipContent: {
+    maxWidth: 425,
+    maxHeight: 200,
+    overflow: 'auto',
+    whiteSpace: 'pre-line',
+    paddingRight: theme.spacing(0.5),
+    marginRight: theme.spacing(-0.5),
+  },
 }));

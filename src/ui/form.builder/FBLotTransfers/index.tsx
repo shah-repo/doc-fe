@@ -1,44 +1,26 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Popper } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import PopperJs from 'popper.js';
+import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
-import Actions, { ActionsProps } from '../FBApprovalMatrixRoles/components/Actions';
 import FBInput from '../FBInput/FBInput';
-import { MODE_FIELD, Mode } from './constants';
+import { ActionsCell } from './components/ActionsCell';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
 import { useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
-
-const ActionsCell: React.FC<ActionsProps<EditableLotTransfer> & { rootClassName?: string }> = (props) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  return (
-    <>
-      <div ref={ref} className={props.rootClassName} />
-      <Popper
-        open
-        placement="bottom-end"
-        anchorEl={ref.current}
-      >
-        <Actions
-          scrollBehavior="smooth"
-          {...props}
-        />
-      </Popper>
-    </>
-  );
-};
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   transfers = [],
@@ -54,27 +36,42 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const classes = useStyles();
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
   const { initialQuantity, predictOnHandQuantity } = useOnHandQuantity();
-  const isActive = !disabled && initialQuantity;
+  const actionsRef = React.useRef<PopperJs>(null);
+  const isActive = !disabled && initialQuantity !== null && initialQuantity > 0;
 
   const formik = useFormik<Partial<EditableLotTransfer>>({
     initialValues: {},
     validate: (values) => {
       const errors: Record<string, string> = {};
+      const isInitialQuantityValid = initialQuantity !== null;
+
       if (values.from && values.to && values.from === values.to) {
         errors.to = 'validator.lot.transfers.same.location';
       }
-      if (values.quantity && values.type) {
-        const predictedQuantity = predictOnHandQuantity({
-          newTransfer: values as LotTransfer,
-          skipTransfer: editedLotTransfer as LotTransfer,
-        });
+
+      if (isInitialQuantityValid && values.quantity) {
+        if (values.quantity === 0) {
+          errors.quantity = 'validator.lot.transfers.quantity.null';
+        }
+
+        if (values.quantity > initialQuantity) {
+          errors.quantity = 'validator.lot.transfers.quantity.limit';
+        }
+      }
+
+      const predictedQuantity
+        = values.type && values.quantity
+          ? predictOnHandQuantity({
+            newTransfer: values as LotTransfer,
+            skipTransfer: editedLotTransfer as LotTransfer,
+          })
+          : null;
+
+      if (isInitialQuantityValid && predictedQuantity !== null) {
         if (predictedQuantity < 0) {
           errors.quantity = 'validator.lot.transfers.quantity.min';
         }
         if (predictedQuantity > initialQuantity) {
-          errors.quantity = 'validator.lot.transfers.quantity.max';
-        }
-        if (values.quantity > initialQuantity) {
           errors.quantity = 'validator.lot.transfers.quantity.max';
         }
       }
@@ -87,7 +84,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     },
   });
 
-  const { setValues } = formik;
+  const { resetForm, setValues, dirty } = formik;
 
   const existingLocations = transfers.reduce<string[]>((list, transfer) => {
     if (!list.includes(transfer.from)) {
@@ -100,8 +97,8 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   }, []);
 
   useEffect(() => {
-    setValues(editedLotTransfer ?? {});
-  }, [editedLotTransfer, setValues]);
+    resetForm({ values: editedLotTransfer ?? {} });
+  }, [editedLotTransfer, setValues, resetForm]);
 
   const createDraftLotTransfer = () => setEditedLotTransfer({
     id: uuidv4(),
@@ -123,11 +120,18 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     discardLotTransfer();
   };
 
+  const handleResize = () => {
+    actionsRef.current?.scheduleUpdate();
+  };
+
+  const handleRowClick = isActive ? editLotTransfer : undefined;
+
   const schema = buildSchema({
     locations,
     existingLocations,
     employees,
     builds,
+    onRowClick: handleRowClick,
   });
 
   const rowRender: DataGridProps<EditableLotTransfer>['rowRender'] = (row, { dataItem }) => {
@@ -138,12 +142,12 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       return row;
     }
 
-    const predictedQuantity = predictOnHandQuantity({
-      skipTransfer: item,
-    });
+    const predictedQuantity = predictOnHandQuantity({ skipTransfer: item });
 
-    const shouldDisableDelete = (predictedQuantity < 0 || predictedQuantity > initialQuantity);
-    const deleteTootltipSuffix = predictedQuantity < 0 ? 'min' : 'max';
+    const isQuantityPredicted = predictedQuantity !== null && initialQuantity !== null;
+    const isPredictedQuantityValid = isQuantityPredicted && predictedQuantity >= 0 && predictedQuantity <= initialQuantity;
+    const shouldDisableDelete = isQuantityPredicted && item[MODE_FIELD] === Mode.edit && !isPredictedQuantityValid;
+    const deleteTootltipSuffix = isQuantityPredicted && predictedQuantity < 0 ? 'min' : 'max';
 
     const deleteTootltipText
       = shouldDisableDelete
@@ -160,6 +164,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           deleteTooltipText={deleteTootltipText}
           isDeleteDisabled={shouldDisableDelete}
           rootClassName={classes.popperHolder}
+          popperRef={actionsRef}
         />
       </td>
     );
@@ -188,6 +193,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   return (
     <Box position="relative">
+      <PromptIfDirty
+        dirty={dirty}
+      />
       <FBInput {...props} type="lotTransfers" name={name}>
         <FBSection
           label="form.builder.lot.transfers.title"
@@ -213,8 +221,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           data={transferList as EditableLotTransfer[]}
           schema={schema}
           rowRender={rowRender}
-          onRowClick={isActive ? editLotTransfer : undefined}
+          onRowClick={handleRowClick}
           className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+          onResize={handleResize}
         />
       </FormikProvider>
       {isActive && (

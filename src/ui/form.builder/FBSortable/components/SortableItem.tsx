@@ -27,6 +27,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
       ref={setNodeRef}
       className={cx({ 'fb-sortable-ghost': isDragging })}
       style={style}
+      data-cy="sortable-item"
     >
       <Field
         key={name}

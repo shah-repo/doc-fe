@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -189,6 +189,22 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             translation="changeRequest.audit.status.updated.by"
             values={{
               status: <Text translation={audit.nextValue as Translation} />,
+              name: audit.owner?.user.name,
+            }}
+          />
+        );
+        break;
+      case 'displayStatus':
+        if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
+          returnValue = (audit.nextValue as Employee).user?.name;
+          break;
+        }
+        returnValue = (
+          <Text
+            dataCy={dataCy}
+            translation="changeRequest.audit.status.updated.by"
+            values={{
+              status: audit.nextValue,
               name: audit.owner?.user.name,
             }}
           />

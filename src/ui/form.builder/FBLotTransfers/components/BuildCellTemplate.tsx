@@ -1,8 +1,10 @@
+import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { BuildOption, CustomTemplateProps, EditableLotTransfer } from '../types';
 
@@ -15,7 +17,7 @@ const getOptionLabel = (option: BuildOption) => {
   return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
 };
 
-export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds }) => {
+export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -51,5 +53,19 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds }) => {
     );
   }
 
-  return <>{value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER}</>;
+  const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
+
+  return (
+    <Box onClick={() => onClick?.({ dataItem })}>
+      <OverflowTooltip
+        title={displayValue}
+        placement="top"
+        onClick={() => onClick?.({ dataItem })}
+        interactive
+        arrow
+      >
+        {displayValue}
+      </OverflowTooltip>
+    </Box>
+  );
 };

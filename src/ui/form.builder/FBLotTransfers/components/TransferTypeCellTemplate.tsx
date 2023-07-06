@@ -1,9 +1,10 @@
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import { MODE_FIELD, Mode, TRANSFER_TYPE_OPTIONS } from '../constants';
+import { TRANSFER_TYPE_OPTIONS } from '../constants';
 import { CustomTemplateProps, EditableLotTransfer } from '../types';
 
 export const TransferTypeCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
