@@ -10,20 +10,10 @@ import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { withThemeNext } from '../../../../../../../../ui/layout/theme-next';
 import useStyles from './styles';
-import { Facet } from '../../../../types';
 import { IconButton } from '../../../../../../../../ui/components/forms/fields-next';
+import { FacetItemProps, FacetsListProps } from '.';
 
-interface ItemChange {
-  id: string
-  checked: boolean
-}
-
-interface OwnFacet extends Omit<Facet, 'children'> {
-  checked: boolean
-  children?: OwnFacet[]
-}
-
-const FacetItem: React.FC<{ facet: OwnFacet, onChange?: (item: ItemChange) => void }> = (props) => {
+const FacetItem: React.FC<FacetItemProps> = (props) => {
   const { facet: { id, count, label, children, checked }, onChange } = props;
 
   const classes = useStyles();
@@ -104,7 +94,9 @@ const FacetItem: React.FC<{ facet: OwnFacet, onChange?: (item: ItemChange) => vo
   );
 };
 
-const FacetsList: React.FC<{ facets: OwnFacet[], isChild?: boolean, onChange?: (item: ItemChange) => void }> = ({ facets, isChild = false, onChange }) => {
+const FacetsList: React.FC<FacetsListProps> = (props) => {
+  const { facets, isChild = false, onChange } = props;
+
   const classes = useStyles();
 
   return (
@@ -125,3 +117,5 @@ const FacetsList: React.FC<{ facets: OwnFacet[], isChild?: boolean, onChange?: (
 };
 
 export default withThemeNext(FacetsList);
+
+export * from './types';

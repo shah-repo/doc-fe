@@ -1,133 +1,16 @@
-import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Collapse } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import cx from 'classnames';
+import { Box } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Text from '../../../../../../ui/components/Text';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
 import useStyles from './styles';
 import { Facet } from '../../types';
-import { IconButton } from '../../../../../../ui/components/forms/fields-next';
+import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
+import { SideBarProps } from './types';
 
-interface ItemChange {
-  id: string
-  checked: boolean
-}
-
-interface OwnFacet extends Omit<Facet, 'children'> {
-  checked: boolean
-  children?: OwnFacet[]
-}
-
-const FacetItem: React.FC<{ facet: OwnFacet, onChange?: (item: ItemChange) => void }> = (props) => {
-  const { facet: { id, count, label, children, checked }, onChange } = props;
+const SideBar: React.FC<SideBarProps> = (props) => {
+  const { query, onChange, facets = [] } = props;
 
   const classes = useStyles();
-
-  const [isChecked, setIsChecked] = useState(checked);
-  const [isOpened, setIsOpened] = useState(false);
-
-  useEffect(() => {
-    setIsChecked(checked);
-  }, [checked]);
-
-  const handleItemClick = () => setIsChecked(value => {
-    const newValue = !value;
-
-    if (children) {
-      children.forEach(({ id }) => {
-        onChange?.({ id, checked: newValue });
-      });
-    } else {
-      onChange?.({ id, checked: newValue });
-    }
-
-    return newValue;
-  });
-
-  const iconIsCheck = !children || children?.every(item => item.checked);
-
-  return (
-    <>
-      <ListItem
-        className={classes.listItem}
-        button
-      >
-        {children && (
-          <IconButton
-            kind="simple"
-            className={classes.toggleButton}
-            onClick={() => setIsOpened(value => !value)}
-          >
-            <FontAwesomeIcon
-              icon={regular('chevron-down')}
-              className={cx(classes.collapsedIcon, { [classes.expandedIcon]: isOpened })}
-            />
-          </IconButton>
-        )}
-        <ListItemIcon className={classes.listCheckboxWrap}>
-          <Checkbox
-            checked={isChecked}
-            onClick={handleItemClick}
-            className={classes.listCheckbox}
-            color="default"
-            checkedIcon={
-              <span className={cx(classes.checkboxIcon, classes.checkboxIconChecked)}>
-                <FontAwesomeIcon
-                  icon={iconIsCheck ? solid('check') : solid('minus')}
-                  className={classes.checkboxCheck}
-                />
-              </span>
-            }
-            icon={<span className={classes.checkboxIcon} />}
-            disableRipple
-          />
-        </ListItemIcon>
-        <ListItemText onClick={handleItemClick}>
-          {label}{count ? ` (${count})` : null}
-        </ListItemText>
-      </ListItem>
-      {children && (
-        <Collapse in={isOpened} timeout="auto">
-          <FacetsList
-            facets={children}
-            onChange={onChange}
-            isChild
-          />
-        </Collapse>
-      )}
-    </>
-  );
-};
-
-const FacetsList: React.FC<{ facets: OwnFacet[], isChild?: boolean, onChange?: (item: ItemChange) => void }> = ({ facets, isChild = false, onChange }) => {
-  const classes = useStyles();
-
-  return (
-    <List
-      dense
-      disablePadding
-      className={isChild ? classes.listChild : classes.listRoot}
-    >
-      {facets.map(facet => (
-        <FacetItem
-          key={facet.id}
-          facet={facet}
-          onChange={onChange}
-        />
-      ))}
-    </List>
-  );
-};
-
-const SideBar: React.FC<{ query?: string, facets?: Facet[], onChange?: (data: string[]) => void }> = ({ query, onChange, facets = [] }) => {
-  const classes = useStyles();
-
   const [checkedFacetIds, setCheckedFacetIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -144,7 +27,7 @@ const SideBar: React.FC<{ query?: string, facets?: Facet[], onChange?: (data: st
     setCheckedFacetIds([]);
   };
 
-  const handleFacetsChange = ({ id, checked }: ItemChange) => {
+  const handleFacetsChange: FacetOnChangeHandler = ({ id, checked }) => {
     setCheckedFacetIds(checkedIds => {
       if (checked && !checkedIds.includes(id)) {
         return [...checkedIds, id];
@@ -158,17 +41,17 @@ const SideBar: React.FC<{ query?: string, facets?: Facet[], onChange?: (data: st
     });
   };
 
-  const mapOwnFacets = (facets: Facet[]): OwnFacet[] => facets.map(facet => {
-    const mappedChildren = facet.children ? mapOwnFacets(facet.children) : undefined;
+  const mapFacets = (facets: Facet[]): MappedFacet[] => facets.map(facet => {
+    const mappedChildren = facet.children ? mapFacets(facet.children) : undefined;
 
     return ({
       ...facet,
       checked: checkedFacetIds.includes(facet.id) || Boolean(mappedChildren?.some(item => item.checked)),
       ...mappedChildren && { children: mappedChildren },
-    } as OwnFacet);
+    } as MappedFacet);
   });
 
-  const ownFacets = mapOwnFacets(facets);
+  const mappedFacets = mapFacets(facets);
 
   return (
     <Box>
@@ -186,7 +69,7 @@ const SideBar: React.FC<{ query?: string, facets?: Facet[], onChange?: (data: st
         )}
       </Box>
       <FacetsList
-        facets={ownFacets}
+        facets={mappedFacets}
         onChange={handleFacetsChange}
       />
     </Box>
