@@ -1,8 +1,8 @@
 import { ColumnDefinition } from '../../../../../../ui/components/KendoDataGrid/KendoDataGrid.types';
-import { IStoreMappedDocument } from '../../types';
+import { Document } from '../../types';
 import { Status } from '../../../../../../ui/components/common/kendo.column.templates/Status';
 
-const schema: Array<ColumnDefinition<IStoreMappedDocument>> = [
+const schema: Array<ColumnDefinition<Document>> = [
   {
     id: 'id',
     field: 'docId',

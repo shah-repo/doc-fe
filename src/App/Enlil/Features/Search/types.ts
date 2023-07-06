@@ -1,8 +1,10 @@
+import { SortDescriptor } from '@progress/kendo-data-query';
+
 export interface Option {
   group?: string
   label?: string
   query?: string
-  document?: IStoreMappedDocument
+  document?: Document
 }
 
 export interface Facet {
@@ -12,7 +14,7 @@ export interface Facet {
   children?: Facet[]
 }
 
-export interface IStoreMappedDocument {
+export interface Document {
   id: string
   docId: string
   documentTypeCategory: string
@@ -26,8 +28,16 @@ export interface IStoreMappedDocument {
   userName: string
 }
 
-export interface IStoreResult {
-  documents: IStoreMappedDocument[]
+export interface SearchRequestBody {
+  searchText: string
+  facets?: string[]
+  limit?: number
+  offset?: number
+  sort?: SortDescriptor[]
+}
+
+export interface SearchRequestResponse {
+  documents: Document[]
   facets: Facet[]
   limit: number
   total: number

@@ -2,10 +2,11 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { State } from '@progress/kendo-data-query';
-import { GridDataStateChangeEvent } from '@progress/kendo-react-grid';
+import { GridDataStateChangeEvent, GridProps } from '@progress/kendo-react-grid';
 import { clone, map, startCase } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { History } from 'history';
 import Text from '../../../../../../ui/components/Text';
 import { pagerSettings } from '../../../../../../ui/components/common/kendo/helpers';
 import KendoDataGrid from '../../../../../../ui/components/KendoDataGrid/KendoDataGrid';
@@ -23,7 +24,7 @@ import { translate } from '../../../../../../common/intl';
 import { Facet } from '../../types';
 
 const SearchPage: React.FC = () => {
-  const history = useHistory();
+  const history = useHistory() as History;
   const classes = useStyles();
   const searchQuery = useSearchQuery();
   const dialog = useDialog();
@@ -78,23 +79,19 @@ const SearchPage: React.FC = () => {
     key: column.field ?? '',
   }));
 
-  const handleRowClick = (values) => {
-    const { dataItem } = values;
+  const handleRowClick: GridProps['onRowClick'] = ({ dataItem }) => {
     if (dataItem?.id && dataItem?.revisionId) {
       history.push(`/document_revision/${dataItem.id}/version/${dataItem.revisionId}`);
     }
   };
 
-  const exportData = clone(searchData?.documents ?? []).map(item => {
-    const data = {
-      ID: item.docId,
-      Revision: item.displayRevision,
-      Title: item.revisionName,
-      Owner: item.userName,
-      Status: item.status,
-    };
-    return data;
-  });
+  const exportData = clone(searchData?.documents ?? []).map(item => ({
+    ID: item.docId,
+    Revision: item.displayRevision,
+    Title: item.revisionName,
+    Owner: item.userName,
+    Status: item.status,
+  }));
 
   return (
     <Box className={classes.root}>
