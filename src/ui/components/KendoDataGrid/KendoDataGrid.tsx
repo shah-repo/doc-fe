@@ -145,7 +145,7 @@ function KendoDataGrid<T> ({
   filter,
   group,
   sort,
-  noDataProcessing,
+  skipDataProcessing,
   loading,
   schema,
   fullWidth,
@@ -166,9 +166,9 @@ function KendoDataGrid<T> ({
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(processSchema(schema));
   const [dataState, setDataState] = useState<State>({
     ...defaultDataState,
-    filter,
-    group,
-    sort,
+    ...filter && { filter },
+    ...group && { group },
+    ...sort && { sort },
   });
 
   useEffect(() => {
@@ -178,27 +178,15 @@ function KendoDataGrid<T> ({
   useEffect(() => {
     setDataState((prev) => ({
       ...prev,
-      filter,
+      ...filter && { filter },
+      ...group && { group },
+      ...sort && { sort },
     }));
-  }, [filter]);
-
-  useEffect(() => {
-    setDataState((prev) => ({
-      ...prev,
-      group,
-    }));
-  }, [group]);
-
-  useEffect(() => {
-    setDataState((prev) => ({
-      ...prev,
-      sort,
-    }));
-  }, [sort]);
+  }, [filter, group, sort]);
 
   const resultData = useMemo(
     () => {
-      if (noDataProcessing) {
+      if (skipDataProcessing) {
         return data;
       }
       const finalDataState: State = {
@@ -226,7 +214,7 @@ function KendoDataGrid<T> ({
       const processedData = process(data, finalDataState);
       return processedData;
     },
-    [data, noDataProcessing, dataState],
+    [data, skipDataProcessing, dataState],
   );
 
   const autosizedColumns = useMemo(

@@ -45,7 +45,7 @@ export interface DataGridProps<T> extends StyledKendoGridProps {
   data: T[]
   schema: Array<ColumnDefinition<T>>
   loading?: boolean
-  noDataProcessing?: boolean
+  skipDataProcessing?: boolean
   fullWidth?: boolean
   fullHeight?: boolean
   fallback?: React.ReactNode

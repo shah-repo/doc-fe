@@ -27,26 +27,6 @@ const documentRevisionSet = (
   payload: { documentRevision, requestBody, docRevId },
 });
 
-const searchWithCallback = (
-  body: Record<string, unknown>,
-  handlers: Handlers<{
-    results: DocumentRevision[]
-    total: number
-    page_total: number
-  }>,
-): ApiAction<{
-  results: DocumentRevision[]
-  total: number
-  page_total: number
-}> => {
-  return apiActionWithCallbacks({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/search`,
-    data: body,
-    method: 'post',
-    handlers,
-  });
-};
-
 const loadList = (
   states: DocumentRevisionStatus[] = [],
   queryParams: DocRevQueryParam,
@@ -383,12 +363,12 @@ const getDocRevStatuses = (
   notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
   const categoryUrl = category === undefined
-    ? states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
+    ? states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?`)
     : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
   const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0
-    ? notGroupOptions.reduce((acc, groupOption) => acc + `notGroupOptions%5B%5D=${groupOption}&`,
+    ? notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
   const url = notIncategory === undefined
     ? notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
@@ -481,7 +461,6 @@ const getFormMappingTemplate = (
 export default {
   documentRevisionsList,
   documentRevisionSet,
-  searchWithCallback,
   loadList,
   load,
   loadWithCallback,

@@ -15,14 +15,12 @@ const HeaderContainer: React.FC = () => {
   const toggleCustomLabels = () => {
     dispatch(authActions.toggleCustomLabels(!customLabelsValue));
   };
-  const isSearchEnabled = true;
 
   return (
     <HeaderPresenter
       {...{
         name,
         fullHeight,
-        isSearchEnabled,
         customLabelsValue,
         toggleCustomLabels,
         canToggleCustomLabels,

@@ -12,7 +12,6 @@ import AutosaveToggle from './autosave/autosave';
 export interface HeaderPresenterProps {
   name: string
   fullHeight?: boolean
-  isSearchEnabled?: boolean
   toggleCustomLabels: () => void
   customLabelsValue: boolean
   canToggleCustomLabels: boolean
@@ -22,7 +21,6 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   classes,
   name,
   fullHeight,
-  isSearchEnabled,
   toggleCustomLabels,
   customLabelsValue,
   canToggleCustomLabels,
@@ -37,7 +35,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         spacing={2}
       >
         <Grid item xs>
-          {!fullHeight && isSearchEnabled && (
+          {!fullHeight && (
             <SearchBar />
           )}
         </Grid>

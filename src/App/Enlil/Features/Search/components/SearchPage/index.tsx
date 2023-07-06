@@ -137,7 +137,7 @@ const SearchPage: React.FC = () => {
           pageSize={PAGE_SIZE}
           {...dataState}
           onDataStateChange={updateResults}
-          noDataProcessing
+          skipDataProcessing
           fallback={translate('nothing.found')}
           sortable
           resizable
