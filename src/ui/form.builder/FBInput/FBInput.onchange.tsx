@@ -67,7 +67,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     };
 
     function setValue (formValue: any, state = false) {
-      if (!name) { return; }
+      if (!name || workspaceState?.isPreview) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
