@@ -89,17 +89,29 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       updateState(updatedTransfers);
     };
 
-    const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId: FBAutocompleteAsyncOption.lotBuilds,
     });
 
+    const recordsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId: FBAutocompleteAsyncOption.records,
+    });
+
     useEffect(() => {
-      autocompleteAsyncState.load();
-    }, [autocompleteAsyncState]);
+      buildsAsync.load();
+      recordsAsync.load();
+    }, [buildsAsync, recordsAsync]);
 
     const builds = useObserver(
       () => {
-        const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.lotBuilds) as Map<string, BuildOption[]>;
+        const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.lotBuilds) as Map<string, DocumentRevisionOption[]>;
+        return asyncData ? Array.from(asyncData.values()) : [];
+      },
+    );
+
+    const records = useObserver(
+      () => {
+        const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.records) as Map<string, DocumentRevisionOption[]>;
         return asyncData ? Array.from(asyncData.values()) : [];
       },
     );
@@ -112,6 +124,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
       locations,
       employees,
       builds,
+      records,
       updateLotTransfer,
       deleteLotTransfer,
     });
