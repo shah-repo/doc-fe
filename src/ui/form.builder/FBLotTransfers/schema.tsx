@@ -100,7 +100,7 @@ export const buildSchema = ({
     {
       id: 'reference',
       field: 'reference.docId',
-      title: 'form.builder.lot.transfers.references',
+      title: 'form.builder.lot.transfers.reference',
       filterCell: InputFilter,
       template: (props) => <ReferencesCellTemplate {...props} options={records} onClick={onRowClick} />,
       width: 200,
