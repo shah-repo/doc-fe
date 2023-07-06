@@ -144,8 +144,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       return row;
     }
 
-    console.log('render-row');
-
     const predictedQuantity = predictOnHandQuantity({ skipTransfer: item });
 
     const isQuantityPredicted = predictedQuantity !== null && initialQuantity !== null;
