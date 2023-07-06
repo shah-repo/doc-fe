@@ -8,8 +8,9 @@ import { getHasPermission } from '../../../common/utils/selectors';
 import { authSelectors } from '../../../state/ducks/auth';
 import { Permission } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
-import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../state/reducers';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
 import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer } from './types';
@@ -30,26 +31,33 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const locations = useSelector(companySelectors.getAllLocations) ?? [];
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+    const documentRevisions = useSelector((state: ApplicationState) =>
+      documentRevisionsSelectors.getDocumentRevisions(state, workspaceState?.document?.document.id ?? ''),
+    );
     const canEditLotTransfers = useSelector(getHasPermission(Permission.EDIT_LOT_TRANSFERS));
     const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name) ?? []));
 
-    const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => setTransfers(prepareTransfers(updatedTransfers));
+    console.log(documentRevisions);
 
-    const cantCanEditFirstDraft = !disabled && workspaceState?.document?.version === 1;
-    const userCanEditNextRevision = (
-      !disabled || (
-        workspaceState?.document?.version
-        && workspaceState?.document?.version > 1
-        && workspaceState?.document?.status !== DocumentRevisionStatus.Voided
-        && canEditLotTransfers
-      )
-    );
-    const isEditable = cantCanEditFirstDraft && userCanEditNextRevision;
+    const { version, status } = workspaceState?.document ?? { version: 1 };
+
+    const isLatestRevision = version === documentRevisions.filter(
+      (doc) => ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Canceled].includes(doc.status),
+    ).length;
+
+    const isFirstDraft = version === 1 && status === DocumentRevisionStatus.Draft;
+    const canEditFirstDraft = !disabled;
+
+    const isLotTransfersEditable = status !== DocumentRevisionStatus.Voided;
+
+    const isEditable = (isFirstDraft && canEditFirstDraft) || (!isFirstDraft && isLatestRevision && isLotTransfersEditable && canEditLotTransfers);
 
     SM.reaction(
       () => workspaceState?.formInputSync.get(name) as LotTransfer[],
       (data) => updateLocalTransfers(data ?? []),
     );
+
+    const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => setTransfers(prepareTransfers(updatedTransfers));
 
     const updateState = (updatedTransfers: LotTransfer[]) => {
       updateLocalTransfers(updatedTransfers);
