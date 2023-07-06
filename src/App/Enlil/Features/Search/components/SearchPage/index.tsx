@@ -12,7 +12,8 @@ import KendoDataGrid from '../../../../../../ui/components/KendoDataGrid/KendoDa
 import ExportListDialog from '../../../../../../ui/document.revision/list/ExportListDialog/ExportListDialog';
 import useDialog from '../../../../../../ui/hooks/useDialog';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
-import { columnsSchema, PAGE_SIZE, useSearchQuery } from '../../helpers';
+import { PAGE_SIZE, useSearchQuery } from '../../helpers';
+import schema from './schema';
 import useStyles from './styles';
 import Sidebar from '../SideBar';
 import { FB } from '../../../../../../ui/form.builder';
@@ -72,7 +73,7 @@ const SearchPage: React.FC = () => {
     return dataState;
   };
 
-  const headers = map(columnsSchema, (column) => ({
+  const headers = map(schema, (column) => ({
     label: startCase(translate(column?.title)),
     key: column.field ?? '',
   }));
@@ -132,7 +133,7 @@ const SearchPage: React.FC = () => {
       </Box>
       <Box className={classes.grid}>
         <KendoDataGrid
-          schema={columnsSchema}
+          schema={schema}
           data={searchData?.documents ?? []}
           total={searchData?.total}
           pageable={pagerSettings}
