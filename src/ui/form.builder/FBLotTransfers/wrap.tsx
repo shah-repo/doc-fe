@@ -37,8 +37,6 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const canEditLotTransfers = useSelector(getHasPermission(Permission.EDIT_LOT_TRANSFERS));
     const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name) ?? []));
 
-    console.log(documentRevisions);
-
     const { version, status } = workspaceState?.document ?? { version: 1 };
 
     const isLatestRevision = version === documentRevisions.filter(
