@@ -10,10 +10,10 @@ import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 
 interface Props extends CustomTemplateProps {
-  employees: Employee[]
+  options: Employee[]
 }
 
-export const EmployeeCellTemplate: React.FC<Props> = ({ dataItem, employees, onClick }) => {
+export const EmployeeCellTemplate: React.FC<Props> = ({ dataItem, options, onClick }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const userName = useSelector(authSelectors.currentUserName);
 
@@ -28,7 +28,7 @@ export const EmployeeCellTemplate: React.FC<Props> = ({ dataItem, employees, onC
     );
   }
 
-  const employeeName = employees.find(employee => employee.id === dataItem.by)?.user?.name;
+  const employeeName = options.find(employee => employee.id === dataItem.by)?.user?.name;
   const displayValue = employeeName ?? EMPTY_VALUE_PLACEHOLDER;
 
   return (
