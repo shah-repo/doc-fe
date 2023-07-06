@@ -1,11 +1,11 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
-import { find, has, isEmpty, last, orderBy, some } from 'lodash';
+import { find, has, isEmpty, last, orderBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -99,11 +99,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    // TODO Find another workaround to avoid unwanted audit entries while deleting lotTransfers item
-    if (some(audits, { type: 'ARRAY_DELETED' })) {
-      audits = audits.filter(audit => audit.type === 'ARRAY_DELETED');
-    }
-
     orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
@@ -178,12 +173,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
-        const field = change.field.split('.').at(-1) as string;
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
         if (field === 'id') {
           return;
         }
         if (change.type !== 'ARRAY_DELETED') {
-          const fieldName = translate(`form.builder.lot.transfers.${field}`);
+          const fieldFullName = field === 'docId' ? parentField : field;
+          const fieldName = translate(`form.builder.lot.transfers.${fieldFullName}`);
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }
       }

@@ -20,6 +20,7 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, 
       >
         <TextField
           {...getFieldProps(field)}
+          defaultValue={undefined}
           type="number"
           inputProps={{ min: 0 }}
           size="small"
