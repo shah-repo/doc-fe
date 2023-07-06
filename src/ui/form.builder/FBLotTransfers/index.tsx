@@ -27,6 +27,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   locations = [],
   employees = [],
   builds = [],
+  records = [],
   updateLotTransfer,
   deleteLotTransfer,
   name,
@@ -130,6 +131,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     locations,
     existingLocations,
     employees,
+    records,
     builds,
     onRowClick: handleRowClick,
   });
