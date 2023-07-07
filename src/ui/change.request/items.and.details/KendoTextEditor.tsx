@@ -42,6 +42,8 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
         defaultValue={value}
         onBlur={onBlur}
         className={classes.textArea}
+        data-cy={name}
+        name={name}
         rowsMax={maxAutoRowExpandSize}
       />
       {!value && <p className={classes.error}>

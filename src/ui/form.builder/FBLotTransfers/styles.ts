@@ -11,6 +11,7 @@ export default makeStyles(theme => ({
     '& .k-column-title': {
       fontSize: 12,
       textTransform: 'uppercase',
+      whiteSpace: 'normal',
     },
     '& td': {
       height: ROW_HEIGHT,
@@ -21,6 +22,11 @@ export default makeStyles(theme => ({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottom: 'none',
+
+    '& .k-grid-container': {
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+    },
   },
   updatingRow: {
     position: 'relative',
@@ -47,5 +53,13 @@ export default makeStyles(theme => ({
   },
   popperHolder: {
     height: '100%',
+  },
+  tooltipContent: {
+    maxWidth: 425,
+    maxHeight: 200,
+    overflow: 'auto',
+    whiteSpace: 'pre-line',
+    paddingRight: theme.spacing(0.5),
+    marginRight: theme.spacing(-0.5),
   },
 }));

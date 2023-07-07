@@ -1,8 +1,8 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { requiredNumber, validator } from '../../../components/forms/fields/validators';
-import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { DEDUCTABLE_TRANSFER_TYPES } from '../constants';
 import { CustomTemplateProps } from '../types';
 
@@ -20,6 +20,7 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, 
       >
         <TextField
           {...getFieldProps(field)}
+          defaultValue={undefined}
           type="number"
           inputProps={{ min: 0 }}
           size="small"

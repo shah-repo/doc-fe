@@ -1,16 +1,18 @@
+import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CompanyLocation, CustomTemplateProps, EditableLotTransfer } from '../types';
 
 interface Props extends CustomTemplateProps {
-  locations: CompanyLocation[]
+  options: CompanyLocation[]
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locations }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -20,7 +22,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locatio
   };
 
   const defaultValue = (isEditMode ? values[field] : dataItem[field]) as string;
-  const value = locations.find((loc) => loc.id === defaultValue);
+  const value = options.find((loc) => loc.id === defaultValue);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
@@ -32,7 +34,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locatio
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect
-          options={locations.filter(loc => loc.active)}
+          options={options.filter(loc => loc.active)}
           getOptionLabel={(option: CompanyLocation) => option.name}
           value={value}
           onChange={handleChange}
@@ -42,5 +44,19 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locatio
     );
   }
 
-  return <>{value?.name ?? EMPTY_VALUE_PLACEHOLDER}</>;
+  const displayValue = value ? value.name : EMPTY_VALUE_PLACEHOLDER;
+
+  return (
+    <Box onClick={() => onClick?.({ dataItem })}>
+      <OverflowTooltip
+        title={displayValue}
+        placement="top"
+
+        interactive
+        arrow
+      >
+        {displayValue}
+      </OverflowTooltip>
+    </Box>
+  );
 };
