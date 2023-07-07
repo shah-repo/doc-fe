@@ -1543,5 +1543,6 @@
   "documentRevision.po.notification.alert.update": "PO Amount has exceeded the threshold limit. A new revision will be created and new approvals are required.\n\nWould you like to proceed?",
   "documentRevision.po.notification.alert.remove": "Removing a line item will create a new revision and new approvals will be required.\n\nWould you like to proceed?",
   "settings.locations": "Locations",
-  "settings.locations.add": "Add another location"
+  "settings.locations.add": "Add another location",
+  "bom.header.add.item": "Add Item"
 }

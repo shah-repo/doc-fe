@@ -3,7 +3,9 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { isEmpty, map } from 'lodash';
+import { useObserver } from 'mobx-react';
 import * as React from 'react';
+import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -144,11 +146,14 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
+  const { _tabsState } = SM.useStores();
+  const size = useObserver(() => _tabsState?.contentSize);
+
   return (<Grid container>
     <Grid item xs={12}>
       <TreeList
         {...state.dataState}
-        style={{ width: '100%', overflow: 'scroll' }}
+        style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
         tableProps={{ style: { width: '2100px' } }}
         expandField={EXPAND_FIELD}
         subItemsField={SUB_ITEMS_FIELD}

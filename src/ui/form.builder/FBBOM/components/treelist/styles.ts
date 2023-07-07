@@ -623,4 +623,19 @@ export default makeStyles((theme) => ({
   tableContainer: {
     paddingTop: theme.spacing(2.5),
   },
+  addItem: {
+    color: Colors.primary,
+    fontSize: 12,
+    fontWeight: 600,
+    padding: 0,
+    '&:hover': {
+      background: 'none',
+    },
+  },
+  bottomAddButtom: {
+    width: '100%',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    marginTop: theme.spacing(-0.875),
+  },
 }));
