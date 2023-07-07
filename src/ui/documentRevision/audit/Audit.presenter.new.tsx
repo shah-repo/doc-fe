@@ -1,11 +1,11 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
-import { find, has, isEmpty, last, orderBy, some } from 'lodash';
+import { find, get, has, isEmpty, last, orderBy, some } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -47,22 +47,24 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   // Added to exclude few PO line items unwanted audit recrods
   const excludeFewPOAuditRecords = (change: Audit) => (change.field.includes(PO_ITEMS_COMPONENT_NAME)
-   && (change.type.includes('OBJECT_NEW')
-  || change.type.includes('ARRAY_NEW')
-  || change.type.includes('STRING_NEW')
-  || change.type.includes('NUMBER_NEW')
-  || change.type.includes('BOOLEAN_NEW')
-  || change.type.includes('BOOLEAN_EDITED')
-  || change.field.includes('items.date')
-  || change.field.includes('items.capitalEquipment')
-  || change.field.includes('totalInUSD'))
-  // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
-  && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
-    || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
+    && (change.type.includes('OBJECT_NEW')
+      || change.type.includes('ARRAY_NEW')
+      || change.type.includes('STRING_NEW')
+      || change.type.includes('ARRAY_EDITED')
+      || change.type.includes('NUMBER_NEW')
+      || change.type.includes('BOOLEAN_NEW')
+      || change.type.includes('BOOLEAN_EDITED')
+      || change.field.includes('items.date')
+      || change.field.includes('items.capitalEquipment')
+      || change.field.includes('totalInUSD'))
+    // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
+    && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
+      || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
   );
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
+      console.log('---renderAuditGroup--', { groupId, audit, key }, audit[groupId], audit[groupId][0]);
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty, ownerName } = change;
       const isPOAutoChange
@@ -202,7 +204,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // skip audit values
         if (
           (last(valueKey) === 'id'
-          || last(valueKey) === 'attachments' || last(valueKey) === 'quantity') && (
+            || last(valueKey) === 'attachments' || last(valueKey) === 'quantity') && (
             (change.type === 'STRING_NEW' && !isAttachment)
             || change.type === 'NUMBER_DELETED')) {
           return;
@@ -356,7 +358,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             fbLabel = intl.formatMessage({ id: 'form.builder.audit.replacement' },
               {
                 type: (change.type === 'LOT_USAGE.BOOLEAN_NEW' as unknown as Audit['type']
-                || change.type === 'LOT_USAGE.BOOLEAN_EDITED' as unknown as Audit['type'])
+                  || change.type === 'LOT_USAGE.BOOLEAN_EDITED' as unknown as Audit['type'])
                   ? intl.formatMessage({ id: 'form.builder.materials|s' })
                   : intl.formatMessage({ id: 'form.builder.equipment|s' }),
                 value: value?.document.docId,
@@ -379,6 +381,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (change.field.includes('input-context') && change.fbSchemaItem) {
           fbLabel = 'Note';
         }
+        const isArrrayEdited = change.type.includes('ARRAY_EDITED');
+        // const nextValue = JSON.parse(change?.nextValue);
+        // const previousValue = JSON.parse(change?.previousValue);
+        // const isDocIdChanged = isArrrayEdited && change.nextValue?.suffixNumber !== change.previousValue?.suffixNumber;
+        // const isDescriptionChanged = isArrrayEdited && get(change.nextValue, 'suffixName') !== get(change.previousValue, 'suffixName');
+
+        const isDocIdORDescriptionChanged = isArrrayEdited && change.nextValue !== change.previousValue;
+
+        if (isArrrayEdited) {
+          console.log('----change---', { change, isArrrayEdited, statusLabel, isDocIdORDescriptionChanged }, get(change.nextValue, 'suffixNumber'), get(change.nextValue, 'suffixName'));
+        }
 
         singleFields.push(
           <Box
@@ -392,6 +405,38 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             }
           >
             <>
+              {/* {!isFBField && !isSmartRef && isArrrayEdited && ( */}
+              <>
+                {/* {isDocIdORDescriptionChanged && (
+                    <Typography
+                      variant="subtitle1"
+                      className={classes.auditKey}
+                    >
+                      <Text
+                        dataCy={`change-key-${groupKey}-docId-${key}`}
+                        message={`documentRevision.audit.${change.field}.${change.type}`}
+                        values={{
+                          nextStatus: get(change.nextValue, 'suffixName'),
+                        }}
+                      />
+                    </Typography>)} */}
+                {/* {isDescriptionChanged && (
+                    <Typography
+                      variant="subtitle1"
+                      className={classes.auditKey}
+                    >
+                      <Text
+                        dataCy={`change-key-${groupKey}-title-${key}`}
+                        message={`documentRevision.audit.${change.field}.${change.type}`}
+                        values={{
+                          nextStatus: get(change.nextValue, 'suffixName')
+                        }}
+                      />
+                    </Typography>
+                  )} */}
+              </>
+              {/* )
+              } */}
               {!isFBField && !isSmartRef && (
                 <Typography
                   variant="subtitle1"
@@ -418,12 +463,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 </Typography>
               )}
             </>
+            {/* {((isArrrayEdited && isDocIdORDescriptionChanged) || !isArrrayEdited) && ( */}
             <div className={classes.auditValue}>
               <AuditFactory
                 audit={change}
                 dataCy={`change-value-${groupKey}-${key}`}
               />
             </div>
+            {/* )} */}
           </Box>,
         );
         key++;

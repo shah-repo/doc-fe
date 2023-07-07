@@ -623,6 +623,8 @@
   "documentRevision.audit.childrenParts.ARRAY_DELETED": "Part removed",
   "documentRevision.audit.childrenParts.ARRAY_NEW": "Part added",
   "documentRevision.audit.subParts.ARRAY_NEW": "Sub-Part added",
+  "documentRevision.audit.suffixNumber.ARRAY_EDITED": "Sub-part Doc ID Changed to",
+  "documentRevision.audit.suffixName.ARRAY_EDITED": "Sub-part Description Changed to",
   "documentRevision.audit.subParts.ARRAY_DELETED": "Sub-Part removed",
   "documentRevision.audit.relatedPartsStatus.STRING_NEW": "Base part status changed to",
   "documentRevision.audit.subPartObsolete.STRING_EDITED": "Sub-Part revision changed",
