@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import React, { ChangeEventHandler, useState } from 'react';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import { TextField } from '../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { MODE_FIELD, Mode } from '../constants';
 import { EditableVendorData } from '../types';
 
@@ -33,13 +33,17 @@ export const UnitCostCellTemplate: React.FC<Props> = ({
 
   if (isEditMode) {
     return (
-      <TextField
-        type="text"
-        name="unitCost"
-        size="small"
-        onChange={handleChange}
-        value={value}
-      />
+      <FormikField
+        name={field}
+      >
+        <TextField
+          type="text"
+          name="unitCost"
+          size="small"
+          onChange={handleChange}
+          value={value}
+        />
+      </FormikField>
     );
   }
 

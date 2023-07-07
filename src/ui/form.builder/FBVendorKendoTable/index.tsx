@@ -2,6 +2,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Popper } from '@material-ui/core';
 import cx from 'classnames';
+import { FormikProvider, useFormik } from 'formik';
 import React, { useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
@@ -130,6 +131,20 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
 
   const isActive = true;
 
+  // Formik
+
+  const formik = useFormik<Partial<EditableVendorData>>({
+    initialValues: {},
+    validate: (values) => {
+      const errors: Record<string, string> = {};
+
+      return errors;
+    },
+    onSubmit: (values) => {
+      discardLotVendorData();
+    },
+  });
+
   const editVendorData = ({ dataItem }: VendorDataEditEvent) => setEditedVendorData(dataItem);
 
   const createDraftVendorData = () => setEditedVendorData({
@@ -148,10 +163,6 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
     }
     deleteVendorData?.(editedVendorData as VendorData);
     discardLotVendorData();
-  };
-
-  const submitForm = () => {
-    console.log('submitForm');
   };
 
   const shouldDisableDelete = true;
@@ -173,7 +184,7 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
       <td className={classes.actionsCell}>
         <ActionsCell
           dataItem={item}
-          onConfirm={submitForm}
+          onConfirm={formik.submitForm}
           onDiscard={discardLotVendorData}
           onDelete={removeVendorData}
           deleteTooltipText={deleteTootltipText}
@@ -223,16 +234,17 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
           )}
         </FBSection>
       </FBInput>
-
-      <KendoDataGrid<VendorData>
-        fullWidth
-        filterable
-        hasBoxScrollbars
-        schema={schema}
-        data={vendorDataList}
-        onRowClick={isActive ? editVendorData : undefined}
-        rowRender={rowRender}
-      />
+      <FormikProvider value={formik}>
+        <KendoDataGrid<VendorData>
+          fullWidth
+          filterable
+          hasBoxScrollbars
+          schema={schema}
+          data={vendorDataList}
+          onRowClick={isActive ? editVendorData : undefined}
+          rowRender={rowRender}
+        />
+      </FormikProvider>
       {isActive && (
         <Button
           kind="add"
