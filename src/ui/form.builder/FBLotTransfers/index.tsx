@@ -18,7 +18,7 @@ import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
+import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
 import { useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
@@ -27,6 +27,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   locations = [],
   employees = [],
   builds = [],
+  records = [],
   updateLotTransfer,
   deleteLotTransfer,
   name,
@@ -34,40 +35,39 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const [editedLotTransfer, setEditedLotTransfer] = React.useState<Partial<EditableLotTransfer>>();
-  const { initialQuantity, predictOnHandQuantity } = useOnHandQuantity();
+  const [editedLotTransfer, setEditedLotTransfer] = React.useState<DraftLotTransfer>();
+  const { initialQuantity, onHandQuantityUnit, predictOnHandQuantity } = useOnHandQuantity();
   const actionsRef = React.useRef<PopperJs>(null);
-  const isActive = !disabled && initialQuantity !== null && initialQuantity > 0;
+  const isActive = !disabled;
 
-  const formik = useFormik<Partial<EditableLotTransfer>>({
+  const formik = useFormik<DraftLotTransfer>({
     initialValues: {},
     validate: (values) => {
       const errors: Record<string, string> = {};
-      const isInitialQuantityValid = initialQuantity !== null;
 
       if (values.from && values.to && values.from === values.to) {
         errors.to = 'validator.lot.transfers.same.location';
       }
 
-      if (isInitialQuantityValid && values.quantity) {
+      if (values.quantity !== undefined) {
         if (values.quantity === 0) {
           errors.quantity = 'validator.lot.transfers.quantity.null';
         }
 
-        if (values.quantity > initialQuantity) {
+        if (initialQuantity > 0 && values.quantity > initialQuantity) {
           errors.quantity = 'validator.lot.transfers.quantity.limit';
         }
       }
 
-      const predictedQuantity
-        = values.type && values.quantity
-          ? predictOnHandQuantity({
-            newTransfer: values as LotTransfer,
-            skipTransfer: editedLotTransfer as LotTransfer,
-          })
-          : null;
+      if (values.type && values.id && values.quantity !== undefined) {
+        const predictedQuantity = predictOnHandQuantity({
+          newTransfer: {
+            quantity: values.quantity,
+            type: values.type,
+          },
+          skipTransfer: editedLotTransfer,
+        });
 
-      if (isInitialQuantityValid && predictedQuantity !== null) {
         if (predictedQuantity < 0) {
           errors.quantity = 'validator.lot.transfers.quantity.min';
         }
@@ -79,7 +79,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     },
     onSubmit: (values) => {
       const lotTransferToSave = omit(values, [MODE_FIELD]);
-      updateLotTransfer?.(lotTransferToSave as LotTransfer);
+      updateLotTransfer(lotTransferToSave as LotTransfer);
       discardLotTransfer();
     },
   });
@@ -116,7 +116,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     if (!editedLotTransfer) {
       return;
     }
-    deleteLotTransfer?.(editedLotTransfer as LotTransfer);
+    deleteLotTransfer(editedLotTransfer as LotTransfer);
     discardLotTransfer();
   };
 
@@ -124,13 +124,15 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     actionsRef.current?.scheduleUpdate();
   };
 
-  const handleRowClick = isActive ? editLotTransfer : undefined;
+  const handleRowClick = isActive && !editedLotTransfer ? editLotTransfer : undefined;
 
   const schema = buildSchema({
     locations,
     existingLocations,
     employees,
+    records,
     builds,
+    units: onHandQuantityUnit,
     onRowClick: handleRowClick,
   });
 
@@ -155,7 +157,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
         : undefined;
 
     const actions = (
-      <td className={classes.actionsCell}>
+      <td className={classes.actionsCell} key="actions">
         <ActionsCell
           dataItem={item}
           onConfirm={formik.submitForm}
@@ -230,6 +232,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
         <Button
           kind="add"
           fullWidth
+          disabled={Boolean(editedLotTransfer)}
           onClick={createDraftLotTransfer}
         >
           {translate('form.builder.lot.transfers.add')}
