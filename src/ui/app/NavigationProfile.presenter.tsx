@@ -11,6 +11,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Nullable } from '../../state/ducks/common/types';
+import UserSettingsContainer from '../user.management/profile/settings';
 import UserProfileContainer from '../user.management/profile/UserProfile.container';
 import styles from './NavigationProfile.styles';
 import UserAvatar from './UserMenu/UserAvatar';
@@ -21,6 +22,8 @@ interface Props extends WithStyles<typeof styles> {
   name: string
   closeUserProfile: () => void
   showUserProfile: boolean
+  closeUserSettings: () => void
+  showUserSettings: boolean
   avatar: Nullable<string>
   initialColor: string
   handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -34,6 +37,8 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   name,
   closeUserProfile,
   showUserProfile,
+  showUserSettings,
+  closeUserSettings,
   avatar,
   initialColor,
   handleOpenMenu,
@@ -73,6 +78,10 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         <UserProfileContainer
           closeUserProfile={closeUserProfile}
           showUserProfile={showUserProfile}
+        />
+        <UserSettingsContainer
+          closeUserProfile={closeUserSettings}
+          showUserProfile={showUserSettings}
         />
       </Button>
     </ClickAwayListener>

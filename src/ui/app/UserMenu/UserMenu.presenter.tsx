@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
@@ -24,6 +26,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const {
     openUserProfile,
+    openUserSettings,
     handleLogout,
     hasMultipleCompanies,
     handleSwitchCompany,
@@ -45,6 +48,14 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
           horizontal: 'center',
         }}
       >
+        <MenuItem onClick={openUserSettings}>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={solid('gear')} />
+          </ListItemIcon>
+          <ListItemText>
+            <Text translation="header.menu.my.settings" />
+          </ListItemText>
+        </MenuItem>
         <MenuItem onClick={openUserProfile}>
           <ListItemIcon>
             <PersonOutlineOutlinedIcon fontSize="small" />
