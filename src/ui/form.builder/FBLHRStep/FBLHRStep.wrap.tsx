@@ -1,6 +1,6 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { find, flattenDeep, lowerCase, omit } from 'lodash';
-import { reaction } from 'mobx';
+import { reaction, ObservableMap } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
@@ -127,11 +127,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => [
         FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
         formState?.inputState.get(name)?.value,
-      ],
+      ] as [ObservableMap<string, DocumentRevision>, string | undefined],
       ([mpiDocuments, mpiDocumentId]) => {
         const parameters = schemaItem?.editorConfig?.parameters;
-        const mpiDocument = Array.from(mpiDocuments.values())
-          .find((item: any) => item?.id === mpiDocumentId) as DocumentRevision | undefined;
+        const mpiDocument = Array.from(mpiDocuments.values()).find((item) => item?.id === mpiDocumentId);
 
         const editorCfg = mpiDocument?.formTemplate?.schema.filter((item) =>
           item.type === 'mpiprocedure' && !item.deleted) || [];
