@@ -124,11 +124,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     ), []);
 
     React.useEffect(() => reaction(
-      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
-      (data) => {
+      () => [
+        FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
+        formState?.inputState.get(name)?.value,
+      ],
+      ([mpiDocuments, mpiDocumentId]) => {
         const parameters = schemaItem?.editorConfig?.parameters;
-        const dataValues = Array.from(data.values());
-        const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
+        const mpiDocument = Array.from(mpiDocuments.values())
+          .find((item: any) => item?.id === mpiDocumentId) as DocumentRevision | undefined;
 
         const editorCfg = mpiDocument?.formTemplate?.schema.filter((item) =>
           item.type === 'mpiprocedure' && !item.deleted) || [];
