@@ -207,6 +207,9 @@ export default makeStyles((theme) => ({
         },
       },
     },
+    '.k-master-row .k-grid-content-sticky': {
+      backgroundColor: 'inherit',
+    },
     '.k-grid-container': {
       overflow: 'hidden',
 
