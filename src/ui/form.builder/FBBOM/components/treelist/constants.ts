@@ -1,4 +1,3 @@
-import { ColumnMenuNumericColumn, ColumnMenuTextColumn } from '@progress/kendo-react-data-tools';
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { BooleanCell } from './column.templates/Boolean';
 import { Comments } from './column.templates/Comments';
@@ -21,6 +20,7 @@ export const TREELIST_CONFIG = {
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
   hidden: boolean
+  showMenu?: boolean
   disableShowOrHideSelection?: boolean
 }
 
@@ -30,7 +30,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'ID',
     width: '12.57%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     expandable: true,
     locked: false,
     hidden: false,
@@ -42,7 +41,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'TITLE',
     width: '11.29%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
     cell: TextInfoCell,
   },
@@ -51,7 +49,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'REV',
     width: '3.86%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
     cell: TextInfoCell,
   },
@@ -61,7 +58,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '8.81%',
     cell: Status,
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
   },
   {
@@ -69,7 +65,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'COST',
     width: '5.94%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuNumericColumn,
     hidden: false,
   },
   {
@@ -78,13 +73,13 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '6.34%',
     filter: TreeListTextFilter,
     hidden: false,
+    showMenu: false,
   },
   {
     field: 'quantity',
     title: 'QUANTITY',
     width: '5.35%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
   },
   {
@@ -92,7 +87,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'UNIT',
     width: '5.35%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
   },
   {
@@ -100,7 +94,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'REF. DESIGNATOR',
     width: '8.81%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
   },
   {
@@ -109,7 +102,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '4.06%',
     filter: TreeListTextFilter,
     headerCell: PrimaryAttachments,
-    columnMenu: ColumnMenuTextColumn,
     cell: PrimaryAttachmentsCell,
     hidden: false,
     sortable: false,
@@ -120,7 +112,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '3.96%',
     filter: TreeListTextFilter,
     headerCell: Attachments,
-    columnMenu: ColumnMenuTextColumn,
     cell: BooleanCell,
     hidden: false,
     sortable: false,
@@ -130,7 +121,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'ISSUES',
     width: '3.96%',
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     cell: BooleanCell,
     headerCell: Issues,
     hidden: false,
@@ -142,7 +132,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '3.96%',
     cell: BooleanCell,
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     headerCell: Vendors,
     hidden: false,
     sortable: false,
@@ -153,7 +142,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '15.64%',
     cell: Comments,
     filter: TreeListTextFilter,
-    columnMenu: ColumnMenuTextColumn,
     hidden: false,
     sortable: false,
   },

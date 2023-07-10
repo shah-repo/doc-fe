@@ -2,12 +2,13 @@ import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
-import { isEmpty, map } from 'lodash';
+import { isEmpty, map, replace } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
+import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import bom from './data';
@@ -82,7 +83,9 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
-    return React.cloneElement(row, {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const modifiedProps = { ...row?.props, className: replace(row?.props?.className, 'k-alt', '') };
+    return React.cloneElement({ ...row, props: modifiedProps }, {
       style: {
         backgroundColor: color,
       },
@@ -146,6 +149,17 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
+  const onLock = React.useCallback(({ field, locked, closeMenu }: CustomTreeListColumnProps & {closeMenu: () => void}) => {
+    const index = columns.findIndex(c => c.field === field);
+    const column = columns[index];
+    if (column) {
+      const newColumns = [...columns];
+      newColumns.splice(index, 1, { ...column, locked: !locked });
+      setColumns(newColumns);
+      closeMenu?.();
+    }
+  }, [columns]);
+
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -162,6 +176,16 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
         data={processData()}
         onDataStateChange={handleDataStateChange}
         columns={getColumns()}
+        columnMenu={(props) => (
+          <CustomColumnMenu
+            {...props}
+            columns={getColumns()}
+            {...{
+              onLock,
+              onColumnShowHide,
+            }}
+          />
+        )}
         onColumnReorder={onColumnReorder}
         resizable={TREELIST_CONFIG.resizable}
         reorderable={TREELIST_CONFIG.reorderable}

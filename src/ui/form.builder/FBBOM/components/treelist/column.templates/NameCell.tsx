@@ -12,15 +12,18 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
   const onClick = (ev) => {
     props.onExpandChange(ev, props.dataItem, props.level);
   };
+  const { colSpan, id, style } = props;
 
   return (
     <td
-      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom)}
+      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, props.className)}
       aria-colindex={props.ariaColumnIndex}
+      data-grid-col-index={props.colIndex}
       role="gridcell"
       {...navigationAttributes}
       aria-expanded={props.expanded}
       aria-selected="false"
+      {...{ colSpan, id, style }}
     >
       {[...(Array(props.level.length - 1) as number[])].map((e, i) => (
         <span className="k-icon k-i-none" role="presentation" />
