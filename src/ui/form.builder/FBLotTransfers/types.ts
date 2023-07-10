@@ -53,6 +53,9 @@ export interface LotTransfer {
 
 export interface EditableLotTransfer extends LotTransfer {
   [MODE_FIELD]: Mode
+  employeeName: string
+  buildName: string
+  referenceName: string
 }
 export type DraftLotTransfer = Partial<EditableLotTransfer>;
 export type CalculableLotTransfer = Pick<LotTransfer, 'type' | 'quantity'>;
