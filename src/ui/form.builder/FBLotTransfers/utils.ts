@@ -1,12 +1,21 @@
 import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
 import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, PredictQuantityFunction } from './types';
 
-export const getOptionLabel = (option: DocumentRevisionOption) => {
+export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
   return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
+};
+
+export const getLatestRevisionId = (revisions: DocumentRevision[]): string => {
+  const sortedRevisions
+    = revisions
+      .filter(revision => revision.status !== DocumentRevisionStatus.Canceled)
+      .sort((a, b) => b.version - a.version);
+  return sortedRevisions[0].id;
 };
 
 interface UseOnHandQuantityType {
