@@ -1,5 +1,5 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
-import { find, get, has, isEmpty, last, orderBy } from 'lodash';
+import { find, has, isEmpty, last, orderBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -64,7 +64,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
-      console.log('---renderAuditGroup--', { groupId, audit, key }, audit[groupId], audit[groupId][0]);
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty, ownerName } = change;
       const isPOAutoChange
@@ -387,10 +386,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
         const isDocIdORDescriptionChanged = isArrrayEdited && change.nextValue !== change.previousValue;
 
-        if (isArrrayEdited) {
-          console.log('----change---', { change, isArrrayEdited, statusLabel, isDocIdORDescriptionChanged }, get(change.nextValue, 'suffixNumber'), get(change.nextValue, 'suffixName'));
-        }
-
         singleFields.push(
           <Box
             mb={1}
@@ -403,9 +398,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             }
           >
             <>
-              {/* {!isFBField && !isSmartRef && isArrrayEdited && ( */}
-              <>
-                {/* {isDocIdORDescriptionChanged && (
+              {!isFBField && !isSmartRef && isArrrayEdited && (
+                <>
+                  {isDocIdORDescriptionChanged && (
                     <Typography
                       variant="subtitle1"
                       className={classes.auditKey}
@@ -413,29 +408,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       <Text
                         dataCy={`change-key-${groupKey}-docId-${key}`}
                         message={`documentRevision.audit.${change.field}.${change.type}`}
-                        values={{
-                          nextStatus: get(change.nextValue, 'suffixName'),
-                        }}
+                        values={{ nextStatus: change.nextValue }}
                       />
-                    </Typography>)} */}
-                {/* {isDescriptionChanged && (
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.auditKey}
-                    >
-                      <Text
-                        dataCy={`change-key-${groupKey}-title-${key}`}
-                        message={`documentRevision.audit.${change.field}.${change.type}`}
-                        values={{
-                          nextStatus: get(change.nextValue, 'suffixName')
-                        }}
-                      />
-                    </Typography>
-                  )} */}
-              </>
-              {/* )
-              } */}
-              {!isFBField && !isSmartRef && (
+                    </Typography>)}
+                </>
+              )}
+              {!isFBField && !isSmartRef && !isArrrayEdited && (
                 <Typography
                   variant="subtitle1"
                   className={classes.auditKey}
@@ -457,14 +435,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 </Typography>
               )}
             </>
-            {/* {((isArrrayEdited && isDocIdORDescriptionChanged) || !isArrrayEdited) && ( */}
-            <div className={classes.auditValue}>
-              <AuditFactory
-                audit={change}
-                dataCy={`change-value-${groupKey}-${key}`}
-              />
-            </div>
-            {/* )} */}
+            {((isArrrayEdited && isDocIdORDescriptionChanged) || !isArrrayEdited) && (
+              <div className={classes.auditValue}>
+                <AuditFactory
+                  audit={change}
+                  dataCy={`change-value-${groupKey}-${key}`}
+                />
+              </div>
+            )}
           </Box>,
         );
         key++;
