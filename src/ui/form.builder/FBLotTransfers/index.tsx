@@ -195,9 +195,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       ...list,
       {
         ...(isLotTransferEdited ? editedLotTransfer : transfer),
-        employeeName,
-        buildName,
-        referenceName,
         [EMPLOYEE_NAME]: employeeName,
         [BUILD_NAME]: buildName,
         [REFERENCE_NAME]: referenceName,
