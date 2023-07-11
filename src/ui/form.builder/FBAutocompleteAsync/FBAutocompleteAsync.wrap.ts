@@ -8,7 +8,7 @@ import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueTy
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
-  Component: React.FunctionComponent<T>
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     getOptionLabel,
@@ -52,15 +52,15 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     // and discard value prop
     const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
 
-    function getDefault() {
+    function getDefault () {
       const objectValue: Record<FBOptionValueType, () => any> = {
         object: () => formValue,
         key: () => autocompleteAsyncState?.sliceValue(formValue) || formValue,
-        id: () =>  {
+        id: () => {
           const slicedValue = multiple
             ? map(formValue, optionValueKey)
             : get(formValue, optionValueKey);
-          return  autocompleteAsyncState?.sliceValue(slicedValue);
+          return autocompleteAsyncState?.sliceValue(slicedValue);
         },
       };
       return objectValue[optionValueType]();
@@ -73,9 +73,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
       loading = (
-        loading ||
-        FBAutocompleteAsyncStore.loading.get(optionId) ||
-        autocompleteAsyncState?.autocompleteValueApi.loading
+        loading
+        || FBAutocompleteAsyncStore.loading.get(optionId)
+        || autocompleteAsyncState?.autocompleteValueApi.loading
       );
       if (slicedOptions) {
         options = selectedOptions
@@ -117,7 +117,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           autocompleteAsyncState?.fetchAutocompleteOption(defaultValue, optionId);
         }
       },
-      [autocompleteAsyncState, defaultValue, optionId]
+      [autocompleteAsyncState, defaultValue, optionId],
     );
 
     useEffect(() => {
@@ -143,7 +143,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
               return;
             }
             return autocompleteAsyncState?.fetchAutocompleteOption(opt, optionId);
-          }
+          },
           );
           return '';
         }
@@ -163,8 +163,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       if (includeRevision) {
         const revision = get(option, includeRevision);
-        optionLabel = labelPrefixRoot ?
-          `${get(option, labelPrefixRoot)} - rev ${revision} - ` : '';
+        optionLabel = labelPrefixRoot
+          ? `${get(option, labelPrefixRoot)} - rev ${revision} - ` : '';
         if (withoutLabelKey && labelPrefixRoot) {
           return `${get(option, labelPrefixRoot)} - rev ${revision}`;
         }
@@ -173,7 +173,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       return `${optionLabel}${description}`;
     });
 
-    function htmlToPlainText(value?: string): string {
+    function htmlToPlainText (value?: string): string {
       if (!value) { return ''; }
       const contentBlock = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
