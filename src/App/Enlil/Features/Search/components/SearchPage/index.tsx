@@ -219,8 +219,10 @@ const SearchPage: React.FC = () => {
       />
       <Dialog
         open={trainingDetailsDialog.isOpen}
-        fullWidth
         maxWidth="md"
+        fullWidth
+        onEscapeKeyDown={trainingDetailsDialog.close}
+        onBackdropClick={trainingDetailsDialog.close}
       >
         <TrainingDetails
           dialog={trainingDetailsDialog}
