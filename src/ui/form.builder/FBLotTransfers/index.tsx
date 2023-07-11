@@ -16,7 +16,7 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
-import { EMPTY_VALUE_PLACEHOLDER } from './constants';
+import { BUILD_NAME, EMPLOYEE_NAME, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_NAME } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
@@ -79,7 +79,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       return errors;
     },
     onSubmit: (values) => {
-      const lotTransferToSave = omit(values, MODE_FIELD, 'name');
+      const lotTransferToSave = omit(values, FIELDS_TO_OMIT);
       updateLotTransfer(lotTransferToSave as LotTransfer);
       discardLotTransfer();
     },
@@ -195,9 +195,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       ...list,
       {
         ...(isLotTransferEdited ? editedLotTransfer : transfer),
-        employeeName,
-        buildName,
-        referenceName,
+        [EMPLOYEE_NAME]: employeeName,
+        [BUILD_NAME]: buildName,
+        [REFERENCE_NAME]: referenceName,
         [MODE_FIELD]: isLotTransferEdited ? Mode.edit : Mode.show,
       },
     ];
