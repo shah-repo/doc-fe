@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
+import { Box, Dialog } from '@material-ui/core';
 import { State } from '@progress/kendo-data-query';
 import { GridDataStateChangeEvent, GridProps } from '@progress/kendo-react-grid';
 import { clone, map, startCase } from 'lodash';
@@ -22,6 +22,8 @@ import { observer } from 'mobx-react';
 import { translate } from '../../../../../../common/intl';
 import { Facet } from '../../types';
 import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
+import { TrainingRecordQuery } from '../../../../../../state/ducks/training/types';
+import TrainingDetails from '../../../../../../ui/training/details/TrainingDetails';
 
 const SearchPage: React.FC = () => {
   const history = useHistory() as History;
@@ -41,6 +43,7 @@ const SearchPage: React.FC = () => {
     sort: [],
   });
   const searchState = FB.useRef(SearchState);
+  const trainingDetailsDialog = useDialog();
 
   useEffect(() => {
     setQueryFacets([]);
@@ -60,6 +63,7 @@ const SearchPage: React.FC = () => {
   }, [searchState, searchQuery, checkedFacets, dataState]);
 
   const searchData = searchState.searchApi.data;
+  const trainingRecordData = searchState.trainingApi.data;
 
   // Store all possible facets for query from first response.
   useEffect(() => {
@@ -68,6 +72,13 @@ const SearchPage: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchData]);
+
+  useEffect(() => {
+    if (trainingRecordData) {
+      trainingDetailsDialog.open();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainingRecordData]);
 
   const updateResults = ({ dataState }: GridDataStateChangeEvent) => {
     setDataState(dataState);
@@ -80,6 +91,11 @@ const SearchPage: React.FC = () => {
   }));
 
   const handleRowClick: GridProps['onRowClick'] = ({ dataItem }) => {
+    if (dataItem?.documentTypeCategory === 'TrainingRecord') {
+      searchState.fetchTrainingRecord(dataItem?.id);
+      return;
+    }
+
     if (dataItem?.id && dataItem?.revisionId) {
       history.push(`/document_revision/${dataItem.id}/version/${dataItem.revisionId}`);
     }
@@ -124,6 +140,8 @@ const SearchPage: React.FC = () => {
   }
 
   const mappedFacets = mapFacets(queryFacets);
+
+  const loading = searchState.searchApi.loading || searchState.trainingApi.loading;
 
   return (
     <Box className={classes.root}>
@@ -176,6 +194,7 @@ const SearchPage: React.FC = () => {
         <KendoDataGrid
           schema={schema}
           data={searchData?.documents ?? []}
+          loading={loading}
           total={searchData?.total}
           pageable={pagerSettings}
           pageSize={PAGE_SIZE}
@@ -195,6 +214,16 @@ const SearchPage: React.FC = () => {
         {...{ dialog, headers }}
         customFileName="DocumentList"
       />
+      <Dialog
+        open={trainingDetailsDialog.isOpen}
+        fullWidth
+        maxWidth="md"
+      >
+        <TrainingDetails
+          dialog={trainingDetailsDialog}
+          training={trainingRecordData as TrainingRecordQuery}
+        />
+      </Dialog>
     </Box>
   );
 };

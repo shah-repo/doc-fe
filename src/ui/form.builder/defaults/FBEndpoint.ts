@@ -63,4 +63,5 @@ export enum FBEndpoint {
   ModifyFavourites = '/user_favourites/${id}',
   ApprovalLevels = '/document_revisions/threshold',
   GlobalSearch = '/global_search/documents/search',
+  TrainingRecord = '/training_record',
 }
