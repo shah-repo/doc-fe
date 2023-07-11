@@ -1,7 +1,6 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { Employee } from '../../../state/ducks/company/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
@@ -20,7 +19,6 @@ import { CompanyLocation, DocumentRevisionOption, EditableLotTransfer, LotTranfe
 interface SchemaOptions {
   locations: CompanyLocation[]
   existingLocations: string[]
-  employees: Employee[]
   builds: DocumentRevisionOption[]
   records: DocumentRevisionOption[]
   units?: string
@@ -30,7 +28,6 @@ interface SchemaOptions {
 export const buildSchema = ({
   locations,
   existingLocations = [],
-  employees,
   builds,
   records,
   units,
@@ -91,7 +88,7 @@ export const buildSchema = ({
     },
     {
       id: 'build',
-      field: 'build.docId',
+      field: 'buildName',
       title: 'form.builder.lot.transfers.build',
       filterCell: InputFilter,
       template: (props) => <BuildCellTemplate {...props} options={builds} onClick={onRowClick} />,
@@ -99,7 +96,7 @@ export const buildSchema = ({
     },
     {
       id: 'reference',
-      field: 'reference.docId',
+      field: 'referenceName',
       title: 'form.builder.lot.transfers.reference',
       filterCell: InputFilter,
       template: (props) => <ReferencesCellTemplate {...props} options={records} onClick={onRowClick} />,
@@ -123,10 +120,10 @@ export const buildSchema = ({
     },
     {
       id: 'by',
-      field: 'by',
+      field: 'employeeName',
       title: 'form.builder.lot.transfers.by',
       filterCell: InputFilter,
-      template: (props) => <EmployeeCellTemplate {...props} options={employees} onClick={onRowClick} />,
+      template: (props) => <EmployeeCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
     },
     {

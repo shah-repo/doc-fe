@@ -16,10 +16,11 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
+import { EMPTY_VALUE_PLACEHOLDER } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
-import { useOnHandQuantity } from './utils';
+import { getOptionLabel, useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
@@ -78,7 +79,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       return errors;
     },
     onSubmit: (values) => {
-      const lotTransferToSave = omit(values, [MODE_FIELD]);
+      const lotTransferToSave = omit(values, MODE_FIELD, 'name');
       updateLotTransfer(lotTransferToSave as LotTransfer);
       discardLotTransfer();
     },
@@ -129,7 +130,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const schema = buildSchema({
     locations,
     existingLocations,
-    employees,
     records,
     builds,
     units: onHandQuantityUnit,
@@ -184,10 +184,20 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   const transferList = transfers.reduce((list, transfer) => {
     const isLotTransferEdited = editedLotTransfer && editedLotTransfer.id === transfer.id;
+    const employee = employees.find(employee => employee.id === transfer.by);
+    const employeeName = employee?.user?.name ?? EMPTY_VALUE_PLACEHOLDER;
+    const build = builds?.find(build => build.id === transfer.build?.id);
+    const buildName = build ? getOptionLabel(build) : EMPTY_VALUE_PLACEHOLDER;
+    const reference = records?.find(record => record.id === transfer.reference?.id);
+    const referenceName = reference ? getOptionLabel(reference) : EMPTY_VALUE_PLACEHOLDER;
+
     return [
       ...list,
       {
         ...(isLotTransferEdited ? editedLotTransfer : transfer),
+        employeeName,
+        buildName,
+        referenceName,
         [MODE_FIELD]: isLotTransferEdited ? Mode.edit : Mode.show,
       },
     ];
