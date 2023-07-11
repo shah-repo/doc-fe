@@ -5,7 +5,6 @@ import React, { ChangeEvent } from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, DocumentRevisionOption, EditableLotTransfer } from '../types';
 import { getOptionLabel } from '../utils';
 
@@ -13,7 +12,7 @@ interface Props extends CustomTemplateProps {
   options?: DocumentRevisionOption[]
 }
 
-export const BuildCellTemplate: React.FC<Props> = ({ dataItem, options, onClick }) => {
+export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -49,7 +48,7 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, options, onClick 
     );
   }
 
-  const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
+  const displayValue = dataItem[field] as string;
 
   return (
     <Box onClick={() => onClick?.({ dataItem })}>

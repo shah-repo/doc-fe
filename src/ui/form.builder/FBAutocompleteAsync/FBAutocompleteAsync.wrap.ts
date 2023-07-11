@@ -5,7 +5,6 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from '..';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
@@ -91,10 +90,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     useEffect(() => {
       if (shouldReloadOnInit || optionId) {
-        const status = formState?.workspaceState?.document?.displayStatus;
-        if (name?.includes('porec') && status === DocumentRevisionStatus.Released) {
-          return;
-        }
         autocompleteAsyncState?.load(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,9 +97,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     if (optionId) {
       (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
-      refresh = () => {
-        autocompleteAsyncState?.load(true);
-      };
+      refresh = () => autocompleteAsyncState?.load(true);
     }
 
     // Fetch missing selected autocomplete value
