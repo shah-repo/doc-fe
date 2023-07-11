@@ -21,21 +21,26 @@ export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
   return (
     <>
       <div ref={ref} className={props.rootClassName} />
-      <Popper
-        open
-        placement="bottom-end"
-        anchorEl={ref.current}
-        popperRef={popperFinalRef}
-        modifiers={{
-          preventOverflow: {
-            enabled: false,
-          },
-        }}
-      >
-        <Actions
-          scrollBehavior="smooth"
-          {...props} />
-      </Popper>
+      {ref.current && (
+        <Popper
+          open
+          placement="bottom-end"
+          anchorEl={ref.current}
+          popperRef={popperFinalRef}
+          modifiers={{
+            preventOverflow: {
+              enabled: false,
+            },
+            hide: {
+              enabled: false,
+            },
+          }}
+        >
+          <Actions
+            scrollBehavior="smooth"
+            {...props} />
+        </Popper>
+      )}
     </>
   );
 };

@@ -9,10 +9,10 @@ import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CompanyLocation, CustomTemplateProps, EditableLotTransfer } from '../types';
 
 interface Props extends CustomTemplateProps {
-  locations: CompanyLocation[]
+  options: CompanyLocation[]
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locations, onClick }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -22,7 +22,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locatio
   };
 
   const defaultValue = (isEditMode ? values[field] : dataItem[field]) as string;
-  const value = locations.find((loc) => loc.id === defaultValue);
+  const value = options.find((loc) => loc.id === defaultValue);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
@@ -34,7 +34,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, locatio
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect
-          options={locations.filter(loc => loc.active)}
+          options={options.filter(loc => loc.active)}
           getOptionLabel={(option: CompanyLocation) => option.name}
           value={value}
           onChange={handleChange}
