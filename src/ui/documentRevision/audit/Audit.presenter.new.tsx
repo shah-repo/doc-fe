@@ -378,12 +378,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (change.field.includes('input-context') && change.fbSchemaItem) {
           fbLabel = 'Note';
         }
-        const isArrrayEdited = change.type.includes('ARRAY_EDITED');
-        // const nextValue = JSON.parse(change?.nextValue);
-        // const previousValue = JSON.parse(change?.previousValue);
-        // const isDocIdChanged = isArrrayEdited && change.nextValue?.suffixNumber !== change.previousValue?.suffixNumber;
-        // const isDescriptionChanged = isArrrayEdited && get(change.nextValue, 'suffixName') !== get(change.previousValue, 'suffixName');
 
+        const isArrrayEdited = change.type.includes('ARRAY_EDITED');
         const isDocIdORDescriptionChanged = isArrrayEdited && change.nextValue !== change.previousValue;
 
         singleFields.push(
