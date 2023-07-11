@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -99,7 +99,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
+    const sortedAudit = orderBy(audits.filter(audit => audit.field !== 'displayStatus'), ['field']);
+    const statusInfo = audits.find(val => val.field === 'displayStatus');
+    if (statusInfo) {
+      sortedAudit.push(statusInfo);
+    }
+    sortedAudit.forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
       const isSmartRef = change.field.split('.').includes('smartRefs');
