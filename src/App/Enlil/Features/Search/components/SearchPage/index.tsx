@@ -209,6 +209,7 @@ const SearchPage: React.FC = () => {
           fullWidth
           fullHeight
           onRowClick={handleRowClick}
+          rowHeight={40}
         />
       </Box>
       <ExportListDialog

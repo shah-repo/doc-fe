@@ -35,25 +35,27 @@ export const Status = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <Grid
-        container
-        direction="row"
-        alignContent="flex-start"
-        justify="flex-start"
-      >
-        <Tooltip
-          data={fieldLabel}
-          childrenElement={
-            <Chip
-              size="small"
-              className={`${classes.chip} ${
-                classes[statusClassMapping[status]]
-              }`}
-              label={fieldLabel}
-            />
-          }
-        />
-      </Grid>
+      {fieldLabel && (
+        <Grid
+          container
+          direction="row"
+          alignContent="flex-start"
+          justify="flex-start"
+        >
+          <Tooltip
+            data={fieldLabel}
+            childrenElement={
+              <Chip
+                size="small"
+                className={`${classes.chip} ${
+                  classes[statusClassMapping[status]]
+                }`}
+                label={fieldLabel}
+              />
+            }
+          />
+        </Grid>
+      )}
     </td>
   );
 };
