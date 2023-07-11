@@ -15,10 +15,14 @@ export const useSearchQuery = (): string => {
   return query.get(SEARCH_QUERY_PARAMETER) ?? '';
 };
 
-export const searchPath = (query: string) => ({
-  pathname: GLOBAL_SEARCH_URL,
-  search: '?' + qs.stringify({ [SEARCH_QUERY_PARAMETER]: query }),
-});
+export const searchPath = (query: string) => {
+  const trimmedQuery = query.trim();
+
+  return {
+    pathname: GLOBAL_SEARCH_URL,
+    search: trimmedQuery && qs.stringify({ [SEARCH_QUERY_PARAMETER]: trimmedQuery }),
+  };
+};
 
 export const getRecentSearch = (): string[] => {
   try {

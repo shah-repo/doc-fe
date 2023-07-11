@@ -52,11 +52,12 @@ const SearchBar: React.FC = () => {
       return;
     }
 
-    if (value?.query) {
-      setLastRecentSearch(value.query);
+    const trimmedQuery = value?.query?.trim();
 
-      setSearchQuery(value.query);
-      history.push(searchPath(value.query));
+    if (trimmedQuery) {
+      setLastRecentSearch(trimmedQuery);
+      setSearchQuery(trimmedQuery);
+      history.push(searchPath(trimmedQuery));
       return;
     }
 
@@ -100,10 +101,14 @@ const SearchBar: React.FC = () => {
   );
 
   useEffect(() => {
-    if (searchQuery.length >= 3 && isFocused) {
-      requestSearch(searchQuery);
+    if (searchQuery.length >= 3) {
+      if (isFocused) {
+        requestSearch(searchQuery);
+      }
+    } else {
+      searchState.reset();
     }
-  }, [requestSearch, searchQuery, isFocused]);
+  }, [searchState, requestSearch, searchQuery, isFocused]);
 
   const searchData = searchState.searchApi.data;
 
@@ -152,8 +157,11 @@ const SearchBar: React.FC = () => {
     );
   };
 
+  const loading = searchState.searchApi.loading;
+
   return (
     <Autocomplete
+      loading={loading}
       disablePortal
       options={options}
       filterOptions={(options: Option[]) => options}

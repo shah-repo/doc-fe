@@ -30,4 +30,9 @@ export default class SearchState {
       method: 'get',
     });
   };
+
+  @action public reset = (): void => {
+    this.searchApi.data = undefined;
+    this.trainingApi.data = undefined;
+  };
 }

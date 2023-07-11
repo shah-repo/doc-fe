@@ -59,6 +59,8 @@ const SearchPage: React.FC = () => {
         sort: dataState.sort,
         facets: checkedFacets,
       });
+    } else {
+      searchState.reset();
     }
   }, [searchState, searchQuery, checkedFacets, dataState]);
 
