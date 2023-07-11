@@ -2,10 +2,10 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useFormControl } from '@material-ui/core';
 import formControlState from '@material-ui/core/FormControl/formControlState';
-import MuiAutocomplete from '@material-ui/lab/Autocomplete';
+import MuiAutocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import { omit } from 'lodash';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState, MutableRefObject } from 'react';
 import { TextField } from '..';
 import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './Autocomplete.styles';
@@ -57,6 +57,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   placeholder,
   inputProps,
   size,
+  filterOptions,
+  getOptionLabel,
   ChipProps = { size: 'small' },
   ...props
 }, ref: MutableRefObject<HTMLDivElement>) => {
@@ -71,6 +73,11 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
 
   const isSmall = size === 'small';
   const hasClearIcon = !props.disableClearable;
+
+  // TODO this is workaround for incorrect filtering, remove after upgrading MUI
+  const internalFilterOptions = useMemo(() => getOptionLabel ? createFilterOptions({
+    stringify: getOptionLabel,
+  }) : undefined, [getOptionLabel]);
 
   useEffect(() => {
     if (blurEvent && onBlur) {
@@ -87,7 +94,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       ref={ref}
       disabled={controlState.disabled}
       classes={{
-        ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall'),
+        ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall', 'withClearIcon', 'smallWithClearIcon'),
         ...classes,
         inputRoot: cx(
           baseClasses.inputRoot,
@@ -106,6 +113,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
         event.persist();
         setBlurEvent(event);
       }}
+      getOptionLabel={getOptionLabel}
+      filterOptions={filterOptions ?? internalFilterOptions}
       renderInput={(params) => (
         <AutocompleteControl
           {...params}
