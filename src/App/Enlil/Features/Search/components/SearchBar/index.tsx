@@ -88,7 +88,7 @@ const SearchBar: React.FC = () => {
   const requestSearch = useMemo(
     () => debounce(
       (searchText: string) => {
-        searchState.request({
+        searchState.fetchSearch({
           searchText,
           offset: 0,
           limit: MAX_TOP_RESULTS,
@@ -105,7 +105,7 @@ const SearchBar: React.FC = () => {
     }
   }, [requestSearch, searchQuery, isFocused]);
 
-  const searchData = searchState.data;
+  const searchData = searchState.searchApi.data;
 
   const options = useMemo(() => {
     if (searchQuery.length <= 3 && !searchData?.total) {

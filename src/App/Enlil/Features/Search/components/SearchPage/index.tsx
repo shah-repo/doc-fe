@@ -49,7 +49,7 @@ const SearchPage: React.FC = () => {
 
   useEffect(() => {
     if (searchQuery) {
-      searchState.request({
+      searchState.fetchSearch({
         searchText: searchQuery,
         offset: dataState.skip,
         limit: dataState.take,
@@ -59,7 +59,7 @@ const SearchPage: React.FC = () => {
     }
   }, [searchState, searchQuery, checkedFacets, dataState]);
 
-  const searchData = searchState.data;
+  const searchData = searchState.searchApi.data;
 
   // Store all possible facets for query from first response.
   useEffect(() => {

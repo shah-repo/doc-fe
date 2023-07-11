@@ -4,15 +4,13 @@ import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 import { PAGE_SIZE } from './helpers';
 import { SearchRequestBody, SearchRequestResponse } from './types';
 
-export default class SearchState extends FBRequest<SearchRequestResponse, SearchRequestBody> {
-  public constructor () {
-    super(FBEndpoint.GlobalSearch);
-  }
+export default class SearchState {
+  public searchApi = new FBRequest<SearchRequestResponse, SearchRequestBody>(FBEndpoint.GlobalSearch);
 
-  @action public request = (body: SearchRequestBody): void => {
+  @action public fetchSearch = (body: SearchRequestBody): void => {
     const { searchText, facets = [], limit = PAGE_SIZE, offset = 0, sort = [] } = body;
 
-    this.set({
+    this.searchApi.set({
       method: 'post',
       body: {
         searchText,
