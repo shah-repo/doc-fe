@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
@@ -16,7 +17,7 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
-import { BUILD_NAME, EMPLOYEE_NAME, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_NAME } from './constants';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
@@ -190,14 +191,16 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     const buildName = build ? getOptionLabel(build) : EMPTY_VALUE_PLACEHOLDER;
     const reference = records?.find(record => record.id === transfer.reference?.id);
     const referenceName = reference ? getOptionLabel(reference) : EMPTY_VALUE_PLACEHOLDER;
+    const formattedDate = getFormattedDateString(transfer.date, MomentFormats.MonthDateYearTwoDigit);
 
     return [
       ...list,
       {
         ...(isLotTransferEdited ? editedLotTransfer : transfer),
-        [EMPLOYEE_NAME]: employeeName,
-        [BUILD_NAME]: buildName,
-        [REFERENCE_NAME]: referenceName,
+        [EMPLOYEE_FIELD]: employeeName,
+        [BUILD_FIELD]: buildName,
+        [REFERENCE_FIELD]: referenceName,
+        [DATE_FIELD]: formattedDate,
         [MODE_FIELD]: isLotTransferEdited ? Mode.edit : Mode.show,
       },
     ];

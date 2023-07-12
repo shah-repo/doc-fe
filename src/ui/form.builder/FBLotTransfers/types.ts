@@ -3,7 +3,7 @@ import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import { BUILD_NAME, EMPLOYEE_NAME, REFERENCE_NAME } from './constants';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
 
 export interface CompanyLocation {
   id: string
@@ -54,9 +54,10 @@ export interface LotTransfer {
 
 export interface EditableLotTransfer extends LotTransfer {
   [MODE_FIELD]: Mode
-  [EMPLOYEE_NAME]: string
-  [BUILD_NAME]: string
-  [REFERENCE_NAME]: string
+  [EMPLOYEE_FIELD]: string
+  [BUILD_FIELD]: string
+  [REFERENCE_FIELD]: string
+  [DATE_FIELD]: string
 }
 export type DraftLotTransfer = Partial<EditableLotTransfer>;
 export type CalculableLotTransfer = Pick<LotTransfer, 'type' | 'quantity'>;
