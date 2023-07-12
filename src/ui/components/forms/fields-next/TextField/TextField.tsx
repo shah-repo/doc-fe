@@ -25,6 +25,7 @@ const TextField: React.FC<TextFieldProps> = React.forwardRef(({
         ...classes,
         input: cx(
           classes?.input,
+          customClasses.input,
           {
             [customClasses.inputSmall]: size === 'small',
             [customClasses.withStartAdornment]: startAdornment,
