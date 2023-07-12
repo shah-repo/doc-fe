@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
-import { MODE_FIELD } from '../../../constants';
+import { ADD_FIELD, MODE_FIELD } from '../../../constants';
 import { styles } from './styles';
 import { BOMActionsProps } from './types';
 
@@ -29,6 +29,7 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
     }
   }, [scrollBehavior]);
+  const isBOMAdd = dataItem[ADD_FIELD];
   if (!dataItem[MODE_FIELD]) {
     return null;
   }
@@ -39,7 +40,7 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
       id="row-actions"
       ref={ref}
     >
-      {onRestore && (
+      {!isBOMAdd && onRestore && (
         <Tooltip
           title={translate('common.restore')}
           placement="top"
@@ -96,7 +97,7 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
           </div>
         </Tooltip>
       )}
-      <Tooltip
+      {onDiscard && <Tooltip
         title={translate('common.discard')}
         placement="top"
         arrow
@@ -105,11 +106,11 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
           data-cy="action-discard"
           kind="action"
           size="small"
-          onClick={onDiscard}
+          onClick={() => onDiscard(dataItem)}
         >
           <FontAwesomeIcon icon={regular('xmark')} />
         </IconButton>
-      </Tooltip>
+      </Tooltip>}
       <Tooltip
         title={translate('common.save')}
         placement="top"

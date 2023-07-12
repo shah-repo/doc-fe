@@ -1,7 +1,7 @@
 import { MODE_FIELD } from './constants';
 
 export interface BOM {
-  id: number
+  id: string
   title: string
   displayRevision: string
   displayStatus: string
@@ -23,6 +23,7 @@ export interface BOM {
 
 export interface EditableBOM extends BOM {
   [MODE_FIELD]: boolean
+  isNew?: boolean
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM

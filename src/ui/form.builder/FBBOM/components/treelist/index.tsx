@@ -1,15 +1,19 @@
-import { Grid } from '@material-ui/core';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Divider, Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
-import { useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { isEmpty, map, omit, replace } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { MODE_FIELD } from '../../constants';
+import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
@@ -98,11 +102,36 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       discardBOM();
     },
   });
-  // const createBOM = () => setEditedBOM({
-  //   id: uuidv4(),
-  //   date: new Date().toISOString(),
-  //   [MODE_FIELD]: Mode.add,
-  // });
+
+  const createNewItem = () => {
+    return {
+      id: uuidv4(),
+      displayRevision: '',
+      displayStatus: '',
+      title: '',
+      docId: '',
+      cost: '',
+      leadTime: '',
+      primaryAttachments: '',
+      attachments: false,
+      issues: false,
+      vendor: false,
+      comments: '',
+      [MODE_FIELD]: true,
+      [ADD_FIELD]: true,
+    };
+  };
+
+  const addBOM = () => {
+    const newBOM: EditableBOM = createNewItem();
+    state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
+    state.data[0].employees?.push(newBOM);
+    setState({
+      ...state,
+      data: [...state.data],
+      inEdit: [newBOM],
+    });
+  };
 
   const editBOM = ({ dataItem }: BOMEditEvent) => {
     setState({
@@ -111,7 +140,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     });
   };
 
-  const discardBOM = () => {
+  const discardBOM = (dataItem?) => {
+    console.log('dataItem ::', dataItem);
+    if (dataItem && dataItem[ADD_FIELD]) {
+      state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
+    }
     setState({
       ...state,
       inEdit: [],
@@ -246,40 +279,76 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
-  return (<Grid container>
-    <Grid item xs={12}>
-      <TreeList
-        {...state.dataState}
-        style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
-        tableProps={{ style: { width: '2023px' } }}
-        editField={MODE_FIELD}
-        expandField={EXPAND_FIELD}
-        subItemsField={SUB_ITEMS_FIELD}
-        onExpandChange={onExpandChange}
-        rowRender={rowRender}
-        data={processData()}
-        onDataStateChange={handleDataStateChange}
-        columns={getColumns()}
-        columnMenu={(props) => (
-          <CustomColumnMenu
-            {...props}
-            columns={getColumns()}
-            {...{
-              onLock,
-              onColumnShowHide,
-            }}
-          />
-        )}
-        onRowClick={editBOM}
-        onColumnReorder={onColumnReorder}
-        resizable={TREELIST_CONFIG.resizable}
-        reorderable={TREELIST_CONFIG.reorderable}
-        sortable={TREELIST_CONFIG.sortable}
-        toolbar={renderToolbar}
-        cellRender={cellRender}
-      />
+  return (<>
+    <Grid container alignItems="center" justify="space-between" style={{ padding: 0 }}>
+      <Grid item className={classes.header}>
+        {translate('tabId.bom')}
+      </Grid>
+      <Grid item>
+        <Button
+          disableRipple
+          variant="text"
+          className={classes.addItem}
+          startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+          onClick={addBOM}
+        >
+          {translate('bom.header.add.item')}
+        </Button>
+      </Grid>
     </Grid>
-  </Grid>);
+    <Divider />
+    <Grid item className={classes.tableContainer}>
+      <FormikProvider value={formik}>
+        <Grid container>
+          <Grid item xs={12}>
+            <TreeList
+              {...state.dataState}
+              style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
+              tableProps={{ style: { width: '2023px' } }}
+              editField={MODE_FIELD}
+              expandField={EXPAND_FIELD}
+              subItemsField={SUB_ITEMS_FIELD}
+              onExpandChange={onExpandChange}
+              rowRender={rowRender}
+              data={processData()}
+              onDataStateChange={handleDataStateChange}
+              columns={getColumns()}
+              columnMenu={(props) => (
+                <CustomColumnMenu
+                  {...props}
+                  columns={getColumns()}
+                  {...{
+                    onLock,
+                    onColumnShowHide,
+                  }}
+                />
+              )}
+              onRowClick={editBOM}
+              onColumnReorder={onColumnReorder}
+              resizable={TREELIST_CONFIG.resizable}
+              reorderable={TREELIST_CONFIG.reorderable}
+              sortable={TREELIST_CONFIG.sortable}
+              toolbar={renderToolbar}
+              cellRender={cellRender}
+            />
+          </Grid>
+        </Grid>
+      </FormikProvider>
+    </Grid>
+    <Grid item>
+      <AddButton
+        fullWidth
+        attached
+        kind="add"
+        className={classes.bottomAddButtom}
+        data-cy="fb-control-btn"
+        onClick={addBOM}
+      >
+        {translate('form.builder.add.item')}
+      </AddButton>
+    </Grid>
+  </>
+  );
 };
 
 export default withThemeNext(React.forwardRef(FBBOMTreeList));
