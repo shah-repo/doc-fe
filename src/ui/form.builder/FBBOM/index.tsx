@@ -52,7 +52,7 @@ const FBBOM: React.FunctionComponent = () => {
           className={classes.bottomAddButtom}
           data-cy="fb-control-btn"
         >
-          {translate('form.builder.add.line.item')}
+          {translate('form.builder.add.item')}
         </AddButton>
       </Grid>
     </>);

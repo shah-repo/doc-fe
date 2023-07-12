@@ -32,8 +32,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     inEdit: [],
   });
   const actionsRef = React.useRef<PopperJs>(null);
-  const [editedBOM, setEditedBOM] = React.useState<EditableBOM | undefined>();
-  console.log('editedBOM :', editedBOM);
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
@@ -119,17 +117,24 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   };
 
   const discardBOM = () => {
-    setEditedBOM(undefined);
+    setState({
+      ...state,
+      inEdit: [],
+    });
     formik?.resetForm();
   };
 
   const removeBOM = () => {
-    if (!setEditedBOM) {
-      return;
-    }
     // Delete API Here
-    // deleteBOM?.(setEditedBOM as BOM);
     discardBOM();
+  };
+
+  const onRestore = () => {
+    // TODO
+  };
+
+  const onReorder = () => {
+    // TODO
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
@@ -158,6 +163,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
           onDelete={removeBOM}
+          onRestore={onRestore}
+          onReorder={onReorder}
           // isDeleteDisabled={false} // override later
           rootClassName={classes.popperHolder}
           popperRef={actionsRef}
