@@ -4,7 +4,6 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import PopperJs from 'popper.js';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
@@ -39,7 +38,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const classes = useStyles();
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<DraftLotTransfer>();
   const { initialQuantity, onHandQuantityUnit, predictOnHandQuantity } = useOnHandQuantity();
-  const actionsRef = React.useRef<PopperJs>(null);
   const isActive = !disabled;
 
   const formik = useFormik<DraftLotTransfer>({
@@ -122,10 +120,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
     discardLotTransfer();
   };
 
-  const handleResize = () => {
-    actionsRef.current?.scheduleUpdate();
-  };
-
   const handleRowClick = isActive && !editedLotTransfer ? editLotTransfer : undefined;
 
   const schema = buildSchema({
@@ -167,7 +161,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           deleteTooltipText={deleteTootltipText}
           isDeleteDisabled={shouldDisableDelete}
           rootClassName={classes.popperHolder}
-          popperRef={actionsRef}
         />
       </td>
     );
@@ -238,7 +231,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
           rowRender={rowRender}
           onRowClick={handleRowClick}
           className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-          onResize={handleResize}
         />
       </FormikProvider>
       {isActive && (
