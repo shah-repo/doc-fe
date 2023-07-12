@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { useFormik } from 'formik';
 import { isEmpty, map, omit, replace } from 'lodash';
 import { useObserver } from 'mobx-react';
-import PopperJs from 'popper.js';
 import * as React from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
@@ -31,7 +30,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     expanded: [1, 3],
     inEdit: [],
   });
-  const actionsRef = React.useRef<PopperJs>(null);
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
@@ -111,9 +109,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       ...state,
       inEdit: [extendDataItem(dataItem, SUB_ITEMS_FIELD)],
     });
-    setTimeout(() => {
-    actionsRef?.current?.scheduleUpdate();
-    }, 100);
   };
 
   const discardBOM = () => {
@@ -167,7 +162,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
           onReorder={onReorder}
           // isDeleteDisabled={false} // override later
           rootClassName={classes.popperHolder}
-          popperRef={actionsRef}
         />
       </td>
     );
@@ -249,10 +243,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     }
   }, [columns]);
 
-  const handleResize = () => {
-    actionsRef.current?.scheduleUpdate();
-  };
-
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -287,7 +277,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
         sortable={TREELIST_CONFIG.sortable}
         toolbar={renderToolbar}
         cellRender={cellRender}
-        onColumnResize={handleResize}
       />
     </Grid>
   </Grid>);

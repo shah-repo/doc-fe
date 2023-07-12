@@ -21,6 +21,9 @@ const FBBOM: React.FunctionComponent = () => {
       console.log('bomToSave ::', bomToSave);
     },
   });
+  const AddBom = () => {
+    console.log('Add BOM');
+  };
 
   return (
     <>
@@ -33,6 +36,7 @@ const FBBOM: React.FunctionComponent = () => {
             disableRipple
             className={classes.addItem}
             startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+            onClick={AddBom}
           >
             {translate('bom.header.add.item')}
           </Button>
@@ -51,6 +55,7 @@ const FBBOM: React.FunctionComponent = () => {
           kind="add"
           className={classes.bottomAddButtom}
           data-cy="fb-control-btn"
+          onClick={AddBom}
         >
           {translate('form.builder.add.item')}
         </AddButton>
