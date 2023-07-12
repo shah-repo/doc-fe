@@ -1,9 +1,7 @@
 import {
   Button,
   Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
+  DialogContent, Divider,
   FormControlLabel,
   Grid,
   Switch,
@@ -39,16 +37,16 @@ const UserSettingsContainer: React.FC<SettingProps> = ({
   };
   return (
     <Dialog classes={{ paper: classes.dialogPaper }} open={showUserProfile}>
-      <DialogTitle id="user-settings-dialog-title">
-        <h3>{translate('header.menu.my.settings')}</h3>
-      </DialogTitle>
       <DialogContent>
         <Grid container>
-          <Divider />
-          <Grid item>
-            <h4>{translate('settings.bom')}</h4>
+          <Grid item xs={12} >
+            <h4 className={classes.header}>{translate('header.menu.my.settings')}:</h4>
           </Grid>
-          <Grid item>
+          <Divider />
+          <Grid item className={classes.subheader}>
+            <span className={classes.header}>{translate('settings.bom')}</span>
+          </Grid>
+          <Grid item xs={12}>
             <Formik
               initialValues={initialValues}
               onSubmit={onSubmit}
@@ -62,6 +60,7 @@ const UserSettingsContainer: React.FC<SettingProps> = ({
                         <Switch {...field} checked={field.value} color="primary" />
                       }
                       label={translate('settings.bom.attribute.changes')}
+                      className={classes.field}
                     />
                   )}
                 </Field>
@@ -73,6 +72,7 @@ const UserSettingsContainer: React.FC<SettingProps> = ({
                         <Switch {...field} checked={field.value} color="primary" />
                       }
                       label={translate('settings.bom.line.changes')}
+                      className={classes.field}
                     />
                   )}
                 </Field>
@@ -86,6 +86,7 @@ const UserSettingsContainer: React.FC<SettingProps> = ({
                       label={translate(
                         'settings.bom.approved.supplier.list.changes',
                       )}
+                      className={classes.field}
                     />
                   )}
                 </Field>
@@ -97,6 +98,7 @@ const UserSettingsContainer: React.FC<SettingProps> = ({
                         <Switch {...field} checked={field.value} color="primary" />
                       }
                       label={translate('settings.bom.change.attachment.changes')}
+                      className={classes.field}
                     />
                   )}
                 </Field>
@@ -108,22 +110,30 @@ const UserSettingsContainer: React.FC<SettingProps> = ({
                         <Switch {...field} checked={field.value} color="primary" />
                       }
                       label={translate('settings.bom.change.references')}
+                      className={classes.field}
                     />
                   )}
                 </Field>
                 <br />
-                <Grid container alignItems="center" justify="flex-end">
-                  <Button autoFocus onClick={closeUserProfile} color="secondary">
-                    {translate('common.cancel')}
-                  </Button>
-                  <Button
-                    type="submit"
-                    autoFocus
-                    onClick={closeUserProfile}
-                    color="primary"
-                  >
-                    {translate('common.save')}
-                  </Button>
+                <Grid container xs={12} alignItems="center" justify="flex-end">
+                  <Grid item>
+                    <Button
+                      disableRipple
+                      variant="contained"
+                      onClick={closeUserProfile}
+                    >
+                      {translate('common.cancel')}
+                    </Button>
+                    <Button
+                      disableRipple
+                      type="submit"
+                      variant="contained"
+                      color="secondary"
+                      onClick={closeUserProfile}
+                    >
+                      {translate('common.save')}
+                    </Button>
+                  </Grid>
                 </Grid>
               </Form>
             </Formik>

@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import ThemeColors from '../../../../../layout/theme-next/colors';
 import Colors from '../../../../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme) => ({
@@ -54,5 +55,45 @@ export const styles = makeStyles((theme) => ({
   cellborderBottom: {
     borderBottom: `1px solid ${Colors.alice_blue} !important`,
     borderLeft: '0 !important',
+  },
+  actionsCell: {
+    width: 0,
+    overflow: 'visible !important',
+    position: 'sticky',
+    right: 0,
+    padding: '0 !important',
+  },
+  updatingRow: {
+    position: 'relative',
+    zIndex: 3,
+    outline: `1px solid ${ThemeColors.primaryLight}`,
+    outlineOffset: -1,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: theme.spacing(0.75, 0.75),
+  },
+  actions: {
+    gap: theme.spacing(1.25, 1.25),
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: theme.spacing(1.25),
+    backgroundColor: ThemeColors.primaryLight,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    position: 'absolute',
+    zIndex: 3,
+    right: 0,
+    top: '100%',
+  },
+  deleteIcon: {
+    color: ThemeColors.error,
+  },
+  replaceIcon: {
+    color: ThemeColors.error,
+  },
+  restoreIcon: {
+    color: ThemeColors.error,
   },
 }));

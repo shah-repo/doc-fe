@@ -2,20 +2,25 @@ import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
-import { isEmpty, map, replace } from 'lodash';
+import { useFormik } from 'formik';
+import { isEmpty, map, omit, replace } from 'lodash';
 import { useObserver } from 'mobx-react';
+import PopperJs from 'popper.js';
 import * as React from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
-import { Colors, withThemeNext } from '../../../../layout/theme-next';
+import { withThemeNext } from '../../../../layout/theme-next';
+import { MODE_FIELD } from '../../constants';
+import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import bom from './data';
-import { BOM, BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
+import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
 
-const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
+const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   const classes = useStyles();
   const [state, setState] = React.useState<BOMState>({
     data: [...bom],
@@ -24,7 +29,11 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
       filter: [],
     },
     expanded: [1, 3],
+    inEdit: [],
   });
+  const actionsRef = React.useRef<PopperJs>(null);
+  const [editedBOM, setEditedBOM] = React.useState<EditableBOM | undefined>();
+  console.log('editedBOM :', editedBOM);
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
@@ -45,10 +54,11 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
   };
 
   const addExpandField = (dataTree: BOM[]) => {
-    const expanded: number[] = state.expanded;
+    const { expanded, inEdit } = state;
     return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
       extendDataItem(item, SUB_ITEMS_FIELD, {
         [EXPAND_FIELD]: expanded.includes(item.id),
+        [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
       }),
     );
   };
@@ -78,18 +88,91 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     setColumns(dataColumns);
   };
 
+  const formik = useFormik<Partial<EditableBOM>>({
+    initialValues: {},
+    // validate: (values) => {
+    //   const errors: Record<string, string> = {};
+    //   return errors;
+    // },
+    onSubmit: (values) => {
+      const updatedBOM = omit(values, [MODE_FIELD]);
+      // Save API
+      // updateLotTransfer?.(lotTransferToSave as BOM);
+      console.log('updatedBOM :', updatedBOM);
+      discardBOM();
+    },
+  });
+  // const createBOM = () => setEditedBOM({
+  //   id: uuidv4(),
+  //   date: new Date().toISOString(),
+  //   [MODE_FIELD]: Mode.add,
+  // });
+
+  const editBOM = ({ dataItem }: BOMEditEvent) => {
+    setState({
+      ...state,
+      inEdit: [extendDataItem(dataItem, SUB_ITEMS_FIELD)],
+    });
+    setTimeout(() => {
+    actionsRef?.current?.scheduleUpdate();
+    }, 100);
+  };
+
+  const discardBOM = () => {
+    setEditedBOM(undefined);
+    formik?.resetForm();
+  };
+
+  const removeBOM = () => {
+    if (!setEditedBOM) {
+      return;
+    }
+    // Delete API Here
+    // deleteBOM?.(setEditedBOM as BOM);
+    discardBOM();
+  };
+
   const rowRender = (row, props: CustomTreeListRowProps) => {
-    const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
+    const item = props.dataItem as EditableBOM;
+    // const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
+    // classes.updatingRow
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const modifiedProps = { ...row?.props, className: replace(row?.props?.className, 'k-alt', '') };
-    return React.cloneElement({ ...row, props: modifiedProps }, {
-      style: {
-        backgroundColor: color,
+    const modifiedProps = {
+      className: cx(replace(row?.props?.className, 'k-alt', ''),
+        {
+          [classes.WhiteBg]: isEmpty(props.dataItem.employees),
+          [classes.grayBg]: !isEmpty(props.dataItem.employees),
+        }),
+    };
+    if (!item[MODE_FIELD]) {
+      return React.cloneElement(row, modifiedProps);
+    }
+
+    const actions = (
+      <td className={classes.actionsCell}>
+        <ActionsCell
+          dataItem={item}
+          onConfirm={formik?.submitForm}
+          onDiscard={discardBOM}
+          onDelete={removeBOM}
+          // isDeleteDisabled={false} // override later
+          rootClassName={classes.popperHolder}
+          popperRef={actionsRef}
+        />
+      </td>
+    );
+
+    console.log('[row.props.children ::', row.props.children);
+    return React.cloneElement(row,
+      {
+        ...modifiedProps,
+        className: cx(row.props.className, classes.updatingRow),
       },
-    });
+      [row.props.children, actions],
+    );
   };
 
   const getAllItemIds = (items: BOM[]) => {
@@ -160,6 +243,10 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
     }
   }, [columns]);
 
+  const handleResize = () => {
+    actionsRef.current?.scheduleUpdate();
+  };
+
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -169,6 +256,7 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
         {...state.dataState}
         style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
         tableProps={{ style: { width: '2100px' } }}
+        editField={MODE_FIELD}
         expandField={EXPAND_FIELD}
         subItemsField={SUB_ITEMS_FIELD}
         onExpandChange={onExpandChange}
@@ -186,12 +274,14 @@ const FBBOMTreeList: React.FunctionComponent<FBBOMProps> = () => {
             }}
           />
         )}
+        onRowClick={editBOM}
         onColumnReorder={onColumnReorder}
         resizable={TREELIST_CONFIG.resizable}
         reorderable={TREELIST_CONFIG.reorderable}
         sortable={TREELIST_CONFIG.sortable}
         toolbar={renderToolbar}
         cellRender={cellRender}
+        onColumnResize={handleResize}
       />
     </Grid>
   </Grid>);

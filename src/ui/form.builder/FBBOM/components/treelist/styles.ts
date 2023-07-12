@@ -641,4 +641,31 @@ export default makeStyles((theme) => ({
     borderTopRightRadius: 0,
     marginTop: theme.spacing(-0.875),
   },
+  updatingRow: {
+    position: 'relative',
+    zIndex: 2,
+    outline: `1px solid ${Colors.primaryLight}`,
+    outlineOffset: -1,
+    '& td': {
+      whiteSpace: 'normal !important' as 'normal',
+    },
+  },
+  actionsCell: {
+    overflow: 'visible !important',
+    position: 'sticky',
+    right: 0,
+    width: '0 !important',
+    padding: '0 !important',
+    verticalAlign: 'bottom !important',
+    borderLeft: `1px solid ${Colors.primaryLight} !important`,
+  },
+  popperHolder: {
+    height: '100%',
+  },
+  WhiteBg: {
+    backgroundColor: Colors.white,
+  },
+  grayBg: {
+    backgroundColor: Colors.gray,
+  },
 }));

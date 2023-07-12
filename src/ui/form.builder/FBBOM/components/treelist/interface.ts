@@ -1,5 +1,6 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import { BOM } from '../../interface';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FBBOMProps {}
@@ -8,26 +9,7 @@ export interface BOMState {
   data: BOM[]
   dataState: DataState
   expanded: number[]
-}
-export interface BOM {
-  id: number
-  title: string
-  displayRevision: string
-  displayStatus: string
-  cost: string
-  docId: string
-  leadTime?: string
-  quantity?: string
-  unit?: string
-  refDesignator?: string
-  primaryAttachments?: string
-  attachments?: boolean
-  vendor?: boolean
-  issues?: boolean
-  comments?: string
-  employees?: BOM[]
-  inEdit?: boolean
-  isNew?: boolean
+  inEdit: Array<{ id: number, isNew: boolean }>
 }
 
 export interface DataState {

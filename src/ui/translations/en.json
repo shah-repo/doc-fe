@@ -241,6 +241,8 @@
   "common.update": "Update",
   "common.submit": "Submit",
   "common.delete": "Delete",
+  "common.restore": "Restore",
+  "common.reorder": "Reorder",
   "common.assigned.to": "Assigned To",
   "common.due.date": "Due date",
   "common.name": "Name",

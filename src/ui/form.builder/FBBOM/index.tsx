@@ -1,14 +1,27 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Divider, Grid } from '@material-ui/core';
+import { FormikProvider, useFormik } from 'formik';
+import { omit } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
 import { Button as AddButton } from '../../components/forms/fields-next';
 import FBBOMTreeList from './components/treelist';
 import useStyles from './components/treelist/styles';
+import { MODE_FIELD } from './constants';
+import { EditableBOM } from './interface';
 
 const FBBOM: React.FunctionComponent = () => {
   const classes = useStyles();
+
+  const formik = useFormik<Partial<EditableBOM>>({
+    initialValues: {},
+    onSubmit: (values) => {
+      const bomToSave = omit(values, [MODE_FIELD]);
+      console.log('bomToSave ::', bomToSave);
+    },
+  });
+
   return (
     <>
       <Grid container alignItems="center" justify="space-between" style={{ padding: 0 }}>
@@ -27,7 +40,9 @@ const FBBOM: React.FunctionComponent = () => {
       </Grid>
       <Divider />
       <Grid item className={classes.tableContainer}>
-        <FBBOMTreeList />
+        <FormikProvider value={formik}>
+          <FBBOMTreeList />
+        </FormikProvider>
       </Grid>
       <Grid item>
         <AddButton
