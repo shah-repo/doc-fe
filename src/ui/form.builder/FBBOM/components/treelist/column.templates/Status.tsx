@@ -12,6 +12,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   colSpan,
   style,
   className,
+  ...otherProps
 }) => {
   const classes = styles();
   const status = dataItem.displayStatus;
@@ -21,7 +22,12 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
       colSpan={colSpan}
       style={style}
       role="gridcell"
-      className={cx(className, classes.cellborderBottom)}
+      className={cx('k-table-td', className, classes.cellborderBottom)}
+      {...{
+        'aria-colindex': otherProps.ariaColumnIndex,
+        'data-grid-col-index': otherProps.colIndex,
+        'aria-expanded': otherProps.expanded,
+      }}
     >
       <Grid
         container

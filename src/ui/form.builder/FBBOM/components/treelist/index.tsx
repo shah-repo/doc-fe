@@ -172,7 +172,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       </td>
     );
 
-    console.log('[row.props.children ::', row.props.children);
     return React.cloneElement(row,
       {
         ...modifiedProps,
@@ -262,7 +261,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       <TreeList
         {...state.dataState}
         style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
-        tableProps={{ style: { width: '2100px' } }}
+        tableProps={{ style: { width: '2023px' } }}
         editField={MODE_FIELD}
         expandField={EXPAND_FIELD}
         subItemsField={SUB_ITEMS_FIELD}

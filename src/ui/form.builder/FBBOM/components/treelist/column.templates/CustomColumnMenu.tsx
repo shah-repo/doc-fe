@@ -20,12 +20,14 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
   const itemsRender = (rendering: Array<React.ReactElement<HTMLDivElement, string | React.JSXElementConstructor<any>> | null>, colProps: { closeMenu: () => void, field?: string | undefined}) => {
     const items: Array<React.ReactElement<HTMLDivElement, string | React.JSXElementConstructor<any>> | null> = [...rendering];
     items.pop();
-    items.push((<ColumnMenuItem
-      {...props}
-      iconClass="k-i-preview k-i-eye k-grid-menu-icon"
-      onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
-      title={getTranslatedText(TranslatedText[DisplayText.HIDE_COLUMN])}
-    />), (
+    !column?.disableShowOrHideSelection && items.push((
+      <ColumnMenuItem
+        {...props}
+        iconClass="k-i-preview k-i-eye k-grid-menu-icon"
+        onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
+        title={getTranslatedText(TranslatedText[DisplayText.HIDE_COLUMN])}
+      />));
+    items.push((
       <ColumnMenuItem
         {...props}
         iconClass={`k-icon k-grid-menu-icon ${column?.locked ? 'k-i-unlock' : 'k-i-lock'}`}
