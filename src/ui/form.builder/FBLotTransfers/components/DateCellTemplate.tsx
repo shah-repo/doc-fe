@@ -12,8 +12,6 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem[field] as React.ReactElement;
 
-  console.log(value);
-
   const handleChange = (date: MaterialUiPickersDate) => {
     setFieldValue('date', date?.toISOString());
   };
