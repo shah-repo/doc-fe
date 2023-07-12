@@ -1221,6 +1221,7 @@
   "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!",
   "suppliersurvey.submit.button": "Survey is filled. Thank you for the response!",
   "user.management.profile": "User Profile",
+  "user.management.profile.companyStage.alert": "Are you sure you want to update your company setting to have {revStage} level revision stages? This action cannot be undone.",
   "user.management.last.training": "Last Training",
   "user.management.add.to.groups": "Add to groups",
   "user.management.add.employee": "Add Employee",
