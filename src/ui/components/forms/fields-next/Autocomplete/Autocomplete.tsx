@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useFormControl } from '@material-ui/core';
+import { Popper, PopperProps, useFormControl } from '@material-ui/core';
 import formControlState from '@material-ui/core/FormControl/formControlState';
 import MuiAutocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
@@ -48,6 +48,20 @@ const AutocompleteControl: React.FC<AutocompleteInputProps> = ({
     size={size}
     {...InputProps}
   />
+);
+
+// TODO remove after upgrading MUI
+const AutocompletePopper: React.FC<PopperProps> = ({ children, ...props }) => (
+  <Popper
+    {...props}
+    modifiers={{
+      keepTogether: {
+        enabled: true,
+      },
+    }}
+  >
+    {children}
+  </Popper>
 );
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
@@ -114,6 +128,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       }}
       getOptionLabel={getOptionLabel}
       filterOptions={filterOptions ?? internalFilterOptions}
+      PopperComponent={(props) => <AutocompletePopper {...props} />}
       renderInput={(params) => (
         <AutocompleteControl
           {...params}
