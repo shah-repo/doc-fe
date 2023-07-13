@@ -31,7 +31,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       sort: [],
       filter: [],
     },
-    expanded: [1, 3],
+    expanded: [],
     inEdit: [],
   });
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
@@ -129,6 +129,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     setState({
       ...state,
       data: [...state.data],
+      expanded: [state.data[0].id],
       inEdit: [newBOM],
     });
   };
@@ -141,7 +142,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   };
 
   const discardBOM = (dataItem?) => {
-    console.log('dataItem ::', dataItem);
     if (dataItem && dataItem[ADD_FIELD]) {
       state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
     }
@@ -167,11 +167,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
-    // const color = isEmpty(props.dataItem.employees) ? Colors.white : Colors.gray;
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
-    // classes.updatingRow
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''),
@@ -210,7 +208,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
 
   const getAllItemIds = (items: BOM[]) => {
     if (!items) return [];
-    const ids: number[] = [];
+    const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
       if (item.employees) {

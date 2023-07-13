@@ -8,7 +8,7 @@ export interface FBBOMProps {}
 export interface BOMState {
   data: BOM[]
   dataState: DataState
-  expanded: number[]
+  expanded: string[]
   inEdit: Array<{ id: number, isNew: boolean }>
 }
 

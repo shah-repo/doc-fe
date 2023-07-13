@@ -42,9 +42,9 @@ export const styles = makeStyles((theme) => ({
   deselectedDot: {
     color: Colors.dark_gray2,
   },
-  nameCell: (props) => ({
+  nameCell: ({ isEditMode }) => ({
     'vertical-align': 'middle',
-    marginLeft: theme.spacing(1.875),
+    marginLeft: isEditMode ? 0 : theme.spacing(1.875),
   }),
   titleInfoCell: (props) => ({
     fontWeight: props?.hasChildren ? 600 : 400,
@@ -95,5 +95,13 @@ export const styles = makeStyles((theme) => ({
   },
   restoreIcon: {
     color: ThemeColors.error,
+  },
+  tooltipContent: {
+    maxWidth: 425,
+    maxHeight: 200,
+    overflow: 'auto',
+    whiteSpace: 'pre-line',
+    paddingRight: theme.spacing(0.5),
+    marginRight: theme.spacing(-0.5),
   },
 }));

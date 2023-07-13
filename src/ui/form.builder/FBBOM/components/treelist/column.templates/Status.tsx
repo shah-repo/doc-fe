@@ -1,8 +1,11 @@
 import { Chip, Grid } from '@material-ui/core';
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
+import { ADD_FIELD, MODE_FIELD } from '../../../constants';
+import { EditableBOM } from '../../../interface';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -14,8 +17,10 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   className,
   ...otherProps
 }) => {
-  const classes = styles();
-  const status = dataItem.displayStatus;
+  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const classes = styles({ isEditMode });
+  const { values } = useFormikContext<EditableBOM>();
+  const status = isEditMode ? values.displayStatus : dataItem[field];
 
   return (
     <td
@@ -29,7 +34,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
         'aria-expanded': otherProps.expanded,
       }}
     >
-      <Grid
+      {status && <Grid
         container
         direction="row"
         alignContent="flex-start"
@@ -47,7 +52,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
             />
           }
         />
-      </Grid>
+      </Grid>}
     </td>
   );
 };

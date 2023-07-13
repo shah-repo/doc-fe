@@ -1,10 +1,16 @@
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { BooleanCell } from './column.templates/Boolean';
-import { Comments } from './column.templates/Comments';
+import CommentsCell from './column.templates/CommentsCell';
+import CostCell from './column.templates/CostCell';
+import LeadTimeCell from './column.templates/LeadTimeCell';
 import NameCell from './column.templates/NameCell';
 import { PrimaryAttachmentsCell } from './column.templates/PrimaryAttachments';
+import QuantityCell from './column.templates/QuantityCell';
+import RefDesignatorCell from './column.templates/RefDesignatorCell';
+import RevisionCell from './column.templates/RevisionCell';
 import { Status } from './column.templates/Status';
-import TextInfoCell from './column.templates/TextInfoCell';
+import TitleCell from './column.templates/TitleCell';
+import UnitCell from './column.templates/UnitCell';
 import { Attachments } from './header.templates/Attachments';
 import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
@@ -42,7 +48,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '200px',
     filter: TreeListTextFilter,
     hidden: false,
-    cell: TextInfoCell,
+    cell: TitleCell,
   },
   {
     field: 'displayRevision',
@@ -50,7 +56,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '106px',
     filter: TreeListTextFilter,
     hidden: false,
-    cell: TextInfoCell,
+    cell: RevisionCell,
   },
   {
     field: 'displayStatus',
@@ -66,6 +72,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '120px',
     filter: TreeListTextFilter,
     hidden: false,
+    cell: CostCell,
   },
   {
     field: 'leadTime',
@@ -74,6 +81,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     hidden: false,
     showMenu: false,
+    cell: LeadTimeCell,
   },
   {
     field: 'quantity',
@@ -81,6 +89,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '154px',
     filter: TreeListTextFilter,
     hidden: false,
+    cell: QuantityCell,
   },
   {
     field: 'unit',
@@ -88,6 +97,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '113px',
     filter: TreeListTextFilter,
     hidden: false,
+    cell: UnitCell,
   },
   {
     field: 'refDesignator',
@@ -95,6 +105,16 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '207px',
     filter: TreeListTextFilter,
     hidden: false,
+    cell: RefDesignatorCell,
+  },
+  {
+    field: 'comments',
+    title: 'COMMENTS',
+    width: '278px',
+    filter: TreeListTextFilter,
+    hidden: false,
+    sortable: false,
+    cell: CommentsCell,
   },
   {
     field: 'primaryAttachments',
@@ -133,15 +153,6 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: BooleanCell,
     filter: TreeListTextFilter,
     headerCell: Vendors,
-    hidden: false,
-    sortable: false,
-  },
-  {
-    field: 'comments',
-    title: 'COMMENTS',
-    width: '278px',
-    cell: Comments,
-    filter: TreeListTextFilter,
     hidden: false,
     sortable: false,
   },

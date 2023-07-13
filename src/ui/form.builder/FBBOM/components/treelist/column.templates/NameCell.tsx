@@ -1,18 +1,97 @@
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
-import React, { ComponentType } from 'react';
+import { useFormikContext } from 'formik';
+import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
 import { ReactComponent as CollapseIcon } from '../../../../../../assets/images/collapse_tree.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../../assets/images/expand_tree.svg';
+import { translate } from '../../../../../../common/intl';
+import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
+import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
+import { ADD_FIELD, MODE_FIELD } from '../../../constants';
+import { EditableBOM } from '../../../interface';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
 const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
-  const classes = styles({ hasChildren });
+  const { colSpan, id, style, dataItem, field } = props;
+  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const classes = styles({ hasChildren, isEditMode });
+  const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const onClick = (ev) => {
-    props.onExpandChange(ev, props.dataItem, props.level);
+    props.onExpandChange(ev, dataItem, props.level);
   };
-  const { colSpan, id, style } = props;
+
+  const [parts, setParts] = useState<DocumentRevision[]>([]);
+
+  const fetchAvailablePartsAsync = useAsync({
+    onSuccess: (data: DocumentRevision[] = []) => {
+      console.log('parts ::', data);
+      setParts(data.filter(part => part.status === DocumentRevisionStatus.Released));
+    },
+  });
+
+  useEffect(() => {
+    fetchAvailablePartsAsync.start(
+      fetchAvailablePartsAction,
+      fetchAvailablePartsAsync,
+    );
+  }, []);
+  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
+
+  const renderOptions = () => {
+    return parts.map((part) => ({
+      label: renderPartLabel(part),
+      value: part.id,
+    }));
+  };
+
+  const renderPartLabel = (part: DocumentRevision) => {
+    return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
+  };
+
+  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    // Trigger API Here
+    field && setFieldValue(field, value?.value);
+    // settings up other fields
+    // dataItem.displayRevision = '1';
+    dataItem.displayStatus = 'Released';
+    setFieldValue('displayRevision', '1');
+    setFieldValue('displayStatus', 'Released');
+    setFieldValue('title', 'Part Document');
+    setFieldValue('cost', '400');
+    setFieldValue('leadTime', '2');
+    setFieldValue('quantity', '100');
+    setFieldValue('unit', '600');
+    setFieldValue('refDesignator', 'Desig');
+    setFieldValue('comments', 'Sample Comments');
+    setFieldValue('displayStatus', 'Released');
+  };
+
+  const defaultValue = dataItem.id;
+  const value = parts.find((part) => part.id === defaultValue);
+
+  const getFieldInfo = () => (
+    field && <FormikField
+      name={field}
+    >
+      <Autocomplete
+        {...getFieldProps(field)}
+        blurOnSelect
+        disableClearable
+        options={renderOptions()}
+        placeholder={translate('common.select')}
+        value={value}
+        getOptionLabel={(option: OptionType) => option.label}
+        onChange={handleChange}
+        size="small"
+      />
+    </FormikField>
+  );
 
   return (
     <td
@@ -25,11 +104,11 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
       aria-selected="false"
       {...{ colSpan, id, style }}
     >
-      {[...(Array(props.level.length - 1) as number[])].map((e, i) => (
-        <span className="k-icon k-i-none" role="presentation" />
+      {!isEditMode && [...(Array(props.level.length - 1) as number[])].map((e, i) => (
+        !isEditMode && <span className="k-icon k-i-none" role="presentation" />
       ))}
 
-      <span className="k-icon">
+      {!isEditMode && <span className="k-icon">
         {hasChildren && (props.expanded
           ? <CollapseIcon
             onClick={onClick}
@@ -42,10 +121,11 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
             role="presentation"
           />)
         }
-      </span>
+      </span>}
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-        {props.dataItem.docId}
+        {isEditMode && getFieldInfo()}
+        {!isEditMode && dataItem.docId}
       </span>
     </td>
   );
