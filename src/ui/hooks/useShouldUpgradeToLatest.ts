@@ -11,10 +11,10 @@ const useShouldUpgradeToLatest = (
   formDocumentId = '',
 ): boolean => {
   const isFormStatusDeprecated = isDocumentRevisionDeprecated(formDocumentStatus);
-  const isDocumentStatusDraftOrPending =
-    isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentStatus);
+  const isDocumentStatusDraftOrPending
+    = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentStatus);
   const formDocuments: Document = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocument(state, formDocumentId)
+    documentRevisionsSelectors.getDocument(state, formDocumentId),
   );
   const isLastVersionObsolete = useMemo(() =>
     formDocuments && getIsLastVersionObsolete(formDocuments)

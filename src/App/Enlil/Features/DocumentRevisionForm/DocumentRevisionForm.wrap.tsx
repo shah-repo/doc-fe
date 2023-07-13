@@ -1,13 +1,12 @@
-import { useFormikContext } from 'formik';
 import { cloneDeep, get } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import { FB, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -24,7 +23,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     setDoNotPrompt,
     ...props
   }: T) => {
-    const formik = useFormikContext();
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
@@ -39,11 +37,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       autosave: _formState?.autosave || false,
     });
     const { document: { outputRevision = false } = {} } = workspaceState || {};
-
-    const getDAMPayload = useCallback((damData) => ({
-      [FBDAMFields.DAM]: damData?.approvalMatrix,
-      [FBDAMFields.DAR]: damData?.approvalRoles,
-    }), []);
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
     const poApprovalsState = isPO ? FB.useRef(

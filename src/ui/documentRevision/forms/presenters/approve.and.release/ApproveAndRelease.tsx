@@ -43,18 +43,18 @@ import SelectionForm from './SelectionForm';
 import SplitReleaseButton, { ARActions } from './SplitReleaseButton';
 
 interface Props {
-  id?: string;
-  status?: DocumentRevisionStatus;
-  isQms: boolean;
-  needsSignature: boolean;
-  documentName: string;
-  docRevId: string;
-  owner?: Owner;
-  documentTypeId?: string;
-  revisionStage?: number;
-  isRecord: boolean;
-  isInlineApproval: boolean;
-  renderAsButton?: boolean;
+  id?: string
+  status?: DocumentRevisionStatus
+  isQms: boolean
+  needsSignature: boolean
+  documentName: string
+  docRevId: string
+  owner?: Owner
+  documentTypeId?: string
+  revisionStage?: number
+  isRecord: boolean
+  isInlineApproval: boolean
+  renderAsButton?: boolean
 }
 
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
@@ -75,7 +75,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const documentRevision = useSelector(
-    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId)
+    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
   );
 
   // MARK: @state
@@ -136,7 +136,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       if (isDocumentPO) {
         const ownerGroup = find(
           sortBy(uniqBy(response, 'id'), 'documentStage'),
-          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id),
         );
         if (ownerGroup) {
           initialGroups = [{
@@ -147,7 +147,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       } else {
         initialGroups = filter(
           uniqBy(response, 'id'),
-          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id),
         );
       }
       setCheckedGroups(initialGroups);
@@ -166,8 +166,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             docTypeId: template.documentType.id,
             schema: form.formTemplate?.schema,
             formInput: form.formInput,
-          }))
-        )
+          })),
+        ),
       );
       setTemplateOptions(options);
       if (!optionChosen) {
@@ -222,7 +222,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inDraftAROptions]);
-
 
   const processCreatingRevision = (templateChosen?: TemplateOption) => {
     if (!templateChosen) {
@@ -319,7 +318,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       asyncGetDocTypeByGroup.start(
         getDocTypeByGroupAction,
         { docTypeGroupOption: 'CHANGE_REQUEST' },
-        asyncGetDocTypeByGroup
+        asyncGetDocTypeByGroup,
       );
     }
 
@@ -329,7 +328,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       asyncGetDocTypeByGroup.start(
         getDocTypeByGroupAction,
         { docTypeGroupOption: 'CHANGE_REQUEST' },
-        asyncGetDocTypeByGroup
+        asyncGetDocTypeByGroup,
       );
     }
 
@@ -338,7 +337,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
       asyncGetDraftApprovalRequests.start(
         getDraftApprovalRequestsAction,
-        asyncGetDraftApprovalRequests
+        asyncGetDraftApprovalRequests,
       );
     }
   };
@@ -459,8 +458,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         )}
       </CustomLabelTooltip>
       {
-        expressApprovalDialog.isOpen &&
-        <Dialog
+        expressApprovalDialog.isOpen
+        && <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           fullWidth={true}
@@ -471,8 +470,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-dialog"
         >
           <DialogTitle className={classes.dialogTitle} disableTypography>
-            {isQms &&
-              <Text translation={isRecord ? 'record.finalize.and.release' : 'common.approve.and.release'} />
+            {isQms
+              && <Text translation={isRecord ? 'record.finalize.and.release' : 'common.approve.and.release'} />
             }
             {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
           </DialogTitle>

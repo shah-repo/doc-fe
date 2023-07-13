@@ -29,24 +29,24 @@ export const withInput = <T extends FBInputProps>(
     ...props
   }: T) => {
     const elements = React.Children.toArray(children);
-    value =
-      get(form, `values.${name}`) ||
-      get(FBStore.getValues(), name) ||
-      defaultValue ||
-      get(FBValidatorStore.formValues, name) ||
-      '';
+    value
+      = get(form, `values.${name}`)
+      || get(FBStore.getValues(), name)
+      || defaultValue
+      || get(FBValidatorStore.formValues, name)
+      || '';
 
     error = Boolean(get(form, `errors.${name}`));
-    helperText =
-      (error && get(form, `errors.${name}`)) ||
-      FBDynamicValidatorStore.helperText[name];
+    helperText
+      = (error && get(form, `errors.${name}`))
+      || FBDynamicValidatorStore.helperText[name];
 
     if (FBStore.mode === 'form') {
       const isFieldHidden = isEmpty(helperText) && isEmpty(field?.value);
       hidden = includes(validationMode, 'ValidationHidden') && isFieldHidden;
-      disabled =
-        (includes(validationMode, 'ValidationDisabled') && isFieldHidden) ||
-        disabled;
+      disabled
+        = (includes(validationMode, 'ValidationDisabled') && isFieldHidden)
+        || disabled;
     }
 
     children = map(elements, (el) => React.cloneElement(

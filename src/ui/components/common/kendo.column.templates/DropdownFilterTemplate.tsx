@@ -8,28 +8,28 @@ import { useIntl } from 'react-intl';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface SelectedItemProps {
-  text: string;
-  value: string | boolean;
+  text: string
+  value: string | boolean
 }
 interface StateChangeProps {
-  selectedItem?: SelectedItemProps ;
-  parentField: string | undefined;
+  selectedItem?: SelectedItemProps
+  parentField: string | undefined
 }
 interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: {
-    text: string;
-    value: string;
-  };
+    text: string
+    value: string
+  }
   defaultValue?: {
-    text: string;
-    value: string;
-  };
+    text: string
+    value: string
+  }
   data: {
-    text: string;
-    value: string | boolean;
-  }[];
-  customOperator?: string;
-  onStateChange?: (data: StateChangeProps) => void;
+    text: string
+    value: string | boolean
+  }[]
+  customOperator?: string
+  onStateChange?: (data: StateChangeProps) => void
 }
 
 export const DropdownFilterTemplate = ({
@@ -46,7 +46,7 @@ export const DropdownFilterTemplate = ({
   const [state, setState] = React.useState({
     value: defaultItem,
   });
-  const hasValue = (value: { text: string; value: string }) => value && value !== defaultItem;
+  const hasValue = (value: { text: string, value: string }) => value && value !== defaultItem;
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     const selectedItem = data.find((dd) => dd.text === target.value.text);
     const isValueExists = hasValue(target.value);

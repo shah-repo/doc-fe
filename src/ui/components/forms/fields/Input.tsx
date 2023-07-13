@@ -8,13 +8,13 @@ import Field, { FieldOwnProps } from './Field';
 import { InputField as MuiInput } from './Input.styles';
 
 interface InputOwnProps extends FieldOwnProps {
-  inputProps?: MuiInputProps;
-  size?: RenderSize;
-  actionsRenderer?: () => any;
-  lpignore?: boolean;
-  dataCy?: string;
-  inputStyleProps?: string;
-  labelProps?: BoxProps;
+  inputProps?: MuiInputProps
+  size?: RenderSize
+  actionsRenderer?: () => any
+  lpignore?: boolean
+  dataCy?: string
+  inputStyleProps?: string
+  labelProps?: BoxProps
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;

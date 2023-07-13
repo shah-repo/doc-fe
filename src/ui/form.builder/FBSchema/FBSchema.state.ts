@@ -30,6 +30,9 @@ import FBInlineApproval from '../FBInlineApproval/FBInlineApproval';
 import FBInstructionsDocument from '../FBInstructionsDocument/FBInstructionsDocument';
 import FBLHRBuild from '../FBLHRBuild/FBLHRBuild';
 import FBLHRStep from '../FBLHRStep/FBLHRStep';
+import FBLotOnHandQuantityField from '../FBLotOnHandQuantityField/FBLotOnHandQuantityField';
+import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
+import FBLotTransfers from '../FBLotTransfers';
 import FBMediaAlbumField from '../FBMediaAlbumField/FBMediaAlbumField';
 import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
 import FBParagraph from '../FBParagraph/FBParagraph';
@@ -75,7 +78,7 @@ class FBSchemaState {
     'lhrstep',
   ];
 
-  private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+  private static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
     subsection: FBSubsection,
     stepsection: FBSection,
@@ -134,12 +137,15 @@ class FBSchemaState {
     poapprovals: FBPOApprovals,
     lhrbuild: FBLHRBuild,
     downloadsheet: FBDownloadSheetTpl,
+    lotTransfers: FBLotTransfers,
+    lotQuantity: FBLotQuantityField,
+    lotOnHandQuantity: FBLotOnHandQuantityField,
   };
 
   @observable public schema?: FBSchemaProps[];
-  public validationSchema?: Partial<FBSchemaProps>[];
+  public validationSchema?: Array<Partial<FBSchemaProps>>;
 
-  public constructor(schema?: FBSchemaProps[]) {
+  public constructor (schema?: FBSchemaProps[]) {
     this.schema = schema;
   }
 
@@ -176,6 +182,17 @@ class FBSchemaState {
       return;
     }
     return this.schema && this.schema[index];
+  };
+
+  @action public initSchema = (schema?: FBSchemaProps[]): void => {
+    if (schema) {
+      schema
+        .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
+        .forEach((item, index) => {
+          item.index = index;
+        });
+    }
+    set(this, 'schema', schema);
   };
 
   @action public setSchema = (schema?: FBSchemaProps[]) => {
@@ -241,7 +258,7 @@ class FBSchemaState {
   public getItemsByType = (type?: FBInputType): FBSchemaProps[] => {
     if (!type) { return []; }
     return filter(this.getSchema(), (item) =>
-      !item.deleted && item.type === type
+      !item.deleted && item.type === type,
     );
   };
 }

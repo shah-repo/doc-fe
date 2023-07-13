@@ -15,7 +15,7 @@ export const isDocumentAlphaReleased = (revisionStage?: number) => revisionStage
 
 export const getRevisionStageNumber = (intl: IntlShape, revisionStageName: string) => {
   const revisionStageByName = RevisionStageOptions.map((option) =>
-    ({ [intl.formatMessage({ id: option.text })]: option.value.toString() })
+    ({ [intl.formatMessage({ id: option.text })]: option.value.toString() }),
   );
   return Object.assign({}, ...revisionStageByName)[revisionStageName];
 };

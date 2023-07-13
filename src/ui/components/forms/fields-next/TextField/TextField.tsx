@@ -1,22 +1,37 @@
-import { InputBase, InputBaseProps } from '@material-ui/core';
+import { InputBase, TextareaAutosize } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './TextField.styles';
+import { TextFieldProps } from './TextField.types';
 
-interface TextFieldProps extends InputBaseProps {
-  size?: 'small' | 'medium'
-}
-
-const TextField: React.FC<TextFieldProps> = React.forwardRef(({ size = 'medium', classes, ...props }, ref) => {
+const TextField: React.FC<TextFieldProps> = React.forwardRef(({
+  size = 'medium',
+  autosize,
+  classes,
+  endAdornment,
+  startAdornment,
+  ...props
+}, ref) => {
   const customClasses = useStyles();
 
   return (
     <InputBase
       {...props}
+      inputComponent={autosize ? TextareaAutosize : undefined}
+      startAdornment={startAdornment}
+      endAdornment={endAdornment}
       classes={{
         ...classes,
-        input: cx(classes?.input, { [customClasses.inputSmall]: size === 'small' }),
+        input: cx(
+          classes?.input,
+          customClasses.input,
+          {
+            [customClasses.inputSmall]: size === 'small',
+            [customClasses.withStartAdornment]: startAdornment,
+            [customClasses.withEndAdornment]: endAdornment,
+          },
+        ),
       }}
       ref={ref}
     />

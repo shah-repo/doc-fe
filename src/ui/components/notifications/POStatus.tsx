@@ -14,8 +14,8 @@ import POStatusToastrStyles from './POStatus.styles';
 import './styles.css';
 
 interface Props {
-  id?: string;
-  revId?: string;
+  id?: string
+  revId?: string
 }
 
 const POToastr: React.FC<Props> = (props) => {
@@ -55,10 +55,10 @@ const POToastr: React.FC<Props> = (props) => {
                 <div className={classes.blackDot} />
                 <Text
                   translation="form.builder.header.rev"
-                  values={{ revision: props?.revId }}/>
+                  values={{ revision: props?.revId }} />
               </span>
             </Link>{' '}
-            <Text translation="documentRevision.po.reopen"/>
+            <Text translation="documentRevision.po.reopen" />
           </Typography>
         }
         className={classes.listItemText}
@@ -68,7 +68,7 @@ const POToastr: React.FC<Props> = (props) => {
 };
 
 const closeButton = ({ closeToast }) => (
-  <div id="poStatusCloseButton" onClick={closeToast}>{<CloseIcon />} </div>
+  <div id="poStatusCloseButton" onClick={closeToast}><CloseIcon /> </div>
 );
 
 export const openPOToastr = (myProps, options = {}) =>

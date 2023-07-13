@@ -27,20 +27,20 @@ import { FormHeaderStatusClassMapping } from './Helpers';
 import { StyledBreadcrumb } from './StyledBreadcrumb';
 
 interface Props {
-  status: string;
-  id: string;
-  name: string;
-  revisionChangeType?: RevisionChangeType;
-  subRevision?: number;
-  documentTypeId?: string;
-  revisionStage?: number;
-  groupOptions?: DocumentGroupOptionsType[];
-  isInlineApproval?: boolean;
-  displayStatus?: string;
-  subtitle?: any;
-  displayRevision?: string;
-  relatedParentPartDetails?: RelatedParentPartDetails;
-  documentTypeAcronym?: string;
+  status: string
+  id: string
+  name: string
+  revisionChangeType?: RevisionChangeType
+  subRevision?: number
+  documentTypeId?: string
+  revisionStage?: number
+  groupOptions?: DocumentGroupOptionsType[]
+  isInlineApproval?: boolean
+  displayStatus?: string
+  subtitle?: any
+  displayRevision?: string
+  relatedParentPartDetails?: RelatedParentPartDetails
+  documentTypeAcronym?: string
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -71,8 +71,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
       state,
-      documentType?.pageDetails?.category || ''
-    )
+      documentType?.pageDetails?.category || '',
+    ),
   );
   const isEquipmentDocument = checkIsDocumentEquipment(documentType?.groupOptions);
   const getRoute = () => {
@@ -116,17 +116,17 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const mpiOutputTitle = name.match(stepRegex);
 
-    return isTypeMpiOutput && mpiOutputTitle ?
-      <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
+    return isTypeMpiOutput && mpiOutputTitle
+      ? <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
         {mpiOutputTitle[0]}
-      </Typography> :
-      <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
+      </Typography>
+      : <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
         {id}
       </Typography>;
   };
 
-  const statusIcon =
-    <div className={classNames(classes.statusIconDefault, {
+  const statusIcon
+    = <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
@@ -135,8 +135,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     <Grid container xs={6} className={classes.itemWrap} >
       <Grid item className={classes.statusWrap}>
         {
-          isStatusVisible &&
-          <CustomLabelTooltip {...{ tooltipConfig }}>
+          isStatusVisible
+          && <CustomLabelTooltip {...{ tooltipConfig }}>
             <Chip
               label={<Text message={displayStatus || label} />}
               id="HeaderInfo-status"
@@ -151,16 +151,16 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
         <Grid item xs={12}>
           {titleRenderer(classes.id)}
           {
-            isTitleVisible &&
-            <Typography variant="h6" id="HeaderInfo-name" component="span" data-cy="HeaderInfoName">
+            isTitleVisible
+            && <Typography variant="h6" id="HeaderInfo-name" component="span" data-cy="HeaderInfoName">
               {name}
             </Typography>
           }
         </Grid>
         <Grid item xs={12}>
           {
-            subtitle &&
-            <Typography variant="subtitle1" id="HeaderInfo-subtitle" component="p">
+            subtitle
+            && <Typography variant="subtitle1" id="HeaderInfo-subtitle" component="p">
               {subtitle}
             </Typography>
           }
@@ -194,7 +194,6 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     }
   }
 
-
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>
       <Grid item>
@@ -222,8 +221,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   </Link>   // need to remove this link for Approval Request modal
                 }
                 {
-                  isTypeMpiOutput &&
-                  <Link
+                  isTypeMpiOutput
+                  && <Link
                     underline="hover"
                     onClick={returnToList}
                     className={classes.link}
@@ -269,7 +268,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   )}
                 </Grid>
                 &nbsp;
-                {displayRevision && <> <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
+                {displayRevision && <> <Grid item={true} className={classes.whiteDot} />&nbsp;
                   <Grid item={true}>
                     <Text
                       translation="form.builder.header.rev"
@@ -277,8 +276,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                       dataCy="HeaderInfo-Rev"
                     />
                   </Grid> </>}
-                { isTypeMpiOutput &&
-                  <>
+                { isTypeMpiOutput
+                  && <>
                     <Grid item={true} className={classes.arrowPadding}>
                       <ArrowIcon />
                     </Grid>&nbsp;

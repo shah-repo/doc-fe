@@ -2,7 +2,6 @@ import { findLastIndex, orderBy } from 'lodash';
 import moment from 'moment';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 
-
 export const shouldRedirectToLatestReleased = (
   documentRevisions: DocumentRevision[],
   documentRevisionId: string | null,

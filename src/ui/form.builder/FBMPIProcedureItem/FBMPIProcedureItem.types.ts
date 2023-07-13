@@ -6,17 +6,17 @@ export type FBMPIProcedureItemProps =
 & Pick<FBProviderProps, 'mpiProcedureState'>
 & Pick<FBInputProps, 'defaultValue'>
 & {
-  handleSelect?: (item: FBProcedureItemConfig) => void;
-  handleSelectionDelete?: (refId?: string) => void;
-  getProcedureLocale?: (item: FBProcedureItemConfig) => string;
-  getProcedureValues?: (item: FBProcedureItemConfig) => any;
-  isDateOverdue?: (data?: string) => any;
-  multiplier?: number;
-  isOutput?: boolean;
-  isSelectVisible?: boolean;
-  redlineActive?: boolean;
-  usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
-  isDocumentMPI?: boolean;
-  fieldType?: FBInputType;
-  isReleased?: boolean;
+  handleSelect?: (item: FBProcedureItemConfig) => void
+  handleSelectionDelete?: (refId?: string) => void
+  getProcedureLocale?: (item: FBProcedureItemConfig) => string
+  getProcedureValues?: (item: FBProcedureItemConfig) => any
+  isDateOverdue?: (data?: string) => any
+  multiplier?: number
+  isOutput?: boolean
+  isSelectVisible?: boolean
+  redlineActive?: boolean
+  usedDocumentsInLHRS?: UsedDocumentsInLHRS[]
+  isDocumentMPI?: boolean
+  fieldType?: FBInputType
+  isReleased?: boolean
 };

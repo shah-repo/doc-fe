@@ -22,12 +22,12 @@ import styles from './TransitionDialog.styles';
 import { PasswordFormValues, Transition } from './types';
 
 interface TransitionDialogProps {
-  onSubmit: (values: PasswordFormValues) => void;
-  asyncState: AsyncState;
-  buttonProps?: ButtonProps;
-  transition: Transition;
-  label: string;
-  transitionDialog: DialogHandler;
+  onSubmit: (values: PasswordFormValues) => void
+  asyncState: AsyncState
+  buttonProps?: ButtonProps
+  transition: Transition
+  label: string
+  transitionDialog: DialogHandler
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;

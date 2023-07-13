@@ -5,9 +5,9 @@ import DialogTitle from '../dialog/DialogTitle';
 import GroupsDisplayContent from './GroupsDisplayContent';
 
 interface OwnProps {
-  closeDialog: () => void;
-  isOpen: boolean;
-  selectedGroup: LoadCompanyGroup;
+  closeDialog: () => void
+  isOpen: boolean
+  selectedGroup: LoadCompanyGroup
 }
 
 type Props = OwnProps;
@@ -23,7 +23,7 @@ const GroupsDisplay: React.FunctionComponent<Props> = ({
     <Dialog fullScreen={true} open={isOpen}>
       <DialogTitle
         closeDialog={closeDialog}
-        title={'group.management.group.details'}
+        title="group.management.group.details"
       />
       <GroupsDisplayContent
         groupName={name}

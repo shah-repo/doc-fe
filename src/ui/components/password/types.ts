@@ -1,3 +1,3 @@
 export interface Password {
-  password: string;
+  password: string
 }

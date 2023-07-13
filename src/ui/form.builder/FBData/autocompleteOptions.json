@@ -334,5 +334,31 @@
     "includeRevision": "displayRevision",
     "root": "",
     "hidden": false
+  },
+  {
+    "id": "43",
+    "label": "Company Locations",
+    "optionValueType": "id",
+    "hidden": false
+  },
+  {
+    "id": "44",
+    "label": "EB and LHR",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "includeRevision": "displayRevision",
+    "root": "",
+    "hidden": false
+  },
+  {
+    "id": "45",
+    "label": "Records",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "includeRevision": "displayRevision",
+    "root": "",
+    "hidden": false
   }
 ]

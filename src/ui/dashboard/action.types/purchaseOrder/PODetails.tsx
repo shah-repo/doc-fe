@@ -12,12 +12,11 @@ import PODetailItem from './PODetailItem';
 import POSupplier from './POSupplier';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  purchaseOrder: FBPurchaseOrderValue;
-  supplierId: string;
-  docRevAttachments: Attachment[];
+  documentRevision: DocumentRevision
+  purchaseOrder: FBPurchaseOrderValue
+  supplierId: string
+  docRevAttachments: Attachment[]
 }
-
 
 const styles = makeStyles(() =>
   createStyles({

@@ -9,7 +9,7 @@ class FBEQMaintenanceState {
   @observable public newPMLoading?: boolean;
 
   public availableMaintenanceFormsApi = new FBRequest<AvailableMaintenanceForm[], null>(
-    FBEndpoint.FecthAvailableMaintenanceForms
+    FBEndpoint.FecthAvailableMaintenanceForms,
   );
   public proposedIdApi = new FBRequest<ProposedDocIdBody, null>(FBEndpoint.FetchDocId);
   public maintenanceHistoryApi = new FBRequest<Record<string, DocumentRevision[]>, null>(FBEndpoint.HistoryMaintenance);

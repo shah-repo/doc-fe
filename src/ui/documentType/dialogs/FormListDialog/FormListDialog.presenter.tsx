@@ -7,9 +7,9 @@ import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from './FormListDialog.styles';
 
 interface FormListDialogProps {
-  formIds: DocumentTypeByIdForm[];
-  dialog: DialogHandler;
-  handleSelection: (id: string) => void;
+  formIds: DocumentTypeByIdForm[]
+  dialog: DialogHandler
+  handleSelection: (id: string) => void
 }
 const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
   dialog,
@@ -38,8 +38,8 @@ const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
       </DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }} style={{ position: 'relative' }}>
         {
-          selectedFormId &&
-          <div
+          selectedFormId
+          && <div
             style={{ position: 'absolute', top: '50%', left: '50%', marginTop: -45, marginLeft: -23 }}
           >
             <CircularProgress size={45} />

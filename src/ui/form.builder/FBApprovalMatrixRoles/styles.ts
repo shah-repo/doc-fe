@@ -66,4 +66,7 @@ export default makeStyles(theme => ({
     right: 0,
     top: '100%',
   },
+  deleteIcon: {
+    color: Colors.error,
+  },
 }));

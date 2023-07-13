@@ -1,15 +1,15 @@
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { cloneDeep, kebabCase, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { DEFAULT_DATA_STATE, Mode, MODE_FIELD } from '.';
+import { DEFAULT_DATA_STATE, MODE_FIELD, Mode } from '.';
 import { translate } from '../../../../../common/intl';
-import { Button } from '../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { Button } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
 import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
 import useStyles from './styles';
 import { GridItem, GridProps } from './types';
-import { Box } from '@material-ui/core';
 
 function normalizeData <T> (data: T[]): T[] {
   return cloneDeep(data).map(dataItem => {
@@ -60,22 +60,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     },
     [activeItem],
   );
-
-  const handleDataStateChange: GridProps<T>['onDataStateChange'] = ({ dataState }) => {
-    // Remove empty filters.
-    if (dataState.filter?.filters) {
-      dataState.filter.filters = dataState.filter.filters
-        .filter((item) => {
-          if ('value' in item) {
-            return item.value !== undefined;
-          }
-
-          return true;
-        });
-    }
-
-    return dataState;
-  };
 
   const isAdding = data.some((dataItem) => dataItem[MODE_FIELD] === Mode.add);
 
@@ -182,7 +166,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
           rowRender={rowRender}
           dataItemKey="id"
           onRowClick={!disabled ? handleRowClick : undefined}
-          onDataStateChange={handleDataStateChange}
           onItemChange={handleItemChange}
           defaultDataState={!withoutStatus && data.length ? DEFAULT_DATA_STATE : undefined}
           filterable

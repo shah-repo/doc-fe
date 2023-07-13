@@ -120,7 +120,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
       const modifiedTabIdSchema = schema.map((item) => ({
         ...item, tabId: id,
-      })
+      }),
 
       );
       return modifiedTabIdSchema;
@@ -143,7 +143,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         formState?.setFieldValue(name, { id: value });
         formState?.setFieldAutosave(name);
         formik?.submitForm();
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

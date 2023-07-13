@@ -56,8 +56,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
   const intl = useIntl();
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  disabled =
-    isDocumentRevisionReleased(documentStatus) && isUserAdminEnforce
+  disabled
+    = isDocumentRevisionReleased(documentStatus) && isUserAdminEnforce
       ? isUserAdminEnforce
       : disabled;
 
@@ -123,8 +123,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                         collection={approvals}
                       >
                         {(approval, index: number) => {
-                          const isUserNeedToApprove =
-                          documentStatus === DocumentRevisionStatus.InReview
+                          const isUserNeedToApprove
+                          = documentStatus === DocumentRevisionStatus.InReview
                           && approval.approver?.user.id === currentUser
                           && approval.status === FBInlineApprovalStatusIdent.PENDING;
 

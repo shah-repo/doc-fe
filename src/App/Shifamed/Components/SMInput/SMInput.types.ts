@@ -6,7 +6,7 @@ interface SMInputValidationProps {
    * @cfg {Boolean} If true allow form state to record the value
    * but don't include it in validation rules.
    */
-  omit?: boolean;
+  omit?: boolean
 }
 
 export type SMInputProps =
@@ -24,19 +24,19 @@ export type SMInputProps =
   | 'hidden'
 >
 & {
-  label?: SMTextProps['label'];
-  boxProps?: BoxProps;
+  label?: SMTextProps['label']
+  boxProps?: BoxProps
   /**
    * @cfg {String} Validation rules.
    */
-  rules?: string;
+  rules?: string
   /**
    * @cfg {Boolean} Flag to record the input value
    * with state change and force it's rerendering.
    */
-  withState?: boolean;
+  withState?: boolean
   /**
    * @cfg {Object} Set of validation props.
    */
-  validationConfig?: SMInputValidationProps;
+  validationConfig?: SMInputValidationProps
 };

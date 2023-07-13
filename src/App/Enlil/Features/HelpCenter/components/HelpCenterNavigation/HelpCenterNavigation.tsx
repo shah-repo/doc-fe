@@ -10,18 +10,18 @@ import HelpCenterExternalLink from '../HelpCenterExternalLink/HelpCenterExternal
 import useStyles from './HelpCenterNavigation.styles';
 
 interface Props {
-  anchorEl: HTMLElement | null;
-  hasGuide: boolean;
-  handleCloseMenu: () => void;
-  handleOpenContent: () => void;
+  anchorEl: HTMLElement | null
+  hasGuide: boolean
+  handleCloseMenu: () => void
+  handleOpenContent: () => void
 }
 
 interface GuidesItemProps {
-  to: string;
-  children: React.ReactNode;
-  className?: string;
-  dataCy?: string;
-  onClick?: () => void;
+  to: string
+  children: React.ReactNode
+  className?: string
+  dataCy?: string
+  onClick?: () => void
 }
 
 const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(
@@ -35,7 +35,7 @@ const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(
         {children}
       </HelpCenterExternalLink>
     )
-  )
+  ),
 );
 GuidesLink.displayName = 'GuidesLink';
 

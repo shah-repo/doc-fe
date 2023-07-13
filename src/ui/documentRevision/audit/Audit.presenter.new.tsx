@@ -4,6 +4,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
+import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
@@ -98,7 +99,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
+    const sortedAudit = orderBy(audits.filter(audit => audit.field !== 'displayStatus'), ['field']);
+    const statusInfo = audits.find(val => val.field === 'displayStatus');
+    if (statusInfo) {
+      sortedAudit.push(statusInfo);
+    }
+    sortedAudit.forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
       const isSmartRef = change.field.split('.').includes('smartRefs');
@@ -165,6 +171,24 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
         }
         fbLabel = `${label} for ${stepLabel}`;
+      }
+      // LOT QUANTITY
+      if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
+        fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
+      }
+      // LOT TRANSFERS
+      if (fbType === 'lotTransfers') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
+        if (field === 'id') {
+          return;
+        }
+        if (change.type !== 'ARRAY_DELETED') {
+          const fieldFullName = field === 'docId' ? parentField : field;
+          const fieldName = translate(`form.builder.lot.transfers.${fieldFullName}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
       }
       // MPIPROCEDURE
       const valueKey = change.field.split('.');
@@ -445,7 +469,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             message={
               isRemovingApproverAction
                 ? `documentRevision.audit.${field}.ARRAY_DELETED`
-                : `documentRevision.audit.${field}.${type}`} />
+                : `documentRevision.audit.${field}.${type}`}
+          />
         </Typography>
         {auditGroup.map((change, index) => (
           <div

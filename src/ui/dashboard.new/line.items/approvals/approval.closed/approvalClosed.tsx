@@ -25,29 +25,29 @@ import { NormalStyleChip } from './NormalStyleChipApprovalClosed';
 import DismissAction from '../../common/DismissAction';
 
 interface Props {
-  id: string;
-  type: string;
-  title: string;
-  arId: string;
-  arChangeRequestId: string;
-  arStatus: string;
-  timestamp: string;
+  id: string
+  type: string
+  title: string
+  arId: string
+  arChangeRequestId: string
+  arStatus: string
+  timestamp: string
   docRevs: {
-    docTypeGroup: DocTypeGroups;
-    documentRevisionId: string;
-    documentId: string;
-    docId: string;
-    displayRevision: string;
-    name: string;
-    justificationOfChange: string;
-    descriptionOfChange: string;
-  }[];
-  hoverItemId: string;
-  onMouseHoverItem: (id: string) => void;
-  pinned: boolean;
-  pinLineItem?: (id: string) => void;
-  unPinLineItem?: (id: string) => void;
-  dismissLineItem?: (id: string) => void;
+    docTypeGroup: DocTypeGroups
+    documentRevisionId: string
+    documentId: string
+    docId: string
+    displayRevision: string
+    name: string
+    justificationOfChange: string
+    descriptionOfChange: string
+  }[]
+  hoverItemId: string
+  onMouseHoverItem: (id: string) => void
+  pinned: boolean
+  pinLineItem?: (id: string) => void
+  unPinLineItem?: (id: string) => void
+  dismissLineItem?: (id: string) => void
 }
 const ApprovalClosedPresenter: React.FC<Props> = ({
   id,
@@ -180,7 +180,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} className={classes.grayDot} />
                 <Grid item={true}>
                   <Typography
                     component="span"

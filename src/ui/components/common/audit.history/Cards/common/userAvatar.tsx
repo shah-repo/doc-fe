@@ -11,14 +11,14 @@ import styles from './common.styles';
 import UserCard from './UserCard';
 
 interface Props {
-  timestamp: string;
+  timestamp: string
   userDetails: {
     user: {
-      avatar: Nullable<string>;
-      initialColor: string;
-      name: string;
-    };
-  };
+      avatar: Nullable<string>
+      initialColor: string
+      name: string
+    }
+  }
 }
 
 const UserAvatarCard: React.FunctionComponent<Props> = ({ timestamp, userDetails }) => {

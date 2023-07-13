@@ -15,11 +15,11 @@ import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 
 interface Props {
-  buttonProps?: ButtonProps;
-  label: string;
-  transition: ChangeRequestTransition;
-  changeRequestId: string;
-  renderAsButton?: boolean;
+  buttonProps?: ButtonProps
+  label: string
+  transition: ChangeRequestTransition
+  changeRequestId: string
+  renderAsButton?: boolean
 }
 
 const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
@@ -48,8 +48,8 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
         color="primary"  data-cy="change.request.withdraw.alert"
         id="OwnerChangerPresenter-changeOwner" onClick={dialog.open}>
         <Text message={label} />
-      </StyledButton> :
-        <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
+      </StyledButton>
+        : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
           <StyledMenuListIcon>
             <WithdrawSubmissionIcon />
           </StyledMenuListIcon>
@@ -72,7 +72,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
       )}
       <AlertDialog
         confirmAction={withdrawAction}
-        message={'change.request.withdraw.alert'}
+        message="change.request.withdraw.alert"
         {...{ dialog }}
       />
     </>

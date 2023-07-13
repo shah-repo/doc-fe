@@ -17,9 +17,9 @@ import { changeRequestEditPath } from '../utils/paths';
 import FormListPresenter from './FormList.presenter';
 
 interface Props {
-  headers: HeaderTableType[];
-  tableData: TableDataProps<ChangeRequest>;
-  isGrouped: boolean;
+  headers: HeaderTableType[]
+  tableData: TableDataProps<ChangeRequest>
+  isGrouped: boolean
 }
 
 const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData, isGrouped }) => {
@@ -91,7 +91,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
     <FormListPresenter {...{
       templateOptions, dialog, handleCreateButton, headers, data, exportDialog,
       handleTemplateSelection: processCreatingRevision, isGrouped,
-    }}/>
+    }} />
   );
 };
 

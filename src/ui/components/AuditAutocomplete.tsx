@@ -7,9 +7,9 @@ import { FB, FBAutocompleteAsyncState } from '../form.builder';
 import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 interface OwnProps {
-  audit: Audit;
-  dataCy?: string;
-  loading?: boolean;
+  audit: Audit
+  dataCy?: string
+  loading?: boolean
 }
 
 type Props = OwnProps;
@@ -34,8 +34,8 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
   autocompleteState?.setOptionId(optionId);
   const data = FBAutocompleteAsyncStore.data.get(optionId);
   if (data) {
-    const { labelKey = 'text', labelPrefixRoot = '' } =
-    autocompleteState?.optionConfig || {};
+    const { labelKey = 'text', labelPrefixRoot = '' }
+    = autocompleteState?.optionConfig || {};
     if (!multiple) {
       const record = data.get(auditValue);
       label = get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));

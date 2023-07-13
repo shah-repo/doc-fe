@@ -1,11 +1,11 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useFormControl } from '@material-ui/core';
+import { Popper, PopperProps, useFormControl } from '@material-ui/core';
 import formControlState from '@material-ui/core/FormControl/formControlState';
-import MuiAutocomplete from '@material-ui/lab/Autocomplete';
+import MuiAutocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import { omit } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TextField } from '..';
 import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './Autocomplete.styles';
@@ -50,6 +50,20 @@ const AutocompleteControl: React.FC<AutocompleteInputProps> = ({
   />
 );
 
+// TODO remove after upgrading MUI
+const AutocompletePopper: React.FC<PopperProps> = ({ children, ...props }) => (
+  <Popper
+    {...props}
+    modifiers={{
+      keepTogether: {
+        enabled: true,
+      },
+    }}
+  >
+    {children}
+  </Popper>
+);
+
 const Autocomplete: React.FC<AutocompleteProps> = ({
   name,
   classes,
@@ -57,6 +71,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   placeholder,
   inputProps,
   size,
+  filterOptions,
+  getOptionLabel,
   ChipProps = { size: 'small' },
   ...props
 }) => {
@@ -70,6 +86,12 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const [blurEvent, setBlurEvent] = useState<React.FocusEvent<HTMLUnknownElement>>();
 
   const isSmall = size === 'small';
+  const hasClearIcon = !props.disableClearable;
+
+  // TODO this is workaround for incorrect filtering, remove after upgrading MUI
+  const internalFilterOptions = useMemo(() => getOptionLabel ? createFilterOptions({
+    stringify: getOptionLabel,
+  }) : undefined, [getOptionLabel]);
 
   useEffect(() => {
     if (blurEvent && onBlur) {
@@ -85,9 +107,17 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       {...props}
       disabled={controlState.disabled}
       classes={{
-        ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall'),
+        ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall', 'withClearIcon', 'smallWithClearIcon'),
         ...classes,
-        inputRoot: cx(baseClasses.inputRoot, { [baseClasses.sizeSmall]: isSmall }),
+        inputRoot: cx(
+          baseClasses.inputRoot,
+          {
+            [baseClasses.sizeSmall]: isSmall,
+            [baseClasses.withClearIcon]: hasClearIcon,
+            [baseClasses.sizeSmall]: isSmall,
+            [baseClasses.smallWithClearIcon]: hasClearIcon && isSmall,
+          },
+        ),
         option: cx(baseClasses.option, { [baseClasses.optionSmall]: isSmall }),
       }}
       size={size}
@@ -96,6 +126,9 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
         event.persist();
         setBlurEvent(event);
       }}
+      getOptionLabel={getOptionLabel}
+      filterOptions={filterOptions ?? internalFilterOptions}
+      PopperComponent={(props) => <AutocompletePopper {...props} />}
       renderInput={(params) => (
         <AutocompleteControl
           {...params}

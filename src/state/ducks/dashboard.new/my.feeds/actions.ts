@@ -11,7 +11,7 @@ MyFeedsListAction => ({
 });
 
 const loadMyFeedsList = (
-  queryPayload = MY_FEEDS_INITIAL_PAYLOAD
+  queryPayload = MY_FEEDS_INITIAL_PAYLOAD,
 ): ApiAction<MyFeedsListApiResponse> => (
   apiAction({
     url: DASHBOARD_MY_FEEDS_URL_SEARCH,
@@ -23,7 +23,6 @@ const loadMyFeedsList = (
     },
   })
 );
-
 
 const pinnedLineItem = (
   id: string,

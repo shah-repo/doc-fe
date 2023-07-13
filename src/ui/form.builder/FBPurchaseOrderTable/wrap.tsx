@@ -58,7 +58,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const [isPOAddAction, setIsPOAddAction] = useState<boolean>(false);
     const [isPORemoveAction, setIsPORemoveAction] = useState<boolean>(false);
     const createDocAction = useActionCreator(documentRevisionsActions.create);
-
+    const isDocumentReleased = workspaceState?.document?.status === DocumentRevisionStatus.Released;
     const outputId = isOutput ? id : undefined;
     const isReceivable = checkIsDocumentReceivable(document?.document.documentType.groupOptions);
     const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
@@ -398,6 +398,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       isPORemoveAction,
       handleItem,
       dialog,
+      isDocumentReleased,
+      isPOEditState,
     });
   };
 

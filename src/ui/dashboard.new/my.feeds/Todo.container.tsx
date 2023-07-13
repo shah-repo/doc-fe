@@ -32,7 +32,7 @@ const TodoContainer: React.FunctionComponent = () => {
   };
   const loadMyFeeds = useActionCreator(dashboardTodoActions.loadMyFeedsList);
   const loadMyFeedsListAsyncState = useSelector(
-    dashboardTodoSelectors.getLoadMyFeedsListAsyncInfo
+    dashboardTodoSelectors.getLoadMyFeedsListAsyncInfo,
   );
   const feedItems = useSelector(dashboardTodoSelectors.myFeedsList);
 

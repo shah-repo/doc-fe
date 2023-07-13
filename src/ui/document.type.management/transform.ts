@@ -8,7 +8,7 @@ export const enumToOptions = (values): any => {
   return Object.values(values).map((value) => ({
     label: value,
     value,
-  })
+  }),
   ); };
 
 export const translatedOptions = (intl: IntlShape, enumOptions) =>  Object.values(enumOptions).map((value) => {
@@ -40,8 +40,8 @@ export const toDocumentTypeBody = (values) => ({
   ...values,
   defaultRevStage: isNull(values.defaultRevStage) ? null : values.defaultRevStage,
   group: values.group,
-  hiddenForCreationForUsersWithoutTags: !isEmpty(values.hiddenForCreationForUsersWithoutTags) ?
-    castArray(values.hiddenForCreationForUsersWithoutTags) : [],
+  hiddenForCreationForUsersWithoutTags: !isEmpty(values.hiddenForCreationForUsersWithoutTags)
+    ? castArray(values.hiddenForCreationForUsersWithoutTags) : [],
   schema: typeof values.schema == 'string' ? parseJSON(values.schema) : values.schema,
   fieldsConfig: typeof values.fieldsConfig === 'string' ? parseJSON(values.fieldsConfig) : values.fieldsConfig,
 });

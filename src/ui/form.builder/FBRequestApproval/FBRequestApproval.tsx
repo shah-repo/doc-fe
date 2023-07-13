@@ -10,5 +10,4 @@ const FBRequestApproval: React.FunctionComponent<FBInputProps> = ({
   </FBInput>
 );
 
-
 export default FBRequestApproval;

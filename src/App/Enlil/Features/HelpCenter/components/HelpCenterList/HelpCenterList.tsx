@@ -17,7 +17,7 @@ const items = {
 };
 
 interface Props {
-  content: HelpCenterModuleData;
+  content: HelpCenterModuleData
 }
 
 const HelpCenterItem: React.FC<HelpCenterItems> = (props) => {

@@ -12,16 +12,16 @@ import HeaderInfo from '../../components/common/header/HeaderInfo';
 import HeaderLastSaved from '../../components/common/header/HeaderLastSaved';
 import { generateSubtitle } from '../../components/common/header/subtitles';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../constants/urls';
-import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
 import ControlsContainer from '../../documentRevision/PreviewControls.container';
+import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
 import { getVersionNumber } from '../utils/helpers';
 import useStyles from './FormHeader.styles';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  canChangeOwnerShip?: boolean;
-  canShowCreateVersionButton?: boolean;
-  displayLastSaved: boolean;
+  documentRevision: DocumentRevision
+  canChangeOwnerShip?: boolean
+  canShowCreateVersionButton?: boolean
+  displayLastSaved: boolean
 }
 
 const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
@@ -30,10 +30,11 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
   displayLastSaved,
 }) => {
+  const { _formState } = SM.useStores();
   const asyncSecurityState = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getLoadAsyncSecurityState(state));
   const isLoading = useObserver(() => (
-    asyncSecurityState.status === AsyncStatus.Active
+    asyncSecurityState.status === AsyncStatus.Active || _formState?.loading
   ));
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const classes = useStyles(isCreateUrl);

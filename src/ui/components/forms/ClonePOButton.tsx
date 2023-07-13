@@ -16,8 +16,8 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 
 interface ClonePOButtonProps extends ButtonProps {
-  documentRevision: DocumentRevision;
-  renderAsButton?: boolean;
+  documentRevision: DocumentRevision
+  renderAsButton?: boolean
 }
 
 const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
@@ -33,7 +33,7 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
       history.push({
         pathname: documentVersionPath(
           documentRevision.id,
-          documentRevision.document.id
+          documentRevision.document.id,
         ),
       });
     },
@@ -47,7 +47,7 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
     if (isNewLayout) {
       if (!renderAsButton) {
         return (<StyledMenuListItem button alignItems="flex-start" onClick={cloneAction}>
-          <StyledMenuListIcon><CloneIcon/></StyledMenuListIcon>
+          <StyledMenuListIcon><CloneIcon /></StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="CloneEBButton"
             primary={<Text translation="documentRevision.clone" />}

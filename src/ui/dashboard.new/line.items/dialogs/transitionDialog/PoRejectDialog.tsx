@@ -7,12 +7,12 @@ import { Translation } from '../../../../translations/types';
 import styles from './TransitionDialog.styles';
 
 interface PoRejectDialogProps {
-  onSubmit: () => void;
-  cancelAction?: () => void;
-  message: Translation;
-  dialog: DialogHandler;
-  confirmLabel?: Translation;
-  cancelLabel?: Translation;
+  onSubmit: () => void
+  cancelAction?: () => void
+  message: Translation
+  dialog: DialogHandler
+  confirmLabel?: Translation
+  cancelLabel?: Translation
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -23,7 +23,6 @@ interface PoRejectDialogProps {
  * @param confirmLabel Confirm button text (optional).
  * @param cancelLabel Cancel button text (optional).
  */
-
 
 type Props = PoRejectDialogProps & WithStyles<typeof styles>;
 
@@ -38,8 +37,8 @@ const PoRejectDialog: React.FunctionComponent<Props> = ({
 }) => (
   <>
     {
-      dialog.isOpen &&
-        <Dialog
+      dialog.isOpen
+        && <Dialog
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"

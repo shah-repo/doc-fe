@@ -7,8 +7,8 @@ import Text from '../../../ui/components/Text';
 import useStyles from './FBPOApprovals.styles';
 
 const ApprovalsBlock: React.FC<{
-  headerText: string;
-  itemsCount: number;
+  headerText: string
+  itemsCount: number
 }> = ({
   headerText,
   itemsCount,
@@ -57,6 +57,5 @@ const ApprovalsBlock: React.FC<{
     </List>
   );
 };
-
 
 export default ApprovalsBlock;

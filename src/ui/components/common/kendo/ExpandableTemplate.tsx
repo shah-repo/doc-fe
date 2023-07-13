@@ -6,9 +6,9 @@ import { ReactComponent as TriangleDown } from '../../../../assets/images/triang
 import { styles } from './ExpandableTemplate.styles';
 
 interface Props {
-  items: string[];
-  dataId: string;
-  noOfItems?: number;
+  items: string[]
+  dataId: string
+  noOfItems?: number
 }
 const ExpandableTemplate = ({ items, dataId, noOfItems = 15  }: Props) => {
   const classes = styles();
@@ -37,7 +37,7 @@ const ExpandableTemplate = ({ items, dataId, noOfItems = 15  }: Props) => {
               <TriangleDown className={classNames({
                 [classes.triangleDown]: true,
                 expanded: groupId === expandedGroupId,
-              })}/>
+              })} />
             </Button>
           </>
         )

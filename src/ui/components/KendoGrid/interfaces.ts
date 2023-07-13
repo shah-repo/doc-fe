@@ -4,63 +4,63 @@ import { KendoColumn } from '../../components/common/kendo/types';
 import { TablePanelStateProps } from '../../components/table/types';
 
 interface FilterList {
-  field: string;
-  operator: string;
-  value: any;
+  field: string
+  operator: string
+  value: any
 }
 
 interface FilterObject {
-  logic: 'and';
-  filters: FilterList[];
+  logic: 'and'
+  filters: FilterList[]
 }
 
 interface SortObject {
-  field: string;
-  dir: 'asc' | 'desc';
+  field: string
+  dir: 'asc' | 'desc'
 }
 interface GroupObject {
-  field: string;
-  dir?: 'asc' | 'desc';
+  field: string
+  dir?: 'asc' | 'desc'
 }
 export interface DataStateProps {
-  filter: FilterObject;
-  take: number;
-  skip: number;
-  sort: SortObject[];
-  group: GroupObject[];
+  filter: FilterObject
+  take: number
+  skip: number
+  sort: SortObject[]
+  group: GroupObject[]
 }
 
 export interface KendoPresenterProps {
-  statuses: DocumentRevisionStatus | DocumentRevisionStatus[];
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
-  schema: object;
-  columns: KendoColumn[];
-  onRowClick: ((dataItem: any) => void);
-  queryUrl: string;
+  statuses: DocumentRevisionStatus | DocumentRevisionStatus[]
+  tableName: string
+  tableCriteria: TablePanelStateProps
+  schema: object
+  columns: KendoColumn[]
+  onRowClick: ((dataItem: any) => void)
+  queryUrl: string
 }
 
 export interface KendoGridProps<T> {
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
-  schema: object;
-  statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];
-  exportDataChanges: (data: T[]) => void;
-  onRowClick: ((dataItem: any) => void);
-  queryUrl: string;
-  defaultPayloadData: object;
-  documentTypeCategory?: string;
+  tableName: string
+  tableCriteria: TablePanelStateProps
+  schema: object
+  statuses?: DocumentRevisionStatus | DocumentRevisionStatus[]
+  exportDataChanges: (data: T[]) => void
+  onRowClick: ((dataItem: any) => void)
+  queryUrl: string
+  defaultPayloadData: object
+  documentTypeCategory?: string
 }
 
 export interface DataLoaderProps {
-  dataState: State;
-  onDataReceived: (products: DataResult, dataState: State) => void;
-  schema: object;
-  tableName: string;
-  queryUrl: string;
-  defaultPayloadData: object;
-  documentTypeCategory?: string;
-  tableCriteria: TablePanelStateProps;
+  dataState: State
+  onDataReceived: (products: DataResult, dataState: State) => void
+  schema: object
+  tableName: string
+  queryUrl: string
+  defaultPayloadData: object
+  documentTypeCategory?: string
+  tableCriteria: TablePanelStateProps
 }
 
 export enum KendoGridFilterCell {
@@ -76,7 +76,7 @@ export enum KendoGridFilterCell {
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',
-  ASYNC_CREATED_AT = 'createdAtt'
+  ASYNC_CREATED_AT = 'createdAtt',
 }
 
 export enum KendoGridFilterCellOperators {

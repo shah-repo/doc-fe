@@ -14,8 +14,8 @@ import ExportListDialog from '../../../../document.revision/list/ExportListDialo
 import useDialog from '../../../../hooks/useDialog';
 
 interface Props {
-  documentRevision: DocumentRevision;
-  renderAsButton?: boolean;
+  documentRevision: DocumentRevision
+  renderAsButton?: boolean
 }
 
 const ExportToCSVButton: React.FunctionComponent<Props> = ({
@@ -115,7 +115,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
           color="primary" data-cy="exportCSVButton" onClick={dialog.open}>
           <Text translation="common.export" />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
-          <StyledMenuListIcon><ExportIcon/></StyledMenuListIcon>
+          <StyledMenuListIcon><ExportIcon /></StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="exportCSVButton"
             primary={<Text translation="common.export" />}

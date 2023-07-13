@@ -9,5 +9,5 @@ export const styles = makeStyles(() =>
       fontSize: 12,
       whiteSpace: 'pre-line',
     },
-  })
+  }),
 );

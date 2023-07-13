@@ -16,9 +16,9 @@ import { DocumentRevisionApprovalDialog } from './DocumentRevisionApprovalDialog
 import { styles } from './PendingAction.styles';
 
 interface Props {
-  index: number;
-  documentRevision: DocumentRevision;
-  approval: Approval;
+  index: number
+  documentRevision: DocumentRevision
+  approval: Approval
 }
 
 const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
@@ -86,14 +86,14 @@ const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
             color="secondary"
             onClick={() => changeApprovalStatus('reject', approval.id)}
           >
-            <Text translation="transition.action.reject"/>
+            <Text translation="transition.action.reject" />
           </Button>
           <Button
             variant="outlined"
             color="secondary"
             onClick={() => passwordDialog.open()}
           >
-            <Text translation="transition.action.approve"/>
+            <Text translation="transition.action.approve" />
           </Button>
         </Grid>
       </Grid>

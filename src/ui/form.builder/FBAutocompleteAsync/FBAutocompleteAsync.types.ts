@@ -5,32 +5,32 @@ export type FBAutocompleteAsyncProps =
 & FBAutocompleteProps
 & Pick<Partial<AutocompleteProps>, 'renderInput' | 'loading' | 'defaultValue' | 'renderTags'>
 & {
-  autocompleteAsyncState?: FBAutocompleteAsyncState;
-  selectedOptions?: string[];
-  shouldReloadOnInit?: boolean;
-  additionalData?: any[]; // TODO: make autocomplete async generic type by data
-  forceNewRender?: boolean;
+  autocompleteAsyncState?: FBAutocompleteAsyncState
+  selectedOptions?: string[]
+  shouldReloadOnInit?: boolean
+  additionalData?: any[] // TODO: make autocomplete async generic type by data
+  forceNewRender?: boolean
   /**
    * @cfg {Record} Additional url params.
    */
-  urlValues?: Record<string, any>;
-  withoutPrefixRoot?: boolean;
-  withoutLabelKey?: boolean;
+  urlValues?: Record<string, any>
+  withoutPrefixRoot?: boolean
+  withoutLabelKey?: boolean
 };
 
-export interface FBAutocompleteAsyncConfig  {
-  id: string;
-  label: string;
-  labelKey: string;
-  valueKey?: string;
-  root?: string;
-  labelPrefixRoot?: string;
-  includeRevision?: string;
-  publicApi?: boolean;
+export interface FBAutocompleteAsyncConfig {
+  id: string
+  label: string
+  labelKey: string
+  valueKey?: string
+  root?: string
+  labelPrefixRoot?: string
+  includeRevision?: string
+  publicApi?: boolean
   /**
    * @cfg {Bool} If true show the option in editor config.
    */
-  hidden?: boolean;
+  hidden?: boolean
 }
 
 export enum FBAutocompleteAsyncOption {
@@ -71,9 +71,12 @@ export enum FBAutocompleteAsyncOption {
   outputDocumentTypes = '35',
   trainingDocuments = '36',
   releasedParts = '42',
+  companyLocations = '43',
+  lotBuilds = '44',
+  records = '45',
 }
 
 export interface FBAutocompleteAsyncConstructor {
-  optionId?: string;
-  urlValues?: Record<string, any>;
+  optionId?: string
+  urlValues?: Record<string, any>
 }

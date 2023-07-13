@@ -36,7 +36,7 @@ const apiMiddleware: Middleware = ({
   dispatch,
   getState,
 }: MiddlewareAPI<Dispatch, ApplicationState>) => (next: Dispatch) => async <
-  A extends Action
+  A extends Action,
 >(
   action: A,
 ) => {
@@ -93,14 +93,14 @@ const apiMiddleware: Middleware = ({
     if (axios.isCancel(exception)) {
       return;
     }
-    const redirectToMaintenance = exception?.response?.status === 491 &&
-      window.location.pathname !== MAINTENANCE &&
-      window.location.pathname !== STATUS &&
-      window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
+    const redirectToMaintenance = exception?.response?.status === 491
+      && window.location.pathname !== MAINTENANCE
+      && window.location.pathname !== STATUS
+      && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
 
-    const userLocked = exception?.response?.status === 423 &&
-      window.location.pathname !== USER_LOCKED &&
-      window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
+    const userLocked = exception?.response?.status === 423
+      && window.location.pathname !== USER_LOCKED
+      && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
 
     userLocked && redirectTo(USER_LOCKED)();
     redirectToMaintenance && redirectTo(MAINTENANCE)();

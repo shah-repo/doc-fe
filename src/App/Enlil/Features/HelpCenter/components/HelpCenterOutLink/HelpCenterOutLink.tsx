@@ -17,8 +17,8 @@ const Icon: React.FC = () => {
 };
 
 interface Props {
-  className?: string;
-  children?: React.ReactNode;
+  className?: string
+  children?: React.ReactNode
 }
 
 const HelpCenterOutLink: React.FC<Props> = ({ className, children }) => {

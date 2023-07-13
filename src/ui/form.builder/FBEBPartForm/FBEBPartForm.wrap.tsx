@@ -25,7 +25,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     React.useEffect(() => dialogState?.setActions(
       <FBEBPartFormActions
         {...{ onDialogConfirm, onDialogClose, disabled: ebPartState?.proposedDocIdApi.loading }}
-      />
+      />,
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [ebPartState?.proposedDocIdApi.loading]);
 

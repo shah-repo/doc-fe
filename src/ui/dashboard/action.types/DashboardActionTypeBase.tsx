@@ -6,13 +6,13 @@ import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
-  index: number;
-  title: string;
-  description: string;
-  url: string;
-  alert?: boolean;
-  alertMessage?: string;
-  dataCy?: string;
+  index: number
+  title: string
+  description: string
+  url: string
+  alert?: boolean
+  alertMessage?: string
+  dataCy?: string
 }
 
 const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
@@ -39,8 +39,8 @@ const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
         alignItems="center"
       >
         {
-          alert &&
-          <span
+          alert
+          && <span
             style={{
               backgroundColor: isHover ? Colors.light_red : '',
               borderRadius: 50,

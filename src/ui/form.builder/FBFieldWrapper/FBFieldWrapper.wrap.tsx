@@ -1,86 +1,59 @@
-import { useObserver } from 'mobx-react';
-import React from 'react';
-import { BlockTypeField, FB, FBFieldWrapperProps, FBFieldWrapperState } from '..';
+import React, { useCallback } from 'react';
+import { BlockTypeField, FB, FBFieldWrapperProps, SectionTypeField } from '..';
 import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
 
+const DEFAULT_MARGIN_TOP = 3.5;
+const BLOCK_MARGIN_TOP = 6;
+const DEFAULT_MARGIN_BOTTOM = 2;
+const SECTION_MARGIN_BOTTOM = -0.5;
+
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
-    fieldWrapperState,
-    toolsVisible,
-    addToolVisible,
-    markDownVisible,
-    isDragged,
     inputProps,
-    position,
-    showSchemaFields = true,
+    isFirst,
+    showDefaultFieldTools = true,
     ...props
   }: T) => {
-    const { workspaceState, sortableState } = FB.useStores();
-    const { designDisabled = false, index, type } = inputProps || {};
-    const reviseDisabled = inputProps?.editorProperties?.includes('reviseDisabled');
-    fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
+    const { workspaceState } = FB.useStores();
+    const { designDisabled = false, index, type } = inputProps ?? {};
+    const [isMarkDownVisible, setIsMarkdownVisible] = React.useState(false);
+
+    const toggleItemMarkdown = useCallback(() => {
+      setIsMarkdownVisible(prev => !prev);
+    }, []);
+
+    const reviseDisabled = inputProps?.editorProperties?.includes('reviseDisabled') ?? false;
     const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
 
     const isInputFromDefaultSchema = workspaceState?.document?.formDocument?.formTemplate?.schema.find(
-      (schemaElement) => schemaElement.name === inputProps?.name
+      (schemaElement) => schemaElement.name === inputProps?.name,
     );
 
-    const shouldHideTools =
-      sortableState?.isDragPerfomed
-      || designDisabled
-      || (!showSchemaFields && isInputFromDefaultSchema)
-      || (reviseDisabled && workspaceState?.isRevised);
+    const isRevised = workspaceState?.isRevised ?? false;
+    const canUseTools = !(designDisabled || (reviseDisabled && isRevised) || (!showDefaultFieldTools && isInputFromDefaultSchema));
+    const canAddField = !isEquipmentDoc;
 
-    const shouldHideAddButton = isEquipmentDoc;
-
-    const onMouseOver = () => {
-      if (shouldHideTools) {
-        return;
-      }
-      if (!shouldHideAddButton) {
-        fieldWrapperState?.setAddToolActive(true);
-      }
-      fieldWrapperState?.setToolsActive(true);
-    };
-    const onMouseLeave = () => {
-      fieldWrapperState?.setAddToolActive(false);
-      if (sortableState?.isDragPerfomed) {
-        return;
-      }
-      fieldWrapperState?.setToolsActive(false);
-    };
-
-    useObserver(() => {
-      toolsVisible = fieldWrapperState?.toolsVisible;
-      addToolVisible = fieldWrapperState?.addToolVisible;
-      markDownVisible = fieldWrapperState?.markDownVisible;
-      isDragged = index === sortableState?.draggedIndex;
-    });
-
-    const isSection = type === 'section' || type === 'subsection';
+    const isSection = type && SectionTypeField.includes(type);
     const isBlock = type && BlockTypeField.includes(type);
-    const isFirst = position === 1;
-    const mt = isFirst || isDragged ? 0 : isBlock ? 6 : 3.5;
-    const mb = isSection ? -0.5 : 2;
+    const fieldMarginTop = isBlock ? BLOCK_MARGIN_TOP : DEFAULT_MARGIN_TOP;
+    const mt = isFirst ? 0 : fieldMarginTop;
+    const mb = isSection ? SECTION_MARGIN_BOTTOM : DEFAULT_MARGIN_BOTTOM;
 
-    return useObserver(() => Component({
+    return Component({
       ...(props as T),
-      onMouseOver,
-      onMouseLeave,
-      fieldWrapperState,
-      toolsVisible,
-      addToolVisible,
-      markDownVisible,
+      toggleItemMarkdown,
+      isMarkDownVisible,
+      canUseTools,
+      canAddField,
       designDisabled,
       inputProps,
       index,
       type,
-      isDragged,
       mt,
       mb,
-    }));
+    });
   };
 
   return (props: T) => Comp(props);

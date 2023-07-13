@@ -10,13 +10,13 @@ import UpgradeToLatestButton from './UpgradeToLatest.button';
 type DisplayType = 'button' | 'banner';
 
 interface Props {
-  formDocumentId?: string;
-  docRevId?: string;
-  type: DisplayType;
-  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
-  setShouldDisplay?: (value: boolean) => void;
-  shouldShowUpgrade: boolean;
-  renderAsButton?: boolean;
+  formDocumentId?: string
+  docRevId?: string
+  type: DisplayType
+  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>
+  setShouldDisplay?: (value: boolean) => void
+  shouldShowUpgrade: boolean
+  renderAsButton?: boolean
 }
 
 const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
@@ -48,12 +48,12 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        type === 'button' &&
-        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade, renderAsButton }}/>
+        type === 'button'
+        && <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade, renderAsButton }} />
       }
       {
-        type === 'banner' &&
-        <UpgradeToLatestBanner {...{ onUpgradeClick, shouldShowUpgrade, bannerPortal }} />
+        type === 'banner'
+        && <UpgradeToLatestBanner {...{ onUpgradeClick, shouldShowUpgrade, bannerPortal }} />
       }
     </>
   );

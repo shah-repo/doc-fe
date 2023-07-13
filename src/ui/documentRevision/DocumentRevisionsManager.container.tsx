@@ -13,18 +13,17 @@ import useDocumentTitle from '../hooks/useDocumentTitle';
 import DocumentRevisionDisplayContainer from './DocumentRevisionDisplay.container';
 import { getDocRevIdToRedirect, shouldRedirectToLatestReleased } from './helpers/redirect';
 
-
 interface StateProps {
-  documentRevisions: DocumentRevision[];
-  docId: string;
+  documentRevisions: DocumentRevision[]
+  docId: string
 }
 
 interface OwnProps {
-  documentId: string;
-  documentRevisionId: string | null;
-  isNewVersion: boolean;
-  isNewOutput: boolean;
-  deprecatedAt: string;
+  documentId: string
+  documentRevisionId: string | null
+  isNewVersion: boolean
+  isNewOutput: boolean
+  deprecatedAt: string
 }
 
 type DocumentRevisionManagerContainerProps = OwnProps & StateProps;

@@ -4,7 +4,6 @@ export type FBRequestApprovalProps =
 & FBInputProps
 & FBEditorHelperProps
 & {
-  handleAddEdit?: () => any;
-  isOutput?: boolean;
+  handleAddEdit?: () => any
+  isOutput?: boolean
 };
-

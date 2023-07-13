@@ -15,17 +15,16 @@ import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import ChangeRequestForm from './ChangeRequestForm';
 import { ChangeRequestFormValues } from './types';
 
-
 interface OwnProps {
-  initialValues: ChangeRequestFormValues;
-  onSubmit: (values: ChangeRequestFormValues) => void;
-  asyncState: AsyncState;
-  changeRequest?: ChangeRequest;
-  doNotPrompt?: boolean;
-  chosenForm?: FBDocumentRevisionProps;
-  hideSideBar?: boolean;
-  currentDocRevId? : string;
-  inDialog?: boolean;
+  initialValues: ChangeRequestFormValues
+  onSubmit: (values: ChangeRequestFormValues) => void
+  asyncState: AsyncState
+  changeRequest?: ChangeRequest
+  doNotPrompt?: boolean
+  chosenForm?: FBDocumentRevisionProps
+  hideSideBar?: boolean
+  currentDocRevId? : string
+  inDialog?: boolean
 }
 
 export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);

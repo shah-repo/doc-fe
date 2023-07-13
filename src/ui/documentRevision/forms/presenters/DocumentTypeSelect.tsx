@@ -23,11 +23,11 @@ import { getActiveDocumentTypes } from '../transform';
 import { styles } from './styles/DocIdInput.styles';
 
 interface Props {
-  isDocRevStatusDraft: boolean;
-  type?: DocumentCloneType;
-  outputDocumentTypes?: FBOutputDocumentType[];
-  isDisabled: boolean;
-  documentTypeId?: string;
+  isDocRevStatusDraft: boolean
+  type?: DocumentCloneType
+  outputDocumentTypes?: FBOutputDocumentType[]
+  isDisabled: boolean
+  documentTypeId?: string
 }
 
 const schemaFieldsWithoutNormalisation = ['approvals', 'section', 'subsection', 'stepsection', 'teststep'];
@@ -68,14 +68,14 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const options: SelectOption[] = React.useMemo(() => {
     if (isNewOutput && outputDocumentTypes) {
       return (outputDocumentTypes.filter((type) => type.active)).map((e) =>
-        ({ value: e.id, text: e.documentTypeName }) as SelectOption
+        ({ value: e.id, text: e.documentTypeName }) as SelectOption,
       );
     }
 
     return documentTypes
       .filter((docType) => {
-        if (checkIsTypeMustBeOutput(docType.groupOptions) ||
-           (!isDocTypeDisabled && checkIsTypeOnlyOnOutputs(docType.groupOptions))) {
+        if (checkIsTypeMustBeOutput(docType.groupOptions)
+           || (!isDocTypeDisabled && checkIsTypeOnlyOnOutputs(docType.groupOptions))) {
           return false;
         }
         // omit parts (ENC-6788) unless it is already selected as doc type via Parts module (ENC-7022 fix)
@@ -84,14 +84,14 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
           return true;
         }
         return docType.hiddenForCreationForUsersWithoutTags?.some((tag) => currentUserTags.includes(tag));
-      }
+      },
       ).map((docType) =>
-        ({ value: docType.id, text: docType.documentTypeName })
+        ({ value: docType.id, text: docType.documentTypeName }),
       );
   }, [isNewOutput, outputDocumentTypes, documentTypes, isDocTypeDisabled, currentUserTags]);
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
+    event: React.ChangeEvent<{ name?: string, value: unknown }>,
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
@@ -115,8 +115,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
 
     // FB mode
-    const mode: FBWorkspaceMode = isNewOutput ? 'form' :
-      checkIsDocumentForm(type.groupOptions) ? 'design' : 'none';
+    const mode: FBWorkspaceMode = isNewOutput ? 'form'
+      : checkIsDocumentForm(type.groupOptions) ? 'design' : 'none';
     let scheme: FBSchemaProps[] = [];
     if (mode === 'design' && !checkIsDynamicForm(type.groupOptions)) {
       const formValues = {
@@ -128,7 +128,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         formValues,
         documentTypesById,
         _documentRevisionFormState?.schema,
-        _tabsState?.activeTabId
+        _tabsState?.activeTabId,
       );
     }
     _formState?.setMode(mode);

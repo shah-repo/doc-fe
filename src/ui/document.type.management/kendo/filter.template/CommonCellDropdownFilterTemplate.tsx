@@ -10,20 +10,19 @@ import Tooltip from '../../../components/common/kendo/Tooltip';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 import { enumToOptions, translatedOptions } from '../../transform';
 
-
 const getDSByType = (type: typeof GroupTag | typeof DOC_TYPE_GROUP) =>
-  enumToOptions(type).map((o: { label: string; value: string }) => ({
+  enumToOptions(type).map((o: { label: string, value: string }) => ({
     text: o.label,
     value: o.value,
   }));
 
 interface DataSourceProps {
-  text: string;
-  value: string | boolean;
+  text: string
+  value: string | boolean
 }
 interface ResultProps {
-  dataSource: DataSourceProps[];
-  operator: string;
+  dataSource: DataSourceProps[]
+  operator: string
 
 }
 export const getDropDownDataSource: (f: string) => ResultProps = (field: string) => {

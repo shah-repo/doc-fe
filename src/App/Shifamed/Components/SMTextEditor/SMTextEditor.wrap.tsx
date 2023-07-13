@@ -76,7 +76,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       () => _documentRevisionFormState?.isDirty,
       (isDirty: boolean | undefined) => {
         workspaceState?.setDirty(isDirty || false);
-      }
+      },
     );
 
     // MARK: @state
@@ -88,7 +88,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
         const editorState = htmlToEditorState(value);
         _textEditorState?.setEditorState(editorState);
         showToggleButton && showToggleButton();
-      }
+      },
     );
     // MARK: @helpers
     // Creates editor state with initial value

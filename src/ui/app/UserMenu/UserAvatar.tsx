@@ -19,9 +19,9 @@ const styles = makeStyles((theme: Theme) =>
   }));
 
 interface Props {
-  avatar: Nullable<string>;
-  initialColor: string;
-  name: string;
+  avatar: Nullable<string>
+  initialColor: string
+  name: string
 }
 
 const UserAvatar: React.FunctionComponent<Props> = ({
@@ -33,9 +33,9 @@ const UserAvatar: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      {avatar ?
-        <Avatar className={classes.avatar} alt={name} src={avatar} /> :
-        <Avatar className={classes.avatar} data-cy="header-userInitials">
+      {avatar
+        ? <Avatar className={classes.avatar} alt={name} src={avatar} />
+        : <Avatar className={classes.avatar} data-cy="header-userInitials">
           {getInitalsFromName(name)}
         </Avatar>
       }

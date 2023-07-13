@@ -8,7 +8,7 @@ import { MigrationSpecialFields } from './constants';
 export const toFormOptions = (forms: DocumentTypeByIdForm[]): OptionType[] => forms.map((form) => ({
   label: `${form.document.docId} - ${form.name}`,
   value: form.id,
-})
+}),
 );
 
 export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSchema: FBSchemaProps[] ): any => {
@@ -84,4 +84,3 @@ export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => {
       id: values.changeDocumentForm.value,
     },
   }); };
-

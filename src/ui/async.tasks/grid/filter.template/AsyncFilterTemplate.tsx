@@ -8,8 +8,8 @@ import { useIntl } from 'react-intl';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
-  data: string[];
-  defaultItem: string;
+  data: string[]
+  defaultItem: string
 }
 
 export const AsyncFilterTemplate = ({

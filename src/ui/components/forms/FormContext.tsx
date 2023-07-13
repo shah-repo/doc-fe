@@ -22,8 +22,8 @@ export const useFormContext = () => {
     const values = formik.values as any;
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};
     return (
-      (values?.document?.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA)) &&
-      !isEqual(JSON.stringify(_documentRevisionFormState?.schema), JSON.stringify(documentSchema))
+      (values?.document?.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))
+      && !isEqual(JSON.stringify(_documentRevisionFormState?.schema), JSON.stringify(documentSchema))
     );
   }
 
@@ -99,8 +99,8 @@ export const useFormContext = () => {
     map(_formState?.getValues(), (id: string, key) => {
       if (key === name) { return; }
       if (!poNames?.includes(key)) { return; }
-      const docRev: DocumentRevision | undefined =
-        FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, id);
+      const docRev: DocumentRevision | undefined
+        = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, id);
       const { document: { id: docId = undefined } = {} } = docRev || {};
       if (!docId) { return; }
       values.push(docId);

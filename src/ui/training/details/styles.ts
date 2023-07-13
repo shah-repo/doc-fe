@@ -32,5 +32,5 @@ export const styles = makeStyles((theme: Theme) =>
       top: theme.spacing(1),
       color: theme.palette.grey[500],
     },
-  })
+  }),
 );

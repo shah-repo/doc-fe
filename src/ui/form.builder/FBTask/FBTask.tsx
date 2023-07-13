@@ -4,7 +4,6 @@ import { FBButton, FBDialog, FBMapWrapper, FBProvider, FBSection, FBTaskField, F
 import Colors from '../../layout/theme/utils/colors';
 import { withFBTask } from './FBTask.wrap';
 
-
 const FBTask: React.FunctionComponent<FBTaskProps> = ({
   onClick,
   taskState,
@@ -34,8 +33,8 @@ const FBTask: React.FunctionComponent<FBTaskProps> = ({
         endIcon={loading && <CircularProgress size={16} />}
         {...{ disabled }}
       />
-      {!canAddTask &&
-      <FBText locale="form.builder.warning.tasks" boxProps={{ my: 4, color: Colors.error_red }} />
+      {!canAddTask
+      && <FBText locale="form.builder.warning.tasks" boxProps={{ my: 4, color: Colors.error_red }} />
       }
     </Box>
   </FBProvider>

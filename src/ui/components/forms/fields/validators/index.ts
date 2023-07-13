@@ -1,4 +1,4 @@
-import { isEmpty, isEqual } from 'lodash';
+import { isEmpty, isEqual, isNumber } from 'lodash';
 import * as Yup from 'yup';
 import { Translation } from '../../../../translations/types';
 
@@ -17,6 +17,12 @@ export const email: Validator = (value: string) => {
   // eslint-disable-next-line max-len
   if (!/^[a-z0-9!'#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return 'validators.email';
+  }
+};
+
+export const requiredNumber: Validator = (value) => {
+  if (!isNumber(value)) {
+    return 'validators.required';
   }
 };
 
@@ -54,10 +60,10 @@ const validatorFactory = (...validators: Validator[]): Validator => (value: any)
 };
 
 export const validator = (() => {
-  const memo: {
-    validators: Validator[];
-    finalValidator: Validator;
-  }[] = [];
+  const memo: Array<{
+    validators: Validator[]
+    finalValidator: Validator
+  }> = [];
 
   return (...validators: Validator[]): Validator => {
     const memoValidator = memo.find((el) => isEqual(el.validators, validators));

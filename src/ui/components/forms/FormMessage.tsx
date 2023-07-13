@@ -4,7 +4,7 @@ import { AsyncState } from '../../../state/types';
 import { toastError } from '../notifications';
 
 export interface FormMessageProps extends FormHelperTextProps {
-  asyncState: AsyncState;
+  asyncState: AsyncState
 }
 
 const FormMessage: React.FunctionComponent<FormMessageProps> = ({ asyncState, ...formHelperTextProps }) => {

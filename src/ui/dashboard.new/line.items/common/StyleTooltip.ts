@@ -8,6 +8,8 @@ const styles = () => ({
   tooltip: {
     backgroundColor: Colors.black,
     fontSize: '12px',
+    maxWidth: 420,
+    maxHeight: 207,
   },
   tooltipPlacementTop: {
     margin: '8px 0',
@@ -16,7 +18,7 @@ const styles = () => ({
   // Tooltip displays over every other element on top of it
   // this changes affect all applications tooltips so removed this
   popper: {
-    zIndex: 1,
+    zIndex: 9999,
   //  display: "none",
   },
 });

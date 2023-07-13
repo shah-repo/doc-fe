@@ -8,8 +8,8 @@ import Colors from '../../../../layout/theme/utils/colors';
 import { UpgradeToLatestDialog } from './UpgradeToLatestDialog';
 
 interface Props {
-  shouldShowUpgrade: boolean;
-  onUpgradeClick: () => void;
+  shouldShowUpgrade: boolean
+  onUpgradeClick: () => void
 }
 
 const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
@@ -23,8 +23,8 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        shouldShowUpgrade && showBanner &&
-        <>
+        shouldShowUpgrade && showBanner
+        && <>
           <Box
             bgcolor={Colors.blue}
             color={Colors.white}
@@ -64,7 +64,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             </Box>
             <CloseIcon onClick={hideBanner} style={{ cursor: 'pointer', marginLeft: 'auto' }} />
           </Box>
-          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }}/>
+          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }} />
         </>
       }
     </>

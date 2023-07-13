@@ -49,7 +49,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, docRevId || '')
+    documentRevisionsSelectors.getDocumentRevision(state, docRevId || ''),
   );
   documentRevision = documentRevision || documentRevisionFromState;
   const dialogHandler = useDialog();
@@ -113,25 +113,25 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       return false;
     }
     const hasPasswordRequiredStatusFromDocList = (
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Released ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Released
+      || documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
+      || documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
     const hasPasswordRequiredStatusFromCR = (
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Released ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Released
+      || documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated
+      || documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
 
     return isRedLine && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
   };
 
   const cleanCopyRequiresPassword = (attachment: Attachment) => {
     const hasPasswordRequiredStatusFromDocList = (
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
+      || documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
 
     const hasPasswordRequiredStatusFromCR = (
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated
+      || documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
 
     return (attachment.lineType === LINE_TYPES.CLEAN_COPY)
       && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
@@ -175,7 +175,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const startWaterMarkRequest  = (
     attachment: Attachment,
     attachmentType: AttachmentType,
-    documentRevisionId?: string
+    documentRevisionId?: string,
   ) => {
     const pdfBody: WatermarkRequestBody = {
       attachment: {

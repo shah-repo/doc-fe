@@ -11,7 +11,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
   // Prevent form submitting.
   const submitHandler: React.FormEventHandler = React.useCallback(
     (event) => event.preventDefault(),
-    []
+    [],
   );
 
   return (

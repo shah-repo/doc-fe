@@ -1,4 +1,4 @@
-import { isEmpty, isObject } from 'lodash';
+import { isEmpty, isObject, omit } from 'lodash';
 import React from 'react';
 import { FB, FBFieldTopBarProps, FBSchemaProps } from '..';
 import { toastError } from '../../components/notifications';
@@ -14,7 +14,6 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     inputProps: { type } = {},
     ...props
   }: T) => {
-
     const { fieldWrapperState, workspaceState, bookmarkState } = FB.useStores();
     const { documentId, document } = workspaceState || {};
     const { documentType } = document?.document || {};
@@ -22,7 +21,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     const { deleteInFormDisabled } = inputProps || {};
     const deleteDisabled = inputProps?.editorProperties?.includes('deleteDisabled');
     inputProps = {
-      ...inputProps,
+      ...omit(inputProps, 'id'),
       deleteDisabled: (isDocumentForm && deleteInFormDisabled) || (!isDocumentForm && deleteDisabled),
     };
 
@@ -48,7 +47,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);
 
     // MARK: @helpers
-    function hasValidationRelation(fieldName: string, fieldRules: string): boolean {
+    function hasValidationRelation (fieldName: string, fieldRules: string): boolean {
       const scheme = workspaceState?.getSchema() || [];
       let relatedValidationItem: FBSchemaProps | undefined;
       for (const schemeItem of scheme) {
@@ -64,13 +63,13 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       }
       if (relatedValidationItem) {
         const relatedValidationLabel = (
-          relatedValidationItem.label ||
-          relatedValidationItem.placeholder ||
-          relatedValidationItem.name
+          relatedValidationItem.label
+          || relatedValidationItem.placeholder
+          || relatedValidationItem.name
         );
         // TODO: Check for copy and do translation
         // eslint-disable-next-line max-len
-        toastError( `Field can't be removed because it has validation relation with the field: ${relatedValidationLabel}!`);
+        toastError(`Field can't be removed because it has validation relation with the field: ${relatedValidationLabel}!`);
         return true;
       }
       return false;

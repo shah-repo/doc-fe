@@ -15,43 +15,43 @@ export enum TrainingPlanTransition {
 }
 
 export interface TrainingRecord {
-  id: string;
-  completedAt?: string;
-  expireOn: string;
-  obsoletedOn?: string;
-  dueOn: string;
-  isRefreshed: boolean;
-  isValid: boolean;
-  trainingPlan?: TrainingPlan;
-  documentRevision: Partial<DocumentRevision>;
-  trId: string;
+  id: string
+  completedAt?: string
+  expireOn: string
+  obsoletedOn?: string
+  dueOn: string
+  isRefreshed: boolean
+  isValid: boolean
+  trainingPlan?: TrainingPlan
+  documentRevision: Partial<DocumentRevision>
+  trId: string
 }
 
 export interface TrainingListData {
-  documentRevision: DocumentRevision;
-  trainingPlan: TrainingPlan;
-  createdAt: Date;
-  dueOn: Date;
-  completedAt: Date;
-  trId: string;
+  documentRevision: DocumentRevision
+  trainingPlan: TrainingPlan
+  createdAt: Date
+  dueOn: Date
+  completedAt: Date
+  trId: string
 }
 
 export interface TrainingRecordQuery {
-  isValid: boolean;
-  revision: number;
-  docId: string;
-  docRevTitle: string;
-  userName: string;
-  createdAtAfter?: Date;
-  dueOn?: Date;
-  completedAtAfter?: Date;
-  tcId: string;
-  dueOnBefore?: Date;
-  trId: string;
-  documentRevision?: DocumentRevision;
-  trainingPlan?: TrainingPlan;
-  completedAt?: Date;
-  id: string;
+  isValid: boolean
+  revision: number
+  docId: string
+  docRevTitle: string
+  userName: string
+  createdAtAfter?: Date
+  dueOn?: Date
+  completedAtAfter?: Date
+  tcId: string
+  dueOnBefore?: Date
+  trId: string
+  documentRevision?: DocumentRevision
+  trainingPlan?: TrainingPlan
+  completedAt?: Date
+  id: string
 }
 
 export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
@@ -65,21 +65,20 @@ export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
   id: '',
 };
 
-
 interface TrainingPlan {
-  id: string;
-  status: TrainingPlanStatus;
-  validity: number;
-  trainingRecords: TrainingRecord[];
-  document: DocumentRevisionDocument;
-  employee: Employee;
-  curriculumDocIds: string[];
+  id: string
+  status: TrainingPlanStatus
+  validity: number
+  trainingRecords: TrainingRecord[]
+  document: DocumentRevisionDocument
+  employee: Employee
+  curriculumDocIds: string[]
 }
 
 export interface TrainingTransitionRequestBody {
-  password: string;
+  password: string
 }
 
 export interface TrainingRequestBody {
-  docRev: Id;
+  docRev: Id
 }

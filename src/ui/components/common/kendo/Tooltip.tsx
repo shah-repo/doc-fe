@@ -6,13 +6,14 @@ import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTool
 import { styles } from './Tooltip.styles';
 
 interface Props {
-  data: string | number;
-  customClass?: string;
-  childrenElement?: JSX.Element;
-  placement?: 'bottom' | 'left' | 'right' | 'top' | 'top-start';
-  showTooltip?: boolean;
-  tooltipContent?: Nullable<string>;
-  className?: string;
+  data: string | number
+  customClass?: string
+  customTooltipClass?: string
+  childrenElement?: JSX.Element
+  placement?: 'bottom' | 'left' | 'right' | 'top' | 'top-start'
+  showTooltip?: boolean
+  tooltipContent?: Nullable<string>
+  className?: string
 }
 
 const Tooltip: React.FunctionComponent<Props> = ({
@@ -22,11 +23,12 @@ const Tooltip: React.FunctionComponent<Props> = ({
   placement = 'top-start',
   showTooltip = false,
   tooltipContent,
+  customTooltipClass,
   className,
 }) => {
   const classes = styles();
   const renderContent = <span className={className}>
-    {!childrenElement && <span  className={customClass}>{data}</span>}
+    {!childrenElement && <span className={customClass}>{data}</span>}
     {childrenElement && childrenElement}
   </span>;
   return (
@@ -34,7 +36,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
       interactive={true}
       enterDelay={1000}
       title={
-        <Typography component={'p'} className={`${classes.tooltip}`}>
+        <Typography component="p" className={customTooltipClass ?? classes.tooltip}>
           {tooltipContent ? convertHtmlEntities(tooltipContent.replace(/(<([^>]+)>|\/n)/g, '')) : data}
         </Typography>
       }

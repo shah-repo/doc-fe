@@ -32,7 +32,7 @@ class RelatedPartsState {
           return { ...item, ...data };
         }
         return item;
-      }
+      },
     );
     this.clearListItemBeingEdited();
   }
@@ -48,7 +48,7 @@ class RelatedPartsState {
   @computed get relatedSubParts() {
     if (this.showOnlyActiveSubParts) {
       return this.relatedPartsList.filter((part) =>
-        ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status)
+        ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status),
       );
     }
     return this.relatedPartsList;

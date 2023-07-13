@@ -6,11 +6,11 @@ export type FBMediaCarouselProps =
 & Pick<BoxProps, 'onMouseOver' | 'onMouseLeave'>
 & Pick<FBMediaAlbumProps, 'collection' | 'removeMedia' | 'actionsDisabled' | 'autosave'>
 & {
-  handleNext?: () => any;
-  handleBack?: () => any;
-  handleDelete?: () => any;
-  mediaCarouselState?: FBMediaCarouselState;
-  activeMediaPath?: string;
-  toolsVisibility?: FBVisibilityType;
-  previewType?: FBFilePreviewType;
+  handleNext?: () => any
+  handleBack?: () => any
+  handleDelete?: () => any
+  mediaCarouselState?: FBMediaCarouselState
+  activeMediaPath?: string
+  toolsVisibility?: FBVisibilityType
+  previewType?: FBFilePreviewType
 };

@@ -36,9 +36,9 @@ export const withFBTextField = <T extends FBTextFieldProps>(
 
     const intl = useIntl();
     disabled = (
-      disabled ||
-      get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD' ||
-      formState?.getFieldValue('signatureRequestId')
+      disabled
+      || get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD'
+      || formState?.getFieldValue('signatureRequestId')
     );
 
     (isUndefined(multiline)) && (
@@ -75,8 +75,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       }
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
-      if (workspaceState?.isChangeRequest && workspaceState?.autosave &&
-         (name.includes('.justificationOfChange') ||  name.includes('.descriptionOfChange'))) {
+      if (workspaceState?.isChangeRequest && workspaceState?.autosave
+         && (name.includes('.justificationOfChange') ||  name.includes('.descriptionOfChange'))) {
         submitForm();
         return;
       }
@@ -89,7 +89,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       () => workspaceState?.formInputSync.get(name),
       (value?: string) => {
         formState?.setFieldValue(name, value, true);
-      }
+      },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

@@ -56,6 +56,10 @@ const getNavigationDetails = (state: ApplicationState, category: string) => {
   return { label: menuItem?.label, icon: menuItem?.icon, path: menuItem?.path, type: menuItem?.type };
 };
 
+const getActiveLocations = (state: ApplicationState) =>
+  chain(state.company.companyMine.locations)
+    .filter({ active: true });
+
 const getActiveEmployees = (state: ApplicationState) =>
   chain(state.company.companyMine.employees)
     .filter({ active: true })
@@ -64,6 +68,8 @@ const getActiveEmployees = (state: ApplicationState) =>
     .sort(sortStringsByKey('user.name'));
 
 const getAllEmployees = (state: ApplicationState) => state.company.companyMine.employees;
+
+const getAllLocations = (state: ApplicationState) => state.company.companyMine.locations;
 
 export default {
   getWhiteLabeling,
@@ -84,4 +90,6 @@ export default {
   getNavigationDetails,
   getActiveEmployees,
   getAllEmployees,
+  getActiveLocations,
+  getAllLocations,
 };

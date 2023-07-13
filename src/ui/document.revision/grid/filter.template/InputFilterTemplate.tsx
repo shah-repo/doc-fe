@@ -4,26 +4,11 @@ import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import { debounce, isEmpty } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { SOLO_OPERATORS, VALUE_OPERATORS } from '../../../components/KendoDataGrid/constants';
 import { KendoGridFilterCellOperators } from '../../../components/KendoGrid/interfaces';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
-const valueOperators = [
-  'contains',
-  'doesnotcontain',
-  'eq',
-  'neq',
-  'startswith',
-  'endswith',
-];
-
-const soloOperators = [
-  'isnull',
-  'isnotnull',
-  'isempty',
-  'isnotempty',
-];
-
-const operatorsList = [...valueOperators, ...soloOperators];
+const operatorsList = [...VALUE_OPERATORS, ...SOLO_OPERATORS];
 
 export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
   value = '',
@@ -43,9 +28,9 @@ export const InputFilterTemplate: React.FC<GridFilterCellProps> = ({
     newValue,
     newOperator,
   }: {
-    event: Parameters<GridFilterCellProps['onChange']>[0]['syntheticEvent'];
-    newValue?: GridFilterCellProps['value'];
-    newOperator?: GridFilterCellProps['operator'];
+    event: Parameters<GridFilterCellProps['onChange']>[0]['syntheticEvent']
+    newValue?: GridFilterCellProps['value']
+    newOperator?: GridFilterCellProps['operator']
   }) => {
     onChange({
       value: newValue ?? value,

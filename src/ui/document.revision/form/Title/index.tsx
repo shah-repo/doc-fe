@@ -8,10 +8,10 @@ import TitleState from './state';
 import { asyncDebounce } from '../../../../common/utils/helpers';
 
 interface TitleProps {
-  name: string;
-  documentTypeId?: string;
-  disabled?: boolean;
-  value?: string;
+  name: string
+  documentTypeId?: string
+  disabled?: boolean
+  value?: string
 }
 
 const Index: FC<TitleProps> = ({
@@ -35,7 +35,7 @@ const Index: FC<TitleProps> = ({
       },
       300,
     ),
-    [titleState]
+    [titleState],
   );
 
   if (!isVisible) {

@@ -105,7 +105,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     isOpen: false,
     menu: [
       {
-        label: 'Lots',
+        label: 'Lot/Inventory',
         type: 'CATEGORY',
         icon: '/navigation_icons/tag-check.svg',
         category: 'Lot',

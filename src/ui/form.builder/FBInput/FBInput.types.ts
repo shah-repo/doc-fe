@@ -75,7 +75,10 @@ export type FBInputType =
   | 'poapprovals'
   | 'lhrbuild'
   | 'purchaseordersummary'
-  | 'downloadsheet';
+  | 'downloadsheet'
+  | 'lotTransfers'
+  | 'lotQuantity'
+  | 'lotOnHandQuantity';
 
 export type FBInputProps =
   & FBLabelProps
@@ -84,125 +87,125 @@ export type FBInputProps =
   & Pick<AutocompleteProps, 'multiple'>
   & Pick<FBProviderProps, 'formState'>
   & Pick<BaseTextFieldProps,
-    | 'children'
-    | 'error'
-    | 'value'
-    | 'disabled'
-    | 'name'
-    | 'helperText'
-    | 'rows'
-    | 'placeholder'
-    | 'defaultChecked'
-    | 'hidden'
+  | 'children'
+  | 'error'
+  | 'value'
+  | 'disabled'
+  | 'name'
+  | 'helperText'
+  | 'rows'
+  | 'placeholder'
+  | 'defaultChecked'
+  | 'hidden'
   > & {
-    onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
-    onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
-    setTranform?: (value: string) => string;
-    type?: FBInputType;
-    index?: number;
-    stepIndex?: number;
-    gutter?: boolean;
-    linkUrl?: string;
-    defaultValue?: any;
-    inputState?: FBInputState;
-    editorProperties?: FBEditorPropertiesType[];
-    includeContext?: boolean;
-    rules?: any;
-    validationMode?: FBEditorValidationMode;
-    includeSelectedSchema?: boolean;
-    paragraph?: string;
-    isTemplate?: boolean;
-    includeQRScan?: boolean;
-    isInputOwner?: boolean;
-    designDisabled?: boolean;
-    tabId?: string;
-    removeBorder?: boolean;
+    onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any
+    onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any
+    setTranform?: (value: string) => string
+    type?: FBInputType
+    index?: number
+    stepIndex?: number
+    gutter?: boolean
+    linkUrl?: string
+    defaultValue?: any
+    inputState?: FBInputState
+    editorProperties?: FBEditorPropertiesType[]
+    includeContext?: boolean
+    rules?: any
+    validationMode?: FBEditorValidationMode
+    includeSelectedSchema?: boolean
+    paragraph?: string
+    isTemplate?: boolean
+    includeQRScan?: boolean
+    isInputOwner?: boolean
+    designDisabled?: boolean
+    tabId?: string
+    removeBorder?: boolean
 
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
-    deleteDisabled?: boolean;
+    deleteDisabled?: boolean
     /**
      * @cfg {Bool} Whether the field can be deleted in the form.
      */
-    deleteInFormDisabled?: boolean;
-    instructionsDocument?: string;
-    reviseDisabled?: boolean;
-    outputDisabled?: boolean;
-    approvers?: string[] | Employee[];
-    approverGroups?: string[] | GroupRequestBody[];
-    approvalRoles?: string[] | FBInlineApprovalRole[];
-    approveIsBlocking?: boolean;
-    applicableOn?: any[];
-    actions?: string[];
-    hellosignFlowProps?: any;
-    showErrorMsg?: boolean;
+    deleteInFormDisabled?: boolean
+    instructionsDocument?: string
+    reviseDisabled?: boolean
+    outputDisabled?: boolean
+    approvers?: string[] | Employee[]
+    approverGroups?: string[] | GroupRequestBody[]
+    approvalRoles?: string[] | FBInlineApprovalRole[]
+    approveIsBlocking?: boolean
+    applicableOn?: any[]
+    actions?: string[]
+    hellosignFlowProps?: any
+    showErrorMsg?: boolean
     // Field is under validation for validation mode (e.g show/hide)
     // but should not be included in the next form validation flow (e.g on form save)
-    omitFinalValidation?: boolean;
-    validators?: Dictionary<any>;
-    forceDefault?: boolean;
-    autosave?: boolean;
-    transform?: FBInputTransform;
-    dataCy?: string;
-    withState?: boolean;
-    bookmarked?: boolean;
+    omitFinalValidation?: boolean
+    validators?: Dictionary<any>
+    forceDefault?: boolean
+    autosave?: boolean
+    transform?: FBInputTransform
+    dataCy?: string
+    withState?: boolean
+    bookmarked?: boolean
     /**
      * @cfg {Bool} Whether the type added to the schema must be unique.
      * El with a type marked as a uniqueSchemaItem can be added to the schema only once.
      */
-    uniqueSchemaItem?: boolean;
+    uniqueSchemaItem?: boolean
     /**
      * @cfg {Bool} Include component into validation schema select option.
      */
-    applicableValidationSchema?: boolean;
+    applicableValidationSchema?: boolean
     /**
      * @cfg {Bool} Any additional config we want to pass to the input.
      */
-    editorConfig?: any;
+    editorConfig?: any
     /**
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
-    boxProps?: BoxProps;
-    inspectionSection?: boolean;
+    boxProps?: BoxProps
+    inspectionSection?: boolean
     /**
      * @cfg {String} Validation attribute name. Use this prop for non labeled controls.
      */
-    validationAttribute?: string;
+    validationAttribute?: string
     /**
      * @cfg {Bool} Flag for control inputs which values we need to generate control's
      * value but we need to omit it from form values.
      */
-    omitFormValue?: boolean;
+    omitFormValue?: boolean
     /**
      * @cfg {Bool} Item is deleted. It will not be visible but will remain in scheme.
      */
-    deleted?: boolean;
+    deleted?: boolean
     // /**
     //  * @cfg {Bool} true to force form validation on input render if its default value
     //  * is validation relation.
     //  */
     // validateDefaultValue?: boolean;
-    includeNotes?: boolean;
-    isOutput?: boolean;
+    includeNotes?: boolean
+    isOutput?: boolean
     /**
      * @cfg {Bool} If true focus the texteditor on render.
      */
-    autoFocus?: boolean;
+    autoFocus?: boolean
     /**
      * @cfg {Bool} If true scroll to el on render.
      */
-    autoScrollTo?: boolean;
+    autoScrollTo?: boolean
 
     /**
      * @cfg {string} Username that holds the lock.
      */
-    lockOwnerName?: string;
+    lockOwnerName?: string
     /**
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
-    labelProps?: BoxProps;
-    isAddAction?: boolean;
+    labelProps?: BoxProps
+    isAddAction?: boolean
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -246,6 +249,12 @@ export const FBAutosave: FBInputType[] = [
   'select',
   'quantity',
   'texteditor',
+  'lotTransfers',
+];
+
+export const SectionTypeField: FBInputType[] = [
+  'section',
+  'subsection',
 ];
 
 export const BlockTypeField: FBInputType[] = [
@@ -261,6 +270,6 @@ export const BlockTypeField: FBInputType[] = [
 ];
 
 export interface FBInputConstructor {
-  value: any;
-  hidden?: boolean;
+  value: any
+  hidden?: boolean
 }
