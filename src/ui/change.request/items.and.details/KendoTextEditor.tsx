@@ -1,6 +1,6 @@
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Field, FieldProps, useFormikContext } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
@@ -9,12 +9,12 @@ import { FBInputProps } from '../../form.builder/FBInput/FBInput.types';
 import styles from './KendoTextEditor.styles';
 
 type KendoTextEditorProps =
-& FBInputProps
-& {
-  name: string
-  label: string
-  defaultValue?: string
-};
+  & FBInputProps
+  & {
+    name: string
+    label: string
+    defaultValue?: string
+  };
 
 const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   name = 'justificationOfChange',
@@ -27,6 +27,10 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const maxAutoRowExpandSize = 4;
   const fieldValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const classes = styles();
+
+  useEffect(() => {
+    return formik.resetForm();
+  }, []);
 
   const onBlur = (evt) => {
     if (!name) { return; }
