@@ -9,7 +9,7 @@ export interface BOMState {
   data: BOM[]
   dataState: DataState
   expanded: string[]
-  inEdit: Array<{ id: number, isNew: boolean }>
+  inEdit: Array<{id: string }>
 }
 
 export interface DataState {

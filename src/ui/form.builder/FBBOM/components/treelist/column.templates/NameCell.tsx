@@ -11,14 +11,14 @@ import { Autocomplete, FormikField } from '../../../../../components/forms/field
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
-import { ADD_FIELD, MODE_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
 const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { colSpan, id, style, dataItem, field } = props;
-  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
@@ -58,7 +58,9 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
     // Trigger API Here
     field && setFieldValue(field, value?.value);
     // settings up other fields
-    // dataItem.displayRevision = '1';
+    if (value?.value) {
+      dataItem.docId = value.value;
+    }
     dataItem.displayStatus = 'Released';
     setFieldValue('displayRevision', '1');
     setFieldValue('displayStatus', 'Released');

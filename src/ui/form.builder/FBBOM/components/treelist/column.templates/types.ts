@@ -1,9 +1,8 @@
 import { TreeListCellProps } from '@progress/kendo-react-treelist';
 import { EditableBOM } from '../../../interface';
-import { BOM } from '../interface';
 
 export interface CustomTreeListCellProps extends TreeListCellProps {
-  dataItem: BOM
+  dataItem: EditableBOM
 }
 
 export interface BOMActionsProps<T> {
@@ -12,8 +11,8 @@ export interface BOMActionsProps<T> {
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
   onConfirm: () => void
-  onDiscard?: (T: EditableBOM| BOM) => void
-  onDelete?: () => void
+  onDiscard?: (T) => void
+  onDelete?: (T) => void
   onRestore?: () => void
   onReorder?: () => void
 }

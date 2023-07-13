@@ -5,9 +5,8 @@ import {
   FormikField,
   TextField,
 } from '../../../../../components/forms/fields-next';
-import { MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
-import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { enableFieldAfterPartSelection, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -21,8 +20,8 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const { getFieldProps } = useFormikContext<EditableBOM>();
-  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const { values, getFieldProps } = useFormikContext<EditableBOM>();
+  const isEditMode = isEditBOM(dataItem);
 
   const getFieldInfo = () =>
     field && (
@@ -31,7 +30,7 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
           {...getFieldProps(field)}
           type="text"
           inputProps={{ min: 0 }}
-          disabled={dataItem[ADD_FIELD]}
+          disabled={!enableFieldAfterPartSelection(dataItem, values.docId)}
           size="small"
         />
       </FormikField>

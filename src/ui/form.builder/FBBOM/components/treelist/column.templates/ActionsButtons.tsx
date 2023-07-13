@@ -86,7 +86,7 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
             <IconButton
               kind="action"
               size="small"
-              onClick={onDelete}
+              onClick={() => onDelete(dataItem)}
               ref={deleteRef}
               disabled={isDeleteDisabled}
             >

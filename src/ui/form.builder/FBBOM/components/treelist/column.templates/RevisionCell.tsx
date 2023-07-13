@@ -5,9 +5,9 @@ import {
   FormikField,
   TextField,
 } from '../../../../../components/forms/fields-next';
-import { MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -22,7 +22,7 @@ const TextInfoCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren, isEditMode: dataItem[ADD_FIELD] });
   const { getFieldProps } = useFormikContext<EditableBOM>();
-  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const isEditMode = isEditBOM(dataItem);
 
   const getFieldInfo = () =>
     field && (

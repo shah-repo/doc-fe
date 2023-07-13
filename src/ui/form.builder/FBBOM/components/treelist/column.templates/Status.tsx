@@ -4,8 +4,8 @@ import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
-import { ADD_FIELD, MODE_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -17,10 +17,10 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   className,
   ...otherProps
 }) => {
-  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const isEditMode = isEditBOM(dataItem);
   const classes = styles({ isEditMode });
   const { values } = useFormikContext<EditableBOM>();
-  const status = isEditMode ? values.displayStatus : dataItem[field];
+  const status = isEditMode ? values.displayStatus : dataItem.displayStatus;
 
   return (
     <td

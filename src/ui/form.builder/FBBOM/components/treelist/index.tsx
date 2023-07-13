@@ -152,9 +152,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     formik?.resetForm();
   };
 
-  const removeBOM = () => {
+  const removeBOM = (dataItem) => {
     // Delete API Here
-    discardBOM();
+    discardBOM(dataItem);
   };
 
   const onRestore = () => {

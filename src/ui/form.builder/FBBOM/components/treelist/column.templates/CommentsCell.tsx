@@ -6,10 +6,9 @@ import {
   FormikField,
   TextField,
 } from '../../../../../components/forms/fields-next';
-import { MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
-import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -25,7 +24,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
   const value = values.comments ?? '';
-  const isEditMode = dataItem[MODE_FIELD] || dataItem[ADD_FIELD];
+  const isEditMode = isEditBOM(dataItem);
   const displayValue = dataItem[field ?? ''] ?? '-';
 
   const getFieldInfo = () =>

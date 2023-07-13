@@ -42,9 +42,9 @@ export const styles = makeStyles((theme) => ({
   deselectedDot: {
     color: Colors.dark_gray2,
   },
-  nameCell: ({ isEditMode }) => ({
+  nameCell: (props) => ({
     'vertical-align': 'middle',
-    marginLeft: isEditMode ? 0 : theme.spacing(1.875),
+    marginLeft: props.isEditMode ? 0 : theme.spacing(1.875),
   }),
   titleInfoCell: (props) => ({
     fontWeight: props?.hasChildren ? 600 : 400,
