@@ -1,4 +1,5 @@
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
+import ARIDCell from './column.templates/ARIDCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
@@ -11,6 +12,7 @@ import RevisionCell from './column.templates/RevisionCell';
 import { Status } from './column.templates/Status';
 import TitleCell from './column.templates/TitleCell';
 import UnitCell from './column.templates/UnitCell';
+import { AlternatePartsList } from './header.templates/AlternatePartsList';
 import { Attachments } from './header.templates/Attachments';
 import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
@@ -43,20 +45,28 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: NameCell,
   },
   {
-    field: 'title',
-    title: 'TITLE',
-    width: '200px',
-    filter: TreeListTextFilter,
-    hidden: false,
-    cell: TitleCell,
-  },
-  {
     field: 'displayRevision',
     title: 'REV',
     width: '106px',
     filter: TreeListTextFilter,
     hidden: false,
     cell: RevisionCell,
+  },
+  {
+    field: 'title',
+    title: 'TITLE',
+    width: '300px',
+    filter: TreeListTextFilter,
+    hidden: false,
+    cell: TitleCell,
+  },
+  {
+    field: 'arId',
+    title: 'AR ID',
+    width: '200px',
+    filter: TreeListTextFilter,
+    hidden: false,
+    cell: ARIDCell,
   },
   {
     field: 'displayStatus',
@@ -76,7 +86,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   },
   {
     field: 'leadTime',
-    title: 'LEAD TIME',
+    title: 'LEAD TIME (Days)',
     width: '127px',
     filter: TreeListTextFilter,
     hidden: false,
@@ -85,7 +95,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   },
   {
     field: 'quantity',
-    title: 'QUANTITY',
+    title: 'QTY.',
     width: '154px',
     filter: TreeListTextFilter,
     hidden: false,
@@ -98,6 +108,14 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     filter: TreeListTextFilter,
     hidden: false,
     cell: UnitCell,
+  },
+  {
+    field: 'hasChanges',
+    title: 'Has Changes',
+    width: '154px',
+    filter: TreeListTextFilter,
+    hidden: false,
+    cell: QuantityCell,
   },
   {
     field: 'refDesignator',
@@ -153,6 +171,16 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: BooleanCell,
     filter: TreeListTextFilter,
     headerCell: Vendors,
+    hidden: false,
+    sortable: false,
+  },
+  {
+    field: 'alternatePartsList',
+    title: 'Alternate Parts List',
+    width: '80px',
+    cell: BooleanCell,
+    filter: TreeListTextFilter,
+    headerCell: AlternatePartsList,
     hidden: false,
     sortable: false,
   },

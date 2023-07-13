@@ -1553,5 +1553,10 @@
   "settings.bom.approved.supplier.list.changes": "Approved Supplier List - Affects Part Rev",
   "settings.bom.change.attachment.changes": "Changes to Attachments (other Enlil objects)",
   "settings.bom.change.references": "Changes to References - Affects Part Rev",
-  "bom.header.add.item": "Add Item"
+  "bom.header.add.item": "Add Item",
+  "bom.table.title.alternate.parts.list": "Alternate Parts List",
+  "bom.table.title.attachments": "Attachments",
+  "bom.table.title.primary.attachments": "Primary Attachments",
+  "bom.table.title.vendors": "Vendors",
+  "bom.table.title.issues": "Issues"
 }

@@ -122,7 +122,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     };
   };
 
+  const isNewBOMAdditionInProgress = () => {
+    return state.data[0].employees && state.data[0].employees.filter(data => data[ADD_FIELD])?.length > 0;
+  };
   const addBOM = () => {
+    if (isNewBOMAdditionInProgress()) {
+      return;
+    }
     const newBOM: EditableBOM = createNewItem();
     state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
     state.data[0].employees?.push(newBOM);
@@ -135,8 +141,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   };
 
   const editBOM = ({ dataItem }: BOMEditEvent) => {
+    if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
+      state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
+    }
     setState({
       ...state,
+      data: [...state.data],
       inEdit: [extendDataItem(dataItem, SUB_ITEMS_FIELD)],
     });
   };
@@ -302,7 +312,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
             <TreeList
               {...state.dataState}
               style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
-              tableProps={{ style: { width: '2023px' } }}
+              tableProps={{ style: { width: '2423px' } }}
               editField={MODE_FIELD}
               expandField={EXPAND_FIELD}
               subItemsField={SUB_ITEMS_FIELD}

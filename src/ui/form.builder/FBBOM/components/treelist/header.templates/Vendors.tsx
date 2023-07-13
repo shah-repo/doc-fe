@@ -1,8 +1,9 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React from 'react';
+import { translate } from '../../../../../../common/intl';
 import { styles } from './styles';
 
 export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
@@ -15,7 +16,12 @@ export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
       alignContent="flex-start"
       justify="flex-start"
     >
-      <FontAwesomeIcon icon={regular('receipt')} className={classes.icon} />
+      <Tooltip
+        title={translate('bom.table.title.vendors')}
+        placement="top"
+      >
+        <FontAwesomeIcon icon={regular('receipt')} className={classes.icon} />
+      </Tooltip>
     </Grid>
   );
 };

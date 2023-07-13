@@ -1,8 +1,9 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React from 'react';
+import { translate } from '../../../../../../common/intl';
 import { styles } from './styles';
 
 export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = () => {
@@ -15,7 +16,12 @@ export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = () => 
       alignContent="flex-start"
       justify="flex-start"
     >
-      <FontAwesomeIcon icon={regular('paperclip')} className={classes.icon} />
+      <Tooltip
+        title={translate('bom.table.title.attachments')}
+        placement="top"
+      >
+        <FontAwesomeIcon icon={solid('paperclip')} className={classes.icon} />
+      </Tooltip>
     </Grid>
   );
 };

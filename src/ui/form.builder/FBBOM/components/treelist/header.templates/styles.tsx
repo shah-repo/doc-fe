@@ -5,6 +5,7 @@ export const styles = makeStyles((theme) => ({
   icon: {
     height: 17,
     width: 15,
+    cursor: 'pointer',
   },
   issues: {
     height: 17,
