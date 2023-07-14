@@ -2,6 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React from 'react';
+import FBBOMDetailDrawer from '../../drawer';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -16,6 +17,14 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
   const flag = dataItem[field ?? ''] as boolean;
   const handleToggle = () => {
     // TODO open side bar
+    if (field === 'alternatePartsList') {
+      setOpenPartsDrawer(true);
+    }
+  };
+  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+
+  const closeDrawer = () => {
+    setOpenPartsDrawer(false);
   };
 
   return (
@@ -31,6 +40,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
           className={cx(classes.dot, { selectedDot: flag, deselectedDot: !flag })}
         />
       </div>
+      <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer }} />
     </td>
   );
 };

@@ -28,6 +28,7 @@ const bom: BOM[] = [
         issues: false,
         vendor: false,
         comments: 'Sun glass comment',
+        alternatePartsList: true,
         employees: [
           {
             id: 3,

@@ -8,10 +8,13 @@ import { FormikProvider, useFormik } from 'formik';
 import { isEmpty, map, omit, replace } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
+import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
@@ -34,6 +37,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     expanded: [bom[0].id],
     inEdit: [],
   });
+
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
@@ -51,6 +55,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       ...state,
       dataState: event.dataState,
     });
+  };
+
+  const confirmationDialog = useDialog();
+  const [selectedPart, setSelectedPart] = useState();
+  const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
+    // API call here
+    discardBOM(selectedPart);
+    confirmationDialog.close();
+  };
+
+  const cancelDeletePart = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    confirmationDialog.close();
   };
 
   const addExpandField = (dataTree: BOM[]) => {
@@ -167,7 +184,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
 
   const removeBOM = (dataItem) => {
     // Delete API Here
-    discardBOM(dataItem);
+    confirmationDialog.open();
+    setSelectedPart(dataItem);
   };
 
   const onRestore = () => {
@@ -344,6 +362,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
               cellRender={cellRender}
             />
           </Grid>
+          {confirmationDialog.isOpen && (
+            <AlertDialog
+              dialog={confirmationDialog}
+              confirmAction={confirmDeletePart}
+              cancelAction={cancelDeletePart}
+              message="bom.item.delete.alert"
+            />
+          )}
         </Grid>
       </FormikProvider>
     </Grid>
