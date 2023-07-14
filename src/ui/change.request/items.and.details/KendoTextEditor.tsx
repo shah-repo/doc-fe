@@ -28,9 +28,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   const fieldValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const classes = styles();
 
-  useEffect(() => {
-    return formik.resetForm();
-  }, []);
+  useEffect(formik.resetForm, []);
 
   const onBlur = (evt) => {
     if (!name) { return; }
