@@ -6,7 +6,7 @@ import {
   TextField,
 } from '../../../../../components/forms/fields-next';
 import { EditableBOM } from '../../../interface';
-import { enableFieldAfterPartSelection, isEditBOM } from '../utils';
+import { enableFieldAfterPartSelection, getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -49,8 +49,8 @@ const UnitCell: ComponentType<CustomTreeListCellProps> = ({
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (
-        <span className={classes.titleInfoCell}>
-          {dataItem[field ?? ''] ?? '-'}
+        <span className={classes.Cell}>
+          {getCellValue(dataItem, field)}
         </span>
       )}
     </td>

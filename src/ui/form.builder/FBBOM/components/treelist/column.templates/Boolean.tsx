@@ -26,7 +26,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
     >
-      <div onClick={handleToggle}>
+      <div onClick={isChecked ? handleToggle : undefined}>
         <FontAwesomeIcon
           icon={isChecked ? solid('circle') : regular('circle')}
           className={cx(classes.dot, { selectedDot: isChecked, deselectedDot: !isChecked })}

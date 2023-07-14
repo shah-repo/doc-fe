@@ -3,8 +3,8 @@ import ARIDCell from './column.templates/ARIDCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
+import IDCell from './column.templates/IDCell';
 import LeadTimeCell from './column.templates/LeadTimeCell';
-import NameCell from './column.templates/NameCell';
 import { PrimaryAttachmentsCell } from './column.templates/PrimaryAttachments';
 import QuantityCell from './column.templates/QuantityCell';
 import RefDesignatorCell from './column.templates/RefDesignatorCell';
@@ -20,6 +20,8 @@ import { Vendors } from './header.templates/Vendors';
 
 export const SUB_ITEMS_FIELD = 'employees';
 export const EXPAND_FIELD = 'expanded';
+export const SELECTED_PART_KEY_SEPARATOR = '$$$';
+export const CELL_EMPTY_VALUE = '-';
 export const TREELIST_CONFIG = {
   sortable: true,
   reorderable: true,
@@ -42,7 +44,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     hidden: false,
     disableShowOrHideSelection: true,
-    cell: NameCell,
+    cell: IDCell,
   },
   {
     field: 'displayRevision',

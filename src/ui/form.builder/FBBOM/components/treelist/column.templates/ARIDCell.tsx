@@ -5,8 +5,9 @@ import {
   FormikField,
   TextField,
 } from '../../../../../components/forms/fields-next';
+import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
-import { enableFieldAfterPartSelection, isEditBOM } from '../utils';
+import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -20,7 +21,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const { values, getFieldProps } = useFormikContext<EditableBOM>();
+  const { getFieldProps } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
 
   const getFieldInfo = () =>
@@ -30,7 +31,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
           {...getFieldProps(field)}
           type="text"
           inputProps={{ min: 0 }}
-          disabled={!enableFieldAfterPartSelection(dataItem, values.docId)}
+          disabled={dataItem[ADD_FIELD]}
           size="small"
         />
       </FormikField>
@@ -49,8 +50,8 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (
-        <span className={classes.titleInfoCell}>
-          {dataItem[field ?? ''] ?? '-'}
+        <span className={classes.Cell}>
+          {getCellValue(dataItem, field)}
         </span>
       )}
     </td>

@@ -7,7 +7,7 @@ import {
 } from '../../../../../components/forms/fields-next';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
-import { isEditBOM } from '../utils';
+import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -51,7 +51,7 @@ const CostCell: ComponentType<CustomTreeListCellProps> = ({
       {isEditMode && getFieldInfo()}
       {!isEditMode && (
         <span className={classes.titleInfoCell}>
-          {dataItem[field ?? ''] ?? '-'}
+          {getCellValue(dataItem, field)}
         </span>
       )}
     </td>

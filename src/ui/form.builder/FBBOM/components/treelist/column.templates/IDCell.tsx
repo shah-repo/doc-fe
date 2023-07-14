@@ -12,11 +12,12 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { EditableBOM } from '../../../interface';
+import { SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
+const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { colSpan, id, style, dataItem, field } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
@@ -35,18 +36,42 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
     },
   });
 
+  // const fetchSelectedPartAsync = useAsync({
+  //   onSuccess: (data: DocumentRevision[] = []) => {
+  //     console.log('parts ::', data);
+  //     field && setFieldValue(field, value?.value);
+  //     // settings up other fields
+  //     if (value?.value) {
+  //       dataItem.docId = value.value;
+  //     }
+  //     dataItem.displayStatus = 'Released';
+  //     setFieldValue('displayRevision', '1');
+  //     setFieldValue('displayStatus', 'Released');
+  //     setFieldValue('title', 'Part Document');
+  //     setFieldValue('cost', '400');
+  //     setFieldValue('leadTime', '2');
+  //     setFieldValue('quantity', '100');
+  //     setFieldValue('unit', '600');
+  //     setFieldValue('refDesignator', 'Desig');
+  //     setFieldValue('comments', 'Sample Comments');
+  //     setFieldValue('displayStatus', 'Released');
+  //   },
+  // });
+
   useEffect(() => {
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
       fetchAvailablePartsAsync,
     );
   }, []);
+
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
+  // const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchSelectedPart);
 
   const renderOptions = () => {
     return parts.map((part) => ({
       label: renderPartLabel(part),
-      value: part.id,
+      value: `${part.id}${SELECTED_PART_KEY_SEPARATOR}${part.document.id}`,
     }));
   };
 
@@ -56,6 +81,15 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
     // Trigger API Here
+    // const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+
+    // fetchSelectedPartAsync.start(
+    //   fetchSelectedPartsAction,
+    //   docInfo[0],
+    //   docInfo[1],
+    //   fetchSelectedPartAsync,
+    // );
+
     field && setFieldValue(field, value?.value);
     // settings up other fields
     if (value?.value) {
@@ -133,4 +167,4 @@ const NameCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...prop
   );
 };
 
-export default NameCell;
+export default IDCell;

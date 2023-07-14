@@ -19,6 +19,9 @@ export const DOCUMENT_REVISION_UPGRADE_URL = `${DOCUMENT_REVISION_ROOT_URL}/upgr
 export const DOCUMENT_REVISION_FORMS_URL = `${DOCUMENT_REVISION_ROOT_URL}/forms_group_option`;
 export const DOCUMENT_REVISION_FAI_INSPECTION_URL = `${DOCUMENT_REVISION_ROOT_URL}/fai_inspection`;
 export const DOCUMENT_REVISION_PARTS_URL = `${DOCUMENT_REVISION_ROOT_URL}/available_parts`;
+
+export const DOCUMENT_REVISION_FETCH_PARTS_URL = 'bom/addBranch/details';
+
 export const PO_REQUESTOR_COMPONENT_NAME = 'po-requestor-autocomplete';
 export const PO_ITEMS_COMPONENT_NAME = 'po-items-built-in';
 export const PO_APPROVAL_KEY = 'fb-po-approvals-';

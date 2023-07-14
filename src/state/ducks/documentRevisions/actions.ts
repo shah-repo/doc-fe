@@ -10,7 +10,7 @@ import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, PO_ROOT_URL } from './constants';
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FETCH_PARTS_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, PO_ROOT_URL } from './constants';
 import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
@@ -46,7 +46,7 @@ const loadList = (
   });
 };
 
-const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<DocumentRevision> => apiAction({
+const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: 'get',
   asyncType,
@@ -363,12 +363,12 @@ const getDocRevStatuses = (
   notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
   const categoryUrl = category === undefined
-    ? states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
+    ? states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?`)
     : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
   const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0
-    ? notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
+    ? notGroupOptions.reduce((acc, groupOption) => acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
   const url = notIncategory === undefined
     ? notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
@@ -397,6 +397,17 @@ const fetchAvailableParts = (
 ): ApiAction<DocumentRevision[]> =>
   apiActionWithCallbacks({
     url: DOCUMENT_REVISION_PARTS_URL,
+    method: 'get',
+    handlers,
+  });
+
+const fetchSelectedPart = (
+  docRevId,
+  docId,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_FETCH_PARTS_URL}/${docId}/${docRevId}`,
     method: 'get',
     handlers,
   });
@@ -497,4 +508,5 @@ export default {
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,
+  fetchSelectedPart,
 };

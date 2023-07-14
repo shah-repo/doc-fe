@@ -7,7 +7,7 @@ import {
 } from '../../../../../components/forms/fields-next';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
-import { isEditBOM } from '../utils';
+import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -50,8 +50,8 @@ const LeadTimeCell: ComponentType<CustomTreeListCellProps> = ({
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (
-        <span className={classes.titleInfoCell}>
-          {dataItem[field ?? ''] ?? '-'}
+        <span className={classes.Cell}>
+          {getCellValue(dataItem, field)}
         </span>
       )}
     </td>
