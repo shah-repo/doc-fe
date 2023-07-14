@@ -19,10 +19,11 @@ export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = () => {
       <Tooltip
         title={translate('bom.table.title.primary.attachments')}
         placement="top"
-      ><>
+        arrow
+      ><span>
           <FontAwesomeIcon icon={regular('paperclip')} className={classes.icon} />
           <FontAwesomeIcon icon={solid('star')} className={classes.star} />
-        </>
+        </span>
       </Tooltip>
     </Grid>
   );

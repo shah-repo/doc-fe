@@ -19,6 +19,7 @@ export const Issues: React.FC<TreeListHeaderCellProps> = () => {
       <Tooltip
         title={translate('bom.table.title.issues')}
         placement="top"
+        arrow
       >
         <FontAwesomeIcon icon={regular('hexagon-exclamation')} className={classes.issues} />
       </Tooltip>

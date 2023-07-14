@@ -6,7 +6,7 @@ import { ReactComponent as CollapseIcon } from '../../../../../../assets/images/
 import { ReactComponent as ExpandIcon } from '../../../../../../assets/images/expand_tree.svg';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -31,8 +31,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      console.log('parts ::', data);
-      setParts(data.filter(part => part.status === DocumentRevisionStatus.Released));
+      setParts(data);
     },
   });
 
@@ -144,7 +143,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         !isEditMode && <span className="k-icon k-i-none" role="presentation" />
       ))}
 
-      {!isEditMode && <span className="k-icon">
+      {!isEditMode && <span className={cx('k-icon', classes.expand)}>
         {hasChildren && (props.expanded
           ? <CollapseIcon
             onClick={onClick}

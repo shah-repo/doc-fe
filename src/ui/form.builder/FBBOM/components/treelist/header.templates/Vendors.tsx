@@ -19,6 +19,7 @@ export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
       <Tooltip
         title={translate('bom.table.title.vendors')}
         placement="top"
+        arrow
       >
         <FontAwesomeIcon icon={regular('receipt')} className={classes.icon} />
       </Tooltip>

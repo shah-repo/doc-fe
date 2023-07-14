@@ -31,7 +31,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
       sort: [],
       filter: [],
     },
-    expanded: [],
+    expanded: [bom[0].id],
     inEdit: [],
   });
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
@@ -238,9 +238,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   };
 
   const handleCollapseAll = () => {
+    const { data } = state;
     setState({
       ...state,
-      expanded: [],
+      expanded: [data[0]?.id],
     });
   };
 

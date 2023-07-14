@@ -110,4 +110,7 @@ export const styles = makeStyles((theme) => ({
     paddingRight: theme.spacing(0.5),
     marginRight: theme.spacing(-0.5),
   },
+  expand: {
+    cursor: 'pointer',
+  },
 }));

@@ -19,6 +19,7 @@ export interface BOM {
   employees?: BOM[]
   inEdit?: boolean
   isNew?: boolean
+  isDeleted?: boolean
 }
 
 export interface EditableBOM extends BOM {

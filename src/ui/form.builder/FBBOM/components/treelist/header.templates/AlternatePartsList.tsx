@@ -21,6 +21,7 @@ export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = () => {
         <Tooltip
           title={translate('bom.table.title.alternate.parts.list')}
           placement="top"
+          arrow
         >
           <FontAwesomeIcon icon={hover ? solid('screwdriver-wrench') : regular('screwdriver-wrench')} className={classes.icon} />
         </Tooltip>

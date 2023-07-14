@@ -6,11 +6,12 @@ import React, { useCallback } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
-import { ADD_FIELD, MODE_FIELD } from '../../../constants';
+import { DELETE_FIELD, MODE_FIELD } from '../../../constants';
+import { EditableBOM } from '../../../interface';
 import { styles } from './styles';
 import { BOMActionsProps } from './types';
 
-export default function ActionButtons <T> (props: BOMActionsProps<T>): React.ReactElement | null {
+export default function ActionButtons (props: BOMActionsProps<EditableBOM>): React.ReactElement | null {
   const {
     dataItem,
     scrollBehavior = 'auto',
@@ -29,7 +30,7 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
     }
   }, [scrollBehavior]);
-  const isBOMAdd = dataItem[ADD_FIELD];
+  const isBOMDeleted = dataItem[DELETE_FIELD];
   if (!dataItem[MODE_FIELD]) {
     return null;
   }
@@ -40,7 +41,7 @@ export default function ActionButtons <T> (props: BOMActionsProps<T>): React.Rea
       id="row-actions"
       ref={ref}
     >
-      {!isBOMAdd && onRestore && (
+      {isBOMDeleted && onRestore && (
         <Tooltip
           title={translate('common.restore')}
           placement="top"

@@ -19,6 +19,7 @@ export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = () => 
       <Tooltip
         title={translate('bom.table.title.attachments')}
         placement="top"
+        arrow
       >
         <FontAwesomeIcon icon={solid('paperclip')} className={classes.icon} />
       </Tooltip>

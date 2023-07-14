@@ -50,7 +50,7 @@ const CostCell: ComponentType<CustomTreeListCellProps> = ({
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (
-        <span className={classes.titleInfoCell}>
+        <span className={classes.Cell}>
           {getCellValue(dataItem, field)}
         </span>
       )}
