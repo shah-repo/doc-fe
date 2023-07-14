@@ -3,6 +3,11 @@ import Colors from '../../../../../layout/theme/utils/colors';
 
 export const styles = makeStyles(() =>
   createStyles({
+    box: {
+      maxHeight: 350,
+      padding: 0,
+      overflow: 'auto',
+    },
     columnsCus: {
       fontWeight: 600,
       fontSize: '14px',

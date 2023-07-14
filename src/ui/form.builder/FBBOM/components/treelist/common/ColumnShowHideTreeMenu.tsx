@@ -1,5 +1,8 @@
 import {
   Box,
+  Card,
+  CardContent,
+  CardHeader,
   FormControl,
   IconButton,
   ListItemText,
@@ -42,7 +45,7 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
     <FormControl variant="outlined">
       <StyleTooltip
         title={<Text translation="common.column" />}
-        placement="top"
+        placement="bottom"
         arrow
       >
         <IconButton onClick={handleClick} data-cy="manageColumnsBtn">
@@ -50,57 +53,61 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
         </IconButton>
       </StyleTooltip>
       <Menu
-        id="long-menu"
+        id="bom-togglecolumns-menu"
         anchorEl={anchorEl}
         keepMounted
         open={open}
         onClose={handleClose}
       >
-        <MenuItem className={classes.headerMenuItem}>
-          <ListItemText
-            primary={
+        <Card>
+          <CardHeader
+            className={classes.headerMenuItem}
+            title={
               <Typography
                 component="span"
                 variant="body2"
                 className={classes.columnsCus}
+                data-cy="column-menu"
                 color="textPrimary"
               >
                 <Text translation="common.column" />
               </Typography>
             }
           />
-        </MenuItem>
-        {columnDefinition.map((item: CustomTreeListColumnProps) => (
-          <MenuItem
-            key={item.title}
-            value={item.field}
-            disabled={item.disableShowOrHideSelection}
-          >
-            <ListItemText
-              id={item.field}
-              primary={
-                <Typography className={classes.menuItem}>
-                  {getTranslatedText(item.title ?? '').toUpperCase()}
-                </Typography>
-              }
-            />
-            <Box flexGrow={1} mr={5} />
-            {item.hidden ? (
-              <ViewChecked
-                onClick={() => {
-                  onChange(item);
-                }}
-              />
-            ) : (
-              <SolidIcon
-                onClick={() => {
-                  onChange(item);
-                }}
-              />
 
-            )}
-          </MenuItem>
-        ))}
+          <CardContent className={classes.box}>
+            {columnDefinition.map((item: CustomTreeListColumnProps) => (
+              <MenuItem
+                key={item.title}
+                value={item.field}
+                disabled={item.disableShowOrHideSelection}
+              >
+                <ListItemText
+                  id={item.field}
+                  primary={
+                    <Typography className={classes.menuItem} data-cy={`${item.title}-${item.hidden}`}>
+                      {getTranslatedText(item.title ?? '').toUpperCase()}
+                    </Typography>
+                  }
+                />
+                <Box flexGrow={1} mr={5} />
+                {item.hidden ? (
+                  <ViewChecked
+                    onClick={() => {
+                      onChange(item);
+                    }}
+                  />
+                ) : (
+                  <SolidIcon
+                    onClick={() => {
+                      onChange(item);
+                    }}
+                  />
+                )}
+              </MenuItem>
+            ))}
+          </CardContent>
+        </Card>
       </Menu>
     </FormControl>
   );
