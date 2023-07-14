@@ -16,6 +16,6 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
     role="gridcell"
     className={cx(className, classes.cellborderBottom)}
   >
-    <img src={dataItem.primaryAttachments} alt="" width="100%" />
+    <img src={dataItem.hasPrimaryAttachments} alt="" width="100%" />
   </td>;
 };

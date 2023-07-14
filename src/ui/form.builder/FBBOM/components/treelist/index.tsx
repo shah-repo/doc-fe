@@ -124,13 +124,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     return {
       id: uuidv4(),
       displayRevision: '',
-      displayStatus: '',
+      status: '',
       title: '',
       docId: '',
       cost: '',
       leadTime: '',
-      primaryAttachments: '',
-      attachments: false,
+      hasPrimaryAttachment: '',
+      hasAttachments: false,
       issues: false,
       vendor: false,
       comments: '',
@@ -222,7 +222,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
           onDelete={removeBOM}
           onRestore={onRestore}
           onReorder={onReorder}
-          // isDeleteDisabled={false} // override later
           rootClassName={classes.popperHolder}
         />
       </td>

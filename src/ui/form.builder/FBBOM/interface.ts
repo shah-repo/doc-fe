@@ -4,15 +4,15 @@ export interface BOM {
   id: string
   title: string
   displayRevision: string
-  displayStatus: string
+  status: string
   cost: string
   docId: string
   leadTime?: string
   quantity?: string
   unit?: string
   refDesignator?: string
-  primaryAttachments?: string
-  attachments?: boolean
+  hasPrimaryAttachments?: string
+  hasAttachments?: boolean
   vendor?: boolean
   issues?: boolean
   comments?: string

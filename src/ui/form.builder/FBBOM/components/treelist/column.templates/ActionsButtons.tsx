@@ -8,6 +8,7 @@ import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
 import { DELETE_FIELD, MODE_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { isAddOnly, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { BOMActionsProps } from './types';
 
@@ -30,7 +31,10 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
     }
   }, [scrollBehavior]);
-  const isBOMDeleted = dataItem[DELETE_FIELD];
+
+  const isPartDeleted = dataItem[DELETE_FIELD];
+  const isPartEdit = !isAddOnly(dataItem) && isEditBOM(dataItem);
+
   if (!dataItem[MODE_FIELD]) {
     return null;
   }
@@ -41,7 +45,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
       id="row-actions"
       ref={ref}
     >
-      {isBOMDeleted && onRestore && (
+      {isPartDeleted && onRestore && (
         <Tooltip
           title={translate('common.restore')}
           placement="top"
@@ -60,7 +64,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
           </div>
         </Tooltip>
       )}
-      {onReorder && (
+      {isPartEdit && onReorder && (
         <Tooltip
           title={translate('common.restore')}
           placement="top"
@@ -77,7 +81,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
           </div>
         </Tooltip>
       )}
-      {onDelete && (
+      {isPartEdit && onDelete && (
         <Tooltip
           title={translate('common.delete')}
           placement="top"

@@ -20,7 +20,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ isEditMode });
   const { values } = useFormikContext<EditableBOM>();
-  const status = isEditMode ? values.displayStatus : dataItem.displayStatus;
+  const status = isEditMode ? values.status : dataItem.status;
 
   return (
     <td

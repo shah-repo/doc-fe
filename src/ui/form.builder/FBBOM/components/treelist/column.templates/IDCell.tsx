@@ -43,9 +43,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   //     if (value?.value) {
   //       dataItem.docId = value.value;
   //     }
-  //     dataItem.displayStatus = 'Released';
+  //     dataItem.status = 'Released';
   //     setFieldValue('displayRevision', '1');
-  //     setFieldValue('displayStatus', 'Released');
+  //     setFieldValue('status', 'Released');
   //     setFieldValue('title', 'Part Document');
   //     setFieldValue('cost', '400');
   //     setFieldValue('leadTime', '2');
@@ -53,7 +53,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   //     setFieldValue('unit', '600');
   //     setFieldValue('refDesignator', 'Desig');
   //     setFieldValue('comments', 'Sample Comments');
-  //     setFieldValue('displayStatus', 'Released');
+  //     setFieldValue('status', 'Released');
   //   },
   // });
 
@@ -94,9 +94,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (value?.value) {
       dataItem.docId = value.value;
     }
-    dataItem.displayStatus = 'Released';
+    dataItem.status = 'Released';
     setFieldValue('displayRevision', '1');
-    setFieldValue('displayStatus', 'Released');
+    setFieldValue('status', 'Released');
     setFieldValue('title', 'Part Document');
     setFieldValue('cost', '400');
     setFieldValue('leadTime', '2');
@@ -104,7 +104,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     setFieldValue('unit', '600');
     setFieldValue('refDesignator', 'Desig');
     setFieldValue('comments', 'Sample Comments');
-    setFieldValue('displayStatus', 'Released');
   };
 
   const defaultValue = dataItem.id;
