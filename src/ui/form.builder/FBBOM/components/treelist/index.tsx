@@ -140,7 +140,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     });
   };
 
-  const editBOM = ({ dataItem }: BOMEditEvent) => {
+  const editBOM = ({ dataItem, level }: BOMEditEvent) => {
+    if (level?.length !== 2) {
+      return;
+    }
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
       state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
     }

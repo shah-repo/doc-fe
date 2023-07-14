@@ -28,4 +28,5 @@ export interface EditableBOM extends BOM {
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM
+  level: number[]
 }

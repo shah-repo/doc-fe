@@ -1,7 +1,7 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -14,9 +14,8 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
 }) => {
   const classes = styles();
   const flag = dataItem[field ?? ''] as boolean;
-  const [isChecked, setIsChecked] = useState(flag);
   const handleToggle = () => {
-    setIsChecked(!isChecked);
+    // TODO open side bar
   };
 
   return (
@@ -26,10 +25,10 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
     >
-      <div onClick={isChecked ? handleToggle : undefined}>
+      <div onClick={flag ? handleToggle : undefined}>
         <FontAwesomeIcon
-          icon={isChecked ? solid('circle') : regular('circle')}
-          className={cx(classes.dot, { selectedDot: isChecked, deselectedDot: !isChecked })}
+          icon={flag ? solid('circle') : regular('circle')}
+          className={cx(classes.dot, { selectedDot: flag, deselectedDot: !flag })}
         />
       </div>
     </td>
