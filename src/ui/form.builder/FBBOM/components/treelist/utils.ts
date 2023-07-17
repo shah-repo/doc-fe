@@ -22,3 +22,15 @@ export const enableFieldAfterPartSelection = (dataItem: EditableBOM, docId: stri
 export const getCellValue = (dataItem: EditableBOM, field?: string): string => {
   return ((field && dataItem[field]) ?? CELL_EMPTY_VALUE) as string;
 };
+
+export const isOfSameParent = (arr1: number[], arr2: number[]): boolean => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length - 1; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
+};
