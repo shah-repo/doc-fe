@@ -332,7 +332,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
           <Grid item xs={12}>
             <TreeList
               {...state.dataState}
-              style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'scroll' }}
+              style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'auto' }}
               tableProps={{ style: { width: '2423px' } }}
               editField={MODE_FIELD}
               expandField={EXPAND_FIELD}
