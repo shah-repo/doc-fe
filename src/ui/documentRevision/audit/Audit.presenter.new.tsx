@@ -1,5 +1,5 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
-import { find, has, isEmpty, last, orderBy, some } from 'lodash';
+import { find, has, isEmpty, last, orderBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -99,12 +99,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    // TODO Find another workaround to avoid unwanted audit entries while deleting lotTransfers item
-    if (some(audits, { type: 'ARRAY_DELETED' })) {
-      audits = audits.filter(audit => audit.type === 'ARRAY_DELETED');
+    const sortedAudit = orderBy(audits.filter(audit => audit.field !== 'displayStatus'), ['field']);
+    const statusInfo = audits.find(val => val.field === 'displayStatus');
+    if (statusInfo) {
+      sortedAudit.push(statusInfo);
     }
-
-    orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
+    sortedAudit.forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
       const isSmartRef = change.field.split('.').includes('smartRefs');
@@ -178,12 +178,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
-        const field = change.field.split('.').at(-1) as string;
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
         if (field === 'id') {
           return;
         }
         if (change.type !== 'ARRAY_DELETED') {
-          const fieldName = translate(`form.builder.lot.transfers.${field}`);
+          const fieldFullName = field === 'docId' ? parentField : field;
+          const fieldName = translate(`form.builder.lot.transfers.${fieldFullName}`);
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }
       }

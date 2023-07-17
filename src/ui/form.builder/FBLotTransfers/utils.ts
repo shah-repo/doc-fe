@@ -1,17 +1,31 @@
 import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
-import { LotTransfer, PredictFactory, PredictFunction } from './types';
+import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, PredictQuantityFunction } from './types';
+
+export const getOptionLabel = (option: DocumentRevisionOption): string => {
+  const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
+  return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
+};
+
+export const getLatestRevisionId = (revisions: DocumentRevision[]): string => {
+  const sortedRevisions
+    = revisions
+      .filter(revision => revision.status !== DocumentRevisionStatus.Canceled)
+      .sort((a, b) => b.version - a.version);
+  return sortedRevisions[0].id;
+};
 
 interface UseOnHandQuantityType {
-  initialQuantity: number | null
-  onHandQuantity: number | null
+  initialQuantity: number
+  onHandQuantity: number
   onHandQuantityUnit: string
-  predictOnHandQuantity: PredictFunction
+  predictOnHandQuantity: PredictQuantityFunction
 }
 
-const calculateSumForTransfer = (transfer: LotTransfer, sum: number) => {
+const calculateSumForTransfer = (transfer: CalculableLotTransfer, sum: number) => {
   const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
   const shouldAdd = INCREMENTABLE_LOT_TRANSFER_TYPES.includes(transfer.type);
   let result = sum;
@@ -24,32 +38,36 @@ const calculateSumForTransfer = (transfer: LotTransfer, sum: number) => {
   return round(result, MAX_DECIMALS);
 };
 
-const predictQuantity: PredictFactory = (initialQuantity, transfers) => ({ skipTransfer, newTransfer }) => {
-  const filteredTransfers = transfers?.filter((transfer) => transfer.id !== skipTransfer?.id) ?? [];
-  const allTransfers = newTransfer ? unionBy([newTransfer], filteredTransfers) : filteredTransfers;
-
-  return allTransfers.reduce(
-    (sum, transfer) => calculateSumForTransfer(transfer, sum),
-    initialQuantity,
-  );
-};
-
 export const useOnHandQuantity = (): UseOnHandQuantityType => {
   const { workspaceState } = FB.useStores();
 
-  const transfers = useObserver(() => workspaceState?.formInputSync.get(TRANSFERS_FIELD) as LotTransfer[] | undefined);
-  const initialQuantity = useObserver(() => workspaceState?.formInputSync.get(INITIAL_QUANTITY_FIELD) as number | null);
-  const onHandQuantityUnit = useObserver(() => workspaceState?.formInputSync.get(`${INITIAL_QUANTITY_FIELD}_unit`) as string);
+  const transfers = useObserver(() => {
+    const value = workspaceState?.formInputSync.get(TRANSFERS_FIELD) as LotTransfer[] | undefined;
+    return value ?? [];
+  });
+  const initialQuantity = useObserver(() => {
+    const value = workspaceState?.formInputSync.get(INITIAL_QUANTITY_FIELD) as number | null;
+    return value ?? 0;
+  });
+  const onHandQuantityUnit = useObserver(() => {
+    const value = workspaceState?.formInputSync.get(`${INITIAL_QUANTITY_FIELD}_unit`) as string;
+    return value ?? '';
+  });
 
-  const onHandQuantity
-    = initialQuantity !== null && transfers
-      ? transfers?.reduce((sum, transfer) => calculateSumForTransfer(transfer, sum), initialQuantity)
-      : initialQuantity;
+  const onHandQuantity = transfers.reduce(
+    (sum, transfer) => calculateSumForTransfer(transfer, sum),
+    initialQuantity,
+  );
 
-  const predictOnHandQuantity
-    = initialQuantity !== null
-      ? predictQuantity(initialQuantity, transfers)
-      : () => null;
+  const predictOnHandQuantity: PredictQuantityFunction = ({ skipTransfer, newTransfer }) => {
+    const filteredTransfers = transfers.filter((transfer) => transfer.id !== skipTransfer?.id) ?? [];
+    const allTransfers = newTransfer ? unionBy([newTransfer], filteredTransfers) : filteredTransfers;
+
+    return allTransfers.reduce(
+      (sum, transfer) => calculateSumForTransfer(transfer, sum),
+      initialQuantity,
+    );
+  };
 
   return {
     initialQuantity,

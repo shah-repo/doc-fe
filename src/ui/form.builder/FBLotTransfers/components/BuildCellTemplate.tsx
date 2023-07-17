@@ -5,24 +5,19 @@ import React, { ChangeEvent } from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { BuildOption, CustomTemplateProps, EditableLotTransfer } from '../types';
+import { CustomTemplateProps, DocumentRevisionOption, EditableLotTransfer } from '../types';
+import { getOptionLabel } from '../utils';
 
 interface Props extends CustomTemplateProps {
-  builds?: BuildOption[]
+  options?: DocumentRevisionOption[]
 }
 
-const getOptionLabel = (option: BuildOption) => {
-  const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
-  return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
-};
-
-export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds, onClick }) => {
+export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const handleChange = (event: ChangeEvent<unknown>, build?: BuildOption) => {
+  const handleChange = (event: ChangeEvent<unknown>, build?: DocumentRevisionOption) => {
     const value = build ? {
       id: build.id,
       docId: build.document.docId,
@@ -32,7 +27,7 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds, onClick }
   };
 
   const defaultValue = isEditMode ? values.build?.id : dataItem.build?.id;
-  const value = builds?.find((build) => build.id === defaultValue);
+  const value = options?.find((build) => build.id === defaultValue);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
@@ -43,7 +38,7 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds, onClick }
         <Autocomplete
           {...getFieldProps('build')}
           blurOnSelect
-          options={builds}
+          options={options}
           getOptionLabel={getOptionLabel}
           value={value}
           onChange={handleChange}
@@ -53,7 +48,7 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, builds, onClick }
     );
   }
 
-  const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
+  const displayValue = dataItem[field] as string;
 
   return (
     <Box onClick={() => onClick?.({ dataItem })}>

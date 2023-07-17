@@ -1,7 +1,6 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { Employee } from '../../../state/ducks/company/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
@@ -12,26 +11,34 @@ import { DateCellTemplate } from './components/DateCellTemplate';
 import { EmployeeCellTemplate } from './components/EmployeeCellTemplate';
 import { LocationCellTemplate } from './components/LocationCellTemplate';
 import { QuantityCellTemplate } from './components/QuantityCellTemplate';
+import { ReferencesCellTemplate } from './components/ReferencesCellTemplate';
 import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
-import { TRANSFER_TYPE_OPTIONS } from './constants';
-import { BuildOption, CompanyLocation, EditableLotTransfer, LotTranferEditEvent } from './types';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD, TRANSFER_TYPE_OPTIONS } from './constants';
+import { CompanyLocation, DocumentRevisionOption, EditableLotTransfer, LotTranferEditEvent } from './types';
 
 interface SchemaOptions {
   locations: CompanyLocation[]
   existingLocations: string[]
-  employees: Employee[]
-  builds: BuildOption[]
+  builds: DocumentRevisionOption[]
+  records: DocumentRevisionOption[]
+  units?: string
   onRowClick?: (e: LotTranferEditEvent) => void
 }
 
 export const buildSchema = ({
   locations,
   existingLocations = [],
-  employees,
   builds,
+  records,
+  units,
   onRowClick,
 }: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => {
   const transferTypeOptions = TRANSFER_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
+
+  const quantityTitle
+    = units
+      ? `${translate('form.builder.lot.transfers.quantity')} (${units})`
+      : translate('form.builder.lot.transfers.quantity');
 
   const TransferTypeFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
@@ -68,7 +75,7 @@ export const buildSchema = ({
       field: 'from',
       title: 'form.builder.lot.transfers.from',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} locations={locations} onClick={onRowClick} />,
+      template: (props) => <LocationCellTemplate {...props} options={locations} onClick={onRowClick} />,
       width: 180,
     },
     {
@@ -76,28 +83,36 @@ export const buildSchema = ({
       field: 'to',
       title: 'form.builder.lot.transfers.to',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} locations={locations} onClick={onRowClick} />,
+      template: (props) => <LocationCellTemplate {...props} options={locations} onClick={onRowClick} />,
       width: 180,
     },
     {
       id: 'build',
-      field: 'build.docId',
+      field: BUILD_FIELD,
       title: 'form.builder.lot.transfers.build',
       filterCell: InputFilter,
-      template: (props) => <BuildCellTemplate {...props} builds={builds} onClick={onRowClick} />,
+      template: (props) => <BuildCellTemplate {...props} options={builds} onClick={onRowClick} />,
+      width: 200,
+    },
+    {
+      id: 'reference',
+      field: REFERENCE_FIELD,
+      title: 'form.builder.lot.transfers.reference',
+      filterCell: InputFilter,
+      template: (props) => <ReferencesCellTemplate {...props} options={records} onClick={onRowClick} />,
       width: 200,
     },
     {
       id: 'quantity',
       field: 'quantity',
       filterCell: InputFilter,
-      title: 'form.builder.lot.transfers.quantity',
+      title: quantityTitle,
       template: QuantityCellTemplate,
       width: 150,
     },
     {
       id: 'date',
-      field: 'date',
+      field: DATE_FIELD,
       title: 'form.builder.lot.transfers.date',
       filterCell: InputFilter,
       template: DateCellTemplate,
@@ -105,10 +120,10 @@ export const buildSchema = ({
     },
     {
       id: 'by',
-      field: 'by',
+      field: EMPLOYEE_FIELD,
       title: 'form.builder.lot.transfers.by',
       filterCell: InputFilter,
-      template: (props) => <EmployeeCellTemplate {...props} employees={employees} onClick={onRowClick} />,
+      template: (props) => <EmployeeCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
     },
     {

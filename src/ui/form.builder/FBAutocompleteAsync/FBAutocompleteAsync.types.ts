@@ -73,6 +73,7 @@ export enum FBAutocompleteAsyncOption {
   releasedParts = '42',
   companyLocations = '43',
   lotBuilds = '44',
+  records = '45',
 }
 
 export interface FBAutocompleteAsyncConstructor {
