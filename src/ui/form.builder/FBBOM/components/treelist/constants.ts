@@ -47,7 +47,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: IDCell,
   },
   {
-    field: 'displayRevision',
+    field: 'revision',
     title: 'REV',
     width: '106px',
     filter: TreeListTextFilter,
@@ -71,7 +71,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: ARIDCell,
   },
   {
-    field: 'displayStatus',
+    field: 'status',
     title: 'STATUS',
     width: '167px',
     cell: Status,
@@ -128,7 +128,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: RefDesignatorCell,
   },
   {
-    field: 'comments',
+    field: 'comment',
     title: 'COMMENTS',
     width: '278px',
     filter: TreeListTextFilter,
@@ -137,7 +137,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: CommentsCell,
   },
   {
-    field: 'primaryAttachments',
+    field: 'primaryAttachmentDetails',
     title: 'PRIMARY ATTACHMENTS',
     width: '81px',
     filter: TreeListTextFilter,
@@ -147,7 +147,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     sortable: false,
   },
   {
-    field: 'attachments',
+    field: 'attachmentNames',
     title: 'ATTACHMENTS',
     width: '80px',
     filter: TreeListTextFilter,

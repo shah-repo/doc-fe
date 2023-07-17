@@ -3,7 +3,7 @@ import { BOM } from './interface';
 const DummyBOM: BOM[] = [
   {
     id: 1,
-    displayRevision: '1',
+    revision: '1',
     status: 'Draft',
     title: 'Black Unisex Sunglasses',
     docId: 'FG-00126',
@@ -13,11 +13,11 @@ const DummyBOM: BOM[] = [
     hasAttachments: true,
     issues: false,
     vendor: false,
-    comments: 'sample comment',
+    comment: 'sample comment',
     employees: [
       {
         id: 2,
-        displayRevision: '1',
+        revision: '1',
         status: 'Released',
         title: 'Sun glasses',
         docId: 'SA-000050',
@@ -27,12 +27,12 @@ const DummyBOM: BOM[] = [
         hasAttachments: true,
         issues: false,
         vendor: false,
-        comments: 'Sun glass comment',
+        comment: 'Sun glass comment',
         alternatePartsList: true,
         employees: [
           {
             id: 3,
-            displayRevision: '1',
+            revision: '1',
             status: 'Released',
             title: 'Frame Assembly',
             docId: 'FS-00005',
@@ -47,7 +47,7 @@ const DummyBOM: BOM[] = [
             employees: [
               {
                 id: 4,
-                displayRevision: '1',
+                revision: '1',
                 status: 'Draft',
                 title: 'Right Lens',
                 docId: 'RL-00121',
@@ -63,7 +63,7 @@ const DummyBOM: BOM[] = [
               },
               {
                 id: 5,
-                displayRevision: '1',
+                revision: '1',
                 status: 'Draft',
                 title: 'Left Lens',
                 docId: 'RL-00122',
@@ -81,7 +81,7 @@ const DummyBOM: BOM[] = [
           },
           {
             id: 6,
-            displayRevision: '1',
+            revision: '1',
             status: 'Released',
             title: 'Left Arm',
             docId: 'LM-00002',
@@ -96,7 +96,7 @@ const DummyBOM: BOM[] = [
             employees: [
               {
                 id: 7,
-                displayRevision: '1',
+                revision: '1',
                 status: 'Draft',
                 title: 'Hinge',
                 docId: 'CS-00126',
@@ -111,7 +111,7 @@ const DummyBOM: BOM[] = [
               },
               {
                 id: 8,
-                displayRevision: 'B',
+                revision: 'B',
                 status: 'Draft',
                 title: 'Screw',
                 docId: 'CS-00126',
@@ -128,7 +128,7 @@ const DummyBOM: BOM[] = [
           },
           {
             id: 9,
-            displayRevision: '2',
+            revision: '2',
             status: 'Released',
             title: 'Right Arm',
             docId: 'RM-00003',
@@ -143,7 +143,7 @@ const DummyBOM: BOM[] = [
             employees: [
               {
                 id: 10,
-                displayRevision: '1C',
+                revision: '1C',
                 status: 'Released',
                 title: 'Sticker',
                 docId: 'CS-00126',
@@ -163,7 +163,7 @@ const DummyBOM: BOM[] = [
       },
       {
         id: 11,
-        displayRevision: '1',
+        revision: '1',
         status: 'Draft',
         title: 'Packaging',
         docId: 'FG-00126',
@@ -176,7 +176,7 @@ const DummyBOM: BOM[] = [
         employees: [
           {
             id: 12,
-            displayRevision: '1',
+            revision: '1',
             status: 'Draft',
             title: 'Box',
             docId: 'BX-00126',
@@ -192,7 +192,7 @@ const DummyBOM: BOM[] = [
           },
           {
             id: 13,
-            displayRevision: '1',
+            revision: '1',
             status: 'Draft',
             title: 'Product Label',
             docId: 'PL-00126',
@@ -208,7 +208,7 @@ const DummyBOM: BOM[] = [
           },
           {
             id: 14,
-            displayRevision: '1',
+            revision: '1',
             status: 'Draft',
             title: 'Silk Pouch',
             docId: 'SP-00126',
@@ -224,7 +224,7 @@ const DummyBOM: BOM[] = [
           },
           {
             id: 15,
-            displayRevision: '1',
+            revision: '1',
             status: 'Draft',
             title: 'Warrenty Card',
             docId: 'WC-00125',
@@ -240,7 +240,7 @@ const DummyBOM: BOM[] = [
           },
           {
             id: 16,
-            displayRevision: '1',
+            revision: '1',
             status: 'Draft',
             title: 'Manual',
             docId: 'ML-00122',
