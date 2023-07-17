@@ -10,6 +10,7 @@ import Colors from '../../../layout/theme/utils/colors';
 
 interface Props extends FormikProps<any> {
   asyncState: AsyncState
+  disabled: boolean
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -27,6 +28,7 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
   resetForm,
   initialValues,
   asyncState,
+  disabled,
 }) => {
   const classes = styles();
 
@@ -48,12 +50,14 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
                 // if value is number, cheking radio buttons doesn't work correctly
                 label="2"
                 value="2"
+                disabled={disabled}
               />
               <RadioButton
                 // has to be string
                 // if value is number, cheking radio buttons doesn't work correctly
                 label="3"
                 value="3"
+                disabled={disabled}
               />
             </RadioGroup>
           </>
@@ -63,11 +67,12 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={asyncState} />
       </Box>
       <Box display="flex" justifyContent="flex-end">
-        <Button type="submit" variant="outlined">
+        <Button type="submit" disabled={disabled} variant="outlined">
           <Text translation="common.save" />
         </Button>
       </Box>
     </FormWrapper>
-  ); };
+  );
+};
 
 export default CompanyStageManagementPresenter;
