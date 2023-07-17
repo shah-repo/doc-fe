@@ -5,6 +5,7 @@ import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
@@ -412,6 +413,16 @@ const fetchSelectedPart = (
     handlers,
   });
 
+const fetchDocumentByRevId = (
+  docRevId,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${docRevId}`,
+    method: 'get',
+    handlers,
+  });
+
 const createFaiInspection = (
   data: CreateInspectionBody,
   handlers: Handlers,
@@ -509,4 +520,5 @@ export default {
   getFormMappingTemplate,
   fetchAvailableParts,
   fetchSelectedPart,
+  fetchDocumentByRevId,
 };

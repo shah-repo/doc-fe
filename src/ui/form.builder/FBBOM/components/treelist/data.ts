@@ -1,6 +1,6 @@
 import { BOM } from './interface';
 
-const bom: BOM[] = [
+const DummyBOM: BOM[] = [
   {
     id: 1,
     displayRevision: '1',
@@ -260,4 +260,4 @@ const bom: BOM[] = [
   },
 ];
 
-export default bom;
+export default DummyBOM;

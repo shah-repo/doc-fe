@@ -8,35 +8,72 @@ import { FormikProvider, useFormik } from 'formik';
 import { isEmpty, map, omit, replace } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { FB } from '../../../helpers';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
-import bom from './data';
+import DummyBOM from './data';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   const classes = useStyles();
+  const { workspaceState } = FB.useStores();
+  const {
+    id,
+  } = workspaceState || {};
   const [state, setState] = React.useState<BOMState>({
-    data: [...bom],
+    data: [],
     dataState: {
       sort: [],
       filter: [],
     },
-    expanded: [bom[0].id],
+    expanded: [],
     inEdit: [],
   });
+
+  const fetchBOMTreeListAsync = useAsync({
+    onSuccess: (data: BOM[] = []) => {
+      console.log('Data :', data);
+      setState({
+        ...state,
+        data: [...DummyBOM],
+        expanded: [DummyBOM[0].id],
+      });
+    },
+    onError: (response) => {
+      console.log('response :', response);
+      setState({
+        ...state,
+        data: [...DummyBOM],
+        expanded: [DummyBOM[0].id],
+      });
+    },
+  });
+
+  useEffect(() => {
+    fetchBOMTreeListAsync.start(
+      fetchBOMTreeList,
+      id,
+      fetchBOMTreeListAsync,
+    );
+  }, []);
+
+  const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchDocumentByRevId);
 
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
