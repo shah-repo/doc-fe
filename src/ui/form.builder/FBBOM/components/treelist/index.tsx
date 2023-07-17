@@ -2,10 +2,10 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Divider, Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
+import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListRowDragEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { isEmpty, map, omit, replace } from 'lodash';
+import { isEmpty, map, omit, replace, tail, take } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useState } from 'react';
@@ -25,6 +25,7 @@ import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, 
 import bom from './data';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
+import { isOfSameParent } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   const classes = useStyles();
@@ -308,6 +309,31 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
+  const onRowDrop = (event: TreeListRowDragEvent) => {
+    if (event?.draggedOver && isOfSameParent(event?.dragged, event?.draggedOver)) {
+      const parentIndices: number[] = event.dragged.slice(0, -1);
+      const draggedChildIndex: number = event.dragged.slice(-1)[0];
+      const draggedOverChildIndex: number = event.draggedOver?.slice(-1)[0];
+      const swapChildElements = (tree: BOM[], parentIndices: number[]) => {
+        if (!isEmpty(parentIndices)) {
+          const index = take(parentIndices)[0];
+          tree[index][SUB_ITEMS_FIELD] = swapChildElements(tree[index][SUB_ITEMS_FIELD] as BOM[], tail(parentIndices));
+        } else {
+          const draggedChild = tree[draggedChildIndex];
+          const draggedOver = tree[draggedOverChildIndex];
+          tree.splice(draggedOverChildIndex, 1, draggedChild);
+          tree.splice(draggedChildIndex, 1, draggedOver);
+        }
+        return tree;
+      };
+      const updatedBOMTree = swapChildElements(state.data, parentIndices);
+      setState({
+        ...state,
+        data: [...updatedBOMTree],
+      });
+    }
+  };
+
   return (<>
     <Grid container alignItems="center" justify="space-between" style={{ padding: 0 }}>
       <Grid item className={classes.header}>
@@ -359,6 +385,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
               sortable={TREELIST_CONFIG.sortable}
               toolbar={renderToolbar}
               cellRender={cellRender}
+              onRowDrop={onRowDrop}
+              row={TreeListDraggableRow}
             />
           </Grid>
           {confirmationDialog.isOpen && (
