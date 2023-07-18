@@ -5,7 +5,7 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListRowDragEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { isEmpty, map, omit, replace, tail, take } from 'lodash';
+import { isEmpty, map, omit, replace, tail, take, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -24,8 +24,7 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
-import DummyBOM from './data';
+import { CustomTreeListColumnProps, DATA_ITEM_KEY, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
 import { isOfSameParent, processBOMData, realBomInfo } from './utils';
@@ -44,19 +43,22 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const fetchBOMTreeListAsync = useAsync({
     onSuccess: (data: BOM[] = []) => {
-      console.log('Data :', data);
+      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
+      console.log('Success :', bomProccedData);
       setState({
         ...state,
-        data: [...DummyBOM],
-        expanded: [DummyBOM[0].id],
+        data: [...processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263')],
+        expanded: [bomProccedData[0].id],
       });
     },
     onError: (response) => {
       console.log('response :', response);
+      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
+      console.log('Error :', bomProccedData);
       setState({
         ...state,
-        data: [...DummyBOM],
-        expanded: [DummyBOM[0].id],
+        data: [...bomProccedData],
+        expanded: [bomProccedData[0].id],
       });
     },
   });
@@ -106,11 +108,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     e.stopPropagation();
     confirmationDialog.close();
   };
-
-  // Remove at last
-  const result = [];
-  processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263', result);
-  console.log('Reslt ::', result);
 
   const addExpandField = (dataTree: BOM[]) => {
     const { expanded, inEdit } = state;
@@ -165,32 +162,35 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const createNewItem = () => {
     return {
       id: uuidv4(),
-      displayRevision: '',
+      revision: '',
       status: '',
-      title: '',
+      name: '',
       docId: '',
       cost: '',
+      quantity: '',
       leadTime: '',
       hasPrimaryAttachment: '',
       hasAttachments: false,
       issues: false,
       vendor: false,
-      comments: '',
+      unit: '',
+      comment: '',
+      refDesignator: '',
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
   };
 
   const isNewBOMAdditionInProgress = () => {
-    return state.data[0].employees && state.data[0].employees.filter(data => data[ADD_FIELD])?.length > 0;
+    return state.data[0][SUB_ITEMS_FIELD] && state.data[0][SUB_ITEMS_FIELD].filter(data => data[ADD_FIELD])?.length > 0;
   };
   const addBOM = () => {
     if (isNewBOMAdditionInProgress()) {
       return;
     }
     const newBOM: EditableBOM = createNewItem();
-    state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
-    state.data[0].employees?.push(newBOM);
+    state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
+    state.data[0][SUB_ITEMS_FIELD]?.push(newBOM);
     setState({
       ...state,
       data: [...state.data],
@@ -204,7 +204,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       return;
     }
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
-      state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
+      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
     }
     setState({
       ...state,
@@ -215,7 +215,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const discardBOM = (dataItem?) => {
     if (dataItem && dataItem[ADD_FIELD]) {
-      state.data[0].employees = state.data[0].employees?.filter(data => !data[ADD_FIELD]);
+      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
     }
     setState({
       ...state,
@@ -247,8 +247,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''),
         {
-          [classes.WhiteBg]: isEmpty(props.dataItem.employees),
-          [classes.grayBg]: !isEmpty(props.dataItem.employees),
+          [classes.WhiteBg]: isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
+          [classes.grayBg]: !isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
         }),
     };
     if (!item[MODE_FIELD]) {
@@ -283,11 +283,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
-      if (item.employees) {
-        ids.push(...getAllItemIds(item.employees));
+      if (item[SUB_ITEMS_FIELD] && (item?.depth || 0) < 2) {
+        ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD]));
       }
     });
-    return ids;
+    return uniq(ids);
   };
 
   const handleExpandAll = () => {
@@ -403,6 +403,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
               tableProps={{ style: { width: '2423px' } }}
               editField={MODE_FIELD}
               expandField={EXPAND_FIELD}
+              dataItemKey={DATA_ITEM_KEY}
               subItemsField={SUB_ITEMS_FIELD}
               onExpandChange={onExpandChange}
               rowRender={rowRender}

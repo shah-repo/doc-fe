@@ -2820,21 +2820,22 @@ const processChildDocRevIDs = (bomInfo, childRevIdOrderArr, result) => {
     if (has(bomInfo.bomObj, chld.id)) {
       result.push(chld);
       if (bomInfo.bomObj[chld.id].childRevIdOrderArr.length > 1) {
-        result[index].children = [];
+        result[index].childrenParts = [];
       }
-      processChildDocRevIDs(bomInfo, bomInfo.bomObj[chld.id].childRevIdOrderArr, result[index].children);
+      processChildDocRevIDs(bomInfo, bomInfo.bomObj[chld.id].childRevIdOrderArr, result[index].childrenParts);
     } else if (result) {
       result.push(chld);
     }
   });
 };
 
-export const processBOMData = (bomInfo, parentId, result: any = []) => {
+export const processBOMData = (bomInfo, parentId) => {
+  const result: any = [];
   if (isEmpty(bomInfo)) {
     return result.push(bomInfo.parentRevDetails);
   } else {
-    result.push({ ...bomInfo.parentRevDetails, ...bomInfo.bomObj[parentId], ...{ children: [] } });
-    processChildDocRevIDs(bomInfo, bomInfo.bomObj[parentId].childRevIdOrderArr, result[0].children);
+    result.push({ ...bomInfo.parentRevDetails, ...bomInfo.bomObj[parentId], ...{ childrenParts: [] } });
+    processChildDocRevIDs(bomInfo, bomInfo.bomObj[parentId].childRevIdOrderArr, result[0].childrenParts);
   }
   return result;
 };

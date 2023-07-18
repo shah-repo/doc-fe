@@ -12,7 +12,7 @@ export interface BOM {
   quantity?: string
   unit?: string
   refDesignator?: string
-  depth?: string
+  depth?: number
   markAsDeleted?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean

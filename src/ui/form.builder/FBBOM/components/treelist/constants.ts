@@ -18,7 +18,8 @@ import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 
-export const SUB_ITEMS_FIELD = 'employees';
+export const SUB_ITEMS_FIELD = 'childrenParts';
+export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
 export const CELL_EMPTY_VALUE = '-';
@@ -55,7 +56,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: RevisionCell,
   },
   {
-    field: 'title',
+    field: 'name',
     title: 'TITLE',
     width: '300px',
     filter: TreeListTextFilter,
@@ -137,7 +138,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: CommentsCell,
   },
   {
-    field: 'primaryAttachmentDetails',
+    field: 'hasPrimaryAttachment',
     title: 'PRIMARY ATTACHMENTS',
     width: '81px',
     filter: TreeListTextFilter,
@@ -147,7 +148,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     sortable: false,
   },
   {
-    field: 'attachmentNames',
+    field: 'hasAttachments',
     title: 'ATTACHMENTS',
     width: '80px',
     filter: TreeListTextFilter,
