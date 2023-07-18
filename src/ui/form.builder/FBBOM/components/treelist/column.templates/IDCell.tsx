@@ -22,7 +22,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const { colSpan, id, style, dataItem, field } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
@@ -100,8 +100,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
-  const defaultValue = dataItem.id;
-  const value = parts.find((part) => part.id === defaultValue);
+  console.log('values :', values);
+  const value = `${values.id}${SELECTED_PART_KEY_SEPARATOR}${values.documentId}`;
+  // const value = parts.find((part) => part.id === defaultValue);
 
   const getFieldInfo = () => (
     field && <FormikField
@@ -113,7 +114,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         disableClearable
         options={renderOptions()}
         placeholder={translate('common.select')}
-        value={value}
+        defaultValue={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
         size="small"

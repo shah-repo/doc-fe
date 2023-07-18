@@ -264,11 +264,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
       state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
     }
+    const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     setState({
       ...state,
       data: [...state.data],
-      inEdit: [extendDataItem(dataItem, SUB_ITEMS_FIELD)],
+      inEdit: [editBOMInfo],
     });
+    formik.setValues(editBOMInfo);
   };
 
   const discardBOM = (dataItem?) => {
