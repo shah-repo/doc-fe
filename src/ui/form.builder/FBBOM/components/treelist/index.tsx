@@ -59,13 +59,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const deleteBOMTreeListAsync = useAsync({
     onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
-      const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
-      console.log('Success :', bomProccessedData);
-      setState({
-        ...state,
-        data: bomProccessedData,
-        expanded: [bomProccessedData[0].id],
-      });
+      // const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
+      // console.log('Success :', bomProccessedData);
+      // setState({
+      //   ...state,
+      //   data: bomProccessedData,
+      //   expanded: [bomProccessedData[0].id],
+      // });
+      fetchBOMTreeListAsync.start(
+        fetchBOMTreeList,
+        documentRevision.id,
+        documentRevision.documentId,
+        fetchBOMTreeListAsync,
+      );
     },
     onError: (response) => {
       console.log('response :', response);
@@ -73,14 +79,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   });
 
   const addBOMTreeListAsync = useAsync({
-    onSuccess: (data: BOMResponse[] = []) => {
-      // const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
-      // console.log('Success :', bomProccedData);
-      // setState({
-      //   ...state,
-      //   data: [...processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263')],
-      //   expanded: [bomProccedData[0].id],
-      // });
+    onSuccess: () => {
       fetchBOMTreeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
@@ -139,10 +138,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const [selectedPart, setSelectedPart] = useState();
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
     // API call here
+    console.log('selectedPart :', selectedPart);
     deleteBOMTreeListAsync.start(
       deleteBOMBranch,
-      documentRevision.id,
-      documentRevision.documentId,
+      documentRevision.id, // parentRevID
+      selectedPart?.id, // childRevID
       deleteBOMTreeListAsync,
     );
     discardBOM(selectedPart);
