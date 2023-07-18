@@ -3,6 +3,7 @@ import ARIDCell from './column.templates/ARIDCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
+import DropdownFilterCell from './column.templates/DropDownFilterCell';
 import IDCell from './column.templates/IDCell';
 import LeadTimeCell from './column.templates/LeadTimeCell';
 import { PrimaryAttachmentsCell } from './column.templates/PrimaryAttachments';
@@ -108,7 +109,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'unit',
     title: 'UNIT',
     width: '113px',
-    filter: TreeListTextFilter,
+    filter: DropdownFilterCell,
     hidden: false,
     cell: UnitCell,
   },
