@@ -3,7 +3,8 @@ import { MODE_FIELD } from './constants';
 export interface BOM {
   id: string
   title: string
-  displayRevision: string
+  version: string
+  revision: string
   status: string
   cost: string
   docId: string
@@ -11,11 +12,13 @@ export interface BOM {
   quantity?: string
   unit?: string
   refDesignator?: string
+  depth?: string
+  markAsDeleted?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
   vendor?: boolean
   issues?: boolean
-  comments?: string
+  comment?: string
   employees?: BOM[]
   inEdit?: boolean
   isNew?: boolean

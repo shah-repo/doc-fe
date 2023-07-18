@@ -23,7 +23,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
-  const value = values.comments ?? '';
+  const value = values.comment ?? '';
   const isEditMode = isEditBOM(dataItem);
   const displayValue = dataItem[field ?? ''] ?? '-';
 

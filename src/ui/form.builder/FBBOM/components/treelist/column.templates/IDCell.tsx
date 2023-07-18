@@ -95,7 +95,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       dataItem.docId = value.value;
     }
     dataItem.status = 'Released';
-    setFieldValue('displayRevision', '1');
+    setFieldValue('revision', '1');
     setFieldValue('status', 'Released');
     setFieldValue('title', 'Part Document');
     setFieldValue('cost', '400');

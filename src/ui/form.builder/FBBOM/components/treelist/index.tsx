@@ -29,7 +29,7 @@ import { CustomTreeListColumnProps, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, 
 import DummyBOM from './data';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
-import { isOfSameParent } from './utils';
+import { isOfSameParent, processBOMData, realBomInfo } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   const classes = useStyles();
@@ -107,6 +107,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
     e.stopPropagation();
     confirmationDialog.close();
   };
+
+  // Remove at last
+  const result = [];
+  processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263', result);
+  console.log('Reslt ::', result);
 
   const addExpandField = (dataTree: BOM[]) => {
     const { expanded, inEdit } = state;
