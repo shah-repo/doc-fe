@@ -1,13 +1,14 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
-import React from 'react';
+import React, { useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { styles } from './styles';
 
 export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
   const classes = styles();
+  const [hover, setHover] = useState(false);
 
   return (
     <Grid
@@ -16,13 +17,15 @@ export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
       alignContent="flex-start"
       justify="flex-start"
     >
-      <Tooltip
-        title={translate('bom.table.title.vendors')}
-        placement="top"
-        arrow
-      >
-        <FontAwesomeIcon icon={regular('receipt')} className={classes.icon} />
-      </Tooltip>
+      <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+        <Tooltip
+          title={translate('bom.table.title.vendors')}
+          placement="top"
+          arrow
+        >
+          <FontAwesomeIcon icon={hover ? solid('receipt') : regular('receipt')} className={classes.icon} />
+        </Tooltip>
+      </div>
     </Grid>
   );
 };

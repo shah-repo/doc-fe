@@ -23,6 +23,7 @@ export interface BOM {
   inEdit?: boolean
   isNew?: boolean
   isDeleted?: boolean
+  childrenParts?: BOM[]
 }
 
 export interface EditableBOM extends BOM {
@@ -32,4 +33,15 @@ export interface EditableBOM extends BOM {
 export interface BOMEditEvent {
   dataItem: EditableBOM
   level: number[]
+}
+
+interface BOMObject {
+  [id: string]: {
+    childRevIdOrderArr: BOM[]
+  }
+}
+
+export interface BOMResponse {
+  parentRevDetails: BOM
+  bomObj: BOMObject
 }

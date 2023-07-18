@@ -1,6 +1,6 @@
 import { each, has, isEmpty, isNil } from 'lodash';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
-import { EditableBOM } from '../../interface';
+import { BOM, BOMResponse, EditableBOM } from '../../interface';
 import { CELL_EMPTY_VALUE } from './constants';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
@@ -2815,27 +2815,27 @@ export const realBomInfo = {
   },
 };
 
-const processChildDocRevIDs = (bomInfo, childRevIdOrderArr, result) => {
+const processChildDocRevIDs = (bomInfo: BOMResponse, childRevIdOrderArr: BOM[], result: BOM[]) => {
   each(childRevIdOrderArr, (chld, index) => {
     if (has(bomInfo.bomObj, chld.id)) {
       result.push(chld);
       if (bomInfo.bomObj[chld.id].childRevIdOrderArr.length > 1) {
         result[index].childrenParts = [];
       }
-      processChildDocRevIDs(bomInfo, bomInfo.bomObj[chld.id].childRevIdOrderArr, result[index].childrenParts);
+      processChildDocRevIDs(bomInfo, bomInfo.bomObj[chld.id].childRevIdOrderArr, result[index].childrenParts ?? []);
     } else if (result) {
       result.push(chld);
     }
   });
 };
 
-export const processBOMData = (bomInfo, parentId) => {
-  const result: any = [];
+export const processBOMData = (bomInfo: BOMResponse, parentId: string): BOM[] => {
+  const result: BOM[] = [];
   if (isEmpty(bomInfo)) {
-    return result.push(bomInfo.parentRevDetails);
+    result.push(bomInfo.parentRevDetails);
   } else {
     result.push({ ...bomInfo.parentRevDetails, ...bomInfo.bomObj[parentId], ...{ childrenParts: [] } });
-    processChildDocRevIDs(bomInfo, bomInfo.bomObj[parentId].childRevIdOrderArr, result[0].childrenParts);
+    processChildDocRevIDs(bomInfo, bomInfo.bomObj[parentId].childRevIdOrderArr, result[0].childrenParts ?? []);
   }
   return result;
 };

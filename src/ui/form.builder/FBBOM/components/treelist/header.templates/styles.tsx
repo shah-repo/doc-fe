@@ -10,6 +10,7 @@ export const styles = makeStyles((theme) => ({
   issues: {
     height: 17,
     width: 17,
+    cursor: 'pointer',
   },
   star: {
     color: Colors.statusDraft,
