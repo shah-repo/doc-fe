@@ -38,10 +38,12 @@ export interface BOMEditEvent {
 interface BOMObject {
   [id: string]: {
     childRevIdOrderArr: BOM[]
+    parentNodeRevId: string
+    depth: number
   }
 }
 
 export interface BOMResponse {
-  parentRevDetails: BOM
+  parentRevDetails: BOM | {}
   bomObj: BOMObject
 }

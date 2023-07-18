@@ -20,7 +20,7 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
-import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import { BOM, BOMEditEvent, BOMResponse, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -63,6 +63,28 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     },
   });
 
+  const deleteBOMTreeListAsync = useAsync({
+    onSuccess: (data: BOMResponse[] = []) => {
+      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
+      console.log('Success :', bomProccedData);
+      setState({
+        ...state,
+        data: [...processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263')],
+        expanded: [bomProccedData[0].id],
+      });
+    },
+    onError: (response) => {
+      console.log('response :', response);
+      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
+      console.log('Error :', bomProccedData);
+      setState({
+        ...state,
+        data: [...bomProccedData],
+        expanded: [bomProccedData[0].id],
+      });
+    },
+  });
+
   useEffect(() => {
     if (!documentRevision) {
       return;
@@ -76,6 +98,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   }, [documentRevision?.id]);
 
   const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchBOMTree);
+  const deleteBOMBranch = useActionCreator(documentRevisionsActions.deleteBomBranch);
 
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
@@ -100,6 +123,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const [selectedPart, setSelectedPart] = useState();
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
     // API call here
+    deleteBOMTreeListAsync.start(
+      deleteBOMBranch,
+      documentRevision.id,
+      documentRevision.documentId,
+      deleteBOMTreeListAsync,
+    );
     discardBOM(selectedPart);
     confirmationDialog.close();
   };

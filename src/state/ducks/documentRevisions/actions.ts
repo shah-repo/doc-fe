@@ -419,7 +419,7 @@ const fetchBOMTree = (
   handlers: Handlers,
 ): ApiAction<BOM[]> =>
   apiActionWithCallbacks({
-    url: `${FETCH_BOM_TREE}/${docRevId}/${docId}`,
+    url: `${FETCH_BOM_TREE}/${docId}/${docRevId}`,
     method: 'get',
     handlers,
   });
