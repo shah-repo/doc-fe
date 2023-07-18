@@ -19,7 +19,6 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { FB } from '../../../helpers';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
@@ -31,12 +30,8 @@ import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBO
 import useStyles from './styles';
 import { isOfSameParent, processBOMData, realBomInfo } from './utils';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = () => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const classes = useStyles();
-  const { workspaceState } = FB.useStores();
-  const {
-    id,
-  } = workspaceState || {};
   const [state, setState] = React.useState<BOMState>({
     data: [],
     dataState: {
@@ -67,14 +62,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = () => {
   });
 
   useEffect(() => {
+    if (!documentRevision) {
+      return;
+    }
     fetchBOMTreeListAsync.start(
       fetchBOMTreeList,
-      id,
+      documentRevision.id,
+      documentRevision.documentId,
       fetchBOMTreeListAsync,
     );
-  }, []);
+  }, [documentRevision?.id]);
 
-  const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchDocumentByRevId);
+  const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchBOMTree);
 
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 

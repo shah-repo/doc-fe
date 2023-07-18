@@ -1,9 +1,11 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { BOM } from '../../interface';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FBBOMProps {}
+export interface FBBOMProps {
+  documentRevision: DocumentRevision
+}
 
 export interface BOMState {
   data: BOM[]
