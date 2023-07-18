@@ -21,14 +21,14 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
-import { BOM, BOMEditEvent, BOMResponse, EditableBOM } from '../../interface';
+import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps, DATA_ITEM_KEY, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
-import { isOfSameParent, processBOMData, realBomInfo } from './utils';
+import { isOfSameParent, processBOMData } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const classes = useStyles();
@@ -43,46 +43,32 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   });
 
   const fetchBOMTreeListAsync = useAsync({
-    onSuccess: (data: BOM[] = []) => {
-      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
-      console.log('Success :', bomProccedData);
+    onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
+      const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
+      console.log('Success :', bomProccessedData);
       setState({
         ...state,
-        data: [...processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263')],
-        expanded: [bomProccedData[0].id],
+        data: bomProccessedData,
+        expanded: [bomProccessedData[0].id],
       });
     },
     onError: (response) => {
       console.log('response :', response);
-      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
-      console.log('Error :', bomProccedData);
-      setState({
-        ...state,
-        data: [...bomProccedData],
-        expanded: [bomProccedData[0].id],
-      });
     },
   });
 
   const deleteBOMTreeListAsync = useAsync({
-    onSuccess: (data: BOMResponse[] = []) => {
-      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
-      console.log('Success :', bomProccedData);
+    onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
+      const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
+      console.log('Success :', bomProccessedData);
       setState({
         ...state,
-        data: [...processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263')],
-        expanded: [bomProccedData[0].id],
+        data: bomProccessedData,
+        expanded: [bomProccessedData[0].id],
       });
     },
     onError: (response) => {
       console.log('response :', response);
-      const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
-      console.log('Error :', bomProccedData);
-      setState({
-        ...state,
-        data: [...bomProccedData],
-        expanded: [bomProccedData[0].id],
-      });
     },
   });
 

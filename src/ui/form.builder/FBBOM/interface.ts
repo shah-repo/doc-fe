@@ -2,8 +2,10 @@ import { MODE_FIELD } from './constants';
 
 export interface BOM {
   id: string
-  title: string
-  version: string
+  documentId?: string
+  parentNodeRevId?: string
+  name: string
+  version?: string
   revision: string
   status: string
   cost: string
@@ -13,17 +15,18 @@ export interface BOM {
   unit?: string
   refDesignator?: string
   depth?: number
+  order?: number
   markAsDeleted?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
+  primaryAttachmentDetails?: {name: string, s3Link: string}
   vendor?: boolean
   issues?: boolean
   comment?: string
-  employees?: BOM[]
+  childNodes?: BOM[]
   inEdit?: boolean
   isNew?: boolean
   isDeleted?: boolean
-  childrenParts?: BOM[]
 }
 
 export interface EditableBOM extends BOM {
@@ -37,17 +40,4 @@ export interface EditableBOM extends BOM {
 export interface BOMEditEvent {
   dataItem: EditableBOM
   level: number[]
-}
-
-interface BOMObject {
-  [id: string]: {
-    childRevIdOrderArr: BOM[]
-    parentNodeRevId: string
-    depth: number
-  }
-}
-
-export interface BOMResponse {
-  parentRevDetails: BOM
-  bomObj: BOMObject
 }

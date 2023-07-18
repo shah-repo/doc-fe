@@ -1,7 +1,7 @@
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
+import React, { ChangeEvent, ComponentType, useEffect } from 'react';
 import { ReactComponent as CollapseIcon } from '../../../../../../assets/images/collapse_tree.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../../assets/images/expand_tree.svg';
 import { translate } from '../../../../../../common/intl';
@@ -28,34 +28,29 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     props.onExpandChange(ev, dataItem, props.level);
   };
 
-  const [parts, setParts] = useState<DocumentRevision[]>([]);
+  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      console.log('Parts ::', data);
       setParts(data);
     },
   });
 
   const fetchSelectedPartAsync = useAsync({
-    onSuccess: (data: DocumentRevision[] = []) => {
-      console.log('parts ::', data);
-      // field && setFieldValue(field, value?.value);
-      // // settings up other fields
-      // if (value?.value) {
-      //   dataItem.docId = value.value;
-      // }
-      // dataItem.status = 'Released';
-      // setFieldValue('displayRevision', '1');
-      // setFieldValue('status', 'Released');
-      // setFieldValue('title', 'Part Document');
-      // setFieldValue('cost', '400');
-      // setFieldValue('leadTime', '2');
-      // setFieldValue('quantity', '100');
-      // setFieldValue('unit', '600');
-      // setFieldValue('refDesignator', 'Desig');
-      // setFieldValue('comments', 'Sample Comments');
-      // setFieldValue('status', 'Released');
+    onSuccess: (data: any[] = []) => {
+      if (data && data.length > 0) {
+        const {
+          revision, status, name, hasAttachments,
+          hasPrimaryAttachment, docId,
+        } = data[0];
+
+        setFieldValue('revision', revision);
+        setFieldValue('status', status);
+        setFieldValue('name', name);
+        setFieldValue('hasAttachments', hasAttachments);
+        setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
+        setFieldValue('docId', docId);
+      }
     },
   });
 
@@ -99,21 +94,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (value?.value) {
       dataItem.docId = value.value;
     }
-    dataItem.status = 'Released';
-    setFieldValue('revision', '1');
-    setFieldValue('status', 'Released');
-    setFieldValue('title', 'Part Document');
-    setFieldValue('cost', '400');
-    setFieldValue('leadTime', '2');
-    setFieldValue('quantity', '100');
-    setFieldValue('unit', '600');
-    setFieldValue('refDesignator', 'Desig');
-    setFieldValue('comment', 'Sample Comments');
+
     setFieldValue('childNodeRevId', docInfo[0]);
     setFieldValue('childNodeDocumentId', docInfo[1]);
-    // if (dataItem[MODE_FIELD]) {
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
-    // }
   };
 
   const defaultValue = dataItem.id;
