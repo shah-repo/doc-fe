@@ -65,7 +65,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   }, []);
 
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
-  // const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchSelectedPart);
+  // const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
 
   const renderOptions = () => {
     return parts.map((part) => ({
