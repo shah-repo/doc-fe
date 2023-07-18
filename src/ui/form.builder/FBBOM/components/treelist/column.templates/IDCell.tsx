@@ -11,6 +11,7 @@ import { Autocomplete, FormikField } from '../../../../../components/forms/field
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import { SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
@@ -31,33 +32,37 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
+      console.log('Parts ::', data);
       setParts(data);
     },
   });
 
-  // const fetchSelectedPartAsync = useAsync({
-  //   onSuccess: (data: DocumentRevision[] = []) => {
-  //     console.log('parts ::', data);
-  //     field && setFieldValue(field, value?.value);
-  //     // settings up other fields
-  //     if (value?.value) {
-  //       dataItem.docId = value.value;
-  //     }
-  //     dataItem.status = 'Released';
-  //     setFieldValue('displayRevision', '1');
-  //     setFieldValue('status', 'Released');
-  //     setFieldValue('title', 'Part Document');
-  //     setFieldValue('cost', '400');
-  //     setFieldValue('leadTime', '2');
-  //     setFieldValue('quantity', '100');
-  //     setFieldValue('unit', '600');
-  //     setFieldValue('refDesignator', 'Desig');
-  //     setFieldValue('comments', 'Sample Comments');
-  //     setFieldValue('status', 'Released');
-  //   },
-  // });
+  const fetchSelectedPartAsync = useAsync({
+    onSuccess: (data: DocumentRevision[] = []) => {
+      console.log('parts ::', data);
+      // field && setFieldValue(field, value?.value);
+      // // settings up other fields
+      // if (value?.value) {
+      //   dataItem.docId = value.value;
+      // }
+      // dataItem.status = 'Released';
+      // setFieldValue('displayRevision', '1');
+      // setFieldValue('status', 'Released');
+      // setFieldValue('title', 'Part Document');
+      // setFieldValue('cost', '400');
+      // setFieldValue('leadTime', '2');
+      // setFieldValue('quantity', '100');
+      // setFieldValue('unit', '600');
+      // setFieldValue('refDesignator', 'Desig');
+      // setFieldValue('comments', 'Sample Comments');
+      // setFieldValue('status', 'Released');
+    },
+  });
 
   useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
       fetchAvailablePartsAsync,
@@ -65,7 +70,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   }, []);
 
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
-  // const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
+  const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
 
   const renderOptions = () => {
     return parts.map((part) => ({
@@ -80,14 +85,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
     // Trigger API Here
-    // const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
-
-    // fetchSelectedPartAsync.start(
-    //   fetchSelectedPartsAction,
-    //   docInfo[0],
-    //   docInfo[1],
-    //   fetchSelectedPartAsync,
-    // );
+    const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+    console.log('fetchBOMBranch :', docInfo);
+    fetchSelectedPartAsync.start(
+      fetchSelectedPartsAction,
+      docInfo[0],
+      docInfo[1],
+      fetchSelectedPartAsync,
+    );
 
     field && setFieldValue(field, value?.value);
     // settings up other fields
@@ -103,7 +108,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     setFieldValue('quantity', '100');
     setFieldValue('unit', '600');
     setFieldValue('refDesignator', 'Desig');
-    setFieldValue('comments', 'Sample Comments');
+    setFieldValue('comment', 'Sample Comments');
+    setFieldValue('childNodeRevId', docInfo[0]);
+    setFieldValue('childNodeDocumentId', docInfo[1]);
+    // if (dataItem[MODE_FIELD]) {
+    setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+    // }
   };
 
   const defaultValue = dataItem.id;

@@ -14,6 +14,7 @@ import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -85,6 +86,33 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     },
   });
 
+  const addBOMTreeListAsync = useAsync({
+    onSuccess: (data: BOMResponse[] = []) => {
+      // const bomProccedData = processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263');
+      // console.log('Success :', bomProccedData);
+      // setState({
+      //   ...state,
+      //   data: [...processBOMData(realBomInfo, 'ac964bfb-e4c2-4249-860d-54e05c9a6263')],
+      //   expanded: [bomProccedData[0].id],
+      // });
+      fetchBOMTreeListAsync.start(
+        fetchBOMTreeList,
+        documentRevision.id,
+        documentRevision.documentId,
+        fetchBOMTreeListAsync,
+      );
+    },
+    onError: (response) => {
+      console.log('response :', response);
+      fetchBOMTreeListAsync.start(
+        fetchBOMTreeList,
+        documentRevision.id,
+        documentRevision.documentId,
+        fetchBOMTreeListAsync,
+      );
+    },
+  });
+
   useEffect(() => {
     if (!documentRevision) {
       return;
@@ -99,6 +127,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchBOMTree);
   const deleteBOMBranch = useActionCreator(documentRevisionsActions.deleteBomBranch);
+  const addBOMBranch = useActionCreator(documentRevisionsActions.addBomBranch);
+  // const updateBOMBranch = useActionCreator(documentRevisionsActions.updateBomBranch);
 
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
@@ -180,9 +210,22 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     //   return errors;
     // },
     onSubmit: (values) => {
-      const updatedBOM = omit(values, [MODE_FIELD]);
+      const updatedBOM = omit(values, [MODE_FIELD, 'dataItem']);
       // Save API
-      // updateLotTransfer?.(lotTransferToSave as BOM);
+      if (values[ADD_FIELD]) {
+        updatedBOM.parentNodeRevId = documentRevision.id;
+        updatedBOM.parentNodeDocumentId = documentRevision.documentId;
+        updatedBOM.markAsDeleted = false; // After rev1 it should be true
+
+        console.log('Add ::', updatedBOM);
+        addBOMTreeListAsync.start(
+          addBOMBranch,
+          updatedBOM,
+          addBOMTreeListAsync,
+        );
+      } else {
+        // update case
+      }
       console.log('updatedBOM :', updatedBOM);
       discardBOM();
     },
@@ -312,7 +355,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
-      if (item[SUB_ITEMS_FIELD] && (item?.depth || 0) < 2) {
+      if (item[SUB_ITEMS_FIELD] && (item?.depth || 0) < 2 && !isEmpty(item[SUB_ITEMS_FIELD])) {
         ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD]));
       }
     });
@@ -329,10 +372,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const handleCollapseAll = () => {
-    const { data } = state;
     setState({
       ...state,
-      expanded: [data[0]?.id],
+      expanded: [],
     });
   };
 
@@ -459,6 +501,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
               onRowDrop={onRowDrop}
               row={TreeListDraggableRow}
             />
+            {(fetchBOMTreeListAsync.isLoading || addBOMTreeListAsync.isLoading || deleteBOMTreeListAsync.isLoading
+            ) && <Loader />}
           </Grid>
           {confirmationDialog.isOpen && (
             <AlertDialog

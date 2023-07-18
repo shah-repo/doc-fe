@@ -29,6 +29,10 @@ export interface BOM {
 export interface EditableBOM extends BOM {
   [MODE_FIELD]: boolean
   isNew?: boolean
+  parentNodeRevId?: string
+  parentNodeDocumentId?: string
+  childNodeRevId?: string
+  childNodeDocumentId?: string
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM
@@ -44,6 +48,6 @@ interface BOMObject {
 }
 
 export interface BOMResponse {
-  parentRevDetails: BOM | {}
+  parentRevDetails: BOM
   bomObj: BOMObject
 }

@@ -22,7 +22,7 @@ export const DOCUMENT_REVISION_PARTS_URL = `${DOCUMENT_REVISION_ROOT_URL}/availa
 
 export const FETCH_BOM_TREE = 'bom/parent_tree';
 export const FETCH_BOM_BRANCH = 'bom/add_branch/details';
-export const ADD_BOM_BRANCH = 'bom/update_branch';
+export const ADD_BOM_BRANCH = 'bom/add_branch';
 export const UPDATE_BOM_BRANCH = 'bom/update_branch';
 export const DELETE_BOM_BRANCH = 'bom/remove_branch';
 
