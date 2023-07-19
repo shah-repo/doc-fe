@@ -38,7 +38,7 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
 
 export const TreeColumns: CustomTreeListColumnProps[] = [
   {
-    field: 'docId',
+    field: 'customDocId',
     title: 'ID',
     width: '230px',
     filter: TreeListTextFilter,

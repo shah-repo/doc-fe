@@ -91,8 +91,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
     field && setFieldValue(field, value?.value);
     // settings up other fields
-    if (value?.value) {
-      dataItem.docId = value.value;
+    if (value?.value && field) {
+      dataItem[field] = value.value;
     }
 
     setFieldValue('childNodeRevId', docInfo[0]);
@@ -101,7 +101,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   console.log('values :', values);
-  const value = `${values.id}${SELECTED_PART_KEY_SEPARATOR}${values.documentId}`;
+  // const value = `${values.id}${SELECTED_PART_KEY_SEPARATOR}${values.documentId}`;
   // const value = parts.find((part) => part.id === defaultValue);
 
   const getFieldInfo = () => (
@@ -111,10 +111,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <Autocomplete
         {...getFieldProps(field)}
         blurOnSelect
-        disableClearable
         options={renderOptions()}
         placeholder={translate('common.select')}
-        defaultValue={value}
+        // value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
         size="small"

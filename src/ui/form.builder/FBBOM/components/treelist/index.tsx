@@ -25,10 +25,10 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import { CustomTreeListColumnProps, DATA_ITEM_KEY, EXPAND_FIELD, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
+import { CustomTreeListColumnProps, DATA_ITEM_KEY, EXPAND_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
-import { isOfSameParent, processBOMData } from './utils';
+import { bomTreeRelationsObj, isOfSameParent, parentDetailsObj, processBOMData } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const classes = useStyles();
@@ -44,7 +44,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const fetchBOMTreeListAsync = useAsync({
     onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
-      const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
+      const bomProccessedData = processBOMData(bomTreeRelationsObj, parentDetailsObj);
       console.log('Success :', bomProccessedData);
       setState({
         ...state,
@@ -54,6 +54,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     },
     onError: (response) => {
       console.log('response :', response);
+      // remove at last
+      const bomProccessedData = processBOMData(bomTreeRelationsObj, parentDetailsObj);
+      console.log('Success :', bomProccessedData);
+      setState({
+        ...state,
+        data: bomProccessedData,
+        expanded: [bomProccessedData[0].id],
+      });
     },
   });
 
@@ -265,6 +273,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
+    editBOMInfo.customDocId = [`${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`];
     setState({
       ...state,
       data: [...state.data],
