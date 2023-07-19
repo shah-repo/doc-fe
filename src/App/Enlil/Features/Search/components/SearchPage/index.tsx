@@ -93,12 +93,21 @@ const SearchPage: React.FC = () => {
   }));
 
   const handleRowClick: GridProps['onRowClick'] = ({ dataItem }) => {
-    if (dataItem?.documentTypeCategory === 'TrainingRecord') {
-      searchState.fetchTrainingRecord(dataItem?.id);
+    if (!dataItem || !dataItem.id) {
       return;
     }
 
-    if (dataItem?.id && dataItem?.revisionId) {
+    if (dataItem.documentTypeCategory === 'TrainingRecord') {
+      searchState.fetchTrainingRecord(dataItem.id);
+      return;
+    }
+
+    if (dataItem.documentTypeCategory === 'ChangeRequest') {
+      history.push(`/change_request/${dataItem.id}/preview`);
+      return;
+    }
+
+    if (dataItem.revisionId) {
       history.push(`/document_revision/${dataItem.id}/version/${dataItem.revisionId}`);
     }
   };

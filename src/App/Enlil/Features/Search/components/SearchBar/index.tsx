@@ -47,12 +47,17 @@ const SearchBar: React.FC = () => {
 
     handleBlur();
 
-    if (value?.document?.id && value?.document?.revisionId) {
+    if (value.document?.id && value.document.documentTypeCategory === 'ChangeRequest') {
+      history.push(`/change_request/${value.document.id}/preview`);
+      return;
+    }
+
+    if (value.document?.id && value.document.revisionId) {
       history.push(`/document_revision/${value.document.id}/version/${value.document.revisionId}`);
       return;
     }
 
-    const trimmedQuery = value?.query?.trim();
+    const trimmedQuery = value.query?.trim();
 
     if (trimmedQuery) {
       setLastRecentSearch(trimmedQuery);
