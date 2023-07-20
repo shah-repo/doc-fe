@@ -47,7 +47,7 @@ const SearchBar: React.FC = () => {
 
     handleBlur();
 
-    if (value.document?.id && value.document.documentTypeCategory === 'ChangeRequest') {
+    if (value.document?.id && value.document.typeName === 'ChangeRequest') {
       history.push(`/change_request/${value.document.id}/preview`);
       return;
     }
@@ -78,8 +78,8 @@ const SearchBar: React.FC = () => {
       return option.query;
     }
     return [
-      option?.document?.docId,
-      option?.document?.revisionName,
+      option?.document?.typeId,
+      option?.document?.title,
       option?.document?.companyName,
     ].filter(Boolean).join(' - ');
   };

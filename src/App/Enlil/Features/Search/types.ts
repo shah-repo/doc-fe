@@ -16,13 +16,13 @@ export interface Facet {
 
 export interface Document {
   id: string
-  docId: string
-  documentTypeCategory: string
+  typeId: string
+  typeName: string
   companyId: string
   companyName: string
   revisionId: string
+  title: string
   revisionName: string
-  displayRevision: string
   status: string
   userId: string
   userName: string

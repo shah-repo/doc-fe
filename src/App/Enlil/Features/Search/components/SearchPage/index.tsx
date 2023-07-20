@@ -97,12 +97,12 @@ const SearchPage: React.FC = () => {
       return;
     }
 
-    if (dataItem.documentTypeCategory === 'TrainingRecord') {
+    if (dataItem.typeName === 'TrainingRecord') {
       searchState.fetchTrainingRecord(dataItem.id);
       return;
     }
 
-    if (dataItem.documentTypeCategory === 'ChangeRequest') {
+    if (dataItem.typeName === 'ChangeRequest') {
       history.push(`/change_request/${dataItem.id}/preview`);
       return;
     }
@@ -113,9 +113,9 @@ const SearchPage: React.FC = () => {
   };
 
   const exportData = clone(searchData?.documents ?? []).map(item => ({
-    ID: item.docId,
-    Revision: item.displayRevision,
-    Title: item.revisionName,
+    ID: item.typeId,
+    Revision: item.revisionName,
+    Title: item.title,
     Owner: item.userName,
     Status: item.status,
   }));

@@ -5,19 +5,19 @@ import { Status } from '../../../../../../ui/components/common/kendo.column.temp
 const schema: Array<ColumnDefinition<Document>> = [
   {
     id: 'id',
-    field: 'docId',
+    field: 'typeId',
     title: 'ID',
     width: 130,
   },
   {
     id: 'revision',
-    field: 'displayRevision',
+    field: 'revisionName',
     title: 'Revision',
     width: 120,
   },
   {
     id: 'title',
-    field: 'revisionName',
+    field: 'title',
     title: 'Title',
   },
   {
