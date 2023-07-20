@@ -23,7 +23,7 @@ const FBLotOnHandQuantityField: React.FC<FBInputProps> = ({
         {...props}
         label={label}
         name={undefined}
-        dataCy={kebabCase(name)}
+        dataCy={cyName}
         gutter={false}
         defaultValue={compoundValue}
         value={compoundValue}
