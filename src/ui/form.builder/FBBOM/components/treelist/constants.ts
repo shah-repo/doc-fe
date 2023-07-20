@@ -40,7 +40,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'customDocId',
     title: 'ID',
-    width: '230px',
+    width: '209px',
     filter: TreeListTextFilter,
     expandable: true,
     locked: false,
@@ -59,7 +59,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'name',
     title: 'TITLE',
-    width: '300px',
+    width: '251px',
     filter: TreeListTextFilter,
     hidden: false,
     cell: TitleCell,
@@ -67,7 +67,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'arId',
     title: 'AR ID',
-    width: '200px',
+    width: '177px',
     filter: TreeListTextFilter,
     hidden: false,
     cell: ARIDCell,
@@ -75,7 +75,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'status',
     title: 'STATUS',
-    width: '167px',
+    width: '159px',
     cell: Status,
     filter: TreeListTextFilter,
     hidden: false,
@@ -91,7 +91,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'leadTime',
     title: 'LEAD TIME (Days)',
-    width: '127px',
+    width: '171px',
     filter: TreeListTextFilter,
     hidden: false,
     showMenu: false,
@@ -100,7 +100,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'quantity',
     title: 'QTY.',
-    width: '154px',
+    width: '142px',
     filter: TreeListTextFilter,
     hidden: false,
     cell: QuantityCell,
@@ -108,7 +108,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'unit',
     title: 'UNIT',
-    width: '113px',
+    width: '198px',
     filter: DropdownFilterCell,
     hidden: false,
     cell: UnitCell,
@@ -116,7 +116,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'hasChanges',
     title: 'Has Changes',
-    width: '154px',
+    width: '171px',
     filter: TreeListTextFilter,
     hidden: false,
     cell: QuantityCell,
@@ -132,7 +132,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   {
     field: 'comment',
     title: 'COMMENTS',
-    width: '278px',
+    width: '248px',
     filter: TreeListTextFilter,
     hidden: false,
     sortable: false,

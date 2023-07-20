@@ -468,7 +468,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
             <TreeList
               {...state.dataState}
               style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'auto' }}
-              tableProps={{ style: { width: '2423px' } }}
+              tableProps={{ style: { width: '2560px' } }}
               editField={MODE_FIELD}
               expandField={EXPAND_FIELD}
               dataItemKey={DATA_ITEM_KEY}
