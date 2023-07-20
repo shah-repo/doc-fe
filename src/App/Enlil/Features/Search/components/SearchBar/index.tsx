@@ -17,6 +17,8 @@ import { observer } from 'mobx-react';
 import { translate } from '../../../../../../common/intl';
 import { debounce } from 'lodash';
 import Text from '../../../../../../ui/components/Text';
+import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
+import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
 
 const SearchBar: React.FC = () => {
   const history = useHistory() as History;
@@ -48,12 +50,12 @@ const SearchBar: React.FC = () => {
     handleBlur();
 
     if (value.document?.id && value.document.typeName === 'ChangeRequest') {
-      history.push(`/change_request/${value.document.id}/preview`);
+      history.push(changeRequestPreviewPath(value.document.id));
       return;
     }
 
     if (value.document?.id && value.document.revisionId) {
-      history.push(`/document_revision/${value.document.id}/version/${value.document.revisionId}`);
+      history.push(documentVersionPath(value.document.revisionId, value.document.id));
       return;
     }
 

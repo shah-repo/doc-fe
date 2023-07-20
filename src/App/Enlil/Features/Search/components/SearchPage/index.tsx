@@ -24,6 +24,8 @@ import { Facet } from '../../types';
 import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
 import { TrainingRecordQuery } from '../../../../../../state/ducks/training/types';
 import TrainingDetails from '../../../../../../ui/training/details/TrainingDetails';
+import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
+import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
 
 const SearchPage: React.FC = () => {
   const history = useHistory() as History;
@@ -103,12 +105,12 @@ const SearchPage: React.FC = () => {
     }
 
     if (dataItem.typeName === 'ChangeRequest') {
-      history.push(`/change_request/${dataItem.id}/preview`);
+      history.push(changeRequestPreviewPath(dataItem.id));
       return;
     }
 
     if (dataItem.revisionId) {
-      history.push(`/document_revision/${dataItem.id}/version/${dataItem.revisionId}`);
+      history.push(documentVersionPath(dataItem.revisionId, dataItem.id));
     }
   };
 

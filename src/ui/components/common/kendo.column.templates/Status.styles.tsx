@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme) => ({
+export const styles = makeStyles(() => ({
   chip: {
-    display: 'flex',
+    display: 'inline-flex',
     flexDirection: 'row',
     borderRadius: 3,
     border: `1px solid ${Colors.steel_blue}`,

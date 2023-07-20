@@ -1,4 +1,4 @@
-import { Chip, Grid } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import React from 'react';
 import { POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
 import { KendoGridFilterCell } from '../../KendoGrid/interfaces';
@@ -36,25 +36,18 @@ export const Status = ({
       onClick={cellClickEvent}
     >
       {fieldLabel && (
-        <Grid
-          container
-          direction="row"
-          alignContent="flex-start"
-          justify="flex-start"
-        >
-          <Tooltip
-            data={fieldLabel}
-            childrenElement={
-              <Chip
-                size="small"
-                className={`${classes.chip} ${
-                  classes[statusClassMapping[status]]
-                }`}
-                label={fieldLabel}
-              />
-            }
-          />
-        </Grid>
+        <Tooltip
+          data={fieldLabel}
+          childrenElement={
+            <Chip
+              size="small"
+              className={`${classes.chip} ${
+                classes[statusClassMapping[status]]
+              }`}
+              label={fieldLabel}
+            />
+          }
+        />
       )}
     </td>
   );

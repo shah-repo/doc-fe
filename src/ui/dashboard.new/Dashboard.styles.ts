@@ -34,9 +34,7 @@ export default makeStyles((theme) => ({
   },
   loadMore: loadMoreStyles(theme),
   searchContainer: {
-    '& > [role="combobox"]': {
-      maxWidth: 500,
-      marginTop: -78,
-    },
+    maxWidth: 500,
+    marginTop: -78,
   },
 }));

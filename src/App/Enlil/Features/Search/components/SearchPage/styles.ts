@@ -1,14 +1,17 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '../../../../../../ui/layout/theme-next';
 
+const TOOLBAR_HEIGHT = 30;
+const FACETS_BAR_WIDTH = 250;
+
 export default makeStyles((theme) => ({
   root: {
     width: '100%',
     height: '100%',
     display: 'grid',
-    gridGap: '12px 24px',
+    gridGap: theme.spacing(1.5, 3),
     padding: theme.spacing(3),
-    gridTemplate: 'min-content 32px auto / 250px auto',
+    gridTemplate: `min-content ${TOOLBAR_HEIGHT}px auto / ${FACETS_BAR_WIDTH}px auto`,
   },
   grid: {
     gridArea: '3 / 2 / 4 / 3',
@@ -28,7 +31,7 @@ export default makeStyles((theme) => ({
   toolbar: {
     fontSize: 12,
     fontWeight: 600,
-    height: 30,
+    height: TOOLBAR_HEIGHT,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
