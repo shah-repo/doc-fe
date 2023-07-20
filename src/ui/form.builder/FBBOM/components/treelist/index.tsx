@@ -5,7 +5,7 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListRowDragEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { isEmpty, map, omit, replace, tail, take, uniq } from 'lodash';
+import { chain, isEmpty, map, omit, replace, tail, take, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -443,6 +443,21 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     }
   };
 
+  const orderByLockedState = (
+    columnDefinitions: CustomTreeListColumnProps[],
+  ): CustomTreeListColumnProps[] => {
+    return chain([...columnDefinitions])
+      .orderBy(['locked'], ['desc'])
+      .map((column, index) => {
+        column.reorderable = !column.locked;
+        column.orderIndex = column.locked ? 0 : column.mainOrderIndex;
+        return column;
+      })
+      .value();
+  };
+
+  const sortedColumnDefinitions = orderByLockedState(getColumns());
+
   return (<>
     <Grid container alignItems="center" justify="space-between" style={{ padding: 0 }}>
       <Grid item className={classes.header}>
@@ -468,7 +483,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
             <TreeList
               {...state.dataState}
               style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'auto' }}
-              tableProps={{ style: { width: '2560px' } }}
+              tableProps={{ style: { width: '2561px' } }}
               editField={MODE_FIELD}
               expandField={EXPAND_FIELD}
               dataItemKey={DATA_ITEM_KEY}
@@ -477,7 +492,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
               rowRender={rowRender}
               data={processData()}
               onDataStateChange={handleDataStateChange}
-              columns={getColumns()}
+              columns={sortedColumnDefinitions}
               columnMenu={(props) => (
                 <CustomColumnMenu
                   {...props}
