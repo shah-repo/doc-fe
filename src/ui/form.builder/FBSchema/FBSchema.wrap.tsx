@@ -1,6 +1,7 @@
+import { Box, CircularProgress } from '@material-ui/core';
 import { filter, includes, isEmpty, map, range, size } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from '..';
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { intl } from '../../../common/intl';
@@ -17,10 +18,19 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     ...props
   }: T) => {
 
-    !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
+    !schemaState && (schemaState = FB.useRef < FBSchemaState > (FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
+
+    // To avoid UI-freezes on rendering huge list in schema.
+    const [rendered, setRendered] = useState(false);
+    useEffect(
+      () => {
+        setTimeout(() => setRendered(true));
+      },
+      [],
+    );
 
     function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component({ ...schemaItem, gutter: false });
@@ -33,7 +43,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
       range(0, index).reverse().some((current) => {
         if (!schema) { return disabled; }
-        const item =  schema[current];
+        const item = schema[current];
         const { type, name } = item;
         if (type === 'requestapproval' || type === 'inlineapproval') {
           const activeConfig = type === 'inlineapproval' ? item : formState?.getFieldValue(name);
@@ -50,6 +60,12 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         return false;
       });
       return disabled;
+    }
+
+    function loader(): React.ReactNode {
+      return (<Box style={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress size={40} disableShrink />
+      </Box>);
     }
 
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
@@ -83,8 +99,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         const { disabled, outputDisabled } = schemaItem || {};
         const reviseDisabled = schemaItem.editorProperties?.includes('reviseDisabled');
         if (schemaItem.deleted || schemaItem.hidden
-        || ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
-        && !_documentRevisionFormState?.leftPanelOpen))
+          || ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
+            && !_documentRevisionFormState?.leftPanelOpen))
         ) { return; }
 
         position++;
@@ -120,7 +136,10 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       schemaState,
       workspaceMode,
       schema,
-      children: schemaRenderer(),
+      children: <>
+        {!rendered && loader()}
+        {rendered && schemaRenderer()}
+      </>,
     });
   };
 
