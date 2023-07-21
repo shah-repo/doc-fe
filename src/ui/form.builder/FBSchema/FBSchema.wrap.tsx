@@ -138,7 +138,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 };
 
 function loader(): React.ReactNode {
-  return (<Box style={{ display: 'flex', justifyContent: 'center' }}>
+  return (<Box display='flex' justifyContent='center'>
     <CircularProgress size={40} disableShrink />
   </Box>);
 }
