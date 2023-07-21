@@ -127,7 +127,7 @@ const makeGetAudit = () => createSelector(
       audits[groupId].forEach((audit: Audit) => {
         if (audit.field === 'description') {
           const html = audit.nextValue as string;
-          audit.nextValue = stripTags(html).substring(0, 30);
+          audit.nextValue = stripTags(html);
         }
       });
     });
