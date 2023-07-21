@@ -63,7 +63,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }
 
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
-			const isDesignOrFormDesign = [
+      const isDesignOrFormDesign = [
         FBWorkspaceModeOptions.DESIGN,
         FBWorkspaceModeOptions.FORMDESIGN,
       ].includes(workspaceMode as FBWorkspaceModeOptions);

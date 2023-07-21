@@ -12,7 +12,8 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
+  "editor.insertSpaces": false,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
   "javascript.preferences.importModuleSpecifier": "relative",
