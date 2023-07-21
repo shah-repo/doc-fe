@@ -10,6 +10,12 @@ import { isDocumentRevisionInDraft } from '../../documentRevision/helpers/docume
 import Colors from '../../layout/theme/utils/colors';
 import { withFBMPIProcedureSelect } from './FBMPIProcedureSelect.wrap';
 
+function getOptionLabel (option) {
+  const lotPartRevision = option.precalc?.lot_part_revision !== 'N/A' ? option.precalc?.lot_part_revision : '';
+  const part = [option.precalc?.lot_part, lotPartRevision].filter(Boolean).join('.');
+  return [option.document.docId, part].filter(Boolean).join(' | ');
+}
+
 const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> = ({
   isOptionDisabled,
   renderOptionWithDate,
@@ -40,12 +46,8 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 optionValueKey="id"
                 optionLabelKey="document.docId"
                 optionValueType="object"
-                renderOption={(option) =>
-                  `${option.document.docId} | ${option.precalc?.lot_part || ''}`
-                }
-                getOptionLabel={(option) =>
-                  `${option.document.docId} | ${option.precalc?.lot_part || ''}`
-                }
+                renderOption={getOptionLabel}
+                getOptionLabel={getOptionLabel}
                 inputPropStyleSize="small"
                 customStyles = {{ height: 40 }}
                 inputStyle={{ padding: 0 }}
