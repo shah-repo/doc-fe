@@ -18,7 +18,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     ...props
   }: T) => {
 
-    !schemaState && (schemaState = FB.useRef < FBSchemaState > (FBSchemaState, schema));
+    !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
@@ -62,14 +62,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       return disabled;
     }
 
-    function loader(): React.ReactNode {
-      return (<Box style={{ display: 'flex', justifyContent: 'center' }}>
-        <CircularProgress size={40} disableShrink />
-      </Box>);
-    }
-
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
-      const isDesignOrFormDesign = [
+			const isDesignOrFormDesign = [
         FBWorkspaceModeOptions.DESIGN,
         FBWorkspaceModeOptions.FORMDESIGN,
       ].includes(workspaceMode as FBWorkspaceModeOptions);
@@ -136,12 +130,15 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       schemaState,
       workspaceMode,
       schema,
-      children: <>
-        {!rendered && loader()}
-        {rendered && schemaRenderer()}
-      </>,
+      children: rendered ? schemaRenderer() : loader(),
     });
   };
 
   return (props: T) => Comp(props);
 };
+
+function loader(): React.ReactNode {
+  return (<Box style={{ display: 'flex', justifyContent: 'center' }}>
+    <CircularProgress size={40} disableShrink />
+  </Box>);
+}
