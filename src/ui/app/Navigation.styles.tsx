@@ -76,12 +76,12 @@ export default (theme: Theme) =>
     },
     icon: {
       position: 'absolute',
-      marginTop: 32,
+      marginTop: 15,
       marginLeft: 59,
     },
     shiftIcon: {
       position: 'absolute',
-      marginTop: 32,
+      marginTop: 25,
       marginLeft: 222,
     },
     leftSideIcon: {

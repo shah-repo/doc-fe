@@ -152,7 +152,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             )
         }
         <Box className={classes.userInfo}>
-          <NavigationProfileContainer />
+          <NavigationProfileContainer open={open} />
         </Box>
       </Box>
     </Drawer>

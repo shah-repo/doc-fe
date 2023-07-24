@@ -19,7 +19,7 @@ export default (theme: Theme) =>
       padding: theme.spacing(0.625, 1.25, 2.5, 1.875),
     },
     collapsedBottomPush: {
-      padding: theme.spacing(1.25),
+      padding: 0,
     },
     emailPosition: {
       flexFlow: 'nowrap',
@@ -40,6 +40,7 @@ export default (theme: Theme) =>
       textOverflow: 'ellipsis',
     },
     list: {
+      width: '98%',
       padding: 0,
       margin: 0,
     },

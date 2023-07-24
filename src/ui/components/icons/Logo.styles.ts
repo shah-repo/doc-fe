@@ -17,7 +17,7 @@ const styles = makeStyles((theme: Theme) =>
       background: '0% 0% no-repeat padding-box',
       backgroundColor: theme.palette.secondary.contrastText,
       width: '100%',
-      marginBottom: 20,
+      marginBottom: 10,
       display: 'flex',
       justifyContent: 'center',
       height: '25px',

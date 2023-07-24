@@ -2,8 +2,7 @@ import {
   Button,
   List,
   ListItem,
-  ListItemAvatar,
-  ListItemText,
+  ListItemAvatar, ListItemText,
   Typography,
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
