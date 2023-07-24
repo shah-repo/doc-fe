@@ -89,7 +89,6 @@ NavigationLinkContainerProps
   const dispatch = useDispatch();
   const history = useHistory();
   const { label } = rest;
-  console.log('open :', open);
 
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const isOpen = useSelector((state: ApplicationState) =>

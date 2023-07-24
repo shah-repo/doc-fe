@@ -45,6 +45,9 @@ export default (theme: Theme) =>
       margin: 0,
     },
     listItem: {
+      padding: 0,
+    },
+    collapsedListItem: {
       padding: theme.spacing(0.625, 0.875, 0, 1.875),
     },
     listItemAvatar: {

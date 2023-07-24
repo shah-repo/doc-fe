@@ -17,7 +17,6 @@ interface UserMenuContext {
   openUserProfile: () => void
   hasMultipleCompanies: boolean
   handleSwitchCompany: () => void
-  open: boolean
 }
 
 export let UserMenuContext = React.createContext<UserMenuContext | undefined>(

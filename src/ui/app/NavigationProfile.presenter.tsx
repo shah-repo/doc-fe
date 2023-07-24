@@ -57,7 +57,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         classes={{ root: classes.headerButton }}
       >
         <List classes={{ root: classes.list }} >
-          <ListItem classes={{ root: classes.listItem }} >
+          <ListItem classes={{ root: open ? classes.listItem : classes.collapsedListItem }} >
             <ListItemAvatar className={classes.listItemAvatar}>
               <UserAvatar {...{ avatar, initialColor, name }} />
             </ListItemAvatar>
