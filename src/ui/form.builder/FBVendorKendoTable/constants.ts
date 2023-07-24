@@ -5,5 +5,3 @@ export enum Mode {
   add = 'add',
   edit = 'edit',
 }
-
-export const EMPTY_VALUE_PLACEHOLDER = '-';

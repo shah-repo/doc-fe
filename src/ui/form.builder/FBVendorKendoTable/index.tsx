@@ -1,135 +1,50 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Popper } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import React, { useRef } from 'react';
+import { omit } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { CATEGORY, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { Button } from '../../components/forms/fields-next';
-import InputFilter from '../FBApprovalMatrix/components/InputFilter';
+import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
-import Actions, { ActionsProps } from './components/Actions';
-import { ConversionCellTemplate } from './components/ConversionCellTemplate';
-import { LeadTimeCellTemplate } from './components/LeadTimeCellTemplate';
-import { SupplierCellTemplate } from './components/SupplierCellTemplate';
-import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
-import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
-import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
-import { UnitsBuyCellTemplate } from './components/UnitsBuyCellTemplate';
-import { UnitsUseCellTemplate } from './components/UnitsUseCellTemplate';
+import { ActionsCell } from './components/ActionsCell';
 import { MODE_FIELD, Mode } from './constants';
+import vendorDataSchema from './schema';
 import useStyles from './styles';
 import { EditableVendorData, VendorData, VendorDataEditEvent, VendorDataProps } from './types';
 import { withFBVendorData } from './wrap';
 
-interface SchemaOptions {
-  vendors
-}
-
-const vendorDataSchema = (vendors: SchemaOptions) => ([
-  {
-    id: 'supplier',
-    field: 'supplier',
-    title: 'Supplier',
-    filterCell: InputFilter,
-    template: (props) => <SupplierCellTemplate {...props} vendors={vendors} />,
-    width: 150,
-  },
-  {
-    id: 'status',
-    field: 'status',
-    title: 'Supplier Status',
-    filterCell: InputFilter,
-    template: (props) => <SupplierStatusCellTemplate {...props} vendors={vendors} />,
-
-    width: 150,
-  },
-  {
-    id: 'cost',
-    field: 'cost',
-    title: 'Unit Cost',
-    filterCell: InputFilter,
-    template: UnitCostCellTemplate,
-    width: 150,
-  },
-  {
-    id: 'partNumber',
-    field: 'partNumber',
-    title: 'Supplier Part Number',
-    filterCell: InputFilter,
-    template: SupplierPartNumberCellTemplate,
-    width: 150,
-  },
-  {
-    id: 'unitsBuy',
-    field: 'unitsBuy',
-    title: 'Units(Buy)',
-    filterCell: InputFilter,
-    template: UnitsBuyCellTemplate,
-    width: 150,
-  },
-  {
-    id: 'conversion',
-    field: 'conversion',
-    title: 'Conversion',
-    filterCell: InputFilter,
-    template: ConversionCellTemplate,
-    width: 150,
-  },
-  {
-    id: 'unitsUse',
-    field: 'unitsUse',
-    title: 'Units(Use)',
-    filterCell: InputFilter,
-    template: UnitsUseCellTemplate,
-    width: 150,
-  },
-  {
-    id: 'leadTime',
-    field: 'leadTime',
-    title: 'Lead Time(Days)',
-    filterCell: InputFilter,
-    template: LeadTimeCellTemplate,
-    width: 150,
-  },
-
-]);
-
-const ActionsCell: React.FC<ActionsProps<EditableVendorData> & { rootClassName?: string }> = (props) => {
-  const ref = useRef<HTMLDivElement>(null);
-  return (
-    <>
-      <div ref={ref} className={props.rootClassName} />
-      <Popper
-        open
-        placement="bottom-end"
-        anchorEl={ref.current}
-      >
-        <Actions
-          scrollBehavior="smooth"
-          {...props}
-        />
-      </Popper>
-    </>
-  );
-};
-
 const FBVendorDataTable: React.FC<VendorDataProps> = ({
-  items = [],
+  // items = [],
   vendors = [],
+  vendorData = [],
   name,
   disabled,
   deleteVendorData,
-  addVendorData,
+  updateVendorData,
 }) => {
+  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.SUPPLIER];
+  const notIncategory = CATEGORY.WORKORDER_CATEGORY;
   const classes = useStyles();
+  const isActive = !disabled;
   const [editedVendorData, setEditedVendorData] = React.useState<Partial<EditableVendorData>>();
-
-  const isActive = true;
+  const [primaryVendorId, setPrimaryVendorId] = useState(vendorData.find(vendor => vendor.primary)?.id);
+  const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
+  const editVendorData = ({ dataItem }: VendorDataEditEvent) => setEditedVendorData(dataItem);
+  const deleteTootltipText = translate('Delete');
+  const isVendorDataAdded = editedVendorData?.[MODE_FIELD] === Mode.add;
+  const handleRowClick = isActive ? editVendorData : undefined;
 
   // Formik
 
@@ -141,18 +56,16 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
       return errors;
     },
     onSubmit: (values) => {
+      const vendorDataToSave = omit(values, [MODE_FIELD]);
+      updateVendorData?.(vendorDataToSave as VendorData);
       discardLotVendorData();
     },
   });
-
-  const editVendorData = ({ dataItem }: VendorDataEditEvent) => setEditedVendorData(dataItem);
 
   const createDraftVendorData = () => setEditedVendorData({
     id: uuidv4(),
     [MODE_FIELD]: Mode.add,
   });
-
-  /// ///////////////////////////
 
   const discardLotVendorData = () => {
     setEditedVendorData(undefined);
@@ -164,15 +77,6 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
     deleteVendorData?.(editedVendorData as VendorData);
     discardLotVendorData();
   };
-
-  const shouldDisableDelete = true;
-
-  const deleteTootltipText
-      = shouldDisableDelete
-        ? translate('Delete')
-        : undefined;
-
-  const schema = vendorDataSchema(vendors);
 
   const rowRender: DataGridProps<EditableVendorData>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableVendorData;
@@ -202,14 +106,43 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
     );
   };
 
-  const isVendorDataAdded = editedVendorData?.[MODE_FIELD] === Mode.add;
+  const async = useAsync({
+    onSuccess: (response: DocumentRevisionStatus[] = []) => {
+      saveStatuses(response);
+    },
+  });
+  const getStatusesAction = useActionCreator(
+    documentRevisionsActions.getDocRevStatuses,
+  );
+  const getStatuses = () =>
+    async.start(
+      getStatusesAction,
+      async,
+      documentRevisionQueryStatus(),
+      notGroupOptions,
+      undefined,
+      notIncategory,
+    );
 
-  const vendorDataList = items.reduce((list, item) => {
+  useEffect(() => {
+    getStatuses();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const schema = vendorDataSchema({
+    vendors,
+    setPrimaryVendorId,
+    onRowClick: handleRowClick,
+    statuses,
+  });
+
+  const vendorDataList = vendorData.reduce((list, item) => {
     const isVendorDataEdited = editedVendorData && editedVendorData.id === item.id;
     return [
       ...list,
       {
         ...(isVendorDataEdited ? editedVendorData : item),
+        primary: item.id === primaryVendorId,
         [MODE_FIELD]: isVendorDataEdited ? Mode.edit : Mode.show,
       },
     ];
@@ -217,7 +150,7 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
 
   return (
     <Box position="relative">
-      <FBInput type="vendorData" name={name}>
+      <FBInput name={name}>
         <FBSection
           label="form.builder.new.supplier.add"
         >
@@ -241,7 +174,7 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
           hasBoxScrollbars
           schema={schema}
           data={vendorDataList}
-          onRowClick={isActive ? editVendorData : undefined}
+          onRowClick={handleRowClick}
           rowRender={rowRender}
         />
       </FormikProvider>
@@ -249,6 +182,7 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
         <Button
           kind="add"
           fullWidth
+          attached
           onClick={createDraftVendorData}
         >
           {translate('form.builder.new.supplier.add')}

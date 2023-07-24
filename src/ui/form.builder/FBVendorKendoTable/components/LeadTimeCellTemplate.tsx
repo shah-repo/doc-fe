@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import React, { ChangeEventHandler, useState } from 'react';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
-import { requiredNumber, validator } from '../../../components/forms/fields/validators';
 import { MODE_FIELD, Mode } from '../constants';
 import { EditableVendorData } from '../types';
 
@@ -39,7 +38,6 @@ export const LeadTimeCellTemplate: React.FC<Props> = ({
     return (
       <FormikField
         name={field}
-        validate={validator(requiredNumber)}
       >
         <TextField
           {...getFieldProps(field)}

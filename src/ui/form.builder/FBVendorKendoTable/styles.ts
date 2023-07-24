@@ -87,4 +87,7 @@ export default makeStyles(theme => ({
   deleteIcon: {
     color: Colors.latest_red_varient,
   },
+  displayNone: {
+    display: 'none',
+  },
 }));

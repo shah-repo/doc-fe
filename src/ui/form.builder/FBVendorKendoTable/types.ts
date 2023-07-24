@@ -5,15 +5,16 @@ import { MODE_FIELD, Mode } from './constants';
 export type VendorDataProps =
 & Pick<FBInputProps, 'name' | 'disabled'>
 & {
-  items?: VendorData[]
   vendors?: VendorOption[]
+  vendorData?: VendorData[]
+  updateVendorData?: (item: VendorData) => void
   deleteVendorData?: (item: VendorData) => void
-  updateLotTransfer?: (item: VendorData) => void
 };
 
 export interface VendorData {
   id: string
-  vendor: string
+  primary: boolean
+  supplier: string
   status: string
   partNumber: string
   cost: string

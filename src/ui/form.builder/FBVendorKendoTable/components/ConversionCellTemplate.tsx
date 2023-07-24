@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import React, { ChangeEventHandler, useState } from 'react';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
-import { requiredNumber, validator } from '../../../components/forms/fields/validators';
 import { MODE_FIELD, Mode } from '../constants';
 import { EditableVendorData } from '../types';
 
@@ -19,6 +18,7 @@ export const ConversionCellTemplate: React.FC<Props> = ({
     = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
 
   const [value, setValue] = useState(get(dataItem, field) as number);
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
 
   const handleChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (
@@ -39,7 +39,6 @@ export const ConversionCellTemplate: React.FC<Props> = ({
     return (
       <FormikField
         name={field}
-        validate={validator(requiredNumber)}
       >
         <TextField
           {...getFieldProps(field)}
