@@ -58,6 +58,7 @@ enum Colors {
   clear_blue='#2684FF',
   light_cream_blue = '#EEF1F9',
   alice_blue='#e2e8f0',
+  deep_blue='#033D5A',
   // red
   red = '#c40000',
   dark_red = '#a10808',

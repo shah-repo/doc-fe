@@ -16,6 +16,24 @@ export default (theme: Theme) =>
       overflow: 'hidden',
       borderRight: 'none',
     },
+    drawerOpen: {
+      width: DRAWER_WIDTH,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: 0,
+      }),
+    },
+    drawerClose: {
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: 0,
+      }),
+      overflowX: 'hidden',
+      width: theme.spacing(7) + 1,
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9) + 1,
+      },
+    },
     root: {
       flex: 1,
       height: '100%',
@@ -28,6 +46,7 @@ export default (theme: Theme) =>
       paddingLeft: 0,
       paddingRight: 0,
       flexShrink: 0,
+      marginBottom: theme.spacing(3.75),
     },
     toolbarTitle: {
       flex: 1,
@@ -48,5 +67,31 @@ export default (theme: Theme) =>
     },
     bottom: {
       paddingBottom: 20,
+    },
+    defaultIcon: {
+      position: 'absolute',
+      top: 70,
+      zIndex: theme.zIndex.drawer + 2,
+      cursor: 'pointer',
+    },
+    icon: {
+      position: 'absolute',
+      marginTop: 32,
+      marginLeft: 59,
+    },
+    shiftIcon: {
+      position: 'absolute',
+      marginTop: 32,
+      marginLeft: 222,
+    },
+    leftSideIcon: {
+      color: Colors.dark_gray2,
+      width: 30,
+      height: 30,
+      boxShadow: '4px 4px 8px 0px #979EC71A',
+      position: 'fixed',
+    },
+    userInfo: {
+      height: 55,
     },
   });

@@ -40,9 +40,24 @@ const styles = makeStyles((theme: Theme) =>
     },
     logo: {
       maxWidth: '100%',
+      width: 150,
       paddingLeft: 24,
+      height: 50,
       paddingRight: 24,
     },
+    logoContainer: {
+      paddingLeft: theme.spacing(5.625),
+      paddingRight: theme.spacing(5.625),
+    },
+    avatar: ({ initialColor }: {initialColor: string}) => ({
+      width: 47,
+      height: 47,
+      margin: theme.spacing(0, 1.625),
+      fontSize: 15,
+      color: Colors.white,
+      background: Colors.deep_blue,
+      fontWeight: 600,
+    }),
   }),
 );
 

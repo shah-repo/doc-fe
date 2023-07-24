@@ -1,5 +1,6 @@
 import { createStyles, Theme } from '@material-ui/core';
 import EnlilLogo from '../../assets/images/enlil_logo.svg';
+import ThemeColors from '../layout/theme-next/colors';
 import Colors from '../layout/theme/utils/colors';
 import { HeaderPresenterProps } from './Header.presenter';
 import { DRAWER_WIDTH } from './Navigation.styles';
@@ -7,6 +8,7 @@ import { DRAWER_WIDTH } from './Navigation.styles';
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
 export const HEADER_GAP = 96;
+export const COLLAPSE_BAR_SPACE = 72;
 
 export default (theme: Theme) =>
   createStyles({
@@ -17,12 +19,15 @@ export default (theme: Theme) =>
       color: Colors.white,
       zIndex: 1,
     },
+    lightBg: {
+      background: `linear-gradient(225deg,${ThemeColors.primary} 0%,${ThemeColors.ultramarine_blue} 29.56%,${ThemeColors.primary} 100%)`,
+    },
     toolbar: (props: HeaderPresenterProps) => ({
-      'marginLeft': DRAWER_WIDTH,
-      'minHeight': props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
-      'paddingBottom': props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
-      'paddingLeft': theme.spacing(props.fullHeight ? 8 : 3),
-      'paddingRight': theme.spacing(props.fullHeight ? 6 : 3),
+      marginLeft: DRAWER_WIDTH,
+      minHeight: props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
+      paddingBottom: props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
+      paddingLeft: theme.spacing(props.fullHeight ? 8 : 3),
+      paddingRight: theme.spacing(props.fullHeight ? 6 : 3),
       '&::before': {
         content: "''",
         position: 'absolute',
