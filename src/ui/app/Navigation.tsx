@@ -18,7 +18,7 @@ import { getCurrentUserTags } from '../../common/utils/selectors';
 import { authSelectors } from '../../state/ducks/auth';
 import { GroupTag } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
-import { NavigationItem } from '../../state/ducks/company/types';
+import { NavigationItem, NavigationItems } from '../../state/ducks/company/types';
 import Logo from '../components/icons/Logo.container';
 import { HOME_URL } from '../constants/urls';
 import useStyles from '../form.builder/FBTooltip/FBTooltip.styles';
@@ -58,7 +58,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
     if (itemAllowedForUser(item, userTags)) {
-      if (item.type === 'MENU') {
+      if (item.type === NavigationItems.MENU) {
         item.menu = (item.menu || []).filter((menuItem) => itemAllowedForUser(menuItem, userTags));
       }
       acc.push(item);

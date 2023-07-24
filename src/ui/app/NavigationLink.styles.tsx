@@ -51,7 +51,7 @@ export default makeStyles((theme: Theme) =>
         `url(${iconLink}) no-repeat center / contain`,
     }),
     iconActive: ({ iconLink, open, isParent }) => ({
-      background: open || isParent ? `${Colors.white} !important` : 'linear-gradient(0deg, rgba(1, 166, 199, 0.3), rgba(1, 166, 199, 0.3))',
+      background: open || isParent ? `${Colors.white} !important` : `linear-gradient(0deg, ${Colors.cerulean_light_shade}, ${Colors.cerulean_light_shade})`,
     }),
     collapsedIcon: {
       padding: theme.spacing(1.25),
@@ -68,7 +68,7 @@ export default makeStyles((theme: Theme) =>
     },
     childMenuActive: {
       color: Colors.white,
-      background: `linear-gradient(0deg, rgba(1, 166, 199, 0.3), rgba(1, 166, 199, 0.3)),${Colors.almost_black} !important`,
+      background: `linear-gradient(0deg, ${Colors.cerulean_light_shade}, ${Colors.cerulean_light_shade}),${Colors.almost_black} !important`,
     },
     parentMenuItem: {
       color: Colors.white,

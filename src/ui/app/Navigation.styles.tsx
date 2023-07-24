@@ -76,19 +76,19 @@ export default (theme: Theme) =>
     },
     icon: {
       position: 'absolute',
-      marginTop: 15,
-      marginLeft: 59,
+      marginTop: theme.spacing(1.875),
+      marginLeft: theme.spacing(7.375),
     },
     shiftIcon: {
       position: 'absolute',
-      marginTop: 25,
-      marginLeft: 222,
+      marginTop: theme.spacing(3.125),
+      marginLeft: theme.spacing(27.75),
     },
     leftSideIcon: {
       color: Colors.dark_gray2,
       width: 30,
       height: 30,
-      boxShadow: '4px 4px 8px 0px #979EC71A',
+      boxShadow: `4px 4px 8px 0px ${Colors.blue_bell}`,
       position: 'fixed',
     },
     userInfo: {
