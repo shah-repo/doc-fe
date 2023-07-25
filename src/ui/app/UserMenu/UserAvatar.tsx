@@ -10,7 +10,7 @@ const styles = makeStyles((theme: Theme) =>
       width: 30,
       height: 30,
       borderRadius: '50%',
-      margin: theme.spacing(0, 1, 0, 1),
+      margin: theme.spacing(0, 1),
       fontSize: 12,
       color: Colors.white,
       background: initialColor,

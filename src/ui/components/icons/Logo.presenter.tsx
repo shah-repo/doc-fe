@@ -1,4 +1,5 @@
 import { Avatar } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { theme } from '../../../common/utils/helpers';
 import { store } from '../../../state/store';
@@ -37,8 +38,7 @@ const Logo: React.FunctionComponent<Props> = ({
         <img
           id="logo"
           src={logo}
-          style={{ marginTop: showEnvironment ? 0 : 20 }}
-          className={classes.logo}
+          className={cx(classes.logo, { [classes.mt0]: showEnvironment, [classes.mt20]: !showEnvironment })}
           alt={companyName}
         /></div>}
     </React.Fragment>

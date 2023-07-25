@@ -20,7 +20,7 @@ const styles = makeStyles((theme: Theme) =>
       marginBottom: 10,
       display: 'flex',
       justifyContent: 'center',
-      height: '25px',
+      height: 25,
       alignItems: 'center',
     },
     evnTxt: {
@@ -41,15 +41,19 @@ const styles = makeStyles((theme: Theme) =>
     logo: {
       maxWidth: '100%',
       width: 150,
-      paddingLeft: 24,
       height: 50,
-      paddingRight: 24,
+      padding: theme.spacing(0, 3),
     },
     logoContainer: {
-      paddingLeft: theme.spacing(5.625),
-      paddingRight: theme.spacing(5.625),
+      padding: theme.spacing(0, 5.625),
     },
-    avatar: ({ initialColor }: {initialColor: string}) => ({
+    mt0: {
+      marginTop: 0,
+    },
+    mt20: {
+      marginTop: 20,
+    },
+    avatar: {
       width: 47,
       height: 47,
       margin: theme.spacing(0, 1.625),
@@ -57,7 +61,7 @@ const styles = makeStyles((theme: Theme) =>
       color: Colors.white,
       background: Colors.deep_blue,
       fontWeight: 600,
-    }),
+    },
   }),
 );
 

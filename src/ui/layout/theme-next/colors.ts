@@ -23,11 +23,11 @@ enum Colors {
   secondaryBg='#E6F6F9',
   secondaryLight='#E1E7F2',
   secondaryHighlight='#F2FBFC',
+  secondaryDimmed='rgba(22, 34, 41, 0.15)',
 
   // Success
   success='#0DB78D',
   successHighlight='#F3FCF9',
-  darkJungleGreenDimmed='rgba(22, 34, 41, 0.15)',
 
   // Warning
   warning='#EFA10B',
