@@ -69,8 +69,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       return;
     }
 
-    await workspaceState?.undoPO(
-      prevPODoc[0] as DocumentRevision);
+    await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
     await getPOIndexDbInstance().clear();
     FBDataStore.setRefreshData(undefined);
     history.push(lastLocation?.pathname);

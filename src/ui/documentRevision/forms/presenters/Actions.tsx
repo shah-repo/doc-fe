@@ -213,8 +213,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       return;
     }
 
-    await workspaceState?.undoPO(
-      prevPODoc[0] as DocumentRevision);
+    await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
 
     await getPOIndexDbInstance().clear();
     FBDataStore.setRefreshData(undefined);
