@@ -68,7 +68,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
             </ListItemText>
           </MenuItem>
         }
-        <Divider variant="middle" className={classes.devider} />
+        <Divider variant="middle" className={classes.divider} />
         <MenuItem
           data-cy="header.logout"
           onClick={handleLogout}

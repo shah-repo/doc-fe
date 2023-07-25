@@ -9,7 +9,7 @@ export default makeStyles((theme) => ({
     marginTop: theme.spacing(0.75),
     marginBottom: theme.spacing(0.75),
     '&:hover': {
-      background: Colors.strokeDimmed,
+      background: Colors.darkJungleGreenDimmed,
     },
   },
   listItemIcon: {
@@ -24,7 +24,7 @@ export default makeStyles((theme) => ({
     height: 16,
     width: 16,
   },
-  devider: {
+  divider: {
     marginTop: theme.spacing(0.75),
     marginBottom: theme.spacing(0.75),
   },

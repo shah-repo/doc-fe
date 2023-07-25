@@ -18,6 +18,7 @@ const Logo: React.FunctionComponent<Props> = ({
   open,
 }) => {
   const user = store.getState().auth.user;
+  const companyName = user.employee.company.name;
   const classes = styles({ initialColor: user.initialColor });
   const themeBgClass = theme.toLowerCase().replace(/(_)/g, '');
   return (
@@ -30,7 +31,7 @@ const Logo: React.FunctionComponent<Props> = ({
         </div>
       )}
       {!open && <Avatar className={classes.avatar}>
-        {getInitalsFromName(user.employee.company.name)}
+        {getInitalsFromName(companyName)}
       </Avatar>}
       {open && <div className={classes.logoContainer}>
         <img
@@ -38,7 +39,7 @@ const Logo: React.FunctionComponent<Props> = ({
           src={logo}
           style={{ marginTop: showEnvironment ? 0 : 20 }}
           className={classes.logo}
-          alt="Company logo"
+          alt={companyName}
         /></div>}
     </React.Fragment>
   );

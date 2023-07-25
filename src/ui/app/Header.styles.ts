@@ -1,6 +1,5 @@
 import { createStyles, Theme } from '@material-ui/core';
 import EnlilLogo from '../../assets/images/enlil_logo.svg';
-import ThemeColors from '../layout/theme-next/colors';
 import Colors from '../layout/theme/utils/colors';
 import { HeaderPresenterProps } from './Header.presenter';
 import { DRAWER_WIDTH } from './Navigation.styles';
@@ -20,7 +19,7 @@ export default (theme: Theme) =>
       zIndex: 1,
     },
     lightBg: {
-      background: `linear-gradient(225deg,${ThemeColors.primary} 0%,${ThemeColors.ultramarine_blue} 29.56%,${ThemeColors.primary} 100%)`,
+      background: `linear-gradient(225deg,${Colors.navy} 0%,${Colors.ultramarine_blue} 29.56%,${Colors.navy} 100%)`,
     },
     toolbar: (props: HeaderPresenterProps) => ({
       marginLeft: DRAWER_WIDTH,

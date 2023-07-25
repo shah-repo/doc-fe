@@ -9,7 +9,6 @@ enum Colors {
   hover='#EBEFF7',
   background='#F9FBFF',
   fieldDisabled='#EBEDF2',
-  strokeDimmed='rgba(22, 34, 41, 0.15)',
 
   // Primary
   primary='#011FBB',
@@ -17,7 +16,6 @@ enum Colors {
   primaryDark='#011994',
   primaryLight='#4D88FF',
   primaryGradient='#4C69FF',
-  ultramarine_blue ='#4c69ff',
   primaryHighlight='#F5F8FF',
 
   // Secondary
@@ -29,6 +27,7 @@ enum Colors {
   // Success
   success='#0DB78D',
   successHighlight='#F3FCF9',
+  darkJungleGreenDimmed='rgba(22, 34, 41, 0.15)',
 
   // Warning
   warning='#EFA10B',
@@ -42,7 +41,6 @@ enum Colors {
   white='#FFF',
   whiteDimmed='rgba(255, 255, 255, .5)',
   gray='#F9F9F9',
-  blackDimmed='rgba(8, 11, 17, 0.15)',
   darkGray='#F5F5F5',
   black='#000',
 
