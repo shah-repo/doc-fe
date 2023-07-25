@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Prompt, useHistory } from 'react-router-dom';
 import { translate } from '../../../common/intl';
-import { getPOIndexDbInstance } from '../../../indexDb';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { FB } from '../../form.builder';
@@ -61,7 +61,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     setDoNotPrompt?.(true);
     let prevPODoc;
     try {
-      prevPODoc = await getPOIndexDbInstance().toArray();
+      prevPODoc = await getPOSavedInfo();
     } catch (e) {}
 
     if (!prevPODoc.length) {
@@ -70,7 +70,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     }
 
     await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
-    await getPOIndexDbInstance().clear();
+    await clearPOSavedInfo();
     FBDataStore.setRefreshData(undefined);
     history.push(lastLocation?.pathname);
   };

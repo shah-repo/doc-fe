@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { SM } from '../../../../App';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { getHasPermission } from '../../../../common/utils/selectors';
-import { getPOIndexDbInstance } from '../../../../indexDb';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
@@ -205,7 +205,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     setDoNotPrompt(true);
     let prevPODoc;
     try {
-      prevPODoc = await getPOIndexDbInstance().toArray();
+      prevPODoc = await getPOSavedInfo();
     } catch (e) {}
 
     if (!prevPODoc.length) {
@@ -214,7 +214,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
 
     await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
-    await getPOIndexDbInstance().clear();
+    await clearPOSavedInfo();
     FBDataStore.setRefreshData(undefined);
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
     dispatch(documentRevisionsActions.load(documentRevision.id));
@@ -237,7 +237,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     if (isPOEditState) {
       setDoNotPrompt(true);
       FBDataStore.setRefreshData(undefined);
-      await getPOIndexDbInstance().clear();
+      await clearPOSavedInfo();
       history.push(documentVersionPath(documentRevision.id, documentRevision.document.id));
       dispatch(documentRevisionsActions.load(documentRevision.id));
     }
