@@ -4,6 +4,7 @@ import { companySelectors } from '../../../state/ducks/company';
 import Text from '../Text';
 import styles from './BottomLogo.styles';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BottomLogoContainer: React.FunctionComponent = () => {
   const classes = styles();
   const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
@@ -24,4 +25,4 @@ const BottomLogoContainer: React.FunctionComponent = () => {
   );
 };
 
-export default BottomLogoContainer;
+// export default BottomLogoContainer;
