@@ -213,7 +213,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       return;
     }
 
-    await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+    await workspaceState?.undoPO(prevPODoc[0]);
     await clearPOSavedInfo();
     FBDataStore.setRefreshData(undefined);
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
