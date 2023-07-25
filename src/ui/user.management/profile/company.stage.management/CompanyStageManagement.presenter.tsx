@@ -67,7 +67,7 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={asyncState} />
       </Box>
       <Box display="flex" justifyContent="flex-end">
-        <Button type="submit" disabled={disabled} variant="outlined">
+        <Button type="submit" data-cy="num-of-rev-stages-save" disabled={disabled} variant="outlined">
           <Text translation="common.save" />
         </Button>
       </Box>

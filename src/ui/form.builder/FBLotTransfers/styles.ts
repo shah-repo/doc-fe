@@ -16,6 +16,14 @@ export default makeStyles(theme => ({
     '& td': {
       height: ROW_HEIGHT,
       boxSizing: 'border-box',
+
+      '& a': {
+        color: Colors.primary,
+
+        '&:hover': {
+          textDecoration: 'underline',
+        },
+      },
     },
   },
   gridWithButton: {
