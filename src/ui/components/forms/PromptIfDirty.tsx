@@ -4,6 +4,7 @@ import { translate } from '../../../common/intl';
 import { getPOIndexDbInstance } from '../../../indexDb';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { FB } from '../../form.builder';
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDialog from '../../hooks/useDialog';
 
@@ -22,6 +23,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const dialog = useDialog();
   const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
+  const { workspaceState } = FB.useStores();
 
   useEffect(() => {
     const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
@@ -67,6 +69,8 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       return;
     }
 
+    await workspaceState?.undoPO(
+      prevPODoc[0] as DocumentRevision);
     await getPOIndexDbInstance().clear();
     FBDataStore.setRefreshData(undefined);
     history.push(lastLocation?.pathname);
