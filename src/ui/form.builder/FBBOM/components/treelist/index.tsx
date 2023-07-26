@@ -16,6 +16,7 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
+import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -53,10 +54,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       });
     },
     onError: (response) => {
-      console.log('response :', response);
-      // remove at last
+      toastError(response);
       const bomProccessedData = processBOMData(bomTreeRelationsObj, parentDetailsObj);
-      console.log('Success :', bomProccessedData);
       setState({
         ...state,
         data: bomProccessedData,
@@ -66,14 +65,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   });
 
   const deleteBOMTreeListAsync = useAsync({
-    onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
-      // const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
-      // console.log('Success :', bomProccessedData);
-      // setState({
-      //   ...state,
-      //   data: bomProccessedData,
-      //   expanded: [bomProccessedData[0].id],
-      // });
+    onSuccess: () => {
       fetchBOMTreeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
@@ -82,7 +74,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       );
     },
     onError: (response) => {
-      console.log('response :', response);
+      toastError(response);
     },
   });
 
@@ -96,7 +88,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       );
     },
     onError: (response) => {
-      console.log('response :', response);
+      toastError(response);
       fetchBOMTreeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
