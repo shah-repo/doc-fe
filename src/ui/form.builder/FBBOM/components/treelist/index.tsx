@@ -16,6 +16,7 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
+import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -28,7 +29,7 @@ import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps, DATA_ITEM_KEY, EXPAND_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
 import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import useStyles from './styles';
-import { bomTreeRelationsObj, isOfSameParent, parentDetailsObj, processBOMData } from './utils';
+import { isOfSameParent, processBOMData } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const classes = useStyles();
@@ -44,24 +45,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const fetchBOMTreeListAsync = useAsync({
     onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
-      const bomProccessedData = processBOMData(bomTreeRelationsObj, parentDetailsObj);
-      console.log('Success :', bomProccessedData);
+      const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
+      // console.log('Success :', bomProccessedData);
       setState({
         ...state,
         data: bomProccessedData,
         expanded: [bomProccessedData[0].id],
       });
     },
-    onError: (response) => {
-      console.log('response :', response);
-      // remove at last
-      const bomProccessedData = processBOMData(bomTreeRelationsObj, parentDetailsObj);
-      console.log('Success :', bomProccessedData);
-      setState({
-        ...state,
-        data: bomProccessedData,
-        expanded: [bomProccessedData[0].id],
-      });
+    onError: (err) => {
+      console.log('err :', err);
+      toastError(err);
     },
   });
 
@@ -95,14 +89,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         fetchBOMTreeListAsync,
       );
     },
-    onError: (response) => {
-      console.log('response :', response);
-      fetchBOMTreeListAsync.start(
-        fetchBOMTreeList,
-        documentRevision.id,
-        documentRevision.documentId,
-        fetchBOMTreeListAsync,
-      );
+    onError: (err) => {
+      console.log('err :', err);
+      toastError(err);
     },
   });
 
