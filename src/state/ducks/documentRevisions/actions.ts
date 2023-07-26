@@ -442,9 +442,9 @@ const updateBomBranch = (
   handlers: Handlers,
 ): ApiAction<BOM[]> =>
   apiActionWithCallbacks({
-    url: `${UPDATE_BOM_BRANCH}/${parentNodeRevId}/${childNodeRevId}`,
+    url: `${UPDATE_BOM_BRANCH}/${parentNodeRevId}`,
     method: 'patch',
-    data,
+    data: { ...data, childNodeRevId },
     handlers,
   });
 
