@@ -79,22 +79,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    // Trigger API Here
     const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
-    console.log('fetchBOMBranch :', docInfo);
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],
       docInfo[1],
       fetchSelectedPartAsync,
     );
-
-    // field && setFieldValue(field, value?.value);
-    // // settings up other fields
-    // if (value?.value && field) {
-    //   dataItem[field] = value.value;
-    // }
-
     setFieldValue('childNodeRevId', docInfo[0]);
     setFieldValue('childNodeDocumentId', docInfo[1]);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
@@ -106,7 +97,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
     const fieldValue = `${dataItem.id}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
     const value = renderOptions().find((option) => option.value === fieldValue);
-    console.log('value ::', value);
     if (value) {
       setFieldValue(field, value);
     }

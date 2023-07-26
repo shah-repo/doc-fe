@@ -2,10 +2,31 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Divider, Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListRowDragEvent } from '@progress/kendo-react-treelist';
+import {
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy,
+  TreeList,
+  TreeListCellProps,
+  TreeListColumnReorderEvent,
+  TreeListDataStateChangeEvent,
+  TreeListDraggableRow,
+  TreeListRowDragEvent,
+} from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { chain, get, isEmpty, map, omit, replace, tail, take, uniq } from 'lodash';
+import {
+  chain,
+  get,
+  isEmpty,
+  map,
+  omit,
+  replace,
+  tail,
+  take,
+  uniq,
+} from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -26,8 +47,21 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import { CustomTreeListColumnProps, DATA_ITEM_KEY, EXPAND_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TreeColumns, TREELIST_CONFIG } from './constants';
-import { BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
+import {
+  CustomTreeListColumnProps,
+  DATA_ITEM_KEY,
+  EXPAND_FIELD,
+  SELECTED_PART_KEY_SEPARATOR,
+  SUB_ITEMS_FIELD,
+  TreeColumns,
+  TREELIST_CONFIG,
+} from './constants';
+import {
+  BOMState,
+  CustomTreeListExpandChangeEvent,
+  CustomTreeListRowProps,
+  FBBOMProps,
+} from './interface';
 import useStyles from './styles';
 import { isOfSameParent, processBOMData } from './utils';
 
@@ -43,10 +77,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     inEdit: [],
   });
 
-  const fetchBOMTreeListAsync = useAsync({
-    onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
-      const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
-      // console.log('Success :', bomProccessedData);
+  const treeListAsync = useAsync({
+    onSuccess: ({
+      bomTreeRelations,
+      parentRevDetails,
+    }: {
+      bomTreeRelations: BOM[]
+      parentRevDetails: BOM
+    }) => {
+      const bomProccessedData = processBOMData(
+        bomTreeRelations,
+        parentRevDetails,
+      );
       setState({
         ...state,
         data: bomProccessedData,
@@ -54,18 +96,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       });
     },
     onError: (err) => {
-      console.log('err :', err);
       toastError(err);
     },
   });
 
-  const deleteBOMTreeListAsync = useAsync({
+  const partAsync = useAsync({
     onSuccess: () => {
-      fetchBOMTreeListAsync.start(
+      treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
         documentRevision.documentId,
-        fetchBOMTreeListAsync,
+        treeListAsync,
       );
     },
     onError: (response) => {
@@ -73,39 +114,31 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     },
   });
 
-  const addBOMTreeListAsync = useAsync({
-    onSuccess: () => {
-      fetchBOMTreeListAsync.start(
-        fetchBOMTreeList,
-        documentRevision.id,
-        documentRevision.documentId,
-        fetchBOMTreeListAsync,
-      );
-    },
-    onError: (err) => {
-      console.log('err :', err);
-      toastError(err);
-    },
-  });
-
   useEffect(() => {
     if (!documentRevision) {
       return;
     }
-    fetchBOMTreeListAsync.start(
+    treeListAsync.start(
       fetchBOMTreeList,
       documentRevision.id,
       documentRevision.documentId,
-      fetchBOMTreeListAsync,
+      treeListAsync,
     );
   }, [documentRevision?.id]);
 
-  const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchBOMTree);
-  const deleteBOMBranch = useActionCreator(documentRevisionsActions.deleteBomBranch);
+  const fetchBOMTreeList = useActionCreator(
+    documentRevisionsActions.fetchBOMTree,
+  );
+  const deleteBOMBranch = useActionCreator(
+    documentRevisionsActions.deleteBomBranch,
+  );
   const addBOMBranch = useActionCreator(documentRevisionsActions.addBomBranch);
-  const updateBOMBranch = useActionCreator(documentRevisionsActions.updateBomBranch);
+  const updateBOMBranch = useActionCreator(
+    documentRevisionsActions.updateBomBranch,
+  );
 
-  const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
+  const [columns, setColumns]
+    = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
     const expanded = event.value
@@ -129,11 +162,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
     // API call here
     console.log('selectedPart :', selectedPart);
-    deleteBOMTreeListAsync.start(
+    partAsync.start(
       deleteBOMBranch,
       documentRevision.id, // parentRevID
       selectedPart?.id, // childRevID
-      deleteBOMTreeListAsync,
+      partAsync,
     );
     discardBOM(selectedPart);
     confirmationDialog.close();
@@ -156,16 +189,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const processData = () => {
     const { data, dataState } = state;
-    const filteredData = dataState.filter && filterBy(
-      data,
-      dataState.filter,
-      SUB_ITEMS_FIELD,
-    );
-    const sortedData = dataState.sort && filteredData && orderBy(
-      filteredData,
-      dataState.sort,
-      SUB_ITEMS_FIELD,
-    );
+    const filteredData
+      = dataState.filter && filterBy(data, dataState.filter, SUB_ITEMS_FIELD);
+    const sortedData
+      = dataState.sort
+      && filteredData
+      && orderBy(filteredData, dataState.sort, SUB_ITEMS_FIELD);
     return addExpandField(sortedData as BOM[]);
   };
 
@@ -181,10 +210,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const formik = useFormik<Partial<EditableBOM>>({
     initialValues: {},
-    // validate: (values) => {
-    //   const errors: Record<string, string> = {};
-    //   return errors;
-    // },
     onSubmit: (values) => {
       const partInfo = omit(values, [MODE_FIELD, 'dataItem']);
       partInfo.unit = get(partInfo, 'unit.value');
@@ -193,11 +218,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         partInfo.parentNodeRevId = documentRevision.id;
         partInfo.parentNodeDocumentId = documentRevision.documentId;
         partInfo.markAsDeleted = false; // After rev1 it should be true
-        addBOMTreeListAsync.start(
-          addBOMBranch,
-          partInfo,
-          addBOMTreeListAsync,
-        );
+        partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
         // Update keys if required
         const payload = {
@@ -206,12 +227,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
           unit: partInfo.unit,
           comment: partInfo.comment,
         };
-        addBOMTreeListAsync.start(
+        partAsync.start(
           updateBOMBranch,
           documentRevision.id,
           partInfo.id,
           payload,
-          addBOMTreeListAsync,
+          partAsync,
         );
       }
       console.log('partInfo :', partInfo);
@@ -242,14 +263,20 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const isNewBOMAdditionInProgress = () => {
-    return state.data[0][SUB_ITEMS_FIELD] && state.data[0][SUB_ITEMS_FIELD].filter(data => data[ADD_FIELD])?.length > 0;
+    return (
+      state.data[0][SUB_ITEMS_FIELD]
+      && state.data[0][SUB_ITEMS_FIELD].filter((data) => data[ADD_FIELD])?.length
+        > 0
+    );
   };
   const addBOM = () => {
     if (isNewBOMAdditionInProgress()) {
       return;
     }
     const newBOM: EditableBOM = createNewItem();
-    state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
+    state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
+      (data) => !data[ADD_FIELD],
+    );
     state.data[0][SUB_ITEMS_FIELD]?.push(newBOM);
     setState({
       ...state,
@@ -264,7 +291,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       return;
     }
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
-      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
+      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
+        (data) => !data[ADD_FIELD],
+      );
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     editBOMInfo.customDocId = `${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
@@ -278,7 +307,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const discardBOM = (dataItem?) => {
     if (dataItem && dataItem[ADD_FIELD]) {
-      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
+      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
+        (data) => !data[ADD_FIELD],
+      );
     }
     setState({
       ...state,
@@ -308,11 +339,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const modifiedProps = {
-      className: cx(replace(row?.props?.className, 'k-alt', ''),
-        {
-          [classes.WhiteBg]: isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
-          [classes.grayBg]: !isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
-        }),
+      className: cx(replace(row?.props?.className, 'k-alt', ''), {
+        [classes.WhiteBg]: isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
+        [classes.grayBg]: !isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
+      }),
     };
     if (!item[MODE_FIELD]) {
       return React.cloneElement(row, modifiedProps);
@@ -332,7 +362,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       </td>
     );
 
-    return React.cloneElement(row,
+    return React.cloneElement(
+      row,
       {
         ...modifiedProps,
         className: cx(row.props.className, classes.updatingRow),
@@ -346,7 +377,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
-      if (item[SUB_ITEMS_FIELD] && (item?.depth || 0) < 2 && !isEmpty(item[SUB_ITEMS_FIELD])) {
+      if (
+        item[SUB_ITEMS_FIELD]
+        && (item?.depth || 0) < 2
+        && !isEmpty(item[SUB_ITEMS_FIELD])
+      ) {
         ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD]));
       }
     });
@@ -369,23 +404,42 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     });
   };
 
-  const renderToolbar = <GridToolbar>
-    <Grid container justify="space-between">
-      <Grid item data-cy="collapse-expand-collapse" className={classes.toggleExpandCollapse}>
-        <span onClick={handleExpandAll}>{translate('common.expand.all')} / </span>
-        <span onClick={handleCollapseAll}>{translate('common.collapse.all')}</span>
+  const renderToolbar = (
+    <GridToolbar>
+      <Grid container justify="space-between">
+        <Grid
+          item
+          data-cy="collapse-expand-collapse"
+          className={classes.toggleExpandCollapse}
+        >
+          <span onClick={handleExpandAll}>
+            {translate('common.expand.all')} /{' '}
+          </span>
+          <span onClick={handleCollapseAll}>
+            {translate('common.collapse.all')}
+          </span>
+        </Grid>
+        <Grid item data-cy="show-hide-columns">
+          <ColumnShowHideTreeMenu
+            columnDefinition={columns}
+            onChange={onColumnShowHide}
+          />
+        </Grid>
       </Grid>
-      <Grid item data-cy="show-hide-columns">
-        <ColumnShowHideTreeMenu
-          columnDefinition={columns}
-          onChange={onColumnShowHide}
-        />
-      </Grid>
-    </Grid>
-  </GridToolbar>;
+    </GridToolbar>
+  );
 
-  const cellRender = (tdElement: React.ReactElement<HTMLTableCellElement, string | React.JSXElementConstructor<any>> | null, cellProps: TreeListCellProps): React.ReactElement<HTMLTableCellElement> => {
-    const props = { ...tdElement?.props, className: cx(tdElement?.props.className, classes.borderBottom) };
+  const cellRender = (
+    tdElement: React.ReactElement<
+    HTMLTableCellElement,
+    string | React.JSXElementConstructor<any>
+    > | null,
+    cellProps: TreeListCellProps,
+  ): React.ReactElement<HTMLTableCellElement> => {
+    const props = {
+      ...tdElement?.props,
+      className: cx(tdElement?.props.className, classes.borderBottom),
+    };
     const defaultRendering = { ...tdElement, props: props };
     return defaultRendering as React.ReactElement<HTMLTableCellElement>;
   };
@@ -398,29 +452,42 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
-  const onLock = React.useCallback(({ field, locked, closeMenu }: CustomTreeListColumnProps & {closeMenu: () => void}) => {
-    const index = columns.findIndex(c => c.field === field);
-    const column = columns[index];
-    if (column) {
-      const newColumns = [...columns];
-      newColumns.splice(index, 1, { ...column, locked: !locked });
-      setColumns(newColumns);
-      closeMenu?.();
-    }
-  }, [columns]);
+  const onLock = React.useCallback(
+    ({
+      field,
+      locked,
+      closeMenu,
+    }: CustomTreeListColumnProps & { closeMenu: () => void }) => {
+      const index = columns.findIndex((c) => c.field === field);
+      const column = columns[index];
+      if (column) {
+        const newColumns = [...columns];
+        newColumns.splice(index, 1, { ...column, locked: !locked });
+        setColumns(newColumns);
+        closeMenu?.();
+      }
+    },
+    [columns],
+  );
 
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
   const onRowDrop = (event: TreeListRowDragEvent) => {
-    if (event?.draggedOver && isOfSameParent(event?.dragged, event?.draggedOver)) {
+    if (
+      event?.draggedOver
+      && isOfSameParent(event?.dragged, event?.draggedOver)
+    ) {
       const parentIndices: number[] = event.dragged.slice(0, -1);
       const draggedChildIndex: number = event.dragged.slice(-1)[0];
       const draggedOverChildIndex: number = event.draggedOver?.slice(-1)[0];
       const swapChildElements = (tree: BOM[], parentIndices: number[]) => {
         if (!isEmpty(parentIndices)) {
           const index = take(parentIndices)[0];
-          tree[index][SUB_ITEMS_FIELD] = swapChildElements(tree[index][SUB_ITEMS_FIELD] as BOM[], tail(parentIndices));
+          tree[index][SUB_ITEMS_FIELD] = swapChildElements(
+            tree[index][SUB_ITEMS_FIELD] as BOM[],
+            tail(parentIndices),
+          );
         } else {
           const draggedChild = tree[draggedChildIndex];
           const draggedOver = tree[draggedOverChildIndex];
@@ -452,88 +519,97 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   const sortedColumnDefinitions = orderByLockedState(getColumns());
 
-  return (<>
-    <Grid container alignItems="center" justify="space-between" style={{ padding: 0 }}>
-      <Grid item className={classes.header}>
-        {translate('tabId.bom')}
+  return (
+    <>
+      <Grid
+        container
+        alignItems="center"
+        justify="space-between"
+        style={{ padding: 0 }}
+      >
+        <Grid item className={classes.header}>
+          {translate('tabId.bom')}
+        </Grid>
+        <Grid item>
+          <Button
+            disableRipple
+            variant="text"
+            className={classes.addItem}
+            startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+            onClick={addBOM}
+          >
+            {translate('bom.header.add.item')}
+          </Button>
+        </Grid>
+      </Grid>
+      <Divider />
+      <Grid item className={classes.tableContainer}>
+        <FormikProvider value={formik}>
+          <Grid container>
+            <Grid item xs={12}>
+              <TreeList
+                {...state.dataState}
+                style={{
+                  width: '100%',
+                  maxHeight: size ? size?.height - 160 : 'auto',
+                  overflow: 'auto',
+                }}
+                tableProps={{ style: { width: '2561px' } }}
+                editField={MODE_FIELD}
+                expandField={EXPAND_FIELD}
+                dataItemKey={DATA_ITEM_KEY}
+                subItemsField={SUB_ITEMS_FIELD}
+                onExpandChange={onExpandChange}
+                rowRender={rowRender}
+                data={processData()}
+                onDataStateChange={handleDataStateChange}
+                columns={sortedColumnDefinitions}
+                columnMenu={(props) => (
+                  <CustomColumnMenu
+                    {...props}
+                    columns={getColumns()}
+                    {...{
+                      onLock,
+                      onColumnShowHide,
+                    }}
+                  />
+                )}
+                onRowClick={editBOM}
+                onColumnReorder={onColumnReorder}
+                resizable={TREELIST_CONFIG.resizable}
+                reorderable={TREELIST_CONFIG.reorderable}
+                sortable={TREELIST_CONFIG.sortable}
+                toolbar={renderToolbar}
+                cellRender={cellRender}
+                onRowDrop={onRowDrop}
+                row={TreeListDraggableRow}
+              />
+              {(treeListAsync.isLoading || partAsync.isLoading) && <Loader />}
+            </Grid>
+            {confirmationDialog.isOpen && (
+              <AlertDialog
+                dialog={confirmationDialog}
+                confirmAction={confirmDeletePart}
+                cancelAction={cancelDeletePart}
+                message="bom.item.delete.alert"
+              />
+            )}
+          </Grid>
+        </FormikProvider>
       </Grid>
       <Grid item>
-        <Button
-          disableRipple
-          variant="text"
-          className={classes.addItem}
-          startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+        <AddButton
+          fullWidth
+          attached
+          kind="add"
+          className={classes.bottomAddButtom}
+          data-cy="fb-control-btn"
           onClick={addBOM}
         >
-          {translate('bom.header.add.item')}
-        </Button>
+          {translate('form.builder.add.item')}
+        </AddButton>
       </Grid>
-    </Grid>
-    <Divider />
-    <Grid item className={classes.tableContainer}>
-      <FormikProvider value={formik}>
-        <Grid container>
-          <Grid item xs={12}>
-            <TreeList
-              {...state.dataState}
-              style={{ width: '100%', maxHeight: size ? size?.height - 160 : 'auto', overflow: 'auto' }}
-              tableProps={{ style: { width: '2561px' } }}
-              editField={MODE_FIELD}
-              expandField={EXPAND_FIELD}
-              dataItemKey={DATA_ITEM_KEY}
-              subItemsField={SUB_ITEMS_FIELD}
-              onExpandChange={onExpandChange}
-              rowRender={rowRender}
-              data={processData()}
-              onDataStateChange={handleDataStateChange}
-              columns={sortedColumnDefinitions}
-              columnMenu={(props) => (
-                <CustomColumnMenu
-                  {...props}
-                  columns={getColumns()}
-                  {...{
-                    onLock,
-                    onColumnShowHide,
-                  }}
-                />
-              )}
-              onRowClick={editBOM}
-              onColumnReorder={onColumnReorder}
-              resizable={TREELIST_CONFIG.resizable}
-              reorderable={TREELIST_CONFIG.reorderable}
-              sortable={TREELIST_CONFIG.sortable}
-              toolbar={renderToolbar}
-              cellRender={cellRender}
-              onRowDrop={onRowDrop}
-              row={TreeListDraggableRow}
-            />
-            {(fetchBOMTreeListAsync.isLoading || addBOMTreeListAsync.isLoading || deleteBOMTreeListAsync.isLoading
-            ) && <Loader />}
-          </Grid>
-          {confirmationDialog.isOpen && (
-            <AlertDialog
-              dialog={confirmationDialog}
-              confirmAction={confirmDeletePart}
-              cancelAction={cancelDeletePart}
-              message="bom.item.delete.alert"
-            />
-          )}
-        </Grid>
-      </FormikProvider>
-    </Grid>
-    <Grid item>
-      <AddButton
-        fullWidth
-        attached
-        kind="add"
-        className={classes.bottomAddButtom}
-        data-cy="fb-control-btn"
-        onClick={addBOM}
-      >
-        {translate('form.builder.add.item')}
-      </AddButton>
-    </Grid>
-  </>
+    </>
   );
 };
 
