@@ -1,10 +1,13 @@
+import { DropDownList } from '@progress/kendo-react-dropdowns';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { find, isString } from 'lodash';
 import React, { ComponentType } from 'react';
+import { translate } from '../../../../../../common/intl';
 import {
   FormikField,
-  TextField,
 } from '../../../../../components/forms/fields-next';
+import unitsOptions from '../../../../FBData/unitsOptions.json';
 import { EditableBOM } from '../../../interface';
 import { enableFieldAfterPartSelection, getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -22,16 +25,19 @@ const UnitCell: ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
+  const data = unitsOptions.map(item => ({ ...item, text: translate(item.text) }));
+  const getValue = () => find(data, { value: isString(values[field]) ? values[field] : values[field]?.value });
 
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
-        <TextField
+        <DropDownList
           {...getFieldProps(field)}
-          type="text"
-          inputProps={{ min: 0 }}
+          data={data}
+          textField="text"
+          dataItemKey="value"
+          value={getValue()}
           disabled={!enableFieldAfterPartSelection(dataItem, values.docId)}
-          size="small"
         />
       </FormikField>
     );

@@ -2,9 +2,11 @@ import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { CustomTemplateProps, DocumentRevisionOption, EditableLotTransfer } from '../types';
 import { getOptionLabel } from '../utils';
 
@@ -49,17 +51,22 @@ export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, options, o
   }
 
   const displayValue = dataItem[field] as string;
+  const linkPath = value ? documentVersionPath(value?.id, value?.document.id) : undefined;
+
+  const handleClick = () => {
+    !linkPath && onClick?.({ dataItem });
+  };
 
   return (
-    <Box onClick={() => onClick?.({ dataItem })}>
+    <Box onClick={handleClick}>
       <OverflowTooltip
         title={displayValue}
         placement="top"
-        onClick={() => onClick?.({ dataItem })}
         interactive
         arrow
+        onClick={handleClick}
       >
-        {displayValue}
+        {linkPath ? <Link target="_blank" to={linkPath}>{displayValue}</Link> : displayValue}
       </OverflowTooltip>
     </Box>
   );

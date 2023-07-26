@@ -60,14 +60,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   });
 
   const deleteBOMTreeListAsync = useAsync({
-    onSuccess: ({ bomTreeRelations, parentRevDetails }: {bomTreeRelations: BOM[], parentRevDetails: BOM}) => {
-      // const bomProccessedData = processBOMData(bomTreeRelations, parentRevDetails);
-      // console.log('Success :', bomProccessedData);
-      // setState({
-      //   ...state,
-      //   data: bomProccessedData,
-      //   expanded: [bomProccessedData[0].id],
-      // });
+    onSuccess: () => {
       fetchBOMTreeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
@@ -76,7 +69,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       );
     },
     onError: (response) => {
-      console.log('response :', response);
+      toastError(response);
     },
   });
 
