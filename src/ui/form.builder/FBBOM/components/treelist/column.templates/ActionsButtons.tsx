@@ -21,7 +21,6 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
     onDiscard,
     onDelete,
     onRestore,
-    onReorder,
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -64,7 +63,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
           </div>
         </Tooltip>
       )}
-      {isPartEdit && onReorder && (
+      {/* {isPartEdit && onReorder && (
         <Tooltip
           title={translate('common.restore')}
           placement="top"
@@ -80,7 +79,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
             </IconButton>
           </div>
         </Tooltip>
-      )}
+      )} */}
       {isPartEdit && onDelete && (
         <Tooltip
           title={translate('common.delete')}

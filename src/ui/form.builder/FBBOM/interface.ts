@@ -11,7 +11,7 @@ export interface BOM {
   cost: string
   docId: string
   leadTime?: string
-  quantity?: string
+  quantity?: number
   unit?: string
   refDesignator?: string
   depth?: number

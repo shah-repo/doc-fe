@@ -30,7 +30,7 @@ const TitleCell: ComponentType<CustomTreeListCellProps> = ({
         <TextField
           {...getFieldProps(field)}
           type="text"
-          disabled={dataItem[ADD_FIELD]}
+          disabled={isEditMode}
           inputProps={{ min: 0 }}
           size="small"
         />

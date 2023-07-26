@@ -22,7 +22,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const { colSpan, id, style, dataItem, field } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
+  const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
@@ -89,20 +89,28 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       fetchSelectedPartAsync,
     );
 
-    field && setFieldValue(field, value?.value);
-    // settings up other fields
-    if (value?.value && field) {
-      dataItem[field] = value.value;
-    }
+    // field && setFieldValue(field, value?.value);
+    // // settings up other fields
+    // if (value?.value && field) {
+    //   dataItem[field] = value.value;
+    // }
 
     setFieldValue('childNodeRevId', docInfo[0]);
     setFieldValue('childNodeDocumentId', docInfo[1]);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
-  console.log('values :', values);
-  // const value = `${values.id}${SELECTED_PART_KEY_SEPARATOR}${values.documentId}`;
-  // const value = parts.find((part) => part.id === defaultValue);
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+    const fieldValue = `${dataItem.id}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+    const value = renderOptions().find((option) => option.value === fieldValue);
+    console.log('value ::', value);
+    if (value) {
+      setFieldValue(field, value);
+    }
+  }, [parts]);
 
   const getFieldInfo = () => (
     field && <FormikField
@@ -113,7 +121,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         blurOnSelect
         options={renderOptions()}
         placeholder={translate('common.select')}
-        // value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
         size="small"

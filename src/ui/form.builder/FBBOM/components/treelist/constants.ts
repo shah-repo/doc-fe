@@ -4,6 +4,7 @@ import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
 import DropdownFilterCell from './column.templates/DropDownFilterCell';
+import HasChangesCell from './column.templates/HasChangesCell';
 import IDCell from './column.templates/IDCell';
 import LeadTimeCell from './column.templates/LeadTimeCell';
 import { PrimaryAttachmentsCell } from './column.templates/PrimaryAttachments';
@@ -139,7 +140,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     mainOrderIndex: 9,
     hidden: false,
-    cell: QuantityCell,
+    cell: HasChangesCell,
   },
   {
     field: 'refDesignator',

@@ -11,7 +11,7 @@ import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const TextInfoCell: ComponentType<CustomTreeListCellProps> = ({
+const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   dataItem,
   field,
   colSpan,
@@ -30,7 +30,7 @@ const TextInfoCell: ComponentType<CustomTreeListCellProps> = ({
         <TextField
           {...getFieldProps(field)}
           type="text"
-          disabled={dataItem[ADD_FIELD]}
+          disabled={isEditMode}
           inputProps={{ min: 0 }}
           size="small"
         />
@@ -58,4 +58,4 @@ const TextInfoCell: ComponentType<CustomTreeListCellProps> = ({
   );
 };
 
-export default TextInfoCell;
+export default RevisionCell;

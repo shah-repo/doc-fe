@@ -5,7 +5,6 @@ import {
   FormikField,
   TextField,
 } from '../../../../../components/forms/fields-next';
-import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -31,7 +30,7 @@ const CostCell: ComponentType<CustomTreeListCellProps> = ({
           {...getFieldProps(field)}
           type="text"
           inputProps={{ min: 0 }}
-          disabled={dataItem[ADD_FIELD]}
+          disabled={isEditMode}
           size="small"
         />
       </FormikField>

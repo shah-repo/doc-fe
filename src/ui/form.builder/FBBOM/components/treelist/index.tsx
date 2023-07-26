@@ -5,7 +5,7 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListRowDragEvent } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { chain, isEmpty, map, omit, replace, tail, take, uniq } from 'lodash';
+import { chain, get, isEmpty, map, omit, replace, tail, take, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -103,7 +103,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const fetchBOMTreeList = useActionCreator(documentRevisionsActions.fetchBOMTree);
   const deleteBOMBranch = useActionCreator(documentRevisionsActions.deleteBomBranch);
   const addBOMBranch = useActionCreator(documentRevisionsActions.addBomBranch);
-  // const updateBOMBranch = useActionCreator(documentRevisionsActions.updateBomBranch);
+  const updateBOMBranch = useActionCreator(documentRevisionsActions.updateBomBranch);
 
   const [columns, setColumns] = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
@@ -186,23 +186,35 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     //   return errors;
     // },
     onSubmit: (values) => {
-      const updatedBOM = omit(values, [MODE_FIELD, 'dataItem']);
-      // Save API
-      if (values[ADD_FIELD]) {
-        updatedBOM.parentNodeRevId = documentRevision.id;
-        updatedBOM.parentNodeDocumentId = documentRevision.documentId;
-        updatedBOM.markAsDeleted = false; // After rev1 it should be true
+      const partInfo = omit(values, [MODE_FIELD, 'dataItem']);
+      partInfo.unit = get(partInfo, 'unit.value');
 
-        console.log('Add ::', updatedBOM);
+      if (values[ADD_FIELD]) {
+        partInfo.parentNodeRevId = documentRevision.id;
+        partInfo.parentNodeDocumentId = documentRevision.documentId;
+        partInfo.markAsDeleted = false; // After rev1 it should be true
         addBOMTreeListAsync.start(
           addBOMBranch,
-          updatedBOM,
+          partInfo,
           addBOMTreeListAsync,
         );
       } else {
-        // update case
+        // Update keys if required
+        const payload = {
+          refDesignator: partInfo.refDesignator,
+          quantity: partInfo?.quantity ? +partInfo?.quantity ?? 0 : 0,
+          unit: partInfo.unit,
+          comment: partInfo.comment,
+        };
+        addBOMTreeListAsync.start(
+          updateBOMBranch,
+          documentRevision.id,
+          partInfo.id,
+          payload,
+          addBOMTreeListAsync,
+        );
       }
-      console.log('updatedBOM :', updatedBOM);
+      console.log('partInfo :', partInfo);
       discardBOM();
     },
   });
@@ -255,7 +267,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(data => !data[ADD_FIELD]);
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
-    editBOMInfo.customDocId = [`${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`];
+    editBOMInfo.customDocId = `${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
     setState({
       ...state,
       data: [...state.data],
