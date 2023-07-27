@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from '..';
 import { SM } from '../../../App';
 import { MomentFormats } from '../../../common/utils/date';
-import { getPOIndexDbInstance } from '../../../indexDb';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
@@ -102,16 +102,16 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         if (createdDocumentRevision) {
           dialog?.close();
           try {
-            const prevPODoc = await getPOIndexDbInstance().toArray();
+            const prevPODoc = await getPOSavedInfo();
             if (prevPODoc.length) {
               await workspaceState?.updateDocRevById(getLatestDocRevData() as DocumentRevision, createdDocumentRevision.id);
-              await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+              await workspaceState?.undoPO(prevPODoc[0]);
             }
           } catch (e) {
             console.error(e);
           }
           FBDataStore.setRefreshData(undefined);
-          await getPOIndexDbInstance().clear();
+          await clearPOSavedInfo();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -184,7 +184,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       _documentRevisionFormState?.setDoNotPrompt(true);
       const latestDocRevData = getLatestDocRevData();
       try {
-        const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];
+        const prevPODoc = await getPOSavedInfo();
         if (latestDocRevData && prevPODoc.length) {
           latestDocRevData.formInput = prevPODoc[0]?.formInput;
           latestDocRevData.description = prevPODoc[0]?.description;
