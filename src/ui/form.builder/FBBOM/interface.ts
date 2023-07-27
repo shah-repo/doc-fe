@@ -7,6 +7,7 @@ export interface BOM {
   name: string
   version?: string
   revision: string
+  isOwner?: boolean
   status: string
   cost: string
   docId: string
@@ -36,6 +37,7 @@ export interface EditableBOM extends BOM {
   parentNodeDocumentId?: string
   childNodeRevId?: string
   childNodeDocumentId?: string
+  newChildNodeRevId?: string
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM

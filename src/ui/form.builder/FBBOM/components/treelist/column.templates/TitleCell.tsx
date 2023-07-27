@@ -1,10 +1,6 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
-import {
-  FormikField,
-  TextField,
-} from '../../../../../components/forms/fields-next';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import { getCellValue, isEditBOM } from '../utils';
@@ -21,21 +17,9 @@ const TitleCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren, isEditMode: dataItem[ADD_FIELD] });
-  const { getFieldProps } = useFormikContext<EditableBOM>();
+  const { values } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
 
-  const getFieldInfo = () =>
-    field && (
-      <FormikField name={field}>
-        <TextField
-          {...getFieldProps(field)}
-          type="text"
-          disabled={isEditMode}
-          inputProps={{ min: 0 }}
-          size="small"
-        />
-      </FormikField>
-    );
   return (
     <td
       colSpan={colSpan}
@@ -48,12 +32,9 @@ const TitleCell: ComponentType<CustomTreeListCellProps> = ({
         'aria-expanded': otherProps.expanded,
       }}
     >
-      {isEditMode && getFieldInfo()}
-      {!isEditMode && (
-        <span className={classes.titleInfoCell}>
-          {getCellValue(dataItem, field)}
-        </span>
-      )}
+      <span className={classes.titleInfoCell}>
+        {getCellValue(isEditMode ? values : dataItem, field)}
+      </span>
     </td>
   );
 };

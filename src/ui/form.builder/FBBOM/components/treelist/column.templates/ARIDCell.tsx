@@ -1,12 +1,6 @@
 import cx from 'classnames';
-import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
-import {
-  FormikField,
-  TextField,
-} from '../../../../../components/forms/fields-next';
-import { EditableBOM } from '../../../interface';
-import { getCellValue, isEditBOM } from '../utils';
+import { getCellValue } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -20,21 +14,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const { getFieldProps } = useFormikContext<EditableBOM>();
-  const isEditMode = isEditBOM(dataItem);
 
-  const getFieldInfo = () =>
-    field && (
-      <FormikField name={field}>
-        <TextField
-          {...getFieldProps(field)}
-          type="text"
-          inputProps={{ min: 0 }}
-          disabled={isEditMode}
-          size="small"
-        />
-      </FormikField>
-    );
   return (
     <td
       colSpan={colSpan}
@@ -47,12 +27,9 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
         'aria-expanded': otherProps.expanded,
       }}
     >
-      {isEditMode && getFieldInfo()}
-      {!isEditMode && (
-        <span className={classes.Cell}>
-          {getCellValue(dataItem, field)}
-        </span>
-      )}
+      <span className={classes.Cell}>
+        {getCellValue(dataItem, field)}
+      </span>
     </td>
   );
 };

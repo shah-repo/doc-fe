@@ -86,8 +86,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       docInfo[1],
       fetchSelectedPartAsync,
     );
-    setFieldValue('childNodeRevId', docInfo[0]);
-    setFieldValue('childNodeDocumentId', docInfo[1]);
+    if (dataItem[ADD_FIELD]) {
+      setFieldValue('childNodeRevId', docInfo[0]);
+      setFieldValue('childNodeDocumentId', docInfo[1]);
+    } else {
+      setFieldValue('newChildNodeRevId', docInfo[0]);
+    }
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
