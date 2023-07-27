@@ -54,7 +54,10 @@ const makeGetDisableCreateNewVersion = () => createSelector(
     some(
       documentRevisions,
       (docRev) => isDocumentRevisionInStatus(
-        [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview],
+        [
+          DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange,
+          DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved,
+        ],
         docRev.status,
       ),
     ),
