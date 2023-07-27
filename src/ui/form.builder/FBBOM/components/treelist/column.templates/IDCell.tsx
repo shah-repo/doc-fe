@@ -1,9 +1,12 @@
+import { Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
 import { ReactComponent as CollapseIcon } from '../../../../../../assets/images/collapse_tree.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../../assets/images/expand_tree.svg';
+import { ReactComponent as InfoIcon } from '../../../../../../assets/images/info_icon.svg';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
@@ -133,12 +136,19 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       aria-selected="false"
       {...{ colSpan, id, style }}
     >
-      {!isEditMode && [...(Array(props.level.length - 1) as number[])].map((e, i) => (
-        !isEditMode && <span className="k-icon k-i-none" role="presentation" />
-      ))}
+      {!isEditMode && [...(Array(props.level.length - 1) as number[])].map((e, i) => {
+        if (!isEmpty(dataItem?.availableRevisions) && i === props.level.length - 2) {
+          return (<span className={cx('k-icon', classes.infoIcon)}>
+            <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
+              <InfoIcon />
+            </Tooltip>
+          </span>);
+        }
+        return !isEditMode && <span className="k-icon k-i-none" role="presentation" />;
+      })}
 
-      {!isEditMode && <span className={cx('k-icon', classes.expand)}>
-        {hasChildren && (props.expanded
+      {!isEditMode && hasChildren && <span className={cx('k-icon', classes.expand)}>
+        {(props.expanded
           ? <CollapseIcon
             onClick={onClick}
             data-prevent-selection="true"

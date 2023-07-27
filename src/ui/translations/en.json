@@ -1563,5 +1563,6 @@
   "bom.table.title.attachments": "Attachments",
   "bom.table.title.primary.attachments": "Primary Attachments",
   "bom.table.title.vendors": "Vendors",
-  "bom.table.title.issues": "Issues"
+  "bom.table.title.issues": "Issues",
+  "bom.revision.available": "New Revision Available"
 }
