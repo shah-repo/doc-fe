@@ -1,6 +1,6 @@
 import { Popper } from '@material-ui/core';
 import React, { useRef } from 'react';
-import Actions, { ActionsProps } from '../components/Actions';
+import Actions, { ActionsProps } from './Actions';
 import { EditableVendorData } from '../types';
 
 export const ActionsCell: React.FC<ActionsProps<EditableVendorData> & { rootClassName?: string }> = (props) => {

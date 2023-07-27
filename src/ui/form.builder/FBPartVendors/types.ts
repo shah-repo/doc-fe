@@ -2,7 +2,7 @@ import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks
 import { FBInputProps } from '../FBInput/FBInput.types';
 import { MODE_FIELD, Mode } from './constants';
 
-export type VendorDataProps =
+export type FBPartVendorsProps =
 & Pick<FBInputProps, 'name' | 'disabled'>
 & {
   vendors?: VendorOption[]

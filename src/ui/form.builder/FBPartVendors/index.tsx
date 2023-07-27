@@ -22,10 +22,10 @@ import { ActionsCell } from './components/ActionsCell';
 import { MODE_FIELD, Mode } from './constants';
 import vendorDataSchema from './schema';
 import useStyles from './styles';
-import { EditableVendorData, VendorData, VendorDataEditEvent, VendorDataProps } from './types';
-import { withFBVendorData } from './wrap';
+import { EditableVendorData, FBPartVendorsProps, VendorData, VendorDataEditEvent } from './types';
+import { withFBPartVendors } from './wrap';
 
-const FBVendorDataTable: React.FC<VendorDataProps> = ({
+const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   // items = [],
   vendors = [],
   vendorData = [],
@@ -191,4 +191,4 @@ const FBVendorDataTable: React.FC<VendorDataProps> = ({
     </Box>
   );
 };
-export default withFBVendorData(FBVendorDataTable);
+export default withFBPartVendors(FBPartVendors);

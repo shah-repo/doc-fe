@@ -38,6 +38,7 @@ import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
 import FBParagraph from '../FBParagraph/FBParagraph';
 import FBParts from '../FBParts/FBParts';
 import FBPartsSelection from '../FBPartsSelection/FBPartsSelection';
+import FBPartVendors from '../FBPartVendors';
 import FBPOApprovalMatrix from '../FBPOApprovalMatrix/FBPOApprovalMatrix';
 import FBPOApprovals from '../FBPOApprovals/FBPOApprovals';
 import FBPOReceive from '../FBPOReceive/FBPOReceive';
@@ -140,6 +141,7 @@ class FBSchemaState {
     lotTransfers: FBLotTransfers,
     lotQuantity: FBLotQuantityField,
     lotOnHandQuantity: FBLotOnHandQuantityField,
+    partVendors: FBPartVendors,
   };
 
   @observable public schema?: FBSchemaProps[];

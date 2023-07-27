@@ -10,12 +10,12 @@ import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import FBStore from '../FBStore/FBStore';
 import { FB } from '../helpers';
-import { VendorData, VendorDataProps, VendorOption } from './types';
+import { FBPartVendorsProps, VendorData, VendorOption } from './types';
 import { getVendorData } from './utils';
 
 const prepareVendorItems = (items: VendorData[]) => orderBy(items ?? [], 'primary', 'desc');
 
-export const withFBVendorData = <T extends VendorDataProps>(
+export const withFBPartVendors = <T extends FBPartVendorsProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
   const Comp = ({
