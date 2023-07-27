@@ -44,13 +44,13 @@ export const styles = makeStyles((theme) => ({
   },
   nameCell: (props) => ({
     'vertical-align': 'middle',
-    marginLeft: props.isEditMode ? 0 : theme.spacing(1.875),
+    marginLeft: (props.isEditMode || !props?.hasChildren) ? 0 : theme.spacing(1.875),
   }),
   titleInfoCell: (props) => ({
     fontWeight: props?.hasChildren ? 600 : 400,
     fontFamily: 'Sora',
     fontSize: 14,
-    lineHeight: '17.64px',
+    lineHeight: '16.64px',
   }),
   Cell: {
     ontWeight: 400,
@@ -112,5 +112,9 @@ export const styles = makeStyles((theme) => ({
   },
   expand: {
     cursor: 'pointer',
+  },
+  infoIcon: {
+    width: '1.5em',
+    marginRight: theme.spacing(1.5),
   },
 }));

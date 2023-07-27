@@ -2,8 +2,8 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import {
+  Autocomplete,
   FormikField,
-  TextField,
 } from '../../../../../components/forms/fields-next';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
@@ -24,14 +24,17 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   const { getFieldProps } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
 
+  const renderOptions = () => {
+    return [dataItem?.revision, dataItem?.availableRevisions?.revision];
+  };
+
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
-        <TextField
+        <Autocomplete
           {...getFieldProps(field)}
-          type="text"
-          disabled={isEditMode}
-          inputProps={{ min: 0 }}
+          options={renderOptions()}
+          disabled={dataItem[ADD_FIELD]}
           size="small"
         />
       </FormikField>

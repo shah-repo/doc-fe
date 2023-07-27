@@ -27,6 +27,7 @@ export interface BOM {
   inEdit?: boolean
   isNew?: boolean
   isDeleted?: boolean
+  availableRevisions?: AvailableRevisions
 }
 
 export interface EditableBOM extends BOM {
@@ -40,4 +41,16 @@ export interface EditableBOM extends BOM {
 export interface BOMEditEvent {
   dataItem: EditableBOM
   level: number[]
+}
+
+export interface AvailableRevisions {
+  isReleased: boolean
+  name: string
+  revision: number
+  status: string
+  changeRequestDetails: {
+    id: string
+    title: string
+    crId: string
+  }
 }
