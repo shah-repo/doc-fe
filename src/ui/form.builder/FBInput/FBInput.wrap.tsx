@@ -296,7 +296,7 @@ export const withFBInput = <T extends FBInputProps>(
       value = defaultValue;
     }
 
-		if (isClone) {
+    if (isClone) {
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,

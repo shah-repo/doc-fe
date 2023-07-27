@@ -4,5 +4,5 @@ export interface FBEditorPlaceholderProps {
   boxProps?: BoxProps
   labelProps?: BoxProps
   className?: string
-	fbEditorField?: boolean
+  fbEditorField?: boolean
 }

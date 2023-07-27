@@ -23,7 +23,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   className,
   value,
   customHeight,
-	fbEditorField = false,
+  fbEditorField = false,
   ...props
 }) => {
   const classes = FBTextFieldStyles({ rows, customHeight });
