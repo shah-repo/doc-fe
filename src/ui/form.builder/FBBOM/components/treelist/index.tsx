@@ -63,7 +63,7 @@ import {
   FBBOMProps,
 } from './interface';
 import useStyles from './styles';
-import { isOfSameParent, processBOMData } from './utils';
+import { isOfSameParent, processBOMData, removeDataAtLevels, updateDataAtLevels } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const classes = useStyles();
@@ -76,7 +76,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     expanded: [],
     inEdit: [],
   });
-  // const [selectedPartLevel, setSelectedPartLevel] = React.useState<number[]>()
+  const [selectedPartLevel, setSelectedPartLevel] = React.useState<{level: number[], dataItem: EditableBOM}>();
   const treeListRef = useRef(null);
 
   const treeListAsync = useAsync({
@@ -216,8 +216,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       const partInfo = omit(values, [MODE_FIELD, 'dataItem']);
       partInfo.unit = get(partInfo, 'unit.value');
       if (values[ADD_FIELD]) {
-        partInfo.parentNodeRevId = documentRevision.id;
-        partInfo.parentNodeDocumentId = documentRevision.documentId;
+        if (!partInfo.parentNodeRevId) {
+          partInfo.parentNodeRevId = documentRevision.id;
+        }
+        if (!partInfo.parentNodeDocumentId) {
+          partInfo.parentNodeDocumentId = documentRevision.documentId;
+        }
         partInfo.markAsDeleted = documentRevision.revision > 1;
         partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
@@ -253,10 +257,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       cost: '',
       quantity: '',
       leadTime: '',
-      hasPrimaryAttachment: '',
-      hasAttachments: false,
-      issues: false,
-      vendor: false,
       unit: '',
       comment: '',
       refDesignator: '',
@@ -266,11 +266,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const isNewBOMAdditionInProgress = () => {
-    return (
-      state.data[0][SUB_ITEMS_FIELD]
-      && state.data[0][SUB_ITEMS_FIELD].filter((data) => data[ADD_FIELD])?.length
-        > 0
-    );
+    return (state.inEdit.length > 0);
   };
   const addBOM = () => {
     if (isNewBOMAdditionInProgress()) {
@@ -297,6 +293,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     if (!dataItem?.isOwner) {
       return;
     }
+    setSelectedPartLevel({ dataItem, level });
+    // check and modify logic here
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
       state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
         (data) => !data[ADD_FIELD],
@@ -305,7 +303,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     editBOMInfo.customDocId = `${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
     editBOMInfo.childNodeRevId = editBOMInfo.id;
-    console.log('editBOMInfo :', editBOMInfo);
     setState({
       ...state,
       data: [...state.data],
@@ -315,8 +312,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const discardBOM = (dataItem?) => {
-    // handle for nested levels
     if (dataItem && dataItem[ADD_FIELD]) {
+      if (selectedPartLevel?.level) {
+        const updatedData = removeDataAtLevels([...state.data], selectedPartLevel?.level, dataItem) as BOM[];
+        setState({
+          ...state,
+          data: [...updatedData],
+          expanded: [...state.expanded],
+          inEdit: [],
+        });
+      }
       state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
         (data) => !data[ADD_FIELD],
       );
@@ -325,11 +330,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       ...state,
       inEdit: [],
     });
+
     formik?.resetForm();
   };
 
   const removeBOM = (dataItem) => {
-    // Delete API Here
     confirmationDialog.open();
     setSelectedPart(dataItem);
   };
@@ -343,33 +348,23 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const onChildPartAdd = (dataItem) => {
-    // TODO Add childpart
-    console.log('dataItem :', dataItem);
     const newBOM: EditableBOM = createNewItem();
-    // [0,1,2] -levels
-    if (state.data[0]?.[SUB_ITEMS_FIELD]?.[1]?.[SUB_ITEMS_FIELD]) {
-      state.data[0][SUB_ITEMS_FIELD][1][SUB_ITEMS_FIELD].push(newBOM);
-    }
+    newBOM.parentNodeDocumentId = dataItem.documentId;
+    newBOM.parentNodeRevId = dataItem.id;
+    const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, newBOM) as BOM[];
+
     setState({
       ...state,
-      data: [...state.data],
+      data: [...updatedData],
       expanded: [...state.expanded, dataItem.id],
       inEdit: [newBOM],
     });
-    // if (treeListRef?.current) {
-    //   const rowToScroll = treeListRef.current.dataItem(state.data[0].id);
-    //   if (rowToScroll) {
-    //     treeListRef.current.scrollToField(rowToScroll, true);
-    //   }
-    // }
+    formik.setValues(newBOM);
+    // Not working scrolling part need to check again
     const treeList = treeListRef.current;
-    if (!treeList) return; // Ensure that the TreeList has been initialized
-    // const index = state.data.findIndex((item) => item.id === id);
-    // if (index === -1) return; // Row with the specified ID not found
+    if (!treeList) return;
     const rowElement = treeList.element.querySelector(`[data-uid="${dataItem.id}"]`);
-    console.log('rowElement :', rowElement);
     if (rowElement) {
-      // Scroll to the row element using DOM methods
       treeList.element.scrollTop = rowElement.offsetTop;
     }
   };
@@ -380,7 +375,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(props.dataItem[SUB_ITEMS_FIELD]),

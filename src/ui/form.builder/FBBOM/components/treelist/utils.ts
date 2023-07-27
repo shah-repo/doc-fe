@@ -1,7 +1,7 @@
 import { isNil } from 'lodash';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, EditableBOM } from '../../interface';
-import { CELL_EMPTY_VALUE } from './constants';
+import { CELL_EMPTY_VALUE, SUB_ITEMS_FIELD } from './constants';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
@@ -55,4 +55,61 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
   });
 
   return dataTree;
+};
+
+// Function to update data at a specific level based on the levels array
+export const updateDataAtLevels = (data?: BOM[], levels?: number[], newValue?: EditableBOM): BOM[] | undefined => {
+  if (!data) { return; }
+  if (levels?.length === 0 && newValue) {
+    // Reached the desired level, update the data
+    data.push(newValue);
+    return;
+  }
+  if (!levels) { return; }
+
+  const currentLevel = levels[0];
+  if (currentLevel >= data.length) {
+    // Invalid level index
+    return data;
+  }
+
+  // Update the data at the current level using recursion for deeper levels
+  const updatedData = data.map((item, index) => {
+    if (index === currentLevel) {
+      updateDataAtLevels(item ? item[SUB_ITEMS_FIELD] : item, levels?.slice(1), newValue);
+    }
+    return item;
+  });
+
+  return updatedData;
+};
+
+// Function to update data at a specific level based on the levels array
+export const removeDataAtLevels = (data?: BOM[], levels?: number[], newValue?: EditableBOM): BOM[] | undefined => {
+  if (!data) { return; }
+  if (levels?.length === 0 && newValue) {
+    // Reached the desired level, update the data
+    const index = data.length - 1; // data.indexOf(newValue);
+    if (index > -1) {
+      data.splice(index, 1);
+    }
+    return;
+  }
+  if (!levels) { return; }
+
+  const currentLevel = levels[0];
+  if (currentLevel >= data.length) {
+    // Invalid level index
+    return data;
+  }
+
+  // Update the data at the current level using recursion for deeper levels
+  const updatedData = data.map((item, index) => {
+    if (index === currentLevel) {
+      removeDataAtLevels(item ? item[SUB_ITEMS_FIELD] : item, levels?.slice(1), newValue);
+    }
+    return item;
+  });
+
+  return updatedData;
 };

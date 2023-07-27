@@ -17,12 +17,12 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
     dataItem,
     scrollBehavior = 'auto',
     isDeleteDisabled,
-    // isAddPartEnabled,
+    isAddPartEnabled,
     onConfirm,
     onDiscard,
     onDelete,
     onRestore,
-    // onChildPartAdd,
+    onChildPartAdd,
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -46,7 +46,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
       id="row-actions"
       ref={ref}
     >
-      {/* {isAddPartEnabled && onChildPartAdd && (
+      {isAddPartEnabled && onChildPartAdd && (
         <Tooltip
           title={translate('common.add')}
           placement="top"
@@ -62,7 +62,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
             </IconButton>
           </div>
         </Tooltip>
-      )} */}
+      )}
       {isPartDeleted && onRestore && (
         <Tooltip
           title={translate('common.restore')}
