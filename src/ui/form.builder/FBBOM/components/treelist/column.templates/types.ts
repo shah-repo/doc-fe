@@ -10,9 +10,11 @@ export interface BOMActionsProps<EditableBOM> {
   isDeleteDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
+  isAddPartEnabled?: boolean
   onConfirm: () => void
   onDiscard?: (dataItem: EditableBOM) => void
   onDelete?: (dataItem: EditableBOM) => void
+  onChildPartAdd?: (dataItem: EditableBOM) => void
   onRestore?: () => void
   onReorder?: () => void
 }

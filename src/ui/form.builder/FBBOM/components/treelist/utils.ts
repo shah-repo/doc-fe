@@ -46,7 +46,9 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
   const dataTree: any[] = [];
   bomList.forEach((aData: BOM) => {
     if (aData.parentNodeRevId) {
-      hashTable[aData.parentNodeRevId].childNodes.push(hashTable[aData.id]);
+      hashTable[aData.parentNodeRevId].childNodes.push(
+        { ...hashTable[aData.id], ...{ parentNodeRevId: aData.parentNodeRevId, parentNodeDocumentId: hashTable[aData.parentNodeRevId].documentId } },
+      );
     } else {
       dataTree.push(hashTable[aData.id]);
     }

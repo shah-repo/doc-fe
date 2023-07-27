@@ -29,7 +29,7 @@ import {
 } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
@@ -76,6 +76,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     expanded: [],
     inEdit: [],
   });
+  // const [selectedPartLevel, setSelectedPartLevel] = React.useState<number[]>()
+  const treeListRef = useRef(null);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -213,23 +215,24 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     onSubmit: (values) => {
       const partInfo = omit(values, [MODE_FIELD, 'dataItem']);
       partInfo.unit = get(partInfo, 'unit.value');
-
       if (values[ADD_FIELD]) {
         partInfo.parentNodeRevId = documentRevision.id;
         partInfo.parentNodeDocumentId = documentRevision.documentId;
-        partInfo.markAsDeleted = false; // After rev1 it should be true
+        partInfo.markAsDeleted = documentRevision.revision > 1;
         partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
         // Update keys if required
         const payload = {
+          childNodeRevId: partInfo.childNodeRevId,
           refDesignator: partInfo.refDesignator,
           quantity: partInfo?.quantity ? +partInfo?.quantity ?? 0 : 0,
           unit: partInfo.unit,
           comment: partInfo.comment,
+          newChildNodeRevId: partInfo.newChildNodeRevId,
         };
         partAsync.start(
           updateBOMBranch,
-          documentRevision.id,
+          partInfo.parentNodeRevId,
           partInfo.id,
           payload,
           partAsync,
@@ -287,7 +290,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (level?.length !== 2) {
+    // if (level?.length !== 2) {
+    //   return;
+    // }
+    // Enable at last
+    if (!dataItem?.isOwner) {
       return;
     }
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
@@ -297,6 +304,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     editBOMInfo.customDocId = `${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
+    editBOMInfo.childNodeRevId = editBOMInfo.id;
+    console.log('editBOMInfo :', editBOMInfo);
     setState({
       ...state,
       data: [...state.data],
@@ -306,6 +315,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const discardBOM = (dataItem?) => {
+    // handle for nested levels
     if (dataItem && dataItem[ADD_FIELD]) {
       state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
         (data) => !data[ADD_FIELD],
@@ -332,8 +342,41 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     // TODO
   };
 
+  const onChildPartAdd = (dataItem) => {
+    // TODO Add childpart
+    console.log('dataItem :', dataItem);
+    const newBOM: EditableBOM = createNewItem();
+    // [0,1,2] -levels
+    if (state.data[0]?.[SUB_ITEMS_FIELD]?.[1]?.[SUB_ITEMS_FIELD]) {
+      state.data[0][SUB_ITEMS_FIELD][1][SUB_ITEMS_FIELD].push(newBOM);
+    }
+    setState({
+      ...state,
+      data: [...state.data],
+      expanded: [...state.expanded, dataItem.id],
+      inEdit: [newBOM],
+    });
+    // if (treeListRef?.current) {
+    //   const rowToScroll = treeListRef.current.dataItem(state.data[0].id);
+    //   if (rowToScroll) {
+    //     treeListRef.current.scrollToField(rowToScroll, true);
+    //   }
+    // }
+    const treeList = treeListRef.current;
+    if (!treeList) return; // Ensure that the TreeList has been initialized
+    // const index = state.data.findIndex((item) => item.id === id);
+    // if (index === -1) return; // Row with the specified ID not found
+    const rowElement = treeList.element.querySelector(`[data-uid="${dataItem.id}"]`);
+    console.log('rowElement :', rowElement);
+    if (rowElement) {
+      // Scroll to the row element using DOM methods
+      treeList.element.scrollTop = rowElement.offsetTop;
+    }
+  };
+
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
+
     if (isEmpty(props.dataItem.refDesignator)) {
       props.dataItem.refDesignator = '-';
     }
@@ -357,6 +400,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
           onDelete={removeBOM}
           onRestore={onRestore}
           onReorder={onReorder}
+          isAddPartEnabled={(props.dataItem.childNodes ?? []).length > 0}
+          onChildPartAdd={onChildPartAdd}
           rootClassName={classes.popperHolder}
         />
       </td>
@@ -549,6 +594,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
             <Grid item xs={12}>
               <TreeList
                 {...state.dataState}
+                ref={treeListRef}
                 style={{
                   width: '100%',
                   maxHeight: size ? size?.height - 160 : 'auto',
