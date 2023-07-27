@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
@@ -9,10 +11,6 @@ import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ReactComponent as CollapseIcon } from '../../assets/images/navigation_collapse.svg';
-import { ReactComponent as CollapseHoverIcon } from '../../assets/images/navigation_collapse_hover.svg';
-import { ReactComponent as ExpandIcon } from '../../assets/images/navigation_expand.svg';
-import { ReactComponent as ExpandHoverIcon } from '../../assets/images/navigation_expand_hover.svg';
 import { translate } from '../../common/intl';
 import { getCurrentUserTags } from '../../common/utils/selectors';
 import { authSelectors } from '../../state/ducks/auth';
@@ -129,9 +127,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
               open={isHovered}
               classes={tooltipClasses}
             >
-              { isHovered
-                ? (open ? <CollapseHoverIcon /> : <ExpandHoverIcon />)
-                : (open ? <CollapseIcon /> : <ExpandIcon />)}
+              <FontAwesomeIcon flip={!open ? 'horizontal' : undefined} size="xs" icon={solid('chevron-left')} />
             </Tooltip>
           </span>
         </Box>
