@@ -148,7 +148,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       ) {
         workspaceState?.saveDocRev(formState?.getValues());
       }
-			FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
+      FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
     };
 
     handleCancel = () => {

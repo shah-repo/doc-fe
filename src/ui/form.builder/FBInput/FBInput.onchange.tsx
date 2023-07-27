@@ -36,7 +36,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     withState,
     omitFormValue,
     hidden,
-		fbEditorField = false,
+    fbEditorField = false,
     ...props
   }: T) => {
     const { formState, schemaState, workspaceState } = FB.useStores();
@@ -50,7 +50,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       hidden,
     });
 
-		const [, setTextValue] = useState(inputValue);
+    const [, setTextValue] = useState(inputValue);
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -75,9 +75,9 @@ export const withFBOnChange = <T extends FBInputProps>(
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
 
-			if(!fbEditorField) {
-				FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
-			}
+      if (!fbEditorField) {
+        FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
+      }
 
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
@@ -200,9 +200,9 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === 'number' && value === '') {
           value = null;
         }
-				if(fbEditorField) {
-					setTextValue(value);
-				}
+        if (fbEditorField) {
+          setTextValue(value);
+        }
         setValue(value);
       }
 
@@ -248,7 +248,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       type,
       name,
       hidden,
-			fbEditorField,
+      fbEditorField,
     }));
   };
 

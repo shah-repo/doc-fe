@@ -75,7 +75,7 @@ export const withFBInput = <T extends FBInputProps>(
     isInputOwner,
     lockOwnerName,
     includeNotes,
-		fbEditorField = false,
+    fbEditorField = false,
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
@@ -292,16 +292,16 @@ export const withFBInput = <T extends FBInputProps>(
       disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
     }
 
-		if(fbEditorField) {
-			value = defaultValue;
-		}
+    if (fbEditorField) {
+      value = defaultValue;
+    }
 
 		if (isClone) {
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
         onChange,
-				...(fbEditorField && { value }),
+        ...(fbEditorField && { value }),
         ...(type !== 'textfield' && { onBlur }),
         ...(withState && type !== 'autocomplete' && { value }),
         ...(type === 'textfield' && { error }),
@@ -430,7 +430,7 @@ export const withFBInput = <T extends FBInputProps>(
       isOutput,
       lockOwnerName,
       includeNotes,
-			fbEditorField,
+      fbEditorField,
     });
   };
 
