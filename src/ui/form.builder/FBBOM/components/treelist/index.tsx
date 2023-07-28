@@ -1,6 +1,4 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Divider, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
   extendDataItem,
@@ -559,28 +557,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
 
   return (
     <>
-      <Grid
-        container
-        alignItems="center"
-        justify="space-between"
-        style={{ padding: 0 }}
-      >
-        <Grid item className={classes.header}>
-          {translate('tabId.bom')}
-        </Grid>
-        <Grid item>
-          <Button
-            disableRipple
-            variant="text"
-            className={classes.addItem}
-            startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-            onClick={addBOM}
-          >
-            {translate('bom.header.add.item')}
-          </Button>
-        </Grid>
-      </Grid>
-      <Divider />
       <Grid item className={classes.tableContainer}>
         <FormikProvider value={formik}>
           <Grid container>
