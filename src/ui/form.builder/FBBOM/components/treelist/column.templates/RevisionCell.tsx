@@ -1,10 +1,6 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
-import {
-  Autocomplete,
-  FormikField,
-} from '../../../../../components/forms/fields-next';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import { getCellValue, isEditBOM } from '../utils';
@@ -21,24 +17,25 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren, isEditMode: dataItem[ADD_FIELD] });
-  const { getFieldProps } = useFormikContext<EditableBOM>();
+  const { values } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
+  // const isAvailableRevsExists = isEditMode && !isEmpty(dataItem?.availableRevisions);
 
-  const renderOptions = () => {
-    return [dataItem?.revision, dataItem?.availableRevisions?.revision];
-  };
+  // const renderOptions = () => {
+  //   return [dataItem?.revision, dataItem?.availableRevisions?.revision];
+  // };
 
-  const getFieldInfo = () =>
-    field && (
-      <FormikField name={field}>
-        <Autocomplete
-          {...getFieldProps(field)}
-          options={renderOptions()}
-          disabled={dataItem[ADD_FIELD]}
-          size="small"
-        />
-      </FormikField>
-    );
+  // const getFieldInfo = () =>
+  //   field && (
+  //     <FormikField name={field}>
+  //       <Autocomplete
+  //         {...getFieldProps(field)}
+  //         options={renderOptions()}
+  //         disabled={dataItem[ADD_FIELD]}
+  //         size="small"
+  //       />
+  //     </FormikField>
+  //   );
   return (
     <td
       colSpan={colSpan}
@@ -51,12 +48,12 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
         'aria-expanded': otherProps.expanded,
       }}
     >
-      {isEditMode && getFieldInfo()}
-      {!isEditMode && (
-        <span className={classes.Cell}>
-          {getCellValue(dataItem, field)}
-        </span>
-      )}
+      {/* {isAvailableRevsExists && getFieldInfo()} */}
+      {/* {!isAvailableRevsExists && ( */}
+      <span className={classes.Cell}>
+        {getCellValue(isEditMode ? values : dataItem, field)}
+      </span>
+      {/* )} */}
     </td>
   );
 };
