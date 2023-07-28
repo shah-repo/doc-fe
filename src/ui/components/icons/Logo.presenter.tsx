@@ -34,7 +34,7 @@ const Logo: React.FunctionComponent<Props> = ({
       {!open && <Avatar className={classes.avatar} data-cy={companyName}>
         {getInitalsFromName(companyName)}
       </Avatar>}
-      {open && <div className={classes.logoContainer}>
+      {open && <div className={classes.logoContainer} data-cy={companyName}>
         <img
           id="logo"
           src={logo}
