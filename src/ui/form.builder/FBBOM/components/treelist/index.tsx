@@ -87,14 +87,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       bomTreeRelations: BOM[]
       parentRevDetails: BOM
     }) => {
+      formik.setValues({});
       const bomProccessedData = processBOMData(
         bomTreeRelations,
         parentRevDetails,
       );
       setState({
         ...state,
-        data: bomProccessedData,
-        expanded: [bomProccessedData[0].id],
+        data: [...bomProccessedData],
+        inEdit: [],
+        expanded: [...state.expanded, ...[bomProccessedData[0].id]],
       });
     },
     onError: (err) => {
@@ -243,7 +245,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         );
       }
       console.log('partInfo :', partInfo);
-      discardBOM();
     },
   });
 
@@ -290,9 +291,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     //   return;
     // }
     // Enable at last
-    if (!dataItem?.isOwner) {
-      return;
-    }
+    // if (!dataItem?.isOwner) {
+    //   return;
+    // }
     setSelectedPartLevel({ dataItem, level });
     // check and modify logic here
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
