@@ -118,6 +118,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             className={classes.leftSideIcon}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave }
+            data-cy={open ? 'collapse-icon' : 'expand-icon'}
           >
             <Tooltip
               arrow
