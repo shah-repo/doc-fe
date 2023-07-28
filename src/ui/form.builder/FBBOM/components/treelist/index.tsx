@@ -285,8 +285,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id) {
-      // skipping edit for parent
+    if (dataItem.id === documentRevision.id || dataItem.inEdit) {
+      // skipping edit for parent and click on edit item itself
       return;
     }
     setSelectedPartLevel({ dataItem, level });

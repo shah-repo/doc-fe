@@ -135,7 +135,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         {..._documentRevisionFormState?.documentRevision && !isSideBarHidden && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={false} />}
+              {() => <DocumentRevisionSidebar edit={false} minimizeRightPanel={_tabsState?.isTabActive(TabTypeOptions.BOM)} />}
             </Observer>
           ),
         }}

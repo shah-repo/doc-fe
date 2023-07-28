@@ -174,7 +174,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={true} />}
+              {() => <DocumentRevisionSidebar edit={true} minimizeRightPanel={_tabsState?.isTabActive(TabTypeOptions.BOM)} />}
             </Observer>
           ),
         }}

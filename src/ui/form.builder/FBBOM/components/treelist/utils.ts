@@ -50,6 +50,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
         {
           ...hashTable[aData.id],
           ...{
+            // id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
             parentNodeRevId: aData.parentNodeRevId,
             parentNodeDocumentId: hashTable[aData.parentNodeRevId].documentId,
             isParentOwner: hashTable[aData.parentNodeRevId].isOwner,

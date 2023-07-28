@@ -8,9 +8,9 @@ export type DocumentRevisionSidebarProps =
 & Pick<SMProviderProps, '_documentRevisionFormState' | '_documentRevisionSidebarState'>
 & Pick<DocumentRevisionFormProps, 'documentRevisions'>
 & Pick<Partial<DocumentRevisionFormStateProps>,
-  'documentTypeId' |
-  'documentId' |
-  'docId'
+'documentTypeId' |
+'documentId' |
+'docId'
 >
 & {
   intl?: IntlShape
@@ -25,6 +25,7 @@ export type DocumentRevisionSidebarProps =
   isNewOutput?: boolean
   title?: string
   edit: boolean
+  minimizeRightPanel?: boolean
 };
 
 export interface DocumentRevisionSidebarStateProps {
