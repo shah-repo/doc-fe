@@ -8,7 +8,9 @@ import { LOGIN_URL } from '../constants/urls';
 import FBStore from '../form.builder/stores/ui/FBStore';
 import NavigationProfilePresenter from './NavigationProfile.presenter';
 
-type Props = RouteComponentProps;
+type Props = RouteComponentProps & {
+  open: boolean
+};
 
 interface UserMenuContext {
   handleLogout: () => void
@@ -23,6 +25,7 @@ export let UserMenuContext = React.createContext<UserMenuContext | undefined>(
 
 const NavigationProfileContainer: React.FunctionComponent<Props> = ({
   history,
+  open,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showUserProfile, setUserProfile] = useState(false);
@@ -86,6 +89,7 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
         handleOpenMenu,
         handleCloseMenu,
         anchorEl,
+        open,
       }}
     />
   );

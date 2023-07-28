@@ -9,6 +9,7 @@ import {
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import cx from 'classnames';
 import React from 'react';
 import { Nullable } from '../../state/ducks/common/types';
 import UserProfileContainer from '../user.management/profile/UserProfile.container';
@@ -26,6 +27,7 @@ interface Props extends WithStyles<typeof styles> {
   handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
   anchorEl: Nullable<HTMLElement>
   handleCloseMenu: () => void
+  open: boolean
 }
 
 const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
@@ -39,11 +41,12 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   handleOpenMenu,
   handleCloseMenu,
   anchorEl,
+  open,
 }) => (
   <Box
     alignItems="center"
     justifyContent="space-between"
-    className={classes.bottomPush}
+    className={cx({ [classes.bottomPush]: open, [classes.collapsedBottomPush]: !open })}
   >
     <ClickAwayListener onClickAway={handleCloseMenu}>
       <Button
@@ -54,20 +57,20 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         }
         classes={{ root: classes.headerButton }}
       >
-        <List style={{ width: '98%' }}>
-          <ListItem style={{ padding: 0 }}>
-            <ListItemAvatar>
+        <List classes={{ root: classes.list }} >
+          <ListItem classes={{ root: open ? classes.listItem : classes.collapsedListItem }} >
+            <ListItemAvatar className={classes.listItemAvatar}>
               <UserAvatar {...{ avatar, initialColor, name }} />
             </ListItemAvatar>
-            <ListItemText
+            {open && <ListItemText
               primary={
                 <Typography data-cy="UserName" className={classes.nameStyle} noWrap={true}> {name}</Typography>
               }
               secondary={
                 <Typography data-cy="UserEmail" className={classes.emailStyle} noWrap={true}> {email}</Typography>
               }
-            />
-            <UserMenu {...{ handleCloseMenu, anchorEl }} />
+            />}
+            <UserMenu {...{ handleCloseMenu, anchorEl, open }} />
           </ListItem>
         </List>
         <UserProfileContainer
