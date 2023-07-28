@@ -63,7 +63,7 @@ import {
   FBBOMProps,
 } from './interface';
 import useStyles from './styles';
-import { isOfSameParent, processBOMData, removeDataAtLevels, updateDataAtLevels } from './utils';
+import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const classes = useStyles();
@@ -312,7 +312,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const discardBOM = (dataItem?) => {
     if (dataItem && dataItem[ADD_FIELD]) {
       if (selectedPartLevel?.level) {
-        const updatedData = removeDataAtLevels([...state.data], selectedPartLevel?.level, dataItem) as BOM[];
+        const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
         setState({
           ...state,
           data: [...updatedData],
@@ -349,7 +349,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     const newBOM: EditableBOM = createNewItem();
     newBOM.parentNodeDocumentId = dataItem.documentId;
     newBOM.parentNodeRevId = dataItem.id;
-    const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, newBOM) as BOM[];
+    const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, newBOM, true) as BOM[];
 
     setState({
       ...state,
@@ -383,13 +383,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       return React.cloneElement(row, modifiedProps);
     }
     const isOwner = item.isOwner;
+
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
           dataItem={item}
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
-          onDelete={(isOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
+          onDelete={(isOwner || item.isParentOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
           onRestore={onRestore}
           onReorder={onReorder}
           isAddPartEnabled={isOwner}
