@@ -287,13 +287,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    // if (level?.length !== 2) {
-    //   return;
-    // }
-    // Enable at last
-    // if (!dataItem?.isOwner) {
-    //   return;
-    // }
+    if (dataItem.id === documentRevision.id) {
+      // skipping edit for parent
+      return;
+    }
     setSelectedPartLevel({ dataItem, level });
     // check and modify logic here
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
@@ -373,29 +370,29 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
 
-    if (isEmpty(props.dataItem.refDesignator)) {
-      props.dataItem.refDesignator = '-';
+    if (isEmpty(item.refDesignator)) {
+      item.refDesignator = '-';
     }
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(props.dataItem[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
       }),
     };
     if (!item[MODE_FIELD]) {
       return React.cloneElement(row, modifiedProps);
     }
-
+    const isOwner = item.isOwner;
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
           dataItem={item}
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
-          onDelete={removeBOM}
+          onDelete={(isOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
           onRestore={onRestore}
           onReorder={onReorder}
-          isAddPartEnabled={(props.dataItem.childNodes ?? []).length > 0}
+          isAddPartEnabled={isOwner}
           onChildPartAdd={onChildPartAdd}
           rootClassName={classes.popperHolder}
         />

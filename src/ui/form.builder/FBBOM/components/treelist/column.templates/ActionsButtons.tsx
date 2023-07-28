@@ -48,7 +48,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
     >
       {isAddPartEnabled && onChildPartAdd && (
         <Tooltip
-          title={translate('common.add')}
+          title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >

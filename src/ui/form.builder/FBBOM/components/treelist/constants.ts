@@ -27,7 +27,7 @@ export const SELECTED_PART_KEY_SEPARATOR = '$$$';
 export const CELL_EMPTY_VALUE = '-';
 export const TREELIST_CONFIG = {
   sortable: true,
-  reorderable: true,
+  reorderable: false,
   resizable: true,
 };
 
