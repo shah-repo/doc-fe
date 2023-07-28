@@ -162,12 +162,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const confirmationDialog = useDialog();
   const [selectedPart, setSelectedPart] = useState();
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
-    // API call here
-    console.log('selectedPart :', selectedPart);
+    const partInfo = selectedPart?.id?.split(SELECTED_PART_KEY_SEPARATOR);
     partAsync.start(
       deleteBOMBranch,
-      documentRevision.id, // parentRevID
-      selectedPart?.id, // childRevID
+      partInfo[1], // parentRevID
+      partInfo[0], // childRevID
       partAsync,
     );
     discardBOM(selectedPart);
@@ -237,7 +236,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         partAsync.start(
           updateBOMBranch,
           partInfo.parentNodeRevId,
-          partInfo.id,
+          partInfo.childNodeRevId,
           payload,
           partAsync,
         );
@@ -297,8 +296,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       );
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
-    editBOMInfo.customDocId = `${editBOMInfo.id}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
-    editBOMInfo.childNodeRevId = editBOMInfo.id;
+    const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
+    editBOMInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
+    editBOMInfo.childNodeRevId = childRevId;
     setState({
       ...state,
       data: [...state.data],
@@ -346,7 +346,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const onChildPartAdd = (dataItem) => {
     const newBOM: EditableBOM = createNewItem();
     newBOM.parentNodeDocumentId = dataItem.documentId;
-    newBOM.parentNodeRevId = dataItem.id;
+    newBOM.parentNodeRevId = dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
     const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, newBOM, true) as BOM[];
 
     setState({

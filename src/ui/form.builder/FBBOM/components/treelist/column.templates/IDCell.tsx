@@ -104,7 +104,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (!isEditMode) {
       return;
     }
-    const fieldValue = `${dataItem.id}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+    const fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
     const value = renderOptions().find((option) => option.value === fieldValue);
     if (value) {
       setFieldValue(field, value);

@@ -1,7 +1,7 @@
 import { isNil } from 'lodash';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, EditableBOM } from '../../interface';
-import { CELL_EMPTY_VALUE, SUB_ITEMS_FIELD } from './constants';
+import { CELL_EMPTY_VALUE, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
@@ -50,7 +50,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
         {
           ...hashTable[aData.id],
           ...{
-            // id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
             parentNodeRevId: aData.parentNodeRevId,
             parentNodeDocumentId: hashTable[aData.parentNodeRevId].documentId,
             isParentOwner: hashTable[aData.parentNodeRevId].isOwner,
