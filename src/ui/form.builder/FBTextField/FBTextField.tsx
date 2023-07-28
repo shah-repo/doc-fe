@@ -23,13 +23,13 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   className,
   value,
   customHeight,
-  fbEditorField = false,
+  isFbEditorField = false,
   ...props
 }) => {
   const classes = FBTextFieldStyles({ rows, customHeight });
   className = className ?? classes.textfield;
   return (
-    <FBInput {...props} {...{ error, defaultValue, fbEditorField }}
+    <FBInput {...props} {...{ error, defaultValue, isFbEditorField }}
       type={inputType} labelProps={FBFontStyle.labelProps}>
       {mode === 'preview' && (
         <Box>{defaultValue}</Box>

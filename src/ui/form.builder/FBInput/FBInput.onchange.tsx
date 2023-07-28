@@ -36,7 +36,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     withState,
     omitFormValue,
     hidden,
-    fbEditorField = false,
+    isFbEditorField = false,
     ...props
   }: T) => {
     const { formState, schemaState, workspaceState } = FB.useStores();
@@ -75,7 +75,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
 
-      if (!fbEditorField) {
+      if (!isFbEditorField) {
         FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
       }
 
@@ -200,7 +200,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === 'number' && value === '') {
           value = null;
         }
-        if (fbEditorField) {
+        if (isFbEditorField) {
           setTextValue(value);
         }
         setValue(value);
@@ -248,7 +248,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       type,
       name,
       hidden,
-      fbEditorField,
+      isFbEditorField,
     }));
   };
 

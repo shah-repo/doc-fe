@@ -75,7 +75,7 @@ export const withFBInput = <T extends FBInputProps>(
     isInputOwner,
     lockOwnerName,
     includeNotes,
-    fbEditorField = false,
+    isFbEditorField = false,
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
@@ -292,7 +292,7 @@ export const withFBInput = <T extends FBInputProps>(
       disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
     }
 
-    if (fbEditorField) {
+    if (isFbEditorField) {
       value = defaultValue;
     }
 
@@ -301,7 +301,7 @@ export const withFBInput = <T extends FBInputProps>(
         name,
         disabled,
         onChange,
-        ...(fbEditorField && { value }),
+        ...(isFbEditorField && { value }),
         ...(type !== 'textfield' && { onBlur }),
         ...(withState && type !== 'autocomplete' && { value }),
         ...(type === 'textfield' && { error }),
@@ -430,7 +430,7 @@ export const withFBInput = <T extends FBInputProps>(
       isOutput,
       lockOwnerName,
       includeNotes,
-      fbEditorField,
+      isFbEditorField,
     });
   };
 
