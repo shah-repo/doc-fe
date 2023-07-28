@@ -168,7 +168,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && getFieldInfo()}
         {!isEditMode && dataItem.docId}
-        {dataItem.isOwner && <FontAwesomeIcon icon={solid('house')} />}
+        {dataItem.isOwner && <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />}
       </span>
     </td>
   );

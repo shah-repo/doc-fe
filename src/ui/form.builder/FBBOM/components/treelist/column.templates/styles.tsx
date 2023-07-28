@@ -117,4 +117,9 @@ export const styles = makeStyles((theme) => ({
     width: '1.5em',
     marginRight: theme.spacing(1.5),
   },
+  ownerIcon: {
+    width: '1.5em',
+    color: ThemeColors.primaryLight,
+    marginLeft: theme.spacing(1.5),
+  },
 }));
