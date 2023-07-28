@@ -33,6 +33,7 @@ enum Colors {
   secondaryBg='#E6F6F9',
   secondaryLight='#E1E7F2',
   secondaryHighlight='#F2FBFC',
+  secondaryDimmed='rgba(22, 34, 41, 0.15)',
 
   // Success
   success='#0DB78D',
@@ -63,6 +64,9 @@ enum Colors {
   // Tables
   tableHeader='#F4F7FC',
   tableStroke='#DBE0EB',
+
+  // Header
+  headerBg= '#1533CD',
 }
 
 export default Colors;
