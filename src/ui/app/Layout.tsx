@@ -30,15 +30,19 @@ import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
-  const classes = useStyles(SM.isHomeURL);
+  const [open, setOpen] = React.useState(false);
+  const classes = useStyles({ isDashboard: SM.isHomeURL, open: open });
+  const handleDrawerOpen = () => {
+    setOpen(!open);
+  };
 
   return (
     <>
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer />
-      <Navigation />
+      <HeaderContainer open={open} />
+      <Navigation handleDrawerOpen={handleDrawerOpen} open={open} />
       <SocketsContainer />
       <WatermarkFooterContainer />
       <main className={classes.root}>

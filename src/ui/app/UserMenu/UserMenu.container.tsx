@@ -6,11 +6,13 @@ import UserMenuPresenter from './UserMenu.presenter';
 interface Props {
   anchorEl: Nullable<HTMLElement>
   handleCloseMenu: () => void
+  open?: boolean
 }
 
 const UserMenuContainer: React.FunctionComponent<Props> = ({
   anchorEl,
   handleCloseMenu,
+  open,
 }) => {
   const location = useLocation();
 
@@ -20,6 +22,7 @@ const UserMenuContainer: React.FunctionComponent<Props> = ({
         location,
         anchorEl,
         handleCloseMenu,
+        open,
       }}
     />
   );
