@@ -10,6 +10,7 @@ import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button, FormField, TextField } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
@@ -56,7 +57,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
     },
   });
 
-  const { resetForm, setValues } = formik;
+  const { resetForm, setValues, dirty } = formik;
 
   useEffect(() => {
     resetForm({ values: editedVendor ?? {} });
@@ -150,6 +151,9 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
 
   return (
     <Box position="relative">
+      <PromptIfDirty
+        dirty={dirty}
+      />
       <FBInput {...props} type="partVendors" name={name}>
         <FBSection label={label}>
           {isActive && (
