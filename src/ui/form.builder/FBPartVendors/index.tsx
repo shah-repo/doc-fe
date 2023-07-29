@@ -42,7 +42,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   const isActive = !disabled;
   const [editedVendor, setEditedVendor] = React.useState<Partial<EditableVendor>>();
 
-  const isVendorDataAdded = editedVendor?.[MODE_FIELD] === Mode.add;
+  const isVendorAdded = editedVendor?.[MODE_FIELD] === Mode.add;
 
   const editVendor = ({ dataItem }: VendorEditEvent) => setEditedVendor(dataItem);
   const isInEditMode = editedVendor !== undefined;
@@ -51,8 +51,8 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   const formik = useFormik<Partial<EditableVendor>>({
     initialValues: {},
     onSubmit: (values) => {
-      const vendorDataToSave = omit(values, FIELDS_TO_OMIT);
-      updateVendor?.(vendorDataToSave as Vendor);
+      const vendorToSave = omit(values, FIELDS_TO_OMIT);
+      updateVendor?.(vendorToSave as Vendor);
       discardVendor();
     },
   });
@@ -147,7 +147,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
         [MODE_FIELD]: isVendorEdited ? Mode.edit : Mode.show,
       },
     ];
-  }, isVendorDataAdded ? [editedVendor] : []);
+  }, isVendorAdded ? [editedVendor] : []);
 
   return (
     <Box position="relative">
