@@ -1,125 +1,138 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import { Input } from '@progress/kendo-react-inputs';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import FBData from '../FBData/FBData';
-import { ConversionCellTemplate } from './components/ConversionCellTemplate';
-import { LeadTimeCellTemplate } from './components/LeadTimeCellTemplate';
+import { NumericCellTemplate } from './components/NumericCellTemplate';
 import { PrimarySupplierCellTemplate } from './components/PrimarySupplierCellTemplate';
 import { PrimarySupplierTitle } from './components/PrimarySupplierTitle';
 import { SupplierCellTemplate } from './components/SupplierCellTemplate';
 import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
 import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
 import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
-import { UnitsBuyCellTemplate } from './components/UnitsBuyCellTemplate';
-import { UnitsUseCellTemplate } from './components/UnitsUseCellTemplate';
-import { EditableVendorData, VendorDataEditEvent, VendorOption } from './types';
+import { UnitsCellTemplate } from './components/UnitsCellTemplate';
+import { SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
+import { EditableVendor, SupplierOption, VendorEditEvent } from './types';
 
 interface SchemaOptions {
-  vendors: VendorOption[]
-  setPrimaryVendorId: React.Dispatch<React.SetStateAction<any>>
-  onRowClick?: (e: VendorDataEditEvent) => void
-  statuses: DocumentRevisionStatus[]
+  units: string[]
+  statuses: string[]
+  suppliers: SupplierOption[]
+  isActive: boolean
+  isInEditMode: boolean
+  setPrimaryVendor?: (id: string) => void
+  onRowClick?: (e: VendorEditEvent) => void
 }
 
-export default function vendorDataSchema ({ vendors, setPrimaryVendorId, onRowClick, statuses }: SchemaOptions): Array<ColumnDefinition<EditableVendorData>> {
-  const unitFilterOptions = FBData.unitsOptions.map(obj => createOption(obj.value));
-  const supplierStatusFilterOptions = statuses.map(status => createOption(status));
-
-  const unitsFilterOptions: React.FC<GridFilterCellProps> = (props) => (
+export const buildSchema = ({
+  units,
+  statuses,
+  suppliers,
+  isActive,
+  isInEditMode,
+  setPrimaryVendor,
+  onRowClick,
+}: SchemaOptions): Array<ColumnDefinition<EditableVendor>> => {
+  const unitOptions = units.map(unit => createOption(unit, unit));
+  const UnitsFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
-      data={unitFilterOptions}
+      data={unitOptions}
       defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
-  const supplierStatusFilter: React.FC<GridFilterCellProps> = (props) => (
+  const statusOptions = statuses.map(status => createOption(status, status));
+  const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
-      data={supplierStatusFilterOptions}
+      data={statusOptions}
       defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
 
-  const schema = [
+  return [
     {
-      id: 'primarySupplier',
-      field: 'primarySupplier',
-      title: <PrimarySupplierTitle />,
-      filterCell: InputFilter,
-      template: (props) => <PrimarySupplierCellTemplate {...props} setPrimaryVendorId={setPrimaryVendorId} />,
+      id: 'primary',
+      field: 'primary',
+      filterCell: () => <Input disabled />,
+      headerCell: PrimarySupplierTitle,
+      template: (props) => (
+        <PrimarySupplierCellTemplate
+          {...props}
+          setPrimaryVendor={setPrimaryVendor}
+          isActive={isActive}
+          isInEditMode={isInEditMode}
+        />
+      ),
       width: 50,
     },
     {
       id: 'supplier',
-      field: 'supplier',
-      title: 'Supplier',
+      field: SUPPLIER_FIELD,
+      title: 'form.builder.part.vendors.supplier',
       filterCell: InputFilter,
-      template: (props) => <SupplierCellTemplate {...props} vendors={vendors} />,
+      template: (props) => <SupplierCellTemplate {...props} options={suppliers} onClick={onRowClick} />,
       width: 150,
     },
     {
       id: 'status',
-      field: 'status',
-      title: 'Supplier Status',
-      filterCell: supplierStatusFilter,
-      template: (props) => <SupplierStatusCellTemplate {...props} />,
+      field: SUPPLIER_STATUS_FIELD,
+      title: 'form.builder.part.vendors.supplier.status',
+      filterCell: StatusFilter,
+      template: (props) => <SupplierStatusCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
     },
     {
       id: 'cost',
-      field: 'cost',
-      title: 'Unit Cost',
+      field: 'cost.value',
+      title: 'form.builder.part.vendors.unit.cost',
       filterCell: InputFilter,
       template: UnitCostCellTemplate,
       width: 150,
     },
     {
-      id: 'partNumber',
+      id: 'part-number',
       field: 'partNumber',
       title: 'Supplier Part Number',
       filterCell: InputFilter,
       template: SupplierPartNumberCellTemplate,
-      width: 150,
+      width: 200,
     },
     {
-      id: 'unitsBuy',
+      id: 'units-buy',
       field: 'unitsBuy',
-      title: 'Units(Buy)',
-      filterCell: unitsFilterOptions,
-      template: UnitsBuyCellTemplate,
+      title: 'form.builder.part.vendors.unit.buy',
+      filterCell: UnitsFilter,
+      template: (props) => <UnitsCellTemplate {...props} options={units} />,
       width: 150,
     },
     {
       id: 'conversion',
       field: 'conversion',
-      title: 'Conversion',
+      title: 'form.builder.part.vendors.unit.conversion',
       filterCell: InputFilter,
-      template: ConversionCellTemplate,
+      template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
     },
     {
-      id: 'unitsUse',
+      id: 'units-use',
       field: 'unitsUse',
-      title: 'Units(Use)',
-      filterCell: unitsFilterOptions,
-      template: UnitsUseCellTemplate,
+      title: 'form.builder.part.vendors.unit.use',
+      filterCell: UnitsFilter,
+      template: (props) => <UnitsCellTemplate {...props} options={units} />,
       width: 150,
     },
     {
-      id: 'leadTime',
+      id: 'lead-time',
       field: 'leadTime',
-      title: 'Lead Time(Days)',
+      title: 'form.builder.part.vendors.lead.time',
       filterCell: InputFilter,
-      template: LeadTimeCellTemplate,
+      template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
     },
   ];
-
-  return schema;
-}
+};

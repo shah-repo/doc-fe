@@ -1,23 +1,43 @@
 import { Popper } from '@material-ui/core';
+import PopperJs from 'popper.js';
 import React, { useRef } from 'react';
-import Actions, { ActionsProps } from './Actions';
-import { EditableVendorData } from '../types';
+import Actions, { ActionsProps } from '../../FBApprovalMatrixRoles/components/Actions';
+import { EditableVendor } from '../types';
 
-export const ActionsCell: React.FC<ActionsProps<EditableVendorData> & { rootClassName?: string }> = (props) => {
+interface Props extends ActionsProps<EditableVendor> {
+  rootClassName?: string
+  popperRef?: React.RefObject<PopperJs>
+}
+
+export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
   const ref = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <div ref={ref} className={props.rootClassName} />
-      <Popper
-        open
-        placement="bottom-end"
-        anchorEl={ref.current}
-      >
-        <Actions
-          scrollBehavior="smooth"
-          {...props}
-        />
-      </Popper>
+      {ref.current && (
+        <Popper
+          open
+          placement="bottom-end"
+          anchorEl={ref.current}
+          modifiers={{
+            keepTogether: {
+              enabled: true,
+            },
+            preventOverflow: {
+              enabled: false,
+            },
+            hide: {
+              enabled: false,
+            },
+          }}
+        >
+          <Actions
+            scrollBehavior="smooth"
+            {...props}
+          />
+        </Popper>
+      )}
     </>
   );
 };

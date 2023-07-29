@@ -1,45 +1,61 @@
-import { Chip, Grid, Tooltip } from '@material-ui/core';
+import { Box, Chip } from '@material-ui/core';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { styles as useStyles } from '../../../components/common/kendo.column.templates/Status.styles';
 import { statusClassMapping } from '../../../components/common/kendo/helpers';
-import { FormikField } from '../../../components/forms/fields-next';
-import { MODE_FIELD, Mode } from '../constants';
-import useStyles from '../styles';
-import { EditableVendorData } from '../types';
+import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { CustomTemplateProps, EditableVendor } from '../types';
 
-interface Props extends CellTemplateProps<EditableVendorData> {}
+interface StatusChipProps {
+  value: string
+  onClick?: () => void
+}
 
-export const SupplierStatusCellTemplate: React.FC<Props> = ({ field, dataItem }) => {
+const StatusChip: React.FC<StatusChipProps> = ({ value, onClick }) => {
   const classes = useStyles();
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps } = useFormikContext<EditableVendorData>();
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  const value = isEditMode ? values.supplier?.status : dataItem.status;
+  const statusClass = value ? statusClassMapping[value] as keyof typeof classes : '';
 
   return (
-    <FormikField
-      name={field}
-    >
-      <Grid
-        container
-        direction="row"
-        alignContent="flex-start"
-        justify="flex-start"
-        {...getFieldProps(field)}
-      >
-        <Grid item >
-          <Tooltip title={value}>
-            <Chip
-              size="small"
-              className={value ? `${classes.chip} ${classes[statusClassMapping[value]]}` : classes.displayNone}
-              label={value}
-            />
-          </Tooltip>
-        </Grid>
-      </Grid>
-    </FormikField>
+    <Box className={classes.wrapper} onClick={onClick}>
+      <Chip
+        size="small"
+        className={cx(classes.chip, classes[statusClass])}
+        label={value}
+      />
+    </Box>
   );
+};
+
+const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { values } = useFormikContext<EditableVendor>();
+
+  const value = values.vendor.status;
+
+  if (!value) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+  }
+
+  return <StatusChip value={value} />;
+};
+
+export const SupplierStatusCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+  const { field, dataItem, onClick } = props;
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+
+  const value = dataItem[field] as string;
+
+  if (!value) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+  }
+
+  if (isEditMode) {
+    return <Editor {...props} />;
+  }
+
+  const handleClick = () => onClick?.({ dataItem });
+
+  return <StatusChip value={value} onClick={handleClick} />;
 };

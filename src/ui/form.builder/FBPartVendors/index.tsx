@@ -1,194 +1,220 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
+import { Box, Grid, InputAdornment } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
-import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { CATEGORY, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { Button } from '../../components/forms/fields-next';
-import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
-import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { Button, FormField, TextField } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { ActionsCell } from './components/ActionsCell';
-import { MODE_FIELD, Mode } from './constants';
-import vendorDataSchema from './schema';
+import { FIELDS_TO_OMIT, SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
+import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableVendorData, FBPartVendorsProps, VendorData, VendorDataEditEvent } from './types';
+import { EditableVendor, FBPartVendorsProps, Vendor, VendorEditEvent } from './types';
 import { withFBPartVendors } from './wrap';
 
 const FBPartVendors: React.FC<FBPartVendorsProps> = ({
-  // items = [],
-  vendors = [],
-  vendorData = [],
-  name,
+  label = 'form.builder.part.vendors.title',
+  name = '',
   disabled,
-  deleteVendorData,
-  updateVendorData,
+  list = [],
+  units = [],
+  statuses = [],
+  suppliers = [],
+  standardCost,
+  standardLeadTime,
+  deleteVendor,
+  updateVendor,
+  setPrimaryVendor,
+  setStandardCost,
+  setStandardLeadTime,
+  ...props
 }) => {
-  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.SUPPLIER];
-  const notIncategory = CATEGORY.WORKORDER_CATEGORY;
   const classes = useStyles();
   const isActive = !disabled;
-  const [editedVendorData, setEditedVendorData] = React.useState<Partial<EditableVendorData>>();
-  const [primaryVendorId, setPrimaryVendorId] = useState(vendorData.find(vendor => vendor.primary)?.id);
-  const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
-  const editVendorData = ({ dataItem }: VendorDataEditEvent) => setEditedVendorData(dataItem);
-  const deleteTootltipText = translate('Delete');
-  const isVendorDataAdded = editedVendorData?.[MODE_FIELD] === Mode.add;
-  const handleRowClick = isActive ? editVendorData : undefined;
+  const [editedVendor, setEditedVendor] = React.useState<Partial<EditableVendor>>();
 
-  // Formik
+  const isVendorDataAdded = editedVendor?.[MODE_FIELD] === Mode.add;
 
-  const formik = useFormik<Partial<EditableVendorData>>({
+  const editVendor = ({ dataItem }: VendorEditEvent) => setEditedVendor(dataItem);
+  const isInEditMode = editedVendor !== undefined;
+  const handleRowClick = isActive && !isInEditMode ? editVendor : undefined;
+
+  const formik = useFormik<Partial<EditableVendor>>({
     initialValues: {},
-    validate: (values) => {
-      const errors: Record<string, string> = {};
-
-      return errors;
-    },
     onSubmit: (values) => {
-      const vendorDataToSave = omit(values, [MODE_FIELD]);
-      updateVendorData?.(vendorDataToSave as VendorData);
-      discardLotVendorData();
+      const vendorDataToSave = omit(values, FIELDS_TO_OMIT);
+      updateVendor?.(vendorDataToSave as Vendor);
+      discardVendor();
     },
   });
 
-  const createDraftVendorData = () => setEditedVendorData({
+  const { resetForm, setValues } = formik;
+
+  useEffect(() => {
+    resetForm({ values: editedVendor ?? {} });
+  }, [editedVendor, setValues, resetForm]);
+
+  const createDraftVendor = () => setEditedVendor({
     id: uuidv4(),
+    primary: list.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 
-  const discardLotVendorData = () => {
-    setEditedVendorData(undefined);
-  };
-  const removeVendorData = () => {
-    if (!editedVendorData) {
+  const discardVendor = () => setEditedVendor(undefined);
+
+  const removeVendor = () => {
+    if (!editedVendor) {
       return;
     }
-    deleteVendorData?.(editedVendorData as VendorData);
-    discardLotVendorData();
+    deleteVendor?.(editedVendor as Vendor);
+    discardVendor();
   };
 
-  const rowRender: DataGridProps<EditableVendorData>['rowRender'] = (row, { dataItem }) => {
-    const item = dataItem as EditableVendorData;
+  const rowRender: DataGridProps<EditableVendor>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableVendor;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
     if (!isUpdating) {
       return row;
     }
+
+    const shouldDisableDelete = item.primary;
+
+    const deleteTootltipText
+      = shouldDisableDelete
+        ? translate('form.builder.part.vendors.primary.delete.message')
+        : undefined;
+
     const actions = (
-      <td className={classes.actionsCell}>
+      <td className={classes.actionsCell} key="actions">
         <ActionsCell
           dataItem={item}
           onConfirm={formik.submitForm}
-          onDiscard={discardLotVendorData}
-          onDelete={removeVendorData}
+          onDiscard={discardVendor}
+          onDelete={removeVendor}
           deleteTooltipText={deleteTootltipText}
-          isDeleteDisabled={false}
+          isDeleteDisabled={shouldDisableDelete}
           rootClassName={classes.popperHolder}
         />
       </td>
     );
-    return React.cloneElement(
+
+    const editedRow = React.cloneElement(
       row,
       {
         className: cx(row.props.className, classes.updatingRow),
       },
       [row.props.children, actions],
     );
+
+    return (
+      <FormikProvider value={formik}>
+        {editedRow}
+      </FormikProvider>
+    );
   };
 
-  const async = useAsync({
-    onSuccess: (response: DocumentRevisionStatus[] = []) => {
-      saveStatuses(response);
-    },
-  });
-  const getStatusesAction = useActionCreator(
-    documentRevisionsActions.getDocRevStatuses,
-  );
-  const getStatuses = () =>
-    async.start(
-      getStatusesAction,
-      async,
-      documentRevisionQueryStatus(),
-      notGroupOptions,
-      undefined,
-      notIncategory,
-    );
-
-  useEffect(() => {
-    getStatuses();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const schema = vendorDataSchema({
-    vendors,
-    setPrimaryVendorId,
-    onRowClick: handleRowClick,
+  const schema = buildSchema({
+    units,
     statuses,
+    suppliers,
+    isActive,
+    isInEditMode,
+    setPrimaryVendor,
+    onRowClick: handleRowClick,
   });
 
-  const vendorDataList = vendorData.reduce((list, item) => {
-    const isVendorDataEdited = editedVendorData && editedVendorData.id === item.id;
+  const vendorsList = list.reduce((list, item) => {
+    const isVendorEdited = editedVendor && editedVendor.id === item.id;
+    const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
+    const supplierName = supplier?.name ?? item.vendor?.name;
+    const supplierStatus = supplier?.displayStatus ?? '';
+
     return [
       ...list,
       {
-        ...(isVendorDataEdited ? editedVendorData : item),
-        primary: item.id === primaryVendorId,
-        [MODE_FIELD]: isVendorDataEdited ? Mode.edit : Mode.show,
+        ...(isVendorEdited ? editedVendor : item),
+        [SUPPLIER_FIELD]: supplierName,
+        [SUPPLIER_STATUS_FIELD]: supplierStatus,
+        [MODE_FIELD]: isVendorEdited ? Mode.edit : Mode.show,
       },
     ];
-  }, isVendorDataAdded ? [editedVendorData] : []);
+  }, isVendorDataAdded ? [editedVendor] : []);
 
   return (
     <Box position="relative">
-      <FBInput name={name}>
-        <FBSection
-          label="form.builder.new.supplier.add"
-        >
+      <FBInput {...props} type="partVendors" name={name}>
+        <FBSection label={label}>
           {isActive && (
             <Button
               kind="ghost"
               size="small"
               className={classes.addButton}
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-              onClick={createDraftVendorData}
+              onClick={createDraftVendor}
             >
-              {translate('form.builder.new.supplier.add')}
+              {translate('form.builder.part.vendors.add')}
             </Button>
           )}
         </FBSection>
       </FBInput>
-      <FormikProvider value={formik}>
-        <KendoDataGrid<VendorData>
-          fullWidth
-          filterable
-          hasBoxScrollbars
-          schema={schema}
-          data={vendorDataList}
-          onRowClick={handleRowClick}
-          rowRender={rowRender}
-        />
-      </FormikProvider>
+      <KendoDataGrid<EditableVendor>
+        fullWidth
+        filterable
+        hasBoxScrollbars
+        schema={schema}
+        data={vendorsList as EditableVendor[]}
+        onRowClick={handleRowClick}
+        rowRender={rowRender}
+      />
       {isActive && (
         <Button
           kind="add"
           fullWidth
           attached
-          onClick={createDraftVendorData}
+          onClick={createDraftVendor}
         >
-          {translate('form.builder.new.supplier.add')}
+          {translate('form.builder.part.vendors.add')}
         </Button>
       )}
+      <Box mt={3}>
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <FormField
+              label="form.builder.part.vendors.cost.standard"
+            >
+              <TextField
+                type="number"
+                inputProps={{ min: 0 }}
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                value={standardCost?.value}
+                onChange={(e) => setStandardCost?.(Number(e.target.value))}
+              />
+            </FormField>
+          </Grid>
+          <Grid item xs={6}>
+            <FormField
+              label="form.builder.part.vendors.lead.time.standard"
+            >
+              <TextField
+                type="number"
+                inputProps={{ min: 0 }}
+                value={standardLeadTime}
+                onChange={(e) => setStandardLeadTime?.(Number(e.target.value))}
+              />
+            </FormField>
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
+
 export default withFBPartVendors(FBPartVendors);
