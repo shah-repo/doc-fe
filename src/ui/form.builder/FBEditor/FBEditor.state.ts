@@ -166,6 +166,10 @@ class FBEditorState {
     supplier: FBEditorLabel,
     lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,
+    partVendors: FBEditorLabel,
+    lotTransfers: FBEditorLabel,
+    lotOnHandQuantity: FBEditorEmpty,
+    lotQuantity: FBEditorLabel,
   };
 
   public static editorTypeIconMapping = {
