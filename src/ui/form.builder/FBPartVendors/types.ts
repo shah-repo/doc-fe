@@ -3,31 +3,28 @@ import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { FBInputProps } from '../FBInput/FBInput.types';
 
+export enum Currency {
+  USD = 'USD',
+}
+export enum CurrencySymbol {
+  USD = '$',
+}
+
 export type FBPartVendorsProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
-  list: Vendor[]
+  vendors: Vendor[]
   units: string[]
   statuses: string[]
   suppliers: SupplierOption[]
-  standardCost?: Cost
-  standardLeadTime?: number
   updateVendor: (item: Vendor) => void
   deleteVendor: (item: Vendor) => void
   setPrimaryVendor: (id: string) => void
-  setStandardCost: (value: number) => void
-  setStandardLeadTime: (value: number) => void
 };
-
-export interface InputData {
-  list?: Vendor[]
-  standardCost?: Cost
-  standardLeadTime?: number
-}
 
 export interface Cost {
   value: number
-  currency: string
+  currency: Currency
 }
 export interface Supplier {
   id: string

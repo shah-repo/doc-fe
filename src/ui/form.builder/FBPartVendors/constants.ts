@@ -1,6 +1,7 @@
 import { MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import { Currency } from './types';
 
-export const DEFAULT_CURRENCY = 'USD';
+export const DEFAULT_CURRENCY = Currency.USD;
 
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 

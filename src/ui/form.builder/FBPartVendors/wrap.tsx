@@ -2,15 +2,10 @@ import { differenceBy, orderBy, unionBy } from 'lodash';
 import { useState } from 'react';
 import { FB } from '..';
 import { DEFAULT_CURRENCY } from './constants';
-import { FBPartVendorsProps, InputData, Vendor } from './types';
+import { FBPartVendorsProps, Vendor } from './types';
 import { useOptions } from './utils';
 
-const prepareList = (list: Vendor[] = []) => orderBy(list, 'primary', 'desc');
-
-const prepareData = (data: InputData = { list: [] }) => ({
-  ...data,
-  list: prepareList(data.list),
-});
+const prepareData = (list: Vendor[] = []) => orderBy(list, 'primary', 'desc');
 
 export const withFBPartVendors = <T extends FBPartVendorsProps>(
   Component: React.FC<T>,
@@ -22,57 +17,53 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const { suppliers, units, statuses } = useOptions();
-    const [data, setData] = useState<InputData>(prepareData(workspaceState?.formInputSync.get(name) ?? { list: [] }));
+    const [vendors, setVendors] = useState<Vendor[]>(prepareData(workspaceState?.formInputSync.get(name) ?? []));
 
-    const setStandardCost = (value: number) => {
-      updateState({ standardCost: { value, currency: DEFAULT_CURRENCY } });
-    };
-
-    const setStandardLeadTime = (value: number) => {
-      updateState({ standardLeadTime: value });
-    };
-
-    const updateState = (state: InputData) => {
-      const newData = {
-        ...data,
-        ...state,
-      };
-      setData(prepareData(newData));
-      formState?.setFieldValue(name, newData);
+    const updateState = (state: Vendor[]) => {
+      setVendors(prepareData(state));
+      formState?.setFieldValue(name, state);
       formState?.setFieldAutosave(name);
     };
 
+    const prepareVendor = (vendor: Vendor) => ({
+      ...vendor,
+      ...(vendor.cost?.value && ({
+        unitCost: {
+          ...vendor.cost,
+          currency: DEFAULT_CURRENCY,
+        },
+      })),
+    });
+
     const deleteVendor = (item: Vendor) => {
-      const list = differenceBy(data.list, [item], 'id');
-      updateState({ list });
+      const updatedVendors = differenceBy(vendors, [item], 'id');
+      updateState(updatedVendors);
     };
 
     const updateVendor = (item: Vendor) => {
-      const list = unionBy([item], data.list, 'id');
-      updateState({ list });
+      const updatedVendors = unionBy([prepareVendor(item)], vendors, 'id');
+      updateState(updatedVendors);
     };
 
     const setPrimaryVendor = (id: string) => {
-      const list = data.list?.map((item) => ({
+      const updatedVendors = vendors.map((item) => ({
         ...item,
         primary: item.id === id,
       }));
-      updateState({ list });
+      updateState(updatedVendors);
     };
 
     return Component({
       ...props as T,
-      ...data,
       name,
       disabled,
       units,
+      vendors,
       statuses,
       suppliers,
       updateVendor,
       deleteVendor,
       setPrimaryVendor,
-      setStandardCost,
-      setStandardLeadTime,
     });
   };
 

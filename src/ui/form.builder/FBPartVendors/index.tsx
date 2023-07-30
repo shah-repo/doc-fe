@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Grid, InputAdornment } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -11,7 +11,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button, FormField, TextField } from '../../components/forms/fields-next';
+import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { ActionsCell } from './components/ActionsCell';
@@ -25,17 +25,13 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   label = 'form.builder.part.vendors.title',
   name = '',
   disabled,
-  list = [],
   units = [],
   statuses = [],
+  vendors = [],
   suppliers = [],
-  standardCost,
-  standardLeadTime,
   deleteVendor,
   updateVendor,
   setPrimaryVendor,
-  setStandardCost,
-  setStandardLeadTime,
   ...props
 }) => {
   const classes = useStyles();
@@ -65,7 +61,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
 
   const createDraftVendor = () => setEditedVendor({
     id: uuidv4(),
-    primary: list.length === 0,
+    primary: vendors.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 
@@ -132,7 +128,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
     onRowClick: handleRowClick,
   });
 
-  const vendorsList = list.reduce((list, item) => {
+  const vendorsList = vendors.reduce((list, item) => {
     const isVendorEdited = editedVendor && editedVendor.id === item.id;
     const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
     const supplierName = supplier?.name ?? item.vendor?.name;
@@ -150,7 +146,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   }, isVendorAdded ? [editedVendor] : []);
 
   return (
-    <Box position="relative">
+    <Box className={classes.root}>
       <PromptIfDirty
         dirty={dirty}
       />
@@ -170,6 +166,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
         </FBSection>
       </FBInput>
       <KendoDataGrid<EditableVendor>
+        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         fullWidth
         filterable
         hasBoxScrollbars
@@ -188,35 +185,6 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
           {translate('form.builder.part.vendors.add')}
         </Button>
       )}
-      <Box mt={3}>
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <FormField
-              label="form.builder.part.vendors.cost.standard"
-            >
-              <TextField
-                type="number"
-                inputProps={{ min: 0 }}
-                startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                value={standardCost?.value}
-                onChange={(e) => setStandardCost?.(Number(e.target.value))}
-              />
-            </FormField>
-          </Grid>
-          <Grid item xs={6}>
-            <FormField
-              label="form.builder.part.vendors.lead.time.standard"
-            >
-              <TextField
-                type="number"
-                inputProps={{ min: 0 }}
-                value={standardLeadTime}
-                onChange={(e) => setStandardLeadTime?.(Number(e.target.value))}
-              />
-            </FormField>
-          </Grid>
-        </Grid>
-      </Box>
     </Box>
   );
 };
