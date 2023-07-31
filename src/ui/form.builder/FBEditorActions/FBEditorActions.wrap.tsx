@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
-import { compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from 'lodash';
+import { cloneDeep, compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from 'lodash';
 import React from 'react';
 import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from '..';
 import { SM } from '../../../App';
 import { TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
 import { COMMON_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
+import FBDataStore from '../FBStore/FBDataStore';
 import { withFBValidation } from '../FBValidation/FBValidation.wrap';
 import { Rules } from './constants';
 
@@ -147,6 +148,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       ) {
         workspaceState?.saveDocRev(formState?.getValues());
       }
+      FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
     };
 
     handleCancel = () => {

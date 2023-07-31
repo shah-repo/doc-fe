@@ -24,4 +24,5 @@ export type FBTextFieldProps =
       inputType?: FBInputType
     }
     customHeight?: number
+    isFbEditorField?: boolean
   };
