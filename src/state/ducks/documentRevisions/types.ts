@@ -1,6 +1,6 @@
 import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
 import { TableColumnActionType } from '../../../ui/components/table/column/types';
-import { FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
+import { DOCUMENT_REVISION_LOT_STATUS, FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
 import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
@@ -216,7 +216,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
-  lotStatus?: string
+  lotStatus?: DOCUMENT_REVISION_LOT_STATUS
 }
 
 export interface SmartReference {
