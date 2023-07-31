@@ -78,7 +78,9 @@ export type FBInputType =
   | 'downloadsheet'
   | 'lotTransfers'
   | 'lotQuantity'
-  | 'lotOnHandQuantity';
+  | 'lotOnHandQuantity'
+  | 'partVendors'
+  | 'numeric';
 
 export type FBInputProps =
   & FBLabelProps
@@ -251,6 +253,8 @@ export const FBAutosave: FBInputType[] = [
   'quantity',
   'texteditor',
   'lotTransfers',
+  'partVendors',
+  'numeric',
 ];
 
 export const SectionTypeField: FBInputType[] = [
