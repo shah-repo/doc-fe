@@ -298,11 +298,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       return;
     }
     setSelectedPartLevel({ dataItem, level });
-    // check and modify logic here
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
-      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
-        (data) => !data[ADD_FIELD],
-      );
+      state.data = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
@@ -368,9 +365,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     // Not working scrolling part need to check again
     const treeList = treeListRef.current;
     if (!treeList) return;
-    const rowElement = treeList.element.querySelector(`[data-uid="${dataItem.id}"]`);
+    const id = dataItem[SUB_ITEMS_FIELD]?.length ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id : dataItem.id;
+    const rowElement = treeList.querySelector(`[id^="_${id}"]`);
     if (rowElement) {
-      treeList.element.scrollTop = rowElement.offsetTop;
+      const scrollableContainer = treeList.querySelector('.k-grid-table');
+      if (scrollableContainer) {
+        const offsetTop = rowElement.offsetTop - scrollableContainer.offsetTop;
+        scrollableContainer.scrollTop = offsetTop;
+      }
     }
   };
 
@@ -579,10 +581,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       <Grid item className={classes.tableContainer}>
         <FormikProvider value={formik}>
           <Grid container>
-            <Grid item xs={12}>
+            <Grid item xs={12} ref={treeListRef}>
               <TreeList
                 {...state.dataState}
-                ref={treeListRef}
                 style={{
                   width: '100%',
                   maxHeight: size ? size?.height - 160 : 'auto',

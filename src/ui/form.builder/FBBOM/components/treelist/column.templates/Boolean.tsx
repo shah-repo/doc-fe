@@ -18,7 +18,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
   const handleToggle = () => {
     // TODO open side bar
     // if (field === 'alternatePartsList') {
-    setOpenPartsDrawer(true);
+    // setOpenPartsDrawer(true);
     // }
   };
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
