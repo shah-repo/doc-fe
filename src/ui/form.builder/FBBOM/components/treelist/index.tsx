@@ -520,6 +520,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       const swapChildElements = (tree: BOM[], parentIndices: number[]) => {
         if (!isEmpty(parentIndices)) {
           const index = take(parentIndices)[0];
+          // fire api
           tree[index][SUB_ITEMS_FIELD] = swapChildElements(
             tree[index][SUB_ITEMS_FIELD] as BOM[],
             tail(parentIndices),
@@ -537,6 +538,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         ...state,
         data: [...updatedBOMTree],
       });
+    } else {
+      toastError(translate('bom.order.error.message'));
     }
   };
 
