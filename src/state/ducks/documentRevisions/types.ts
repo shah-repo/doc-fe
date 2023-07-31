@@ -42,6 +42,33 @@ export enum POStatusType {
   VOIDED = 'VOIDED',
 }
 
+// Lot types implemetation
+export enum LotStatusType {
+  QUARANTINE = 'QUARANTINE',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+  USE = 'USEASIS',
+  RETURNVENDOR = 'RETURNTOVENDOR',
+  REWORK = 'REWORK',
+  SCRAP = 'SCRAP',
+  RNDONLY = 'RNDUSEDONLY',
+  OTHER = 'OTHER',
+}
+
+export enum LotStatusLabelMapping {
+  QUARANTINE = 'Quarantine',
+  ACCEPTED = 'Accepted',
+  REJECTED = 'Rejected',
+  EXPIRED = 'Expired',
+  USE = 'Use As-Is',
+  RETURNVENDOR = 'Return to Vendor (RTV)',
+  REWORK = 'Rework',
+  SCRAP = 'Scrap',
+  RNDONLY = 'R&D used only',
+  OTHER = 'Other',
+}
+
 export enum POStatusLabelMapping {
   OPENED = 'Open',
   CLOSED = 'Closed',
@@ -215,6 +242,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
+  lotStatus: LotStatusType
 }
 
 export interface SmartReference {
