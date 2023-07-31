@@ -116,6 +116,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     },
   });
 
+  const partChangeOrderAsync = useAsync({
+    onError: (response) => {
+      toastError(response);
+    },
+  });
+
   useEffect(() => {
     if (!documentRevision) {
       return;
@@ -137,6 +143,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   const addBOMBranch = useActionCreator(documentRevisionsActions.addBomBranch);
   const updateBOMBranch = useActionCreator(
     documentRevisionsActions.updateBomBranch,
+  );
+  const reorderBOMBranch = useActionCreator(
+    documentRevisionsActions.changeOrderBomBranch,
   );
 
   const [columns, setColumns]
@@ -520,7 +529,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       const swapChildElements = (tree: BOM[], parentIndices: number[]) => {
         if (!isEmpty(parentIndices)) {
           const index = take(parentIndices)[0];
-          // fire api
           tree[index][SUB_ITEMS_FIELD] = swapChildElements(
             tree[index][SUB_ITEMS_FIELD] as BOM[],
             tail(parentIndices),
@@ -528,6 +536,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         } else {
           const draggedChild = tree.splice(draggedChildIndex, 1)[0];
           tree.splice(draggedOverChildIndex, 0, draggedChild);
+          // Update part orders
+          partChangeOrderAsync.start(
+            reorderBOMBranch,
+            draggedChild.parentNodeRevId,
+            {
+              childNodeRevId: draggedChild.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+              newPos: draggedOverChildIndex,
+            },
+            partChangeOrderAsync,
+          );
         }
         return tree;
       };
@@ -600,7 +618,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
                 onRowDrop={onRowDrop}
                 row={TreeListDraggableRow}
               />
-              {(treeListAsync.isLoading || partAsync.isLoading) && <Loader />}
+              {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
             </Grid>
             {confirmationDialog.isOpen && (
               <AlertDialog
