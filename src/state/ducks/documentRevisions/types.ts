@@ -144,6 +144,7 @@ interface Precalc {
   cali_due_date?: string
   pm_due_date?: string
   lshs_subtitle?: LSHS
+  lot_on_hand_quantity?: string
 }
 
 interface DocumentsInLHRS {
@@ -215,6 +216,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
+  lotStatus?: string
 }
 
 export interface SmartReference {
