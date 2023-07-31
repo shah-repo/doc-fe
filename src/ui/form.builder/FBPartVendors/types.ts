@@ -3,11 +3,8 @@ import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { FBInputProps } from '../FBInput/FBInput.types';
 
-export enum Currency {
+enum Currency {
   USD = 'USD',
-}
-export enum CurrencySymbol {
-  USD = '$',
 }
 
 export type FBPartVendorsProps =
