@@ -6,7 +6,7 @@ import { DOCUMENT_REVISION_LOT_STATUS, FBAutocomplete, FBAutocompleteAsync, FBAu
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import Text from '../../components/Text';
 import { checkIsDocumentLot } from '../../documentRevision/helpers/checkDocumentGroup';
-import { isDocumentRevisionInDraft } from '../../documentRevision/helpers/documentRevisionStatus';
+import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import Colors from '../../layout/theme/utils/colors';
 import { withFBMPIProcedureSelect } from './FBMPIProcedureSelect.wrap';
 
@@ -30,14 +30,13 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
   isLHRProductionBuild,
 }) => {
   const isValidLOT = (lot) => {
-    const isProductionBuild = isLHRProductionBuild;
-    const isAcceptedStatus = isProductionBuild
+    const isAcceptedStatus = isLHRProductionBuild
       ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED
       : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
 
     const isZeroOnHandQuantity = Number(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && isZeroOnHandQuantity;
+    return isAcceptedStatus && !isZeroOnHandQuantity;
   };
   return (
     <FBForm {...{ formState }} >
@@ -51,7 +50,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                   name="usedOverride"
                   options={mpiProcedureSelectState?.lotsApi.data
                     ?.filter((option) =>
-                      !isDocumentRevisionInDraft(option.status)
+                      isDocumentRevisionReleased(option.status)
                     && checkIsDocumentLot(option.document.documentType.groupOptions)
                     && isValidLOT(option))
                   }
