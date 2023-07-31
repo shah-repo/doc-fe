@@ -526,10 +526,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
             tail(parentIndices),
           );
         } else {
-          const draggedChild = tree[draggedChildIndex];
-          const draggedOver = tree[draggedOverChildIndex];
-          tree.splice(draggedOverChildIndex, 1, draggedChild);
-          tree.splice(draggedChildIndex, 1, draggedOver);
+          const draggedChild = tree.splice(draggedChildIndex, 1)[0];
+          tree.splice(draggedOverChildIndex, 0, draggedChild);
         }
         return tree;
       };
