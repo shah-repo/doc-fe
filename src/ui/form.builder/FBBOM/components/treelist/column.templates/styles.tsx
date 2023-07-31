@@ -44,7 +44,7 @@ export const styles = makeStyles((theme) => ({
   },
   nameCell: (props) => ({
     'vertical-align': 'middle',
-    marginLeft: (props.isEditMode || !props?.hasChildren) ? 0 : theme.spacing(1.875),
+    marginLeft: props.isEditMode ? 0 : theme.spacing(1.875),
   }),
   titleInfoCell: (props) => ({
     fontWeight: props?.hasChildren ? 600 : 400,
@@ -113,10 +113,9 @@ export const styles = makeStyles((theme) => ({
   expand: {
     cursor: 'pointer',
   },
-  infoIcon: {
-    width: '1.5em',
-    marginRight: theme.spacing(1.5),
-  },
+  infoIcon: (props) => ({
+    marginRight: props?.hasChildren ? theme.spacing(1.5) : 0,
+  }),
   ownerIcon: {
     width: '1.5em',
     color: ThemeColors.primaryLight,

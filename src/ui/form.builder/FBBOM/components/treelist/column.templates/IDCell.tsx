@@ -127,6 +127,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     </FormikField>
   );
 
+  const getInfoIcon = () => (
+    <span className={cx('k-icon', classes.infoIcon)}>
+      <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
+        <InfoIcon />
+      </Tooltip>
+    </span>
+  );
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, props.className)}
@@ -138,32 +146,35 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       aria-selected="false"
       {...{ colSpan, id, style }}
     >
-      {!isEditMode && [...(Array(props.level.length - 1) as number[])].map((e, i) => {
-        if (!isEmpty(dataItem?.availableRevisions) && i === props.level.length - 2) {
-          return (<span className={cx('k-icon', classes.infoIcon)}>
-            <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-              <InfoIcon />
-            </Tooltip>
+      {!isEditMode && [...(Array(props.level.length) as number[])].map((e, i) => {
+        if (hasChildren) {
+          if (i === props.level.length - 2 && !isEmpty(dataItem?.availableRevisions)) {
+            return getInfoIcon();
+          }
+        } else {
+          if (i === props.level.length - 1 && !isEmpty(dataItem?.availableRevisions)) {
+            return getInfoIcon();
+          }
+        }
+        if (i === props.level.length - 1 && hasChildren) {
+          return (<span className={cx('k-icon', classes.expand)}>
+            {(props.expanded
+              ? <CollapseIcon
+                onClick={onClick}
+                data-prevent-selection="true"
+                role="presentation"
+              />
+              : <ExpandIcon
+                onClick={onClick}
+                data-prevent-selection="true"
+                role="presentation"
+              />)
+            }
           </span>);
         }
         return !isEditMode && <span className="k-icon k-i-none" role="presentation" />;
       })
       }
-
-      {!isEditMode && hasChildren && <span className={cx('k-icon', classes.expand)}>
-        {(props.expanded
-          ? <CollapseIcon
-            onClick={onClick}
-            data-prevent-selection="true"
-            role="presentation"
-          />
-          : <ExpandIcon
-            onClick={onClick}
-            data-prevent-selection="true"
-            role="presentation"
-          />)
-        }
-      </span>}
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && getFieldInfo()}
