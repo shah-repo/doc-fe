@@ -35,6 +35,7 @@ import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
 import FBLotTransfers from '../FBLotTransfers';
 import FBMediaAlbumField from '../FBMediaAlbumField/FBMediaAlbumField';
 import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
+import FBNumericField from '../FBNumericField/FBNumericField';
 import FBParagraph from '../FBParagraph/FBParagraph';
 import FBParts from '../FBParts/FBParts';
 import FBPartsSelection from '../FBPartsSelection/FBPartsSelection';
@@ -142,6 +143,7 @@ class FBSchemaState {
     lotQuantity: FBLotQuantityField,
     lotOnHandQuantity: FBLotOnHandQuantityField,
     partVendors: FBPartVendors,
+    numeric: FBNumericField,
   };
 
   @observable public schema?: FBSchemaProps[];

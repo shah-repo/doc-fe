@@ -29,7 +29,7 @@ export interface Cost {
 export interface Supplier {
   id: string
   name: string
-  status?: string
+  displayStatus?: string
 }
 
 export interface UnitOption {

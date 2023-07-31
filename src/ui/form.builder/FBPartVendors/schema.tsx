@@ -73,7 +73,7 @@ export const buildSchema = ({
     {
       id: 'supplier',
       field: SUPPLIER_FIELD,
-      title: 'form.builder.part.vendors.supplier',
+      title: 'form.builder.part.vendors.vendor',
       filterCell: InputFilter,
       template: (props) => <SupplierCellTemplate {...props} options={suppliers} onClick={onRowClick} />,
       width: 150,
@@ -81,7 +81,7 @@ export const buildSchema = ({
     {
       id: 'status',
       field: SUPPLIER_STATUS_FIELD,
-      title: 'form.builder.part.vendors.supplier.status',
+      title: 'form.builder.part.vendors.vendor.status',
       filterCell: StatusFilter,
       template: (props) => <SupplierStatusCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
@@ -89,7 +89,7 @@ export const buildSchema = ({
     {
       id: 'cost',
       field: 'cost.value',
-      title: 'form.builder.part.vendors.unit.cost',
+      title: 'form.builder.part.vendors.cost',
       filterCell: InputFilter,
       template: (props) => <UnitCostCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
@@ -97,7 +97,7 @@ export const buildSchema = ({
     {
       id: 'part-number',
       field: 'partNumber',
-      title: 'Supplier Part Number',
+      title: 'form.builder.part.vendors.partNumber',
       filterCell: InputFilter,
       template: (props) => <SupplierPartNumberCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
@@ -105,7 +105,7 @@ export const buildSchema = ({
     {
       id: 'units-buy',
       field: 'unitsBuy',
-      title: 'form.builder.part.vendors.unit.buy',
+      title: 'form.builder.part.vendors.unitsBuy',
       filterCell: UnitsFilter,
       template: (props) => <UnitsCellTemplate {...props} options={units} onClick={onRowClick} />,
       width: 150,
@@ -113,7 +113,7 @@ export const buildSchema = ({
     {
       id: 'conversion',
       field: 'conversion',
-      title: 'form.builder.part.vendors.unit.conversion',
+      title: 'form.builder.part.vendors.conversion',
       filterCell: InputFilter,
       template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
@@ -121,7 +121,7 @@ export const buildSchema = ({
     {
       id: 'units-use',
       field: 'unitsUse',
-      title: 'form.builder.part.vendors.unit.use',
+      title: 'form.builder.part.vendors.unitsUse',
       filterCell: UnitsFilter,
       template: (props) => <UnitsCellTemplate {...props} options={units} />,
       width: 150,
@@ -129,7 +129,7 @@ export const buildSchema = ({
     {
       id: 'lead-time',
       field: 'leadTime',
-      title: 'form.builder.part.vendors.lead.time',
+      title: 'form.builder.part.vendors.leadTime',
       filterCell: InputFilter,
       template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
       width: 150,

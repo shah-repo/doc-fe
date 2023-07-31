@@ -28,9 +28,13 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
     const prepareVendor = (vendor: Vendor) => ({
       ...vendor,
       ...(vendor.cost?.value && ({
-        unitCost: {
+        cost: {
           ...vendor.cost,
           currency: DEFAULT_CURRENCY,
+        },
+        vendor: {
+          name: vendor.vendor.name,
+          id: vendor.vendor.id,
         },
       })),
     });

@@ -5,8 +5,8 @@ import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from '..'
 import { ReactComponent as ApprovalsIcon } from '../../../assets/images/leftPanel/approvals.svg';
 import { ReactComponent as AutoCompleteIcon } from '../../../assets/images/leftPanel/auto_complete.svg';
 import { ReactComponent as BlankTplformIcon } from '../../../assets/images/leftPanel/blank_t_pl_form.svg';
-import { ReactComponent as CheckboxIcon } from '../../../assets/images/leftPanel/checkbox_group.svg';
 import { ReactComponent as CheckPointIcon } from '../../../assets/images/leftPanel/check_point.svg';
+import { ReactComponent as CheckboxIcon } from '../../../assets/images/leftPanel/checkbox_group.svg';
 import { ReactComponent as DatePickerIcon } from '../../../assets/images/leftPanel/date_picker.svg';
 import { ReactComponent as DefaultIcon } from '../../../assets/images/leftPanel/default.svg';
 import { ReactComponent as EquipmentIcon } from '../../../assets/images/leftPanel/equipment.svg';
@@ -25,17 +25,17 @@ import { ReactComponent as SelectIcon } from '../../../assets/images/leftPanel/s
 import { ReactComponent as StepsectionIcon } from '../../../assets/images/leftPanel/step_section.svg';
 import { ReactComponent as SubsectionIcon } from '../../../assets/images/leftPanel/sub_section.svg';
 import { ReactComponent as SupplierIcon } from '../../../assets/images/leftPanel/supplier.svg';
-import { ReactComponent as TextfieldwithrangeIcon } from '../../../assets/images/leftPanel/textfield_with_range.svg';
 import { ReactComponent as TextEditorIcon } from '../../../assets/images/leftPanel/text_editor.svg';
 import { ReactComponent as TextfieldIcon } from '../../../assets/images/leftPanel/text_field.svg';
+import { ReactComponent as TextfieldwithrangeIcon } from '../../../assets/images/leftPanel/textfield_with_range.svg';
 import { ReactComponent as TimerIcon } from '../../../assets/images/leftPanel/timer.svg';
 import FBEditorAction from '../FBEditorAction/FBEditorAction';
 import FBEditorApprovalField from '../FBEditorApprovalField/FBEditorApprovalField';
 import FBEditorApprovals from '../FBEditorApprovals/FBEditorApprovals';
 import FBEditorAutocomplete from '../FBEditorAutocomplete/FBEditorAutocomplete';
 import FBEditorCheckControl from '../FBEditorCheckControl/FBEditorCheckControl';
-import FBEditorEmpty from '../FBEditorEmpty/FBEditorEmpty';
 import FBEditorEQMaintenance from '../FBEditorEQMaintenance/FBEditorEQMaintenance';
+import FBEditorEmpty from '../FBEditorEmpty/FBEditorEmpty';
 import FBEditorHyperlink from '../FBEditorHyperlink/FBEditorHyperlink';
 import FBEditorInlineApproval from '../FBEditorInlineApproval/FBEditorInlineApproval';
 import FBEditorInstructionsDocument from '../FBEditorInstructionsDocument/FBEditorInstructionsDocument';
@@ -170,6 +170,7 @@ class FBEditorState {
     lotTransfers: FBEditorLabel,
     lotOnHandQuantity: FBEditorEmpty,
     lotQuantity: FBEditorLabel,
+    numeric: FBEditorLabel,
   };
 
   public static editorTypeIconMapping = {
@@ -213,6 +214,7 @@ class FBEditorState {
     task: CheckPointIcon,
     action: FileuploadIcon,
     default: DefaultIcon,
+    numeric: QuantityIcon,
   };
 
   @observable public mode?: FBEditorMode = 'config';

@@ -28,11 +28,11 @@ const StatusChip: React.FC<StatusChipProps> = ({ value, onClick }) => {
   );
 };
 
-const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
+const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values } = useFormikContext<EditableVendor>();
 
-  const value = values.vendor.status;
+  const value = values?.vendor?.displayStatus ?? dataItem?.[field] as string;
 
   if (!value) {
     return <>{EMPTY_VALUE_PLACEHOLDER}</>;
