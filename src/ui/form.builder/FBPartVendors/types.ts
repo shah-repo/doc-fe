@@ -3,7 +3,7 @@ import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { FBInputProps } from '../FBInput/FBInput.types';
 
-enum Currency {
+export enum Currency {
   USD = 'USD',
 }
 
@@ -19,11 +19,11 @@ export type FBPartVendorsProps =
   setPrimaryVendor: (id: string) => void
 };
 
-export interface Cost {
+interface Cost {
   value: number
   currency: Currency
 }
-export interface Supplier {
+interface Supplier {
   id: string
   name: string
   displayStatus?: string
