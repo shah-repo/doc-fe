@@ -6,11 +6,12 @@ const FBEditorPlaceholder: React.FunctionComponent<FBEditorPlaceholderProps> = (
   boxProps,
   labelProps,
   className,
+  isFbEditorField,
 }) => (
   <FBTextField
     label="form.builder.placeholder"
     name="placeholder"
-    {...{ boxProps, labelProps, className }}
+    {...{ boxProps, labelProps, className, isFbEditorField }}
   />
 );
 

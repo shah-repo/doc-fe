@@ -18,7 +18,7 @@ export default makeStyles(theme => ({
       boxSizing: 'border-box',
 
       '& a': {
-        color: Colors.primary,
+        color: Colors.textBlack,
 
         '&:hover': {
           textDecoration: 'underline',

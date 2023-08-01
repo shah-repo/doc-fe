@@ -80,6 +80,7 @@ NavigationLinkPresenterProps
       }
       onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, '0')}
       onMouseLeave={onMouseLeave}
+      data-cy={`navigation.${camelCase(label)}`}
     >
       {!isChild && (
         <ListItemIcon
@@ -103,7 +104,6 @@ NavigationLinkPresenterProps
               className={classNames(classes.itemText, {
                 [classes.childTextItem]: isChild && open,
               })}
-              data-cy={`navigation.${camelCase(label)}`}
             >
               {label.replace(
                 translate('navigation.common.management'),

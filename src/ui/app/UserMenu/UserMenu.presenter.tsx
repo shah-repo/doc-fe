@@ -72,7 +72,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
             <ListItemIcon className={classes.listItemIcon}>
               <FontAwesomeIcon className={classes.icon} icon={light('arrow-up-arrow-down')} rotation={90} />
             </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.text}>
               <SwitchCompanyButtonContainer location={location} />
             </ListItemText>
           </MenuItem>
