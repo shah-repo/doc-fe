@@ -26,6 +26,12 @@ export const requiredNumber: Validator = (value) => {
   }
 };
 
+export const positiveNumber: Validator = (value) => {
+  if (value && (!isNumber(value) || value < 0)) {
+    return 'validators.positive.number';
+  }
+};
+
 export const passwordSchema = Yup.string()
   .min(8, 'validator.password.min')
   .required('validators.required')
