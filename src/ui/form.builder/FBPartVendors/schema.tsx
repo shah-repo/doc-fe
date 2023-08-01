@@ -87,20 +87,20 @@ export const buildSchema = ({
       width: 150,
     },
     {
-      id: 'cost',
-      field: 'cost.value',
-      title: 'form.builder.part.vendors.cost',
-      filterCell: InputFilter,
-      template: (props) => <UnitCostCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
-    },
-    {
       id: 'part-number',
       field: 'partNumber',
       title: 'form.builder.part.vendors.partNumber',
       filterCell: InputFilter,
       template: (props) => <SupplierPartNumberCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
+    },
+    {
+      id: 'cost',
+      field: 'cost.value',
+      title: 'form.builder.part.vendors.cost',
+      filterCell: InputFilter,
+      template: (props) => <UnitCostCellTemplate {...props} onClick={onRowClick} />,
+      width: 150,
     },
     {
       id: 'units-buy',

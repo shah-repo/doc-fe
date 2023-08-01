@@ -3,13 +3,14 @@ import React from 'react';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 
 interface Props {
+  title?: React.ReactNode
   onClick?: () => void
 }
 
-const OverflowingContent: React.FC<Props> = ({ children, onClick }) => (
+const OverflowingContent: React.FC<Props> = ({ title, children, onClick }) => (
   <Box onClick={onClick}>
     <OverflowTooltip
-      title={children}
+      title={title ?? children}
       placement="top"
       interactive
       arrow
