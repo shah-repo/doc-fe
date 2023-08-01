@@ -159,6 +159,7 @@ interface Precalc {
   cali_due_date?: string
   pm_due_date?: string
   lshs_subtitle?: LSHS
+  lot_on_hand_quantity?: string
 }
 
 interface DocumentsInLHRS {

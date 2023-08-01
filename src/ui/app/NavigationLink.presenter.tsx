@@ -1,32 +1,41 @@
-import { ListItemIcon } from '@material-ui/core';
+import { ListItemIcon, Typography } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
 import React, { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import { NavigationItem, NavigationItemType } from '../../state/ducks/company/types';
-import Text from '../components/Text';
+import { translate } from '../../common/intl';
+import {
+  NavigationItem,
+  NavigationItems,
+  NavigationItemType,
+} from '../../state/ducks/company/types';
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from '../constants/urls';
 import { SIDE_BAR_TAB_INDEX } from '../documentRevision/Sidebar/constants';
 import styles from './NavigationLink.styles';
 
-interface NavigationLinkPresenterProps extends
-  NavigationItem {
+interface NavigationLinkPresenterProps extends NavigationItem {
   ActionIcon?: ReactNode
   isChild?: boolean
   toggleChildren?: (event: React.MouseEvent) => void
+  onMouseEnter?: (event: React.MouseEvent) => void
+  onMouseLeave?: (event: React.MouseEvent) => void
   currentPath: string
+  open: boolean
+  menu?: NavigationItem[]
   checkIfItemIsActive: (
     type: NavigationItemType,
     currentPath: string,
     path?: string,
     category?: string,
-    menu?: NavigationItem[],
+    menu?: NavigationItem[]
   ) => boolean
 }
 
-const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
+const NavigationLinkPresenter: React.FunctionComponent<
+NavigationLinkPresenterProps
+> = ({
   path,
   category,
   label,
@@ -34,46 +43,79 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   icon,
   ActionIcon,
   isChild,
+  menu,
   toggleChildren,
+  onMouseEnter,
+  onMouseLeave,
   currentPath,
+  open,
   checkIfItemIsActive,
 }) => {
-  const classes = styles({ iconLink: icon });
-  const isItemActive = checkIfItemIsActive(type, currentPath, path, category);
+  const isMenu = type === NavigationItems.MENU;
+  const classes = styles({
+    iconLink: icon,
+    open: open,
+    isParent: menu?.length !== 0,
+  });
+  const isItemActive = checkIfItemIsActive(
+    type,
+    currentPath,
+    path,
+    category,
+    menu,
+  );
   return (
-    <>
-      <ListItem
-        component={path || category ? NavLink : null}
-        button
-        className={
-          classNames(classes.link, {
-            [classes.childLink]: isChild,
-            [classes.menu]: type === 'MENU',
-            [classes.activeLink]: isItemActive,
-          })}
-        to={type === 'CATEGORY' ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
-        onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, '0')}
-      >
-        <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
+    <ListItem
+      component={path || category ? NavLink : null}
+      button
+      className={classNames(classes.link, {
+        [classes.childLink]: isChild,
+        [classes.menu]: isMenu,
+        [classes.activeLink]: isItemActive,
+      })}
+      to={
+        type === NavigationItems.CATEGORY
+          ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}`
+          : path
+      }
+      onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, '0')}
+      onMouseLeave={onMouseLeave}
+      data-cy={`navigation.${camelCase(label)}`}
+    >
+      {!isChild && (
+        <ListItemIcon
+          className={classes.itemIcon}
+          onClick={toggleChildren}
+          onMouseEnter={onMouseEnter}
+        >
           <div
-            className={classNames(
-              classes.icon, {
-                [classes.iconActive]: type !== 'MENU' && isItemActive,
-              },
-            )}
+            className={classNames(classes.icon, {
+              [classes.iconActive]: !isMenu && isItemActive,
+              [classes.collapsedIcon]: !open,
+            })}
           />
         </ListItemIcon>
+      )}
+      {open && (
         <ListItemText
-          primary={<Text message={label} />}
-          classes={{
-            primary: classes.itemText,
-          }}
-          data-cy={`navigation.${camelCase(label)}`}
+          primary={
+            <Typography
+              component="span"
+              className={classNames(classes.itemText, {
+                [classes.childTextItem]: isChild && open,
+              })}
+            >
+              {label.replace(
+                translate('navigation.common.management'),
+                translate('navigation.common.management.short'),
+              )}
+            </Typography>
+          }
           onClick={toggleChildren}
         />
-        {ActionIcon}
-      </ListItem>
-    </>
+      )}
+      {open ? ActionIcon : null}
+    </ListItem>
   );
 };
 

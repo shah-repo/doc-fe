@@ -1,6 +1,6 @@
 import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, throttle, toNumber, union } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from '..';
 import { toastError } from '../../components/notifications';
@@ -36,6 +36,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     withState,
     omitFormValue,
     hidden,
+    isFbEditorField = false,
     ...props
   }: T) => {
     const { formState, schemaState, workspaceState } = FB.useStores();
@@ -48,6 +49,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       value: cloneDeep(inputValue),
       hidden,
     });
+
+    const [, setTextValue] = useState(inputValue);
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -71,7 +74,10 @@ export const withFBOnChange = <T extends FBInputProps>(
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
-      FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
+
+      if (!isFbEditorField) {
+        FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
+      }
 
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
@@ -194,6 +200,9 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === 'number' && value === '') {
           value = null;
         }
+        if (isFbEditorField) {
+          setTextValue(value);
+        }
         setValue(value);
       }
 
@@ -239,6 +248,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       type,
       name,
       hidden,
+      isFbEditorField,
     }));
   };
 

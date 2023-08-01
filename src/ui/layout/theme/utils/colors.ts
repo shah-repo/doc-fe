@@ -49,6 +49,7 @@ enum Colors {
   aqua_blue = '#20D5E0',
   light_gray_blue = '#CBD5E0',
   cerulean='#01A6C7',
+  cerulean_light_shade='rgba(1, 166, 199, 0.3)',
   light_slate_blue='#7B61FF',
   steel_blue='#457AB5',
   dodger_blue='#4D88FF',
@@ -58,6 +59,8 @@ enum Colors {
   clear_blue='#2684FF',
   light_cream_blue = '#EEF1F9',
   alice_blue='#e2e8f0',
+  deep_blue='#033D5A',
+  blue_bell='#979EC71A',
   // red
   red = '#c40000',
   dark_red = '#a10808',

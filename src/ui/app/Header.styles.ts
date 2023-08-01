@@ -7,6 +7,7 @@ import { DRAWER_WIDTH } from './Navigation.styles';
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
 export const HEADER_GAP = 96;
+export const COLLAPSE_BAR_SPACE = 72;
 
 export default (theme: Theme) =>
   createStyles({
@@ -17,12 +18,15 @@ export default (theme: Theme) =>
       color: Colors.white,
       zIndex: 1,
     },
+    lightBg: {
+      background: `linear-gradient(225deg,${Colors.navy} 0%,${Colors.ultramarine_blue} 29.56%,${Colors.navy} 100%)`,
+    },
     toolbar: (props: HeaderPresenterProps) => ({
-      'marginLeft': DRAWER_WIDTH,
-      'minHeight': props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
-      'paddingBottom': props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
-      'paddingLeft': theme.spacing(props.fullHeight ? 8 : 3),
-      'paddingRight': theme.spacing(props.fullHeight ? 6 : 3),
+      marginLeft: DRAWER_WIDTH,
+      minHeight: props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
+      paddingBottom: props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
+      paddingLeft: theme.spacing(props.fullHeight ? 8 : 3),
+      paddingRight: theme.spacing(props.fullHeight ? 6 : 3),
       '&::before': {
         content: "''",
         position: 'absolute',
