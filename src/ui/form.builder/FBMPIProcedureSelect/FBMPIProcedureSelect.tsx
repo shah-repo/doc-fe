@@ -34,7 +34,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
       ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED
       : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
 
-    const isZeroOnHandQuantity = parseInt(lot?.precalc?.lot_on_hand_quantity) === 0;
+    const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
     return isAcceptedStatus && !isZeroOnHandQuantity;
   };
