@@ -69,6 +69,7 @@
   "validator.lot.transfers.quantity.null": "Must not be null",
   "validators.greater.than.zero": "Must be greater that zero",
   "validators.positive.number": "Must be greater that zero",
+  "validator.location.same.name.exist": "The location with this name already exists, please choose a different one",
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
   "errors.fetch.tryAgain": "Try again",
