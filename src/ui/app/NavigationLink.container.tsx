@@ -180,6 +180,7 @@ NavigationLinkContainerProps
       <MenuItem
         className={classes.parentMenuItem}
         data-cy={`navigation.${camelCase(label)}`}
+        onClick={() => menuClick({ type, category: rest?.category, path: rest?.path ?? currentPath })}
       >
         {label}
       </MenuItem>
