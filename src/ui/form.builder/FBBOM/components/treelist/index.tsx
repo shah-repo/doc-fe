@@ -74,6 +74,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     expanded: [],
     inEdit: [],
   });
+  const { _documentRevisionFormState } = SM.useStores();
   const [selectedPartLevel, setSelectedPartLevel] = React.useState<{level: number[], dataItem: EditableBOM}>();
   const treeListRef = useRef(null);
 
@@ -90,6 +91,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         bomTreeRelations,
         parentRevDetails,
       );
+      _documentRevisionFormState?.setIsBomExists(bomTreeRelations.length > 0);
       setState({
         ...state,
         data: [...bomProccessedData],

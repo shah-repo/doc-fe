@@ -24,6 +24,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public releasedDocRev?: DocumentRevision;
   @observable public forceRender?: any;
   @observable public disabledAction = false;
+  @observable public isBomExists = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
   @observable public expanded = false;
@@ -157,6 +158,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setDisabledAction = (disabledAction: boolean) => {
     set(this, 'disabledAction', disabledAction);
+  };
+
+  @action public setIsBomExists = (isBomExists: boolean) => {
+    set(this, 'isBomExists', isBomExists);
   };
 
   @action public setDirty = (isDirty: boolean) => {

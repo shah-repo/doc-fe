@@ -30,6 +30,7 @@ import { FormContext } from '../../../../components/forms/FormContext';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { FB } from '../../../../form.builder';
+import { BOM } from '../../../../form.builder/FBBOM/interface';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -55,6 +56,8 @@ interface Props {
   isRecord: boolean
   isInlineApproval: boolean
   renderAsButton?: boolean
+  isBOMExists?: boolean
+  isPart?: boolean
 }
 
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
@@ -70,8 +73,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
   renderAsButton,
+  isBOMExists = false,
+  isPart = false,
 }) => {
-
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const documentRevision = useSelector(
@@ -179,7 +183,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // Existing Draft CO calls
   const getDraftApprovalRequestsAction = useActionCreator(changeRequestsActions.draftApprovalRequestsList);
   const asyncGetDraftApprovalRequests = useAsync({
-    onSuccess: (data: Pick<ChangeRequest, 'crId' | 'title' | 'id'>[] = []) => {
+    onSuccess: (data: Array<Pick<ChangeRequest, 'crId' | 'title' | 'id'>> = []) => {
       const options = data.map((option) => ({
         label: `${option.crId} - ${option.title}`,
         value: option.id,
@@ -206,6 +210,34 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       toastError(err as string);
     },
   });
+  const [isBomRecord, setIsBomRecord] = useState<boolean>(isBOMExists);
+  const bomInfoAsync = useAsync({
+    onSuccess: ({
+      bomTreeRelations,
+      parentRevDetails,
+    }: {
+      bomTreeRelations: BOM[]
+      parentRevDetails: BOM
+    }) => {
+      setIsBomRecord(bomTreeRelations.length > 0);
+    },
+  });
+  const fetchBOMTreeList = useActionCreator(
+    documentRevisionsActions.fetchBOMTree,
+  );
+
+  useEffect(() => {
+    if (isBomRecord || !isPart) {
+      return;
+    }
+    setIsBomRecord(isBOMExists);
+    bomInfoAsync.start(
+      fetchBOMTreeList,
+      documentRevision.id,
+      documentRevision.documentId,
+      bomInfoAsync,
+    );
+  }, []);
 
   useEffect(() => {
     if (templateOptions.length === 1 && optionChosen === ARActions.NEW) {
@@ -431,7 +463,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             ? (
               <SplitReleaseButton
                 className={classes.button}
-                disableExpessAR={revisionStage !== 1}
+                disableExpessAR={isBomRecord || isBOMExists || revisionStage !== 1}
                 onClick={openDialog}
               />
             )

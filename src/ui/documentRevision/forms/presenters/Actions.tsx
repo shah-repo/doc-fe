@@ -34,7 +34,7 @@ import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustom
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -118,6 +118,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision?.status);
@@ -365,6 +366,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               needsSignature={
                  _documentRevisionFormState?.docInfo.needsSignature || false
               }
+              isBOMExists={_documentRevisionFormState?.isBomExists}
               isQms={_documentRevisionFormState?.docInfo.isQms || false}
               documentName={_documentRevisionFormState?.docInfo.name || ''}
               docRevId={values.id as string}
@@ -375,6 +377,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 documentTypeId,
                 revisionStage,
                 isInlineApproval,
+                isPart,
               }}
             />
           )}
