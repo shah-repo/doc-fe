@@ -21,7 +21,6 @@ import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
 import Text from '../components/Text';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
-import HeaderLotStatusOptions from '../components/common/header/HeaderLotStatusOptions';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
 import HeaderMenu from '../components/common/header/Menu';
@@ -506,6 +505,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       )}
     </>
   );
+
   return (
     <>
       <PDFSocket {...{ documentRevision }} />
@@ -517,11 +517,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
-      {isLot
-          && documentRevision.lotStatus
-          && (isDocumentInReview || isDocumentDraft || isDocumentVoided || isDocumentObsolete) && (
-        <HeaderLotStatus lotStatus={documentRevision.lotStatus} />
-      )}
+      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
@@ -535,23 +531,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             isOwner = {isUserDocumentOwner}
           />
         )}
-      </>
-      <>
-
-        {hasAccess && canCreate() && isLot
-          && documentRevision?.id
-          && documentRevision?.lotStatus
-          && (isDocumentApproved || isDocumentReleased)
-          && (
-            <HeaderLotStatusOptions
-              lotStatus={documentRevision?.lotStatus}
-              docId={documentRevision?.id}
-              docRevOwner= {documentRevision?.owner?.user?.name}
-              updatedAt= {documentRevision?.updatedAt || ''}
-              documentRevision={documentRevision}
-              isOwner = {true}
-            />
-          )}
       </>
       {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
