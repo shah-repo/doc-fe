@@ -1,6 +1,6 @@
 import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
 import { TableColumnActionType } from '../../../ui/components/table/column/types';
-import { DOCUMENT_REVISION_LOT_STATUS, FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
+import { FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
 import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
@@ -39,6 +39,21 @@ export enum DocumentRevisionStatusDisplay {
 export enum POStatusType {
   OPENED = 'OPENED',
   CLOSED = 'CLOSED',
+  VOIDED = 'VOIDED',
+}
+
+// Lot types implemetation
+export enum LotStatus {
+  QUARANTINE = 'QUARANTINE',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+  USE_AS_IS = 'USE_AS_IS',
+  RTV = 'RETURN_TO_VENDOR',
+  REWORK = 'REWORK',
+  SCRAP = 'SCRAP',
+  RD_USED_ONLY = 'R&D_USED_ONLY',
+  OTHER = 'OTHER',
   VOIDED = 'VOIDED',
 }
 
@@ -216,7 +231,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
-  lotStatus?: DOCUMENT_REVISION_LOT_STATUS
+  lotStatus: LotStatus
 }
 
 export interface SmartReference {
