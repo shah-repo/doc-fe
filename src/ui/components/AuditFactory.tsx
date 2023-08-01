@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -22,6 +22,7 @@ import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
+import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
@@ -117,6 +118,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       lotTransfers () {
         return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
+      },
+      partVendors () {
+        return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;

@@ -1,7 +1,12 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme) => ({
+export const styles = makeStyles({
+  wrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   chip: {
     display: 'flex',
     flexDirection: 'row',
@@ -31,4 +36,4 @@ export const styles = makeStyles((theme) => ({
     color: Colors.font_gray,
     border: `1px solid ${Colors.font_gray}`,
   },
-}));
+});

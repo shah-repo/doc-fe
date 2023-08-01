@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -176,6 +176,23 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
         fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
       }
+      // PART VENDORS
+      if (fbType === 'partVendors') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
+        if (['id', 'currency', 'primary'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+          const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
+          fbLabel = translate('form.builder.part.vendors.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
+        }
+      }
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
         const fieldParts = change.field.split('.');
@@ -185,7 +202,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return;
         }
         if (change.type !== 'ARRAY_DELETED') {
-          const fieldFullName = field === 'docId' ? parentField : field;
+          const fieldFullName = ['docId'].includes(field) ? parentField : field;
           const fieldName = translate(`form.builder.lot.transfers.${fieldFullName}`);
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }

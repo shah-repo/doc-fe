@@ -19,7 +19,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     const { deleteInFormDisabled } = inputProps || {};
-    const deleteDisabled = inputProps?.editorProperties?.includes('deleteDisabled');
+    const deleteDisabled = inputProps?.deleteDisabled || inputProps?.editorProperties?.includes('deleteDisabled');
     inputProps = {
       ...omit(inputProps, 'id'),
       deleteDisabled: (isDocumentForm && deleteInFormDisabled) || (!isDocumentForm && deleteDisabled),
