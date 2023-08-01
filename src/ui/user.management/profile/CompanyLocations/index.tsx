@@ -6,14 +6,14 @@ import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { companyActions } from '../../../../state/ducks/company';
 import { CompanyLocation } from '../../../../state/ducks/company/types';
-import { Button } from '../../../components/forms/fields-next';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps, DataGridRowClickEvent } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
+import { Button } from '../../../components/forms/fields-next';
+import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { Mode, MODE_FIELD } from './constants';
+import { MODE_FIELD, Mode } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableCompanyLocation, Props } from './types';
@@ -38,6 +38,14 @@ export const CompanyLocations: React.FC<Props> = ({
   const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
   const formik = useFormik<EditableCompanyLocation | Record<string, never>>({
     initialValues: {},
+    validate: (values) => {
+      const error: Record<string, string> = {};
+      const isDuplicate = locations.some((location) => location.name === values.name && location.id !== values.id);
+      if (values.name && isDuplicate) {
+        error.name = 'validator.location.same.name.exist';
+      }
+      return error;
+    },
     onSubmit: (values) => {
       const updatedLocations = unionBy([omit(values, MODE_FIELD)], locations, 'id');
       setLocationsData(updatedLocations);
