@@ -349,7 +349,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
     // TODO
   };
 
-  const onChildPartAdd = (dataItem) => {
+  const onChildPartAdd = (dataItem: EditableBOM) => {
     const newBOM: EditableBOM = createNewItem();
     newBOM.parentNodeDocumentId = dataItem.documentId;
     newBOM.parentNodeRevId = dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
@@ -362,18 +362,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
       inEdit: [newBOM],
     });
     formik.setValues(newBOM);
-    // Not working scrolling part need to check again
-    const treeList = treeListRef.current;
-    if (!treeList) return;
-    const id = dataItem[SUB_ITEMS_FIELD]?.length ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id : dataItem.id;
-    const rowElement = treeList.querySelector(`[id^="_${id}"]`);
-    if (rowElement) {
-      const scrollableContainer = treeList.querySelector('.k-grid-table');
-      if (scrollableContainer) {
-        const offsetTop = rowElement.offsetTop - scrollableContainer.offsetTop;
-        scrollableContainer.scrollTop = offsetTop;
+    const treeList: HTMLElement = treeListRef.current;
+    if (!treeList && !dataItem) return;
+    setTimeout(() => {
+      const id = dataItem[SUB_ITEMS_FIELD]?.length
+        ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id
+        : dataItem.id;
+      const rowElement = treeList.querySelector(`[id^="_${id}"]`);
+      if (rowElement) {
+        rowElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    }
+    });
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
