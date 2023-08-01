@@ -12,6 +12,7 @@ export type FBMPIProcedureSelectProps =
   isOptionDisabled?: (option: any) => any
   renderOptionWithDate?: (option: any) => any
   onChange?: () => void
+  isLHRProductionBuild?: boolean
 };
 
 export interface FBMPIProcedureSelectValue {
@@ -28,6 +29,20 @@ export interface FBMPIProcedureSelectValue {
   lotPart?: string
   pmDueDate?: string
   calDueDate?: string
+}
+
+export enum DOCUMENT_REVISION_LOT_STATUS {
+  QUARANTINE = 'QUARANTINE',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+  USE_AS_IS = 'USE_AS_IS',
+  RTV = 'RETURN_TO_VENDOR',
+  REWORK = 'REWORK',
+  SCRAP = 'SCRAP',
+  RD_USED_ONLY = 'R&D_USED_ONLY',
+  OTHER = 'OTHER',
+  VOIDED = 'VOIDED',
 }
 
 export enum EQStatus {
