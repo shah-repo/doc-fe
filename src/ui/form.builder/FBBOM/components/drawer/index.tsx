@@ -1,7 +1,16 @@
-import { Box, Chip, Drawer, Grid, IconButton, Typography } from '@material-ui/core';
+import {
+  Box,
+  Chip,
+  Divider,
+  Drawer,
+  Grid,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import LaunchIcon from '@material-ui/icons/Launch';
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
 import { Colors } from '../../../../layout/theme-next';
@@ -13,40 +22,31 @@ interface FBBOMDetailDrawerProps {
   closeDrawer: () => void
 }
 
-const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({ openDrawer, closeDrawer }) => {
+const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
+  openDrawer,
+  closeDrawer,
+}) => {
   const classes = useStyles();
   return (
-    <div>
-      <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
-        <Box margin="30px">
-          <div className={classes.titleOuterContainer}>
-            <Grid
-              container={true}
-              wrap="nowrap"
-              justify="flex-start"
-              alignItems="center"
+    <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
+      <Box margin="30px">
+        <Grid
+          container={true}
+          wrap="nowrap"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography
+              className={classes.headerInfo}
+              data-cy="HeaderInfo-docId"
+              component="span"
             >
-              <Grid item={true}>
-                <Typography className={classes.headerInfo} data-cy="HeaderInfo-docId" component="span">
-            CS-00005-02
-                </Typography>
-              </Grid>
-              <Grid item={true} className={classes.whiteDot} />
-              <Grid item={true} className={classes.headerInfo}>
-                <Text
-                  translation="form.builder.header.rev"
-                  values={{ revision: 1 }}
-                  dataCy="HeaderInfo-Rev"
-                />
-              </Grid>
-              <Grid item={true} className={classes.chipContainer} >
-                <Chip
-                  size="small"
-                  className={`${classes.chip} ${classes[FormHeaderStatusClassMapping.Released]}`}
-                  label="Released"
-                  data-cy="HeaderInfo-status"
-                />
-              </Grid>
+              {translate('bom.table.title.alternate.parts.list')}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <div className={classes.iconContainer}>
               <IconButton
                 onClick={() => closeDrawer()}
                 className={classes.iconButton}
@@ -55,35 +55,59 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({ op
               >
                 <LaunchIcon className={classes.launchIcon} />
               </IconButton>
-            </Grid>
-            <div className={classes.iconContainer} >
               <IconButton
-                style={{ width: '23px' }}
-                color="default"
                 onClick={() => closeDrawer()}
                 aria-label="Close"
                 disableFocusRipple
                 disableRipple
                 disableTouchRipple
-                data-cy=""
+                data-cy="close-alternate-part-list"
+                className={classes.closeIcon}
               >
                 <CloseIcon style={{ color: Colors.light_gray }} />
               </IconButton>
             </div>
-          </div>
-          <Typography data-cy="" component="div" className={classes.title}>
-            Right Lens
-          </Typography>
-          <Typography data-cy="" component="span" className={classes.description}>
-          This is the description of this part. It can include high level details of the part
-          </Typography>
-          <Typography className={classes.tableTitle} id="tableTitle" >
-            <Text translation="form.builder.parts.bom.tableTitle" />
-          </Typography>
-          <FBBOMDrawerTable />
-        </Box>
-      </Drawer>
-    </div>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap="nowrap"
+          justify="flex-start"
+          alignItems="center"
+          className={classes.partInfo}
+        >
+          <Grid item>
+            <Typography
+              className={classes.docId}
+              data-cy="HeaderInfo-docId"
+              component="span"
+            >
+              CS-00007
+            </Typography>
+          </Grid>
+          <Grid item className={classes.whiteDot} />
+          <Grid item className={classes.docId}>
+            <Text
+              translation="form.builder.header.rev"
+              values={{ revision: 1 }}
+              dataCy="HeaderInfo-Rev"
+            />
+          </Grid>
+          <Grid item className={classes.chipContainer}>
+            <Chip
+              size="small"
+              className={`${classes.chip} ${
+                classes[FormHeaderStatusClassMapping.Released]
+              }`}
+              label="Released"
+              data-cy="HeaderInfo-status"
+            />
+          </Grid>
+        </Grid>
+        <Divider className={classes.divider} />
+        <FBBOMDrawerTable />
+      </Box>
+    </Drawer>
   );
 };
 
