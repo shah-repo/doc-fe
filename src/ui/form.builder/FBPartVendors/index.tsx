@@ -46,15 +46,6 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
 
   const formik = useFormik<Partial<EditableVendor>>({
     initialValues: {},
-    validate: (values) => {
-      const errors: Record<string, string> = {};
-      if (!values.vendor) {
-        return {
-          [SUPPLIER_FIELD]: translate('form.builder.part.vendors.vendor.required'),
-        };
-      }
-      return errors;
-    },
     onSubmit: (values) => {
       const vendorToSave = omit(values, FIELDS_TO_OMIT);
       updateVendor?.(vendorToSave as Vendor);
