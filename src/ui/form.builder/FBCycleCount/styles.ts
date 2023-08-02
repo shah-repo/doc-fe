@@ -9,7 +9,6 @@ export default makeStyles(theme => ({
   grid: {
     '& .k-column-title': {
       fontSize: 12,
-      textTransform: 'uppercase',
     },
     '& td': {
       height: ROW_HEIGHT,
@@ -34,6 +33,11 @@ export default makeStyles(theme => ({
     zIndex: 3,
     outline: `1px solid ${Colors.primaryLight}`,
     outlineOffset: -1,
+
+    '& td': {
+      verticalAlign: 'top !important',
+      whiteSpace: 'normal !important' as 'normal',
+    },
   },
   actionsCell: {
     overflow: 'visible !important',

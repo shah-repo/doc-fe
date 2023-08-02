@@ -91,7 +91,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     return Component({
       ...props as T,
       name,
-      disabled,
+      disabled: !isEditable,
       cycleCounts,
       employees,
       onHandQuantity,
