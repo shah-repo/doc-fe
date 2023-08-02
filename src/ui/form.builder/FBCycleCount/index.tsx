@@ -110,6 +110,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
   };
 
   const schema = buildSchema({
+    onHandQuantity,
     onHandQuantityUnit,
     onRowClick: handleRowClick,
   });

@@ -9,6 +9,7 @@ export default makeStyles(theme => ({
   grid: {
     '& .k-column-title': {
       fontSize: 12,
+      whiteSpace: 'pre-line !important' as 'pre-line',
     },
     '& td': {
       height: ROW_HEIGHT,

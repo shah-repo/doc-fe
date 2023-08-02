@@ -15,12 +15,13 @@ import { CycleCountEditEvent, EditableCycleCount } from './types';
 
 interface SchemaOptions {
   onHandQuantityUnit?: string
-  systemCount?: number
+  onHandQuantity?: number
   onRowClick?: (e: CycleCountEditEvent) => void
 }
 
 export const buildSchema = ({
   onHandQuantityUnit,
+  onHandQuantity,
   onRowClick,
 }: SchemaOptions): Array<ColumnDefinition<EditableCycleCount>> => {
   const actionNeededOptions = ACTION_NEEDED_OPTIONS.map((option) => createOption(option.value, option.label));
@@ -33,14 +34,9 @@ export const buildSchema = ({
     />
   );
 
-  const countTitle
-    = onHandQuantityUnit
-      ? `${translate('form.builder.cycle.count.count')} (${onHandQuantityUnit})`
-      : translate('form.builder.cycle.count.count');
-
   const countSystemTitle
     = onHandQuantityUnit
-      ? `${translate('form.builder.cycle.count.count.system')} (${onHandQuantityUnit})`
+      ? `${translate('form.builder.cycle.count.count.system')}\n (${onHandQuantityUnit})`
       : translate('form.builder.cycle.count.count.system');
 
   return [
@@ -56,8 +52,8 @@ export const buildSchema = ({
       id: 'count',
       field: 'count',
       filterCell: InputFilter,
-      title: countTitle,
-      template: (props) => <QuantityCellTemplate {...props} disabled />,
+      title: 'form.builder.cycle.count.count',
+      template: (props) => <QuantityCellTemplate {...props} />,
       width: 150,
     },
     {
@@ -65,7 +61,7 @@ export const buildSchema = ({
       field: 'systemCount',
       filterCell: InputFilter,
       title: countSystemTitle,
-      template: (props) => <QuantityCellTemplate {...props} disabled />,
+      template: (props) => <QuantityCellTemplate {...props} defaultValue={onHandQuantity} disabled />,
       width: 150,
     },
     {
@@ -73,8 +69,8 @@ export const buildSchema = ({
       field: DATE_FIELD,
       title: 'form.builder.cycle.count.date',
       filterCell: InputFilter,
-      template: DateCellTemplate,
-      width: 160,
+      template: (props) => <DateCellTemplate {...props} onClick={onRowClick} />,
+      width: 170,
     },
     {
       id: 'action-needed',

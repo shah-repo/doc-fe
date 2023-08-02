@@ -5,6 +5,7 @@ import { MomentFormats } from '../../../../common/utils/date';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../types';
+import OverflowingContent from './OveflowContent';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -30,13 +31,19 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 };
 
 export const DateCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, field } = props;
+  const { dataItem, field, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const value = dataItem[field] as React.ReactElement;
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  return value;
+  const handleClick = () => onClick?.({ dataItem });
+  const displayValue = dataItem[field] as string;
+
+  return (
+    <OverflowingContent onClick={handleClick}>
+      {displayValue}
+    </OverflowingContent>
+  );
 };

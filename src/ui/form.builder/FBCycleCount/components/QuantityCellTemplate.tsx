@@ -3,27 +3,29 @@ import { get } from 'lodash';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
-import { requiredNumber, validator } from '../../../components/forms/fields/validators';
+import { positiveNumber, requiredNumber, validator } from '../../../components/forms/fields/validators';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CustomTemplateProps } from '../types';
+import { CustomTemplateProps, EditableCycleCount } from '../types';
 import OverflowingContent from './OveflowContent';
 
 interface Props extends CustomTemplateProps {
+  defaultValue?: number
   disabled?: boolean
 }
 
-const Editor: React.FC<Props> = ({ disabled, field }) => {
+const Editor: React.FC<Props> = ({ disabled, defaultValue, field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps } = useFormikContext();
+  const { getFieldProps, values } = useFormikContext<EditableCycleCount>();
 
   return (
     <FormikField
       name={field}
-      validate={validator(requiredNumber)}
+      validate={!disabled ? validator(requiredNumber, positiveNumber) : undefined}
       disabled={disabled}
     >
       <TextField
         {...getFieldProps(field)}
+        value={defaultValue ?? values[field] as number}
         defaultValue={undefined}
         type="number"
         inputProps={{ min: 0 }}

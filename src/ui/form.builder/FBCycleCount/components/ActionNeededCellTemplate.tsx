@@ -29,6 +29,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         disableClearable
         options={ACTION_NEEDED_OPTIONS}
         value={value}
+        getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
         size="small"
       />
