@@ -32,11 +32,11 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
           ...vendor.cost,
           currency: DEFAULT_CURRENCY,
         },
-        vendor: {
-          name: vendor.vendor.name,
-          id: vendor.vendor.id,
-        },
       })),
+      vendor: {
+        name: vendor.vendor.name,
+        id: vendor.vendor.id,
+      },
     });
 
     const deleteVendor = (item: Vendor) => {
@@ -45,15 +45,18 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
     };
 
     const updateVendor = (item: Vendor) => {
-      const updatedVendors = unionBy([prepareVendor(item)], vendors, 'id');
+      const newVendors = unionBy([prepareVendor(item)], vendors, 'id');
+      const updatedVendors = item.primary ? updatePrimaryVendor(item.id, newVendors) : newVendors;
       updateState(updatedVendors);
     };
 
+    const updatePrimaryVendor = (id: string, vendors: Vendor[]) => vendors.map(item => ({
+      ...item,
+      primary: item.id === id,
+    }));
+
     const setPrimaryVendor = (id: string) => {
-      const updatedVendors = vendors.map((item) => ({
-        ...item,
-        primary: item.id === id,
-      }));
+      const updatedVendors = updatePrimaryVendor(id, vendors);
       updateState(updatedVendors);
     };
 

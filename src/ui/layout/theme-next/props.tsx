@@ -31,6 +31,11 @@ const props = (theme: Theme): ComponentsProps => ({
   },
   MuiCheckbox: {
     disableRipple: true,
+    color: 'default',
+  },
+  MuiRadio: {
+    disableRipple: true,
+    color: 'default',
   },
   MuiButton: {
     variant: 'contained',

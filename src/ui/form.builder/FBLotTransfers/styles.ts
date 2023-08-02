@@ -10,7 +10,6 @@ export default makeStyles(theme => ({
   grid: {
     '& .k-column-title': {
       fontSize: 12,
-      textTransform: 'uppercase',
       whiteSpace: 'normal',
     },
     '& td': {
