@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
+import { Link, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -18,6 +18,8 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import FBBOMDetailDrawer from '../../drawer';
+import DocumentRevisionDrawerContent from '../../drawer/DocumentRevisionDrawerContent';
 import { SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -100,6 +102,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
+  const handleToggle = () => {
+    setOpenPartsDrawer(true);
+  };
+  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+
+  const closeDrawer = () => {
+    setOpenPartsDrawer(false);
+  };
+
   useEffect(() => {
     if (!isEditMode) {
       return;
@@ -133,6 +144,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         <InfoIcon />
       </Tooltip>
     </span>
+  );
+
+  const getDrawer = () => (
+    <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, dataItem }} >
+      <DocumentRevisionDrawerContent {...{ dataItem }} />
+    </FBBOMDetailDrawer>
   );
 
   return (
@@ -178,9 +195,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && getFieldInfo()}
-        {!isEditMode && dataItem.docId}
+        {!isEditMode
+        && <Link underline="hover" onClick={handleToggle} className={classes.link}>
+          {dataItem.docId}
+        </Link> }
         {dataItem.isOwner && !isEditMode && <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />}
       </span>
+      {getDrawer()}
     </td>
   );
 };

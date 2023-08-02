@@ -25,11 +25,12 @@ interface FBBOMDetailDrawerProps {
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
   openDrawer,
   closeDrawer,
+  children,
 }) => {
   const classes = useStyles();
   return (
     <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
-      <Box margin="30px">
+      {children ?? <Box margin="30px">
         <Grid
           container={true}
           wrap="nowrap"
@@ -106,7 +107,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
         </Grid>
         <Divider className={classes.divider} />
         <FBBOMDrawerTable />
-      </Box>
+      </Box>}
     </Drawer>
   );
 };
