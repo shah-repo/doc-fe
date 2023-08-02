@@ -27,7 +27,7 @@ export const requiredNumber: Validator = (value) => {
 };
 
 export const positiveNumber: Validator = (value) => {
-  if (!isNumber(value) || value < 0) {
+  if (value && (isNaN(parseFloat(value)) || parseFloat(value) < 0)) {
     return 'validators.positive.number';
   }
 };
