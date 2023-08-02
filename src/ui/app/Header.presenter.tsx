@@ -15,6 +15,7 @@ export interface HeaderPresenterProps {
   toggleCustomLabels: () => void
   customLabelsValue: boolean
   canToggleCustomLabels: boolean
+  open: boolean
 }
 
 const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
