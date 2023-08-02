@@ -38,7 +38,6 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     const { onHandQuantity, onHandQuantityUnit } = useOnHandQuantity();
     const [cycleCounts, setCycleCounts] = useState<CycleCount[]>(prepareCycleCounts(workspaceState?.formInputSync.get(name) ?? []));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const dispatch = useDispatch();
     const lotPartRevisionId = workspaceState?.formInputSync.get(LOT_PART_SELECT_KEY) as string;
     const docRevById = useSelector(documentRevisionsSelectors.byId);
@@ -46,7 +45,6 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
       if (!lotPartRevisionId || docRevById[lotPartRevisionId]) {
         return;
       }
-
       dispatch(documentRevisionsActions.load(lotPartRevisionId));
     }, [lotPartRevisionId, dispatch, docRevById]);
 
