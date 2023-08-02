@@ -13,10 +13,14 @@ import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/t
 import { ApplicationState } from '../../../state/reducers';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
-import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer } from './types';
+import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer, LotTransferType } from './types';
 import { getLatestRevisionId } from './utils';
 
 const prepareTransfers = (transfers: LotTransfer[] = []) => orderBy(transfers, 'date', 'desc');
+
+const shapeQuantity = (quantity: number, type: LotTransferType) => {
+  return [LotTransferType.Backflush].includes(type) ? quantity : Math.abs(quantity);
+};
 
 export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
   Component: React.FC<T>,
@@ -82,7 +86,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
 
     const prepareLotTransfer = (transfer: LotTransfer) => ({
       ...transfer,
-      quantity: Math.abs(transfer.quantity),
+      quantity: shapeQuantity(transfer.quantity, transfer.type),
       by: currentEmployeeId,
     });
 
