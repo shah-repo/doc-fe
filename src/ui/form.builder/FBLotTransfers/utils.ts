@@ -30,7 +30,6 @@ export const shapeQuantity = (quantity: number, type: LotTransferType): number =
 };
 
 const calculateSumForTransfer = (transfer: CalculableLotTransfer, sum: number) => {
-  console.log('transfer', transfer, 'sum', sum);
   const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
   const shouldAdd = INCREMENTABLE_LOT_TRANSFER_TYPES.includes(transfer.type);
   let result = sum;
