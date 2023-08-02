@@ -132,6 +132,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (auditValue === 'undefined' || auditValue === '[]' || auditValue === '{}') {
           return;
         }
+        if (nextValue === 'null' && fbType === 'numeric') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'NUMBER_DELETED',
+            nextValue: previousValue as string,
+          };
+        }
       }
       // PROCEDURE
       if (fbType === 'procedure') {

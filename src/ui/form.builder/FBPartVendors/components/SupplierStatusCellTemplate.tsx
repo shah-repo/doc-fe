@@ -47,12 +47,12 @@ export const SupplierStatusCellTemplate: React.FC<CustomTemplateProps> = (props)
 
   const value = dataItem[field] as string;
 
-  if (!value) {
-    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
-  }
-
   if (isEditMode) {
     return <Editor {...props} />;
+  }
+
+  if (!value) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
   }
 
   const handleClick = () => onClick?.({ dataItem });

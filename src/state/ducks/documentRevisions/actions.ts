@@ -1,18 +1,18 @@
 import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
-import { intl } from '../../../common/intl';
+import { intl, translate } from '../../../common/intl';
 import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
-import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, PO_ROOT_URL } from './constants';
-import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, LOT_ROOT_URL, PO_ROOT_URL } from './constants';
+import { DOC_TYPE_GROUP_OPTION, DocRevQueryParam, DocumentGroupOptionsType } from './documentType/types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentRevisionsListAction, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -46,7 +46,7 @@ const loadList = (
   });
 };
 
-const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<DocumentRevision> => apiAction({
+const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: 'get',
   asyncType,
@@ -363,12 +363,12 @@ const getDocRevStatuses = (
   notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
   const categoryUrl = category === undefined
-    ? states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
+    ? states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?`)
     : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
   const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0
-    ? notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
+    ? notGroupOptions.reduce((acc, groupOption) => acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
   const url = notIncategory === undefined
     ? notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
@@ -458,6 +458,18 @@ const getFormMappingTemplate = (
   handlers,
 });
 
+const updateLotStatus = (id: string, body: { lotStatus: LotStatus }): ApiAction<DocumentRevision> => apiAction({
+  url: `${LOT_ROOT_URL}/${id}/status`,
+  method: 'put',
+  data: body,
+  onSuccess: (response, dispatch) => {
+    dispatch(load(id));
+  },
+  onFailure: () => {
+    toastError(translate('documentRevision.lot.status.update.failed'));
+  },
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -497,4 +509,5 @@ export default {
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,
+  updateLotStatus,
 };

@@ -93,7 +93,6 @@ const Dialog: React.FC<DialogProps> = ({
           {loading && <LinearProgress className={classes.loading} />}
         </DialogTitle>
       )}
-      {!title && loading && <LinearProgress className={cx(classes.loading, classes.loadingAtTop)} />}
       <DialogContent
         {...contentProps}
         className={cx(contentProps.className, classes.content)}
@@ -110,6 +109,7 @@ const Dialog: React.FC<DialogProps> = ({
           ))}
         </DialogActions>
       )}
+      {!title && loading && <LinearProgress className={cx(classes.loading, classes.loadingAtTop)} />}
     </MuiDialog>
   );
 };
