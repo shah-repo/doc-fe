@@ -80,7 +80,8 @@ export type FBInputType =
   | 'lotQuantity'
   | 'lotOnHandQuantity'
   | 'partVendors'
-  | 'numeric';
+  | 'numeric'
+  | 'cycleCount';
 
 export type FBInputProps =
   & FBLabelProps
