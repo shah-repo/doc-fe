@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { IotService } from '../../../common/utils/iot/iotService';
 import { clearPOSavedInfo } from '../../../indexDb';
+import { IS_SIDEBAR_EXPANDED } from '../../../ui/documentRevision/Sidebar/constants';
 import { ResetPasswordValues } from '../../../ui/users/types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApplicationState } from '../../reducers';
@@ -228,6 +229,7 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
       const iotService = IotService.getInstance();
       iotService.unsubscribeAll();
       await clearPOSavedInfo();
+      localStorage.removeItem(IS_SIDEBAR_EXPANDED);
     },
   });
 
