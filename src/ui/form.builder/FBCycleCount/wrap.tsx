@@ -1,5 +1,5 @@
-import { differenceBy, orderBy, unionBy } from 'lodash';
-import { useState } from 'react';
+import { differenceBy, get, orderBy, unionBy } from 'lodash';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FB } from '..';
 import { SM } from '../../../App';
@@ -12,6 +12,7 @@ import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/t
 import { ApplicationState } from '../../../state/reducers';
 import { useOnHandQuantity } from '../FBLotTransfers/utils';
 import FBStore from '../FBStore/FBStore';
+import { CYCLE_COUNT_FREQUENCY_KEY, LOT_PART_SELECT_KEY } from './constants';
 import { CycleCount, FBCycleCountProps } from './types';
 import { getLatestRevisionId } from './utils';
 
@@ -25,7 +26,6 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     disabled,
     ...props
   }: T) => {
-    const dispatch = useDispatch();
     const { formState, workspaceState } = FB.useStores();
     const { _formState } = SM.useStores();
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
@@ -37,6 +37,20 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     );
     const { onHandQuantity, onHandQuantityUnit } = useOnHandQuantity();
     const [cycleCounts, setCycleCounts] = useState<CycleCount[]>(prepareCycleCounts(workspaceState?.formInputSync.get(name) ?? []));
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const dispatch = useDispatch();
+    const lotPartRevisionId = workspaceState?.formInputSync.get(LOT_PART_SELECT_KEY) as string;
+    const docRevById = useSelector(documentRevisionsSelectors.byId);
+    useEffect(() => {
+      if (!lotPartRevisionId || docRevById[lotPartRevisionId]) {
+        return;
+      }
+
+      dispatch(documentRevisionsActions.load(lotPartRevisionId));
+    }, [lotPartRevisionId, dispatch, docRevById]);
+
+    const cycleCountFrequency = get(docRevById, [lotPartRevisionId, 'formInput', CYCLE_COUNT_FREQUENCY_KEY]) as number;
 
     const { id, version, status } = workspaceState?.document ?? { version: 0 };
 
@@ -96,6 +110,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
       employees,
       onHandQuantity,
       onHandQuantityUnit,
+      cycleCountFrequency,
       updateCycleCount,
       deleteCycleCount,
     });

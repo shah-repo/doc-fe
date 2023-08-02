@@ -15,6 +15,7 @@ export type FBCycleCountProps =
   employees: Employee[]
   onHandQuantity?: number
   onHandQuantityUnit?: string
+  cycleCountFrequency?: number
   updateCycleCount: (item: CycleCount) => void
   deleteCycleCount: (item: CycleCount) => void
 };

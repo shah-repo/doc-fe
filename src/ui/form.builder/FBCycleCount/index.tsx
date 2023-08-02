@@ -4,6 +4,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
@@ -30,6 +31,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
   employees = [],
   onHandQuantity,
   onHandQuantityUnit,
+  cycleCountFrequency,
   deleteCycleCount,
   updateCycleCount,
   ...props
@@ -132,13 +134,17 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
     ];
   }, isCycleCountAdded ? [editedCycleCount] : []);
 
+  const nextDueDate = moment(cycleCountsList.at(0)?.date).add(cycleCountFrequency, 'days').format(MomentFormats.MonthDateYearTwoDigit);
+  const nextDueLabel = translate('form.builder.cycle.count.next.due', { date: nextDueDate });
+  const sectionLabel = cycleCountFrequency ? `${label as string} (${nextDueLabel})` : label;
+
   return (
     <Box className={classes.root}>
       <PromptIfDirty
         dirty={dirty}
       />
       <FBInput {...props} type="cycleCount" name={name}>
-        <FBSection label={label}>
+        <FBSection label={sectionLabel}>
           {isActive && (
             <Button
               kind="ghost"
