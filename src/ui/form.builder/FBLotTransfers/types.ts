@@ -37,6 +37,7 @@ export enum LotTransferType {
   Return = 'return',
   Move = 'move',
   Issue = 'issue',
+  Backflush='backflush',
 }
 
 export interface LotTransfer {

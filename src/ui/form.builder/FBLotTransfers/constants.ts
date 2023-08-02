@@ -14,7 +14,7 @@ export const TRANSFERS_FIELD = 'lot_transfers';
 export const MAX_DECIMALS = 12;
 
 export const EMPTY_VALUE_PLACEHOLDER = '-';
-
+export const COMMON_LOT_TRANSFER_TYPES = [LotTransferType.Backflush];
 export const DEDUCTABLE_TRANSFER_TYPES = [LotTransferType.Allocate, LotTransferType.Transfer];
 export const INCREMENTABLE_LOT_TRANSFER_TYPES = [LotTransferType.Return];
 

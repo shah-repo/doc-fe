@@ -882,6 +882,7 @@
   "form.builder.lot.transfers.type.return": "Return",
   "form.builder.lot.transfers.type.move": "Move",
   "form.builder.lot.transfers.type.issue": "Issue",
+  "form.builder.lot.transfers.type.backflush": "Backflush",
   "form.builder.lot.transfers.from": "From",
   "form.builder.lot.transfers.to": "To",
   "form.builder.lot.transfers.build": "Build allocated",

@@ -2,7 +2,7 @@ import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
+import { COMMON_LOT_TRANSFER_TYPES, DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
 import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, PredictQuantityFunction } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
@@ -26,8 +26,10 @@ interface UseOnHandQuantityType {
 }
 
 const calculateSumForTransfer = (transfer: CalculableLotTransfer, sum: number) => {
+  console.log('transfer', transfer, 'sum', sum);
   const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
   const shouldAdd = INCREMENTABLE_LOT_TRANSFER_TYPES.includes(transfer.type);
+  const isBackflush = COMMON_LOT_TRANSFER_TYPES.includes(transfer.type);
   let result = sum;
   if (shouldDeduct) {
     result -= Math.abs(transfer.quantity);
@@ -35,6 +37,14 @@ const calculateSumForTransfer = (transfer: CalculableLotTransfer, sum: number) =
   if (shouldAdd) {
     result += Math.abs(transfer.quantity);
   }
+  if (isBackflush) {
+    if (transfer.quantity > 0) {
+      result += Math.abs(transfer.quantity);
+    } else {
+      result -= Math.abs(transfer.quantity);
+    }
+  }
+
   return round(result, MAX_DECIMALS);
 };
 
