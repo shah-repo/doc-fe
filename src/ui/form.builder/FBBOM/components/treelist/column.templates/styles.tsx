@@ -121,4 +121,12 @@ export const styles = makeStyles((theme) => ({
     color: ThemeColors.primaryLight,
     marginLeft: theme.spacing(1.5),
   },
+  link: {
+    color: `${Colors.navy_active} !important`,
+    cursor: 'Pointer',
+    textDecoration: 'initial !important',
+    '&:hover': {
+      textDecoration: 'underline !important',
+    },
+  },
 }));
