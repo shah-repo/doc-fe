@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -12,7 +12,7 @@ import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types'
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
+import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
@@ -22,8 +22,10 @@ import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
+import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -117,6 +119,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       lotTransfers () {
         return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
+      },
+      partVendors () {
+        return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
@@ -236,6 +241,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             )}
           </>
         );
+        break;
+      case 'lotStatus':
+        returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
         break;
       case 'EMAIL_SENT':
         returnValue = (

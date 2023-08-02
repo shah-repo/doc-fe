@@ -10,12 +10,19 @@ export default makeStyles(theme => ({
   grid: {
     '& .k-column-title': {
       fontSize: 12,
-      textTransform: 'uppercase',
       whiteSpace: 'normal',
     },
     '& td': {
       height: ROW_HEIGHT,
       boxSizing: 'border-box',
+
+      '& a': {
+        color: Colors.textBlack,
+
+        '&:hover': {
+          textDecoration: 'underline',
+        },
+      },
     },
   },
   gridWithButton: {

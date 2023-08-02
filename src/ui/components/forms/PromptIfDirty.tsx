@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Prompt, useHistory } from 'react-router-dom';
 import { translate } from '../../../common/intl';
-import { getPOIndexDbInstance } from '../../../indexDb';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { FB } from '../../form.builder';
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDialog from '../../hooks/useDialog';
 
@@ -22,6 +23,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const dialog = useDialog();
   const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
+  const { workspaceState } = FB.useStores();
 
   useEffect(() => {
     const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
@@ -59,7 +61,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     setDoNotPrompt?.(true);
     let prevPODoc;
     try {
-      prevPODoc = await getPOIndexDbInstance().toArray();
+      prevPODoc = await getPOSavedInfo();
     } catch (e) {}
 
     if (!prevPODoc.length) {
@@ -67,7 +69,8 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       return;
     }
 
-    await getPOIndexDbInstance().clear();
+    await workspaceState?.undoPO(prevPODoc[0]);
+    await clearPOSavedInfo();
     FBDataStore.setRefreshData(undefined);
     history.push(lastLocation?.pathname);
   };

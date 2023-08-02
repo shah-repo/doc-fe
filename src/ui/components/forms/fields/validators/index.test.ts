@@ -1,4 +1,4 @@
-import { email, required, validator } from '.';
+import { email, positiveNumber, required, validator } from '.';
 
 describe('validators tests', () => {
   describe('required validator tests', () => {
@@ -26,6 +26,24 @@ describe('validators tests', () => {
 
     it('returns error when value is incorrect email', () => {
       expect(email('dinocodecons.com')).toEqual('validators.email');
+    });
+  });
+
+  describe('posititiveNumber validator tests', () => {
+    it('returns undefined when undefined is provided', () => {
+      expect(positiveNumber(undefined)).toBeUndefined();
+    });
+    it('returns undefined when positive number is provided', () => {
+      expect(positiveNumber(2)).toBeUndefined();
+    });
+    it('returns undefined when positive number in form of string is provided', () => {
+      expect(positiveNumber('2')).toBeUndefined();
+    });
+    it('returns error when negative number is provided', () => {
+      expect(positiveNumber(-2)).toEqual('validators.positive.number');
+    });
+    it('returns error when string is provided', () => {
+      expect(positiveNumber('foo')).toEqual('validators.positive.number');
     });
   });
 

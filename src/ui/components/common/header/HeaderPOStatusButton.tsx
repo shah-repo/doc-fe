@@ -3,7 +3,8 @@ import Colors from '../../../layout/theme/utils/colors';
 
 const styles = (theme: Theme) => ({
   root: {
-    'margin': 0,
+    margin: 0,
+    cursor: 'default',
     '&:hover': {
       backgroundColor: 'unset',
     },

@@ -78,7 +78,9 @@ export type FBInputType =
   | 'downloadsheet'
   | 'lotTransfers'
   | 'lotQuantity'
-  | 'lotOnHandQuantity';
+  | 'lotOnHandQuantity'
+  | 'partVendors'
+  | 'numeric';
 
 export type FBInputProps =
   & FBLabelProps
@@ -120,6 +122,7 @@ export type FBInputProps =
     designDisabled?: boolean
     tabId?: string
     removeBorder?: boolean
+    isFbEditorField?: boolean
 
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
@@ -250,6 +253,8 @@ export const FBAutosave: FBInputType[] = [
   'quantity',
   'texteditor',
   'lotTransfers',
+  'partVendors',
+  'numeric',
 ];
 
 export const SectionTypeField: FBInputType[] = [

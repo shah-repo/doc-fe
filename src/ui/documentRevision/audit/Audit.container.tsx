@@ -57,7 +57,7 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   const approvals = selectedDocument?.approvals as Approval[];
   const schema = selectedDocument?.formDocument?.formTemplate?.schema as FBSchemaProps[];
 
-  return  <CustomLabelTooltip {...{ tooltipConfig }}>
+  return <CustomLabelTooltip {...{ tooltipConfig }}>
     <AuditPresenter
       {...{ audit, approvals, versionNumber, isStatusVisible, schema }}
       statusLabel={statusLabel as string}
