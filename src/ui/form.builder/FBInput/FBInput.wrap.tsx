@@ -78,6 +78,7 @@ export const withFBInput = <T extends FBInputProps>(
     isFbEditorField = false,
     ...props
   }: T) => {
+		console.log('-----defaultValue--11-', { defaultValue, name });
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
     const { isOutput, isChangeRequest } = workspaceState || {};
     const { submitForm } = useFormContext();
@@ -291,9 +292,13 @@ export const withFBInput = <T extends FBInputProps>(
     if (lockOwnerName && (ownerName !== lockOwnerName)) {
       disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
     }
-
+		console.log('----defaultValue--1-', { defaultValue, value });
     if (isFbEditorField) {
+      if(isUndefined(defaultValue)) {
+        defaultValue = formState?.getFieldValue(name);
+      }
       value = defaultValue;
+			console.log('----defaultValue---', { defaultValue, value });
     }
 
     if (isClone) {
