@@ -76,7 +76,7 @@ export const buildSchema = ({
       title: 'form.builder.part.vendors.vendor',
       filterCell: InputFilter,
       template: (props) => <SupplierCellTemplate {...props} options={suppliers} onClick={onRowClick} />,
-      width: 150,
+      width: 200,
     },
     {
       id: 'status',
@@ -84,7 +84,7 @@ export const buildSchema = ({
       title: 'form.builder.part.vendors.vendor.status',
       filterCell: StatusFilter,
       template: (props) => <SupplierStatusCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
+      width: 120,
     },
     {
       id: 'part-number',

@@ -1,7 +1,8 @@
-import { Box, Radio } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { Radio } from '../../../components/forms/fields-next';
 import { CustomTemplateProps, EditableVendor } from '../types';
 
 interface Props extends CustomTemplateProps {
@@ -19,7 +20,7 @@ const Editor: React.FC<Props> = ({ field }) => {
   };
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" mt={0.75}>
       <Radio
         checked={values.primary}
         color="primary"
