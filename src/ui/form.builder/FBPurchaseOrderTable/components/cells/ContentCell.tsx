@@ -2,7 +2,7 @@ import { kebabCase } from 'lodash';
 import React, { ReactNode } from 'react';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import KendoDataGridCell from '../../../../components/KendoDataGrid/KendoDataGridCell';
-import OveflowTooltip from '../../../../components/OverflowTooltip';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { FBPurchaseOrderItem } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
 
 const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
@@ -22,12 +22,12 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
       data-cy={dataCy}
       dataItem={dataItem}
     >
-      <OveflowTooltip
+      <OverflowTooltip
         title={value}
         arrow
       >
         {value}
-      </OveflowTooltip>
+      </OverflowTooltip>
     </KendoDataGridCell>
   );
 };
