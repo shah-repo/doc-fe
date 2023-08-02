@@ -36,8 +36,8 @@ export const buildSchema = ({
 
   const countSystemTitle
     = onHandQuantityUnit
-      ? `${translate('form.builder.cycle.count.count.system')}\n (${onHandQuantityUnit})`
-      : translate('form.builder.cycle.count.count.system');
+      ? `${translate('form.builder.cycle.count.systemCount')}\n (${onHandQuantityUnit})`
+      : translate('form.builder.cycle.count.systemCount');
 
   return [
     {
@@ -75,7 +75,7 @@ export const buildSchema = ({
     {
       id: 'action-needed',
       field: 'actionNeeded',
-      title: 'form.builder.cycle.count.action.needed',
+      title: 'form.builder.cycle.count.actionNeeded',
       filterCell: ActionNeededFilter,
       template: (props) => <ActionNeededCellTemplate {...props} onClick={onRowClick} />,
       width: 140,

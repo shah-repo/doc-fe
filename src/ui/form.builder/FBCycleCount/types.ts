@@ -24,7 +24,7 @@ export interface CycleCount {
   id: string
   by: string
   count: number
-  systemCounte: number
+  systemCount: number
   date: string
   actionNeeded: ActionNeededType
   comments?: string

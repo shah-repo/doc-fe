@@ -256,6 +256,7 @@ export const FBAutosave: FBInputType[] = [
   'lotTransfers',
   'partVendors',
   'numeric',
+  'cycleCount',
 ];
 
 export const SectionTypeField: FBInputType[] = [

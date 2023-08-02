@@ -153,7 +153,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftCycleCount}
             >
-              {translate('form.builder.part.cycle.counts.add')}
+              {translate('form.builder.cycle.count.add')}
             </Button>
           )}
         </FBSection>
@@ -175,7 +175,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
           attached
           onClick={createDraftCycleCount}
         >
-          {translate('form.builder.part.cycle.counts.add')}
+          {translate('form.builder.cycle.count.add')}
         </Button>
       )}
     </Box>
