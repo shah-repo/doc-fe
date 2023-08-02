@@ -1,6 +1,6 @@
 import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
-import { intl } from '../../../common/intl';
+import { intl, translate } from '../../../common/intl';
 import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
@@ -11,9 +11,9 @@ import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
-import { ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, FETCH_BOM_BRANCH, FETCH_BOM_TREE, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
+import { ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, FETCH_BOM_BRANCH, FETCH_BOM_TREE, LOT_ROOT_URL, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
 import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -528,6 +528,18 @@ const getFormMappingTemplate = (
   handlers,
 });
 
+const updateLotStatus = (id: string, body: { lotStatus: LotStatus }): ApiAction<DocumentRevision> => apiAction({
+  url: `${LOT_ROOT_URL}/${id}/status`,
+  method: 'put',
+  data: body,
+  onSuccess: (response, dispatch) => {
+    dispatch(load(id));
+  },
+  onFailure: () => {
+    toastError(translate('documentRevision.lot.status.update.failed'));
+  },
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -573,4 +585,5 @@ export default {
   deleteBomBranch,
   updateBomBranch,
   changeOrderBomBranch,
+  updateLotStatus,
 };

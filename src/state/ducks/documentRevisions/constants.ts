@@ -33,3 +33,4 @@ export const PO_ITEMS_COMPONENT_NAME = 'po-items-built-in';
 export const PO_APPROVAL_KEY = 'fb-po-approvals-';
 export const THRESHOLD_KEY = 'threshold';
 export const PO_ROOT_URL = '/purchase_order';
+export const LOT_ROOT_URL = '/lot';

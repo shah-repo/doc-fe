@@ -417,6 +417,15 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       },
     },
   },
+  MuiRadio: {
+    root: {
+      padding: 0,
+
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
   MuiLinearProgress: {
     barColorPrimary: {
       backgroundColor: 'transparent',

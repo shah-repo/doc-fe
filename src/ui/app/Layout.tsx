@@ -14,6 +14,7 @@ import DocumentRevisionContainer from '../document.revision/container';
 import DocumentRevisionListContainer from '../document.revision/grid/container';
 import { DocumentTypeManagementContainer } from '../document.type.management/kendo/container';
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
+import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
 import GroupManagementListContainer from '../group.management/kendo/container';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
@@ -30,9 +31,11 @@ import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
-  const [open, setOpen] = React.useState(false);
+  const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
+  const [open, setOpen] = React.useState(isExpanded);
   const classes = useStyles({ isDashboard: SM.isHomeURL, open: open });
   const handleDrawerOpen = () => {
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !open ? '1' : '0');
     setOpen(!open);
   };
 

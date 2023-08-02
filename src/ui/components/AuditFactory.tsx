@@ -12,7 +12,7 @@ import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types'
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
+import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
@@ -25,6 +25,7 @@ import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -240,6 +241,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             )}
           </>
         );
+        break;
+      case 'lotStatus':
+        returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
         break;
       case 'EMAIL_SENT':
         returnValue = (

@@ -4,6 +4,7 @@ import { get } from 'lodash';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
+import { positiveNumber, validator } from '../../../components/forms/fields/validators';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 import OverflowingContent from './OveflowContent';
@@ -15,6 +16,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   return (
     <FormikField
       name={field}
+      validate={validator(positiveNumber)}
     >
       <TextField
         {...getFieldProps(field)}

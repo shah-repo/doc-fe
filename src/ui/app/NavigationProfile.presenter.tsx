@@ -47,8 +47,15 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   handleCloseMenu,
   anchorEl,
   open,
-}) => (
-  <Box
+}) => {
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (showUserProfile) {
+      return;
+    }
+    handleOpenMenu(event);
+  };
+
+  return (<Box
     alignItems="center"
     justifyContent="space-between"
     className={cx({ [classes.bottomPush]: open, [classes.collapsedBottomPush]: !open })}
@@ -57,9 +64,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
       <Button
         disableFocusRipple={true}
         disableRipple={true}
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-          handleOpenMenu(event)
-        }
+        onClick={openMenu}
         classes={{ root: classes.headerButton }}
       >
         <List classes={{ root: classes.list }} >
@@ -88,7 +93,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         />
       </Button>
     </ClickAwayListener>
-  </Box>
-);
+  </Box>);
+};
 
 export default withStyles(styles)(NavigationProfilePresenter);

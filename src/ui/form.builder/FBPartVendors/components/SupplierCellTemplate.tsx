@@ -28,7 +28,8 @@ const Editor: React.FC<Props> = ({ field, options }) => {
 
   return (
     <FormikField
-      name={field}
+      name="vendor"
+      required
     >
       <Autocomplete
         {...getFieldProps(field)}
@@ -62,7 +63,7 @@ export const SupplierCellTemplate: React.FC<Props> = (props) => {
   const displayValue = dataItem[field] as string;
 
   return (
-    <OverflowingContent onClick={handleClick}>
+    <OverflowingContent onClick={handleClick} title={displayValue}>
       {linkPath ? <Link target="_blank" to={linkPath}>{displayValue}</Link> : displayValue}
     </OverflowingContent>
   );

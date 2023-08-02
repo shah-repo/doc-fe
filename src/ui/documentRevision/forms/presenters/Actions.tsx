@@ -16,6 +16,7 @@ import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions
 import { DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
+import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
 import { default as OwnerChangerContainer } from '../../../components/common/owner.changer/container';
@@ -34,7 +35,7 @@ import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustom
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentLot, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -120,6 +121,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
+  const isLot = checkIsDocumentLot(documentRevision?.document?.documentType?.groupOptions);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
@@ -446,6 +448,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {isPO && documentRevision.poStatus && (
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
+      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
       {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased && (
         <StyledSubmitButton
           showNewButton={true}
