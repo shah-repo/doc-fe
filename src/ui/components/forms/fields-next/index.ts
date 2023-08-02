@@ -6,6 +6,7 @@ export { default as DatePicker } from './Datepicker/Datepicker';
 export { default as FormField } from './FormField/FormField';
 export { default as FormikField } from './FormikField/FormikField';
 export { default as IconButton } from './IconButton/IconButton';
+export { default as Radio } from './Radio/Radio';
 export { default as SplitButton } from './SplitButton/SplitButton';
 export { default as SplitButtonMenu } from './SplitButton/SplitButtonMenu';
 export { default as TextField } from './TextField/TextField';
