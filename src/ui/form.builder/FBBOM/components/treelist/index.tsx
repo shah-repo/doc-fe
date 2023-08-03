@@ -10,7 +10,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent
+  TreeListRowDragEvent,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -23,7 +23,7 @@ import {
   replace,
   tail,
   take,
-  uniq
+  uniq,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -52,13 +52,13 @@ import {
   SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TreeColumns,
-  TREELIST_CONFIG
+  TREELIST_CONFIG,
 } from './constants';
 import {
   BOMState,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBBOMProps
+  FBBOMProps,
 } from './interface';
 import useStyles from './styles';
 import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
