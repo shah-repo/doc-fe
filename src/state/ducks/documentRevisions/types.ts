@@ -65,6 +65,9 @@ export enum POStatusLabelMapping {
 
 export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
+  Supplier = 'Supplier',
+  Equipment = 'Equipment',
+  TrainingCurriculums = 'Training Curriculums',
 }
 
 export enum RevisionChangeType {
