@@ -40,7 +40,7 @@ export const CompanyLocations: React.FC<Props> = ({
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = locations.some((location) => location.name === values.name && location.id !== values.id);
+      const isDuplicate = locations.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
       if (values.name && isDuplicate) {
         error.name = 'validator.location.same.name.exist';
       }
