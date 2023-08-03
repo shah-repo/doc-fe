@@ -1,7 +1,7 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { BOM } from '../../interface';
 
 export interface FBBOMProps {
@@ -23,6 +23,7 @@ export interface DataState {
 export interface FBBOMDrawerTableProps {}
 
 export interface EditableAlternatePart extends AlternatePart {
+  [MODE_FIELD]: Mode
 }
 
 export interface AlternatePartEditEvent {
@@ -31,13 +32,12 @@ export interface AlternatePartEditEvent {
 
 export interface AlternatePart {
   id: string
-  title?: string
-  displayRevision?: string
-  displayStatus?: string
+  name?: string
+  revision?: string
+  status?: string
   cost?: string
-  partId?: string
+  docId?: string
   leadTime?: string
-  [MODE_FIELD]?: string
 }
 
 export interface CustomTreeListRowProps extends TreeListRowProps {

@@ -31,6 +31,7 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
   } = props;
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const isAdditionMode = [Mode.add].includes(dataItem[MODE_FIELD]);
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
 
   const ref = useCallback((node: HTMLDivElement | null) => {
@@ -49,7 +50,7 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
       id="row-actions"
       ref={ref}
     >
-      {onDelete && (
+      {onDelete && !isAdditionMode && (
         <Tooltip
           title={deleteTooltipText ?? translate('common.delete')}
           placement="top"
@@ -85,7 +86,7 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
           <FontAwesomeIcon icon={regular('xmark')} />
         </IconButton>
       </Tooltip>
-      <Tooltip
+      {isAdditionMode && <Tooltip
         title={translate('common.save')}
         placement="top"
         arrow
@@ -98,7 +99,7 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
         >
           <FontAwesomeIcon icon={regular('check')} />
         </IconButton>
-      </Tooltip>
+      </Tooltip>}
     </div>
   );
 }

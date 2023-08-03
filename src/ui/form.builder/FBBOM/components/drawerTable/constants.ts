@@ -1,43 +1,50 @@
-import { Status } from '../../../../components/common/kendo.column.templates/Status';
-import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { AlternateParts } from '../treelist/interface';
+import { CostCell } from './components/CostCell';
+import { LeadTimeCell } from './components/LeadTimeCell';
+import PartIDCell from './components/PartIDCell';
+import { RevCell } from './components/RevCell';
+import { StatusCell } from './components/StatusCell';
+import { TitleCell } from './components/TitleCell';
 
-export const columns: Array<ColumnDefinition<AlternateParts>> = [
-  {
-    id: 'partId',
-    field: 'partId',
-    title: 'PART ID',
-    width: '150px',
-  },
-  {
-    id: 'displayRevision',
-    field: 'displayRevision',
-    title: 'REV',
-    width: '70px',
-  },
-  {
-    id: 'title',
-    field: 'title',
-    title: 'TITLE',
-    width: '160px',
-  },
-  {
-    id: 'cost',
-    field: 'cost',
-    title: 'COST',
-    width: '90px',
-  },
-  {
-    id: 'leadTime',
-    field: 'leadTime',
-    title: 'LEAD TIME',
-    width: '110px',
-  },
-  {
-    id: 'displayStatus',
-    field: 'displayStatus',
-    title: 'STATUS',
-    template: Status,
-    width: '170px',
-  },
+export const schema = [{
+  id: 'id',
+  field: 'docId',
+  title: 'PART ID',
+  width: '150px',
+  template: PartIDCell,
+},
+{
+  id: 'revision',
+  field: 'revision',
+  title: 'REV',
+  width: '70px',
+  template: RevCell,
+},
+{
+  id: 'name',
+  field: 'name',
+  title: 'TITLE',
+  width: '160px',
+  template: TitleCell,
+},
+{
+  id: 'cost',
+  field: 'cost',
+  title: 'COST',
+  width: '90px',
+  template: CostCell,
+},
+{
+  id: 'leadTime',
+  field: 'leadTime',
+  title: 'LEAD TIME',
+  width: '110px',
+  template: LeadTimeCell,
+},
+{
+  id: 'status',
+  field: 'status',
+  title: 'STATUS',
+  template: StatusCell,
+  width: '170px',
+},
 ];

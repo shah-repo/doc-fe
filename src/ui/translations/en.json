@@ -1606,6 +1606,7 @@
   "bom.table.title.primary.attachments": "Primary Attachments",
   "bom.table.title.vendors": "Vendors",
   "bom.table.title.issues": "Issues",
+  "bom.alternate.part.add": "Add Part",
   "bom.revision.available": "New Revision Available",
   "bom.order.error.message": "Change the order of the parts within the same parent"
 }

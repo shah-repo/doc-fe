@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import React from 'react';
@@ -10,7 +11,7 @@ import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { AlternatePartEditEvent, EditableAlternatePart, FBBOMDrawerTableProps } from '../treelist/interface';
 import { ActionsCell } from './components/Actions';
-import { columns as schema } from './constants';
+import { schema } from './constants';
 import alternateParts from './data';
 import useStyles from './styles';
 
@@ -25,15 +26,16 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
     },
   });
 
-  const createDraftLotTransfer = () => setEditedAlternatePart({
+  const AddAlternatePart = () => setEditedAlternatePart({
     id: uuidv4(),
     [MODE_FIELD]: Mode.add,
   });
 
-  const editLotTransfer = ({ dataItem }: AlternatePartEditEvent) => setEditedAlternatePart(dataItem);
+  const editAlternatePart = ({ dataItem }: AlternatePartEditEvent) => setEditedAlternatePart(dataItem);
 
   const discardAlternatePart = () => {
-    // TODO
+    setEditedAlternatePart(undefined);
+    formik.resetForm();
   };
   const deleteAlternatePart = () => {
     // TODO
@@ -41,7 +43,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
 
   const rowRender: DataGridProps<EditableAlternatePart>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableAlternatePart;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD] as Mode);
+    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
 
     if (!isUpdating) {
       return row;
@@ -71,22 +73,22 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
   const isAlternatePartAdded = editedAlternatePart?.[MODE_FIELD] === Mode.add;
 
   const enableAddField = true;
-  const handleRowClick = enableAddField && !editedAlternatePart ? editLotTransfer : undefined;
+  const handleRowClick = enableAddField && !editedAlternatePart ? editAlternatePart : undefined;
 
   const alternatePartList = alternateParts.reduce((list, alternatePart) => {
     const isAlternatePartEdited = editedAlternatePart && editedAlternatePart.id === alternatePart.id;
 
     return [
-      ...list,
       {
         ...(isAlternatePartEdited ? editedAlternatePart : alternatePart),
         [MODE_FIELD]: isAlternatePartEdited ? Mode.edit : Mode.show,
       },
+      ...list,
     ];
   }, isAlternatePartAdded ? [editedAlternatePart] : []);
 
   return (
-    <div>
+    <Box position="relative">
       <FormikProvider value={formik}>
         <KendoDataGrid<EditableAlternatePart>
           fullWidth={false}
@@ -102,11 +104,12 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
       {enableAddField && <Button
         kind="add"
         fullWidth
-        onClick={createDraftLotTransfer}
+        onClick={AddAlternatePart}
+        style={{ marginTop: '-4px' }}
       >
-        {translate('form.builder.lot.transfers.add')}
+        {translate('bom.alternate.part.add')}
       </Button>}
-    </div>
+    </Box>
   );
 };
 

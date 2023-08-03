@@ -16,10 +16,8 @@ export default makeStyles(theme => ({
     '& td': {
       height: ROW_HEIGHT,
       boxSizing: 'border-box',
-
       '& a': {
         color: Colors.textBlack,
-
         '&:hover': {
           textDecoration: 'underline',
         },
@@ -30,7 +28,6 @@ export default makeStyles(theme => ({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottom: 'none',
-
     '& .k-grid-container': {
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
@@ -38,12 +35,9 @@ export default makeStyles(theme => ({
   },
   updatingRow: {
     position: 'relative',
-    zIndex: 99999,
     outline: `1px solid ${Colors.primaryLight}`,
     outlineOffset: -1,
-
     '& td': {
-      verticalAlign: 'top !important',
       whiteSpace: 'normal !important' as 'normal',
     },
   },
@@ -53,7 +47,6 @@ export default makeStyles(theme => ({
     position: 'sticky',
     borderLeft: `1px solid ${Colors.primaryLight} !important`,
     right: 0,
-    top: 45,
     padding: '0 !important',
   },
   addButton: {
@@ -61,7 +54,6 @@ export default makeStyles(theme => ({
   },
   popperHolder: {
     height: '100%',
-    zIndex: 99999,
   },
   tooltipContent: {
     maxWidth: 425,
@@ -81,8 +73,7 @@ export default makeStyles(theme => ({
     borderBottomRightRadius: 4,
     position: 'absolute',
     right: 0,
-    top: '100%',
-    zIndex: 99999,
+    top: 18,
   },
   deleteIcon: {
     color: Colors.error,
