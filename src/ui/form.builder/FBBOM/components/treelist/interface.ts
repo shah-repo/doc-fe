@@ -6,6 +6,7 @@ import { BOM } from '../../interface';
 
 export interface FBBOMProps {
   documentRevision: DocumentRevision
+  isDisabled: boolean
 }
 
 export interface BOMState {

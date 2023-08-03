@@ -29,7 +29,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" open={openDrawer} onClose={closeDrawer} BackdropProps={{ invisible: true }}>
+    <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
       {children ?? <Box margin="30px">
         <Grid
           container={true}

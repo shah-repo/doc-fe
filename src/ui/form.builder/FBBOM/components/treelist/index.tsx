@@ -10,7 +10,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent,
+  TreeListRowDragEvent
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -23,7 +23,7 @@ import {
   replace,
   tail,
   take,
-  uniq,
+  uniq
 } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -52,18 +52,18 @@ import {
   SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TreeColumns,
-  TREELIST_CONFIG,
+  TREELIST_CONFIG
 } from './constants';
 import {
   BOMState,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBBOMProps,
+  FBBOMProps
 } from './interface';
 import useStyles from './styles';
 import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) => {
   const classes = useStyles();
   const [state, setState] = React.useState<BOMState>({
     data: [],
@@ -295,7 +295,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -634,7 +634,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
         </FormikProvider>
       </Grid>
       <Grid item>
-        <AddButton
+        {!isDisabled && <AddButton
           fullWidth
           attached
           kind="add"
@@ -643,7 +643,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision }) => {
           onClick={addBOM}
         >
           {translate('form.builder.add.item')}
-        </AddButton>
+        </AddButton>}
       </Grid>
     </>
   );

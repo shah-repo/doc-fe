@@ -231,7 +231,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} />
+                                <FBBOM documentRevision={documentRevision} isDisabled={true} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper
