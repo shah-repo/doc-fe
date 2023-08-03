@@ -1,7 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { companySelectors } from '../../../../state/ducks/company';
 import { DocumentRevision, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import RadioButton from '../../../components/forms/fields/RadioButton';
 import RadioGroup from '../../../components/forms/fields/RadioGroup';
@@ -11,6 +10,8 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from '../../../hooks/docCustomization/useCustomization';
 import { versionNumber } from '../../helpers/generateRevisionNumber';
 import { styles } from './RevisionTypeChange.styles';
+import { ApplicationState } from '../../../../state/reducers';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 
 interface Props {
   documentTypeId?: string
@@ -58,13 +59,15 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
     label: administrationChangeLabel,
     tooltipConfig: administrationTooltipConfig,
   } = useAdministrativeChange(documentTypeId);
-  const numOfStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
+  const numOfStages = useSelector<ApplicationState, number>(
+    state => documentTypeSelectors.getDocTypeNumOfRevStages(state, documentTypeId),
+  );
 
   if (!showRevisionSelect) {
     return null;
   }
 
-  const generateVersionPrediction = ( revisionChangeType: RevisionChangeType ) =>
+  const generateVersionPrediction = (revisionChangeType: RevisionChangeType) =>
     versionNumber(revisionChangeType, numOfStages, releasedDocRev, isRecord);
 
   return (
