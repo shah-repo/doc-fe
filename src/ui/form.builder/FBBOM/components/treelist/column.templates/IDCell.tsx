@@ -1,4 +1,4 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
@@ -6,8 +6,6 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
-import { ReactComponent as CollapseIcon } from '../../../../../../assets/images/collapse_tree.svg';
-import { ReactComponent as ExpandIcon } from '../../../../../../assets/images/expand_tree.svg';
 import { ReactComponent as InfoIcon } from '../../../../../../assets/images/info_icon.svg';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
@@ -176,16 +174,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         if (i === props.level.length - 1 && hasChildren) {
           return (<span className={cx('k-icon', classes.expand)}>
             {(props.expanded
-              ? <CollapseIcon
-                onClick={onClick}
-                data-prevent-selection="true"
-                role="presentation"
-              />
-              : <ExpandIcon
-                onClick={onClick}
-                data-prevent-selection="true"
-                role="presentation"
-              />)
+              ? <FontAwesomeIcon onClick={onClick} size="sm" icon={regular('square-minus')} />
+              : <FontAwesomeIcon onClick={onClick} icon={solid('square-plus')} size="sm" />
+            )
             }
           </span>);
         }
