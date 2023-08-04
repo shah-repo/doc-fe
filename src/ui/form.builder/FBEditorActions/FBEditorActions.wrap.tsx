@@ -125,20 +125,20 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       additionalSchema();
       formValues.rules = formRules;
 
-			setTimeout(() => {
-				workspaceState?.setSchemaItemAt({
-					index,
-					type,
-					name: `${kebabCase(label as string)}-${FB.uniqid}`,
-					...omit(formValues, editorPropertiesFlags),
-					...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
-					applicableOn: ['ON_STATE_TO_IN_REVIEW'],
-					applicableValidationSchema: true,
-					validationAttribute: (label as string) || placeholder || validationAttribute,
-					tabId: editorState?.tabId ?? _tabsState?.activeTabId,
-				}, index);
-				document.body.style.cursor = 'wait';
-			});
+      setTimeout(() => {
+        workspaceState?.setSchemaItemAt({
+          index,
+          type,
+          name: `${kebabCase(label as string)}-${FB.uniqid}`,
+          ...omit(formValues, editorPropertiesFlags),
+          ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
+          applicableOn: ['ON_STATE_TO_IN_REVIEW'],
+          applicableValidationSchema: true,
+          validationAttribute: (label as string) || placeholder || validationAttribute,
+          tabId: editorState?.tabId ?? _tabsState?.activeTabId,
+        }, index);
+        document.body.style.cursor = 'wait';
+      });
       leftPanelState?.setIndex(index + 1 || 0);
 
       dialogState?.closeDialog();

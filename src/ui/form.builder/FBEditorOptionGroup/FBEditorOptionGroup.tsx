@@ -18,13 +18,13 @@ const FBEditorOptionGroup: React.FunctionComponent<FBEditorProps> = ({
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={AutoCompleteStyles.labelProps}
-				isFbEditorField />
+        isFbEditorField />
       {type === 'select' && (
         <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`}
           boxProps={{ mb: 3.125, className: classes.error }}
           labelProps={AutoCompleteStyles.labelProps}
           className={classes.textfield}
-					isFbEditorField />
+          isFbEditorField />
       )}
       <FBEditorOptions key={`fb-editor-options-${type}-${index}`} className={editorOptionClasses.textfield} />
       {children}

@@ -136,7 +136,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     [_tabsState],
   );
 
-	useEffect(() => {	document.body.style.cursor = 'default';	},);
+  useEffect(() => { document.body.style.cursor = 'default'; });
 
   return (
     <SMForm
