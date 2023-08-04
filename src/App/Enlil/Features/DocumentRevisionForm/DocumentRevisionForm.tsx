@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { debounce, filter, get, includes, map, size } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
@@ -135,6 +135,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     ),
     [_tabsState],
   );
+
+	useEffect(() => {	document.body.style.cursor = 'default';	},);
 
   return (
     <SMForm
