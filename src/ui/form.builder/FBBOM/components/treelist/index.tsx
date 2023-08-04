@@ -61,6 +61,7 @@ import {
   FBBOMProps,
 } from './interface';
 import useStyles from './styles';
+import TreeCreator from './TreeCreator';
 import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) => {
@@ -645,6 +646,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
           {translate('form.builder.add.item')}
         </AddButton>}
       </Grid>
+      <TreeCreator docRevId={documentRevision.id} />
     </>
   );
 };
