@@ -1,8 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+
+const TEXTLENGTH = 120;
+const OFFSET = 3;
 
 export default function TreeCreator ({ docRevId }: {docRevId: string}) {
   const [data, setData] = React.useState<any[]>();
@@ -30,6 +39,7 @@ export default function TreeCreator ({ docRevId }: {docRevId: string}) {
       return;
     }
     console.log(data);
+
     const counts = {};
     const root = d3.stratify().id((d: any) => {
       if (!counts[d.name]) {
@@ -41,8 +51,8 @@ export default function TreeCreator ({ docRevId }: {docRevId: string}) {
     }).parentId((d: any) => d.parentDocId)(data);
 
     const margin = { top: 20, right: 160, bottom: 30, left: 160 };
-    const width = 1080 - margin.left - margin.right;
-    const height = 540 - margin.top - margin.bottom;
+    const width = 1200 - margin.left - margin.right;
+    const height = 640 - margin.top - margin.bottom;
 
     // declares a tree layout and assigns the size
     const treemap = d3.tree().size([height, width]);
@@ -53,6 +63,7 @@ export default function TreeCreator ({ docRevId }: {docRevId: string}) {
 
     // maps the node data to the tree layout
     const nodes = treemap(root);
+    console.log(nodes);
 
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
@@ -60,21 +71,56 @@ export default function TreeCreator ({ docRevId }: {docRevId: string}) {
     const svg = d3.select('#treeMap').append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
+
+    svg.append('svg:defs').append('svg:marker')
+      .attr('id', 'arrowhead')
+      .attr('refX', 0)
+      .attr('refY', 3)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 6)
+      .attr('markerUnits', 'userSpaceOnUse')
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M 0 0, 8 3, 0 6')
+      .style('fill', '#555');
+
     const g = svg.append('g')
       .attr('transform',
         'translate(' + margin.left + ',' + margin.top + ')');
 
-    // adds the links between the nodes
-    g.selectAll('.link')
+    console.log(nodes.descendants());
+
+    const links = g.selectAll('.link')
       .data(nodes.descendants().slice(1))
-      .enter().append('path')
+      .enter();
+
+    // adds the links between the nodes
+    links.append('path')
       .attr('class', 'link')
-      .style('stroke', d => d.data.depth)
+      // .style('stroke', d => d.depth)
       .attr('d', d => {
-        return 'M' + d.y + ',' + d.x
-            + 'C' + (d.y + d.parent.y) / 2 + ',' + d.x
-            + ' ' + (d.y + d.parent.y) / 2 + ',' + d.parent.x
-            + ' ' + d.parent.y + ',' + d.parent.x;
+        // console.log(d, d.depth, d.id);
+        const yEndPos = d.y - 10;
+        const yStartPos = d.depth === 1 ? d.parent.y + (2.5 * OFFSET)
+          : d.parent.y + TEXTLENGTH + (2.5 * OFFSET);
+
+        return `M ${yStartPos} , ${xTransformation(d.parent)} 
+          L ${yEndPos}, ${xTransformation(d)} 
+        `;
+      })
+      .attr('marker-end', 'url(#arrowhead)');
+
+    links.append('path')
+      //  .attr('class', 'linkCircle')
+      .attr('fill', d => d3.schemeCategory10[d.depth])
+      .attr('d', d => {
+        // console.log(d, d.depth, d.id);
+        const yStartPos = d.depth === 1 ? d.parent.y + (3 * OFFSET)
+          : d.parent.y + TEXTLENGTH + (3 * OFFSET);
+
+        return `M ${yStartPos} , ${xTransformation(d.parent)} 
+          A ${OFFSET} ${OFFSET} 0 1 0 ${yStartPos} ${(xTransformation(d.parent) + 0.1)} 
+        `;
       });
 
     // adds each node as a group
@@ -82,22 +128,70 @@ export default function TreeCreator ({ docRevId }: {docRevId: string}) {
       .data(nodes.descendants())
       .enter().append('g')
       .attr('class', d => 'node' + (d.children ? ' node--internal' : ' node--leaf'))
-      .attr('transform', d => 'translate(' + d.y + ',' + d.x + ')');
+      // If it is leaf, then give some space between children
+      .attr('transform', (d, index) => {
+        // console.log(d, index);
+        return 'translate(' + d.y + ',' + xTransformation(d) + ')';
+      });
 
-    // adds the circle to the node
-    node.append('circle')
-      .attr('r', d => d.data.value ?? 4)
-      .style('stroke', d => d3.schemeCategory10[d.data.depth])
-      .style('fill', d => d3.schemeCategory10[d.data.depth]);
+    // node.append('rect')
+    //   .attr('width', TEXTLENGTH)
+    //   .attr('height', 24)
+    //   .attr('class', 'backgroundRect');
 
     // adds the text to the node
     node.append('text')
-      .attr('dy', '.35em')
-      .attr('x', d => { console.log(d); return d.children ? (d.data.depth + 5) * -1 : d.data.depth + 5; })
-      .attr('y', d => d.children && d.depth !== 0 ? -(d.data.depth + 5) : d)
-      .style('text-anchor', d => d.children ? 'end' : 'start')
-      .text(d => `${d.data.name}- Rev${d.data.revision}`);
+      .attr('dy', '.45em')
+      // .attr('x', d => { console.log(d); return d.children ? (d.depth + 5) * -1 : d.depth + 5; })
+      // .attr('y', d => d.children && d.depth !== 0 ? -(d.depth + 5) : d.depth + 5)
+      .attr('x', d => d.children ? 0 : 4)
+      .attr('y', 0)
+
+      .attr('textLength', TEXTLENGTH)
+      .attr('class', d => `whereUsedHeadingText ${statusClassDecider(d)}`)
+
+      .style('text-anchor', d => d.depth === 0 ? 'end' : 'start')
+      // .style('text-anchor', d => d.children ? 'end' : 'start')
+      .text(d => `${d.data.name} - Rev${d.data.revision}`);
+
+    // adds the circle to the node
+    // node.append('circle')
+    //   .attr('r', d => d.data.value ?? 4)
+    //   .attr('cx', TEXTLENGTH + 2 * OFFSET)
+    //   .attr('cy', 2)
+    //   .style('stroke', d => d3.schemeCategory10[d.depth])
+    //   .style('fill', d => d3.schemeCategory10[d.depth]);
+
+    // node.append('text')
+    //   .attr('dy', '16px')
+    //   .attr('x', d => { console.log(d); return d.children ? (d.depth + 5) * -1 : d.depth + 5; })
+    //   .attr('class', 'whereUsedStatusText')
+    //   .attr('y', d => d.children && d.depth !== 0 ? -(d.depth + 5) : d)
+    //   .style('text-anchor', d => d.children ? 'end' : 'start')
+    //   .text(d => `${d.data.status}`);
   }, [data]);
+
+  const xTransformation = (d) => {
+    // d has data, & d has parent, which has children.. So if d has no more children, then
+    // look at the children in the parent and find what number child is this of the parent
+    let childXPos = d.x;
+    if (!d.children) {
+      const childPos = d.parent?.children?.findIndex(child => child.id === d.id);
+      // console.log(childPos);
+      childXPos += childPos === 0 ? 10 : childPos === d.parent?.children?.length - 1 ? 8 : (childPos * 10);
+    }
+    return childXPos;
+  };
+
+  const statusClassDecider = (d) => {
+    if (d.data.status === DocumentRevisionStatus.Released) {
+      return 'statusReleased';
+    } else if (d.data.status === DocumentRevisionStatus.Draft) {
+      return 'statusDraft';
+    } else if (d.data.status === DocumentRevisionStatus.PendingChange) {
+      return 'statusPendingChange';
+    }
+  };
 
   return (
     <div id="treeMap" />
