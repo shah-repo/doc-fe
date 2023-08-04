@@ -1,6 +1,10 @@
+import { Link } from '@material-ui/core';
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
-import { getCellValue } from '../utils';
+import { useHistory } from 'react-router-dom';
+import { changeRequestEditPath } from '../../../../../change.request/utils/paths';
+import Tooltip from '../../../../../components/common/kendo/Tooltip';
+import { CELL_EMPTY_VALUE } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -13,8 +17,15 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
   hasChildren,
   ...otherProps
 }) => {
+  const history = useHistory();
   const classes = styles({ hasChildren });
-
+  const changeReqDetails = dataItem?.changeRequestDetails;
+  const arID = changeReqDetails?.crId;
+  const openARDetailsPage = () => {
+    const id = changeReqDetails?.id;
+    id && history.push(changeRequestEditPath(id));
+  };
+  const isReleased = dataItem.availableRevisions?.isReleased;
   return (
     <td
       colSpan={colSpan}
@@ -28,7 +39,22 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
       }}
     >
       <span className={classes.titleInfoCell}>
-        {getCellValue(dataItem, field)}
+        {arID && !isReleased && changeReqDetails && (
+          <Tooltip
+            data={changeReqDetails?.title ?? ''}
+            childrenElement={
+              <Link
+                underline="hover"
+                onClick={openARDetailsPage}
+                className={classes.link}
+              >
+                {arID}
+              </Link>
+            }
+          />
+        )}
+        {!arID && !isReleased && !changeReqDetails && CELL_EMPTY_VALUE}
+        {isReleased && !changeReqDetails && dataItem.availableRevisions?.revision}
       </span>
     </td>
   );
