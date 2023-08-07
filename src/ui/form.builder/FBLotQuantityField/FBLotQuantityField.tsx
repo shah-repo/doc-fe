@@ -25,8 +25,7 @@ const getQuantityLabelPrefix = (name: string, conversionData?: ConversionData) =
   switch (name) {
     case 'lot_quantity': {
       const { unitsBuy, unitsUse, conversion } = conversionData ?? {};
-      const suffix = unitsBuy && unitsUse && conversion ? ` (1 ${unitsBuy} = ${conversion} ${unitsUse})` : '';
-      return suffix;
+      return unitsBuy && unitsUse && conversion ? ` (1 ${unitsBuy} = ${conversion} ${unitsUse})` : '';
     }
     default:
       return '';
