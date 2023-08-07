@@ -18,6 +18,7 @@ import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
+import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
 import FBDocumentRevisions from '../FBDocumentRevisions/FBDocumentRevisions';
 import FBDownloadSheetTpl from '../FBDownloadSheetTpl/FBDownloadSheetTpl';
@@ -144,6 +145,7 @@ class FBSchemaState {
     lotOnHandQuantity: FBLotOnHandQuantityField,
     partVendors: FBPartVendors,
     numeric: FBNumericField,
+    cycleCount: FBCycleCount,
   };
 
   @observable public schema?: FBSchemaProps[];

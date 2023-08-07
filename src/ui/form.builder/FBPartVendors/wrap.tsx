@@ -1,4 +1,4 @@
-import { differenceBy, orderBy, unionBy } from 'lodash';
+import { differenceBy, isNumber, orderBy, unionBy } from 'lodash';
 import { useState } from 'react';
 import { FB } from '..';
 import { DEFAULT_CURRENCY } from './constants';
@@ -25,14 +25,14 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
       formState?.setFieldAutosave(name);
     };
 
-    const prepareVendor = (vendor: Vendor) => ({
+    const prepareVendor = (vendor: Vendor): Vendor => ({
       ...vendor,
-      ...(vendor.cost?.value && ({
-        cost: {
-          ...vendor.cost,
-          currency: DEFAULT_CURRENCY,
-        },
-      })),
+      cost: vendor.cost?.value ? {
+        ...vendor.cost,
+        currency: DEFAULT_CURRENCY,
+      } : undefined,
+      leadTime: isNumber(vendor.leadTime) ? vendor.leadTime : undefined,
+      conversion: isNumber(vendor.conversion) ? vendor.conversion : undefined,
       vendor: {
         name: vendor.vendor.name,
         id: vendor.vendor.id,

@@ -44,13 +44,13 @@ export interface Vendor {
   id: string
   primary: boolean
   vendor: Supplier
-  status: string
-  partNumber: string
-  cost: Cost
-  unitsBuy: string
-  conversion: number
-  unitsUse: string
-  leadTime: number
+  status?: string
+  partNumber?: string
+  cost?: Cost
+  unitsBuy?: string
+  conversion?: number
+  unitsUse?: string
+  leadTime?: number
 }
 
 export interface EditableVendor extends Vendor {
