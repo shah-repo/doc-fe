@@ -20,7 +20,7 @@ import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatusLabelMapping, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
@@ -185,6 +185,19 @@ export function KendoGrid<T extends any>({
     POStatusLabelMapping.CLOSED,
     POStatusLabelMapping.VOIDED,
   ];
+const lotStatusOptions = [
+  LotStatusLabelMapping.QUARANTINE,
+  LotStatusLabelMapping.ACCEPTED,
+  LotStatusLabelMapping.REJECTED,
+  LotStatusLabelMapping.EXPIRED,
+  LotStatusLabelMapping.USE_AS_IS,
+  LotStatusLabelMapping.RTV,
+  LotStatusLabelMapping.REWORK,
+  LotStatusLabelMapping.SCRAP,
+  LotStatusLabelMapping.RD_USED_ONLY,
+  LotStatusLabelMapping.OTHER,
+  LotStatusLabelMapping.VOIDED,
+];
 
   const POStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
@@ -195,6 +208,17 @@ export function KendoGrid<T extends any>({
       })}
     />
   );
+
+  const LotStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={lotStatusOptions}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
   const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
       {...props}
@@ -267,6 +291,7 @@ export function KendoGrid<T extends any>({
     [KendoGridFilterCell.ACTIVE]: ActiveFilter,
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
     [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
+    [KendoGridFilterCell.LOT_STATUS]: LotStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
     [KendoGridFilterCell.EFFECTIVE_DATE]: EffectiveDate,
     [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,

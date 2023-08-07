@@ -15,8 +15,8 @@ import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { ApplicationState } from '../../../state/reducers';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
+import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
 import { TableColumnProps } from '../../components/table/column/types';
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from '../../constants/urls';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
@@ -61,6 +61,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     const label = col?.label as string;
     if (col && label === 'PO Status') {
       col.valuePath = 'poStatus';
+    }
+     if (col && label === 'Lot status') {
+      col.valuePath = 'lotStatus';
     }
   });
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];

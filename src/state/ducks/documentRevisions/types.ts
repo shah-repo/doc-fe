@@ -63,6 +63,20 @@ export enum POStatusLabelMapping {
   VOIDED = 'Voided',
 }
 
+export enum LotStatusLabelMapping {
+  QUARANTINE = 'Quarantine',
+  ACCEPTED = 'Accepted',
+  REJECTED = 'Rejected',
+  EXPIRED = 'Expired',
+  USE_AS_IS = 'Use_As_Is',
+  RTV = 'Return_to_Vendor',
+  REWORK = 'Rework',
+  SCRAP = 'Scrap',
+  RD_USED_ONLY = 'R&D_Used_Only',
+  OTHER = 'Other',
+  VOIDED = 'Voided',
+}
+
 export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
 }
