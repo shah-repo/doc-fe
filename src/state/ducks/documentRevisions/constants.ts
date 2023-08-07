@@ -27,6 +27,7 @@ export const ADD_BOM_BRANCH = 'bom/add_branch';
 export const UPDATE_BOM_BRANCH = 'bom/update_branch';
 export const DELETE_BOM_BRANCH = 'bom/remove_branch';
 export const CHANGE_ORDER_BOM_BRANCH = 'bom/change_order';
+export const FETCH_WHERE_USED_TREE = 'bom/where_used';
 
 export const FETCH_ALTERNATE_PART = 'bom/alternate_parts';
 export const ADD_ALTERNATE_PART = 'bom/add_alternate_parts';
