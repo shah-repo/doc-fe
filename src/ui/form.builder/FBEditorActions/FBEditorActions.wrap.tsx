@@ -76,6 +76,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         label,
         editorProperties,
         uniqueSchemaItem,
+        deleteDisabled,
         placeholder,
         validationAttribute,
         rules,
@@ -125,18 +126,18 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       additionalSchema();
       formValues.rules = formRules;
 
-        workspaceState?.setSchemaItemAt({
-          index,
-          type,
-          name: `${kebabCase(label as string)}-${FB.uniqid}`,
-          ...omit(formValues, editorPropertiesFlags),
-          ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
-          applicableOn: ['ON_STATE_TO_IN_REVIEW'],
-          applicableValidationSchema: true,
-          validationAttribute: (label as string) || placeholder || validationAttribute,
-          tabId: editorState?.tabId ?? _tabsState?.activeTabId,
-        }, index);
-
+      workspaceState?.setSchemaItemAt({
+        index,
+        type,
+        name: `${kebabCase(label as string)}-${FB.uniqid}`,
+        ...omit(formValues, editorPropertiesFlags),
+        ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
+        deleteDisabled: deleteDisabled,
+        applicableOn: ['ON_STATE_TO_IN_REVIEW'],
+        applicableValidationSchema: true,
+        validationAttribute: (label as string) || placeholder || validationAttribute,
+        tabId: editorState?.tabId ?? _tabsState?.activeTabId,
+      }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 
       dialogState?.closeDialog();

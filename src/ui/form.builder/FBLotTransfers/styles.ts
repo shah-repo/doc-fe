@@ -10,7 +10,6 @@ export default makeStyles(theme => ({
   grid: {
     '& .k-column-title': {
       fontSize: 12,
-      textTransform: 'uppercase',
       whiteSpace: 'normal',
     },
     '& td': {
@@ -18,7 +17,7 @@ export default makeStyles(theme => ({
       boxSizing: 'border-box',
 
       '& a': {
-        color: Colors.primary,
+        color: Colors.textBlack,
 
         '&:hover': {
           textDecoration: 'underline',
