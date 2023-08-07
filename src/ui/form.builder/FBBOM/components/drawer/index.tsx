@@ -8,7 +8,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import LaunchIcon from '@material-ui/icons/Launch';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
@@ -20,11 +19,19 @@ import useStyles from './styles';
 interface FBBOMDetailDrawerProps {
   openDrawer: boolean
   closeDrawer: () => void
+  parentRevId?: string
+  docId?: string
+  status?: string
+  revision?: string
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
   openDrawer,
   closeDrawer,
+  parentRevId,
+  docId,
+  status,
+  revision,
   children,
 }) => {
   const classes = useStyles();
@@ -48,14 +55,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
           </Grid>
           <Grid item>
             <div className={classes.iconContainer}>
-              <IconButton
-                onClick={() => closeDrawer()}
-                className={classes.iconButton}
-                size="small"
-                data-cy=""
-              >
-                <LaunchIcon className={classes.launchIcon} />
-              </IconButton>
+
               <IconButton
                 onClick={() => closeDrawer()}
                 aria-label="Close"
@@ -83,14 +83,14 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
               data-cy="HeaderInfo-docId"
               component="span"
             >
-              CS-00007
+              {docId}
             </Typography>
           </Grid>
           <Grid item className={classes.whiteDot} />
           <Grid item className={classes.docId}>
             <Text
               translation="form.builder.header.rev"
-              values={{ revision: 1 }}
+              values={{ revision }}
               dataCy="HeaderInfo-Rev"
             />
           </Grid>
@@ -98,15 +98,15 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Chip
               size="small"
               className={`${classes.chip} ${
-                classes[FormHeaderStatusClassMapping.Released]
+                classes[FormHeaderStatusClassMapping[status ?? '']]
               }`}
-              label="Released"
+              label={status}
               data-cy="HeaderInfo-status"
             />
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
-        <FBBOMDrawerTable />
+        <FBBOMDrawerTable parentRevId={parentRevId} />
       </Box>}
     </Drawer>
   );

@@ -1,30 +1,83 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import NoDataFound from '../../../../components/common/kendo/NoDataFound';
 import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../../../components/notifications';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import { AlternatePartEditEvent, EditableAlternatePart, FBBOMDrawerTableProps } from '../treelist/interface';
 import { ActionsCell } from './components/Actions';
 import { schema } from './constants';
-import alternateParts from './data';
 import useStyles from './styles';
 
-const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
+const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId }) => {
   const classes = useStyles();
 
-  const [editedAlternatePart, setEditedAlternatePart] = React.useState<EditableAlternatePart>();
+  const fetchAlternateParts = useActionCreator(
+    documentRevisionsActions.fetchAlternateParts,
+  );
+  const addAlternateParts = useActionCreator(
+    documentRevisionsActions.addAlternatePart,
+  );
+  const deleteAlternateParts = useActionCreator(
+    documentRevisionsActions.deleteAlternatePart,
+  );
+  const [alternateParts, setAlternateParts] = useState<EditableAlternatePart[]>();
+  const [editedAlternatePart, setEditedAlternatePart] = useState<EditableAlternatePart>();
   const formik = useFormik<Partial<EditableAlternatePart>>({
     initialValues: {},
     onSubmit: (values) => {
-      console.log('values ::', values);
+      alternatePartAsync.start(
+        addAlternateParts,
+        {
+          parentNodeRevId: parentRevId,
+          alternatePartNodeRevId: values.id,
+        },
+        alternatePartAsync,
+      );
     },
   });
+  const alternatePartAsync = useAsync({
+    onSuccess: () => {
+      fetchAlternatePartAsync.start(
+        fetchAlternateParts,
+        parentRevId,
+        fetchAlternatePartAsync,
+      );
+    },
+    onError: (response) => {
+      toastError(response);
+    },
+  });
+
+  const fetchAlternatePartAsync = useAsync({
+    onSuccess: (response?: EditableAlternatePart[]) => {
+      setAlternateParts(response);
+      discardAlternatePart();
+    },
+    onError: (response) => {
+      toastError(response);
+    },
+  });
+
+  useEffect(() => {
+    if (!parentRevId) {
+      return;
+    }
+    fetchAlternatePartAsync.start(
+      fetchAlternateParts,
+      parentRevId,
+      fetchAlternatePartAsync,
+    );
+  }, [parentRevId]);
 
   const AddAlternatePart = () => setEditedAlternatePart({
     id: uuidv4(),
@@ -37,8 +90,13 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
     setEditedAlternatePart(undefined);
     formik.resetForm();
   };
-  const deleteAlternatePart = () => {
-    // TODO
+  const deleteAlternatePart = (dataItem) => {
+    alternatePartAsync.start(
+      deleteAlternateParts,
+      parentRevId,
+      dataItem.id,
+      alternatePartAsync,
+    );
   };
 
   const rowRender: DataGridProps<EditableAlternatePart>['rowRender'] = (row, { dataItem }) => {
@@ -75,7 +133,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
   const enableAddField = true;
   const handleRowClick = enableAddField && !editedAlternatePart ? editAlternatePart : undefined;
 
-  const alternatePartList = alternateParts.reduce((list, alternatePart) => {
+  const alternatePartList = alternateParts?.reduce((list, alternatePart) => {
     const isAlternatePartEdited = editedAlternatePart && editedAlternatePart.id === alternatePart.id;
 
     return [
@@ -95,7 +153,8 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = () => {
           filterable={false}
           hasBoxScrollbars
           schema={schema}
-          data={alternatePartList}
+          loading= {fetchAlternatePartAsync.isLoading || alternatePartAsync.isLoading}
+          data={alternatePartList ?? []}
           rowRender={rowRender}
           onRowClick={handleRowClick}
           fallback={<NoDataFound />}
