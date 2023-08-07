@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
+import { SM } from '../../../../../../App';
 import { ReactComponent as InfoIcon } from '../../../../../../assets/images/info_icon.svg';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
@@ -24,6 +25,7 @@ import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
 const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
+  const { _documentRevisionFormState } = SM.useStores();
   const { colSpan, id, style, dataItem, field } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
@@ -100,7 +102,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
-  const handleToggle = () => {
+  const openDrawer = () => {
     setOpenPartsDrawer(true);
   };
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
@@ -187,9 +189,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && getFieldInfo()}
         {!isEditMode
-        && <Link underline="hover" onClick={handleToggle} className={classes.link}>
-          {dataItem.docId}
-        </Link> }
+        && (_documentRevisionFormState?.docId !== dataItem.docId
+         ? <Link underline="hover" onClick={openDrawer} className={classes.link}>
+            {dataItem.docId}
+          </Link>
+          : dataItem.docId) }
         {dataItem.isOwner && !isEditMode && <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />}
       </span>
       {getDrawer()}
