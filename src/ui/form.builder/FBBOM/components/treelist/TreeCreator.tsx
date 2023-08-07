@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -9,21 +10,39 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import Text from '../../../../components/Text';
+import useStyles from './styles';
 
 const TEXTLENGTH = 120;
 const OFFSET = 3;
 
-export default function TreeCreator ({ docRevId }: {docRevId: string}) {
+const Loader = () => {
+  const classes = useStyles();
+
+  return (
+    <div
+      data-cy="ar-items-loader"
+      className={classes.loader}
+    >
+      <Text translation="common.loading" />
+    </div>
+  );
+};
+
+export default function TreeCreator ({ docRevId }: { docRevId: string }) {
   const [data, setData] = React.useState<any[]>();
+  const [isLoading, setLoading] = React.useState(false);
 
   const fetchWhereUsedTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedTree);
   const fetchWhereUsedTreesAsync = useAsync({
     onSuccess: (treeList) => {
       // console.log(treeList);
       setData(treeList);
+      setLoading(false);
     },
   });
   const fetchWhereUsedTree = (docRevId) => {
+    setLoading(true);
     fetchWhereUsedTreesAsync.start(fetchWhereUsedTreesAction, docRevId, fetchWhereUsedTreesAsync);
   };
 
@@ -194,6 +213,9 @@ export default function TreeCreator ({ docRevId }: {docRevId: string}) {
   };
 
   return (
-    <div id="treeMap" />
+    <>
+      {isLoading && <Loader />}
+      <div id="treeMap" />
+    </>
   );
 }

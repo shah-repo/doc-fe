@@ -433,4 +433,25 @@ export default makeStyles((theme) => ({
   grayBg: {
     backgroundColor: Colors.gray,
   },
+  viewIcon: {
+    fill: Colors.black,
+    position: 'relative',
+    marginRight: theme.spacing(2),
+    fontSize: '1.1rem',
+    cursor: 'pointer',
+  },
+  loader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.white,
+    opacity: 0.7,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    zIndex: 1,
+  },
 }));

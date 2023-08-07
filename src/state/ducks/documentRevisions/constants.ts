@@ -28,6 +28,7 @@ export const UPDATE_BOM_BRANCH = 'bom/update_branch';
 export const DELETE_BOM_BRANCH = 'bom/remove_branch';
 export const CHANGE_ORDER_BOM_BRANCH = 'bom/change_order';
 export const FETCH_WHERE_USED_TREE = 'bom/where_used';
+export const CHECK_IS_USED = 'bom/where_used_status';
 
 export const PO_REQUESTOR_COMPONENT_NAME = 'po-requestor-autocomplete';
 export const PO_ITEMS_COMPONENT_NAME = 'po-items-built-in';

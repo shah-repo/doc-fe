@@ -61,8 +61,11 @@ import {
   FBBOMProps,
 } from './interface';
 import useStyles from './styles';
-import TreeCreator from './TreeCreator';
 import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) => {
   const classes = useStyles();
@@ -78,6 +81,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
   const { _documentRevisionFormState } = SM.useStores();
   const [selectedPartLevel, setSelectedPartLevel] = React.useState<{level: number[], dataItem: EditableBOM}>();
   const treeListRef = useRef(null);
+
+  const [showTree, setShowTree] = useState(false);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -172,6 +177,33 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
   };
 
   const confirmationDialog = useDialog();
+
+  const whereUsedDialog = useDialog();
+  const openWhereUsedDialog = () => {
+    whereUsedDialog.open();
+  };
+  const closeWhereUsedDialog = () => {
+    whereUsedDialog.close();
+  };
+
+  const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
+  const fetchHasATreeAsync = useAsync({
+    onSuccess: (statusObj) => {
+      // console.log(treeList);
+      if (statusObj && statusObj[documentRevision?.id]) {
+        setShowTree(true);
+      }
+    },
+  });
+  const fetchHasATree = (docRevId) => {
+    fetchHasATreeAsync.start(fetchHasATreeAction, [docRevId], fetchHasATreeAsync);
+  };
+
+  useEffect(() => {
+    fetchHasATree(documentRevision?.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevision?.id]);
+
   const [selectedPart, setSelectedPart] = useState();
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
     const partInfo = selectedPart?.id?.split(SELECTED_PART_KEY_SEPARATOR);
@@ -469,6 +501,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
           </span>
         </Grid>
         <Grid item data-cy="show-hide-columns">
+          { showTree && <FontAwesomeIcon className={classes.viewIcon} icon={solid('tree-deciduous')}
+            onClick={openWhereUsedDialog}
+          /> }
           <ColumnShowHideTreeMenu
             columnDefinition={columns}
             onChange={onColumnShowHide}
@@ -646,7 +681,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
           {translate('form.builder.add.item')}
         </AddButton>}
       </Grid>
-      <TreeCreator docRevId={documentRevision.id} />
+      {
+        whereUsedDialog.isOpen
+        && <WhereUsedDialog
+          docRevId={documentRevision.id}
+          whereUsedDialog={whereUsedDialog}
+          closeDialog = {closeWhereUsedDialog}
+        />
+      }
     </>
   );
 };

@@ -1608,5 +1608,6 @@
   "bom.table.title.issues": "Issues",
   "bom.alternate.part.add": "Add Part",
   "bom.revision.available": "New Revision Available",
-  "bom.order.error.message": "Change the order of the parts within the same parent"
+  "bom.order.error.message": "Change the order of the parts within the same parent",
+  "bom.whereUsed.dialog.title": "Where Used View"
 }
