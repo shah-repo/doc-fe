@@ -40,15 +40,12 @@ const styles = makeStyles((theme: Theme) =>
     },
     logo: {
       maxWidth: '100%',
-      height: 50,
+      height: 80,
       padding: theme.spacing(0, 3),
     },
     smallLogo: {
       width: 50,
       height: 50,
-    },
-    logoContainer: {
-      padding: theme.spacing(0, 5.625),
     },
     mt0: {
       marginTop: 0,

@@ -42,7 +42,7 @@ const Logo: React.FunctionComponent<Props> = ({
           alt={companyName}
         />
       </Avatar>}
-      {open && <div className={classes.logoContainer} data-cy={companyName}>
+      {open && <div data-cy={companyName}>
         <img
           id="logo"
           src={logo}

@@ -65,6 +65,8 @@ export default makeStyles((theme: Theme) =>
     },
     childMenuItems: {
       color: Colors.light_gray,
+      width: 210,
+      height: 33,
     },
     childMenuActive: {
       color: Colors.white,
@@ -75,6 +77,8 @@ export default makeStyles((theme: Theme) =>
       background: `${Colors.mirage} !important`,
       padding: theme.spacing(0.75, 1.25),
       borderRadius: 4,
+      maxWidth: 155,
+      height: 28,
     },
     popover: {
       pointerEvents: 'auto',
@@ -88,5 +92,12 @@ export default makeStyles((theme: Theme) =>
     childMenuLabel: {
       opacity: 0.7,
     },
+    firstChildMenuItem: {
+      borderRadius: theme.spacing(0.5, 0.5, 0, 0),
+    },
+    lastChildMenuItem: {
+      borderRadius: theme.spacing(0, 0, 0.5, 0.5),
+    },
+
   }),
 );

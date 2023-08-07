@@ -58,9 +58,11 @@ const checkIfItemIsActive = (
 
 const StyledMenu = withStyles({
   paper: {
-    background: 'transparant !important',
     fontSize: 13,
     fontWeight: 400,
+    boxShadow: 'none',
+    outline: 'none',
+    backgroundColor: 'transparent',
   },
   list: {
     padding: 0,
@@ -186,7 +188,7 @@ NavigationLinkContainerProps
       </MenuItem>
       {menu?.length && <div className={classes.menuDivSeparator} />}
       {menu?.map(
-        (ld) =>
+        (ld, index) =>
           !isMenuType(ld.type) && (
             <MenuItem
               onClick={() => menuClick(ld)}
@@ -204,6 +206,8 @@ NavigationLinkContainerProps
                   ld.path,
                   ld.category,
                 ),
+                [classes.firstChildMenuItem]: index === 0,
+                [classes.lastChildMenuItem]: index === menu.length - 1,
               })}
             >
               <span className={classes.childMenuLabel}> {ld.label}</span>
