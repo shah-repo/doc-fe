@@ -16,7 +16,7 @@ export interface ActionsProps<EditableAlternatePart> {
   scrollBehavior?: ScrollBehavior
   onConfirm: () => void
   onDiscard: () => void
-  onDelete?: () => void
+  onDelete?: (dataItem: EditableAlternatePart) => void
 }
 
 export default function Actions <EditableAlternatePart> (props: ActionsProps<EditableAlternatePart>): React.ReactElement | null {
@@ -60,7 +60,7 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
             <IconButton
               kind="action"
               size="small"
-              onClick={onDelete}
+              onClick={() => onDelete(dataItem)}
               ref={deleteRef}
               disabled={isDeleteDisabled}
             >

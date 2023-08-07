@@ -1,6 +1,8 @@
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
+import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import { getCellValue, isEditBOM } from '../utils';
@@ -19,6 +21,7 @@ const TitleCell: ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren, isEditMode: dataItem[ADD_FIELD] });
   const { values } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
+  const displayValue = getCellValue(isEditMode ? values : dataItem, field);
 
   return (
     <td
@@ -32,9 +35,16 @@ const TitleCell: ComponentType<CustomTreeListCellProps> = ({
         'aria-expanded': otherProps.expanded,
       }}
     >
-      <span className={classes.titleInfoCell}>
-        {getCellValue(isEditMode ? values : dataItem, field)}
-      </span>
+      <Box className={classes.titleInfoCell}>
+        <OverflowTooltip
+          title={displayValue}
+          placement="top"
+          interactive
+          arrow
+        >
+          {displayValue}
+        </OverflowTooltip>
+      </Box>
     </td>
   );
 };

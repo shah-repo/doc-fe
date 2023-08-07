@@ -24,6 +24,7 @@ export const SUB_ITEMS_FIELD = 'childNodes';
 export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
+export const ALTERNATE_PART_KEY = 'alternatePartsList';
 export const CELL_EMPTY_VALUE = '-';
 export const TREELIST_CONFIG = {
   sortable: true,

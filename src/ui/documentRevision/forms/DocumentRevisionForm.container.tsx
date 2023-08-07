@@ -64,6 +64,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean
   type?: DocumentCloneType
   isNewVersion?: boolean
+  minimizeRightPanel?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -86,6 +87,7 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  minimizeRightPanel,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -281,6 +283,7 @@ DocumentRevisionFormContainerProps
         formInput,
         mode,
         isDAM,
+        minimizeRightPanel,
       }}
     />
   );

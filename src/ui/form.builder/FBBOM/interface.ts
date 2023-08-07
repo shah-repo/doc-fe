@@ -29,6 +29,7 @@ export interface BOM {
   isNew?: boolean
   isDeleted?: boolean
   availableRevisions?: AvailableRevisions
+  changeRequestDetails?: changeRequestDetails
 }
 
 export interface EditableBOM extends BOM {
@@ -46,14 +47,16 @@ export interface BOMEditEvent {
   level: number[]
 }
 
+interface changeRequestDetails {
+  id: string
+  title: string
+  crId: string
+}
+
 export interface AvailableRevisions {
   isReleased: boolean
   name: string
   revision: number
   status: string
-  changeRequestDetails: {
-    id: string
-    title: string
-    crId: string
-  }
+  changeRequestDetails: changeRequestDetails
 }

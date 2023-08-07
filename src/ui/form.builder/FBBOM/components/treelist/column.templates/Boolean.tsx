@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React from 'react';
 import FBBOMDetailDrawer from '../../drawer';
+import { ALTERNATE_PART_KEY, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -16,10 +17,9 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
   const classes = styles();
   const flag = dataItem[field ?? ''] as boolean;
   const handleToggle = () => {
-    // TODO open side bar
-    // if (field === 'alternatePartsList') {
-    // setOpenPartsDrawer(true);
-    // }
+    if (field === ALTERNATE_PART_KEY) {
+      setOpenPartsDrawer(true);
+    }
   };
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
 
@@ -34,13 +34,13 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
     >
-      <div onClick={flag ? handleToggle : undefined}>
+      <div onClick={flag ? handleToggle : handleToggle}>
         <FontAwesomeIcon
           icon={flag ? solid('circle') : regular('circle')}
           className={cx(classes.dot, { selectedDot: flag, deselectedDot: !flag })}
         />
       </div>
-      <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer }} />
+      <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
     </td>
   );
 };

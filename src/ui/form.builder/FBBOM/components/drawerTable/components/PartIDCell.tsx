@@ -30,13 +30,13 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
     onSuccess: (data: any[] = []) => {
       if (data && data.length > 0) {
         const {
-          revision, status, name, docId,
+          revision, status, name, id,
         } = data[0];
 
         setFieldValue('revision', revision);
         setFieldValue('status', status);
         setFieldValue('name', name);
-        setFieldValue('docId', docId);
+        setFieldValue('id', id);
       }
     },
   });

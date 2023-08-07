@@ -62,6 +62,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   workspaceState,
   isCreateUrl,
   dirty = false,
+  minimizeRightPanel,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
@@ -174,7 +175,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={true} minimizeRightPanel={_tabsState?.isTabActive(TabTypeOptions.BOM)} />}
+              {() => <DocumentRevisionSidebar edit={true} minimizeRightPanel={minimizeRightPanel ?? _tabsState?.isTabActive(TabTypeOptions.BOM)} />}
             </Observer>
           ),
         }}
