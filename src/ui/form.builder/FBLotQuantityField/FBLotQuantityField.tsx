@@ -21,12 +21,11 @@ const getUnitsLabel = (name: string) => {
   }
 };
 
-const getQuantityLabelPrefix = (name: string, conversion?: ConversionData) => {
+const getQuantityLabelPrefix = (name: string, conversionData?: ConversionData) => {
   switch (name) {
     case 'lot_quantity': {
-      const unitsBuy = conversion?.unitsBuy ? `1 ${conversion.unitsBuy}` : '';
-      const unitsUse = conversion?.unitsUse && conversion?.conversion ? `${conversion?.conversion} ${conversion.unitsUse}` : '';
-      const suffix = unitsBuy && unitsUse ? ` (${unitsBuy} = ${unitsUse})` : '';
+      const { unitsBuy, unitsUse, conversion } = conversionData ?? {};
+      const suffix = unitsBuy && unitsUse && conversion ? ` (1 ${unitsBuy} = ${conversion} ${unitsUse})` : '';
       return suffix;
     }
     default:
@@ -43,9 +42,9 @@ const FBQuantityField: React.FC<FBInputProps> = ({
   const { workspaceMode: mode } = formState ?? {};
   const value = formState?.getFieldValue(name) as number;
   const unit = useObserver(() => workspaceState?.formInputSync.get(`${name}_unit`) as string);
-  const conversion = useObserver(() => workspaceState?.formInputSync.get('part-conversion') as ConversionData);
+  const conversionData = useObserver(() => workspaceState?.formInputSync.get('part-conversion') as ConversionData);
   const unitsLabel = getUnitsLabel(name);
-  const quantityLabelPrefix = getQuantityLabelPrefix(name, conversion);
+  const quantityLabelPrefix = getQuantityLabelPrefix(name, conversionData);
   const fieldLabel = `${label as string}${quantityLabelPrefix}`;
 
   if (mode === FBWorkspaceModeOptions.PREVIEW) {
