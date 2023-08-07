@@ -5,7 +5,7 @@ import React, { CSSProperties } from 'react';
 import { SortableItemProps } from '../types';
 import { Field } from './Field';
 
-export const SortableItem: React.FC<SortableItemProps> = ({
+const SortableItem: React.FC<SortableItemProps> = ({
   item, isFirst, isDesignMode, isAutosaveEnabled,
 }) => {
   const { name = '' } = item;
@@ -38,3 +38,5 @@ export const SortableItem: React.FC<SortableItemProps> = ({
     </div>
   );
 };
+
+export default SortableItem;

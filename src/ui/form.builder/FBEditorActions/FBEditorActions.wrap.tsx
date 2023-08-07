@@ -125,7 +125,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       additionalSchema();
       formValues.rules = formRules;
 
-      setTimeout(() => {
         workspaceState?.setSchemaItemAt({
           index,
           type,
@@ -137,8 +136,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
           validationAttribute: (label as string) || placeholder || validationAttribute,
           tabId: editorState?.tabId ?? _tabsState?.activeTabId,
         }, index);
-        document.body.style.cursor = 'wait';
-      });
+
       leftPanelState?.setIndex(index + 1 || 0);
 
       dialogState?.closeDialog();
