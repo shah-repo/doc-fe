@@ -17,7 +17,7 @@ export interface Facet {
 export interface Document {
   id: string
   typeId: string
-  typeName: DocumentTypeName
+  typeName: FacetCategoryId
   companyId: string
   companyName: string
   revisionId: string
@@ -43,7 +43,7 @@ export interface SearchRequestResponse {
   total: number
 }
 
-export enum DocumentTypeName {
+export enum FacetCategoryId {
   Document = 'Document',
   EmptyCategory = 'EmptyCategory',
   ChangeRequest = 'ChangeRequest',

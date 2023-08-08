@@ -20,7 +20,7 @@ import { FB } from '../../../../../../ui/form.builder';
 import SearchState from '../../state';
 import { observer } from 'mobx-react';
 import { translate } from '../../../../../../common/intl';
-import { Facet, Document, DocumentTypeName } from '../../types';
+import { Facet, Document, FacetCategoryId } from '../../types';
 import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
 import { TrainingRecordQuery } from '../../../../../../state/ducks/training/types';
 import TrainingDetails from '../../../../../../ui/training/details/TrainingDetails';
@@ -97,12 +97,12 @@ const SearchPage: React.FC = () => {
   const handleRowClick: GridProps['onRowClick'] = ({ dataItem }) => {
     const { id, revisionId, typeName } = dataItem as Document;
 
-    if (typeName === DocumentTypeName.TrainingRecord) {
+    if (typeName === FacetCategoryId.TrainingRecord) {
       searchState.fetchTrainingRecord(id);
       return;
     }
 
-    if (typeName === DocumentTypeName.ChangeRequest) {
+    if (typeName === FacetCategoryId.ChangeRequest) {
       history.push(changeRequestPreviewPath(id));
       return;
     }
@@ -158,7 +158,7 @@ const SearchPage: React.FC = () => {
 
   const mappedFacets = mapFacets(queryFacets);
 
-  const loading = searchState.searchApi.loading || searchState.trainingApi.loading;
+  const isLoading = searchState.searchApi.loading || searchState.trainingApi.loading;
 
   return (
     <Box className={classes.root}>
@@ -220,7 +220,7 @@ const SearchPage: React.FC = () => {
         <KendoDataGrid
           schema={schema}
           data={searchData?.documents ?? []}
-          loading={loading}
+          loading={isLoading}
           total={searchData?.total}
           pageable={pagerSettings}
           pageSize={PAGE_SIZE}

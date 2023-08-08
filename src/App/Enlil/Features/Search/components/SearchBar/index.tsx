@@ -10,7 +10,7 @@ import { Autocomplete } from '../../../../../../ui/components/forms/fields-next'
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
 import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
 import useStyles from './styles';
-import { DocumentTypeName, Option } from '../../types';
+import { FacetCategoryId, Option } from '../../types';
 import { FB } from '../../../../../../ui/form.builder';
 import SearchState from '../../state';
 import { observer } from 'mobx-react';
@@ -19,6 +19,9 @@ import { debounce } from 'lodash';
 import Text from '../../../../../../ui/components/Text';
 import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
 import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
+import { INPUT_DEBOUNCE_TIMEOUT } from '../../../../../../ui/constants/general';
+
+const MIN_QUERY_LENGTH = 3;
 
 const SearchBar: React.FC = () => {
   const history = useHistory() as History;
@@ -49,7 +52,7 @@ const SearchBar: React.FC = () => {
 
     handleBlur();
 
-    if (value.document?.id && value.document.typeName === DocumentTypeName.ChangeRequest) {
+    if (value.document?.id && value.document.typeName === FacetCategoryId.ChangeRequest) {
       history.push(changeRequestPreviewPath(value.document.id));
       return;
     }
@@ -102,25 +105,25 @@ const SearchBar: React.FC = () => {
           limit: MAX_TOP_RESULTS,
         });
       },
-      300,
+      INPUT_DEBOUNCE_TIMEOUT,
     ),
     [searchState],
   );
 
   useEffect(() => {
-    if (searchQuery.length >= 3) {
-      if (isFocused) {
-        requestSearch(searchQuery);
-      }
-    } else {
-      searchState.reset();
+    if (searchQuery.length < 3) {
+      return searchState.reset();
+    }
+
+    if (isFocused) {
+      requestSearch(searchQuery);
     }
   }, [searchState, requestSearch, searchQuery, isFocused]);
 
   const searchData = searchState.searchApi.data;
 
   const options = useMemo(() => {
-    if (searchQuery.length <= 3 && !searchData?.total) {
+    if (searchQuery.length <= MIN_QUERY_LENGTH && !searchData?.total) {
       return getRecentSearch().map((query) => ({
         query,
         group: translate('search.recent'),
@@ -164,11 +167,11 @@ const SearchBar: React.FC = () => {
     );
   };
 
-  const loading = searchState.searchApi.loading;
+  const isLoading = searchState.searchApi.loading;
 
   return (
     <Autocomplete
-      loading={loading}
+      loading={isLoading}
       disablePortal
       options={options}
       filterOptions={(options: Option[]) => options}
