@@ -5,6 +5,8 @@ import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpe
 import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
 import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
+import { companySelectors } from '../../company';
+import { DocumentCategory } from '../types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -102,6 +104,27 @@ const getDocTypeName = createSelector(
   (byIds, docTypeId) => get(byIds[docTypeId], 'documentTypeName', 'N/A'),
 );
 
+const getDocTypeCategory = createSelector(
+  byId,
+  (state, docTypeId) => docTypeId,
+  (byIds, docTypeId) => get(byIds[docTypeId], 'category', 'N/A'),
+);
+
+const getDocTypeNumOfRevStages = createSelector(
+  companySelectors.getCompanyMaxRevisionStage,
+  getDocTypeCategory,
+  (companyMaxRevisionStage, docTypeCategory) => {
+    // Some categories aren't available for NumericAlpha.
+    return [
+      DocumentCategory.Supplier,
+      DocumentCategory.TrainingCurriculums,
+      DocumentCategory.Equipment,
+    ].includes(docTypeCategory as DocumentCategory)
+      ? 2
+      : companyMaxRevisionStage;
+  },
+);
+
 const makeGetDocTypeByAcronym = () => createSelector(
   (state: ApplicationState) => getDocumentTypeList(state),
   (state: ApplicationState, acronym: string) => acronym,
@@ -120,6 +143,8 @@ export default {
   getDocumentTypeByAcronym,
   docRevTypeById,
   getDocTypeName,
+  getDocTypeCategory,
+  getDocTypeNumOfRevStages,
   docRevTypeForms,
   makeGetDocTypeByAcronym,
   getDocumentTypesByCategory,
