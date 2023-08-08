@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Dialog } from '@material-ui/core';
 import { State } from '@progress/kendo-data-query';
 import { GridDataStateChangeEvent, GridProps } from '@progress/kendo-react-grid';
-import { clone, kebabCase, map, startCase } from 'lodash';
+import { kebabCase, map, startCase } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
@@ -20,7 +20,7 @@ import { FB } from '../../../../../../ui/form.builder';
 import SearchState from '../../state';
 import { observer } from 'mobx-react';
 import { translate } from '../../../../../../common/intl';
-import { Facet } from '../../types';
+import { Facet, Document, DocumentTypeName } from '../../types';
 import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
 import { TrainingRecordQuery } from '../../../../../../state/ducks/training/types';
 import TrainingDetails from '../../../../../../ui/training/details/TrainingDetails';
@@ -95,26 +95,24 @@ const SearchPage: React.FC = () => {
   }));
 
   const handleRowClick: GridProps['onRowClick'] = ({ dataItem }) => {
-    if (!dataItem || !dataItem.id) {
+    const { id, revisionId, typeName } = dataItem as Document;
+
+    if (typeName === DocumentTypeName.TrainingRecord) {
+      searchState.fetchTrainingRecord(id);
       return;
     }
 
-    if (dataItem.typeName === 'TrainingRecord') {
-      searchState.fetchTrainingRecord(dataItem.id);
+    if (typeName === DocumentTypeName.ChangeRequest) {
+      history.push(changeRequestPreviewPath(id));
       return;
     }
 
-    if (dataItem.typeName === 'ChangeRequest') {
-      history.push(changeRequestPreviewPath(dataItem.id));
-      return;
-    }
-
-    if (dataItem.revisionId) {
-      history.push(documentVersionPath(dataItem.revisionId, dataItem.id));
+    if (revisionId) {
+      history.push(documentVersionPath(revisionId, id));
     }
   };
 
-  const exportData = clone(searchData?.documents ?? []).map(item => ({
+  const exportData = (searchData?.documents ?? []).map(item => ({
     ID: item.typeId,
     Revision: item.revisionName,
     Title: item.title,

@@ -4,13 +4,13 @@ import { InputAdornment, ListSubheader, Popper } from '@material-ui/core';
 import { RenderGroupParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { History } from 'history';
 import { Autocomplete } from '../../../../../../ui/components/forms/fields-next';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
 import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
 import useStyles from './styles';
-import { Option } from '../../types';
+import { DocumentTypeName, Option } from '../../types';
 import { FB } from '../../../../../../ui/form.builder';
 import SearchState from '../../state';
 import { observer } from 'mobx-react';
@@ -49,7 +49,7 @@ const SearchBar: React.FC = () => {
 
     handleBlur();
 
-    if (value.document?.id && value.document.typeName === 'ChangeRequest') {
+    if (value.document?.id && value.document.typeName === DocumentTypeName.ChangeRequest) {
       history.push(changeRequestPreviewPath(value.document.id));
       return;
     }

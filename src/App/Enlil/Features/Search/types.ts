@@ -17,7 +17,7 @@ export interface Facet {
 export interface Document {
   id: string
   typeId: string
-  typeName: string
+  typeName: DocumentTypeName
   companyId: string
   companyName: string
   revisionId: string
@@ -41,4 +41,23 @@ export interface SearchRequestResponse {
   facets: Facet[]
   limit: number
   total: number
+}
+
+export enum DocumentTypeName {
+  Document = 'Document',
+  EmptyCategory = 'EmptyCategory',
+  ChangeRequest = 'ChangeRequest',
+  Record = 'Record',
+  Equipment = 'Equipment',
+  Supplier = 'Supplier',
+  PurchaseOrder = 'PurchaseOrder',
+  Receive = 'Receive',
+  Manufacturing = 'Manufacturing',
+  Parts = 'Parts',
+  EB = 'EB',
+  Lhr = 'Lhr',
+  Lot = 'Lot',
+  Training = 'Training',
+  TrainingRecord = 'TrainingRecord',
+  TrainingCurriculum = 'TrainingCurriculum',
 }
