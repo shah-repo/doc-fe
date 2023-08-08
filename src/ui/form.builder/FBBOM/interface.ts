@@ -43,6 +43,7 @@ export interface EditableBOM extends BOM {
   isParentOwner?: boolean
   alternatePartsCount?: number
   attachmentNames: string[]
+  primaryAttachmentDetails: primaryAttachmentDetails
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM
@@ -53,6 +54,11 @@ interface changeRequestDetails {
   id: string
   title: string
   crId: string
+}
+
+interface primaryAttachmentDetails {
+  name: string
+  s3link: string
 }
 
 export interface AvailableRevisions {
