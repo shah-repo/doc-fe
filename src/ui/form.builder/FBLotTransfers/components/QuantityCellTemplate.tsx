@@ -1,16 +1,22 @@
+import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { requiredNumber, validator } from '../../../components/forms/fields/validators';
 import { DEDUCTABLE_TRANSFER_TYPES } from '../constants';
-import { CustomTemplateProps, LotTransferType } from '../types';
+import { CustomTemplateProps } from '../types';
 
-export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
+export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const defaultValue = dataItem.quantity;
+
+  const handleClick = () => {
+    onClick?.({ dataItem });
+  };
 
   if (isEditMode) {
     return (
@@ -29,6 +35,17 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, 
     );
   }
 
-  // return <>{DEDUCTABLE_TRANSFER_TYPES.includes(dataItem.type) ? `-${defaultValue}` : defaultValue}</>;
-  return <>{DEDUCTABLE_TRANSFER_TYPES.includes(dataItem?.type) ? (dataItem?.type === LotTransferType.Backflush ? defaultValue : `-${defaultValue}`) : defaultValue}</>;
+  return (
+    <Box onClick={handleClick}>
+      <OverflowTooltip
+        title={defaultValue}
+        onClick={handleClick}
+        placement="top"
+        interactive
+        arrow
+      >
+        {DEDUCTABLE_TRANSFER_TYPES.includes(dataItem.type) ? `-${defaultValue}` : defaultValue}
+      </OverflowTooltip>
+    </Box>
+  );
 };
