@@ -39,7 +39,7 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
     >
-      <div onClick={openDrawer}>
+      <div onClick={isAttachmentNamesExists ? openDrawer : undefined}>
         <Tooltip
           title={attachmentNamesCount}
           placement="top"
