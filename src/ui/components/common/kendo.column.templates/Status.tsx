@@ -33,6 +33,7 @@ export const Status = ({
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}
+      data-cy="cell-status"
       onClick={cellClickEvent}
     >
       {fieldLabel && (

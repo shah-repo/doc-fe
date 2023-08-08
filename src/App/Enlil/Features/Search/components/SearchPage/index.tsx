@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Dialog } from '@material-ui/core';
 import { State } from '@progress/kendo-data-query';
 import { GridDataStateChangeEvent, GridProps } from '@progress/kendo-react-grid';
-import { clone, map, startCase } from 'lodash';
+import { clone, kebabCase, map, startCase } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
@@ -152,13 +152,22 @@ const SearchPage: React.FC = () => {
     });
   }
 
+  const rowRender: GridProps['rowRender'] = (row, { dataItem }) => (
+    React.cloneElement(row, {
+      ['data-cy' as string]: `row-${kebabCase(dataItem.typeId)}`,
+    })
+  );
+
   const mappedFacets = mapFacets(queryFacets);
 
   const loading = searchState.searchApi.loading || searchState.trainingApi.loading;
 
   return (
     <Box className={classes.root}>
-      <Box className={classes.title}>
+      <Box
+        className={classes.title}
+        data-cy="global-search-title"
+      >
         {!searchQuery && <Text translation="common.search" />}
         {searchQuery && (
           <Text
@@ -171,30 +180,36 @@ const SearchPage: React.FC = () => {
         )}
       </Box>
       <Box className={classes.sidebar}>
-        <Box className={classes.toolbar}>
-          <Box>
-            <Text message="search.facets.header" />
-          </Box>
-          {checkedFacets.length > 0 && (
-            <Box
-              className={classes.selectButton}
-              onClick={handleFacetsDeselect}
-            >
-              <Text message="common.deselect.all" />
+        <Box data-cy="global-search-facets">
+          <Box className={classes.toolbar}>
+            <Box>
+              <Text message="search.facets.header" />
             </Box>
-          )}
+            {checkedFacets.length > 0 && (
+              <Box
+                className={classes.selectButton}
+                onClick={handleFacetsDeselect}
+              >
+                <Text message="common.deselect.all" />
+              </Box>
+            )}
+          </Box>
+          <FacetsList
+            facets={mappedFacets}
+            onChange={handleFacetsChange}
+          />
         </Box>
-        <FacetsList
-          facets={mappedFacets}
-          onChange={handleFacetsChange}
-        />
       </Box>
       <Box className={classes.topbar}>
         <Box className={classes.toolbar}>
           <Box>
             <Text translation="search.result" />
           </Box>
-          <Box className={classes.exportButton} onClick={dialog.open}>
+          <Box
+            className={classes.exportButton}
+            data-cy="global-search-export"
+            onClick={dialog.open}
+          >
             <FontAwesomeIcon
               className={classes.exportButtonIcon}
               icon={regular('up-from-bracket')}
@@ -221,6 +236,7 @@ const SearchPage: React.FC = () => {
           fullHeight
           onRowClick={handleRowClick}
           rowHeight={40}
+          rowRender={rowRender}
         />
       </Box>
       <ExportListDialog

@@ -184,6 +184,7 @@ const SearchBar: React.FC = () => {
       renderGroup={renderGroup}
       inputProps={{
         endAdornment: null,
+        ['data-cy' as string]: 'global-search-bar',
         className: cx({ [classes.inputFocused]: isFocused }),
         startAdornment: (
           <InputAdornment position="start" className={ cx({ [classes.iconFocused]: isFocused }) }>

@@ -45,6 +45,7 @@ const FacetItem: React.FC<FacetItemProps> = (props) => {
     <>
       <ListItem
         className={classes.listItem}
+        data-cy="global-search-facet"
         button
       >
         {children && (
