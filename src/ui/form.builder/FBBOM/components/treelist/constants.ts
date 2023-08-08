@@ -1,4 +1,5 @@
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
+import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import ARIDCell from './column.templates/ARIDCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
@@ -25,6 +26,7 @@ export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
 export const ALTERNATE_PART_KEY = 'alternatePartsList';
+export const ALTERNATE_PARTS_COUNT_KEY = 'alternatePartsCount';
 export const CELL_EMPTY_VALUE = '-';
 export const TREELIST_CONFIG = {
   sortable: true,
@@ -216,7 +218,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'alternatePartsList',
     title: 'Alternate Parts List',
     width: '80px',
-    cell: BooleanCell,
+    cell: AlternatePartsCell,
     filter: TreeListTextFilter,
     locked: false,
     mainOrderIndex: 16,
