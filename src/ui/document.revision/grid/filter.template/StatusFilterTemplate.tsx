@@ -11,7 +11,7 @@ import { DisplayText, TranslatedText } from '../../../components/common/kendo/he
 
 interface Props extends GridFilterCellProps {
   defaultItem: string
-  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[]| LotStatusLabelMapping[]
+  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | LotStatusLabelMapping[]
   documentTypeCategory?: string
 }
 
@@ -58,7 +58,7 @@ export const StatusFilterTemplate = ({
         }}
         valueRender={(li, itemProps) => {
           const itemChildren = <span>{(documentTypeCategory
-          === DocumentCategory.PurchaseOrder && itemProps
+          === (DocumentCategory.PurchaseOrder || DocumentCategory.Lot) && itemProps
           === DocumentRevisionStatusDisplay.Released)
             ? DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
           return React.cloneElement(li, li.props, itemChildren);

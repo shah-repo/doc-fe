@@ -56,7 +56,7 @@ import { DataLoader } from './DataLoader';
 import { KendoGridFilterCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
 
-export function KendoGrid<T extends any>({
+export function KendoGrid<T extends any> ({
   tableName,
   tableCriteria,
   schema,
@@ -185,19 +185,20 @@ export function KendoGrid<T extends any>({
     POStatusLabelMapping.CLOSED,
     POStatusLabelMapping.VOIDED,
   ];
-const lotStatusOptions = [
-  LotStatusLabelMapping.QUARANTINE,
-  LotStatusLabelMapping.ACCEPTED,
-  LotStatusLabelMapping.REJECTED,
-  LotStatusLabelMapping.EXPIRED,
-  LotStatusLabelMapping.USE_AS_IS,
-  LotStatusLabelMapping.RTV,
-  LotStatusLabelMapping.REWORK,
-  LotStatusLabelMapping.SCRAP,
-  LotStatusLabelMapping.RD_USED_ONLY,
-  LotStatusLabelMapping.OTHER,
-  LotStatusLabelMapping.VOIDED,
-];
+
+  const lotStatusOptions = [
+    LotStatusLabelMapping.QUARANTINE,
+    LotStatusLabelMapping.ACCEPTED,
+    LotStatusLabelMapping.REJECTED,
+    LotStatusLabelMapping.EXPIRED,
+    LotStatusLabelMapping.USE_AS_IS,
+    LotStatusLabelMapping.RTV,
+    LotStatusLabelMapping.REWORK,
+    LotStatusLabelMapping.SCRAP,
+    LotStatusLabelMapping.RD_USED_ONLY,
+    LotStatusLabelMapping.OTHER,
+    LotStatusLabelMapping.VOIDED,
+  ];
 
   const POStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
@@ -208,7 +209,6 @@ const lotStatusOptions = [
       })}
     />
   );
-
   const LotStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
@@ -218,7 +218,6 @@ const lotStatusOptions = [
       })}
     />
   );
-
   const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
       {...props}
@@ -319,11 +318,10 @@ const lotStatusOptions = [
             headerCell={
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
-            cell={(props) =>
-            {
-              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder
+            cell={(props) => {
+              props.dataItem.displayStatus = ((documentTypeCategory === DocumentCategory.PurchaseOrder
                  && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
-                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
+                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus);
               return RenderCustomCell(
                 {
                   ...props,
@@ -332,7 +330,8 @@ const lotStatusOptions = [
                   tooltipField: column.tooltipField,
                 },
                 column.cell || '',
-              ); }
+              );
+            }
             }
             filterCell={
               filterCellMapping[column.filterCell as string]

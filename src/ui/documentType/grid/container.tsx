@@ -62,7 +62,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     if (col && label === 'PO Status') {
       col.valuePath = 'poStatus';
     }
-     if (col && label === 'Lot status') {
+    if (col && label === 'Lot status') {
       col.valuePath = 'lotStatus';
     }
   });
@@ -150,6 +150,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
     } else if (columnDetails.searchOptions?.poStatusTemplate) {
       filterCellTemplate = KendoGridFilterCell.PO_STATUS;
+      dynamicCellTemplate = KendoCellTemplates.STATUS;
+    } else if (columnDetails.searchOptions?.lotStatusTemplate) {
+      filterCellTemplate = KendoGridFilterCell.LOT_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
     } else if (columnDetails.searchOptions?.statusTemplate) {
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;

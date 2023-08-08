@@ -30,19 +30,6 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
           }
         });
       }
-      const lotStatusField = find(payload.filters, { field: KendoGridFilterCell.LOT_STATUS });
-
-         if (lotStatusField && payload?.filters && lotStatusField.field === KendoGridFilterCell.LOT_STATUS) {
-        payload?.filters?.forEach((filter) => {
-          if (filter.field === KendoGridFilterCell.PO_STATUS) {
-            if ([POStatusLabelMapping.CLOSED, POStatusLabelMapping.VOIDED].includes(filter.value)) {
-              filter.value = filter.value.toUpperCase();
-            } else {
-              filter.value = POStatusType.OPENED;
-            }
-          }
-        });
-      }
       // Special handling in payload for effectiveDate
       const effectiveDateFiel = find(payload.filters, { field: 'effectiveDate' });
       if (effectiveDateFiel && effectiveDateFiel.field === 'effectiveDate') {

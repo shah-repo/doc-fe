@@ -16,18 +16,18 @@ export const Status = ({
   columnIndex,
   cellRowClick,
 }: CustomGridCellProps) => {
+  console.log(React);
   const classes = styles();
   const status = dataItem[field || ''];
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
-  console.log(React);
-    let fieldLabel = status;
+  let fieldLabel = status;
   if (field === KendoGridFilterCell.PO_STATUS) {
     fieldLabel = POStatusLabelMapping[status];
   }
-    if (field === KendoGridFilterCell.LOT_STATUS) {
+  if (field === KendoGridFilterCell.LOT_STATUS) {
     fieldLabel = LotStatusLabelMapping[status];
   }
   return (
