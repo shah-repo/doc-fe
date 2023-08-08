@@ -6,7 +6,7 @@ import OverflowTooltip from '../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { requiredNumber, validator } from '../../../components/forms/fields/validators';
 import { DEDUCTABLE_TRANSFER_TYPES } from '../constants';
-import { CustomTemplateProps } from '../types';
+import { CustomTemplateProps, LotTransferType } from '../types';
 
 export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -44,7 +44,10 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, 
         interactive
         arrow
       >
-        {DEDUCTABLE_TRANSFER_TYPES.includes(dataItem.type) ? `-${defaultValue}` : defaultValue}
+        {DEDUCTABLE_TRANSFER_TYPES.includes(dataItem?.type)
+          ? (dataItem?.type === LotTransferType.Backflush ? defaultValue : `-${defaultValue}`)
+          : defaultValue
+        }
       </OverflowTooltip>
     </Box>
   );
