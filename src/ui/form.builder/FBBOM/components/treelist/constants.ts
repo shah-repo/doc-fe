@@ -1,6 +1,7 @@
 import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import ARIDCell from './column.templates/ARIDCell';
+import AttachmentCell from './column.templates/AttachmentCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
@@ -48,7 +49,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     width: '204px',
     filter: TreeListTextFilter,
     expandable: true,
-    locked: false,
+    locked: true,
     mainOrderIndex: 0,
     hidden: false,
     disableShowOrHideSelection: true,
@@ -186,7 +187,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     mainOrderIndex: 13,
     headerCell: Attachments,
-    cell: BooleanCell,
+    cell: AttachmentCell,
     hidden: false,
     sortable: false,
   },

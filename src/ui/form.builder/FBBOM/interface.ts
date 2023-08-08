@@ -42,6 +42,7 @@ export interface EditableBOM extends BOM {
   newChildNodeRevId?: string
   isParentOwner?: boolean
   alternatePartsCount?: number
+  attachmentNames: string[]
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM
