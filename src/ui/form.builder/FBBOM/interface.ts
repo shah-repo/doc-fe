@@ -1,3 +1,5 @@
+import { Attachment } from '../../../state/ducks/attachments/types';
+import { Vendor } from '../FBPartVendors/types';
 import { MODE_FIELD } from './constants';
 
 export interface BOM {
@@ -20,8 +22,8 @@ export interface BOM {
   markAsDeleted?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
-  primaryAttachmentDetails?: {name: string, s3Link: string}
-  vendor?: boolean
+  primaryAttachmentDetails?: Attachment
+  vendors?: Vendor[]
   issues?: boolean
   comment?: string
   childNodes?: BOM[]
@@ -43,7 +45,6 @@ export interface EditableBOM extends BOM {
   isParentOwner?: boolean
   alternatePartsCount?: number
   attachmentNames: string[]
-  primaryAttachmentDetails: primaryAttachmentDetails
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM
@@ -54,11 +55,6 @@ interface changeRequestDetails {
   id: string
   title: string
   crId: string
-}
-
-interface primaryAttachmentDetails {
-  name: string
-  s3link: string
 }
 
 export interface AvailableRevisions {

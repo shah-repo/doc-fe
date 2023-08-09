@@ -52,3 +52,11 @@ export interface CustomTreeListRowProps extends TreeListRowProps {
 export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEvent {
   dataItem: BOM
 }
+
+export interface WhereUsedTree {
+  depth: number
+  name: string
+  parentDocId: string
+  revision: number
+  status: string
+}

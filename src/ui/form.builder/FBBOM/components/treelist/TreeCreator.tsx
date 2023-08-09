@@ -4,13 +4,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React, { useEffect } from 'react';
 import * as d3 from 'd3';
+import React, { useEffect } from 'react';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import useActionCreator from '../../../../hooks/useActionCreator';
-import useAsync from '../../../../hooks/useAsync';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../components/Text';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import { WhereUsedTree } from './interface';
 import useStyles from './styles';
 
 const TEXTLENGTH = 120;
@@ -30,13 +31,12 @@ const Loader = () => {
 };
 
 export default function TreeCreator ({ docRevId }: { docRevId: string }) {
-  const [data, setData] = React.useState<any[]>();
+  const [data, setData] = React.useState<WhereUsedTree[]>();
   const [isLoading, setLoading] = React.useState(false);
 
   const fetchWhereUsedTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedTree);
   const fetchWhereUsedTreesAsync = useAsync({
-    onSuccess: (treeList) => {
-      // console.log(treeList);
+    onSuccess: (treeList: WhereUsedTree[]| undefined) => {
       setData(treeList);
       setLoading(false);
     },
@@ -118,10 +118,9 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
       .attr('class', 'link')
       // .style('stroke', d => d.depth)
       .attr('d', d => {
-        // console.log(d, d.depth, d.id);
         const yEndPos = d.y - 10;
-        const yStartPos = d.depth === 1 ? d.parent.y + (2.5 * OFFSET)
-          : d.parent.y + TEXTLENGTH + (2.5 * OFFSET);
+        const yStartPos = d.depth === 1 ? (d?.parent?.y ?? 0) + (2.5 * OFFSET)
+          : d?.parent?.y + TEXTLENGTH + (2.5 * OFFSET);
 
         return `M ${yStartPos} , ${xTransformation(d.parent)} 
           L ${yEndPos}, ${xTransformation(d)} 
@@ -171,7 +170,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
 
       .style('text-anchor', d => d.depth === 0 ? 'end' : 'start')
       // .style('text-anchor', d => d.children ? 'end' : 'start')
-      .text(d => `${d.data.name} - Rev${d.data.revision}`);
+      .text(d => `${d?.data?.name} - Rev${d?.data?.revision}`);
 
     // adds the circle to the node
     // node.append('circle')

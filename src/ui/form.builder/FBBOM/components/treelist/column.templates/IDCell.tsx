@@ -117,7 +117,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
     const fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
     const value = renderOptions().find((option) => option.value === fieldValue);
-    if (value) {
+    if (value && field) {
       setFieldValue(field, value);
     }
   }, [parts]);
@@ -190,11 +190,30 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         {isEditMode && getFieldInfo()}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
-         ? <Link underline="hover" onClick={openDrawer} className={classes.link}>
+          ? <Link underline="hover" onClick={openDrawer} className={classes.link}>
             {dataItem.docId}
           </Link>
           : dataItem.docId) }
-        {dataItem.isOwner && !isEditMode && <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />}
+        {dataItem.isOwner && !isEditMode && <Tooltip
+          title={translate('bom.owner')}
+          placement="top"
+          arrow
+        >
+          <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />
+        </Tooltip>}
+        {/* {onChildPartAdd && <Tooltip
+          title={translate('bom.add.child.part')}
+          placement="top"
+          arrow
+        >
+          <IconButton
+            kind="action"
+            size="small"
+            onClick={() => onChildPartAdd(dataItem)}
+          >
+            <FontAwesomeIcon color={Colors.primaryLight } icon={solid('plus')} className={classes.childePartAddIcon} />
+          </IconButton>
+        </Tooltip>} */}
       </span>
       {getDrawer()}
     </td>

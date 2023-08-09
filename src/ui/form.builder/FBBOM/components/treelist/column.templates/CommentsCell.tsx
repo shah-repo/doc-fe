@@ -8,6 +8,7 @@ import {
 } from '../../../../../components/forms/fields-next';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { EditableBOM } from '../../../interface';
+import { CELL_EMPTY_VALUE } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -23,9 +24,8 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
-  const value = values.comment ?? '';
+  const displayValue = values.comment ?? '';
   const isEditMode = isEditBOM(dataItem);
-  const displayValue = dataItem[field ?? ''] ?? '-';
 
   const getFieldInfo = () =>
     field && (
@@ -39,7 +39,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
           inputProps={{
             rowsMax: 5,
           }}
-          value={value}
+          value={displayValue}
           placeholder={translate('form.builder.lot.transfers.comments')}
         />
       </FormikField>
@@ -57,7 +57,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
       }}
     >
       {isEditMode && getFieldInfo()}
-      {!isEditMode && (
+      {!isEditMode && displayValue && (
         <OverflowTooltip
           title={<div className={cx('containing-box-scrollbar', classes.tooltipContent)}>{displayValue}</div>}
           placement="top"
@@ -67,6 +67,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
           {displayValue}
         </OverflowTooltip>
       )}
+      {!isEditMode && !displayValue && CELL_EMPTY_VALUE}
     </td>
   );
 };

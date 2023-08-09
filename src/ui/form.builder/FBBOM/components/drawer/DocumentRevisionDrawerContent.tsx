@@ -28,7 +28,7 @@ const DocumentRevisionDrawerContent: React.FunctionComponent<DocumentRevisionDra
 
   return (
     <Theme>
-      <Box margin="10px" height="100%" width="760px">
+      <Box margin="10px" height="100%" width="950px">
         <AsyncGate asyncAction={loadAction} asyncState={loadDocumentRevisionAsyncState} startActionOnMount={true}>
           {documentRevision && <DocumentRevisionUpdateContainer
             documentRevision={documentRevision}

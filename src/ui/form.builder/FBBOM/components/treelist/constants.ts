@@ -2,7 +2,6 @@ import { TreeListColumnProps, TreeListTextFilter } from '@progress/kendo-react-t
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import ARIDCell from './column.templates/ARIDCell';
 import AttachmentCell from './column.templates/AttachmentCell';
-import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
 import DropdownFilterCell from './column.templates/DropDownFilterCell';
@@ -16,9 +15,9 @@ import RevisionCell from './column.templates/RevisionCell';
 import { Status } from './column.templates/Status';
 import TitleCell from './column.templates/TitleCell';
 import UnitCell from './column.templates/UnitCell';
+import { VendorsCell } from './column.templates/VendorsCell';
 import { AlternatePartsList } from './header.templates/AlternatePartsList';
 import { Attachments } from './header.templates/Attachments';
-import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 
@@ -191,23 +190,23 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     hidden: false,
     sortable: false,
   },
+  // {
+  //   field: 'issues',
+  //   title: 'ISSUES',
+  //   width: '80px',
+  //   filter: TreeListTextFilter,
+  //   locked: false,
+  //   mainOrderIndex: 14,
+  //   cell: BooleanCell,
+  //   headerCell: Issues,
+  //   hidden: false,
+  //   sortable: false,
+  // },
   {
-    field: 'issues',
-    title: 'ISSUES',
-    width: '80px',
-    filter: TreeListTextFilter,
-    locked: false,
-    mainOrderIndex: 14,
-    cell: BooleanCell,
-    headerCell: Issues,
-    hidden: false,
-    sortable: false,
-  },
-  {
-    field: 'vendor',
+    field: 'vendors',
     title: 'VENDORS',
     width: '80px',
-    cell: BooleanCell,
+    cell: VendorsCell,
     filter: TreeListTextFilter,
     locked: false,
     mainOrderIndex: 15,

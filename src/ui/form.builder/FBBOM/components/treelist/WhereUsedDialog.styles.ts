@@ -12,10 +12,10 @@ export default makeStyles((theme) => ({
     minHeight: '80vh',
   },
   close: {
-    height: '24px',
-    width: '24px',
+    height: 24,
+    width: 24,
     backgroundColor: Colors.athens_gray,
-    borderRadius: '6px',
+    borderRadius: theme.spacing(0.75),
     margin: theme.spacing(0, 1.25),
   },
   content: {
@@ -26,8 +26,8 @@ export default makeStyles((theme) => ({
     backgroundColor: Colors.white,
   },
   heading: {
-    fontWeight: 600,
-    fontSize: '14px',
+    fontWeight: 700,
+    fontSize: 14,
     flex: 1,
     color: Colors.almost_black,
   },

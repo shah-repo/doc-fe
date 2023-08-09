@@ -1,10 +1,10 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
-import { DialogHandler } from '../../../../hooks/useDialog';
-import useStyles from './WhereUsedDialog.styles';
 import CloseIcon from '@material-ui/icons/Close';
-import TreeCreator from './TreeCreator';
-import Text from '../../../../components/Text';
 import React from 'react';
+import Text from '../../../../components/Text';
+import { DialogHandler } from '../../../../hooks/useDialog';
+import TreeCreator from './TreeCreator';
+import useStyles from './WhereUsedDialog.styles';
 
 interface Props {
   docRevId: string

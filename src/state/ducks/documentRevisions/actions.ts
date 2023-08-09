@@ -5,6 +5,7 @@ import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
@@ -427,7 +428,7 @@ const fetchBOMTree = (
 const fetchWhereUsedTree = (
   docRevId,
   handlers: Handlers,
-): ApiAction<BOM[]> =>
+): ApiAction<WhereUsedTree[]> =>
   apiActionWithCallbacks({
     url: `${FETCH_WHERE_USED_TREE}/${docRevId}`,
     method: 'get',

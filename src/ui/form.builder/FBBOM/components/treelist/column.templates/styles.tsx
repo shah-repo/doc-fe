@@ -117,9 +117,11 @@ export const styles = makeStyles((theme) => ({
     marginRight: props?.hasChildren ? theme.spacing(1.5) : 0,
   }),
   ownerIcon: {
-    width: '1.5em',
     color: ThemeColors.primaryLight,
     marginLeft: theme.spacing(1.5),
+  },
+  childePartAddIcon: {
+    color: ThemeColors.primaryLight,
   },
   link: {
     color: `${Colors.navy_active} !important`,
