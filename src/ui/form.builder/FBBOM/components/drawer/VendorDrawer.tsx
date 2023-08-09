@@ -41,7 +41,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
   return (
     <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
       {children ?? (
-        <Box className={classes.drawer}>
+        <Box margin="30px" width="950px">
           <Grid
             container={true}
             wrap="nowrap"
