@@ -17,7 +17,7 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
 }) => {
   const classes = styles();
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
-  const attachmentNamesCount = dataItem.attachmentNames.length ?? 0;
+  const attachmentNamesCount = dataItem.attachmentNames?.length ?? 0;
   const isAttachmentNamesExists = attachmentNamesCount > 0;
 
   const openDrawer = () => {
