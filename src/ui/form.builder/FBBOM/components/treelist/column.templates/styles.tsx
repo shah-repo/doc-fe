@@ -131,4 +131,7 @@ export const styles = makeStyles((theme) => ({
       textDecoration: 'underline !important',
     },
   },
+  progress: {
+    color: theme.palette.secondary.main,
+  },
 }));

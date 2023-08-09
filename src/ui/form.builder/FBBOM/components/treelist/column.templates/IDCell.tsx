@@ -17,8 +17,8 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
-import FBBOMDetailDrawer from '../../drawer';
-import DocumentRevisionDrawerContent from '../../drawer/DocumentRevisionDrawerContent';
+import FBBOMDetailDrawer from '../../drawer/AlternateParts';
+import DocumentRevisionDrawer from '../../drawer/DocumentRevisionDrawer';
 import { SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -148,7 +148,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawerContent {...{ dataItem }} />
+      <DocumentRevisionDrawer {...{ dataItem }} />
     </FBBOMDetailDrawer>
   );
 

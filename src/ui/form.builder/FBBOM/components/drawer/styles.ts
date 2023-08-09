@@ -84,5 +84,10 @@ export default makeStyles((theme: Theme) =>
       color: Colors.textGray,
       border: `1px solid ${Colors.textGray}`,
     },
+    drawer: {
+      margin: theme.spacing(1.25),
+      height: '100%',
+      width: 950,
+    },
   }),
 );

@@ -40,77 +40,78 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
   const classes = useStyles();
   return (
     <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
-      {children ?? <Box margin="30px" width="950px">
-        <Grid
-          container={true}
-          wrap="nowrap"
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid item>
-            <Typography
-              className={classes.headerInfo}
-              data-cy="HeaderInfo-docId"
-              component="span"
-            >
-              {translate('bom.table.title.alternate.suppliers.list')}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <div className={classes.iconContainer}>
-
-              <IconButton
-                onClick={() => closeDrawer()}
-                aria-label="Close"
-                disableFocusRipple
-                disableRipple
-                disableTouchRipple
-                data-cy="close-alternate-part-list"
-                className={classes.closeIcon}
+      {children ?? (
+        <Box className={classes.drawer}>
+          <Grid
+            container={true}
+            wrap="nowrap"
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography
+                className={classes.headerInfo}
+                data-cy="HeaderInfo-docId"
+                component="span"
               >
-                <CloseIcon style={{ color: Colors.light_gray }} />
-              </IconButton>
-            </div>
+                {translate('bom.table.title.alternate.suppliers.list')}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <div className={classes.iconContainer}>
+                <IconButton
+                  onClick={() => closeDrawer()}
+                  aria-label="Close"
+                  disableFocusRipple
+                  disableRipple
+                  disableTouchRipple
+                  data-cy="close-alternate-part-list"
+                  className={classes.closeIcon}
+                >
+                  <CloseIcon style={{ color: Colors.light_gray }} />
+                </IconButton>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap="nowrap"
-          justify="flex-start"
-          alignItems="center"
-          className={classes.partInfo}
-        >
-          <Grid item>
-            <Typography
-              className={classes.docId}
-              data-cy="HeaderInfo-docId"
-              component="span"
-            >
-              {docId}
-            </Typography>
+          <Grid
+            container
+            wrap="nowrap"
+            justify="flex-start"
+            alignItems="center"
+            className={classes.partInfo}
+          >
+            <Grid item>
+              <Typography
+                className={classes.docId}
+                data-cy="HeaderInfo-docId"
+                component="span"
+              >
+                {docId}
+              </Typography>
+            </Grid>
+            <Grid item className={classes.whiteDot} />
+            <Grid item className={classes.docId}>
+              <Text
+                translation="form.builder.header.rev"
+                values={{ revision }}
+                dataCy="HeaderInfo-Rev"
+              />
+            </Grid>
+            <Grid item className={classes.chipContainer}>
+              <Chip
+                size="small"
+                className={`${classes.chip} ${
+                  classes[FormHeaderStatusClassMapping[status ?? '']]
+                }`}
+                label={status}
+                data-cy="HeaderInfo-status"
+              />
+            </Grid>
           </Grid>
-          <Grid item className={classes.whiteDot} />
-          <Grid item className={classes.docId}>
-            <Text
-              translation="form.builder.header.rev"
-              values={{ revision }}
-              dataCy="HeaderInfo-Rev"
-            />
-          </Grid>
-          <Grid item className={classes.chipContainer}>
-            <Chip
-              size="small"
-              className={`${classes.chip} ${
-                classes[FormHeaderStatusClassMapping[status ?? '']]
-              }`}
-              label={status}
-              data-cy="HeaderInfo-status"
-            />
-          </Grid>
-        </Grid>
-        <Divider className={classes.divider} />
-        <PartVendorsTable vendors={vendors} />
-      </Box>}
+          <Divider className={classes.divider} />
+          <PartVendorsTable vendors={vendors} />
+        </Box>
+      )}
     </Drawer>
   );
 };

@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
-import FBBOMDetailDrawer from '../../drawer';
-import DocumentRevisionDrawerContent from '../../drawer/DocumentRevisionDrawerContent';
+import FBBOMDetailDrawer from '../../drawer/AlternateParts';
+import DocumentRevisionDrawerContent from '../../drawer/DocumentRevisionDrawer';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
