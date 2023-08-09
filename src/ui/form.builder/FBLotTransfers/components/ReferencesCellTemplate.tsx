@@ -1,12 +1,13 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { isEmpty, truncate } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
+import FBTooltip from '../../FBTooltip/FBTooltip';
 import { CustomTemplateProps, DocumentRevisionOption, EditableLotTransfer } from '../types';
 import { getOptionLabel } from '../utils';
 
@@ -34,9 +35,7 @@ export const ReferencesCellTemplate: React.FC<Props> = ({ dataItem, field, optio
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
-      <FormikField
-        name="reference"
-      >
+      <FormikField name="reference" >
         <Autocomplete
           {...getFieldProps('reference')}
           blurOnSelect
@@ -45,6 +44,20 @@ export const ReferencesCellTemplate: React.FC<Props> = ({ dataItem, field, optio
           value={value}
           onChange={handleChange}
           size="small"
+          renderOption={(option) => {
+            const optionLabel = getOptionLabel(option);
+            const label = truncate(optionLabel, { length: 60, omission: ' ...' });
+            if (label.length !== optionLabel.length) {
+              return (
+                <FBTooltip title={optionLabel}>
+                  <>{label}</>
+                </FBTooltip>
+              );
+            } else {
+              return <>{optionLabel}</>;
+            }
+          }
+          }
         />
       </FormikField>
     );
