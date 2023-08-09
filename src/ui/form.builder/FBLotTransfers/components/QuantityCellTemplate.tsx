@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
@@ -36,19 +35,17 @@ export const QuantityCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, 
   }
 
   return (
-    <Box onClick={handleClick}>
-      <OverflowTooltip
-        title={defaultValue}
-        onClick={handleClick}
-        placement="top"
-        interactive
-        arrow
-      >
-        {DEDUCTABLE_TRANSFER_TYPES.includes(dataItem?.type)
-          ? (dataItem?.type === LotTransferType.Backflush ? defaultValue : `-${defaultValue}`)
-          : defaultValue
-        }
-      </OverflowTooltip>
-    </Box>
+    <OverflowTooltip
+      title={defaultValue}
+      onClick={handleClick}
+      placement="top"
+      interactive
+      arrow
+    >
+      {DEDUCTABLE_TRANSFER_TYPES.includes(dataItem?.type)
+        ? (dataItem?.type === LotTransferType.Backflush ? defaultValue : `-${defaultValue}`)
+        : defaultValue
+      }
+    </OverflowTooltip>
   );
 };
