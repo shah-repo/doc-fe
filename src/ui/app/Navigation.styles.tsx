@@ -46,7 +46,6 @@ export default (theme: Theme) =>
       paddingLeft: 0,
       paddingRight: 0,
       flexShrink: 0,
-      marginBottom: theme.spacing(3.75),
     },
     toolbarTitle: {
       flex: 1,
