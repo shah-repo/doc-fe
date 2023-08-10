@@ -15,7 +15,7 @@ import { CustomTreeListCellProps } from './types';
 
 const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
   dataItem,
-  field,
+  field = 'comment',
   colSpan,
   style,
   className,
@@ -24,8 +24,8 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
-  const displayValue = values.comment ?? '';
   const isEditMode = isEditBOM(dataItem);
+  const displayValue = isEditMode ? values[field] ?? '' : dataItem[field];
 
   const getFieldInfo = () =>
     field && (
