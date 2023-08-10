@@ -6,6 +6,8 @@ import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, Rev
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
 import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
+import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
+import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
   // MARK: @config
@@ -25,6 +27,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public forceRender?: any;
   @observable public disabledAction = false;
   @observable public isBomExists = false;
+  @observable public childPartInfo = { dataItem: {}, level: [] };
+  public bomInfo?: BOMState;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
   @observable public expanded = false;
@@ -99,6 +103,14 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.formSchema;
   }
 
+  @computed public get getBomInfo (): BOMState| undefined {
+    return this.bomInfo;
+  }
+
+  @computed public get getChildPartInfo () {
+    return this.childPartInfo;
+  }
+
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, 'revisionChangeType', revisionChangeType);
@@ -162,6 +174,14 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setIsBomExists = (isBomExists: boolean) => {
     set(this, 'isBomExists', isBomExists);
+  };
+
+  @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
+    set(this, 'childPartInfo', data);
+  };
+
+  @action public setBomInfo = (data) => {
+    set(this, 'bomInfo', data);
   };
 
   @action public setDirty = (isDirty: boolean) => {

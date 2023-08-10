@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
@@ -25,6 +27,7 @@ import {
   take,
   uniq,
 } from 'lodash';
+import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -62,9 +65,6 @@ import {
 } from './interface';
 import useStyles from './styles';
 import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) => {
@@ -98,7 +98,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
         parentRevDetails,
       );
       _documentRevisionFormState?.setIsBomExists(bomTreeRelations.length > 0);
-      setState({
+      updateState({
         ...state,
         data: [...bomProccessedData],
         inEdit: [],
@@ -109,6 +109,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
       toastError(err);
     },
   });
+
+  const updateState = (stateInfo) => {
+    _documentRevisionFormState?.setBomInfo(stateInfo);
+    setState(stateInfo);
+  };
 
   const partAsync = useAsync({
     onSuccess: () => {
@@ -163,14 +168,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     const expanded = event.value
       ? state.expanded.filter((id) => id !== event.dataItem.id)
       : [...state.expanded, event.dataItem.id];
-    setState({
+    updateState({
       ...state,
       expanded,
     });
   };
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
-    setState({
+    updateState({
       ...state,
       dataState: event.dataState,
     });
@@ -189,7 +194,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
   const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
   const fetchHasATreeAsync = useAsync({
     onSuccess: (statusObj) => {
-      // console.log(treeList);
       if (statusObj && statusObj[documentRevision?.id]) {
         setShowTree(true);
       }
@@ -319,7 +323,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
       (data) => !data[ADD_FIELD],
     );
     state.data[0][SUB_ITEMS_FIELD]?.push(newBOM);
-    setState({
+    updateState({
       ...state,
       data: [...state.data],
       expanded: [state.data[0].id],
@@ -340,7 +344,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
     editBOMInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
     editBOMInfo.childNodeRevId = childRevId;
-    setState({
+    updateState({
       ...state,
       data: [...state.data],
       inEdit: [editBOMInfo],
@@ -352,7 +356,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     if (dataItem && dataItem[ADD_FIELD]) {
       if (selectedPartLevel?.level) {
         const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
-        setState({
+        updateState({
           ...state,
           data: [...updatedData],
           expanded: [...state.expanded],
@@ -363,7 +367,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
         (data) => !data[ADD_FIELD],
       );
     }
-    setState({
+    updateState({
       ...state,
       inEdit: [],
     });
@@ -384,30 +388,38 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     // TODO
   };
 
-  const onChildPartAdd = (dataItem: EditableBOM) => {
+  const onChildPartAdd = (dataItem: EditableBOM, updatedState?: BOMState) => {
+    if (isDisabled) {
+      return;
+    }
     const newBOM: EditableBOM = createNewItem();
     newBOM.parentNodeDocumentId = dataItem.documentId;
     newBOM.parentNodeRevId = dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
-    const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, newBOM, true) as BOM[];
-
-    setState({
-      ...state,
-      data: [...updatedData],
-      expanded: [...state.expanded, dataItem.id],
-      inEdit: [newBOM],
-    });
-    formik.setValues(newBOM);
-    const treeList: HTMLElement = treeListRef.current;
-    if (!treeList && !dataItem) return;
-    setTimeout(() => {
-      const id = dataItem[SUB_ITEMS_FIELD]?.length
-        ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id
-        : dataItem.id;
-      const rowElement = treeList.querySelector(`[id^="_${id}"]`);
-      if (rowElement) {
-        rowElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
+    const updatedBOMState = _documentRevisionFormState?.getBomInfo ? toJS(_documentRevisionFormState?.getBomInfo) : undefined;
+    const level = updatedState ? toJS(_documentRevisionFormState?.getChildPartInfo?.level) : selectedPartLevel?.level;
+    const stateData = updatedState ? updatedBOMState?.data : state.data;
+    if (stateData) {
+      const updatedData = updateDataAtLevels([...stateData], level, newBOM, true) as BOM[];
+      const expanded = updatedState ? updatedState.expanded : state.expanded;
+      updateState({
+        ...state,
+        data: [...updatedData],
+        expanded: [...expanded, dataItem.id],
+        inEdit: [newBOM],
+      });
+      formik.setValues(newBOM);
+      const treeList: HTMLElement = treeListRef.current;
+      if (!treeList && !dataItem) return;
+      setTimeout(() => {
+        const id = dataItem[SUB_ITEMS_FIELD]?.length
+          ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id
+          : dataItem.id;
+        const rowElement = treeList?.querySelector(`[id^="_${id}"]`);
+        if (rowElement) {
+          rowElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
@@ -472,14 +484,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
   const handleExpandAll = () => {
     const { data } = state;
     const expanded = getAllItemIds(data);
-    setState({
+    updateState({
       ...state,
       expanded,
     });
   };
 
   const handleCollapseAll = () => {
-    setState({
+    updateState({
       ...state,
       expanded: [],
     });
@@ -589,7 +601,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
         return tree;
       };
       const updatedBOMTree = swapChildElements(state.data, parentIndices);
-      setState({
+      updateState({
         ...state,
         data: [...updatedBOMTree],
       });
@@ -611,6 +623,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
       .value();
   };
 
+  SM.reaction(
+    () => _documentRevisionFormState?.childPartInfo,
+    (info) => {
+      if (info?.dataItem) {
+        const dataItem = toJS(info?.dataItem) as EditableBOM;
+        const level = toJS(info?.level);
+        setSelectedPartLevel({ dataItem, level });
+        onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBomInfo));
+      }
+    },
+  );
   const sortedColumnDefinitions = orderByLockedState(getColumns());
 
   return (
