@@ -1,7 +1,8 @@
 import { Chip, Grid } from '@material-ui/core';
 import React from 'react';
-import { LotStatusLabelMapping, POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
+import { POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
 import { KendoGridFilterCell } from '../../KendoGrid/interfaces';
+import { getLotStatusLabel } from '../header/HeaderLotStatus';
 import Tooltip from '../kendo/Tooltip';
 import { statusClassMapping } from '../kendo/helpers';
 import { CustomGridCellProps } from '../kendo/types';
@@ -28,7 +29,7 @@ export const Status = ({
     fieldLabel = POStatusLabelMapping[status];
   }
   if (field === KendoGridFilterCell.LOT_STATUS) {
-    fieldLabel = LotStatusLabelMapping[status];
+    fieldLabel = getLotStatusLabel(status);
   }
   return (
     <td

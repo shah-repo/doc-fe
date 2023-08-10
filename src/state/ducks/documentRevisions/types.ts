@@ -63,19 +63,6 @@ export enum POStatusLabelMapping {
   VOIDED = 'Voided',
 }
 
-export enum LotStatusLabelMapping {
-  QUARANTINE = 'QUARANTINE',
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
-  EXPIRED = 'EXPIRED',
-  USE_AS_IS = 'USE_AS_IS',
-  RTV = 'RETURN_TO_VENDOR',
-  REWORK = 'REWORK',
-  SCRAP = 'SCRAP',
-  RD_USED_ONLY = 'R&D_USED_ONLY',
-  OTHER = 'OTHER',
-  VOIDED = 'VOIDED',
-}
 export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
   Supplier = 'Supplier',
@@ -428,6 +415,7 @@ export interface FBOutputDocumentType {
   groupOptions?: DocumentGroupOptionsType[]
   active?: boolean
   group?: DocumentGroupType
+
 }
 
 export interface HeaderTableType {

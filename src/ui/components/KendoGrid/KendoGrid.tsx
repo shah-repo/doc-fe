@@ -20,7 +20,7 @@ import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatusLabelMapping, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
@@ -34,6 +34,7 @@ import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
 import useDidMount from '../../hooks/useDidMount';
+import { getLotStatusLabel } from '../common/header/HeaderLotStatus';
 import { DropdownFilterTemplate } from '../common/kendo.column.templates/DropdownFilterTemplate';
 import { RenderCustomCell } from '../common/kendo.column.templates/RenderCellTemplate';
 import ColumnHeader from '../common/kendo/ColumnHeader';
@@ -55,6 +56,13 @@ import ClearFilters from '../table/ClearFilters';
 import { DataLoader } from './DataLoader';
 import { KendoGridFilterCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
+
+const options = Object.values(LotStatus).filter(status => status !== LotStatus.VOIDED).map(value => ({
+  value,
+  label: getLotStatusLabel(value),
+}));
+
+const lotStatusOptions = options.map(option => option.label);
 
 export function KendoGrid<T extends any> ({
   tableName,
@@ -184,20 +192,6 @@ export function KendoGrid<T extends any> ({
     POStatusLabelMapping.OPENED,
     POStatusLabelMapping.CLOSED,
     POStatusLabelMapping.VOIDED,
-  ];
-
-  const lotStatusOptions = [
-    LotStatusLabelMapping.QUARANTINE,
-    LotStatusLabelMapping.ACCEPTED,
-    LotStatusLabelMapping.REJECTED,
-    LotStatusLabelMapping.EXPIRED,
-    LotStatusLabelMapping.USE_AS_IS,
-    LotStatusLabelMapping.RTV,
-    LotStatusLabelMapping.REWORK,
-    LotStatusLabelMapping.SCRAP,
-    LotStatusLabelMapping.RD_USED_ONLY,
-    LotStatusLabelMapping.OTHER,
-    LotStatusLabelMapping.VOIDED,
   ];
 
   const POStatusFilter = (props: GridFilterCellProps) => (
