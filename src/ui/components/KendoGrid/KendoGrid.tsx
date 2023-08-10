@@ -19,6 +19,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
+import { translate } from '../../../common/intl';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
@@ -29,10 +30,12 @@ import { changeRequestStatusOption } from '../../change.request/utils/helpers';
 import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
 import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
+import LotStatusFilterTemplate from '../../document.revision/grid/filter.template/DropdownFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
+import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import useDidMount from '../../hooks/useDidMount';
 import { getLotStatusLabel } from '../common/header/HeaderLotStatus';
 import { DropdownFilterTemplate } from '../common/kendo.column.templates/DropdownFilterTemplate';
@@ -57,12 +60,7 @@ import { DataLoader } from './DataLoader';
 import { KendoGridFilterCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
 
-const options = Object.values(LotStatus).filter(status => status !== LotStatus.VOIDED).map(value => ({
-  value,
-  label: getLotStatusLabel(value),
-}));
-
-const lotStatusOptions = options.map(option => option.label);
+const lotStatusOptions = Object.values(LotStatus).map(value => createOption(value, getLotStatusLabel(value)));
 
 export function KendoGrid<T extends any> ({
   tableName,
@@ -203,15 +201,15 @@ export function KendoGrid<T extends any> ({
       })}
     />
   );
+
   const LotStatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <LotStatusFilterTemplate
       {...props}
       data={lotStatusOptions}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
+      defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
+
   const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
       {...props}
