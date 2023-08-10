@@ -4,8 +4,6 @@ import { intl } from '../../../../common/intl';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 import { DropdownFilterCellProps } from '../../../form.builder/FBApprovalMatrix/components/DropdownFilter/types';
 import { DATA_ITEM_KEY, TEXT_FIELD } from '../../../form.builder/FBApprovalMatrix/components/Grid';
-// import { DropdownFilterCellProps } from './types';
-// import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
 
 const LotStatusFilterTemplate: React.FC<DropdownFilterCellProps> = (props) => {
   const {
