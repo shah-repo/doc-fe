@@ -1147,7 +1147,7 @@
   "form.builder.header.lot.status.label.return-to-vendor": "Return to Vendor (RTV)",
   "form.builder.header.lot.status.label.rework": "Rework",
   "form.builder.header.lot.status.label.scrap": "Scrap",
-  "form.builder.header.lot.status.label.r-d-used-only": "R&D used only",
+  "form.builder.header.lot.status.label.r-d-used-only": "R&D use only",
   "form.builder.header.lot.status.label.other": "Other",
   "form.builder.header.lot.status.label.voided": "Void",
   "form.builder.procedure.materials.title": "{title} | {lot} | Qty: {quantity} {unit}",
