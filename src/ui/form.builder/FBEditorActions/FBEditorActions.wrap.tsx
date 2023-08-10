@@ -1,12 +1,11 @@
 /* eslint-disable max-len */
-import { cloneDeep, compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from 'lodash';
+import { compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from 'lodash';
 import React from 'react';
 import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from '..';
 import { SM } from '../../../App';
 import { TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
 import { COMMON_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
-import FBDataStore from '../FBStore/FBDataStore';
 import { withFBValidation } from '../FBValidation/FBValidation.wrap';
 import { Rules } from './constants';
 
@@ -77,6 +76,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         label,
         editorProperties,
         uniqueSchemaItem,
+        deleteDisabled,
         placeholder,
         validationAttribute,
         rules,
@@ -132,6 +132,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         name: `${kebabCase(label as string)}-${FB.uniqid}`,
         ...omit(formValues, editorPropertiesFlags),
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
+        deleteDisabled: deleteDisabled,
         applicableOn: ['ON_STATE_TO_IN_REVIEW'],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
@@ -148,7 +149,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       ) {
         workspaceState?.saveDocRev(formState?.getValues());
       }
-      FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
     };
 
     handleCancel = () => {

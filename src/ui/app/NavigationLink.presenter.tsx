@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { camelCase } from 'lodash';
 import React, { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import { translate } from '../../common/intl';
 import {
   NavigationItem,
   NavigationItems,
@@ -105,10 +104,7 @@ NavigationLinkPresenterProps
                 [classes.childTextItem]: isChild && open,
               })}
             >
-              {label.replace(
-                translate('navigation.common.management'),
-                translate('navigation.common.management.short'),
-              )}
+              {label}
             </Typography>
           }
           onClick={toggleChildren}

@@ -11,18 +11,18 @@ const useStyles = makeStyles({
   },
 });
 
-const OveflowTooltip: React.FC<Omit<TooltipProps, 'children'>> = ({
+const OverflowTooltip: React.FC<Omit<TooltipProps, 'children'>> = ({
   title,
   children,
   ...props
 }) => {
-  const [overflowRef, isOveflowing] = useOverflow<HTMLDivElement>();
+  const [overflowRef, isOverflowing] = useOverflow<HTMLDivElement>();
   const classes = useStyles();
 
   return (
     <Tooltip
       {...props}
-      title={isOveflowing ? title : ''}
+      title={isOverflowing ? title : ''}
     >
       <div
         className={classes.wrapper}
@@ -34,4 +34,4 @@ const OveflowTooltip: React.FC<Omit<TooltipProps, 'children'>> = ({
   );
 };
 
-export default OveflowTooltip;
+export default OverflowTooltip;
