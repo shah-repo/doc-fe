@@ -1,14 +1,15 @@
-import React from 'react';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
+import React from 'react';
 import Filter from '../Filter';
-import { DropdownFilterCellProps } from './types';
 import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
+import { DropdownFilterCellProps } from './types';
 
 const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   const {
     data,
     value,
     operator = 'eq',
+    children,
     defaultItem,
     defaultValue,
     onChange,
@@ -41,6 +42,7 @@ const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
         value={data.find((item) => item[DATA_ITEM_KEY] === value) ?? defaultItem}
         disabled={disabled}
       />
+      {children}
     </Filter>
   );
 };

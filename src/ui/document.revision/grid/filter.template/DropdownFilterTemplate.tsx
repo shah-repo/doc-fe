@@ -24,12 +24,11 @@ const LotStatusFilterTemplate: React.FC<DropdownFilterCellProps> = (props) => {
   };
 
   return (
-    <div className="k-filtercell" >
-      <DropdownFilter
-        {...props}
-        data={data}
-        defaultItem={defaultItem}
-      />
+    <DropdownFilter
+      {...props}
+      data={data}
+      defaultItem={defaultItem}
+    >
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
@@ -38,7 +37,7 @@ const LotStatusFilterTemplate: React.FC<DropdownFilterCellProps> = (props) => {
       >
         <span className="k-icon k-i-filter-clear" />
       </button>
-    </div>
+    </DropdownFilter>
   );
 };
 
