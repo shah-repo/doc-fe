@@ -293,6 +293,9 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     if (isFbEditorField) {
+      if(isUndefined(defaultValue)) {
+        defaultValue = formState?.getFieldValue(name);
+      }
       value = defaultValue;
     }
 

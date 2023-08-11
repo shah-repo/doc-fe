@@ -4,7 +4,6 @@ import { Link, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
 import { SM } from '../../../../../../App';
 import { ReactComponent as InfoIcon } from '../../../../../../assets/images/info_icon.svg';
@@ -15,6 +14,7 @@ import { Autocomplete, FormikField } from '../../../../../components/forms/field
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import { Colors } from '../../../../../layout/theme-next';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
@@ -26,7 +26,7 @@ import { CustomTreeListCellProps } from './types';
 
 const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { _documentRevisionFormState } = SM.useStores();
-  const { colSpan, id, style, dataItem, field } = props;
+  const { colSpan, id, style, dataItem, field, level } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
@@ -164,12 +164,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       {...{ colSpan, id, style }}
     >
       {!isEditMode && [...(Array(props.level.length) as number[])].map((e, i) => {
+        const availableRevs = dataItem?.availableRevisions;
         if (hasChildren) {
-          if (i === props.level.length - 2 && !isEmpty(dataItem?.availableRevisions)) {
+          if (i === props.level.length - 2 && availableRevs?.isReleased) {
             return getInfoIcon();
           }
         } else {
-          if (i === props.level.length - 1 && !isEmpty(dataItem?.availableRevisions)) {
+          if (i === props.level.length - 1 && availableRevs?.isReleased) {
             return getInfoIcon();
           }
         }
@@ -201,19 +202,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         >
           <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />
         </Tooltip>}
-        {/* {onChildPartAdd && <Tooltip
+        {dataItem.isOwner && !isEditMode && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >
-          <IconButton
-            kind="action"
-            size="small"
-            onClick={() => onChildPartAdd(dataItem)}
-          >
-            <FontAwesomeIcon color={Colors.primaryLight } icon={solid('plus')} className={classes.childePartAddIcon} />
-          </IconButton>
-        </Tooltip>} */}
+          <FontAwesomeIcon onClick={() => _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level })} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+        </Tooltip>}
       </span>
       {getDrawer()}
     </td>

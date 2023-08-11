@@ -2,9 +2,11 @@ import { Avatar } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { theme } from '../../../common/utils/helpers';
+import Config from '../../../config';
+import { WhiteLabelingEnv } from '../../../state/ducks/company/types';
 import { store } from '../../../state/store';
 import Text from '../../components/Text';
-import { getInitalsFromName } from './avatar/helpers';
+import { ThemeEnv } from '../../layout/theme/utils/types';
 import styles from './Logo.styles';
 
 interface Props {
@@ -22,6 +24,7 @@ const Logo: React.FunctionComponent<Props> = ({
   const companyName = user.employee.company.name;
   const classes = styles({ initialColor: user.initialColor });
   const themeBgClass = theme.toLowerCase().replace(/(_)/g, '');
+  const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
   return (
     <React.Fragment>
       {showEnvironment && (
@@ -32,9 +35,14 @@ const Logo: React.FunctionComponent<Props> = ({
         </div>
       )}
       {!open && <Avatar className={classes.avatar} data-cy={companyName}>
-        {getInitalsFromName(companyName)}
+        <img
+          id="logo"
+          className={classes.smallLogo}
+          src={whiteLabeling.avatar}
+          alt={companyName}
+        />
       </Avatar>}
-      {open && <div className={classes.logoContainer} data-cy={companyName}>
+      {open && <div data-cy={companyName}>
         <img
           id="logo"
           src={logo}

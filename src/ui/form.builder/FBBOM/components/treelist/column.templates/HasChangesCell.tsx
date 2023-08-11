@@ -19,7 +19,7 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const history = useHistory();
   const classes = styles({ hasChildren });
-  const changeReqDetails = dataItem?.changeRequestDetails;
+  const changeReqDetails = dataItem.availableRevisions?.changeRequestDetails;
   const arID = changeReqDetails?.crId;
   const openARDetailsPage = () => {
     const id = changeReqDetails?.id;
@@ -39,7 +39,7 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
       }}
     >
       <span className={classes.titleInfoCell}>
-        {arID && !isReleased && changeReqDetails && (
+        {arID && !isReleased && (
           <Tooltip
             data={changeReqDetails?.title ?? ''}
             childrenElement={
@@ -53,8 +53,8 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
             }
           />
         )}
-        {!arID && !isReleased && !changeReqDetails && CELL_EMPTY_VALUE}
-        {isReleased && !changeReqDetails && dataItem.availableRevisions?.revision}
+        {!arID && !isReleased && dataItem.availableRevisions?.revision}
+        {(isReleased || !changeReqDetails) && CELL_EMPTY_VALUE}
       </span>
     </td>
   );

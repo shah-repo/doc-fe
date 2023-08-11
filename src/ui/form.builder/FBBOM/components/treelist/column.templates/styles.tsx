@@ -122,6 +122,8 @@ export const styles = makeStyles((theme) => ({
   },
   childePartAddIcon: {
     color: ThemeColors.primaryLight,
+    marginLeft: theme.spacing(0.5),
+    cursor: 'pointer',
   },
   link: {
     color: `${Colors.navy_active} !important`,

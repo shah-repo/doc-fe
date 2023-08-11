@@ -21,10 +21,10 @@ const AuditPartVendors: React.FC<Props> = ({
     'part-vendors': () => {
       if (audit.type === 'ARRAY_DELETED') {
         try {
-          const transfer = JSON.parse(auditValue as string) as Vendor;
-          if (transfer) {
+          const data = JSON.parse(auditValue as string) as Vendor;
+          if (data) {
             return translate('form.builder.part.vendors.audit.delete', {
-              name: transfer.vendor.name,
+              name: data.vendor.name,
             });
           }
         } catch (err) {

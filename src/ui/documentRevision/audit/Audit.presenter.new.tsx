@@ -215,6 +215,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }
       }
+      // CYCLE COUNT
+      if (fbType === 'cycleCount') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (field === 'id') {
+          return;
+        }
+        if (change.type !== 'ARRAY_DELETED') {
+          const fieldName = translate(`form.builder.cycle.count.${field}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
+      }
       // MPIPROCEDURE
       const valueKey = change.field.split('.');
       if (fbType === 'mpiprocedure') {

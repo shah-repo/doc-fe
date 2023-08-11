@@ -20,6 +20,7 @@ import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
+import AuditCycleCount from './AuditCycleCount';
 import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
@@ -119,6 +120,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       lotTransfers () {
         return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
+      },
+      cycleCount () {
+        return <AuditCycleCount {...{ audit, dataCy, auditValue }} />;
       },
       partVendors () {
         return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
