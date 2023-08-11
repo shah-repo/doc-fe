@@ -20,12 +20,41 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
   const history = useHistory();
   const classes = styles({ hasChildren });
   const changeReqDetails = dataItem.availableRevisions?.changeRequestDetails;
-  const arID = changeReqDetails?.crId;
   const openARDetailsPage = () => {
     const id = changeReqDetails?.id;
     id && history.push(changeRequestEditPath(id));
   };
-  const isReleased = dataItem.availableRevisions?.isReleased;
+
+  function render () {
+    const arID = changeReqDetails?.crId;
+    const isReleased = dataItem.availableRevisions?.isReleased;
+
+    if (!dataItem.availableRevisions) {
+      return CELL_EMPTY_VALUE;
+    }
+
+    if (isReleased) {
+      return CELL_EMPTY_VALUE;
+    }
+
+    if (!changeReqDetails) {
+      return dataItem.availableRevisions?.revision;
+    }
+
+    return <Tooltip
+      data={changeReqDetails?.title ?? ''}
+      childrenElement={
+        <Link
+          underline="hover"
+          onClick={openARDetailsPage}
+          className={classes.link}
+        >
+          {arID}
+        </Link>
+      }
+    />;
+  }
+
   return (
     <td
       colSpan={colSpan}
@@ -39,22 +68,7 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
       }}
     >
       <span className={classes.titleInfoCell}>
-        {arID && !isReleased && (
-          <Tooltip
-            data={changeReqDetails?.title ?? ''}
-            childrenElement={
-              <Link
-                underline="hover"
-                onClick={openARDetailsPage}
-                className={classes.link}
-              >
-                {arID}
-              </Link>
-            }
-          />
-        )}
-        {!arID && !isReleased && dataItem.availableRevisions?.revision}
-        {(isReleased || !changeReqDetails) && CELL_EMPTY_VALUE}
+        {render()}
       </span>
     </td>
   );
