@@ -174,7 +174,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
             return getInfoIcon();
           }
         }
-        if (i === props.level.length - 1 && hasChildren) {
+        if (i === props.level.length - 1 && hasChildren && !dataItem.markAsDeleted) {
           return (<span className={cx('k-icon', classes.expand)}>
             {(props.expanded
               ? <FontAwesomeIcon onClick={onClick} size="sm" icon={regular('square-minus')} />
