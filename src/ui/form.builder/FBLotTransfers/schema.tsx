@@ -96,7 +96,7 @@ export const buildSchema = ({
       field: 'quantity',
       filterCell: InputFilter,
       title: quantityTitle,
-      template: QuantityCellTemplate,
+      template: (props) => <QuantityCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
     },
     {
