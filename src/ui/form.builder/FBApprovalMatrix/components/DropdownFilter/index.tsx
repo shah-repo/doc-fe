@@ -1,8 +1,8 @@
-import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import React from 'react';
+import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import Filter from '../Filter';
-import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
 import { DropdownFilterCellProps } from './types';
+import { DATA_ITEM_KEY, TEXT_FIELD } from '../Grid';
 
 const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
   const {
