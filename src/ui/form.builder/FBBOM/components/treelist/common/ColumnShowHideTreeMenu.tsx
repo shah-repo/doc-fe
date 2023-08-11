@@ -45,11 +45,11 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
     <FormControl variant="outlined">
       <StyleTooltip
         title={<Text translation="common.column" />}
-        placement="bottom"
+        placement="top"
         arrow
       >
         <IconButton onClick={handleClick} data-cy="manageColumnsBtn">
-          <ViewGridIcon />
+          <ViewGridIcon className={classes.viewIcon} />
         </IconButton>
       </StyleTooltip>
       <Menu

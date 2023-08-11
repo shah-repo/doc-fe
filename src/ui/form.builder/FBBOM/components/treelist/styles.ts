@@ -434,10 +434,18 @@ export default makeStyles((theme) => ({
     backgroundColor: Colors.gray,
   },
   viewIcon: {
-    fill: Colors.black,
-    position: 'relative',
-    marginRight: theme.spacing(2),
-    fontSize: '1.1rem',
+    fill: Colors.textBlack,
+    marginRight: theme.spacing(0.625),
+    padding: theme.spacing(1),
+    width: 22,
+    height: 17,
+    cursor: 'pointer',
+  },
+  exportExcelIcon: {
+    color: Colors.textBlack,
+    padding: theme.spacing(1.25),
+    width: 13,
+    height: 17,
     cursor: 'pointer',
   },
   loader: {

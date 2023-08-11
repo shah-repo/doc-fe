@@ -37,6 +37,7 @@ import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -560,24 +561,41 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
             {translate('common.collapse.all')}
           </span>
         </Grid>
-        <Grid
-          item
-          data-cy="excel-export"
-          className={classes.toggleExpandCollapse}
-        >
-          <span onClick={exportToExcel}>
-            {translate('common.export.excel')}
-          </span>
+        <Grid item>
+          <Grid container justify="flex-end">
+            <Grid item
+              data-cy="excel-export"
+            >
+              <StyleTooltip
+                title={translate('common.download')}
+                placement="top"
+                arrow
+              >
+                <FontAwesomeIcon className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
+              </StyleTooltip>
+            </Grid>
+            { showTree && <Grid item
+              data-cy="where-used-view"
+            >
+              <StyleTooltip
+                title={translate('bom.whereUsed.dialog.title')}
+                placement="top"
+                arrow
+              >
+                <FontAwesomeIcon className={classes.viewIcon} icon={solid('tree-deciduous')}
+                  onClick={openWhereUsedDialog}
+                />
+              </StyleTooltip>
+            </Grid>}
+            <Grid item data-cy="show-hide-columns">
+              <ColumnShowHideTreeMenu
+                columnDefinition={columns}
+                onChange={onColumnShowHide}
+              />
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item data-cy="show-hide-columns">
-          { showTree && <FontAwesomeIcon className={classes.viewIcon} icon={solid('tree-deciduous')}
-            onClick={openWhereUsedDialog}
-          /> }
-          <ColumnShowHideTreeMenu
-            columnDefinition={columns}
-            onChange={onColumnShowHide}
-          />
-        </Grid>
+
       </Grid>
     </GridToolbar>
   );

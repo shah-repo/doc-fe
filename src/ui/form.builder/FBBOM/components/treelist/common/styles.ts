@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../../../../layout/theme/utils/colors';
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme) =>
   createStyles({
     box: {
       maxHeight: 350,
@@ -24,6 +24,11 @@ export const styles = makeStyles(() =>
       '&:hover': {
         background: Colors.water,
       },
+    },
+    viewIcon: {
+      color: Colors.almost_black,
+      marginTop: theme.spacing(0.625),
+      cursor: 'pointer',
     },
   }),
 );
