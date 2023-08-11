@@ -158,7 +158,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
       </FBInput>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6}>
-          <FormField label="Cycle Count Frequency (days)" margin="normal">
+          <FormField label="form.builder.cycle.count.frequency" margin="normal">
             <TextField
               value={cycleCountFrequency}
               disabled
@@ -166,7 +166,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
           </FormField>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormField label="Next Due Date" margin="normal">
+          <FormField label="form.builder.cycle.count.next.due" margin="normal">
             <TextField
               value={cycleCountFrequency ? nextDueDate : ''}
               disabled
