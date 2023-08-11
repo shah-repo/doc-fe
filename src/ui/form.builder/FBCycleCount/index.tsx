@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -13,7 +13,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
+import { Button, FormField, TextField } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { ActionsCell } from './components/ActionsCell';
@@ -135,8 +135,6 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
   }, isCycleCountAdded ? [editedCycleCount] : []);
 
   const nextDueDate = moment(cycleCountsList.at(0)?.date).add(cycleCountFrequency, 'days').format(MomentFormats.MonthDateYearTwoDigit);
-  const nextDueLabel = translate('form.builder.cycle.count.next.due', { date: nextDueDate });
-  const sectionLabel = cycleCountFrequency ? `${label as string} (${nextDueLabel})` : label;
 
   return (
     <Box className={classes.root}>
@@ -144,7 +142,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
         dirty={dirty}
       />
       <FBInput {...props} type="cycleCount" name={name}>
-        <FBSection label={sectionLabel}>
+        <FBSection label={label}>
           {isActive && (
             <Button
               kind="ghost"
@@ -158,6 +156,24 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
           )}
         </FBSection>
       </FBInput>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={6}>
+          <FormField label="Cycle Count Frequency (days)" margin="normal">
+            <TextField
+              value={cycleCountFrequency}
+              disabled
+            />
+          </FormField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormField label="Next Due Date" margin="normal">
+            <TextField
+              value={cycleCountFrequency ? nextDueDate : ''}
+              disabled
+            />
+          </FormField>
+        </Grid>
+      </Grid>
       <KendoDataGrid<EditableCycleCount>
         className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         fullWidth
