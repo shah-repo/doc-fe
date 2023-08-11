@@ -269,7 +269,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
         if (!partInfo.parentNodeDocumentId) {
           partInfo.parentNodeDocumentId = documentRevision.documentId;
         }
-        partInfo.markAsDeleted = documentRevision.revision > 1;
+        partInfo.markAsDeleted = false;
         partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
         // Update keys if required
@@ -382,6 +382,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
 
   const onRestore = () => {
     // TODO
+    // partInfo.markAsDeleted = documentRevision.revision > 1;
   };
 
   const onReorder = () => {
