@@ -209,7 +209,6 @@ export function KendoGrid<T extends any> ({
       defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
-
   const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
       {...props}

@@ -6,12 +6,12 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatus, POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
   defaultItem: string
-  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | LotStatus[]
+  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[]
   documentTypeCategory?: string
 }
 
@@ -50,7 +50,7 @@ export const StatusFilterTemplate = ({
         defaultItem={defaultItem}
         itemRender={(li, itemProps) => {
           const itemChildren = <span>{(documentTypeCategory
-          === (DocumentCategory.PurchaseOrder || DocumentCategory.Lot)
+          === DocumentCategory.PurchaseOrder
            && itemProps?.dataItem === DocumentRevisionStatusDisplay.Released)
             ? DocumentRevisionStatusDisplay.Approved
             : li.props.children}</span>;
@@ -58,7 +58,7 @@ export const StatusFilterTemplate = ({
         }}
         valueRender={(li, itemProps) => {
           const itemChildren = <span>{(documentTypeCategory
-          === (DocumentCategory.PurchaseOrder || DocumentCategory.Lot) && itemProps
+          === DocumentCategory.PurchaseOrder && itemProps
           === DocumentRevisionStatusDisplay.Released)
             ? DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
           return React.cloneElement(li, li.props, itemChildren);
