@@ -9,7 +9,6 @@ const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
     data,
     value,
     operator = 'eq',
-    children,
     defaultItem,
     defaultValue,
     onChange,
@@ -42,7 +41,6 @@ const DropdownFilter: React.FC<DropdownFilterCellProps> = (props) => {
         value={data.find((item) => item[DATA_ITEM_KEY] === value) ?? defaultItem}
         disabled={disabled}
       />
-      {children}
     </Filter>
   );
 };
