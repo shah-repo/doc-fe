@@ -308,10 +308,11 @@ export function KendoGrid<T extends any> ({
             headerCell={
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
-            cell={(props) => {
-              props.dataItem.displayStatus = ((documentTypeCategory === DocumentCategory.PurchaseOrder
+            cell={(props) =>
+            {
+              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder
                  && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
-                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus);
+                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
               return RenderCustomCell(
                 {
                   ...props,
@@ -320,8 +321,7 @@ export function KendoGrid<T extends any> ({
                   tooltipField: column.tooltipField,
                 },
                 column.cell || '',
-              );
-            }
+              ); }
             }
             filterCell={
               filterCellMapping[column.filterCell as string]
