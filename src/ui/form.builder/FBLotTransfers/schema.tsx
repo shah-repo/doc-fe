@@ -1,7 +1,6 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
@@ -14,16 +13,7 @@ import { QuantityCellTemplate } from './components/QuantityCellTemplate';
 import { ReferencesCellTemplate } from './components/ReferencesCellTemplate';
 import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD, TRANSFER_TYPE_OPTIONS } from './constants';
-import { CompanyLocation, DocumentRevisionOption, EditableLotTransfer, LotTranferEditEvent } from './types';
-
-interface SchemaOptions {
-  locations: CompanyLocation[]
-  existingLocations: string[]
-  builds: DocumentRevisionOption[]
-  records: DocumentRevisionOption[]
-  units?: string
-  onRowClick?: (e: LotTranferEditEvent) => void
-}
+import { SchemaItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   locations,
@@ -32,7 +22,7 @@ export const buildSchema = ({
   records,
   units,
   onRowClick,
-}: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => {
+}: SchemaOptions): SchemaItem[] => {
   const transferTypeOptions = TRANSFER_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
 
   const quantityTitle
