@@ -4,13 +4,12 @@ import { translate } from '../../../common/intl';
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { BuildCellTemplate } from './components/BuildCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { EmployeeCellTemplate } from './components/EmployeeCellTemplate';
 import { LocationCellTemplate } from './components/LocationCellTemplate';
 import { QuantityCellTemplate } from './components/QuantityCellTemplate';
-import { ReferencesCellTemplate } from './components/ReferencesCellTemplate';
+import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD, TRANSFER_TYPE_OPTIONS } from './constants';
 import { SchemaItem, SchemaOptions } from './types';
@@ -81,15 +80,15 @@ export const buildSchema = ({
       field: BUILD_FIELD,
       title: 'form.builder.lot.transfers.build',
       filterCell: InputFilter,
-      template: (props) => <BuildCellTemplate {...props} options={builds} onClick={onRowClick} />,
-      width: 200,
+      template: (props) => <RevisionCellTemplate {...props} options={builds} onClick={onRowClick} fieldToEdit="build" />,
+      width: 250,
     },
     {
       id: 'reference',
       field: REFERENCE_FIELD,
       title: 'form.builder.lot.transfers.reference',
       filterCell: InputFilter,
-      template: (props) => <ReferencesCellTemplate {...props} options={records} onClick={onRowClick} />,
+      template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="reference" />,
       width: 350,
     },
     {
