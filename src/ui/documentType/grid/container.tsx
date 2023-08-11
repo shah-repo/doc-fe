@@ -62,9 +62,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     if (col && label === 'PO Status') {
       col.valuePath = 'poStatus';
     }
-    if (col && label === 'Lot status') {
-      col.valuePath = 'lotStatus';
-    }
   });
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
 
