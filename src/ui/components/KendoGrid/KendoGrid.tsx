@@ -30,7 +30,6 @@ import { changeRequestStatusOption } from '../../change.request/utils/helpers';
 import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
 import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
-import LotStatusFilterTemplate from '../../document.revision/grid/filter.template/DropdownFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
@@ -203,10 +202,10 @@ export function KendoGrid<T extends any> ({
   );
 
   const LotStatusFilter = (props: GridFilterCellProps) => (
-    <LotStatusFilterTemplate
+    <DropdownFilterTemplate
       {...props}
       data={lotStatusOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
+      defaultItem={createOption('', translate('common.all'))}
     />
   );
   const TypeFilter = (props: GridFilterCellProps) => (
