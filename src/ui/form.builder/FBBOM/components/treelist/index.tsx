@@ -1,25 +1,24 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid } from '@material-ui/core';
+import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
   extendDataItem,
   filterBy,
   mapTree,
   orderBy,
-  TreeList,
-  TreeListCellProps,
+  TreeList, TreeListCellProps,
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent,
+  TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
   chain,
-  get,
-  isEmpty,
+  get, has, isEmpty,
   map,
   omit,
   replace,
@@ -42,7 +41,7 @@ import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import { withThemeNext } from '../../../../layout/theme-next';
+import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
@@ -51,6 +50,7 @@ import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   CustomTreeListColumnProps,
   DATA_ITEM_KEY,
+  EXCEL_FILE_NAME,
   EXPAND_FIELD,
   SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
@@ -64,7 +64,7 @@ import {
   FBBOMProps,
 } from './interface';
 import useStyles from './styles';
-import { isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
+import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) => {
@@ -497,6 +497,44 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     });
   };
 
+  let _export;
+
+  const exportToExcel = () => {
+    const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD)
+      .map(part => ({
+        ...part,
+        attachmentsCount: part?.attachmentNames?.length,
+        vendorsCount: part?.vendors?.length,
+      }));
+    const tableColumns = getExcelColumns(columns);
+
+    const dataMap = data.reduce((acc, val) => {
+      acc.docIdMap[val?.docId] = val;
+    val?.changeRequestDetails && (acc.arIdMap[val?.changeRequestDetails?.crId] = val?.changeRequestDetails);
+    return acc;
+    }, { docIdMap: {}, arIdMap: {} });
+
+    const { docIdMap, arIdMap } = dataMap;
+    const options = _export.workbookOptions(data, tableColumns);
+
+    const rows = options?.sheets[0]?.rows;
+    rows.forEach((row) => {
+      if (row.type === 'data') {
+        row.cells.forEach((cell) => {
+          if (has(docIdMap, cell?.value)) {
+            cell.color = Colors.primaryDark;
+            cell.formula = getHyperLinkForIdCell(docIdMap[cell?.value], cell?.value);
+          }
+          if (has(arIdMap, cell?.value)) {
+            cell.color = Colors.primaryDark;
+            cell.formula = getHyperLinkForArIdCell(arIdMap[cell?.value]?.id, cell.value);
+          }
+        });
+      }
+    });
+    _export.save(options);
+  };
+
   const renderToolbar = (
     <GridToolbar>
       <Grid container justify="space-between">
@@ -510,6 +548,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
           </span>
           <span onClick={handleCollapseAll}>
             {translate('common.collapse.all')}
+          </span>
+        </Grid>
+        <Grid
+          item
+          data-cy="excel-export"
+          className={classes.toggleExpandCollapse}
+        >
+          <span onClick={exportToExcel}>
+            {translate('common.export.excel')}
           </span>
         </Grid>
         <Grid item data-cy="show-hide-columns">
@@ -642,43 +689,45 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
         <FormikProvider value={formik}>
           <Grid container>
             <Grid item xs={12} ref={treeListRef}>
-              <TreeList
-                {...state.dataState}
-                style={{
-                  width: '100%',
-                  maxHeight: size ? size?.height - 160 : 'auto',
-                  overflow: 'auto',
-                }}
-                tableProps={{ style: { width: '2561px' } }}
-                editField={MODE_FIELD}
-                expandField={EXPAND_FIELD}
-                dataItemKey={DATA_ITEM_KEY}
-                subItemsField={SUB_ITEMS_FIELD}
-                onExpandChange={onExpandChange}
-                rowRender={rowRender}
-                data={processData()}
-                onDataStateChange={handleDataStateChange}
-                columns={sortedColumnDefinitions}
-                columnMenu={(props) => (
-                  <CustomColumnMenu
-                    {...props}
-                    columns={getColumns()}
-                    {...{
-                      onLock,
-                      onColumnShowHide,
-                    }}
-                  />
-                )}
-                onRowClick={editBOM}
-                onColumnReorder={onColumnReorder}
-                resizable={TREELIST_CONFIG.resizable}
-                reorderable={TREELIST_CONFIG.reorderable}
-                sortable={TREELIST_CONFIG.sortable}
-                toolbar={renderToolbar}
-                cellRender={cellRender}
-                onRowDrop={onRowDrop}
-                row={TreeListDraggableRow}
-              />
+              <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy={true} fileName={EXCEL_FILE_NAME}>
+                <TreeList
+                  {...state.dataState}
+                  style={{
+                    width: '100%',
+                    maxHeight: size ? size?.height - 160 : 'auto',
+                    overflow: 'auto',
+                  }}
+                  tableProps={{ style: { width: '2561px' } }}
+                  editField={MODE_FIELD}
+                  expandField={EXPAND_FIELD}
+                  dataItemKey={DATA_ITEM_KEY}
+                  subItemsField={SUB_ITEMS_FIELD}
+                  onExpandChange={onExpandChange}
+                  rowRender={rowRender}
+                  data={processData()}
+                  onDataStateChange={handleDataStateChange}
+                  columns={sortedColumnDefinitions}
+                  columnMenu={(props) => (
+                    <CustomColumnMenu
+                      {...props}
+                      columns={getColumns()}
+                      {...{
+                        onLock,
+                        onColumnShowHide,
+                      }}
+                    />
+                  )}
+                  onRowClick={editBOM}
+                  onColumnReorder={onColumnReorder}
+                  resizable={TREELIST_CONFIG.resizable}
+                  reorderable={TREELIST_CONFIG.reorderable}
+                  sortable={TREELIST_CONFIG.sortable}
+                  toolbar={renderToolbar}
+                  cellRender={cellRender}
+                  onRowDrop={onRowDrop}
+                  row={TreeListDraggableRow}
+                />
+              </ExcelExport>
               {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
             </Grid>
             {confirmationDialog.isOpen && (

@@ -1,4 +1,7 @@
 import { isNil } from 'lodash';
+import Config from '../../../../../config';
+import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
+import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, EditableBOM } from '../../interface';
 import { CELL_EMPTY_VALUE, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
@@ -90,4 +93,43 @@ export const updateDataAtLevels = (data?: BOM[], levels?: number[], newValue?: E
     return item;
   });
   return updatedData;
+};
+
+export const getExcelColumns = (columns) => {
+  return [...columns].map(col => {
+    if (['arId', 'hasChanges'].includes(col.field)) {
+      return { ...col, field: 'changeRequestDetails.crId' };
+    } else if (col.field === 'customDocId') {
+      return { ...col, field: 'docId' };
+    } else if (col.field === 'hasPrimaryAttachment') {
+      return { ...col, field: 'primaryAttachmentDetails.name', width: '240px' };
+    } else if (col.field === 'hasAttachments') {
+      return { ...col, field: 'attachmentsCount', width: '100px' };
+    } else if (col.field === 'vendors') {
+      return { ...col, field: 'vendorsCount' };
+    } else if (col.field === 'alternatePartsList') {
+      return { ...col, field: 'alternatePartsCount', width: '130px' };
+    }
+    return col;
+  });
+};
+
+const getChildPartId = (part) => {
+  return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
+};
+
+const getDocLink = (part) => {
+  return `${Config.FrontendUrl}${documentPreviewPath(getChildPartId(part), part?.documentId)}`;
+};
+
+const getCrDocLink = (arId) => {
+  return `${Config.FrontendUrl}${changeRequestPreviewPath(arId)}`;
+};
+
+export const getHyperLinkForIdCell = (part, value) => {
+  return `=HYPERLINK("${getDocLink(part)}", "${value ?? '-'}")`;
+};
+
+export const getHyperLinkForArIdCell = (arId, value) => {
+  return `=HYPERLINK("${getCrDocLink(arId)}", "${value ?? '-'}")`;
 };

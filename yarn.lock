@@ -2370,6 +2370,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@progress/jszip-esm@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@progress/jszip-esm/-/jszip-esm-1.0.3.tgz#778e2845206e2370eb72ca8d5f32041ee0d9dbbb"
+  integrity sha512-qu5qeIlUsJX0Z2oi3Aax3gvfjKrrtVzQ2LIEhmw2CVWffZ0JvtifiomyJOc0ZFk7oEyEyrVvab97bqKkNCKvfQ==
+  dependencies:
+    "@progress/pako-esm" "^1.0.1"
+
 "@progress/kendo-data-query@^1.5.5":
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/@progress/kendo-data-query/-/kendo-data-query-1.5.5.tgz#333422a24be47001465fe855c2e0bd8046eaeb36"
@@ -2405,12 +2412,25 @@
   dependencies:
     "@progress/pako-esm" "^1.0.1"
 
+"@progress/kendo-file-saver@^1.0.0":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-file-saver/-/kendo-file-saver-1.1.1.tgz#4225affb7064fe9e12d3a89f36e00ab6c92deef0"
+  integrity sha512-mo0Cw3MLoLcx2bA+Ma/VAxkM9vHSJ4Sg0vgh6U1ZIvPXmnfO8Dgsdiv/475lafyju0kG8KOhl3bcVagCF71glQ==
+
 "@progress/kendo-licensing@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@progress/kendo-licensing/-/kendo-licensing-1.2.1.tgz#aa8189e9699b9f7c2c879fcab9f6da54faeb256f"
   integrity sha512-j17Mvl1wxdF8C+v6iokssV7tdaeWqCr8zkczTr5jfTe6Fg9DEbFfvt0bl8UnTLg41dc5R14dp8ZVhdnS+sdDrg==
   dependencies:
     jsonwebtoken "^8.5.1"
+
+"@progress/kendo-ooxml@^1.6.3":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-ooxml/-/kendo-ooxml-1.7.0.tgz#9d07586704ea3ef9b45dcc8ac0b7da325421ab38"
+  integrity sha512-8jlL4LDRZabKjx1zcpUMvEz0bJ4FjtDxQBb1Z8NQ0XoA5f9SrZJ2JNOKrvAH9DLnVVw6/bzaNh8ETLok5vLTvg==
+  dependencies:
+    "@progress/jszip-esm" "^1.0.3"
+    "@progress/pako-esm" "^1.0.1"
 
 "@progress/kendo-popup-common@1.9.0-dev.202111301350":
   version "1.9.0-dev.202111301350"
@@ -2479,6 +2499,15 @@
     "@progress/kendo-react-common" "4.13.0"
     "@progress/kendo-react-labels" "4.13.0"
     "@progress/kendo-react-popup" "4.13.0"
+    prop-types "^15.6.0"
+
+"@progress/kendo-react-excel-export@^5.16.1":
+  version "5.16.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-excel-export/-/kendo-react-excel-export-5.16.1.tgz#04f29358926c52407b1eee5c895e9da6c5e10ada"
+  integrity sha512-3gAlqUDYYdNNZxU9/MmTOjzPS5wybDZRHiLWiGMJaJEqjCwJgDy7zQSWuz39TPQ9h2YilDnnBvIPBwaFt7gOFA==
+  dependencies:
+    "@progress/kendo-file-saver" "^1.0.0"
+    "@progress/kendo-ooxml" "^1.6.3"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-form@^4.13.0":

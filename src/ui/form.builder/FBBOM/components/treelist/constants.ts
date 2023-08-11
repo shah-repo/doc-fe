@@ -22,6 +22,7 @@ import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 
 export const SUB_ITEMS_FIELD = 'childNodes';
+export const EXCEL_FILE_NAME = 'bomTree.xlsx';
 export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
