@@ -73,7 +73,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
             <IconButton
               kind="action"
               size="small"
-              onClick={onRestore}
+              onClick={() => onRestore(dataItem)}
             >
               <FontAwesomeIcon
                 className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}

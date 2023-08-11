@@ -15,6 +15,6 @@ export interface BOMActionsProps<EditableBOM> {
   onDiscard?: (dataItem: EditableBOM) => void
   onDelete?: (dataItem: EditableBOM) => void
   onChildPartAdd?: (dataItem: EditableBOM) => void
-  onRestore?: () => void
+  onRestore?: (dataItem: EditableBOM) => void
   onReorder?: () => void
 }

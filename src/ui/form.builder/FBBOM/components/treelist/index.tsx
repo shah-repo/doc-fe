@@ -17,8 +17,7 @@ import {
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain,
-  get, has, isEmpty,
+  chain, get, has, isEmpty,
   map,
   omit,
   replace,
@@ -380,9 +379,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     setSelectedPart(dataItem);
   };
 
-  const onRestore = () => {
-    // TODO
-    // partInfo.markAsDeleted = documentRevision.revision > 1;
+  const onRestore = (dataItem) => {
+    const partInfo = dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR);
+    const payload = {
+      childNodeRevId: partInfo[1],
+      markAsDeleted: true,
+    };
+    partAsync.start(
+      updateBOMBranch,
+      partInfo[0],
+      partInfo[1],
+      payload,
+      partAsync,
+    );
   };
 
   const onReorder = () => {
