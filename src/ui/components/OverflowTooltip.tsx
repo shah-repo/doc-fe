@@ -28,13 +28,13 @@ const OveflowTooltip: React.FC<Props> = ({
   maxLines = 1,
   ...props
 }) => {
-  const [overflowRef, isOveflowing] = useOverflow<HTMLDivElement>();
+  const [overflowRef, isOverflowing] = useOverflow<HTMLDivElement>();
   const classes = useStyles({ maxLines });
 
   return (
     <Tooltip
       {...props}
-      title={isOveflowing ? title : ''}
+      title={isOverflowing ? title : ''}
     >
       <div
         className={maxLines > 1 ? classes.multilineWrapper : classes.wrapper}
