@@ -22,7 +22,7 @@ interface Props extends Omit<TooltipProps, 'children'> {
   maxLines?: number
 }
 
-const OveflowTooltip: React.FC<Props> = ({
+const OverflowTooltip: React.FC<Props> = ({
   title,
   children,
   maxLines = 1,
@@ -46,4 +46,4 @@ const OveflowTooltip: React.FC<Props> = ({
   );
 };
 
-export default OveflowTooltip;
+export default OverflowTooltip;
