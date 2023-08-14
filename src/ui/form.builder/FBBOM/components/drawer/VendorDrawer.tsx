@@ -109,7 +109,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             </Grid>
           </Grid>
           <Divider className={classes.divider} />
-          <PartVendorsTable vendors={vendors} />
+          <PartVendorsTable parentNodeRevId={parentRevId} />
         </Box>
       )}
     </Drawer>

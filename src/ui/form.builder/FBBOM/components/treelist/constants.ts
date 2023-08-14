@@ -205,7 +205,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   //   sortable: false,
   // },
   {
-    field: 'vendors',
+    field: 'vendorsCount',
     title: 'VENDORS',
     width: '80px',
     cell: VendorsCell,

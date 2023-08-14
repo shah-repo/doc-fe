@@ -34,6 +34,8 @@ export const FETCH_ALTERNATE_PART = 'bom/alternate_parts';
 export const ADD_ALTERNATE_PART = 'bom/add_alternate_parts';
 export const DELETE_ALTERNATE_PART = 'bom/remove_alternate_parts';
 
+export const FETCH_VENDORS = 'bom/supplier_list';
+
 export const PO_REQUESTOR_COMPONENT_NAME = 'po-requestor-autocomplete';
 export const PO_ITEMS_COMPONENT_NAME = 'po-items-built-in';
 export const PO_APPROVAL_KEY = 'fb-po-approvals-';

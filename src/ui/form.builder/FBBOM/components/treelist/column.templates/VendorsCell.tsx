@@ -16,7 +16,7 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
   style,
 }) => {
   const classes = styles();
-  const suppliersLength = (dataItem[field ?? ''] ?? []).length as number;
+  const suppliersLength = (dataItem[field ?? ''] ?? 0) as number;
   const isSuppliersExist = suppliersLength > 0;
   const handleToggle = () => {
     setOpenPartsDrawer(true);
