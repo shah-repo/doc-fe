@@ -1,30 +1,35 @@
 import { Chip } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
-import { POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
+import { LotStatus, POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
 import { KendoGridFilterCell } from '../../KendoGrid/interfaces';
-import { statusClassMapping } from '../kendo/helpers';
+import { getLotStatusLabel } from '../header/HeaderLotStatus';
 import Tooltip from '../kendo/Tooltip';
+import { statusClassMapping } from '../kendo/helpers';
 import { CustomGridCellProps } from '../kendo/types';
 import { styles } from './Status.styles';
 
-export const Status = ({
+export const Status: React.FC<CustomGridCellProps> = ({
   dataItem,
-  field,
+  field = '',
   colSpan,
   style,
   className,
   columnIndex,
   cellRowClick,
-}: CustomGridCellProps) => {
+}) => {
   const classes = styles();
-  const status = dataItem[field || ''];
+  const status = dataItem[field] as string;
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
   let fieldLabel = status;
   if (field === KendoGridFilterCell.PO_STATUS) {
-    fieldLabel = POStatusLabelMapping[status];
+    fieldLabel = POStatusLabelMapping[status] as string;
+  }
+  if (field === KendoGridFilterCell.LOT_STATUS) {
+    fieldLabel = getLotStatusLabel(status as LotStatus);
   }
   return (
     <td
@@ -42,9 +47,7 @@ export const Status = ({
           childrenElement={
             <Chip
               size="small"
-              className={`${classes.chip} ${
-                classes[statusClassMapping[status]]
-              }`}
+              className={cx(classes.chip, classes[statusClassMapping[status]])}
               label={fieldLabel}
             />
           }

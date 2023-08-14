@@ -36,4 +36,9 @@ export const styles = makeStyles({
     color: Colors.font_gray,
     border: `1px solid ${Colors.font_gray}`,
   },
+  RED_STATUS: {
+    background: Colors.errorHighlight,
+    color: Colors.latest_red_varient,
+    border: `1px solid ${Colors.latest_red_varient}`,
+  },
 });

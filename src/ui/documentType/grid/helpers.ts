@@ -20,7 +20,6 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
   if (valuePath === 'owner.user.name') {
     searchOptions.dataKey = 'owner';
     searchOptions.ownerTemplate = true;
-
   }
   if (valuePath === 'effectiveDate') {
     searchOptions = {
@@ -45,6 +44,10 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = 'poStatus';
     searchOptions.poStatusTemplate = true;
   }
+  if (valuePath === 'lotStatus') {
+    searchOptions.dataKey = 'lotStatus';
+    searchOptions.lotStatusTemplate = true;
+  }
   return searchOptions;
 };
 
@@ -52,7 +55,7 @@ export const getStaticColumns = (
   isByCategory,
   documentCategory,
   documentType,
-): TableColumnProps<DocumentRevision>[] => [
+): Array<TableColumnProps<DocumentRevision>> => [
   {
     key: 'docId',
     label: `${isByCategory ? documentCategory : documentType?.documentTypeName} ID` as Translation,
