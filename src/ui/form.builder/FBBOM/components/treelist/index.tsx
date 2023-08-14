@@ -384,7 +384,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     const partInfo = dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR);
     const payload = {
       childNodeRevId: partInfo[1],
-      markAsDeleted: true,
+      markAsDeleted: false,
     };
     partAsync.start(
       updateBOMBranch,
@@ -435,6 +435,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
+    item.isDisabled = isDisabled;
 
     if (isEmpty(item.refDesignator)) {
       item.refDesignator = '-';

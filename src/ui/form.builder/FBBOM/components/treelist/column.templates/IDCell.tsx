@@ -202,7 +202,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         >
           <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />
         </Tooltip>}
-        {dataItem.isOwner && !isEditMode && <Tooltip
+        {dataItem.isOwner && !isEditMode && !dataItem.isDisabled && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow

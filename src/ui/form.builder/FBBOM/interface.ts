@@ -45,6 +45,7 @@ export interface EditableBOM extends BOM {
   isParentOwner?: boolean
   alternatePartsCount?: number
   attachmentNames: string[]
+  isDisabled?: boolean
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM
