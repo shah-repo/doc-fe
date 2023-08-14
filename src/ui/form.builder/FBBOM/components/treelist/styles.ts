@@ -433,6 +433,9 @@ export default makeStyles((theme) => ({
   grayBg: {
     backgroundColor: Colors.gray,
   },
+  deletedBg: {
+    backgroundColor: Colors.errorLightShadow,
+  },
   viewIcon: {
     fill: Colors.textBlack,
     marginRight: theme.spacing(0.625),
