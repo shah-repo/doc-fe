@@ -29,6 +29,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public isBomExists = false;
   @observable public childPartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
+  @observable public refreshBomTree = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
   @observable public expanded = false;
@@ -182,6 +183,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setBomInfo = (data) => {
     set(this, 'bomInfo', data);
+  };
+
+  @action public setRefreshBomTree = (data) => {
+    set(this, 'refreshBomTree', data);
   };
 
   @action public setDirty = (isDirty: boolean) => {

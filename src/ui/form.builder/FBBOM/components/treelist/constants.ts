@@ -40,6 +40,7 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
   showMenu?: boolean
   mainOrderIndex?: number
   disableShowOrHideSelection?: boolean
+  filterable?: boolean
 }
 
 export const TreeColumns: CustomTreeListColumnProps[] = [
@@ -171,7 +172,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'hasPrimaryAttachment',
     title: 'PRIMARY ATTACHMENTS',
     width: '81px',
-    filter: TreeListTextFilter,
+    filterable: false,
     locked: false,
     mainOrderIndex: 12,
     headerCell: PrimaryAttachments,
@@ -183,7 +184,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'hasAttachments',
     title: 'ATTACHMENTS',
     width: '80px',
-    filter: TreeListTextFilter,
+    filterable: false,
     locked: false,
     mainOrderIndex: 13,
     headerCell: Attachments,
@@ -208,7 +209,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'VENDORS',
     width: '80px',
     cell: VendorsCell,
-    filter: TreeListTextFilter,
+    filterable: false,
     locked: false,
     mainOrderIndex: 15,
     headerCell: Vendors,
@@ -220,7 +221,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: 'Alternate Parts List',
     width: '80px',
     cell: AlternatePartsCell,
-    filter: TreeListTextFilter,
+    filterable: false,
     locked: false,
     mainOrderIndex: 16,
     headerCell: AlternatePartsList,

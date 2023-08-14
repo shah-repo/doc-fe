@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { SM } from '../../../../../../App';
 import AlternatePartsDrawer from '../../drawer/AlternateParts';
 import { ALTERNATE_PARTS_COUNT_KEY, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
@@ -18,13 +19,20 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const classes = styles();
   const alternatePartsCount = dataItem[ALTERNATE_PARTS_COUNT_KEY] ?? 0;
   const isAlteratePartsExists = alternatePartsCount > 0;
+  const { _documentRevisionFormState } = SM.useStores();
   const handleToggle = () => {
+    if (!dataItem.isDisabled) {
+    _documentRevisionFormState?.setRefreshBomTree(false);
+    }
     setOpenPartsDrawer(true);
   };
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
 
   const closeDrawer = () => {
     setOpenPartsDrawer(false);
+    if (!dataItem.isDisabled) {
+      _documentRevisionFormState?.setRefreshBomTree(!_documentRevisionFormState?.refreshBomTree);
+    }
   };
 
   const fetchDotIcon = () => <FontAwesomeIcon

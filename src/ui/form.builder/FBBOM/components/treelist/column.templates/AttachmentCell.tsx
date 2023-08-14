@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { SM } from '../../../../../../App';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
 import DocumentRevisionDrawerContent from '../../drawer/DocumentRevisionDrawer';
 import { styles } from './styles';
@@ -19,11 +20,18 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
   const attachmentNamesCount = dataItem.attachmentNames?.length ?? 0;
   const isAttachmentNamesExists = attachmentNamesCount > 0;
+  const { _documentRevisionFormState } = SM.useStores();
 
   const openDrawer = () => {
+    if (!dataItem.isDisabled) {
+      _documentRevisionFormState?.setRefreshBomTree(false);
+    }
     setOpenPartsDrawer(true);
   };
   const closeDrawer = () => {
+    if (!dataItem.isDisabled) {
+      _documentRevisionFormState?.setRefreshBomTree(!_documentRevisionFormState?.refreshBomTree);
+    }
     setOpenPartsDrawer(false);
   };
 

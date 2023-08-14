@@ -103,11 +103,17 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const openDrawer = () => {
+    if (!dataItem.isDisabled) {
+      _documentRevisionFormState?.setRefreshBomTree(false);
+    }
     setOpenPartsDrawer(true);
   };
   const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
 
   const closeDrawer = () => {
+    if (!dataItem.isDisabled) {
+      _documentRevisionFormState?.setRefreshBomTree(!_documentRevisionFormState?.refreshBomTree);
+    }
     setOpenPartsDrawer(false);
   };
 

@@ -161,6 +161,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     documentRevisionsActions.changeOrderBomBranch,
   );
 
+  SM.reaction(
+    () => _documentRevisionFormState?.refreshBomTree,
+    (loading) => {
+      if (loading && documentRevision) {
+        treeListAsync.start(
+          fetchBOMTreeList,
+          documentRevision.id,
+          documentRevision.documentId,
+          treeListAsync,
+        );
+      }
+    });
+
   const [columns, setColumns]
     = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
