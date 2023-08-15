@@ -6,6 +6,7 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
+import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { NumericCellTemplate } from './components/NumericCellTemplate';
 import { PrimarySupplierCellTemplate } from './components/PrimarySupplierCellTemplate';
 import { PrimarySupplierTitle } from './components/PrimarySupplierTitle';
@@ -15,17 +16,7 @@ import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTempl
 import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
 import { UnitsCellTemplate } from './components/UnitsCellTemplate';
 import { SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
-import { EditableVendor, SupplierOption, VendorEditEvent } from './types';
-
-interface SchemaOptions {
-  units: string[]
-  statuses: string[]
-  suppliers: SupplierOption[]
-  isActive: boolean
-  isInEditMode: boolean
-  setPrimaryVendor?: (id: string) => void
-  onRowClick?: (e: VendorEditEvent) => void
-}
+import { EditableVendor, SchemaOptions } from './types';
 
 export const buildSchema = ({
   units,
@@ -33,8 +24,12 @@ export const buildSchema = ({
   suppliers,
   isActive,
   isInEditMode,
-  setPrimaryVendor,
+  actionsClass,
   onRowClick,
+  onConfirm,
+  onDiscard,
+  onDelete,
+  onPrimaryChange,
 }: SchemaOptions): Array<ColumnDefinition<EditableVendor>> => {
   const unitOptions = units.map(unit => createOption(unit, unit));
   const UnitsFilter: React.FC<GridFilterCellProps> = (props) => (
@@ -63,7 +58,7 @@ export const buildSchema = ({
       template: (props) => (
         <PrimarySupplierCellTemplate
           {...props}
-          setPrimaryVendor={setPrimaryVendor}
+          onPrimaryChange={onPrimaryChange}
           isActive={isActive}
           isInEditMode={isInEditMode}
         />
@@ -133,6 +128,20 @@ export const buildSchema = ({
       filterCell: InputFilter,
       template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
+    },
+    {
+      id: 'actions',
+      title: 'actions',
+      className: actionsClass,
+      template: (props) => (
+        <ActionsCellTemplate
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          onDelete={onDelete}
+        />
+      ),
+      width: 1,
     },
   ];
 };
