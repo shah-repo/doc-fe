@@ -10,25 +10,24 @@ export const ActionsCellTemplate: React.FC<Props> = (props) => {
   const { dataItem, onConfirm, onDiscard, onDelete } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  if (isEditMode) {
-    const shouldDisableDelete = dataItem.primary;
+  if (!isEditMode) {
+    return null;
+  }
 
-    const deleteTootltipText
+  const shouldDisableDelete = dataItem.primary;
+  const deleteTootltipText
       = shouldDisableDelete
         ? translate('form.builder.part.vendors.primary.delete.message')
         : undefined;
 
-    return (
-      <ActionsCell
-        dataItem={dataItem}
-        onConfirm={onConfirm}
-        onDiscard={onDiscard}
-        onDelete={onDelete}
-        deleteTooltipText={deleteTootltipText}
-        isDeleteDisabled={shouldDisableDelete}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <ActionsCell
+      dataItem={dataItem}
+      onConfirm={onConfirm}
+      onDiscard={onDiscard}
+      onDelete={onDelete}
+      deleteTooltipText={deleteTootltipText}
+      isDeleteDisabled={shouldDisableDelete}
+    />
+  );
 };
