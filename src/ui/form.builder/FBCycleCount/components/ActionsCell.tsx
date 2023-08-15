@@ -2,9 +2,8 @@ import { Popper } from '@material-ui/core';
 import PopperJs from 'popper.js';
 import React, { useRef } from 'react';
 import Actions, { ActionsProps } from '../../FBApprovalMatrixRoles/components/Actions';
-import { EditableCycleCount } from '../types';
 
-interface Props extends ActionsProps<EditableCycleCount> {
+interface Props extends ActionsProps {
   rootClassName?: string
   popperRef?: React.RefObject<PopperJs>
 }
