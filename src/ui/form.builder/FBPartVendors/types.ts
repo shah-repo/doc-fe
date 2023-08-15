@@ -3,6 +3,20 @@ import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { FBInputProps } from '../FBInput/FBInput.types';
 
+export interface SchemaOptions {
+  units: string[]
+  statuses: string[]
+  suppliers: SupplierOption[]
+  isActive: boolean
+  isInEditMode: boolean
+  actionsClass: string
+  onConfirm: () => void
+  onDiscard: () => void
+  onDelete?: () => void
+  onRowClick?: (e: VendorEditEvent) => void
+  onPrimaryChange?: (id: string) => void
+}
+
 export enum Currency {
   USD = 'USD',
 }

@@ -3,7 +3,7 @@ import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGr
 import { EditableRole } from '../types';
 import Actions, { ActionsProps } from './Actions';
 
-interface Props extends CellTemplateProps<EditableRole>, ActionsProps<EditableRole> {}
+type Props = CellTemplateProps<EditableRole> & ActionsProps;
 
 const ActionsCell: React.FC<Props> = (props) => (
   <Actions
