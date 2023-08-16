@@ -345,7 +345,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.markAsDeleted) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -396,13 +396,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   const onRestore = (dataItem) => {
     const partInfo = dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR);
     const payload = {
-      childNodeRevId: partInfo[1],
+      childNodeRevId: partInfo[0],
       markAsDeleted: false,
     };
     partAsync.start(
       updateBOMBranch,
-      partInfo[0],
       partInfo[1],
+      partInfo[0],
       payload,
       partAsync,
     );
@@ -742,6 +742,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       }
     },
   );
+
+  SM.reaction(
+    () => _documentRevisionFormState?.getRestorePartInfo,
+    (info) => {
+      if (info?.dataItem) {
+        const dataItem = toJS(info?.dataItem) as EditableBOM;
+        const level = toJS(info?.level);
+        setSelectedPartLevel({ dataItem, level });
+        onRestore(dataItem);
+      }
+    },
+  );
+
   const sortedColumnDefinitions = orderByLockedState(getColumns());
 
   return (

@@ -29,6 +29,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public isBomExists = false;
   @observable public showBOMDiff = false;
   @observable public childPartInfo = { dataItem: {}, level: [] };
+  @observable public restorePartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
   @observable public refreshBomTree = false;
   @observable public loading = false;
@@ -113,6 +114,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.childPartInfo;
   }
 
+  @computed public get getRestorePartInfo () {
+    return this.restorePartInfo;
+  }
+
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, 'revisionChangeType', revisionChangeType);
@@ -188,6 +193,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
     set(this, 'childPartInfo', data);
+  };
+
+  @action public setRestorePartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
+    set(this, 'restorePartInfo', data);
   };
 
   @action public setBomInfo = (data) => {

@@ -233,6 +233,16 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         >
           <FontAwesomeIcon onClick={() => _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level })} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
         </Tooltip>}
+        {dataItem.markAsDeleted && !dataItem.isDisabled && <Tooltip
+          title={translate('common.restore')}
+          placement="top"
+          arrow
+        >
+          <FontAwesomeIcon
+            className={classes.restoreParentIcon}
+            onClick={() => _documentRevisionFormState?.setRestorePartInfo({ dataItem: dataItem, level })}
+            icon={solid('arrow-rotate-left')} />
+        </Tooltip>}
       </span>
       <Observer>
         {() => (

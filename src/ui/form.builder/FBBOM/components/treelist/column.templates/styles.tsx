@@ -126,7 +126,7 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   replacedDocRevInfo: {
-    color: ThemeColors.darkPpeach,
+    color: ThemeColors.darkPeach,
     fontSize: 12,
     textAlign: 'right',
     padding: theme.spacing(1.5, 0, 1.25),
@@ -140,7 +140,7 @@ export const styles = makeStyles((theme) => ({
     marginLeft: '5px',
     marginRight: '5px',
     position: 'relative',
-    background: ThemeColors.darkPpeach,
+    background: ThemeColors.darkPeach,
   },
   link: {
     color: `${Colors.navy_active} !important`,
@@ -152,5 +152,9 @@ export const styles = makeStyles((theme) => ({
   },
   progress: {
     color: theme.palette.secondary.main,
+  },
+  restoreParentIcon: {
+    color: ThemeColors.primaryLight,
+    marginLeft: theme.spacing(1.5),
   },
 }));

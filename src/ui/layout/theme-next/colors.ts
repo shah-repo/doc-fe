@@ -54,7 +54,7 @@ enum Colors {
   gray='#F9F9F9',
   darkGray='#F5F5F5',
   black='#000',
-  darkPpeach='#B24736',
+  darkPeach='#B24736',
 
   // Statuses
   statusDraft='#4D88FF',
