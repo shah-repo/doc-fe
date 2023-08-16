@@ -62,7 +62,7 @@ const FBQuantityField: React.FC<FBInputProps> = ({
         {isPreview ? (
           <FBTextField
             {...props}
-            label={fieldLabel}
+            label={unitsLabel}
             name={`${name}_unit`}
             gutter={false}
             placeholder="0"
