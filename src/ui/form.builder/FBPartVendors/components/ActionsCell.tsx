@@ -1,20 +1,20 @@
-import { Popper } from '@material-ui/core';
-import PopperJs from 'popper.js';
+import { Popper, makeStyles } from '@material-ui/core';
 import React, { useRef } from 'react';
 import Actions, { ActionsProps } from '../../FBApprovalMatrixRoles/components/Actions';
-import { EditableVendor } from '../types';
 
-interface Props extends ActionsProps<EditableVendor> {
-  rootClassName?: string
-  popperRef?: React.RefObject<PopperJs>
-}
+const useStyles = makeStyles({
+  popperHolder: {
+    height: '100%',
+  },
+});
 
-export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
+export const ActionsCell: React.FC<ActionsProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
+  const classes = useStyles();
 
   return (
     <>
-      <div ref={ref} className={props.rootClassName} />
+      <div ref={ref} className={classes.popperHolder} />
       {ref.current && (
         <Popper
           open
