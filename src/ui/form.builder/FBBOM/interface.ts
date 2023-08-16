@@ -46,6 +46,7 @@ export interface EditableBOM extends BOM {
   alternatePartsCount?: number
   attachmentNames: string[]
   isDisabled?: boolean
+  replacesStatus?: string
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM

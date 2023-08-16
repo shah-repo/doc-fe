@@ -451,6 +451,20 @@ export default makeStyles((theme) => ({
     height: 17,
     cursor: 'pointer',
   },
+  toggleIconContainer: {
+    paddingRight: theme.spacing(2.5),
+    verticalAlign: 'sub',
+  },
+  toggleIcon: {
+    color: Colors.primaryLight,
+    cursor: 'pointer',
+  },
+  toggleIconLabel: {
+    fontSize: 12,
+    fontWeight: 600,
+    lineHeight: '15px',
+    paddingLeft: theme.spacing(0.625),
+  },
   loader: {
     position: 'absolute',
     top: 0,

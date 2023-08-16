@@ -27,6 +27,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public forceRender?: any;
   @observable public disabledAction = false;
   @observable public isBomExists = false;
+  @observable public showBOMDiff = false;
   @observable public childPartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
   @observable public refreshBomTree = false;
@@ -175,6 +176,14 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setIsBomExists = (isBomExists: boolean) => {
     set(this, 'isBomExists', isBomExists);
+  };
+
+  @action public toggleShowBOMDiff = () => {
+    this.setShowBOMDiff(!this.showBOMDiff);
+  };
+
+  @action public setShowBOMDiff = (showBOMDiff: boolean) => {
+    set(this, 'showBOMDiff', showBOMDiff);
   };
 
   @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {

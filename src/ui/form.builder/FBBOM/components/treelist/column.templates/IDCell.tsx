@@ -1,17 +1,21 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, Tooltip } from '@material-ui/core';
+import { Grid, Link, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { Observer } from 'mobx-react';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { ReactComponent as InfoIcon } from '../../../../../../assets/images/info_icon.svg';
 import { translate } from '../../../../../../common/intl';
-import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../../../../state/reducers';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import Text from '../../../../../components/Text';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { Colors } from '../../../../../layout/theme-next';
@@ -128,6 +132,20 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
   }, [parts]);
 
+  const replaceDocumentRevision = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, dataItem?.replacesStatus ?? ''),
+  );
+
+  const loadDocumentRevision = useActionCreator(documentRevisionsActions.load);
+  const loadAction = () =>
+    loadDocumentRevision(dataItem?.replacesStatus, '');
+
+  useEffect(() => {
+    if (dataItem?.replacesStatus) {
+      loadAction();
+    }
+  }, []);
+
   const getFieldInfo = () => (
     field && <FormikField
       name={field}
@@ -216,6 +234,30 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           <FontAwesomeIcon onClick={() => _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level })} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
         </Tooltip>}
       </span>
+      <Observer>
+        {() => (
+          <>
+            {!isEditMode && _documentRevisionFormState?.showBOMDiff && dataItem?.replacesStatus
+            && <Grid
+              container={true}
+              className={classes.replacedDocRevInfo}
+              wrap="nowrap"
+              justify="flex-end"
+              alignItems="center"
+            >
+              <span className={classes.replacedDocRevInfoTitle} >{translate('bom.replaced.doc.rev')}</span>&nbsp;
+              <FontAwesomeIcon icon={solid('arrow-right')} />&nbsp;{replaceDocumentRevision?.document?.docId}
+              <Grid item={true} className={classes.whiteDot} />
+              <Grid item={true}>
+                <Text
+                  translation="form.builder.header.rev"
+                  values={{ revision: replaceDocumentRevision?.displayRevision }}
+                />
+              </Grid>
+            </Grid>}
+          </>
+        )}
+      </Observer>
       {getDrawer()}
     </td>
   );

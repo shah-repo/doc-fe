@@ -1,4 +1,4 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid } from '@material-ui/core';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
@@ -67,7 +67,7 @@ import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false }) => {
   const classes = useStyles();
   const [state, setState] = React.useState<BOMState>({
     data: [],
@@ -446,6 +446,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
     }
   };
 
+  useObserver(() => {
+    showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
+  });
+
+  const showHideDiff = () => {
+    _documentRevisionFormState?.toggleShowBOMDiff();
+  };
+
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
@@ -457,7 +465,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.markAsDeleted,
+        [classes.deletedBg]: item.markAsDeleted || (showBOMDiff && item.replacesStatus),
       }),
     };
     if (!item[MODE_FIELD]) {
@@ -578,6 +586,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled }) =
         </Grid>
         <Grid item>
           <Grid container justify="flex-end">
+            <Grid item
+              data-cy="show-hide-diff"
+            >
+              <span className={classes.toggleIconContainer}>
+                {showBOMDiff
+                  ? <FontAwesomeIcon onClick={showHideDiff} className={classes.toggleIcon} icon={regular('toggle-large-on')} size="lg" />
+                  : <FontAwesomeIcon onClick={showHideDiff} style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
+                <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
+              </span>
+            </Grid>
             <Grid item
               data-cy="excel-export"
             >
