@@ -1,6 +1,6 @@
-import { Avatar } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
 import { theme } from '../../../common/utils/helpers';
 import Config from '../../../config';
 import { WhiteLabelingEnv } from '../../../state/ducks/company/types';
@@ -34,14 +34,14 @@ const Logo: React.FunctionComponent<Props> = ({
           </span>
         </div>
       )}
-      {!open && <Avatar className={classes.avatar} data-cy={companyName}>
-        <img
+      {!open && <div className={classes.smallLogoContainer} data-cy={companyName}>
+        {whiteLabeling.avatar && <img
           id="logo"
-          className={classes.smallLogo}
+          className={classes.avatar}
           src={whiteLabeling.avatar}
-          alt={companyName}
-        />
-      </Avatar>}
+        />}
+        {!whiteLabeling.avatar && <CompanyAvatar />}
+      </div>}
       {open && <div data-cy={companyName}>
         <img
           id="logo"

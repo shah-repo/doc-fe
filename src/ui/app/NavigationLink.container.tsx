@@ -182,6 +182,7 @@ NavigationLinkContainerProps
       <MenuItem
         className={classes.parentMenuItem}
         data-cy={`navigation.${camelCase(label)}`}
+        key="parent-navigation-menu-item"
         onClick={() => menuClick({ type, category: rest?.category, path: rest?.path ?? currentPath })}
       >
         {label}
@@ -192,6 +193,7 @@ NavigationLinkContainerProps
           !isMenuType(ld.type) && (
             <MenuItem
               onClick={() => menuClick(ld)}
+              key={index}
               data-cy={`navigation.${camelCase(ld.label)}`}
               className={classNames(classes.childMenuItems, {
                 [classes.otherChildMenus]: !checkIfItemIsActive(

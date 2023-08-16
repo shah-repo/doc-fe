@@ -40,7 +40,6 @@ const styles = makeStyles((theme: Theme) =>
     },
     logo: {
       maxWidth: '100%',
-      height: 80,
       padding: theme.spacing(0, 3),
     },
     smallLogo: {
@@ -54,13 +53,14 @@ const styles = makeStyles((theme: Theme) =>
       marginTop: 20,
     },
     avatar: {
-      width: 47,
-      height: 47,
-      margin: theme.spacing(0, 1.625),
-      fontSize: 15,
-      color: Colors.white,
-      background: Colors.deep_blue,
-      fontWeight: 600,
+      width: 58,
+      height: 58,
+      borderRadius: '50%',
+      border: `1px solid ${Colors.mirage}`,
+    },
+    smallLogoContainer: {
+      display: 'flex',
+      margin: theme.spacing(0, 0.875),
     },
   }),
 );
