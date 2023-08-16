@@ -404,7 +404,6 @@ export default makeStyles((theme) => ({
     width: '100%',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    marginTop: theme.spacing(-0.875),
   },
   updatingRow: {
     position: 'relative',

@@ -776,6 +776,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
                   expandField={EXPAND_FIELD}
                   dataItemKey={DATA_ITEM_KEY}
                   subItemsField={SUB_ITEMS_FIELD}
+                  className="containing-box-scrollbar"
                   onExpandChange={onExpandChange}
                   rowRender={rowRender}
                   data={processData()}
