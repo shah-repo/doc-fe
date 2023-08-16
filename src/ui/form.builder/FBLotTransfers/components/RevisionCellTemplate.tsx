@@ -1,48 +1,62 @@
-import { Box } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { CustomTemplateProps, DocumentRevisionOption, EditableLotTransfer } from '../types';
 import { getOptionLabel } from '../utils';
 
 interface Props extends CustomTemplateProps {
   options?: DocumentRevisionOption[]
+  fieldToEdit?: string
 }
 
-export const BuildCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
+const useStyles = makeStyles({
+  wrap: {
+    maxWidth: '100%',
+    display: '-webkit-box',
+    overflow: 'hidden',
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical',
+  },
+});
+
+export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const classes = useStyles();
+  const targetField = fieldToEdit ?? field;
 
-  const handleChange = (event: ChangeEvent<unknown>, build?: DocumentRevisionOption) => {
-    const value = build ? {
-      id: build.id,
-      docId: build.document.docId,
+  const handleChange = (event: ChangeEvent<unknown>, reference?: DocumentRevisionOption) => {
+    const value = reference ? {
+      id: reference.id,
+      docId: reference.document.docId,
     } : undefined;
 
-    setFieldValue('build', value);
+    setFieldValue(targetField, value);
   };
 
-  const defaultValue = isEditMode ? values.build?.id : dataItem.build?.id;
-  const value = options?.find((build) => build.id === defaultValue);
+  const source = isEditMode ? values : dataItem;
+  const defaultValue = source[targetField] as DocumentRevisionOption | undefined;
+  const value = options?.find((revision) => revision.id === defaultValue?.id);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
-      <FormikField
-        name="build"
-      >
+      <FormikField name={targetField}>
         <Autocomplete
-          {...getFieldProps('build')}
+          {...getFieldProps(targetField)}
           blurOnSelect
           options={options}
           getOptionLabel={getOptionLabel}
+          renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
           value={value}
+          defaultValue={value}
           onChange={handleChange}
           size="small"
         />
