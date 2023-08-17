@@ -6,9 +6,9 @@ import { Radio } from '../../../components/forms/fields-next';
 import { CustomTemplateProps, EditableVendor } from '../types';
 
 interface Props extends CustomTemplateProps {
-  setPrimaryVendor?: (id: string) => void
   isActive: boolean
   isInEditMode: boolean
+  onPrimaryChange?: (id: string) => void
 }
 
 const Editor: React.FC<Props> = ({ field }) => {
@@ -33,7 +33,7 @@ const Editor: React.FC<Props> = ({ field }) => {
 };
 
 export const PrimarySupplierCellTemplate: React.FC<Props> = (props) => {
-  const { dataIndex, dataItem, isActive, isInEditMode, setPrimaryVendor } = props;
+  const { dataIndex, dataItem, isActive, isInEditMode, onPrimaryChange } = props;
   const isEditMode = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +41,8 @@ export const PrimarySupplierCellTemplate: React.FC<Props> = (props) => {
       return;
     }
     const id = event.target.value;
-    if (id && setPrimaryVendor) {
-      setPrimaryVendor(id);
+    if (id && onPrimaryChange) {
+      onPrimaryChange(id);
     }
   };
 

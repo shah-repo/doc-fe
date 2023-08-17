@@ -1,6 +1,6 @@
-import { Avatar } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
 import { theme } from '../../../common/utils/helpers';
 import Config from '../../../config';
 import { WhiteLabelingEnv } from '../../../state/ducks/company/types';
@@ -30,25 +30,41 @@ const Logo: React.FunctionComponent<Props> = ({
       {showEnvironment && (
         <div className={`${classes.envCnt} ${classes[themeBgClass]}`}>
           <span className={classes.evnTxt}>
-            <Text message={open ? `environment.${theme}` : `environment.${theme}.short`} />
+            <Text
+              message={
+                open ? `environment.${theme}` : `environment.${theme}.short`
+              }
+            />
           </span>
         </div>
       )}
-      {!open && <Avatar className={classes.avatar} data-cy={companyName}>
-        <img
-          id="logo"
-          className={classes.smallLogo}
-          src={whiteLabeling.avatar}
-          alt={companyName}
-        />
-      </Avatar>}
-      {open && <div data-cy={companyName}>
-        <img
-          id="logo"
-          src={logo}
-          className={cx(classes.logo, { [classes.mt0]: showEnvironment, [classes.mt20]: !showEnvironment })}
-          alt={companyName}
-        /></div>}
+      {!open && (
+        <div className={classes.smallLogoContainer} data-cy={companyName}>
+          {whiteLabeling.avatar ? (
+            <img
+              id="logo"
+              className={classes.avatar}
+              src={whiteLabeling.avatar}
+              alt={companyName}
+            />
+          ) : (
+            <CompanyAvatar />
+          )}
+        </div>
+      )}
+      {open && (
+        <div data-cy={companyName}>
+          <img
+            id="logo"
+            src={logo}
+            className={cx(classes.logo, {
+              [classes.mt0]: showEnvironment,
+              [classes.mt20]: !showEnvironment,
+            })}
+            alt={companyName}
+          />
+        </div>
+      )}
     </React.Fragment>
   );
 };
