@@ -1,28 +1,32 @@
 import { Box, Dialog, DialogContent, DialogTitle, FormControlLabel, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import { ChangeRequestDependentOnDocRevsState, DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
+import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import { ChangeRequest, ChangeRequestDependentOnDocRevsState, ChangeRequestEditRequestBody, DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { Button, Checkbox } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
+import { FB } from '../../form.builder';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
 import useStyles from './dialog.styles';
 
 interface Props {
+  changeRequest: ChangeRequest | undefined
   details: ChangeRequestDependentOnDocRevsState
   dialog: DialogHandler
-  addAction: (values?) => void
   closeAction?: () => void
   confirmLabel?: Translation
   cancelLabel?: Translation
 }
 
 const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
+  changeRequest,
   details,
   dialog,
   closeAction = dialog.close,
-  addAction,
   confirmLabel = 'common.continue',
   cancelLabel = 'common.cancel',
 }) => {
@@ -30,11 +34,50 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
 
   let docRevsSelected: DependedDocRevDetails[] = [];
 
+  const async = useAsync<ChangeRequest>({
+    onSuccess: () => dialog.close,
+  });
+
+  const saveChangeRequest = useActionCreator(changeRequestsActions.save);
+
   const handleDocRevSelection = (isChecked: boolean, docRevChecked: DependedDocRevDetails) => {
     if (isChecked) {
       docRevsSelected.push(docRevChecked);
     } else {
       docRevsSelected = docRevsSelected.filter((docRev) => docRev.id !== docRevChecked.id);
+    }
+  };
+
+  const addToChangeRequest = () => {
+    const crFormInput = changeRequest?.formInput;
+    console.log(changeRequest);
+
+    // const formStateContext = FBFormStateContext as any;
+    // const formInput = formStateContext?._currentValue;
+
+    if (docRevsSelected.length > 0) {
+      // Update FormInput - documentRevisions list with the ones selected
+      if (crFormInput && 'documentRevisions' in crFormInput) {
+        crFormInput.documentRevisions.push(
+          ...docRevsSelected.map(docRevSelected => ({
+            descriptionOfChange: '',
+            justificationOfChange: '',
+            id: FB.uniqid,
+            proposedDocumentRevision: {
+              id: docRevSelected.id,
+            },
+          }),
+          ));
+
+        async.reset();
+
+        async.start(
+          saveChangeRequest,
+          changeRequest?.id,
+          { formInput: crFormInput } as ChangeRequestEditRequestBody,
+          async,
+        );
+      }
     }
   };
 
@@ -121,7 +164,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
           className={`${classes.submitButton} ${classes.buttonLabel}`}
           id="DependentOnDialog-addButton"
           data-cy="DependentOnDialog-addButton"
-          onClick={e => addAction(docRevsSelected)}
+          onClick={addToChangeRequest}
         >
           <Text translation={confirmLabel} />
         </Button>
