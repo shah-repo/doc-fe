@@ -17,26 +17,26 @@ export default (theme: Theme) =>
       marginLeft: DRAWER_WIDTH,
       color: Colors.white,
       zIndex: 1,
-    },
-    lightBg: {
-      background: `linear-gradient(225deg,${Colors.navy} 0%,${Colors.ultramarine_blue} 29.56%,${Colors.navy} 100%)`,
-    },
-    toolbar: (props: HeaderPresenterProps) => ({
-      marginLeft: DRAWER_WIDTH,
-      minHeight: props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
-      paddingBottom: props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
-      paddingLeft: theme.spacing(props.fullHeight ? 8 : 3),
-      paddingRight: theme.spacing(props.fullHeight ? 6 : 3),
       '&::before': {
         content: "''",
         position: 'absolute',
-        left: '70%',
+        left: '75%',
         right: 0,
         top: 0,
         bottom: 0,
         backgroundRepeat: 'no-repeat',
         backgroundImage: `url(${EnlilLogo})`,
       },
+    },
+    lightBg: {
+      background: `linear-gradient(225deg,${Colors.navy} 0%,${Colors.ultramarine_blue} 29.56%,${Colors.navy} 100%)`,
+    },
+    toolbar: (props: HeaderPresenterProps) => ({
+      marginLeft: props.open ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
+      minHeight: props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
+      paddingBottom: props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
+      paddingLeft: theme.spacing(props.fullHeight ? 8 : 3),
+      paddingRight: theme.spacing(props.fullHeight ? 6 : 3),
       '& .MuiFormControlLabel-label': {
         whiteSpace: 'nowrap',
       },
