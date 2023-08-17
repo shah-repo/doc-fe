@@ -6,6 +6,7 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
+import { DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
 import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
 import useDialog from '../../hooks/useDialog';
@@ -14,6 +15,7 @@ import useStyles from './ApprovalRequestGrid.styles';
 import ApprovalRequestGridHeader from './ApprovalRequestGridHeader';
 import ApprovalRequestItem from './ApprovalRequestItem';
 import DependentOnDocRevsDialog from './DependentOnDocRevsDialog';
+import { generateStoreRow } from './helpers';
 import ItemsAndDetailsState from './ItemsAndDetails.state';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
@@ -87,9 +89,6 @@ const ItemsAndDetails: React.FunctionComponent<{
   const openDependentOnDocRevsDialog = () => {
     dependentOnDocRevsDialog.open();
   };
-  const closeDependentOnDocRevsDialog = () => {
-    dependentOnDocRevsDialog.close();
-  };
 
   const dependentOnDocRevs = useSelector(changeRequestsSelectors.getDependentOnDocRevsState);
 
@@ -147,6 +146,16 @@ const ItemsAndDetails: React.FunctionComponent<{
     handleAdd();
   }
 
+  function addDependentDocRevs (docRevs: DependedDocRevDetails[]) {
+    console.log(docRevs);
+    docRevs.forEach(docRev => {
+      const storeRow = generateStoreRow(docRev);
+      console.log(storeRow);
+      itemsAndDetailsState.add(storeRow);
+    });
+    dependentOnDocRevsDialog.close();
+  }
+
   return useObserver(() => (
     <div className={cx(classes.tabContent, {
       [classes.tabContentInactive]: itemsAndDetailsState.loadingState,
@@ -178,8 +187,8 @@ const ItemsAndDetails: React.FunctionComponent<{
         dependentOnDocRevsDialog.isOpen
         && <DependentOnDocRevsDialog
           details={dependentOnDocRevs}
-          dependentOnDocRevsDialog={dependentOnDocRevsDialog}
-          closeDialog = {closeDependentOnDocRevsDialog}
+          dialog={dependentOnDocRevsDialog}
+          addAction = {addDependentDocRevs}
         />
       }
     </div>

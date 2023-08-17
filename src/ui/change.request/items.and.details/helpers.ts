@@ -1,5 +1,7 @@
+import { DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FB } from '../../form.builder';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string) => (
@@ -47,3 +49,19 @@ export const formDataToStoreData = (
 
     return entryInfo;
   });
+
+export const generateStoreRow = (
+  { id, documentId, displayRevision, name, docId, group }: DependedDocRevDetails): ApprovalRequestGridItem => {
+  const entryInfo = {
+    justificationOfChange: 'Placeholder. Please Edit',
+    descriptionOfChange: 'Placeholder. Please Edit',
+    docRevId: id,
+    documentId,
+    id: FB.uniqid,
+    titleText: generateDocTitleText(docId, displayRevision, name),
+    displayRevision,
+    isPart: group === DOC_TYPE_GROUP.PART,
+  };
+
+  return entryInfo;
+};

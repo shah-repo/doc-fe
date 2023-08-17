@@ -2,8 +2,8 @@ import { FBTaskItem } from '../../../ui/form.builder';
 import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Approval, Id, Owner, User } from '../common/types';
-import { DocumentType } from '../documentRevisions/documentType/types';
-import { DocumentRevision, FBDocumentRevisionProps } from '../documentRevisions/types';
+import { DocumentType, DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus, FBDocumentRevisionProps } from '../documentRevisions/types';
 import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
 
 export enum ChangeRequestStatus {
@@ -146,10 +146,21 @@ export interface ChangeRequestAuditSetAction {
 
 export type allIdsState = string[];
 
+export interface DependedDocRevDetails {
+  displayRevision: string
+  version: number
+  status: DocumentRevisionStatus
+  name: string
+  docId: string
+  group: DOC_TYPE_GROUP
+  id: string
+  documentId: string
+}
+
 export interface ChangeRequestDependentOnDocRevsState {
   canbeReleased: boolean
   itemsPending: 0
-  draftItemsMap: {[key: string]: DocumentRevision[]}
+  draftItemsMap: {[key: string]: DependedDocRevDetails[]}
   parentDetails: {[key: string]: string}
 }
 
