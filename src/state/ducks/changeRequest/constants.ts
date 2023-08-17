@@ -10,3 +10,5 @@ export const CHANGE_REQUEST_ROOT_URL = '/change_requests';
 export const CHANGE_REQUEST_ROOT_URL_SEARCH = '/change_requests/search';
 export const CHANGE_REQUEST_LIST_APPROVERS = 'changeRequests/LIST_APPROVERS';
 export const CHANGE_REQUEST_GET_APPROVERS_ASYNC = 'changeRequests/GET_APPROVERS_ASYNC';
+
+export const CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS = 'changeRequests/SET_DEPENDENT_ON_DOC_REVS';

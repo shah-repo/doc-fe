@@ -2,8 +2,8 @@ import { groupBy, keyBy, uniq } from 'lodash';
 import { combineReducers } from 'redux';
 import asyncReducer from '../../reducers/asyncReducer';
 import { AuditByCRIdState } from '../audit/types';
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET } from './constants';
-import { allIdsState, ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState, ChangeRequestSetAction } from './types';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
+import { allIdsState, ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestDependentOnDocRevsSetAction, ChangeRequestDependentOnDocRevsState, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState, ChangeRequestSetAction } from './types';
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
 
@@ -98,6 +98,24 @@ export const auditsAllId = (
   }
 };
 
+export const dependentOnDocRevs = (
+  state: ChangeRequestDependentOnDocRevsState = {
+    canbeReleased: true,
+    itemsPending: 0,
+    parentDetails: {},
+    draftItemsMap: {},
+  },
+  action: ChangeRequestDependentOnDocRevsSetAction,
+): ChangeRequestDependentOnDocRevsState => {
+  switch (action.type) {
+    case CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS: {
+      return { ...state, ...action.payload };
+    }
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(CHANGE_REQUEST_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_ASYNC),
@@ -109,4 +127,5 @@ export default combineReducers({
   approversAllIds,
   auditsByCRId,
   auditsAllId,
+  dependentOnDocRevs,
 });

@@ -3,7 +3,7 @@ import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { dashboardActions } from '../dashboard';
 import { ExportToEmailRequest } from '../documentRevisions/types';
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_ROOT_URL, CHANGE_REQUEST_SET } from './constants';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_ROOT_URL, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
 import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestAvailableApproversResponse, ChangeRequestEditRequestBody, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction, ChangeRequestTransition, ChangeRequestTransitionRequestBody, ChangeRequestTransitionResponse } from './types';
 
 const changeRequestsList = (changeRequests: ChangeRequest[]): ChangeRequestListAction => ({
@@ -87,6 +87,11 @@ ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks
   handlers,
 });
 
+const setDependentOnDocRevs = (data: ChangeRequestTransitionResponse) => ({
+  type: CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS,
+  payload: data,
+});
+
 const applyTransition = (
   id: string,
   body: ChangeRequestTransitionRequestBody,
@@ -98,6 +103,10 @@ const applyTransition = (
   data: body,
   password: body.password,
   onSuccess: (d, dispatch) => {
+    if ('canbeReleased' in d) {
+      dispatch(setDependentOnDocRevs(d));
+      return;
+    }
     dispatch(load(id));
     if (transition === 'reject' || transition === 'approve') {
       dispatch(dashboardActions.loadPendingActionsList());

@@ -3,8 +3,8 @@ import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Approval, Id, Owner, User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
-import { FBDocumentRevisionProps } from '../documentRevisions/types';
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from './constants';
+import { DocumentRevision, FBDocumentRevisionProps } from '../documentRevisions/types';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
 
 export enum ChangeRequestStatus {
   Approved = 'APPROVED',
@@ -113,6 +113,10 @@ export interface ChangeRequestTransitionResponse {
   crId: string
   title: string
   state: string
+  canBeReleased?: boolean
+  itemsPending?: number
+  draftItemsMap?: {[key: string]: DocumentRevision[]}
+  parentDetails?: {[key: string]: string}
 }
 
 export interface ChangeRequestAvailableApprovers {
@@ -141,3 +145,15 @@ export interface ChangeRequestAuditSetAction {
 }
 
 export type allIdsState = string[];
+
+export interface ChangeRequestDependentOnDocRevsState {
+  canbeReleased: boolean
+  itemsPending: 0
+  draftItemsMap: {[key: string]: DocumentRevision[]}
+  parentDetails: {[key: string]: string}
+}
+
+export interface ChangeRequestDependentOnDocRevsSetAction {
+  type: typeof CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS
+  payload: ChangeRequestDependentOnDocRevsState
+}

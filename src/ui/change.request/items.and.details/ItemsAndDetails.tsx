@@ -4,12 +4,16 @@ import cx from 'classnames';
 import { isEmpty, map, some } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
+import useDialog from '../../hooks/useDialog';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
 import useStyles from './ApprovalRequestGrid.styles';
 import ApprovalRequestGridHeader from './ApprovalRequestGridHeader';
 import ApprovalRequestItem from './ApprovalRequestItem';
+import DependentOnDocRevsDialog from './DependentOnDocRevsDialog';
 import ItemsAndDetailsState from './ItemsAndDetails.state';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
@@ -79,6 +83,23 @@ const ItemsAndDetails: React.FunctionComponent<{
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
 
+  const dependentOnDocRevsDialog = useDialog();
+  const openDependentOnDocRevsDialog = () => {
+    dependentOnDocRevsDialog.open();
+  };
+  const closeDependentOnDocRevsDialog = () => {
+    dependentOnDocRevsDialog.close();
+  };
+
+  const dependentOnDocRevs = useSelector(changeRequestsSelectors.getDependentOnDocRevsState);
+
+  useEffect(() => {
+    console.log(dependentOnDocRevs);
+    if (dependentOnDocRevs.itemsPending > 0) {
+      openDependentOnDocRevsDialog();
+    }
+  }, [dependentOnDocRevs]);
+
   useEffect(() => {
     if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
       formState.setFieldValue('proposedDocumentRevision', { id: itemsAndDetailsState.approvalRequstItemInEditMode });
@@ -95,11 +116,11 @@ const ItemsAndDetails: React.FunctionComponent<{
     }
   };
 
-  function disabledOptions(): string[] {
+  function disabledOptions (): string[] {
     return map(itemsAndDetailsState?.approvalRequestItemsList, 'proposedDocumentRevision.id');
   }
 
-  function resetAndCancelEdit() {
+  function resetAndCancelEdit () {
     // remove values for formState for keys
     removePrePopulatedField();
 
@@ -114,7 +135,7 @@ const ItemsAndDetails: React.FunctionComponent<{
     });
   };
 
-  function addRevisionToChangeRequest() {
+  function addRevisionToChangeRequest () {
     const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
       = formState?.getValues() as FBDocumentRevisionsValue;
 
@@ -152,6 +173,14 @@ const ItemsAndDetails: React.FunctionComponent<{
             itemsAndDetailsState = {itemsAndDetailsState}
           />
         ))
+      }
+      {
+        dependentOnDocRevsDialog.isOpen
+        && <DependentOnDocRevsDialog
+          details={dependentOnDocRevs}
+          dependentOnDocRevsDialog={dependentOnDocRevsDialog}
+          closeDialog = {closeDependentOnDocRevsDialog}
+        />
       }
     </div>
   ));
