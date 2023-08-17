@@ -35,6 +35,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
+  const isRevisionAvailable = isEditMode && dataItem?.availableRevisions?.isReleased;
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
   };
@@ -156,6 +157,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         options={renderOptions()}
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
+        disabled={isEditMode && isRevisionAvailable}
         onChange={handleChange}
         size="small"
       />

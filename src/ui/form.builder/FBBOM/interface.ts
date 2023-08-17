@@ -62,6 +62,8 @@ interface changeRequestDetails {
 export interface AvailableRevisions {
   isReleased: boolean
   name: string
+  id: string
+  documentId: string
   revision: number
   status: string
   changeRequestDetails: changeRequestDetails

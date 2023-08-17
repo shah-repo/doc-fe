@@ -357,6 +357,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
     editBOMInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
     editBOMInfo.childNodeRevId = childRevId;
+    formik?.setFieldValue('revision', editBOMInfo?.revision);
     updateState({
       ...state,
       data: [...state.data],
@@ -588,11 +589,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
           <Grid container justify="flex-end">
             <Grid item
               data-cy="show-hide-diff"
+              className={classes.diffContainer}
             >
-              <span className={classes.toggleIconContainer}>
+              <span className={classes.toggleIconContainer} onClick={showHideDiff}>
                 {showBOMDiff
-                  ? <FontAwesomeIcon onClick={showHideDiff} className={classes.toggleIcon} icon={regular('toggle-large-on')} size="lg" />
-                  : <FontAwesomeIcon onClick={showHideDiff} style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
+                  ? <FontAwesomeIcon className={classes.toggleIcon} icon={regular('toggle-large-on')} size="lg" />
+                  : <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
                 <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
             </Grid>

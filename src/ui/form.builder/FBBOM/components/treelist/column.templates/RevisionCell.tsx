@@ -2,7 +2,10 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ComponentType } from 'react';
+import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
 import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import { getCellValue, isEditBOM } from '../utils';
@@ -19,12 +22,41 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren, isEditMode: dataItem[ADD_FIELD] });
-  const { values, getFieldProps } = useFormikContext<EditableBOM>();
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
   const isAvailableRevsExists = isEditMode && !isEmpty(dataItem?.availableRevisions);
 
   const renderOptions = () => {
-    return [dataItem?.revision, dataItem?.availableRevisions?.revision];
+    return [dataItem?.revision + '', dataItem?.availableRevisions?.revision + ''];
+  };
+  const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
+  const fetchSelectedPartAsync = useAsync({
+    onSuccess: (data: any[] = []) => {
+      if (data && data.length > 0) {
+        const {
+          revision, status, name, hasAttachments,
+          hasPrimaryAttachment, docId, id,
+        } = data[0];
+
+        setFieldValue('revision', revision);
+        setFieldValue('status', status);
+        setFieldValue('name', name);
+        setFieldValue('hasAttachments', hasAttachments);
+        setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
+        setFieldValue('docId', docId);
+        setFieldValue('newChildNodeRevId', id);
+      }
+    },
+  });
+
+  const onRevChange = (evt) => {
+    setFieldValue('revision', evt.target.innerHTML);
+    fetchSelectedPartAsync.start(
+      fetchSelectedPartsAction,
+      dataItem?.availableRevisions?.id,
+      dataItem?.availableRevisions?.documentId,
+      fetchSelectedPartAsync,
+    );
   };
 
   const getFieldInfo = () =>
@@ -33,7 +65,9 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
         <Autocomplete
           {...getFieldProps(field)}
           options={renderOptions()}
+          value={'' + values[field]}
           disabled={dataItem[ADD_FIELD]}
+          onChange={onRevChange}
           size="small"
         />
       </FormikField>
