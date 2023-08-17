@@ -450,8 +450,13 @@ export default makeStyles((theme) => ({
     height: 17,
     cursor: 'pointer',
   },
+  diffContainer: {
+    paddingTop: theme.spacing(0.625),
+    height: 17,
+    cursor: 'pointer',
+  },
   toggleIconContainer: {
-    paddingRight: theme.spacing(2.5),
+    paddingRight: theme.spacing(0.625),
     verticalAlign: 'sub',
   },
   toggleIcon: {
