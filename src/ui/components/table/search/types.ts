@@ -12,8 +12,9 @@ export interface TableSearchFieldProps {
   defaultValue?: string
   dateFilter?: boolean
   ownerTemplate?: boolean
-  statusTemplate? : boolean
-  poStatusTemplate? : boolean
+  statusTemplate?: boolean
+  poStatusTemplate?: boolean
+  lotStatusTemplate?: boolean
 }
 
 export interface TableSearchQueryProps {

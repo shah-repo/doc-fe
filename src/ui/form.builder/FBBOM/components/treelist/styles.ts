@@ -404,7 +404,6 @@ export default makeStyles((theme) => ({
     width: '100%',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    marginTop: theme.spacing(-0.875),
   },
   updatingRow: {
     position: 'relative',
@@ -450,6 +449,20 @@ export default makeStyles((theme) => ({
     width: 13,
     height: 17,
     cursor: 'pointer',
+  },
+  toggleIconContainer: {
+    paddingRight: theme.spacing(2.5),
+    verticalAlign: 'sub',
+  },
+  toggleIcon: {
+    color: Colors.primaryLight,
+    cursor: 'pointer',
+  },
+  toggleIconLabel: {
+    fontSize: 12,
+    fontWeight: 600,
+    lineHeight: '15px',
+    paddingLeft: theme.spacing(0.625),
   },
   loader: {
     position: 'absolute',

@@ -125,6 +125,23 @@ export const styles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
     cursor: 'pointer',
   },
+  replacedDocRevInfo: {
+    color: ThemeColors.darkPeach,
+    fontSize: 12,
+    textAlign: 'right',
+    padding: theme.spacing(1.5, 0, 1.25),
+  },
+  replacedDocRevInfoTitle: {
+    fontWeight: 600,
+  },
+  whiteDot: {
+    width: '4px',
+    height: '4px',
+    marginLeft: '5px',
+    marginRight: '5px',
+    position: 'relative',
+    background: ThemeColors.darkPeach,
+  },
   link: {
     color: `${Colors.navy_active} !important`,
     cursor: 'Pointer',
@@ -135,5 +152,9 @@ export const styles = makeStyles((theme) => ({
   },
   progress: {
     color: theme.palette.secondary.main,
+  },
+  restoreParentIcon: {
+    color: ThemeColors.primaryLight,
+    marginLeft: theme.spacing(1.5),
   },
 }));
