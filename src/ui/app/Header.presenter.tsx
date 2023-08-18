@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
-import Search from '../../App/Enlil/Features/Search/Search';
+import { SearchBar } from '../../App/Enlil/Features/Search';
 import Text from '../components/Text';
 import styles from './Header.styles';
 import AutosaveToggle from './autosave/autosave';
@@ -12,17 +12,16 @@ import AutosaveToggle from './autosave/autosave';
 export interface HeaderPresenterProps {
   name: string
   fullHeight?: boolean
-  isSearchEnabled?: boolean
   toggleCustomLabels: () => void
   customLabelsValue: boolean
   canToggleCustomLabels: boolean
+  open: boolean
 }
 
 const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
   classes,
   name,
   fullHeight,
-  isSearchEnabled,
   toggleCustomLabels,
   customLabelsValue,
   canToggleCustomLabels,
@@ -37,13 +36,13 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         spacing={2}
       >
         <Grid item xs>
-          {!fullHeight && isSearchEnabled && (
-            <Search />
+          {!fullHeight && (
+            <SearchBar />
           )}
         </Grid>
         <Grid item>
           {fullHeight && (
-            <Typography variant="caption" className={classes.welcomeText}>
+            <Typography variant="caption" className={classes.welcomeText} component="div">
               <Text translation="header.welcome.back" />,
               {' '}
               <b className={classes.welcomeTextName}>{name}!</b>

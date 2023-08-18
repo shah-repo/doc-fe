@@ -8,7 +8,7 @@ export const styles = makeStyles({
     justifyContent: 'flex-start',
   },
   chip: {
-    display: 'flex',
+    display: 'inline-flex',
     flexDirection: 'row',
     borderRadius: 3,
     border: `1px solid ${Colors.steel_blue}`,

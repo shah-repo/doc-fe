@@ -1,4 +1,4 @@
-import { Chip, Grid } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { LotStatus, POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
@@ -38,14 +38,10 @@ export const Status: React.FC<CustomGridCellProps> = ({
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}
+      data-cy="cell-status"
       onClick={cellClickEvent}
     >
-      <Grid
-        container
-        direction="row"
-        alignContent="flex-start"
-        justify="flex-start"
-      >
+      {fieldLabel && (
         <Tooltip
           data={fieldLabel}
           childrenElement={
@@ -56,7 +52,7 @@ export const Status: React.FC<CustomGridCellProps> = ({
             />
           }
         />
-      </Grid>
+      )}
     </td>
   );
 };

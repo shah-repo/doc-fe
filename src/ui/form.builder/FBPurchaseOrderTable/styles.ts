@@ -75,7 +75,7 @@ export default makeStyles((theme) => ({
     padding: `${theme.spacing(0.5, 0.5)} !important`,
     textAlign: 'right',
   },
-  calculationSelect: {
+  calculationSelect: ({ disabled }) => ({
     '@supports (width: -moz-available)': {
       width: '-moz-available',
     },
@@ -83,7 +83,8 @@ export default makeStyles((theme) => ({
       width: '-webkit-fill-available',
     },
     padding: `${theme.spacing(0.5, 4, 0.5, 0.25)} !important`,
-  },
+    cursor: disabled ? 'none' : 'pointer',
+  }),
   calculationTax: {
     display: 'flex',
     justifyContent: 'flex-end',
