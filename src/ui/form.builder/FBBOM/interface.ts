@@ -32,6 +32,7 @@ export interface BOM {
   isDeleted?: boolean
   availableRevisions?: AvailableRevisions
   changeRequestDetails?: changeRequestDetails
+  costRollUp: number
 }
 
 export interface EditableBOM extends BOM {

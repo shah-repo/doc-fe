@@ -283,7 +283,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         partInfo.markAsDeleted = false;
         partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
-        // Update keys if required
         const payload = {
           childNodeRevId: partInfo.childNodeRevId,
           refDesignator: partInfo.refDesignator,

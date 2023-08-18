@@ -101,7 +101,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   },
   {
     field: 'cost',
-    title: 'COST',
+    title: 'COST (COST ROLLUP)',
     width: '120px',
     filter: TreeListTextFilter,
     locked: false,

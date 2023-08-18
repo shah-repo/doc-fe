@@ -53,10 +53,13 @@ export const styles = makeStyles((theme) => ({
     lineHeight: '16.64px',
   }),
   Cell: {
-    ontWeight: 400,
+    fontWeight: 400,
     fontFamily: 'Sora',
     fontSize: 14,
     lineHeight: '17.64px',
+  },
+  costRollup: {
+    fontWeight: 600,
   },
   cellborderBottom: {
     borderBottom: `1px solid ${Colors.alice_blue} !important`,
