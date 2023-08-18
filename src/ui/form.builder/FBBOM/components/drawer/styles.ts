@@ -17,7 +17,7 @@ export default makeStyles((theme: Theme) =>
       textTransform: 'uppercase',
     },
     partInfo: {
-      marginTop: theme.spacing(10 / 8),
+      marginTop: theme.spacing(1.25),
     },
     docId: {
       height: 24,

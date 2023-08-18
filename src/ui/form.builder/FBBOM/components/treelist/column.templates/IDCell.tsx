@@ -8,7 +8,6 @@ import { Observer } from 'mobx-react';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
-import { ReactComponent as InfoIcon } from '../../../../../../assets/images/info_icon.svg';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
@@ -19,11 +18,10 @@ import Text from '../../../../../components/Text';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { Colors } from '../../../../../layout/theme-next';
-import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../../drawer/DocumentRevisionDrawer';
-import { SELECTED_PART_KEY_SEPARATOR } from '../constants';
+import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -167,7 +165,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const getInfoIcon = () => (
     <span className={cx('k-icon', classes.infoIcon)}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <InfoIcon />
+        <FontAwesomeIcon color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );

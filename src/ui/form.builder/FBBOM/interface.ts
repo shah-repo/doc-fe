@@ -1,6 +1,6 @@
 import { Attachment } from '../../../state/ducks/attachments/types';
 import { Vendor } from '../FBPartVendors/types';
-import { MODE_FIELD } from './constants';
+import { MODE_FIELD } from './components/treelist/constants';
 
 export interface BOM {
   id: string

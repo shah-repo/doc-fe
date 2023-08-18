@@ -10,7 +10,7 @@ import { SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from '../../../../FBPartVendors
 import { buildSchema } from '../../../../FBPartVendors/schema';
 import { EditableVendor, Vendor } from '../../../../FBPartVendors/types';
 import { useOptions } from '../../../../FBPartVendors/utils';
-import { MODE_FIELD } from '../../../constants';
+import { MODE_FIELD } from '../../treelist/constants';
 import { VendorTableProps } from './interface';
 import useStyles from './styles';
 
@@ -48,6 +48,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
     units,
     statuses,
     suppliers,
+    actionsClass: '',
     isActive: false,
     isInEditMode: false,
   });

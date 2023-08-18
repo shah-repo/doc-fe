@@ -6,8 +6,8 @@ import { documentRevisionsActions } from '../../../../../../state/ducks/document
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
-import { ADD_FIELD } from '../../../constants';
 import { EditableBOM } from '../../../interface';
+import { ADD_FIELD } from '../constants';
 import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';

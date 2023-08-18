@@ -42,17 +42,15 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
-import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
-  CustomTreeListColumnProps,
+  ADD_FIELD, CustomTreeListColumnProps,
   DATA_ITEM_KEY,
   EXCEL_FILE_NAME,
-  EXPAND_FIELD,
-  SELECTED_PART_KEY_SEPARATOR,
+  EXPAND_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TreeColumns,
   TREELIST_CONFIG,
@@ -206,7 +204,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
 
   const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
   const fetchHasATreeAsync = useAsync({
-    onSuccess: (statusObj) => {
+    onSuccess: (statusObj: BOM) => {
       if (statusObj && statusObj[documentRevision?.id]) {
         setShowTree(true);
       }
@@ -221,13 +219,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevision?.id]);
 
-  const [selectedPart, setSelectedPart] = useState();
+  const [selectedPart, setSelectedPart] = useState<EditableBOM>();
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
-    const partInfo = selectedPart?.id?.split(SELECTED_PART_KEY_SEPARATOR);
+    const partInfo = selectedPart?.id?.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     partAsync.start(
       deleteBOMBranch,
-      partInfo[1], // parentRevID
-      partInfo[0], // childRevID
+      partInfo[1],
+      partInfo[0],
       partAsync,
     );
     discardBOM(selectedPart);
@@ -302,7 +300,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
           partAsync,
         );
       }
-      console.log('partInfo :', partInfo);
     },
   });
 
@@ -319,6 +316,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       unit: '',
       comment: '',
       refDesignator: '',
+      attachmentNames: [],
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
@@ -453,6 +451,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
 
   const showHideDiff = () => {
     _documentRevisionFormState?.toggleShowBOMDiff();
+    handleExpandAll();
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
@@ -510,7 +509,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         && (item?.depth || 0) < 2
         && !isEmpty(item[SUB_ITEMS_FIELD])
       ) {
-        ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD]));
+        ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD] as BOM[]));
       }
     });
     return uniq(ids);

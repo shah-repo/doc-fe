@@ -2,9 +2,8 @@ import { isNil } from 'lodash';
 import Config from '../../../../../config';
 import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
-import { ADD_FIELD, MODE_FIELD } from '../../constants';
 import { BOM, EditableBOM } from '../../interface';
-import { CELL_EMPTY_VALUE, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
+import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;

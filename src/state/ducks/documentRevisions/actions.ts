@@ -442,7 +442,7 @@ const fetchWhereUsedTree = (
 const fetchHasATree = (
   docRevIds,
   handlers: Handlers,
-): ApiAction<BOM[]> =>
+): ApiAction<BOM[] | undefined> =>
   apiActionWithCallbacks({
     url: `${CHECK_IS_USED}`,
     method: 'post',
