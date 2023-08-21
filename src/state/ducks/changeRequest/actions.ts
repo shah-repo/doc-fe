@@ -103,7 +103,7 @@ const applyTransition = (
   data: body,
   password: body.password,
   onSuccess: (d, dispatch) => {
-    if ('canbeReleased' in d) {
+    if ('canBeReleased' in d) {
       dispatch(setDependentOnDocRevs(d));
       return;
     }

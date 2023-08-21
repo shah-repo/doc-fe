@@ -158,7 +158,7 @@ export interface DependedDocRevDetails {
 }
 
 export interface ChangeRequestDependentOnDocRevsState {
-  canbeReleased: boolean
+  canBeReleased: boolean
   itemsPending: 0
   draftItemsMap: {[key: string]: DependedDocRevDetails[]}
   parentDetails: {[key: string]: string}
