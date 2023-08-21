@@ -82,4 +82,5 @@ export interface POLineItem {
   serviceId: string
   description: string
   supplierPartNumber: string
+  capitalEquipment?: boolean
 }
