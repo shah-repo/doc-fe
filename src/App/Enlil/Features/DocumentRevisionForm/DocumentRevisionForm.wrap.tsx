@@ -6,7 +6,7 @@ import { DocumentRevision } from '../../../../state/ducks/documentRevisions/type
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FB, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -53,6 +53,11 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
         outputRevision,
         isOutput: props.isDAM,
       })) : undefined;
+
+    useEffect(() => {
+        approvalMatrixState?.setData(cloneDeep(props?.formInput) as FBApprovalMatrixFieldData);
+    }, [approvalMatrixState, props?.formInput]);
+
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
 
