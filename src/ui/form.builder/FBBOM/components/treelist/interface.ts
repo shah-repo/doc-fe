@@ -5,14 +5,12 @@ import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants
 import { BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
 
-// ts-unused-exports:disable-next-line
 export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
   showBOMDiff?: boolean
 }
 
-// ts-unused-exports:disable-next-line
 export interface BOMState {
   data: BOM[]
   dataState: DataState
@@ -20,28 +18,23 @@ export interface BOMState {
   inEdit: Array<{id: string }>
 }
 
-// ts-unused-exports:disable-next-line
 export interface DataState {
   sort?: SortDescriptor[]
   filter?: FilterDescriptor[]
 }
 
-// ts-unused-exports:disable-next-line
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
 }
 
-// ts-unused-exports:disable-next-line
 export interface EditableAlternatePart extends AlternatePart {
   [MODE_FIELD]: Mode
 }
 
-// ts-unused-exports:disable-next-line
 export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
 
-// ts-unused-exports:disable-next-line
 export interface AlternatePart {
   id: string
   name?: string
@@ -53,17 +46,14 @@ export interface AlternatePart {
   [ALTERNATE_PART_KEY]?: boolean
 }
 
-// ts-unused-exports:disable-next-line
 export interface CustomTreeListRowProps extends TreeListRowProps {
   dataItem: BOM
 }
 
-// ts-unused-exports:disable-next-line
 export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEvent {
   dataItem: BOM
 }
 
-// ts-unused-exports:disable-next-line
 export interface WhereUsedTree {
   depth: number
   name: string
