@@ -35,6 +35,7 @@ export interface BOM {
   costRollUp: number
 }
 
+// ts-unused-exports:disable-next-line
 export interface EditableBOM extends BOM {
   [MODE_FIELD]: boolean
   isNew?: boolean
@@ -49,6 +50,8 @@ export interface EditableBOM extends BOM {
   isDisabled?: boolean
   replacesStatus?: string
 }
+
+// ts-unused-exports:disable-next-line
 export interface BOMEditEvent {
   dataItem: EditableBOM
   level: number[]
@@ -60,6 +63,7 @@ interface changeRequestDetails {
   crId: string
 }
 
+// ts-unused-exports:disable-next-line
 export interface AvailableRevisions {
   isReleased: boolean
   name: string

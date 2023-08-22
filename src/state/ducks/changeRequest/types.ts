@@ -146,6 +146,7 @@ export interface ChangeRequestAuditSetAction {
 
 export type allIdsState = string[];
 
+// ts-unused-exports:disable-next-line
 export interface DependedDocRevDetails {
   displayRevision: string
   version: number
