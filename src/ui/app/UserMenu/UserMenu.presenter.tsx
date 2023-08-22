@@ -1,4 +1,4 @@
-import { light, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Divider, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
@@ -27,7 +27,6 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const {
     openUserProfile,
-    openUserSettings,
     handleLogout,
     hasMultipleCompanies,
     handleSwitchCompany,
@@ -51,14 +50,6 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
           disablePadding: true,
         }}
       >
-        <MenuItem onClick={openUserSettings} className={classes.menu} alignItems="center">
-          <ListItemIcon className={classes.listItemIcon}>
-            <FontAwesomeIcon className={classes.icon} icon={solid('gear')} />
-          </ListItemIcon>
-          <ListItemText>
-            <Text translation="header.menu.my.settings" />
-          </ListItemText>
-        </MenuItem>
         <MenuItem onClick={openUserProfile} className={classes.menu} alignItems="center">
           <ListItemIcon className={classes.listItemIcon}>
             <FontAwesomeIcon className={classes.icon} icon={light('user')} />
