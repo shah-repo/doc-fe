@@ -6,6 +6,8 @@ import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, Rev
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
 import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
+import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
+import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
   // MARK: @config
@@ -24,6 +26,12 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public releasedDocRev?: DocumentRevision;
   @observable public forceRender?: any;
   @observable public disabledAction = false;
+  @observable public isBomExists = false;
+  @observable public showBOMDiff = false;
+  @observable public childPartInfo = { dataItem: {}, level: [] };
+  @observable public restorePartInfo = { dataItem: {}, level: [] };
+  public bomInfo?: BOMState;
+  @observable public refreshBomTree = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
   @observable public expanded = false;
@@ -98,6 +106,18 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.formSchema;
   }
 
+  @computed public get getBomInfo (): BOMState| undefined {
+    return this.bomInfo;
+  }
+
+  @computed public get getChildPartInfo () {
+    return this.childPartInfo;
+  }
+
+  @computed public get getRestorePartInfo () {
+    return this.restorePartInfo;
+  }
+
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, 'revisionChangeType', revisionChangeType);
@@ -157,6 +177,34 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setDisabledAction = (disabledAction: boolean) => {
     set(this, 'disabledAction', disabledAction);
+  };
+
+  @action public setIsBomExists = (isBomExists: boolean) => {
+    set(this, 'isBomExists', isBomExists);
+  };
+
+  @action public toggleShowBOMDiff = () => {
+    this.setShowBOMDiff(!this.showBOMDiff);
+  };
+
+  @action public setShowBOMDiff = (showBOMDiff: boolean) => {
+    set(this, 'showBOMDiff', showBOMDiff);
+  };
+
+  @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
+    set(this, 'childPartInfo', data);
+  };
+
+  @action public setRestorePartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
+    set(this, 'restorePartInfo', data);
+  };
+
+  @action public setBomInfo = (data) => {
+    set(this, 'bomInfo', data);
+  };
+
+  @action public setRefreshBomTree = (data) => {
+    set(this, 'refreshBomTree', data);
   };
 
   @action public setDirty = (isDirty: boolean) => {

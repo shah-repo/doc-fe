@@ -7,11 +7,7 @@ export type DocumentRevisionSidebarProps =
 & RouteComponentProps
 & Pick<SMProviderProps, '_documentRevisionFormState' | '_documentRevisionSidebarState'>
 & Pick<DocumentRevisionFormProps, 'documentRevisions'>
-& Pick<Partial<DocumentRevisionFormStateProps>,
-  'documentTypeId' |
-  'documentId' |
-  'docId'
->
+& Pick<Partial<DocumentRevisionFormStateProps>, 'documentTypeId' | 'documentId' | 'docId'>
 & {
   intl?: IntlShape
   docRevsWithoutCanceled?: DocumentRevision[]
@@ -25,6 +21,7 @@ export type DocumentRevisionSidebarProps =
   isNewOutput?: boolean
   title?: string
   edit: boolean
+  minimizeRightPanel?: boolean
 };
 
 export interface DocumentRevisionSidebarStateProps {
