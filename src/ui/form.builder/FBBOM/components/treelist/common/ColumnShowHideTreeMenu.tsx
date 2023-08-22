@@ -17,7 +17,7 @@ import { ReactComponent as SolidIcon } from '../../../../../../assets/images/vie
 import { ReactComponent as ViewChecked } from '../../../../../../assets/images/view_checked.svg';
 import Text from '../../../../../components/Text';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
-import { CustomTreeListColumnProps } from '../constants';
+import { CustomTreeListColumnProps } from '../interface';
 import { styles } from './styles';
 
 interface Props {

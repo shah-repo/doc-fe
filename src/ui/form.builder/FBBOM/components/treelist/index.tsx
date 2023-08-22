@@ -47,12 +47,11 @@ import { ActionsCell } from './column.templates/Actions';
 import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
-  ADD_FIELD, CustomTreeListColumnProps,
+  ADD_FIELD,
   DATA_ITEM_KEY,
   EXCEL_FILE_NAME,
   EXPAND_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
-  TreeColumns,
   TREELIST_CONFIG,
 } from './constants';
 import {
@@ -60,10 +59,12 @@ import {
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   FBBOMProps,
+  CustomTreeListColumnProps,
 } from './interface';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
+import { TreeColumns } from './schema';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false }) => {
   const classes = useStyles();

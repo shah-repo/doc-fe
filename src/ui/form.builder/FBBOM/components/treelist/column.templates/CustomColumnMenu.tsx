@@ -2,7 +2,7 @@ import { ColumnMenuItem, ColumnMenuProps, ColumnMenuTextColumn } from '@progress
 import React, { ComponentType } from 'react';
 import { useIntl } from 'react-intl';
 import { DisplayText, TranslatedText } from '../../../../../components/common/kendo/helpers';
-import { CustomTreeListColumnProps } from '../constants';
+import { CustomTreeListColumnProps } from '../interface';
 
 interface CustomColumnMenuProps extends ColumnMenuProps {
   columns: CustomTreeListColumnProps[]
