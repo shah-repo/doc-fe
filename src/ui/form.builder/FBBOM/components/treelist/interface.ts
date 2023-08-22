@@ -2,7 +2,7 @@ import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { BOM } from '../../types';
+import { BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
 
 // ts-unused-exports:disable-next-line
@@ -63,6 +63,7 @@ export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEve
   dataItem: BOM
 }
 
+// ts-unused-exports:disable-next-line
 export interface WhereUsedTree {
   depth: number
   name: string
