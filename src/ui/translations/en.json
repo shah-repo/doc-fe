@@ -1634,5 +1634,7 @@
   "bom.hide.diff": "Hide Diff",
   "bom.replaced.doc.rev": "Replacing",
   "bom.order.error.message": "Change the order of the parts within the same parent",
-  "bom.whereUsed.dialog.title": "Where Used View"
+  "bom.whereUsed.dialog.title": "Where Used View",
+  "bom.ar.child.draft.add.action.message": "Action required on {itemsPending} item",
+  "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:"
 }

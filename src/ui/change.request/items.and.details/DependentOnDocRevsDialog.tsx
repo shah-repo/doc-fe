@@ -1,6 +1,9 @@
-import { Box, Dialog, DialogContent, DialogTitle, FormControlLabel, IconButton, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, Typography } from '@material-ui/core';
+import { each, find, isEmpty, unionBy } from 'lodash';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestDependentOnDocRevsState, ChangeRequestEditRequestBody, DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -48,6 +51,19 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
     }
   };
 
+  const handleDocRevSelectionAll = (flag: boolean) => {
+    console.log('All cliked', flag);
+    if (flag) {
+      each(details.draftItemsMap, (value) => {
+        docRevsSelected = unionBy(docRevsSelected, value, 'id');
+      });
+    } else {
+      docRevsSelected = [];
+    }
+    console.log('docRevsSelected :', docRevsSelected);
+  };
+  console.log('details.draftItemsMap :', details.draftItemsMap);
+
   const addToChangeRequest = () => {
     const crFormInput = changeRequest?.formInput;
     console.log(changeRequest);
@@ -91,62 +107,75 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
       }}
       scroll="paper"
       disableEscapeKeyDown={true}
-      maxWidth={false}
+      maxWidth="sm"
       open={dialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-      id="dependent-on-docRevs-dialog"
+      id="dependent-on-doc-revs-dialog"
     >
-      <DialogTitle style={{ display: 'flex' }} disableTypography>
-        <Typography className={classes.heading}>
-          <Text translation="change.request.dependent.docs.dialog.title" />
-        </Typography>
-        <IconButton
-          className={classes.close}
-          size="small"
-          onClick={closeAction}
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
       <DialogContent dividers
-        id="dependent-on-docRevs-content"
+        id="dependent-on-doc-revs-content"
       >
-        <div>
-          <h3>Action needed on {details.itemsPending} item{details.itemsPending > 1 ? 's' : ''}</h3>
-          <p>Add these to this Change Request Or to a separate one.</p>
-          {
-            Object.keys(details.draftItemsMap).map((key: string) => {
-              return (
-                <div key={key}>
-                  <h4 className={classes.parentRevHeading}>{details.parentDetails[key]}</h4>
-                  <ul className={classes.list}>
-                    {
-                      details.draftItemsMap[key].map((value) => {
-                        return (
-                          <li key={value.id} className={classes.listItem}>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  disabled={value.status !== DocumentRevisionStatus.Draft}
-                                  onClick={e => handleDocRevSelection(e.target.checked, value)}
-                                  // onChange={handleDocRevSelection}
-                                  name={value.id}
-                                  color="primary"
-                                  className={classes.check}
+        <DialogContentText>
+          <Grid container className={classes.contentContainer}>
+            <Grid item className={classes.alertIcon}>
+              <FontAwesomeIcon className={classes.infoIcon} color="primary" icon={solid('circle-exclamation')} />
+            </Grid>
+            <Grid item >
+              <Typography data-cy="dialog-header" className={classes.alertTitle}>
+                {translate('bom.ar.child.draft.add.action.message', { itemsPending: details.itemsPending })}{details.itemsPending > 1 ? 's' : ''}
+              </Typography>
+              <Typography data-cy="dialog-message" className={classes.contentText}>
+                {translate('bom.ar.child.draft.add.message')}
+              </Typography>
+              {
+                Object.keys(details.draftItemsMap).map((key: string) => {
+                  return (
+                    <div key={key}>
+                      <ul className={classes.list}>
+                        <li className={classes.parentListItem}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                onClick= {e => handleDocRevSelectionAll(e.target.checked)}
+                                color="primary"
+                                className={classes.check}
+                              />
+                            }
+                            label={translate('common.all')}
+                          />
+                        </li>
+                        {
+                          details.draftItemsMap[key].map((value) => {
+                            const isObjectSelected = isEmpty(find(docRevsSelected, value));
+                            console.log('isObjectSelected ,', isObjectSelected, value);
+                            return (
+                              <li key={value.id} className={classes.listItem}>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      disabled={value.status !== DocumentRevisionStatus.Draft}
+                                      onClick={e => handleDocRevSelection(e.target.checked, value)}
+                                      // onChange={handleDocRevSelection}
+                                      checked={!isObjectSelected}
+                                      name={value.id}
+                                      color="primary"
+                                      className={classes.check}
+                                    />
+                                  }
+                                  label={<Text message={`${value.name} - Rev ${value.version} - ${value.status}`} />}
                                 />
-                              }
-                              label={<Text message={`${value.name} - Rev ${value.version} - ${value.status}`} />}
-                            />
-                          </li>
-                        );
-                      })
-                    }
-                  </ul>
-                </div>
-              );
-            })
-          }
-        </div>
+                              </li>
+                            );
+                          })
+                        }
+                      </ul>
+                    </div>
+                  );
+                })
+              }
+            </Grid>
+          </Grid>
+        </DialogContentText>
       </DialogContent>
       <Box className={classes.dialogAction}>
         <Button
