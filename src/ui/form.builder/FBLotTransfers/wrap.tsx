@@ -52,7 +52,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const isInEditableState = (version > 1 && !isVoided) || isReleased;
     const canEditWithPermission = canEditLotTransfers && isInEditableState;
 
-    const isEditable = isLatestRevision && (canEditAsOwner || canEditWithPermission);
+    const isEditable = id && isLatestRevision && (canEditAsOwner || canEditWithPermission);
 
     SM.reaction(
       () => workspaceState?.formInputSync.get(name) as LotTransfer[],

@@ -73,7 +73,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     const isInEditableState = (version > 1 && !isVoided) || isReleased;
     const canEditWithPermission = canEditCycleCount && isInEditableState;
 
-    const isEditable = isLatestRevision && (canEditAsOwner || canEditWithPermission);
+    const isEditable = id && isLatestRevision && (canEditAsOwner || canEditWithPermission);
 
     const updateState = (state: CycleCount[]) => {
       setCycleCounts(prepareCycleCounts(state));
