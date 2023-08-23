@@ -1,24 +1,29 @@
 import { Grid } from '@material-ui/core';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
+import { getter } from '@progress/kendo-react-common';
 import {
-  setExpandedState,
-  setGroupIds,
+	getSelectedState,
+	setExpandedState,
+	setGroupIds
 } from '@progress/kendo-react-data-tools';
 import {
-  GridColumnReorderEvent,
-  GridColumnResizeEvent,
-  GridDataStateChangeEvent,
-  GridExpandChangeEvent,
-  GridFilterCellProps,
-  GridNoRecords,
-  GridToolbar,
-  GridColumn as KendoColumn,
+	GridColumn,
+	GridColumn as KendoColumn, GridColumnReorderEvent,
+	GridColumnResizeEvent,
+	GridDataStateChangeEvent,
+	GridExpandChangeEvent,
+	GridFilterCellProps,
+	GridHeaderSelectionChangeEvent,
+	GridNoRecords,
+	GridSelectionChangeEvent,
+	GridToolbar
 } from '@progress/kendo-react-grid';
-import { cloneDeep, find, findIndex, map, set } from 'lodash';
+import { cloneDeep, find, findIndex, isEmpty, map, set } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
+import { getCurrentDate, MomentFormats } from '../../../common/utils/date';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
@@ -39,22 +44,45 @@ import { RenderCustomCell } from '../common/kendo.column.templates/RenderCellTem
 import ColumnHeader from '../common/kendo/ColumnHeader';
 import ColumnShowHideMenu from '../common/kendo/ColumnShowHideMenu';
 import {
-  DisplayText,
-  hideColumnTitleOnResize,
-  hideOperatorTooltip,
-  orderByLockedState,
-  pagerSettings,
-  setColumnWidth,
-  TranslatedText,
+	DisplayText,
+	hideColumnTitleOnResize,
+	hideOperatorTooltip,
+	orderByLockedState,
+	pagerSettings,
+	setColumnWidth,
+	TranslatedText
 } from '../common/kendo/helpers';
 import NoDataFound from '../common/kendo/NoDataFound';
 import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
 import { toastError } from '../notifications';
 import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../table/ClearFilters';
+import PrintLabelButton from '../table/printLabel/PrintLabelButton';
+import PrintLabelDetailsDialog from '../table/printLabel/PrintLabelDetailsDialog';
 import { DataLoader } from './DataLoader';
 import { KendoGridFilterCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
+
+const DATA_ITEM_KEY = 'id';
+const SELECTED_FIELD = 'print';
+const idGetter = getter(DATA_ITEM_KEY);
+
+const ZPL = `^XA
+^PW812
+^LL270
+^LH0,0
+^FO15,5^BQN,2,7,H^FDQA,YourQRCodeHere^FS
+^FO220,20^A0N,30,30^FDStatus: statusValue^FS
+^FO220,60^A0N,20,20^FDPart: partValue^FS
+^FO220,90^A0N,20,20^FDDescription: descriptionValue^FS
+^FO220,120^A0N,20,20^FDLot: lotNumber^FS
+^FO475,150^A0N,20,20^FDExp.Date: 10Aug2023^FS
+^FO220,180^A0N,20,20^FDBy: owner^FS
+^FO475,180^A0N,20,20^FDDate:10Aug2023^FS
+^FO220,150^A0N,20,20^FDSerial: 08383929^FS
+^FO475,120^A0N,20,20^FDQuantity: lotQuantity^FS
+^FO475,60^A0N,20,20^FDRev: revNumber^FS
+^XZ`;
 
 export function KendoGrid<T extends any>({
   tableName,
@@ -78,6 +106,7 @@ export function KendoGrid<T extends any>({
   );
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
+	const [selectedState, setSelectedState] = React.useState<{[id: string]: boolean | number[]}>({});
 
   useEffect(() => {
     if (didMount) {
@@ -280,7 +309,22 @@ export function KendoGrid<T extends any>({
   };
 
   const sortedColumnDefinitions = orderByLockedState(columns, []);
+	// console.log('--Kendo grid--', { columns, sortedColumnDefinitions });
 
+  // const newcol = {
+	// 	field: 'print', title: 'Print', width: 10, locked: false, orderIndex: 0, filterable: false,
+	// reorderable: false, show: true, key: { index: 0 },
+	// selectable: true
+  //   } as KendoColumn;
+
+	// sortedColumnDefinitions.splice(0, 0, newcol );
+	// sortedColumnDefinitions.map(( item, index ) => item.orderIndex: index)
+	// sortedColumnDefinitions = (sortedColumnDefinitions || []).map((item, i) => ({
+	// 	...item,
+	// 	orderIndex: i,
+	// 	key: { index: i }
+	// }));
+	console.log('--Kendo grid-2-', { sortedColumnDefinitions });
   const renderKendoColumns = (gridWidth: number) =>
     sortedColumnDefinitions.map(
       (column, index) =>
@@ -416,7 +460,69 @@ export function KendoGrid<T extends any>({
 
   // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
   hideOperatorTooltip();
+console.log('---result----', { result });
+// result = result.map((item) => ({
+// 	...item,
+// 	print: false
+// })
+// );
 
+const onSelectionChange = React.useCallback(
+	(event: GridSelectionChangeEvent) => {
+		const newSelectedState = getSelectedState({
+			event,
+			selectedState: selectedState,
+			dataItemKey: DATA_ITEM_KEY
+		});
+		if(event.dataItem) {
+			return setSelectedState(newSelectedState);
+		}
+		// setSelectedState(newSelectedState);
+	},
+	[selectedState]
+);
+
+const onHeaderSelectionChange = React.useCallback(
+	(event: GridHeaderSelectionChangeEvent) => {
+		const checkboxElement: any = event.syntheticEvent.target;
+		const checked = checkboxElement.checked;
+		const newSelectedState = {};
+
+		event.dataItems.forEach((item) => {
+			console.log('---getter---', idGetter(item));
+			newSelectedState[idGetter(item)] = checked;
+		});
+		setSelectedState(newSelectedState);
+	},
+	[]
+);
+
+const printLabel = () => {
+	const zplOutput = [];
+	const date = getCurrentDate(MomentFormats.MonthDateYearTwoDigit);
+
+	// pop-up will be open and user can re-enter the values for Serial, By, Qty unit and Date.
+	Object.entries(selectedState).map((item) => {
+    const data = result.find(i => String(i.id) === String(item[0]) && item[1] === true );
+		if(data) {
+			console.log('----data----', { data });
+			const zplData = { Id: item[0], qtyUnit: data?.precalc?.lot_on_hand_quantity, date: date	};
+			zplOutput.push(zplData);
+	}
+});
+console.log('----temp----', { zplOutput });
+};
+
+console.log('---result---1-', { result, dataState, documentTypeCategory, selectedState }, isEmpty(selectedState));
+let isLotDocument = false;
+let isPrintLabelDisable = true;
+if(documentTypeCategory === DocumentCategory.Lot) {
+	isLotDocument = true;
+	const selectedFields = Object.entries(selectedState).filter(item => item[1] === true);
+	if(selectedFields.length > 0) {
+		isPrintLabelDisable = false;
+	}
+}
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
@@ -431,7 +537,11 @@ export function KendoGrid<T extends any>({
         reorderable={true}
         resizable={true}
         {...dataState}
-        data={result}
+        // data={result}
+				data={result.map((item) => ({
+          ...item,
+          [SELECTED_FIELD]: selectedState[idGetter(item)]
+        }))}
         total={records.total}
         onDataStateChange={dataStateChange}
         onExpandChange={onExpandChange}
@@ -439,11 +549,24 @@ export function KendoGrid<T extends any>({
         onColumnResize={onColumnResize}
         onColumnReorder={onColumnReorder}
         onRowClick={onRowClick}
+				selectedField={SELECTED_FIELD}
+				dataItemKey={DATA_ITEM_KEY}
+				selectable={{
+          enabled: true,
+          drag: false,
+          cell: true,
+          mode: 'multiple',
+        }}
+				onSelectionChange={onSelectionChange}
+        onHeaderSelectionChange={onHeaderSelectionChange}
       >
         <GridToolbar>
           <Grid container>
             <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
               <ClearFilters {...{ clearFilter }} />
+							{isLotDocument && (
+                <PrintLabelButton disabled={isPrintLabelDisable} {...{ printLabel }} />
+              )}
             </Grid>
             <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
               <ColumnShowHideMenu
@@ -453,10 +576,18 @@ export function KendoGrid<T extends any>({
             </Grid>
           </Grid>
         </GridToolbar>
+				{isLotDocument && (
+          <GridColumn
+            field={SELECTED_FIELD}
+            width="50px"
+            filterable={false}
+            headerSelectionValue={result.findIndex((item) => !selectedState[idGetter(item)]) === -1	}
+						/>
+        )}
         {renderKendoColumns(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
       </StyledKendoGrid>
-
+			<PrintLabelDetailsDialog />
       {dataState && (
         <DataLoader
           dataState={dataState}

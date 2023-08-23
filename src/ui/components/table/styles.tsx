@@ -30,4 +30,11 @@ export const styles = makeStyles((theme) => ({
       background: '#F8F9FF',
     },
   }),
+	dialogTitle: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	closeIcon: { padding: 0 },
+	formControl: { width: '100%' },
 }));

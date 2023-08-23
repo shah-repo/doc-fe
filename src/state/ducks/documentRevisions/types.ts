@@ -68,6 +68,7 @@ export enum DocumentCategory {
   Supplier = 'Supplier',
   Equipment = 'Equipment',
   TrainingCurriculums = 'Training Curriculums',
+	Lot = 'Lot',
 }
 
 export enum RevisionChangeType {
