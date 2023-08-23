@@ -249,7 +249,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === 'Approval Request'
         || type.documentTypeName === 'Document Change Order');
-		const isDocumentCR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+    const isDocumentCR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.group === DocTypeGroups.CHANGE_REQUEST);
 
