@@ -118,6 +118,7 @@ export const styles = makeStyles((theme) => ({
   },
   infoIcon: (props) => ({
     marginRight: props?.hasChildren ? theme.spacing(1.5) : 0,
+    cursor: 'pointer',
   }),
   ownerIcon: {
     color: ThemeColors.primaryLight,

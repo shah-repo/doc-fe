@@ -12,11 +12,13 @@ import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
+import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import Text from '../../../../../components/Text';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
@@ -31,7 +33,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const { colSpan, id, style, dataItem, field, level } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
+  const { getFieldProps, setFieldValue, submitForm } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const isRevisionAvailable = isEditMode && dataItem?.availableRevisions?.isReleased;
   const onClick = (ev) => {
@@ -46,12 +48,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     },
   });
 
+  const dialog = useDialog();
+
   const fetchSelectedPartAsync = useAsync({
     onSuccess: (data: any[] = []) => {
       if (data && data.length > 0) {
         const {
           revision, status, name, hasAttachments,
-          hasPrimaryAttachment, docId,
+          hasPrimaryAttachment, docId, id,
         } = data[0];
 
         setFieldValue('revision', revision);
@@ -60,9 +64,28 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         setFieldValue('hasAttachments', hasAttachments);
         setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
         setFieldValue('docId', docId);
+        if (dialog.isOpen) {
+          setFieldValue('childNodeRevId', dataItem?.id.split(SELECTED_PART_KEY_SEPARATOR)[0]);
+          setFieldValue('newChildNodeRevId', id);
+          setFieldValue('quantity', dataItem?.quantity);
+          setFieldValue('unit', dataItem?.unit);
+          setFieldValue('comment', dataItem?.comment);
+          setFieldValue('parentNodeRevId', dataItem?.parentNodeRevId);
+          dialog.close();
+          submitForm();
+        }
       }
     },
   });
+
+  const onRevChange = () => {
+    fetchSelectedPartAsync.start(
+      fetchSelectedPartsAction,
+      dataItem?.availableRevisions?.id,
+      dataItem?.availableRevisions?.documentId,
+      fetchSelectedPartAsync,
+    );
+  };
 
   useEffect(() => {
     if (!isEditMode) {
@@ -165,7 +188,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const getInfoIcon = () => (
     <span className={cx('k-icon', classes.infoIcon)}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <FontAwesomeIcon color={Colors.primaryLight} icon={solid('circle-exclamation')} />
+        <FontAwesomeIcon onClick={() => { dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );
@@ -269,6 +292,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         )}
       </Observer>
       {getDrawer()}
+      <AlertDialog
+        confirmAction={onRevChange}
+        cancelAction={dialog.close}
+        confirmLabel="common.yes.proceed"
+        cancelLabel="common.cancel"
+        message="bom.revision.alert.message"
+        {...{ dialog }}
+      />
     </td>
   );
 };
