@@ -12,7 +12,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = () => {
 
 	const classes = styles();
 	return (
-		<Dialog open={true} fullWidth={true} maxWidth="sm">
+		<Dialog open={false} fullWidth={true} maxWidth="sm">
 			<DialogTitle disableTypography className={classes.dialogTitle}>
 			<Typography variant="h6"><Text translation="change.owner" /></Typography>
 			<IconButton className={classes.closeIcon} data-cy="change-owner-close-icon">
