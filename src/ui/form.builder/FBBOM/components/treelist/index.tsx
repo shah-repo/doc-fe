@@ -137,6 +137,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     if (!documentRevision) {
       return;
     }
+    console.log('Revision :', documentRevision);
     treeListAsync.start(
       fetchBOMTreeList,
       documentRevision.id,

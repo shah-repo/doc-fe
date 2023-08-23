@@ -14,7 +14,6 @@ type Props = RouteComponentProps & {
 
 interface UserMenuContext {
   handleLogout: () => void
-  openUserSettings: () => void
   openUserProfile: () => void
   hasMultipleCompanies: boolean
   handleSwitchCompany: () => void
@@ -30,7 +29,6 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showUserProfile, setUserProfile] = useState(false);
-  const [showUserSettings, setUserSettings] = useState(false);
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
@@ -44,14 +42,6 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
 
   const openUserProfile = () => {
     setUserProfile(true);
-  };
-
-  const openUserSettings = () => {
-    setUserSettings(true);
-  };
-
-  const closeUserSettings = () => {
-    setUserSettings(false);
   };
 
   const hasMultipleCompanies = useSelector(authSelectors.hasMultipleCompanies);
@@ -82,7 +72,6 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
 
   UserMenuContext = React.createContext<UserMenuContext | undefined>({
     openUserProfile,
-    openUserSettings,
     handleLogout,
     hasMultipleCompanies,
     handleSwitchCompany,
@@ -95,8 +84,6 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
         name,
         closeUserProfile,
         showUserProfile,
-        closeUserSettings,
-        showUserSettings,
         avatar,
         initialColor,
         handleOpenMenu,
