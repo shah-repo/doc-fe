@@ -57,8 +57,8 @@ const SearchBar: React.FC = () => {
       return;
     }
 
-    if (value.document?.id && value.document.revisionId) {
-      history.push(documentVersionPath(value.document.revisionId, value.document.id));
+    if (value.document?.id && value.document.docId) {
+      history.push(documentVersionPath(value.document.id, value.document.docId));
       return;
     }
 

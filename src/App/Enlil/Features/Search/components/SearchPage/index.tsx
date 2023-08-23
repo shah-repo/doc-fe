@@ -95,7 +95,7 @@ const SearchPage: React.FC = () => {
   }));
 
   const handleRowClick: GridProps['onRowClick'] = ({ dataItem }) => {
-    const { id, revisionId, typeName } = dataItem as Document;
+    const { id, docId, typeName } = dataItem as Document;
 
     if (typeName === FacetCategoryId.TrainingRecord) {
       searchState.fetchTrainingRecord(id);
@@ -107,8 +107,8 @@ const SearchPage: React.FC = () => {
       return;
     }
 
-    if (revisionId) {
-      history.push(documentVersionPath(revisionId, id));
+    if (docId) {
+      history.push(documentVersionPath(id, docId));
     }
   };
 

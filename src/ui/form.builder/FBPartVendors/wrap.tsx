@@ -63,7 +63,7 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
     return Component({
       ...props as T,
       name,
-      disabled,
+      disabled: disabled ?? workspaceState?.isPreview,
       units,
       vendors,
       statuses,
