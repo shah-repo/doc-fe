@@ -5,6 +5,7 @@ import Config from './config';
 import { initializeDataDog } from './config/datadog';
 import * as serviceWorker from './serviceWorker';
 import AppContainer from './ui/app/App.container';
+import './index.css';
 
 if (Config.DatadogEnabled) {
   initializeDataDog();
