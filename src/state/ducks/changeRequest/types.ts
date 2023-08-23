@@ -155,6 +155,7 @@ export interface DependedDocRevDetails {
   group: DOC_TYPE_GROUP
   id: string
   documentId: string
+  checked?: boolean
 }
 
 export interface ChangeRequestDependentOnDocRevsState {

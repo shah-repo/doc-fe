@@ -1,11 +1,23 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, Typography } from '@material-ui/core';
-import { each, find, isEmpty, unionBy } from 'lodash';
-import React from 'react';
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from '@material-ui/core';
+import React, { useState } from 'react';
 import { translate } from '../../../common/intl';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
-import { ChangeRequest, ChangeRequestDependentOnDocRevsState, ChangeRequestEditRequestBody, DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
+import {
+  ChangeRequest,
+  ChangeRequestDependentOnDocRevsState,
+  ChangeRequestEditRequestBody,
+  DependedDocRevDetails,
+} from '../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { Button, Checkbox } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
@@ -35,58 +47,62 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
 }) => {
   const classes = useStyles();
 
-  let docRevsSelected: DependedDocRevDetails[] = [];
+  const [selectAll, setSelectAll] = useState(false);
+  const [docRevs, setDocRevs] = useState(
+    Object.values(details.draftItemsMap)
+      .flat()
+      .map((item) => {
+        return {
+          ...item,
+          checked: false,
+        };
+      }),
+  );
 
   const async = useAsync<ChangeRequest>({
-    onSuccess: () => dialog.close,
+    onSuccess: () => dialog.close(),
   });
 
   const saveChangeRequest = useActionCreator(changeRequestsActions.save);
 
-  const handleDocRevSelection = (isChecked: boolean, docRevChecked: DependedDocRevDetails) => {
-    if (isChecked) {
-      docRevsSelected.push(docRevChecked);
-    } else {
-      docRevsSelected = docRevsSelected.filter((docRev) => docRev.id !== docRevChecked.id);
-    }
+  const handleDocRevSelection = (
+    checked: boolean,
+    docRevChecked: DependedDocRevDetails,
+  ) => {
+    const updatedDocRevs = docRevs.map((docRev) =>
+      docRev.id === docRevChecked?.id ? { ...docRev, checked } : docRev,
+    );
+    setDocRevs(updatedDocRevs);
+    const allChecked = updatedDocRevs.every((docRev) => docRev.checked);
+    setSelectAll(allChecked);
   };
 
-  const handleDocRevSelectionAll = (flag: boolean) => {
-    console.log('All cliked', flag);
-    if (flag) {
-      each(details.draftItemsMap, (value) => {
-        docRevsSelected = unionBy(docRevsSelected, value, 'id');
-      });
-    } else {
-      docRevsSelected = [];
-    }
-    console.log('docRevsSelected :', docRevsSelected);
+  const handleDocRevSelectionAll = (checked: boolean) => {
+    setSelectAll(checked);
+    const updatedDocRevs = docRevs.map((docRev) => ({
+      ...docRev,
+      checked,
+    }));
+    setDocRevs(updatedDocRevs);
   };
-  console.log('details.draftItemsMap :', details.draftItemsMap);
 
   const addToChangeRequest = () => {
     const crFormInput = changeRequest?.formInput;
-    console.log(changeRequest);
-
-    // const formStateContext = FBFormStateContext as any;
-    // const formInput = formStateContext?._currentValue;
-
+    const docRevsSelected = docRevs.filter((docRev) => docRev.checked);
     if (docRevsSelected.length > 0) {
       // Update FormInput - documentRevisions list with the ones selected
       if (crFormInput && 'documentRevisions' in crFormInput) {
         crFormInput.documentRevisions.push(
-          ...docRevsSelected.map(docRevSelected => ({
+          ...docRevsSelected.map((docRevSelected) => ({
             descriptionOfChange: '',
             justificationOfChange: '',
             id: FB.uniqid,
             proposedDocumentRevision: {
               id: docRevSelected.id,
             },
-          }),
-          ));
-
+          })),
+        );
         async.reset();
-
         async.start(
           saveChangeRequest,
           changeRequest?.id,
@@ -112,67 +128,78 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
       id="dependent-on-doc-revs-dialog"
     >
-      <DialogContent dividers
-        id="dependent-on-doc-revs-content"
-      >
+      <DialogContent dividers id="dependent-on-doc-revs-content">
         <DialogContentText>
           <Grid container className={classes.contentContainer}>
             <Grid item className={classes.alertIcon}>
-              <FontAwesomeIcon className={classes.infoIcon} color="primary" icon={solid('circle-exclamation')} />
+              <FontAwesomeIcon
+                className={classes.infoIcon}
+                color="primary"
+                icon={solid('circle-exclamation')}
+              />
             </Grid>
-            <Grid item >
-              <Typography data-cy="dialog-header" className={classes.alertTitle}>
-                {translate('bom.ar.child.draft.add.action.message', { itemsPending: details.itemsPending })}{details.itemsPending > 1 ? 's' : ''}
+            <Grid item>
+              <Typography
+                data-cy="dialog-header"
+                className={classes.alertTitle}
+              >
+                {translate('bom.ar.child.draft.add.action.message', {
+                  itemsPending: details.itemsPending,
+                })}
+                {details.itemsPending > 1 ? 's' : ''}
               </Typography>
-              <Typography data-cy="dialog-message" className={classes.contentText}>
+              <Typography
+                data-cy="dialog-message"
+                className={classes.contentText}
+              >
                 {translate('bom.ar.child.draft.add.message')}
               </Typography>
-              {
-                Object.keys(details.draftItemsMap).map((key: string) => {
-                  return (
-                    <div key={key}>
-                      <ul className={classes.list}>
-                        <li className={classes.parentListItem}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                onClick= {e => handleDocRevSelectionAll(e.target.checked)}
-                                color="primary"
-                                className={classes.check}
-                              />
-                            }
-                            label={translate('common.all')}
-                          />
-                        </li>
-                        {
-                          details.draftItemsMap[key].map((value) => {
-                            const isObjectSelected = isEmpty(find(docRevsSelected, value));
-                            console.log('isObjectSelected ,', isObjectSelected, value);
-                            return (
-                              <li key={value.id} className={classes.listItem}>
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      disabled={value.status !== DocumentRevisionStatus.Draft}
-                                      onClick={e => handleDocRevSelection(e.target.checked, value)}
-                                      // onChange={handleDocRevSelection}
-                                      checked={!isObjectSelected}
-                                      name={value.id}
-                                      color="primary"
-                                      className={classes.check}
-                                    />
-                                  }
-                                  label={<Text message={`${value.name} - Rev ${value.version} - ${value.status}`} />}
-                                />
-                              </li>
-                            );
-                          })
-                        }
-                      </ul>
-                    </div>
-                  );
-                })
-              }
+              <div>
+                <ul className={classes.list}>
+                  <li className={classes.parentListItem}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={(e) =>
+                            handleDocRevSelectionAll(e.target.checked)
+                          }
+                          color="primary"
+                          checked={selectAll}
+                          className={classes.check}
+                        />
+                      }
+                      label={translate('common.all')}
+                    />
+                  </li>
+                  {docRevs.map((value) => {
+                    return (
+                      <li key={value.id} className={classes.listItem}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={value.checked ?? false}
+                              disabled={
+                                value.status !== DocumentRevisionStatus.Draft
+                              }
+                              onChange={(e) =>
+                                handleDocRevSelection(e.target.checked, value)
+                              }
+                              name={value.id}
+                              color="primary"
+                              className={classes.check}
+                            />
+                          }
+                          label={
+                            <Text
+                              message={`${value.name} - Rev ${value.version} - ${value.status}`}
+                            />
+                          }
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </Grid>
           </Grid>
         </DialogContentText>
