@@ -21,6 +21,8 @@ import { Attachments } from './header.templates/Attachments';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 import { CustomTreeListColumnProps } from './interface';
+import { BooleanCell } from './column.templates/Boolean';
+import { Issues } from './header.templates/Issues';
 
 export const TreeColumns: CustomTreeListColumnProps[] = [
   {
@@ -171,18 +173,18 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     hidden: false,
     sortable: false,
   },
-  // {
-  //   field: 'issues',
-  //   title: 'ISSUES',
-  //   width: '80px',
-  //   filter: TreeListTextFilter,
-  //   locked: false,
-  //   mainOrderIndex: 14,
-  //   cell: BooleanCell,
-  //   headerCell: Issues,
-  //   hidden: false,
-  //   sortable: false,
-  // },
+  {
+    field: 'issues',
+    title: 'ISSUES',
+    width: '80px',
+    filter: TreeListTextFilter,
+    locked: false,
+    mainOrderIndex: 14,
+    cell: BooleanCell,
+    headerCell: Issues,
+    hidden: true,
+    sortable: false,
+  },
   {
     field: 'vendorsCount',
     title: 'VENDORS',

@@ -841,4 +841,5 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   );
 };
 
+// ts-unused-exports:disable-next-line
 export default withThemeNext(React.forwardRef(FBBOMTreeList));

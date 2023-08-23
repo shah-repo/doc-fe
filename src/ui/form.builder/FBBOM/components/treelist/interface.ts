@@ -18,23 +18,28 @@ export interface BOMState {
   inEdit: Array<{id: string }>
 }
 
+// ts-unused-exports:disable-next-line
 export interface DataState {
   sort?: SortDescriptor[]
   filter?: FilterDescriptor[]
 }
 
+// ts-unused-exports:disable-next-line
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
 }
 
+// ts-unused-exports:disable-next-line
 export interface EditableAlternatePart extends AlternatePart {
   [MODE_FIELD]: Mode
 }
 
+// ts-unused-exports:disable-next-line
 export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
 
+// ts-unused-exports:disable-next-line
 export interface AlternatePart {
   id: string
   name?: string

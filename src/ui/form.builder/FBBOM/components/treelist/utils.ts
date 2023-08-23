@@ -9,6 +9,7 @@ export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
 
+// ts-unused-exports:disable-next-line
 export const isEditOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[MODE_FIELD] ?? false;
 };
