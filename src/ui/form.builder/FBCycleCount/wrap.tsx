@@ -10,13 +10,13 @@ import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
+import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { useOnHandQuantity } from '../FBLotTransfers/utils';
 import FBStore from '../FBStore/FBStore';
 import { CYCLE_COUNT_FREQUENCY_KEY, LOT_PART_SELECT_KEY } from './constants';
 import { CycleCount, FBCycleCountProps } from './types';
-import { getLatestRevisionId } from './utils';
 
 const prepareCycleCounts = (cycleCounts: CycleCount[] = []) => orderBy(cycleCounts, 'date', 'desc');
 
