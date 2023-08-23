@@ -351,7 +351,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const text
             = !serviceId
               ? intl.formatMessage(
-                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.MESSAGE2' },
+                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
                 { ...value, partNumber: partNumberText, capitalEquipment: `${Boolean(capitalEquipment)}` })
               : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...value });
 
