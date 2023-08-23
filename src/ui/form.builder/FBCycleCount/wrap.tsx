@@ -42,7 +42,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     const [cycleCounts, setCycleCounts] = useState<CycleCount[]>(prepareCycleCounts(workspaceState?.formInputSync.get(name) ?? []));
     const [cycleCountFrequency, setCycleCountFrequency] = useState<number>();
 
-    const lotPartRevisionId = workspaceState?.formInputSync.get(LOT_PART_SELECT_KEY) as string;
+    const lotPartRevisionId = workspaceState?.formInputSync.get(LOT_PART_SELECT_KEY) as string | undefined;
     const loadLotPartAction = useActionCreator(documentRevisionsActions.loadWithCallback);
     const async = useAsync<DocumentRevision>({
       onSuccess: (partDocRev) => {
@@ -51,11 +51,13 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     });
 
     useEffect(() => {
-      async.start(
-        loadLotPartAction,
-        lotPartRevisionId,
-        async,
-      );
+      if (lotPartRevisionId) {
+        async.start(
+          loadLotPartAction,
+          lotPartRevisionId,
+          async,
+        );
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lotPartRevisionId]);
 
