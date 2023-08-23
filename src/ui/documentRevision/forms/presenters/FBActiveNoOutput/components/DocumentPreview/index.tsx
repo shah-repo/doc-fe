@@ -1,3 +1,4 @@
+import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
@@ -11,7 +12,7 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
@@ -20,9 +21,10 @@ import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspac
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsTypeHaveOutput } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
+import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
 import styles from './styles';
 
 interface ContainerProps {
@@ -84,6 +86,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
+  const isPart = checkIsDocumentPart(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = useContext(isOperator);
@@ -92,7 +95,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
-
+  const groupOptions = documentRevision.document?.documentType?.groupOptions;
+  const hasOutput = checkIsTypeHaveOutput(groupOptions);
+  const isDisabledInputInPreview = formPreview || isDisabledInput;
+  const isPartForm = useSelector((state: ApplicationState) => documentRevision?.formTemplate
+    ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
@@ -221,6 +228,15 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
+                        {(isPart || isPartForm)
+                         && <Grid item xs={12}>
+                           <RelatedPartsWrapper
+                             viewOnly={isDisabledInputInPreview || hasOutput || !isOwner}
+                             documentRevision={documentRevision}
+                             relatedPartsStatus= {documentRevision?.relatedPartsStatus}
+                           />
+                         </Grid>
+                        }
                         {documentRevision && showTabContent
                         && <FBSchema
                           {...{ schema }}
