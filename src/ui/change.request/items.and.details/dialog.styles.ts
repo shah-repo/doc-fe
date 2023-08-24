@@ -7,9 +7,8 @@ export default makeStyles((theme) => ({
   },
   paper: {
     pointerEvents: 'auto',
-    width: '50%',
-    maxWidth: '50%',
-    minHeight: '70vh',
+    width: '40%',
+    maxWidth: '40%',
   },
   close: {
     height: 24,
@@ -31,20 +30,26 @@ export default makeStyles((theme) => ({
     flex: 1,
     color: Colors.almost_black,
   },
-  list: {
+  parentList: {
     listStyle: 'none',
     padding: 0,
   },
+  list: {
+    padding: 0,
+    maxHeight: '39vh',
+    overflowX: 'scroll',
+  },
   parentListItem: {
-    marginBottom: theme.spacing(1.5),
+    marginBottom: theme.spacing(2.5),
     marginLeft: theme.spacing(1.375),
   },
   listItem: {
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(1.25),
     marginLeft: theme.spacing(1.375),
   },
   check: {
     marginRight: theme.spacing(1),
+    backgroundColor: Colors.dodger_blue,
   },
   dialogAction: {
     display: 'flex',
@@ -65,11 +70,20 @@ export default makeStyles((theme) => ({
   submitButton: {
     height: 36,
     borderRadius: theme.spacing(12.5),
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.dodger_blue,
     color: Colors.white,
     '&:hover': {
-      background: Colors.navy,
+      background: Colors.dodger_blue,
     },
+  },
+  checkbox: {
+    color: Colors.almost_black,
+    '&$checked': {
+      color: Colors.dodger_blue,
+    },
+  },
+  checked: {
+    color: Colors.almost_black,
   },
   cancelButton: {
     height: 36,
@@ -85,7 +99,7 @@ export default makeStyles((theme) => ({
   },
   contentContainer: {
     flexWrap: 'nowrap',
-    padding: theme.spacing(2.5),
+    padding: theme.spacing(2.5, 2.5, 0, 2.5),
   },
   alertIcon: {
     marginTop: theme.spacing(0.25),
@@ -106,6 +120,24 @@ export default makeStyles((theme) => ({
   infoIcon: {
     width: 24,
     height: 23,
-    color: Colors.navy,
+    color: Colors.dodger_blue,
+  },
+  blackDot: {
+    width: 4,
+    height: 4,
+    right: 4,
+    position: 'relative',
+    background: Colors.black,
+  },
+  ml5: {
+    marginLeft: theme.spacing(0.625),
+  },
+  timestampContainer: {
+    fontWeight: 'normal',
+    fontSize: '16px',
+    lineHeight: '22px',
+  },
+  dotContainer: {
+    marginLeft: theme.spacing(1.5),
   },
 }));

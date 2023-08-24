@@ -1,4 +1,4 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
@@ -135,7 +135,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
               <FontAwesomeIcon
                 className={classes.infoIcon}
                 color="primary"
-                icon={solid('circle-exclamation')}
+                icon={regular('circle-exclamation')}
               />
             </Grid>
             <Grid item>
@@ -154,23 +154,26 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
               >
                 {translate('bom.ar.child.draft.add.message')}
               </Typography>
-              <div>
-                <ul className={classes.list}>
-                  <li className={classes.parentListItem}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={(e) =>
-                            handleDocRevSelectionAll(e.target.checked)
-                          }
-                          color="primary"
-                          checked={selectAll}
-                          className={classes.check}
-                        />
-                      }
-                      label={translate('common.all')}
-                    />
-                  </li>
+              <ul className={classes.parentList}>
+                <li className={classes.parentListItem}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={(e) =>
+                          handleDocRevSelectionAll(e.target.checked)
+                        }
+                        classes={{
+                          root: classes.checkbox,
+                          checked: classes.checked,
+                        }}
+                        checked={selectAll}
+                        className={classes.check}
+                      />
+                    }
+                    label={translate('common.select.all')}
+                  />
+                </li>
+                <div className={classes.list}>
                   {docRevs.map((value) => {
                     return (
                       <li key={value.id} className={classes.listItem}>
@@ -178,6 +181,10 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                           control={
                             <Checkbox
                               checked={value.checked ?? false}
+                              classes={{
+                                root: classes.checkbox,
+                                checked: classes.checked,
+                              }}
                               disabled={
                                 value.status !== DocumentRevisionStatus.Draft
                               }
@@ -185,21 +192,33 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                                 handleDocRevSelection(e.target.checked, value)
                               }
                               name={value.id}
-                              color="primary"
                               className={classes.check}
                             />
                           }
                           label={
-                            <Text
-                              message={`${value.name} - Rev ${value.version} - ${value.status}`}
-                            />
+                            <Grid
+                              container
+                              wrap="nowrap"
+                              justify="flex-start"
+                              alignItems="center"
+                            >
+                              <Grid item>
+                                {value.docId}
+                              </Grid>
+                              <Grid item className={classes.dotContainer}>
+                                <Box className={classes.blackDot} />
+                              </Grid>
+                              <Grid item className={classes.timestampContainer}>
+                                {translate('bom.ar.child.draft.option', { revision: value.displayRevision, title: value.name })}
+                              </Grid>
+                            </Grid>
                           }
                         />
                       </li>
                     );
                   })}
-                </ul>
-              </div>
+                </div>
+              </ul>
             </Grid>
           </Grid>
         </DialogContentText>

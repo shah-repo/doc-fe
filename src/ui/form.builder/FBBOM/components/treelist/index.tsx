@@ -12,7 +12,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent, treeToFlat
+  TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -23,7 +23,7 @@ import {
   replace,
   tail,
   take,
-  uniq
+  uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -54,13 +54,13 @@ import {
   EXPAND_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TreeColumns,
-  TREELIST_CONFIG
+  TREELIST_CONFIG,
 } from './constants';
 import {
   BOMState,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBBOMProps
+  FBBOMProps,
 } from './interface';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
@@ -458,6 +458,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
+    if (item.markAsDeleted && !_documentRevisionFormState?.showBOMDiff) {
+      return;
+    }
 
     if (isEmpty(item.refDesignator)) {
       item.refDesignator = '-';
