@@ -12,7 +12,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent, treeToFlat,
+  TreeListRowDragEvent, treeToFlat
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -23,7 +23,7 @@ import {
   replace,
   tail,
   take,
-  uniq,
+  uniq
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -33,6 +33,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
@@ -53,13 +54,13 @@ import {
   EXPAND_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TreeColumns,
-  TREELIST_CONFIG,
+  TREELIST_CONFIG
 } from './constants';
 import {
   BOMState,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBBOMProps,
+  FBBOMProps
 } from './interface';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
@@ -448,7 +449,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   useObserver(() => {
     showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
   });
-
+  const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
     _documentRevisionFormState?.toggleShowBOMDiff();
     handleExpandAll();
@@ -472,7 +473,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       return React.cloneElement(row, modifiedProps);
     }
     const isOwner = item.isOwner;
-
+    const isAddPartEnabled = isOwner && ![DocumentRevisionStatus.Deprecated,
+      DocumentRevisionStatus.Released].includes(item.status as DocumentRevisionStatus);
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
@@ -482,7 +484,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
           onDelete={(isOwner || item.isParentOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
           onRestore={onRestore}
           onReorder={onReorder}
-          isAddPartEnabled={isOwner}
+          isAddPartEnabled={isAddPartEnabled}
           onChildPartAdd={onChildPartAdd}
           rootClassName={classes.popperHolder}
         />
@@ -586,7 +588,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         </Grid>
         <Grid item>
           <Grid container justify="flex-end">
-            <Grid item
+            {showDiffView && <Grid item
               data-cy="show-hide-diff"
               className={classes.diffContainer}
             >
@@ -596,7 +598,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
                   : <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
                 <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
-            </Grid>
+            </Grid>}
             <Grid item
               data-cy="excel-export"
             >

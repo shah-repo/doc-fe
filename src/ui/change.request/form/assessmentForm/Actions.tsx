@@ -31,7 +31,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
 
-  function setFBValue() {
+  function setFBValue () {
     switch (workspaceState?.getMode()) {
       case 'form':
         // formDocument and documentType fields should be set only once
@@ -59,6 +59,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   ) => isButtonShown && changeRequest
         && <TransitionButton
           changeRequestId={changeRequest.id}
+          changeRequest={changeRequest}
           transition={transition}
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}

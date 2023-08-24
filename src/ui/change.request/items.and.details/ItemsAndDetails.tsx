@@ -4,17 +4,13 @@ import cx from 'classnames';
 import { isEmpty, map, some } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
-import useDialog from '../../hooks/useDialog';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
 import useStyles from './ApprovalRequestGrid.styles';
 import ApprovalRequestGridHeader from './ApprovalRequestGridHeader';
 import ApprovalRequestItem from './ApprovalRequestItem';
-import DependentOnDocRevsDialog from './DependentOnDocRevsDialog';
 import ItemsAndDetailsState from './ItemsAndDetails.state';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
@@ -85,20 +81,6 @@ const ItemsAndDetails: React.FunctionComponent<{
 }) => {
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
-
-  const dependentOnDocRevsDialog = useDialog();
-  const openDependentOnDocRevsDialog = () => {
-    dependentOnDocRevsDialog.open();
-  };
-
-  const dependentOnDocRevs = useSelector(changeRequestsSelectors.getDependentOnDocRevsState);
-
-  useEffect(() => {
-    console.log(dependentOnDocRevs);
-    if (dependentOnDocRevs.itemsPending > 0) {
-      openDependentOnDocRevsDialog();
-    }
-  }, [dependentOnDocRevs]);
 
   useEffect(() => {
     if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
@@ -173,14 +155,6 @@ const ItemsAndDetails: React.FunctionComponent<{
             itemsAndDetailsState = {itemsAndDetailsState}
           />
         ))
-      }
-      {
-        dependentOnDocRevsDialog.isOpen
-        && <DependentOnDocRevsDialog
-          changeRequest={changeRequest}
-          details={dependentOnDocRevs}
-          dialog={dependentOnDocRevsDialog}
-        />
       }
     </div>
   ));

@@ -41,7 +41,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
   changeRequest,
   details,
   dialog,
-  closeAction = dialog.close,
+  closeAction,
   confirmLabel = 'common.continue',
   cancelLabel = 'common.cancel',
 }) => {
