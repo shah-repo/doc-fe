@@ -120,13 +120,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       [autocompleteAsyncState, defaultValue, optionId],
     );
 
-    useEffect(() => {
-      if (!optionId) {
-        return;
-      }
-      formState?.getInputState(name ?? '')?.setRender();
-    }, [formState, name, optionId, options]);
-
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && !isObject(option)) {
         return option;

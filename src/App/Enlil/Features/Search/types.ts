@@ -20,7 +20,7 @@ export interface Document {
   typeName: FacetCategoryId
   companyId: string
   companyName: string
-  revisionId: string
+  docId: string
   title: string
   revisionName: string
   status: string

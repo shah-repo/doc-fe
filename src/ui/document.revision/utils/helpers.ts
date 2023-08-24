@@ -77,9 +77,17 @@ export const getVersionNumber = (documentRevisionId) => {
     }, revision, revisionStage, revisionChangeType, subRevision,
   } = store.getState().documentRevisions.byId[documentRevisionId];
 
-  return generateRevisionNumber( revision, revisionStage, subRevision, revisionChangeType, undefined,
+  return generateRevisionNumber(revision, revisionStage, subRevision, revisionChangeType, undefined,
     checkIsDocumentRecord(groupOptions),
   );
+};
+
+export const getLatestRevisionId = (revisions: DocumentRevision[] = []): string | undefined => {
+  const sortedRevisions
+    = revisions
+      .filter(revision => revision.status !== DocumentRevisionStatus.Canceled)
+      .sort((a, b) => b.version - a.version);
+  return sortedRevisions.at(0)?.id;
 };
 
 export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
