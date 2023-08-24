@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from '..';
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { intl } from '../../../common/intl';
+import { shouldFormFieldsBeDisabled } from '../../document.revision/utils/helpers';
 import { isTranslation } from '../../translations/types';
 import FBFieldOutputWrapper from '../FBFieldOutputWrapper/FBFieldOutputWrapper';
 
@@ -17,7 +18,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     schema,
     ...props
   }: T) => {
-
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
@@ -32,11 +32,11 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       [],
     );
 
-    function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
+    function controlRenderer (schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component({ ...schemaItem, gutter: false });
     }
 
-    function isApproved(schemaItem: FBSchemaProps): boolean {
+    function isApproved (schemaItem: FBSchemaProps): boolean {
       const { index = 0 } = schemaItem;
       const { formState } = FB.useStores();
       let disabled = false;
@@ -62,11 +62,11 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       return disabled;
     }
 
-    function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
+    function schemaRenderer (): React.ReactNode | React.ReactNode[] | undefined {
       const isDesignOrFormDesign = [
         FBWorkspaceModeOptions.DESIGN,
         FBWorkspaceModeOptions.FORMDESIGN,
-      ].includes(workspaceMode as FBWorkspaceModeOptions);
+      ].includes(workspaceMode as FBWorkspaceModeOptions) && !workspaceState?.document?.isBeingEditedAfterRelease;
 
       const isPreviewOrFormPreview = [
         FBWorkspaceModeOptions.PREVIEW,
@@ -109,6 +109,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
               },
               disabled: (
                 disabled
+                || shouldFormFieldsBeDisabled(workspaceState?.document)
                 || isPreviewOrFormPreview
                 || isApproved({ ...schemaItem, index })
                 || (reviseDisabled && outputRevision)
@@ -137,7 +138,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   return (props: T) => Comp(props);
 };
 
-function loader(): React.ReactNode {
+function loader (): React.ReactNode {
   return (<Box display="flex" justifyContent="center">
     <CircularProgress size={40} disableShrink />
   </Box>);

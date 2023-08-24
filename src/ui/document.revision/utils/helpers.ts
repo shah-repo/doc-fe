@@ -77,7 +77,7 @@ export const getVersionNumber = (documentRevisionId) => {
     }, revision, revisionStage, revisionChangeType, subRevision,
   } = store.getState().documentRevisions.byId[documentRevisionId];
 
-  return generateRevisionNumber( revision, revisionStage, subRevision, revisionChangeType, undefined,
+  return generateRevisionNumber(revision, revisionStage, subRevision, revisionChangeType, undefined,
     checkIsDocumentRecord(groupOptions),
   );
 };
@@ -91,3 +91,25 @@ export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, Documen
   const getFormInputHasTextField = fieldsWithNoResponse?.find((field) => has(dataToSubmit.formInput, field.name));
   return has(dataToSubmit, "description") || getFormInputHasTextField;
 }; */
+
+// Based on the controlOptions - if attribute-changes is set to yes,
+// then editing any of these will need a new revision
+export const shouldFormFieldsBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+  let disableFormFields = false;
+  if (documentRevision?.isBeingEditedAfterRelease
+    && documentRevision?.changeControlOptions
+    && documentRevision?.changeControlOptions.formInput) {
+    disableFormFields = documentRevision.changeControlOptions.formInput['attribute-changes'] === 'Yes';
+  }
+  return disableFormFields;
+};
+
+export const shouldAttachmentsBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+  let disableAttachment = false;
+  if (documentRevision?.isBeingEditedAfterRelease
+    && documentRevision?.changeControlOptions
+    && documentRevision?.changeControlOptions.formInput) {
+    disableAttachment = documentRevision.changeControlOptions.formInput['changes-to-attachments'] === 'Yes';
+  }
+  return disableAttachment;
+};

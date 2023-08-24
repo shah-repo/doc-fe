@@ -16,6 +16,7 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import ScrollToError from '../../components/forms/ScrollToError';
 import AttachmentsField from '../../document.revision/form/attachments';
 import BuildsContainer from '../../document.revision/summary/builds.container';
+import { shouldAttachmentsBeDisabled } from '../../document.revision/utils/helpers';
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from '../../form.builder';
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../hooks/docCustomization/useCustomization';
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
@@ -352,7 +353,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 ? !_tabsState?.isTabActive('details') && (
                   <Grid item xs={12}>
                     <AttachmentsField
-                      isDisabled={isDisabledInput}
+                      isDisabled={isDisabledInput || shouldAttachmentsBeDisabled(documentRevision)}
                       isNewVersion={false}
                       docRevId={docRevId}
                       isAttachmentEmpty={isAttachmentEmpty}
@@ -365,7 +366,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 ) : (
                   <Grid item xs={12}>
                     <AttachmentsField
-                      isDisabled={isDisabledInput}
+                      isDisabled={isDisabledInput || shouldAttachmentsBeDisabled(documentRevision)}
                       isNewVersion={false}
                       docRevId={docRevId}
                       isAttachmentEmpty={isAttachmentEmpty}

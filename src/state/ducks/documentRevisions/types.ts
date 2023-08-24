@@ -147,6 +147,15 @@ export interface RelatedParentPartDetails {
   docRevId: string
 }
 
+export interface ChangeControlOptions {
+  docId: string
+  id: string
+  name: string
+  status: DocumentRevisionStatus
+  version: number
+  formInput: Record<string, any>
+}
+
 interface LSHS{
   lhr: LHR
   lot: LOT
@@ -232,6 +241,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
+  changeControlOptions?: ChangeControlOptions
+  isBeingEditedAfterRelease?: boolean
   lotStatus: LotStatus
 }
 
@@ -402,6 +413,7 @@ export interface FBDocumentRevisionProps {
   renderHTML?: string
   renderHTMLDefined?: boolean
   status?: DocumentRevisionStatus
+  displayStatus?: string
   tasks?: FBTaskItem[]
   notes?: FBNoteItem[]
 }

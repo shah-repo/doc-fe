@@ -115,6 +115,17 @@ const update = (id: string, body: FBDocumentRevisionProps): ApiAction<DocumentRe
   },
 });
 
+const cancelPartEdit = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/cancel_edit/part/${id}`,
+  method: 'patch',
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  onFailure: (err) => {
+    toastError(err as string);
+  },
+});
+
 const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
@@ -618,6 +629,7 @@ export default {
   loadWithCallback,
   save,
   update,
+  cancelPartEdit,
   create,
   loadDocument,
   documentSet,
