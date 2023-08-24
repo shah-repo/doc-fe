@@ -10,13 +10,13 @@ import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
+import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { useOnHandQuantity } from '../FBLotTransfers/utils';
 import FBStore from '../FBStore/FBStore';
 import { CYCLE_COUNT_FREQUENCY_KEY, LOT_PART_SELECT_KEY } from './constants';
 import { CycleCount, FBCycleCountProps } from './types';
-import { getLatestRevisionId } from './utils';
 
 const prepareCycleCounts = (cycleCounts: CycleCount[] = []) => orderBy(cycleCounts, 'date', 'desc');
 
@@ -42,7 +42,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     const [cycleCounts, setCycleCounts] = useState<CycleCount[]>(prepareCycleCounts(workspaceState?.formInputSync.get(name) ?? []));
     const [cycleCountFrequency, setCycleCountFrequency] = useState<number>();
 
-    const lotPartRevisionId = workspaceState?.formInputSync.get(LOT_PART_SELECT_KEY) as string;
+    const lotPartRevisionId = workspaceState?.formInputSync.get(LOT_PART_SELECT_KEY) as string | undefined;
     const loadLotPartAction = useActionCreator(documentRevisionsActions.loadWithCallback);
     const async = useAsync<DocumentRevision>({
       onSuccess: (partDocRev) => {
@@ -51,11 +51,13 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     });
 
     useEffect(() => {
-      async.start(
-        loadLotPartAction,
-        lotPartRevisionId,
-        async,
-      );
+      if (lotPartRevisionId) {
+        async.start(
+          loadLotPartAction,
+          lotPartRevisionId,
+          async,
+        );
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lotPartRevisionId]);
 
@@ -71,7 +73,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     const isInEditableState = (version > 1 && !isVoided) || isReleased;
     const canEditWithPermission = canEditCycleCount && isInEditableState;
 
-    const isEditable = isLatestRevision && (canEditAsOwner || canEditWithPermission);
+    const isEditable = id && isLatestRevision && (canEditAsOwner || canEditWithPermission);
 
     const updateState = (state: CycleCount[]) => {
       setCycleCounts(prepareCycleCounts(state));

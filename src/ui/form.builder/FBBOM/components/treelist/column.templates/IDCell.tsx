@@ -272,7 +272,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           <>
             {!isEditMode && _documentRevisionFormState?.showBOMDiff && dataItem?.replacesStatus
             && <Grid
-              container={true}
+              container
               className={classes.replacedDocRevInfo}
               wrap="nowrap"
               justify="flex-end"
@@ -280,8 +280,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
             >
               <span className={classes.replacedDocRevInfoTitle} >{translate('bom.replaced.doc.rev')}</span>&nbsp;
               <FontAwesomeIcon icon={solid('arrow-right')} />&nbsp;{replaceDocumentRevision?.document?.docId}
-              <Grid item={true} className={classes.whiteDot} />
-              <Grid item={true}>
+              <Grid item className={classes.whiteDot} />
+              <Grid item>
                 <Text
                   translation="form.builder.header.rev"
                   values={{ revision: replaceDocumentRevision?.displayRevision }}

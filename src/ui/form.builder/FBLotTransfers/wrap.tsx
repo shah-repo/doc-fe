@@ -11,10 +11,11 @@ import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
+import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
 import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer } from './types';
-import { getLatestRevisionId, shapeQuantity } from './utils';
+import { shapeQuantity } from './utils';
 
 const prepareTransfers = (transfers: LotTransfer[] = []) => orderBy(transfers, 'date', 'desc');
 
@@ -51,7 +52,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const isInEditableState = (version > 1 && !isVoided) || isReleased;
     const canEditWithPermission = canEditLotTransfers && isInEditableState;
 
-    const isEditable = isLatestRevision && (canEditAsOwner || canEditWithPermission);
+    const isEditable = id && isLatestRevision && (canEditAsOwner || canEditWithPermission);
 
     SM.reaction(
       () => workspaceState?.formInputSync.get(name) as LotTransfer[],

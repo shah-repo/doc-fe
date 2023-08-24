@@ -82,6 +82,14 @@ export const getVersionNumber = (documentRevisionId) => {
   );
 };
 
+export const getLatestRevisionId = (revisions: DocumentRevision[] = []): string | undefined => {
+  const sortedRevisions
+    = revisions
+      .filter(revision => revision.status !== DocumentRevisionStatus.Canceled)
+      .sort((a, b) => b.version - a.version);
+  return sortedRevisions.at(0)?.id;
+};
+
 export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
 
 // Disabled because of ENC-7826

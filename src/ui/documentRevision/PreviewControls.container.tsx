@@ -29,6 +29,7 @@ import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
 import Text from '../components/Text';
+import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
 import { documentNewVersionPath } from '../document.revision/utils/paths';
@@ -274,8 +275,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === 'Approval Request'
         || type.documentTypeName === 'Document Change Order');
+    const isDocumentCR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+      && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+        .find((type) => type.group === DocTypeGroups.CHANGE_REQUEST);
 
-    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput && !isDocumentCR) {
       return isNewLayout ? (
         renderAsButton ? <StyledButton
           color="primary"
