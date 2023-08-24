@@ -33,6 +33,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
@@ -448,7 +449,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   useObserver(() => {
     showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
   });
-
+  const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
     _documentRevisionFormState?.toggleShowBOMDiff();
     handleExpandAll();
@@ -457,6 +458,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
+    if (item.markAsDeleted && !_documentRevisionFormState?.showBOMDiff) {
+      return;
+    }
 
     if (isEmpty(item.refDesignator)) {
       item.refDesignator = '-';
@@ -472,7 +476,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       return React.cloneElement(row, modifiedProps);
     }
     const isOwner = item.isOwner;
-
+    const isAddPartEnabled = isOwner && ![DocumentRevisionStatus.Deprecated,
+      DocumentRevisionStatus.Released].includes(item.status as DocumentRevisionStatus);
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
@@ -482,7 +487,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
           onDelete={(isOwner || item.isParentOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
           onRestore={onRestore}
           onReorder={onReorder}
-          isAddPartEnabled={isOwner}
+          isAddPartEnabled={isAddPartEnabled}
           onChildPartAdd={onChildPartAdd}
           rootClassName={classes.popperHolder}
         />
@@ -586,7 +591,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         </Grid>
         <Grid item>
           <Grid container justify="flex-end">
-            <Grid item
+            {showDiffView && <Grid item
               data-cy="show-hide-diff"
               className={classes.diffContainer}
             >
@@ -596,7 +601,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
                   : <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
                 <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
-            </Grid>
+            </Grid>}
             <Grid item
               data-cy="excel-export"
             >
