@@ -21,7 +21,7 @@ import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspac
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsTypeHaveOutput } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
 import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
@@ -95,9 +95,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
-  const groupOptions = documentRevision.document?.documentType?.groupOptions;
-  const hasOutput = checkIsTypeHaveOutput(groupOptions);
-  const isDisabledInputInPreview = formPreview || isDisabledInput;
   const isPartForm = useSelector((state: ApplicationState) => documentRevision?.formTemplate
     ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
@@ -105,7 +102,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
 
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-
   useEffect(() => {
     if (isLHR) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,7 +227,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                         {(isPart || isPartForm)
                          && <Grid item xs={12}>
                            <RelatedPartsWrapper
-                             viewOnly={isDisabledInputInPreview || hasOutput || !isOwner}
+                             viewOnly={true}
                              documentRevision={documentRevision}
                              relatedPartsStatus= {documentRevision?.relatedPartsStatus}
                            />
