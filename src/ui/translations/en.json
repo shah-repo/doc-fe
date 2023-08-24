@@ -1630,6 +1630,7 @@
   "bom.table.title.issues": "Issues",
   "bom.alternate.part.add": "Add Part",
   "bom.revision.available": "New Revision Available",
+  "bom.revision.alert.message": "Are you sure you want to replace it with the new revision?",
   "bom.show.diff": "Show Diff",
   "bom.hide.diff": "Hide Diff",
   "bom.replaced.doc.rev": "Replacing",
