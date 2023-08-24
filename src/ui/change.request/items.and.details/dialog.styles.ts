@@ -37,7 +37,7 @@ export default makeStyles((theme) => ({
   list: {
     padding: 0,
     maxHeight: '39vh',
-    overflowX: 'scroll',
+    overflowX: 'auto',
   },
   parentListItem: {
     marginBottom: theme.spacing(2.5),
