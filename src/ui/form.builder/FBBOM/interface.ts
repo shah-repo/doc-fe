@@ -20,6 +20,7 @@ export interface BOM {
   depth?: number
   order?: number
   isDeleted?: boolean
+  inProgress?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
   primaryAttachmentDetails?: Attachment

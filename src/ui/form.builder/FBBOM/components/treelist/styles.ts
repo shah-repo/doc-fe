@@ -397,9 +397,6 @@ export default makeStyles((theme) => ({
     fontWeight: 400,
     cursor: 'pointer',
   },
-  tableContainer: {
-    paddingTop: theme.spacing(2.5),
-  },
   bottomAddButtom: {
     width: '100%',
     borderTopLeftRadius: 0,
@@ -434,6 +431,9 @@ export default makeStyles((theme) => ({
   },
   deletedBg: {
     backgroundColor: Colors.errorLightShadow,
+  },
+  inprogressBg: {
+    backgroundColor: Colors.successHighlight,
   },
   viewIcon: {
     fill: Colors.textBlack,

@@ -470,6 +470,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.deletedBg]: item.isDeleted || (showBOMDiff && item.replacementStatus),
+        [classes.inprogressBg]: item.inProgress && showBOMDiff,
       }),
     };
     if (!item[MODE_FIELD]) {
@@ -765,7 +766,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
 
   return (
     <>
-      <Grid item className={classes.tableContainer}>
+      <Grid item>
         <FormikProvider value={formik}>
           <Grid container>
             <Grid item xs={12} ref={treeListRef}>
