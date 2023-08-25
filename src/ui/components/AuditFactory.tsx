@@ -346,14 +346,23 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { capitalEquipment, partNumber, serviceId } = value;
+          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description } = value;
           const partNumberText = poDefinePartNumberText(value);
+          const values = {
+            ...value,
+            partNumber: partNumberText,
+            capitalEquipment: `${Boolean(capitalEquipment)}`,
+            supplierPartNumber: supplierPartNumber ?? '',
+            order: order ?? '',
+            unitPrice: unitPrice ?? '',
+            description: description ?? '',
+          };
           const text
             = !serviceId
               ? intl.formatMessage(
                 { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
-                { ...value, partNumber: partNumberText, capitalEquipment: `${Boolean(capitalEquipment)}` })
-              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...value });
+                { ...values })
+              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...values });
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
