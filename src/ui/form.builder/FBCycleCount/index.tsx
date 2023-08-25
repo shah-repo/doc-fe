@@ -137,7 +137,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
   const nextDueDate = moment(cycleCountsList.at(0)?.date).add(cycleCountFrequency, 'days').format(MomentFormats.MonthDateYearTwoDigit);
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} data-cy="cycle-count">
       <PromptIfDirty
         dirty={dirty}
       />
@@ -147,9 +147,11 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
             <Button
               kind="ghost"
               size="small"
+              disabled={isInEditMode}
               className={classes.addButton}
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftCycleCount}
+              data-cy="add-link"
             >
               {translate('form.builder.cycle.count.add')}
             </Button>
@@ -189,7 +191,9 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
           kind="add"
           fullWidth
           attached
+          disabled={isInEditMode}
           onClick={createDraftCycleCount}
+          data-cy="add-button"
         >
           {translate('form.builder.cycle.count.add')}
         </Button>
