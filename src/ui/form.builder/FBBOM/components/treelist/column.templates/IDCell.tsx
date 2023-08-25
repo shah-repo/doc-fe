@@ -16,6 +16,7 @@ import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import Text from '../../../../../components/Text';
+import { isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
@@ -36,6 +37,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const { getFieldProps, setFieldValue, submitForm } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const isRevisionAvailable = isEditMode && dataItem?.availableRevisions?.isReleased;
+  const isDocRevReleased = isDocumentRevisionReleased(_documentRevisionFormState?.documentRevision?.status);
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
   };
@@ -188,7 +190,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const getInfoIcon = () => (
     <span className={cx('k-icon', classes.infoIcon)}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <FontAwesomeIcon onClick={() => { dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
+        <FontAwesomeIcon onClick={() => { !isDocRevReleased && dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );
