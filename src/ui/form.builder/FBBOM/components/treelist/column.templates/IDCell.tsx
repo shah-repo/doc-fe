@@ -155,15 +155,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   }, [parts]);
 
   const replaceDocumentRevision = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, dataItem?.replacesStatus ?? ''),
+    documentRevisionsSelectors.getDocumentRevision(state, dataItem?.replacementStatus ?? ''),
   );
 
   const loadDocumentRevision = useActionCreator(documentRevisionsActions.load);
   const loadAction = () =>
-    loadDocumentRevision(dataItem?.replacesStatus, '');
+    loadDocumentRevision(dataItem?.replacementStatus, '');
 
   useEffect(() => {
-    if (dataItem?.replacesStatus) {
+    if (dataItem?.replacementStatus) {
       loadAction();
     }
   }, []);
@@ -221,7 +221,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
             return getInfoIcon();
           }
         }
-        if (i === props.level.length - 1 && hasChildren && !dataItem.markAsDeleted) {
+        if (i === props.level.length - 1 && hasChildren && !dataItem.isDeleted) {
           return (<span className={cx('k-icon', classes.expand)}>
             {(props.expanded
               ? <FontAwesomeIcon onClick={onClick} size="sm" icon={regular('square-minus')} />
@@ -256,7 +256,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         >
           <FontAwesomeIcon onClick={() => _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level })} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
         </Tooltip>}
-        {dataItem.markAsDeleted && !dataItem.isDisabled && <Tooltip
+        {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
           title={translate('common.restore')}
           placement="top"
           arrow
@@ -270,7 +270,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <Observer>
         {() => (
           <>
-            {!isEditMode && _documentRevisionFormState?.showBOMDiff && dataItem?.replacesStatus
+            {!isEditMode && _documentRevisionFormState?.showBOMDiff && dataItem?.replacementStatus
             && <Grid
               container
               className={classes.replacedDocRevInfo}

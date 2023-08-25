@@ -19,7 +19,7 @@ export interface BOM {
   refDesignator?: string
   depth?: number
   order?: number
-  markAsDeleted?: boolean
+  isDeleted?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
   primaryAttachmentDetails?: Attachment
@@ -29,7 +29,6 @@ export interface BOM {
   childNodes?: BOM[]
   inEdit?: boolean
   isNew?: boolean
-  isDeleted?: boolean
   availableRevisions?: AvailableRevisions
   changeRequestDetails?: changeRequestDetails
   costRollUp: number
@@ -47,7 +46,7 @@ export interface EditableBOM extends BOM {
   alternatePartsCount?: number
   attachmentNames: string[]
   isDisabled?: boolean
-  replacesStatus?: string
+  replacementStatus?: string
 }
 export interface BOMEditEvent {
   dataItem: EditableBOM

@@ -282,7 +282,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         if (!partInfo.parentNodeDocumentId) {
           partInfo.parentNodeDocumentId = documentRevision.documentId;
         }
-        partInfo.markAsDeleted = false;
+        partInfo.isDeleted = false;
         partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
         const payload = {
@@ -344,7 +344,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.markAsDeleted) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -397,7 +397,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     const partInfo = dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR);
     const payload = {
       childNodeRevId: partInfo[0],
-      markAsDeleted: false,
+      isDeleted: false,
     };
     partAsync.start(
       updateBOMBranch,
@@ -458,7 +458,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
-    if (item.markAsDeleted && !_documentRevisionFormState?.showBOMDiff) {
+    if (item.isDeleted && !_documentRevisionFormState?.showBOMDiff) {
       return;
     }
 
@@ -469,7 +469,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.markAsDeleted || (showBOMDiff && item.replacesStatus),
+        [classes.deletedBg]: item.isDeleted || (showBOMDiff && item.replacementStatus),
       }),
     };
     if (!item[MODE_FIELD]) {
