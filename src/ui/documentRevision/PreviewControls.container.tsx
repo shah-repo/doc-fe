@@ -89,7 +89,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const formDocumentId = documentRevision.formDocument?.document?.id || '';
   const groupOptions = documentRevision.document?.documentType?.groupOptions;
-  console.log({ groupOptions });
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId),
   );
