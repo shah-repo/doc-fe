@@ -127,7 +127,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   }, isVendorAdded ? [editedVendor] : []);
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} data-cy="part-vendors">
       <PromptIfDirty
         dirty={dirty}
       />
@@ -137,9 +137,11 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
             <Button
               kind="ghost"
               size="small"
+              disabled={isInEditMode}
               className={classes.addButton}
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftVendor}
+              data-cy="add-link"
             >
               {translate('form.builder.part.vendors.add')}
             </Button>
@@ -161,7 +163,9 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
           kind="add"
           fullWidth
           attached
+          disabled={isInEditMode}
           onClick={createDraftVendor}
+          data-cy="add-button"
         >
           {translate('form.builder.part.vendors.add')}
         </Button>
