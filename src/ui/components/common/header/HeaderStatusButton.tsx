@@ -27,6 +27,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
 }) => {
   const optionsMenu = useMenu();
   const classes = useStyles();
+  const dataCy = props['data-cy'] ?? 'status';
 
   const handleMenuClick = (value: LotStatus) => () => onItemSelect(value);
 
@@ -41,6 +42,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         kind="white"
         endIcon={!disabled ? Icon : undefined}
         onClick={!disabled ? optionsMenu.open : undefined}
+        data-cy={`${dataCy}-button`}
       >
         {label}
       </Button>
@@ -48,6 +50,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         <SplitButtonMenu
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
+          data-cy={`${dataCy}-menu`}
         >
           {options.map(option => (
             <MenuItem
