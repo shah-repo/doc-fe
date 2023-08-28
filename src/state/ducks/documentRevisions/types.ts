@@ -154,6 +154,7 @@ export interface ChangeControlOptions {
   status: DocumentRevisionStatus
   version: number
   formInput: Record<string, any>
+  schemaMap: {[key: string]: string}
 }
 
 interface LSHS{

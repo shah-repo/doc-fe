@@ -103,21 +103,27 @@ export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, Documen
 // Based on the controlOptions - if attribute-changes is set to yes,
 // then editing any of these will need a new revision
 export const shouldFormFieldsBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
-  let disableFormFields = false;
-  if (documentRevision?.isBeingEditedAfterRelease
-    && documentRevision?.changeControlOptions
-    && documentRevision?.changeControlOptions.formInput) {
-    disableFormFields = documentRevision.changeControlOptions.formInput['attribute-changes'] === 'Yes';
-  }
-  return disableFormFields;
+  return doesFieldChangeAffectRev(documentRevision, 'attribute-changes');
 };
 
 export const shouldAttachmentsBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
-  let disableAttachment = false;
+  return doesFieldChangeAffectRev(documentRevision, 'changes-to-attachments');
+};
+
+export const shouldReferencesBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'changes-to-references');
+};
+
+export const shouldBOMBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'bom-line-changes');
+};
+
+const doesFieldChangeAffectRev = (documentRevision: DocumentRevision | undefined, field: string) => {
+  let fieldChangeAffectsRev = false;
   if (documentRevision?.isBeingEditedAfterRelease
     && documentRevision?.changeControlOptions
     && documentRevision?.changeControlOptions.formInput) {
-    disableAttachment = documentRevision.changeControlOptions.formInput['changes-to-attachments'] === 'Yes';
+    fieldChangeAffectsRev = documentRevision.changeControlOptions.formInput[field] === 'Yes';
   }
-  return disableAttachment;
+  return fieldChangeAffectsRev;
 };

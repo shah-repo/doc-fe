@@ -14,12 +14,13 @@ import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.deta
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../ui/document.revision/form/attachments';
+import { shouldBOMBeDisabled, shouldReferencesBeDisabled } from '../../../../ui/document.revision/utils/helpers';
 import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisplay.container';
 import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
@@ -69,6 +70,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isPart = checkIsDocumentPart(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -175,7 +177,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={true} minimizeRightPanel={minimizeRightPanel ?? _tabsState?.isTabActive(TabTypeOptions.BOM)} />}
+              {() => <DocumentRevisionSidebar
+                edit={isPart ? !shouldReferencesBeDisabled(documentRevision) : true}
+                minimizeRightPanel={minimizeRightPanel ?? _tabsState?.isTabActive(TabTypeOptions.BOM)} />}
             </Observer>
           ),
         }}
@@ -305,7 +309,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={isDisabledInput} />
+                                <FBBOM documentRevision={documentRevision}
+                                  isDisabled={isDisabledInput || shouldBOMBeDisabled(documentRevision)} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

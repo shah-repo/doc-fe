@@ -6,7 +6,6 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../../App';
-import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
@@ -26,7 +25,6 @@ import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
-import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../../form.builder';
@@ -47,6 +45,7 @@ import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.conta
 import { withActionButton } from './ActionButton.wrap';
 import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import CancelButton from './CancelButton';
+import CancelEditPartButton from './CancelEditPartButton';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
 import ExportToEmail from './export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './GenerateHtmlPreview';
@@ -263,7 +262,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
-
   const showCancelEditPartButton = isPart && documentRevision?.releasedAt && isStatusInDraft;
 
   if (showCancelEditPartButton) {
@@ -373,14 +371,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
       )}
       {buttons.includes(PreviewControlButtons.CancelEditPartButton) && (
-        <StyledButton
-          color="primary"
-          id="cancelEditPartButton"
-          data-cy="cancelEditPartButton"
-          onClick={cancelPartEdit}
-        >
-          <Text message="Cancel Edit" />
-        </StyledButton>
+        <CancelEditPartButton
+          documentRevision = {documentRevision}
+          cancelPartEdit = {cancelPartEdit} />
       )}
       {buttons.includes(PreviewControlButtons.ApproveAndReleaseButton) && (
         <Observer>

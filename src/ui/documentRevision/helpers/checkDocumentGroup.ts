@@ -22,13 +22,13 @@ export const checkIfDocumentHasOptions = (
   documentGroupOptions?: DocumentGroupOptionsType[],
 ): boolean => {
   if (!documentGroupOptions) { return false; }
-  return some(groupOptions, ((groupOption) => checkDocumentGroupOptions(groupOption, documentGroupOptions)));
+  return some(groupOptions, (groupOption) => checkDocumentGroupOptions(groupOption, documentGroupOptions));
 };
 
 export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
 export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
 export const checkIsDocumentDirectApproved = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL);
-export const checkIsDocumentPart =  checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
+export const checkIsDocumentPart = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
 export const checkIsDocumentEB = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD);
 export const checkIsDocumentPO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PO);
 export const checkIsDocumentForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FORM);
