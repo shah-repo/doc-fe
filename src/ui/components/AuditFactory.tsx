@@ -346,7 +346,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description } = value;
+          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description, partNumberTitle, units, glCode, tax } = value;
           const partNumberText = poDefinePartNumberText(value);
           const values = {
             ...value,
@@ -356,6 +356,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             order: order ?? '',
             unitPrice: unitPrice ?? '',
             description: description ?? '',
+            partNumberTitle: partNumberTitle ?? '',
+            units: units ?? '',
+            glCode: glCode ?? '',
+            tax: `${Boolean(tax)}`,
           };
           const text
             = !serviceId
