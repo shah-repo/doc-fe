@@ -29,9 +29,10 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
   selectedEQ,
   isLHRProductionBuild,
 }) => {
+  // TODO implement filtering on BE
   const isValidLOT = (lot) => {
     const isAcceptedStatus = isLHRProductionBuild
-      ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED
+      ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
       : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
