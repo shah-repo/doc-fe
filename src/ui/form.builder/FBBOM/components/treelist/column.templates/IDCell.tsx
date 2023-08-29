@@ -3,31 +3,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Link, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
-import { useFormikContext } from 'formik';
+import { Formik, FormikProps, useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { ChangeEvent, ComponentType, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
+import { documentTypeActions, documentTypeSelectors } from '../../../../../../state/ducks/documentRevisions/documentType';
+import { DocumentTypeById } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../../../../components/forms/FormContext';
+import { toastError } from '../../../../../components/notifications';
 import Text from '../../../../../components/Text';
 import { isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
+import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
+import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
+import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../../drawer/DocumentRevisionDrawer';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
+
+interface MultipleFormInitialValues {
+  selectType: OptionType[]
+}
 
 const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { _documentRevisionFormState } = SM.useStores();
@@ -201,6 +213,71 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     </FBBOMDetailDrawer>
   );
 
+  const [initialValues, setInitialValues] = React.useState<MultipleFormInitialValues>({ selectType: [] });
+  const multipleFormDialog = useDialog();
+  const showFormDialog = useDialog();
+  const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
+  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
+  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+  const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
+  const handleCreateDocument = useHandleCreateDoc();
+
+  const idAsync = useAsync<DocumentTypeById>({
+    onSuccess: () => {
+      if (isEmpty(formIds)) {
+        toastError('missing.form.error');
+        return;
+      }
+    _documentRevisionFormState?.toggleShowPartInDialoge();
+    closeMultipleFormDialog();
+    showFormDialog.open();
+    handleCreateDocument(formIds[0] as DocumentRevision);
+    },
+    onError: (msg) => toastError(msg),
+  });
+
+  const categoryAsync = useAsync<DocumentType[]>({
+    onSuccess: () => {
+      if (isEmpty(documentTypes)) {
+        toastError('missing.type.error');
+        return;
+      }
+      setInitialValues({ selectType: [] });
+      multipleFormDialog.open();
+    },
+    onError: (msg) => toastError(msg),
+  });
+
+  const handleAddButtonClick = () => {
+    categoryAsync.start(getDocTypesByCategory, { category: 'Parts' }, categoryAsync);
+  };
+
+  const handleDocTypeSelection = (docTypeId) => {
+    if (!docTypeId) {
+      return;
+    }
+    idAsync.start(getDocRevByIds, docTypeId, idAsync);
+  };
+
+  const closeMultipleFormDialog = () => {
+    multipleFormDialog.close();
+  };
+
+  const renderFormTemplateDialog = (props: FormikProps<any>) => (
+    <MultipleFormTemplateDialog
+      {...props}
+      dialog={multipleFormDialog}
+      handleSelection={handleDocTypeSelection}
+      {...{
+        documentTypes,
+        formIds: [],
+        isRecord: false,
+        closeMultipleFormDialog,
+        isLHR: false,
+      }}
+    />
+  );
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, props.className)}
@@ -237,7 +314,16 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       }
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-        {isEditMode && getFieldInfo()}
+        {isEditMode && <div className={classes.idCellEditWrapper}>
+          { getFieldInfo()}
+          <Tooltip
+            title={translate('form.builder.create.new.part')}
+            placement="top"
+            arrow
+          >
+            <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          </Tooltip>
+        </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
           ? <Link underline="hover" onClick={openDrawer} className={classes.link}>
@@ -302,6 +388,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         message="bom.revision.alert.message"
         {...{ dialog }}
       />
+      <FormContext.Provider value={{ submitOnChange: false }}>
+        <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
+          {renderFormTemplateDialog}
+        </Formik>
+      </FormContext.Provider>
+      <DocumentRevisionDialog dialog={showFormDialog} />
     </td>
   );
 };
