@@ -102,19 +102,23 @@ export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, Documen
 
 // Based on the controlOptions - if attribute-changes is set to yes,
 // then editing any of these will need a new revision
-export const shouldFormFieldsBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+export const formFieldsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   return doesFieldChangeAffectRev(documentRevision, 'attribute-changes');
 };
 
-export const shouldAttachmentsBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+export const suppliersDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'approved-supplier-list');
+};
+
+export const attachmentsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   return doesFieldChangeAffectRev(documentRevision, 'changes-to-attachments');
 };
 
-export const shouldReferencesBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+export const referencesDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   return doesFieldChangeAffectRev(documentRevision, 'changes-to-references');
 };
 
-export const shouldBOMBeDisabled = (documentRevision: DocumentRevision | undefined): boolean => {
+export const bomDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   return doesFieldChangeAffectRev(documentRevision, 'bom-line-changes');
 };
 

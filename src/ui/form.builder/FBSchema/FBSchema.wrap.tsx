@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from '..';
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { intl } from '../../../common/intl';
-import { shouldFormFieldsBeDisabled } from '../../document.revision/utils/helpers';
+import { formFieldsDisabledChangeControl, suppliersDisabledChangeControl } from '../../document.revision/utils/helpers';
 import { isTranslation } from '../../translations/types';
 import FBFieldOutputWrapper from '../FBFieldOutputWrapper/FBFieldOutputWrapper';
 
@@ -97,6 +97,9 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
             && !_documentRevisionFormState?.leftPanelOpen))
         ) { return; }
 
+        const disabledViaConfigOptions = schemaItem.name === 'part-vendors'
+          ? suppliersDisabledChangeControl(workspaceState?.document) : formFieldsDisabledChangeControl(workspaceState?.document);
+
         position++;
         return (
           <FBFieldOutputWrapper position={position} inputProps={schemaItem}>
@@ -109,7 +112,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
               },
               disabled: (
                 disabled
-                || shouldFormFieldsBeDisabled(workspaceState?.document)
+                || disabledViaConfigOptions
                 || isPreviewOrFormPreview
                 || isApproved({ ...schemaItem, index })
                 || (reviseDisabled && outputRevision)

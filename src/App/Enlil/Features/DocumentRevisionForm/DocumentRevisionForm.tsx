@@ -14,7 +14,7 @@ import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.deta
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../ui/document.revision/form/attachments';
-import { shouldBOMBeDisabled, shouldReferencesBeDisabled } from '../../../../ui/document.revision/utils/helpers';
+import { bomDisabledChangeControl, referencesDisabledChangeControl } from '../../../../ui/document.revision/utils/helpers';
 import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisplay.container';
 import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
@@ -178,7 +178,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           rightSidebar: (
             <Observer>
               {() => <DocumentRevisionSidebar
-                edit={isPart ? !shouldReferencesBeDisabled(documentRevision) : true}
+                edit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
                 minimizeRightPanel={minimizeRightPanel ?? _tabsState?.isTabActive(TabTypeOptions.BOM)} />}
             </Observer>
           ),
@@ -310,7 +310,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                                 <FBBOM documentRevision={documentRevision}
-                                  isDisabled={isDisabledInput || shouldBOMBeDisabled(documentRevision)} />
+                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision)} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper
