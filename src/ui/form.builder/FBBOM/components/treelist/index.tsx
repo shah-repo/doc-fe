@@ -308,11 +308,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     return {
       id: uuidv4(),
       revision: '',
-      status: '',
+      status: '' as DocumentRevisionStatus,
       name: '',
       docId: '',
       cost: '',
-      quantity: '',
+      quantity: 1,
       leadTime: '',
       unit: '',
       comment: '',
@@ -478,7 +478,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     }
     const isOwner = item.isOwner;
     const isAddPartEnabled = isOwner && ![DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.Released].includes(item.status as DocumentRevisionStatus);
+      DocumentRevisionStatus.Released].includes(item.status);
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
