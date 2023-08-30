@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../state/ducks/auth';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
 import { useAssignOperatorsToDocument } from '../../hooks/docCustomization/useCustomization';
@@ -40,11 +41,13 @@ const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsConta
   const operators = get(selectedDocument, 'document.operators', []);
 
   const { isVisible, label } = useAssignOperatorsToDocument(documentTypeId);
+  const isDisabled = (selectedDocument?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER) || false;
 
   return (
     <AccessPermissionsPresenter
       {...{
         isVisible,
+        isDisabled,
         availableApprovers,
         groupOptions,
         securityGroups,
