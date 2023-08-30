@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
-import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
@@ -201,6 +201,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     </FBBOMDetailDrawer>
   );
 
+  const canAddChildren = (dataItem: EditableBOM) => {
+    return dataItem.isOwner
+      && !isEditMode
+      && !dataItem.isDisabled
+      && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided,
+        DocumentRevisionStatus.Released].includes(dataItem.status);
+  };
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, props.className)}
@@ -251,7 +259,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         >
           <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />
         </Tooltip>}
-        {dataItem.isOwner && !isEditMode && !dataItem.isDisabled && dataItem.status?.toLowerCase() !== 'released' && <Tooltip
+        {canAddChildren(dataItem) && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
