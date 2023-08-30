@@ -41,7 +41,7 @@ const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsConta
   const operators = get(selectedDocument, 'document.operators', []);
 
   const { isVisible, label } = useAssignOperatorsToDocument(documentTypeId);
-  const isDisabled = (selectedDocument?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER) || false;
+  const isDisabled = (selectedDocument?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER);
 
   return (
     <AccessPermissionsPresenter
