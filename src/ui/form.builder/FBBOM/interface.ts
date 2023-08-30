@@ -1,4 +1,5 @@
 import { Attachment } from '../../../state/ducks/attachments/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { Vendor } from '../FBPartVendors/types';
 import { MODE_FIELD } from './components/treelist/constants';
 
@@ -10,7 +11,7 @@ export interface BOM {
   version?: string
   revision: string
   isOwner?: boolean
-  status: string
+  status: DocumentRevisionStatus
   cost: string
   docId: string
   leadTime?: string
@@ -32,7 +33,7 @@ export interface BOM {
   isNew?: boolean
   availableRevisions?: AvailableRevisions
   changeRequestDetails?: changeRequestDetails
-  costRollUp: number
+  costRollUp?: number
 }
 
 export interface EditableBOM extends BOM {
