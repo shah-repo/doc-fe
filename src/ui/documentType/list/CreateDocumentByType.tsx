@@ -6,6 +6,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { SM } from '../../../App';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -57,6 +58,7 @@ export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();
+  const { _documentRevisionFormState } = SM.useStores();
   const [form, setForm] = useState<DocumentRevision>();
   const fetchDocIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const fetchDocIdAsync = useAsync<DocumentProposedId>({
@@ -72,7 +74,11 @@ export const useHandleCreateDoc = () => {
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
       const path = documentVersionPath(documentRevision?.id || '', documentRevision?.document?.id || '');
-      history.push(path);
+      if (_documentRevisionFormState?.showPartInDialoge) {
+        _documentRevisionFormState?.setNewlyCreatedDocumentRevision(documentRevision);
+      } else {
+        history.push(path);
+      }
     },
     onError: (error) => {
       toastError(error);
@@ -216,7 +222,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       return;
     }
     idAsync.start(getDocRevByIds, documentTypeId, idAsync);
-    return;
   };
 
   const handleFormSelection = (docRevId) => {
@@ -267,7 +272,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!isEmpty(tableData)) {
       return tableData.map((e) => {
         const h = headers.map((column) => {
-          const columnValue =  get(e, column.key, '');
+          const columnValue = get(e, column.key, '');
 
           switch (column.key) {
             case 'owner':
@@ -288,7 +293,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               }
           }
         });
-        const rows = h.reduce(function(result, current) {
+        const rows = h.reduce(function (result, current) {
           return Object.assign(result, current);
         }, {});
         return rows;
@@ -323,7 +328,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             <Text translation="document.revision.export.list" />
           </Button>
           <ExportListDialog
-            {...{ headers, data  }}
+            {...{ headers, data }}
             dialog={exportDialog}
             customFileName="DocumentList"
           />
@@ -354,15 +359,15 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       <FormContext.Provider value={{ submitOnChange: false }}>
-          <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
-            {renderFormTemplateDialog}
-          </Formik>
-        </FormContext.Provider>
+        <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
+          {renderFormTemplateDialog}
+        </Formik>
+      </FormContext.Provider>
       <FormContext.Provider value={{ submitOnChange: false }}>
-          <Formik initialValues={{}} onSubmit={handleFormSelection}>
-            {renderFormListDialog}
-          </Formik>
-        </FormContext.Provider>
+        <Formik initialValues={{}} onSubmit={handleFormSelection}>
+          {renderFormListDialog}
+        </Formik>
+      </FormContext.Provider>
     </>
   );
 };
