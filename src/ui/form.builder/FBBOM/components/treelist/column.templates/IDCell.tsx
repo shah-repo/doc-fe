@@ -286,6 +286,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         DocumentRevisionStatus.Released].includes(dataItem.status);
   };
 
+  const setChildInfo = (dataItem, level) => {
+    if (!_documentRevisionFormState?.bomChangesInProgress) {
+      _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level });
+      _documentRevisionFormState?.setBomChangesInProgress(true);
+    }
+  };
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, props.className)}
@@ -350,7 +357,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           placement="top"
           arrow
         >
-          <FontAwesomeIcon onClick={() => _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level })} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          <FontAwesomeIcon onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
         </Tooltip>}
         {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
           title={translate('common.restore')}

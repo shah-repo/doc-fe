@@ -31,6 +31,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public showPartInDialoge = false;
   @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
+  @observable public bomChangesInProgress = false;
   @observable public restorePartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
   @observable public refreshBomTree = false;
@@ -203,6 +204,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
     set(this, 'childPartInfo', data);
+  };
+
+  @action public setBomChangesInProgress = (status: boolean) => {
+    set(this, 'bomChangesInProgress', status);
   };
 
   @action public setRestorePartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {

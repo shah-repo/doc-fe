@@ -165,6 +165,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     () => _documentRevisionFormState?.refreshBomTree,
     (loading) => {
       if (loading && documentRevision) {
+        _documentRevisionFormState?.setBomChangesInProgress(false);
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
@@ -331,8 +332,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   const isNewBOMAdditionInProgress = () => {
-    return (state.inEdit.length > 0);
+    // return (state.inEdit.length > 0);
+    return _documentRevisionFormState?.bomChangesInProgress;
   };
+
   const addBOM = () => {
     if (isNewBOMAdditionInProgress()) {
       return;
@@ -387,6 +390,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         (data) => !data[ADD_FIELD],
       );
     }
+    _documentRevisionFormState?.setBomChangesInProgress(false);
     updateState({
       ...state,
       inEdit: [],
