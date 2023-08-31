@@ -283,7 +283,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
           partInfo.parentNodeDocumentId = documentRevision.documentId;
         }
         partInfo.isDeleted = false;
-        partAsync.start(addBOMBranch, partInfo, partAsync);
+        partInfo.quantity = partInfo.quantity ? +partInfo.quantity : 0;
+        if (validate(partInfo)) {
+          partAsync.start(addBOMBranch, partInfo, partAsync);
+        }
       } else {
         const payload = {
           childNodeRevId: partInfo.childNodeRevId,
@@ -321,6 +324,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
+  };
+
+  const validate = (partInfo: Partial<Partial<EditableBOM>>) => {
+    return partInfo.childNodeRevId;
   };
 
   const isNewBOMAdditionInProgress = () => {

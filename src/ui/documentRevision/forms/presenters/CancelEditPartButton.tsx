@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1, 2, 1, 1),
       marginTop: '4px',
       backgroundColor: Colors.white,
-      boxShadow: `4px 4px 8px 0px ${Colors.blue_bell}`,
+      boxShadow: `4px 4px 8px 4px ${Colors.blue_bell}`,
+      right: '10px',
     },
     optionsList: {
       listStyle: 'none',
