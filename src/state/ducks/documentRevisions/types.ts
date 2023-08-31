@@ -42,16 +42,32 @@ export enum POStatusType {
   VOIDED = 'VOIDED',
 }
 
+// Lot types implemetation
+export enum LotStatus {
+  QUARANTINE = 'QUARANTINE',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+  USE_AS_IS = 'USE_AS_IS',
+  RTV = 'RETURN_TO_VENDOR',
+  REWORK = 'REWORK',
+  SCRAP = 'SCRAP',
+  RD_USED_ONLY = 'R&D_USED_ONLY',
+  OTHER = 'OTHER',
+  VOIDED = 'VOIDED',
+}
+
 export enum POStatusLabelMapping {
   OPENED = 'Open',
   CLOSED = 'Closed',
   VOIDED = 'Voided',
 }
-
 export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
+  Supplier = 'Supplier',
+  Equipment = 'Equipment',
+  TrainingCurriculums = 'Training Curriculums',
 }
-
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',
   NextRevisionStage = 'NEXT_REVISION_STAGE',
@@ -144,6 +160,7 @@ interface Precalc {
   cali_due_date?: string
   pm_due_date?: string
   lshs_subtitle?: LSHS
+  lot_on_hand_quantity?: string
 }
 
 interface DocumentsInLHRS {
@@ -215,6 +232,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
+  lotStatus: LotStatus
 }
 
 export interface SmartReference {

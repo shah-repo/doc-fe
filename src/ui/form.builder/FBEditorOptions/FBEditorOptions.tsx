@@ -16,6 +16,7 @@ const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
     boxProps={{ mb: 3.125 }}
     labelProps={styles.labelProps}
     FBProps={{ inputType: 'editoroptions' }}
+    isFbEditorField
   />
 );
 

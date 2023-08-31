@@ -9,8 +9,12 @@ import useHover from '../../../hooks/useHover';
 import { MODE_FIELD, Mode } from '../constants';
 import useStyles from '../styles';
 
-export interface ActionsProps<T> {
-  dataItem: T
+interface EditableItem {
+  [MODE_FIELD]: Mode
+}
+
+export interface ActionsProps {
+  dataItem: EditableItem
   isDeleteDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
@@ -19,16 +23,15 @@ export interface ActionsProps<T> {
   onDelete?: () => void
 }
 
-export default function Actions <T> (props: ActionsProps<T>): React.ReactElement | null {
-  const {
-    dataItem,
-    scrollBehavior = 'auto',
-    isDeleteDisabled,
-    deleteTooltipText,
-    onConfirm,
-    onDiscard,
-    onDelete,
-  } = props;
+const Actions: React.FC<ActionsProps> = ({
+  dataItem,
+  scrollBehavior = 'auto',
+  isDeleteDisabled,
+  deleteTooltipText,
+  onConfirm,
+  onDiscard,
+  onDelete,
+}) => {
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -101,4 +104,6 @@ export default function Actions <T> (props: ActionsProps<T>): React.ReactElement
       </Tooltip>
     </div>
   );
-}
+};
+
+export default Actions;

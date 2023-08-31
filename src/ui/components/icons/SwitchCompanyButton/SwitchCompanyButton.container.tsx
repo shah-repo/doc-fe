@@ -6,6 +6,7 @@ import { authSelectors } from '../../../../state/ducks/auth';
 import { Employee } from '../../../../state/ducks/company/types';
 import { ApplicationState } from '../../../../state/reducers';
 import Text from '../../Text';
+import styles from './styles';
 
 interface StateProps {
   isUserAuthenticated: boolean
@@ -14,14 +15,18 @@ interface StateProps {
 
 type SwitchCompanyButtonProps = StateProps & Pick<RouteComponentProps, 'location'>;
 
-const SwitchCompanyButton: React.FunctionComponent<SwitchCompanyButtonProps> = (props) => (
-  <Box
-    component="span"
-    id="switchCompanyButton"
-  >
-    <Text translation="company.switch.company" />
-  </Box>
-);
+const SwitchCompanyButton: React.FunctionComponent<SwitchCompanyButtonProps> = (props) => {
+  const classes = styles();
+  return (
+    <Box
+      component="span"
+      id="switchCompanyButton"
+      className={classes.text}
+    >
+      <Text translation="company.switch.company" />
+    </Box>
+  );
+};
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isUserAuthenticated: authSelectors.isAuthenticated(state),

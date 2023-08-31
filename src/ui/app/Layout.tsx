@@ -2,18 +2,20 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
+import { SearchPage } from '../../App/Enlil/Features/Search';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
 import ChangeRequestContainer from '../change.request/Container';
 import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
-import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from '../constants/urls';
+import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL, GLOBAL_SEARCH_URL } from '../constants/urls';
 import DashboardLayout from '../dashboard.new/Dashboard.layout';
 import DashboardContainer from '../dashboard/Dashboard.container';
 import DocumentRevisionContainer from '../document.revision/container';
 import DocumentRevisionListContainer from '../document.revision/grid/container';
 import { DocumentTypeManagementContainer } from '../document.type.management/kendo/container';
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
+import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
 import GroupManagementListContainer from '../group.management/kendo/container';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
@@ -30,15 +32,21 @@ import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
-  const classes = useStyles(SM.isHomeURL);
+  const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
+  const [open, setOpen] = React.useState(isExpanded);
+  const classes = useStyles({ isDashboard: SM.isHomeURL, open: open });
+  const handleDrawerOpen = () => {
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !open ? '1' : '0');
+    setOpen(!open);
+  };
 
   return (
     <>
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer />
-      <Navigation />
+      <HeaderContainer open={open} />
+      <Navigation handleDrawerOpen={handleDrawerOpen} open={open} />
       <SocketsContainer />
       <WatermarkFooterContainer />
       <main className={classes.root}>
@@ -121,6 +129,10 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={ASYNC_TASKS_URL}
             component={AsyncTasksContainer}
+          />
+          <Route
+            path={GLOBAL_SEARCH_URL}
+            component={SearchPage}
           />
           <Redirect to={HOME_URL} />
         </Switch>

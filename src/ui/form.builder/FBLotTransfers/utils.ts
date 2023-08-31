@@ -1,21 +1,12 @@
 import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB } from '..';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
-import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, PredictQuantityFunction } from './types';
+import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
   return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
-};
-
-export const getLatestRevisionId = (revisions: DocumentRevision[]): string => {
-  const sortedRevisions
-    = revisions
-      .filter(revision => revision.status !== DocumentRevisionStatus.Canceled)
-      .sort((a, b) => b.version - a.version);
-  return sortedRevisions[0].id;
 };
 
 interface UseOnHandQuantityType {
@@ -25,16 +16,21 @@ interface UseOnHandQuantityType {
   predictOnHandQuantity: PredictQuantityFunction
 }
 
+export const shapeQuantity = (quantity: number, type: LotTransferType): number => {
+  return [LotTransferType.Backflush].includes(type) ? quantity : Math.abs(quantity);
+};
+
 const calculateSumForTransfer = (transfer: CalculableLotTransfer, sum: number) => {
   const shouldDeduct = DEDUCTABLE_TRANSFER_TYPES.includes(transfer.type);
   const shouldAdd = INCREMENTABLE_LOT_TRANSFER_TYPES.includes(transfer.type);
   let result = sum;
   if (shouldDeduct) {
-    result -= Math.abs(transfer.quantity);
+    result -= shapeQuantity(transfer.quantity, transfer.type);
   }
   if (shouldAdd) {
-    result += Math.abs(transfer.quantity);
+    result += shapeQuantity(transfer.quantity, transfer.type);
   }
+
   return round(result, MAX_DECIMALS);
 };
 

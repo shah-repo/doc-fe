@@ -33,4 +33,8 @@ export default makeStyles((theme) => ({
     paddingTop: 56,
   },
   loadMore: loadMoreStyles(theme),
+  searchContainer: {
+    maxWidth: 500,
+    marginTop: -78,
+  },
 }));

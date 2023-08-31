@@ -5,7 +5,7 @@ import formControlState from '@material-ui/core/FormControl/formControlState';
 import MuiAutocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import { omit } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, MutableRefObject } from 'react';
 import { TextField } from '..';
 import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './Autocomplete.styles';
@@ -75,7 +75,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   getOptionLabel,
   ChipProps = { size: 'small' },
   ...props
-}) => {
+}, ref: MutableRefObject<HTMLDivElement>) => {
   const baseClasses = useStyles();
   const muiFormControl = useFormControl();
   const controlState = formControlState({
@@ -105,6 +105,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   return (
     <MuiAutocomplete
       {...props}
+      ref={ref}
       disabled={controlState.disabled}
       classes={{
         ...omit(baseClasses, 'disabled', 'sizeSmall', 'optionSmall', 'withClearIcon', 'smallWithClearIcon'),
@@ -148,4 +149,4 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   );
 };
 
-export default withThemeNext(Autocomplete);
+export default withThemeNext(React.forwardRef(Autocomplete));

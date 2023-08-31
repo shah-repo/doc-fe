@@ -1,9 +1,14 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme) => ({
-  chip: {
+export const styles = makeStyles({
+  wrapper: {
     display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  chip: {
+    display: 'inline-flex',
     flexDirection: 'row',
     borderRadius: 3,
     border: `1px solid ${Colors.steel_blue}`,
@@ -31,4 +36,9 @@ export const styles = makeStyles((theme) => ({
     color: Colors.font_gray,
     border: `1px solid ${Colors.font_gray}`,
   },
-}));
+  RED_STATUS: {
+    background: Colors.errorHighlight,
+    color: Colors.latest_red_varient,
+    border: `1px solid ${Colors.latest_red_varient}`,
+  },
+});

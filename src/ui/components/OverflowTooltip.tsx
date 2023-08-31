@@ -9,23 +9,35 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
   },
+  multilineWrapper: ({ maxLines = 2 }: Partial<Props>) => ({
+    maxWidth: '100%',
+    display: '-webkit-box',
+    overflow: 'hidden',
+    '-webkit-line-clamp': maxLines,
+    '-webkit-box-orient': 'vertical',
+  }),
 });
 
-const OveflowTooltip: React.FC<Omit<TooltipProps, 'children'>> = ({
+interface Props extends Omit<TooltipProps, 'children'> {
+  maxLines?: number
+}
+
+const OverflowTooltip: React.FC<Props> = ({
   title,
   children,
+  maxLines = 1,
   ...props
 }) => {
-  const [overflowRef, isOveflowing] = useOverflow<HTMLDivElement>();
-  const classes = useStyles();
+  const [overflowRef, isOverflowing] = useOverflow<HTMLDivElement>();
+  const classes = useStyles({ maxLines });
 
   return (
     <Tooltip
       {...props}
-      title={isOveflowing ? title : ''}
+      title={isOverflowing ? title : ''}
     >
       <div
-        className={classes.wrapper}
+        className={maxLines > 1 ? classes.multilineWrapper : classes.wrapper}
         ref={overflowRef}
       >
         {children}
@@ -34,4 +46,4 @@ const OveflowTooltip: React.FC<Omit<TooltipProps, 'children'>> = ({
   );
 };
 
-export default OveflowTooltip;
+export default OverflowTooltip;

@@ -18,6 +18,7 @@ import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
+import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
 import FBDocumentRevisions from '../FBDocumentRevisions/FBDocumentRevisions';
 import FBDownloadSheetTpl from '../FBDownloadSheetTpl/FBDownloadSheetTpl';
@@ -35,9 +36,11 @@ import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
 import FBLotTransfers from '../FBLotTransfers';
 import FBMediaAlbumField from '../FBMediaAlbumField/FBMediaAlbumField';
 import FBMPIProcedure from '../FBMPIProcedure/FBMPIProcedure';
+import FBNumericField from '../FBNumericField/FBNumericField';
 import FBParagraph from '../FBParagraph/FBParagraph';
 import FBParts from '../FBParts/FBParts';
 import FBPartsSelection from '../FBPartsSelection/FBPartsSelection';
+import FBPartVendors from '../FBPartVendors';
 import FBPOApprovalMatrix from '../FBPOApprovalMatrix/FBPOApprovalMatrix';
 import FBPOApprovals from '../FBPOApprovals/FBPOApprovals';
 import FBPOReceive from '../FBPOReceive/FBPOReceive';
@@ -140,6 +143,9 @@ class FBSchemaState {
     lotTransfers: FBLotTransfers,
     lotQuantity: FBLotQuantityField,
     lotOnHandQuantity: FBLotOnHandQuantityField,
+    partVendors: FBPartVendors,
+    numeric: FBNumericField,
+    cycleCount: FBCycleCount,
   };
 
   @observable public schema?: FBSchemaProps[];

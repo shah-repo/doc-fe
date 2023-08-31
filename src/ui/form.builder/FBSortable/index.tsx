@@ -1,13 +1,15 @@
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import { closestCenter, DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { findIndex } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { FB } from '..';
-import { SortableItem } from './components/SortableItem';
+import Loader from '../../components/common/kendo/Loader';
 import { SortablePlaceholder } from './components/SortablePlaceholder';
 import { FBSortableProps } from './types';
 import { withFBSortable } from './wrap';
+
+const SortableItemLazy = lazy(() => import('./components/SortableItem'));
 
 const FBSortable: React.FC<FBSortableProps> = ({
   items = [],
@@ -63,13 +65,15 @@ const FBSortable: React.FC<FBSortableProps> = ({
         strategy={verticalListSortingStrategy}
       >
         {localItems.map((item, position) => (
-          <SortableItem
+          <Suspense fallback={<Loader />}>
+          <SortableItemLazy
             key={item.name}
             item={item}
             isFirst={position === 0}
             isDesignMode={isDesignMode}
             isAutosaveEnabled={isAutosaveEnabled}
           />
+          </Suspense>
         ))}
       </SortableContext>
       <DragOverlay>

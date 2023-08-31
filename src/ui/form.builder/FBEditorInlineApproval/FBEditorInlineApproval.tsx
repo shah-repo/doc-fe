@@ -22,6 +22,7 @@ const FBEditorInlineApproval: React.FunctionComponent<FBEditorProps> = ({
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={FBAutoCompleteStyles.labelProps}
+        isFbEditorField
       />
       <FBAutocompleteAsync
         label="common.approvers"

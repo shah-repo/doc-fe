@@ -23,6 +23,7 @@ export default makeStyles((theme) => createStyles({
     left: 0,
     right: 0,
     bottom: -1,
+    zIndex: 3,
   },
   loadingAtTop: {
     bottom: 'auto',

@@ -173,6 +173,14 @@ export enum statusClassMapping {
   'VOIDED' = 'GRAY_STATUS',
   'Superseded'='GRAY_STATUS',
   'Void'='GRAY_STATUS',
+  'QUARANTINE' = 'PENDING_STATUS',
+  'EXPIRED'='GRAY_STATUS',
+  'RETURN_TO_VENDOR'='GRAY_STATUS',
+  'REWORK'='GRAY_STATUS',
+  'OTHER'='GRAY_STATUS',
+  'R&D_USED_ONLY'='GRAY_STATUS',
+  'SCRAP'='RED_STATUS',
+  'REJECTED'='RED_STATUS',
 }
 
 export const pagerSettings: GridPagerSettings = {

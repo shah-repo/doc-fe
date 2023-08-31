@@ -96,6 +96,23 @@ definitions:
         script:
           - ./aws/bash_scripts/publish.sh "dev2"
     #
+    # DEV3
+    #
+    - step: &BUILD_DEV3
+        <<: *COMMON_BUILD
+        name: Building for Dev3
+        script:
+          - ./aws/bash_scripts/build.sh "dev3"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_DEV3
+        <<: *COMMON_DEPLOY
+        name: Deploy to Dev3
+        deployment: Development3
+        script:
+          - ./aws/bash_scripts/publish.sh "dev3"
+    #
     # DEMO
     #
     - step: &BUILD_DEMO
@@ -203,6 +220,10 @@ pipelines:
     deploy-to-dev2:
       - step: *BUILD_DEV2
       - step: *DEPLOY_DEV2
+
+    deploy-to-dev3:
+      - step: *BUILD_DEV3
+      - step: *DEPLOY_DEV3
 
     deploy-to-demo:
       - step: *BUILD_DEMO

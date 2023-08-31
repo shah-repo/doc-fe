@@ -82,4 +82,8 @@ export interface POLineItem {
   serviceId: string
   description: string
   supplierPartNumber: string
+  units: string
+  glCode: string
+  tax: boolean
+  capitalEquipment?: boolean
 }

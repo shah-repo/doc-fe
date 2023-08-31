@@ -5,9 +5,9 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
@@ -15,10 +15,13 @@ import { ReactComponent as WithDrawSubmissionIcon } from '../../assets/images/wi
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
+import Text from '../components/Text';
+import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
 import HeaderMenu from '../components/common/header/Menu';
@@ -27,7 +30,7 @@ import { RequestType } from '../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
-import Text from '../components/Text';
+import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
 import { documentNewVersionPath } from '../document.revision/utils/paths';
@@ -38,13 +41,13 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
-import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
+import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from './PreviewControls.container.types';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
-import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from './PreviewControls.container.types';
 
 interface OwnProps {
   documentRevision: DocumentRevision
@@ -96,6 +99,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
@@ -246,8 +250,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === 'Approval Request'
         || type.documentTypeName === 'Document Change Order');
+    const isDocumentCR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+      && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+        .find((type) => type.group === DocTypeGroups.CHANGE_REQUEST);
 
-    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput && !isDocumentCR) {
       return isNewLayout ? (
         renderAsButton ? <StyledButton
           color="primary"
@@ -503,6 +510,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       )}
     </>
   );
+
   return (
     <>
       <PDFSocket {...{ documentRevision }} />
@@ -514,6 +522,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
+      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
