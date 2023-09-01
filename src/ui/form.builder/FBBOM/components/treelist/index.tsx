@@ -116,6 +116,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
 
   const partAsync = useAsync({
     onSuccess: () => {
+      _documentRevisionFormState?.setBomChangesInProgress(false);
       treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
@@ -139,6 +140,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       return;
     }
     console.log('Revision :', documentRevision);
+    _documentRevisionFormState?.setBomChangesInProgress(false);
     treeListAsync.start(
       fetchBOMTreeList,
       documentRevision.id,
@@ -345,6 +347,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       (data) => !data[ADD_FIELD],
     );
     state.data[0][SUB_ITEMS_FIELD]?.push(newBOM);
+    _documentRevisionFormState?.setBomChangesInProgress(true);
     updateState({
       ...state,
       data: [...state.data],
@@ -367,6 +370,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     editBOMInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
     editBOMInfo.childNodeRevId = childRevId;
     formik?.setFieldValue('revision', editBOMInfo?.revision);
+    _documentRevisionFormState?.setBomChangesInProgress(true);
     updateState({
       ...state,
       data: [...state.data],
