@@ -12,7 +12,7 @@ export const MODE_FIELD = 'inEdit';
 // ts-unused-exports:disable-next-line
 export const ADD_FIELD = 'isNew';
 // ts-unused-exports:disable-next-line
-export const DELETE_FIELD = 'markAsDeleted';
+export const DELETE_FIELD = 'isMarkedAsDeleted';
 export const ALTERNATE_PART_KEY = 'alternatePartsList';
 // ts-unused-exports:disable-next-line
 export const ALTERNATE_PARTS_COUNT_KEY = 'alternatePartsCount';
