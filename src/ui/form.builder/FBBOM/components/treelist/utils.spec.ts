@@ -16,5 +16,3 @@ describe('Testing BOM Utils', () => {
     // console.log(response);
   });
 });
-
-export { };
