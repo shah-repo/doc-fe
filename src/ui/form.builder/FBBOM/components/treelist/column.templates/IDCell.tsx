@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Link, Tooltip } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
@@ -8,6 +8,7 @@ import { isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
@@ -21,6 +22,7 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
 import Text from '../../../../../components/Text';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
 import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
@@ -33,7 +35,7 @@ import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../../drawer/DocumentRevisionDrawer';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
-import { isEditBOM } from '../utils';
+import { getChildPartId, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -385,7 +387,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
-          ? <Link underline="hover" onClick={openDrawer} className={classes.link}>
+          ? <Link onClick={e => { e.preventDefault(); openDrawer(); }} className={classes.link}
+            to={documentVersionPath(getChildPartId(dataItem), dataItem.documentId!)}
+            target="_blank"
+          >
             {dataItem.docId}
           </Link>
           : dataItem.docId) }

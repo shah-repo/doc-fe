@@ -113,7 +113,7 @@ export const getExcelColumns = (columns) => {
   });
 };
 
-const getChildPartId = (part) => {
+export const getChildPartId = (part) => {
   return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
 };
 
