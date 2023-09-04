@@ -1,7 +1,7 @@
 import { Chip, Grid } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ComponentType } from 'react';
+import React from 'react';
 import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
 import { EditableBOM } from '../../../interface';
@@ -9,7 +9,7 @@ import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
+export const Status: React.ComponentType<CustomTreeListCellProps> | undefined = ({
   dataItem,
   field,
   colSpan,
@@ -20,7 +20,7 @@ export const Status: ComponentType<CustomTreeListCellProps> | undefined = ({
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ isEditMode });
   const { values } = useFormikContext<EditableBOM>();
-  const status = isEditMode ? values.status : dataItem.status;
+  const status = isEditMode ? values.displayStatus : dataItem.displayStatus;
 
   return (
     <td

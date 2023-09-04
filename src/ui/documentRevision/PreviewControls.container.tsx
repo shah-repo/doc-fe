@@ -112,7 +112,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
 
-  const showEditButton = isPart && documentRevision?.changeControlOptions?.id && isStatusReleased;
+  const showEditButton = isPart && documentRevision?.changeControlOptions?.id && isStatusReleased && isUserDocumentOwner;
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
   && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
@@ -188,7 +188,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         id="PreviewControlsContainer-revise"
         data-cy="updateRecord"
       >
-        <Text message="Edit Part" />
+        <Text message="controlConfig.editPart.button.text" />
       </StyledButton>
     );
   };

@@ -12,6 +12,7 @@ export interface BOM {
   revision: string
   isOwner?: boolean
   status: DocumentRevisionStatus
+  displayStatus: string
   cost: string
   docId: string
   leadTime?: string

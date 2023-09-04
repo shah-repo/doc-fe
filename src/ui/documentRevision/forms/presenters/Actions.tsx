@@ -306,7 +306,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   if (
     !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords)
-    && canShowCancelButton
+    && canShowCancelButton && !showCancelEditPartButton
   ) {
     accessableButtons.push(PreviewControlButtons.CancelButton);
   }
