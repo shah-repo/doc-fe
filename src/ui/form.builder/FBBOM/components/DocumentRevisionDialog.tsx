@@ -15,7 +15,6 @@ import Theme from '../../../layout/theme/provider';
 import { styles } from './treelist/column.templates/styles';
 
 interface DocumentRevisionDialogProps {
-  // documentRevision: DocumentRevision
   dialog: DialogHandler
 }
 
@@ -44,11 +43,11 @@ DocumentRevisionDialogProps
       maxWidth={false}
       open={dialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-      id="ApprovalRequest-dialog"
+      id="DocumentRevision-dialog"
     >
       <DialogTitle style={{ display: 'flex' }} disableTypography>
         <Typography className={classes.heading}>
-          <Text translation="approvalRequest.dialog.title" />
+          <Text translation="bom.documentRevision.dialog.title" />
         </Typography>
         <IconButton
           className={classes.close}
@@ -66,7 +65,7 @@ DocumentRevisionDialogProps
         </IconButton>
       </DialogTitle>
       <DialogContent dividers
-        id="ApprovalRequest-content"
+        id="DocumentRevision-content"
       >
         <Observer>
           {() => (
