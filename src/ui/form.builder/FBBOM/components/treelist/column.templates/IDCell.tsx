@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
-import React, { ChangeEvent, ComponentType, useEffect } from 'react';
+import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
@@ -127,6 +127,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
     const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+    setValue(value as OptionType);
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],
@@ -161,10 +162,28 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (!isEditMode) {
       return;
     }
-    const fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+    let fieldValue = '';
+    if (!dataItem[ADD_FIELD]) {
+      fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+    } else {
+      const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
+      if (!isEmpty(part) && showFormDialog.isOpen) {
+        const {
+          revision, status, name,
+        } = part as DocumentRevision;
+        fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
+        setFieldValue('childNodeRevId', part?.id);
+        setFieldValue('childNodeDocumentId', part?.document?.id);
+        setFieldValue('revision', revision);
+        setFieldValue('status', status);
+        setFieldValue('name', name);
+        setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+      }
+    }
     const value = renderOptions().find((option) => option.value === fieldValue);
     if (value && field) {
       setFieldValue(field, value);
+      setValue(value);
     }
   }, [parts]);
 
@@ -182,13 +201,28 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
   }, []);
 
+  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+
   const getFieldInfo = () => (
     field && <FormikField
       name={field}
     >
       <Autocomplete
         {...getFieldProps(field)}
+        value={value}
+        disableOpenOnFocus={true}
         blurOnSelect
+        ListboxComponent={({ children, ...otherProps }) => {
+          return (<>
+            <ul {...otherProps} >
+              <li className={classes.createPartOption} onClick={handleAddButtonClick}>
+                <FontAwesomeIcon icon={regular('plus')} />&nbsp;
+                <span >{translate('form.builder.create.new.part')}</span>
+              </li>
+              {children}
+            </ul>
+          </>);
+        }}
         options={renderOptions()}
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
@@ -235,6 +269,16 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     },
     onError: (msg) => toastError(msg),
   });
+
+  useEffect(() => {
+    const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
+    if (!isEmpty(part) && showFormDialog.isOpen) {
+      fetchAvailablePartsAsync.start(
+        fetchAvailablePartsAction,
+        fetchAvailablePartsAsync,
+      );
+    }
+  }, [_documentRevisionFormState?.newlyCreatedDocumentRevision]);
 
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {

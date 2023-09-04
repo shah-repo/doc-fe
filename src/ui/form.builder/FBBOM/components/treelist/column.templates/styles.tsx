@@ -187,4 +187,12 @@ export const styles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  createPartOption: {
+    background: Colors.light_blue2,
+    fontSize: 14,
+    fontWeight: 600,
+    color: Colors.dodger_blue,
+    padding: theme.spacing(0.5, 1.5),
+    cursor: 'pointer',
+  },
 }));
