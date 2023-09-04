@@ -69,7 +69,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           change.field === 'approvals.status' && change.nextValue === ApprovalStatus.Abandoned
         );
         if (isRemovingApproverAction) {
-          const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
+          const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id);
           if (removedApproverById) {
             change = {
               ...change,
@@ -100,7 +100,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   isRemovingApproverAction
                   // hack, since BE cannot make correct data for removing approvers
                     ? 'changeRequest.audit.approvers.ARRAY_DELETED'
-                    : `changeRequest.audit.${change.field}.${change.type}`
+                    : change?.fbSchemaItem?.label
+                      ? `${change?.fbSchemaItem?.label} ${change.type === 'STRING_EDITED' ? 'updated' : 'Added'}`
+                      : `changeRequest.audit.${change.field}.${change.type}`
                 }
               />
             </Typography>
