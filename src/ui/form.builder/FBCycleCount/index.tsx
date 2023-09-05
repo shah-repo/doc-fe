@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -13,7 +13,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
+import { Button, FormField, TextField } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { ActionsCell } from './components/ActionsCell';
@@ -135,29 +135,47 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
   }, isCycleCountAdded ? [editedCycleCount] : []);
 
   const nextDueDate = moment(cycleCountsList.at(0)?.date).add(cycleCountFrequency, 'days').format(MomentFormats.MonthDateYearTwoDigit);
-  const nextDueLabel = translate('form.builder.cycle.count.next.due', { date: nextDueDate });
-  const sectionLabel = cycleCountFrequency ? `${label as string} (${nextDueLabel})` : label;
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} data-cy="cycle-count">
       <PromptIfDirty
         dirty={dirty}
       />
       <FBInput {...props} type="cycleCount" name={name}>
-        <FBSection label={sectionLabel}>
+        <FBSection label={label}>
           {isActive && (
             <Button
               kind="ghost"
               size="small"
+              disabled={isInEditMode}
               className={classes.addButton}
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftCycleCount}
+              data-cy="add-link"
             >
               {translate('form.builder.cycle.count.add')}
             </Button>
           )}
         </FBSection>
       </FBInput>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={6}>
+          <FormField label="form.builder.cycle.count.frequency" margin="normal">
+            <TextField
+              value={cycleCountFrequency}
+              disabled
+            />
+          </FormField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormField label="form.builder.cycle.count.next.due" margin="normal">
+            <TextField
+              value={cycleCountFrequency ? nextDueDate : ''}
+              disabled
+            />
+          </FormField>
+        </Grid>
+      </Grid>
       <KendoDataGrid<EditableCycleCount>
         className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         fullWidth
@@ -173,7 +191,9 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
           kind="add"
           fullWidth
           attached
+          disabled={isInEditMode}
           onClick={createDraftCycleCount}
+          data-cy="add-button"
         >
           {translate('form.builder.cycle.count.add')}
         </Button>

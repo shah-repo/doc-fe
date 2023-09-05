@@ -62,7 +62,6 @@ export enum POStatusLabelMapping {
   CLOSED = 'Closed',
   VOIDED = 'Voided',
 }
-
 export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
   Supplier = 'Supplier',
@@ -70,7 +69,6 @@ export enum DocumentCategory {
   TrainingCurriculums = 'Training Curriculums',
 	Lot = 'Lot',
 }
-
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',
   NextRevisionStage = 'NEXT_REVISION_STAGE',

@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -25,8 +25,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
+import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -346,13 +346,27 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { order, unitPrice } = value;
+          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description, partNumberTitle, units, glCode, tax } = value;
           const partNumberText = poDefinePartNumberText(value);
-
+          const values = {
+            ...value,
+            partNumber: partNumberText,
+            capitalEquipment: `${Boolean(capitalEquipment)}`,
+            supplierPartNumber: supplierPartNumber ?? '',
+            order: order ?? '',
+            unitPrice: unitPrice ?? '',
+            description: description ?? '',
+            partNumberTitle: partNumberTitle ?? '',
+            units: units ?? '',
+            glCode: glCode ?? '',
+            tax: `${Boolean(tax)}`,
+          };
           const text
-            = intl.formatMessage(
-              { id: 'documentRevision.audit.formInput.lineItems.MESSAGE' },
-              { partNumber: partNumberText, order, unitPrice });
+            = !serviceId
+              ? intl.formatMessage(
+                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
+                { ...values })
+              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...values });
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />

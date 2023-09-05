@@ -39,6 +39,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const [editedLotTransfer, setEditedLotTransfer] = React.useState<DraftLotTransfer>();
   const { initialQuantity, onHandQuantityUnit, predictOnHandQuantity } = useOnHandQuantity();
   const isActive = !disabled;
+  const isInEditMode = editedLotTransfer !== undefined;
 
   const formik = useFormik<DraftLotTransfer>({
     initialValues: {},
@@ -200,7 +201,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   }, isLotTransferAdded ? [editedLotTransfer] : []);
 
   return (
-    <Box position="relative">
+    <Box position="relative" data-cy="lot-transfers">
       <PromptIfDirty
         dirty={dirty}
       />
@@ -212,9 +213,11 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
             <Button
               kind="ghost"
               size="small"
+              disabled={isInEditMode}
               className={classes.addButton}
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftLotTransfer}
+              data-cy="add-link"
             >
               {translate('form.builder.lot.transfers.add')}
             </Button>
@@ -237,8 +240,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
         <Button
           kind="add"
           fullWidth
-          disabled={Boolean(editedLotTransfer)}
+          disabled={isInEditMode}
           onClick={createDraftLotTransfer}
+          data-cy="add-button"
         >
           {translate('form.builder.lot.transfers.add')}
         </Button>

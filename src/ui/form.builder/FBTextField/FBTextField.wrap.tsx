@@ -22,13 +22,12 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     value,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
     const { workspaceMode: mode } = formState || {};
     const { id } = workspaceState || {};
     const isDocumentPOAM = checkIsDocumentPOAM(workspaceState?.document?.document?.documentType?.groupOptions);
-    defaultValue = defaultValue || formState?.getFieldValue(name);
+    defaultValue = defaultValue ?? formState?.getFieldValue(name);
 
     if (!['justificationOfChange', 'descriptionOfChange'].includes(name)) {
       value = value ?? formState?.getFieldValue(name);
@@ -76,7 +75,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
       if (workspaceState?.isChangeRequest && workspaceState?.autosave
-         && (name.includes('.justificationOfChange') ||  name.includes('.descriptionOfChange'))) {
+         && (name.includes('.justificationOfChange') || name.includes('.descriptionOfChange'))) {
         submitForm();
         return;
       }

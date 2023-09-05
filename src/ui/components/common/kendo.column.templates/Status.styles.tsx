@@ -8,7 +8,7 @@ export const styles = makeStyles({
     justifyContent: 'flex-start',
   },
   chip: {
-    display: 'flex',
+    display: 'inline-flex',
     flexDirection: 'row',
     borderRadius: 3,
     border: `1px solid ${Colors.steel_blue}`,
@@ -35,5 +35,10 @@ export const styles = makeStyles({
     background: Colors.lily_white,
     color: Colors.font_gray,
     border: `1px solid ${Colors.font_gray}`,
+  },
+  RED_STATUS: {
+    background: Colors.errorHighlight,
+    color: Colors.latest_red_varient,
+    border: `1px solid ${Colors.latest_red_varient}`,
   },
 });

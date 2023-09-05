@@ -15,6 +15,7 @@ import { ReactComponent as WithDrawSubmissionIcon } from '../../assets/images/wi
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
 import { ApplicationState } from '../../state/reducers';
@@ -29,6 +30,7 @@ import { RequestType } from '../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
+import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
 import { documentNewVersionPath } from '../document.revision/utils/paths';
@@ -43,7 +45,7 @@ import { InspectionControlsContainer } from './InspectionControls/InspectionCont
 import { PreviewControlButtons } from './PreviewControls.container.types';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLot, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 
@@ -97,7 +99,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
-  const isLot = checkIsDocumentLot(groupOptions);
+  const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
@@ -248,8 +250,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === 'Approval Request'
         || type.documentTypeName === 'Document Change Order');
+    const isDocumentCR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+      && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+        .find((type) => type.group === DocTypeGroups.CHANGE_REQUEST);
 
-    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput && !isDocumentCR) {
       return isNewLayout ? (
         renderAsButton ? <StyledButton
           color="primary"

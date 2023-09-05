@@ -14,7 +14,6 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
-import { ActionsCell } from './components/ActionsCell';
 import { FIELDS_TO_OMIT, SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -53,7 +52,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
     },
   });
 
-  const { resetForm, setValues, dirty } = formik;
+  const { submitForm, resetForm, setValues, dirty } = formik;
 
   useEffect(() => {
     resetForm({ values: editedVendor ?? {} });
@@ -82,33 +81,11 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
       return row;
     }
 
-    const shouldDisableDelete = item.primary;
-
-    const deleteTootltipText
-      = shouldDisableDelete
-        ? translate('form.builder.part.vendors.primary.delete.message')
-        : undefined;
-
-    const actions = (
-      <td className={classes.actionsCell} key="actions">
-        <ActionsCell
-          dataItem={item}
-          onConfirm={formik.submitForm}
-          onDiscard={discardVendor}
-          onDelete={removeVendor}
-          deleteTooltipText={deleteTootltipText}
-          isDeleteDisabled={shouldDisableDelete}
-          rootClassName={classes.popperHolder}
-        />
-      </td>
-    );
-
     const editedRow = React.cloneElement(
       row,
       {
         className: cx(row.props.className, classes.updatingRow),
       },
-      [row.props.children, actions],
     );
 
     return (
@@ -124,8 +101,12 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
     suppliers,
     isActive,
     isInEditMode,
-    setPrimaryVendor,
+    actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
+    onConfirm: submitForm,
+    onDiscard: discardVendor,
+    onDelete: removeVendor,
+    onPrimaryChange: setPrimaryVendor,
   });
 
   const vendorsList = vendors.reduce((list, item) => {
@@ -146,7 +127,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   }, isVendorAdded ? [editedVendor] : []);
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} data-cy="part-vendors">
       <PromptIfDirty
         dirty={dirty}
       />
@@ -156,9 +137,11 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
             <Button
               kind="ghost"
               size="small"
+              disabled={isInEditMode}
               className={classes.addButton}
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftVendor}
+              data-cy="add-link"
             >
               {translate('form.builder.part.vendors.add')}
             </Button>
@@ -180,7 +163,9 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
           kind="add"
           fullWidth
           attached
+          disabled={isInEditMode}
           onClick={createDraftVendor}
+          data-cy="add-button"
         >
           {translate('form.builder.part.vendors.add')}
         </Button>

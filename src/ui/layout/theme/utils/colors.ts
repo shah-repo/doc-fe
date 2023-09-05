@@ -73,6 +73,8 @@ enum Colors {
   mandy = '#EB4770',
   dawn='#A2A2A2',
   seashell='#FCF0ED',
+  errorHighlight='#FEF4F2',
+
   // purple
   deep_purple = '#29064C',
   purple = '#99c',
