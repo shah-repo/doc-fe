@@ -5,8 +5,8 @@ import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
-import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/types';
-import { BOM } from '../../../ui/form.builder/FBBOM/types';
+import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
+import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { Vendor } from '../../../ui/form.builder/FBPartVendors/types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
@@ -452,7 +452,7 @@ const fetchHasATree = (
     handlers,
   });
 
-const addBomBranch = (
+const addBOMBranch = (
   data,
   handlers: Handlers,
 ): ApiAction<BOM[]> =>
@@ -463,7 +463,7 @@ const addBomBranch = (
     handlers,
   });
 
-const updateBomBranch = (
+const updateBOMBranch = (
   parentNodeRevId,
   childNodeRevId,
   data,
@@ -476,7 +476,7 @@ const updateBomBranch = (
     handlers,
   });
 
-const changeOrderBomBranch = (
+const changeOrderBOMBranch = (
   parentNodeRevId,
   data,
   handlers: Handlers,
@@ -488,7 +488,7 @@ const changeOrderBomBranch = (
     handlers,
   });
 
-const deleteBomBranch = (
+const deleteBOMBranch = (
   parentNodeRevId,
   childNodeRevId,
   handlers: Handlers,
@@ -651,14 +651,14 @@ export default {
   fetchAvailableParts,
   fetchBOMBranch,
   fetchBOMTree,
-  addBomBranch,
+  addBOMBranch,
   fetchAlternateParts,
   addAlternatePart,
   fetchVendors,
   deleteAlternatePart,
-  deleteBomBranch,
-  updateBomBranch,
-  changeOrderBomBranch,
+  deleteBOMBranch,
+  updateBOMBranch,
+  changeOrderBOMBranch,
   fetchWhereUsedTree,
   fetchHasATree,
   updateLotStatus,
