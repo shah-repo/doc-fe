@@ -26,13 +26,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 }) => {
   const classes = styles();
 
-  const getMessage = (change, isRemovingApproverAction) => {
+  const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
     if (isRemovingApproverAction) {
       return 'changeRequest.audit.approvers.ARRAY_DELETED';
-    } else if (change?.fbSchemaItem?.label) {
+    }
+    if (change?.fbSchemaItem?.label) {
       const label = change.fbSchemaItem.label;
 
-      let messageType = '';
+      let messageType: string;
       switch (change.type) {
         case 'ARRAY_DELETED': {
           messageType = translate('form.builder.audit.deleted');
@@ -49,9 +50,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
 
       return `${label} ${messageType}`;
-    } else {
-      return `changeRequest.audit.${change.field}.${change.type}`;
     }
+    return `changeRequest.audit.${change.field}.${change.type}`;
   };
 
   const renderAuditGroup = () =>
