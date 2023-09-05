@@ -1642,5 +1642,6 @@
   "bom.ar.child.draft.add.action.message": "Action required on {itemsRequiringAttention} item",
   "bom.ar.child.draft.add.message": "All line items in the BOM should be released before releasing the BOM.\nAdd the following items in this change request or add them separately:",
   "bom.ar.child.pending.message": "All line items in the BOM should be released before releasing the BOM. \nClose the ARs for these items, before proceeding with this BOM/AR:",
+  "bom.ar.child.invalid.message": "All line items in the BOM should be released before releasing the BOM. \nRemove these {obsolete} / {void} items, before proceeding with this BOM/AR:",
   "controlConfig.editPart.button.text": "Restricted Edit"
 }

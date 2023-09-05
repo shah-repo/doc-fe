@@ -264,6 +264,50 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                 </ul>
               </Grid>
             }
+            {details.itemsInDraft === 0 && details.itemsPending === 0 && details.itemsInvalid > 0
+              && <Grid item>
+                <Typography
+                  data-cy="dialog-header"
+                  className={classes.alertTitle}
+                >
+                  {translate('bom.ar.child.draft.add.action.message', {
+                    itemsRequiringAttention: details.itemsInvalid,
+                  })}
+                  {details.itemsInvalid > 1 ? 's' : ''}
+                </Typography>
+                <Typography
+                  data-cy="dialog-message"
+                  className={classes.contentText}
+                >
+                  {translate('bom.ar.child.invalid.message', {
+                    obsolete: DocumentRevisionStatus.Obsolete, void: DocumentRevisionStatus.Voided,
+                  })}
+                </Typography>
+                <ul className={classes.list}>
+                  {Object.values(details.itemsInvalidMap).flat().map((value) => {
+                    return (
+                      <li key={value.id} className={classes.listItem}>
+                        <Grid container
+                          wrap="nowrap"
+                          justify="flex-start"
+                          alignItems="center"
+                        >
+                          <Grid item>
+                            {value.docId}
+                          </Grid>
+                          <Grid item className={classes.dotContainer}>
+                            <Box className={classes.blackDot} />
+                          </Grid>
+                          <Grid item className={classes.timestampContainer}>
+                            {translate('bom.ar.child.draft.option', { revision: value.displayRevision, title: value.name })}
+                          </Grid>
+                        </Grid>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Grid>
+            }
           </Grid>
         </DialogContentText>
       </DialogContent>
