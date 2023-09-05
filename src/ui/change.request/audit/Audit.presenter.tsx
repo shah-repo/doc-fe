@@ -1,7 +1,7 @@
 import { Box, List, Typography } from '@material-ui/core';
 import { orderBy } from 'lodash';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus } from '../../../state/ducks/common/types';
@@ -25,7 +25,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   isDrawerOpen,
 }) => {
   const classes = styles();
-  const intl = useIntl();
 
   const getMessage = (change, isRemovingApproverAction) => {
     if (isRemovingApproverAction) {
@@ -36,15 +35,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       let messageType = '';
       switch (change.type) {
         case 'ARRAY_DELETED': {
-          messageType = intl.formatMessage({ id: 'form.builder.audit.deleted' });
+          messageType = translate('form.builder.audit.deleted');
           break;
         }
         case 'STRING_EDITED': {
-          messageType = intl.formatMessage({ id: 'form.builder.audit.updated' });
+          messageType = translate('form.builder.audit.updated');
           break;
         }
         default: {
-          messageType = intl.formatMessage({ id: 'form.builder.audit.added' });
+          messageType = translate('form.builder.audit.added');
           break;
         }
       }
