@@ -421,8 +421,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = 'Note';
         }
 
-        const isArrrayEdited = change.type.includes('ARRAY_EDITED');
-        const isDocIdORDescriptionChanged = isArrrayEdited && change.nextValue !== change.previousValue;
+        const isArrayEdited = change.type.includes('ARRAY_EDITED');
+        const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
         singleFields.push(
           <Box
@@ -436,9 +436,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             }
           >
             <>
-              {!isFBField && !isSmartRef && isArrrayEdited && (
-                <>
-                  {isDocIdORDescriptionChanged && (
+              {!isFBField && !isSmartRef && isArrayEdited && isDocIdORDescriptionChanged && (
                     <Typography
                       variant="subtitle1"
                       className={classes.auditKey}
@@ -448,10 +446,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                         message={`documentRevision.audit.${change.field}.${change.type}`}
                         values={{ nextStatus: change.nextValue }}
                       />
-                    </Typography>)}
-                </>
+                    </Typography>
               )}
-              {!isFBField && !isSmartRef && !isArrrayEdited && (
+              {!isFBField && !isSmartRef && !isArrayEdited && (
                 <Typography
                   variant="subtitle1"
                   className={classes.auditKey}
@@ -473,7 +470,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 </Typography>
               )}
             </>
-            {((isArrrayEdited && isDocIdORDescriptionChanged) || !isArrrayEdited) && (
+            {((isArrayEdited && isDocIdORDescriptionChanged) || !isArrayEdited) && (
               <div className={classes.auditValue}>
                 <AuditFactory
                   audit={change}
