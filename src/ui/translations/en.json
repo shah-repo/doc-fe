@@ -1639,7 +1639,8 @@
   "bom.whereUsed.dialog.title": "Where Used View",
   "bom.documentRevision.dialog.title": "Quick View",
   "bom.ar.child.draft.option": "Rev {revision} - {title}",
-  "bom.ar.child.draft.add.action.message": "Action required on {itemsPending} item",
-  "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:",
+  "bom.ar.child.draft.add.action.message": "Action required on {itemsRequiringAttention} item",
+  "bom.ar.child.draft.add.message": "All line items in the BOM should be released before releasing the BOM.\nAdd the following items in this change request or add them separately:",
+  "bom.ar.child.pending.message": "All line items in the BOM should be released before releasing the BOM. \nClose the ARs for these items, before proceeding with this BOM/AR:",
   "controlConfig.editPart.button.text": "Restricted Edit"
 }

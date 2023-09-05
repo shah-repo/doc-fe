@@ -138,88 +138,132 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                 icon={regular('circle-exclamation')}
               />
             </Grid>
-            <Grid item>
-              <Typography
-                data-cy="dialog-header"
-                className={classes.alertTitle}
-              >
-                {translate('bom.ar.child.draft.add.action.message', {
-                  itemsPending: details.itemsPending,
-                })}
-                {details.itemsPending > 1 ? 's' : ''}
-              </Typography>
-              <Typography
-                data-cy="dialog-message"
-                className={classes.contentText}
-              >
-                {translate('bom.ar.child.draft.add.message')}
-              </Typography>
-              <ul className={classes.parentList}>
-                <li className={classes.parentListItem}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onChange={(e) =>
-                          handleDocRevSelectionAll(e.target.checked)
-                        }
-                        classes={{
-                          root: classes.checkbox,
-                          checked: classes.checked,
-                        }}
-                        checked={selectAll}
-                        className={classes.check}
-                      />
-                    }
-                    label={translate('common.select.all')}
-                  />
-                </li>
-                <div className={classes.list}>
-                  {docRevs.map((value) => {
+            {details.itemsInDraft > 0
+              && <Grid item>
+                <Typography
+                  data-cy="dialog-header"
+                  className={classes.alertTitle}
+                >
+                  {translate('bom.ar.child.draft.add.action.message', {
+                    itemsRequiringAttention: details.itemsInDraft,
+                  })}
+                  {details.itemsInDraft > 1 ? 's' : ''}
+                </Typography>
+                <Typography
+                  data-cy="dialog-message"
+                  className={classes.contentText}
+                >
+                  {translate('bom.ar.child.draft.add.message')}
+                </Typography>
+                <ul className={classes.parentList}>
+                  <li className={classes.parentListItem}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={(e) =>
+                            handleDocRevSelectionAll(e.target.checked)
+                          }
+                          classes={{
+                            root: classes.checkbox,
+                            checked: classes.checked,
+                          }}
+                          checked={selectAll}
+                          className={classes.check}
+                        />
+                      }
+                      label={translate('common.select.all')}
+                    />
+                  </li>
+                  <div className={classes.list}>
+                    {docRevs.map((value) => {
+                      return (
+                        <li key={value.id} className={classes.listItem}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={value.checked ?? false}
+                                classes={{
+                                  root: classes.checkbox,
+                                  checked: classes.checked,
+                                }}
+                                disabled={
+                                  value.status !== DocumentRevisionStatus.Draft
+                                }
+                                onChange={(e) =>
+                                  handleDocRevSelection(e.target.checked, value)
+                                }
+                                name={value.id}
+                                className={classes.check}
+                              />
+                            }
+                            label={
+                              <Grid
+                                container
+                                wrap="nowrap"
+                                justify="flex-start"
+                                alignItems="center"
+                              >
+                                <Grid item>
+                                  {value.docId}
+                                </Grid>
+                                <Grid item className={classes.dotContainer}>
+                                  <Box className={classes.blackDot} />
+                                </Grid>
+                                <Grid item className={classes.timestampContainer}>
+                                  {translate('bom.ar.child.draft.option', { revision: value.displayRevision, title: value.name })}
+                                </Grid>
+                              </Grid>
+                            }
+                          />
+                        </li>
+                      );
+                    })}
+                  </div>
+                </ul>
+              </Grid>
+            }
+            {details.itemsInDraft === 0 && details.itemsPending > 0
+              && <Grid item>
+                <Typography
+                  data-cy="dialog-header"
+                  className={classes.alertTitle}
+                >
+                  {translate('bom.ar.child.draft.add.action.message', {
+                    itemsRequiringAttention: details.itemsPending,
+                  })}
+                  {details.itemsPending > 1 ? 's' : ''}
+                </Typography>
+                <Typography
+                  data-cy="dialog-message"
+                  className={classes.contentText}
+                >
+                  {translate('bom.ar.child.pending.message')}
+                </Typography>
+                <ul className={classes.list}>
+                  {Object.values(details.blockingItemsMap).flat().map((value) => {
                     return (
                       <li key={value.id} className={classes.listItem}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={value.checked ?? false}
-                              classes={{
-                                root: classes.checkbox,
-                                checked: classes.checked,
-                              }}
-                              disabled={
-                                value.status !== DocumentRevisionStatus.Draft
-                              }
-                              onChange={(e) =>
-                                handleDocRevSelection(e.target.checked, value)
-                              }
-                              name={value.id}
-                              className={classes.check}
-                            />
-                          }
-                          label={
-                            <Grid
-                              container
-                              wrap="nowrap"
-                              justify="flex-start"
-                              alignItems="center"
-                            >
-                              <Grid item>
-                                {value.docId}
-                              </Grid>
-                              <Grid item className={classes.dotContainer}>
-                                <Box className={classes.blackDot} />
-                              </Grid>
-                              <Grid item className={classes.timestampContainer}>
-                                {translate('bom.ar.child.draft.option', { revision: value.displayRevision, title: value.name })}
-                              </Grid>
-                            </Grid>
-                          }
-                        />
+                        <Grid container
+                          wrap="nowrap"
+                          justify="flex-start"
+                          alignItems="center"
+                        >
+                          <Grid item>
+                            {value.docId}
+                          </Grid>
+                          <Grid item className={classes.dotContainer}>
+                            <Box className={classes.blackDot} />
+                          </Grid>
+                          <Grid item className={classes.timestampContainer}>
+                            {translate('bom.ar.child.draft.option', { revision: value.displayRevision, title: value.name })}
+                          </Grid>
+                        </Grid>
                       </li>
                     );
                   })}
-                </div>
-              </ul>
-            </Grid>
+                </ul>
+              </Grid>
+            }
           </Grid>
         </DialogContentText>
       </DialogContent>
@@ -233,7 +277,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
         >
           <Text translation={cancelLabel} />
         </Button>
-        <Button
+        { details.itemsInDraft > 0 && <Button
           type="submit"
           variant="contained"
           className={`${classes.submitButton} ${classes.buttonLabel}`}
@@ -242,7 +286,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
           onClick={addToChangeRequest}
         >
           <Text translation={confirmLabel} />
-        </Button>
+        </Button> }
       </Box>
     </Dialog>
   );

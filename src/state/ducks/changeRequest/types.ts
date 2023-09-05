@@ -160,8 +160,10 @@ export interface DependedDocRevDetails {
 
 export interface ChangeRequestDependentOnDocRevsState {
   canBeReleased: boolean
+  itemsInDraft: 0
   itemsPending: 0
   draftItemsMap: {[key: string]: DependedDocRevDetails[]}
+  blockingItemsMap: {[key: string]: DependedDocRevDetails[]}
   parentDetails: {[key: string]: string}
 }
 
