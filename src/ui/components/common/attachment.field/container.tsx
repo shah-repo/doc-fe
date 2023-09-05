@@ -68,13 +68,12 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   });
 
   const handleUpload = (files: File[], lineType, cleanCopyRequired) => {
-
     if (files.length === 0) {
       return;
     }
 
     if (lineType === LINE_TYPES.RED_LINE) {
-      cleanCopyRequired = true;
+      cleanCopyRequired = false;
     }
 
     const file = files.pop();

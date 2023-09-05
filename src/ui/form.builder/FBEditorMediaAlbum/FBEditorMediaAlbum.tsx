@@ -24,6 +24,7 @@ const FBEditorMediaAlbum: React.FunctionComponent<FBEditorProps> = ({
             className={classes.textfield}
             boxProps={{ mb: 3.125, className: classes.error }}
             labelProps={AutoCompleteStyles.labelProps}
+            isFbEditorField
           />
         )}
       </Text>

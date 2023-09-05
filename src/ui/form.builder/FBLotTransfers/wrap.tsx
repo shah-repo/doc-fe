@@ -11,9 +11,11 @@ import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
+import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
 import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer } from './types';
+import { shapeQuantity } from './utils';
 
 const prepareTransfers = (transfers: LotTransfer[] = []) => orderBy(transfers, 'date', 'desc');
 
@@ -31,24 +33,26 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const locations = useSelector(companySelectors.getAllLocations) ?? [];
     const employees = useSelector(companySelectors.getAllEmployees) ?? [];
     const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+    const currentUserId = useSelector(authSelectors.currentUserId);
+    const canEditLotTransfers = useSelector(getHasPermission(Permission.EDIT_LOT_TRANSFERS));
     const documentRevisions = useSelector((state: ApplicationState) =>
       documentRevisionsSelectors.getDocumentRevisions(state, workspaceState?.document?.document.id ?? ''),
     );
-    const canEditLotTransfers = useSelector(getHasPermission(Permission.EDIT_LOT_TRANSFERS));
     const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name) ?? []));
 
-    const { version, status } = workspaceState?.document ?? { version: 1 };
+    const { id, version, status } = workspaceState?.document ?? { version: 0 };
 
-    const isLatestRevision = version === documentRevisions.filter(
-      (doc) => ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Canceled].includes(doc.status),
-    ).length;
+    const isLatestRevision = id === getLatestRevisionId(documentRevisions);
+    const isReleased = status === DocumentRevisionStatus.Released;
+    const isVoided = status === DocumentRevisionStatus.Voided;
+    const isQuarantined = status === DocumentRevisionStatus.InReview;
 
-    const isFirstDraft = version === 1 && status === DocumentRevisionStatus.Draft;
-    const canEditFirstDraft = !disabled;
+    const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
+    const canEditAsOwner = !disabled || (isOwner && isQuarantined);
+    const isInEditableState = (version > 1 && !isVoided) || isReleased;
+    const canEditWithPermission = canEditLotTransfers && isInEditableState;
 
-    const isLotTransfersEditable = status !== DocumentRevisionStatus.Voided;
-
-    const isEditable = (isFirstDraft && canEditFirstDraft) || (!isFirstDraft && isLatestRevision && isLotTransfersEditable && canEditLotTransfers);
+    const isEditable = id && isLatestRevision && (canEditAsOwner || canEditWithPermission);
 
     SM.reaction(
       () => workspaceState?.formInputSync.get(name) as LotTransfer[],
@@ -79,7 +83,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
 
     const prepareLotTransfer = (transfer: LotTransfer) => ({
       ...transfer,
-      quantity: Math.abs(transfer.quantity),
+      quantity: shapeQuantity(transfer.quantity, transfer.type),
       by: currentEmployeeId,
     });
 

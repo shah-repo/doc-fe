@@ -100,7 +100,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    orderBy(audits, ['field']).forEach((change: Audit, index, array) => {
+    const sortedAudit = orderBy(audits.filter(audit => audit.field !== 'displayStatus'), ['field']);
+    const statusInfo = audits.find(val => val.field === 'displayStatus');
+    if (statusInfo) {
+      sortedAudit.push(statusInfo);
+    }
+    sortedAudit.forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
       const isSmartRef = change.field.split('.').includes('smartRefs');
@@ -127,6 +132,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         if (auditValue === 'undefined' || auditValue === '[]' || auditValue === '{}') {
           return;
+        }
+        if (nextValue === 'null' && fbType === 'numeric') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'NUMBER_DELETED',
+            nextValue: previousValue as string,
+          };
         }
       }
       // PROCEDURE
@@ -172,6 +185,23 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       if (fbType === 'lotQuantity' && change.field.endsWith('_unit')) {
         fbLabel = `${fbLabel as string} ${translate('form.builder.field.units')}`;
       }
+      // PART VENDORS
+      if (fbType === 'partVendors') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
+        if (['id', 'currency', 'primary'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+          const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
+          fbLabel = translate('form.builder.part.vendors.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
+        }
+      }
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
         const fieldParts = change.field.split('.');
@@ -181,8 +211,20 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return;
         }
         if (change.type !== 'ARRAY_DELETED') {
-          const fieldFullName = field === 'docId' ? parentField : field;
+          const fieldFullName = ['docId'].includes(field) ? parentField : field;
           const fieldName = translate(`form.builder.lot.transfers.${fieldFullName}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
+      }
+      // CYCLE COUNT
+      if (fbType === 'cycleCount') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (field === 'id') {
+          return;
+        }
+        if (change.type !== 'ARRAY_DELETED') {
+          const fieldName = translate(`form.builder.cycle.count.${field}`);
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }
       }

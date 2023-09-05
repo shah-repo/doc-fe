@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue } from '..';
 import { SM } from '../../../App';
-import { getPOIndexDbInstance } from '../../../indexDb';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
@@ -162,16 +162,16 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         if (createdDocumentRevision) {
           dialog?.close();
           try {
-            const prevPODoc = await getPOIndexDbInstance().toArray();
+            const prevPODoc = await getPOSavedInfo();
             if (prevPODoc.length) {
               await workspaceState?.updateDocRevById(getLatestDocRevData(true) as DocumentRevision, createdDocumentRevision.id);
-              await workspaceState?.undoPO(prevPODoc[0] as DocumentRevision);
+              await workspaceState?.undoPO(prevPODoc[0]);
             }
           } catch (e) {
             console.error(e);
           }
           FBDataStore.setRefreshData(undefined);
-          await getPOIndexDbInstance().clear();
+          await clearPOSavedInfo();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
           history.push(
             documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -189,8 +189,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       const latestDocRevData = getLatestDocRevData(false);
       try {
-        const prevPODoc = await getPOIndexDbInstance().toArray() as DocumentRevision[];
-        if (latestDocRevData && prevPODoc.length) {
+        const prevPODoc = await getPOSavedInfo();
+        if (latestDocRevData && prevPODoc?.length) {
           latestDocRevData.formInput = prevPODoc[0]?.formInput;
           latestDocRevData.description = prevPODoc[0]?.description;
         }

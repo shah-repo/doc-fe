@@ -8,9 +8,9 @@ import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption,
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
+import { FBClasses } from '../defaults/layout';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
-import { FBClasses } from '../defaults/layout';
 import { withFBOnChange } from './FBInput.onchange';
 
 // Initial values only some of the fields have
@@ -75,6 +75,7 @@ export const withFBInput = <T extends FBInputProps>(
     isInputOwner,
     lockOwnerName,
     includeNotes,
+    isFbEditorField = false,
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
@@ -291,11 +292,19 @@ export const withFBInput = <T extends FBInputProps>(
       disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
     }
 
+    if (isFbEditorField) {
+      if(isUndefined(defaultValue)) {
+        defaultValue = formState?.getFieldValue(name);
+      }
+      value = defaultValue;
+    }
+
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
         onChange,
+        ...(isFbEditorField && { value }),
         ...(type !== 'textfield' && { onBlur }),
         ...(withState && type !== 'autocomplete' && { value }),
         ...(type === 'textfield' && { error }),
@@ -424,6 +433,7 @@ export const withFBInput = <T extends FBInputProps>(
       isOutput,
       lockOwnerName,
       includeNotes,
+      isFbEditorField,
     });
   };
 

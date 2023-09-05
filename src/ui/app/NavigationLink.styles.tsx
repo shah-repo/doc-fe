@@ -4,65 +4,100 @@ import Colors from '../layout/theme/utils/colors';
 export default makeStyles((theme: Theme) =>
   createStyles({
     link: {
-      'color': Colors.white,
-      'backgroundColor': Colors.mirage,
-      'border-bottom': '1px solid transparent',
+      height: 45,
+      color: Colors.white,
+      backgroundColor: Colors.mirage,
+      borderBottom: '1px solid transparent',
+      opacity: 0.69,
+      alignItems: 'center',
+      justifyContent: 'center',
       '&:hover': {
         color: Colors.white,
         backgroundColor: Colors.bright_grey,
         borderBottom: '1px solid',
         borderImage: `linear-gradient(270deg, ${Colors.cerulean} 0.17%, ${Colors.peri_winkle_blue} 74.99%, ${Colors.navy} 109.83%)`,
         borderImageSlice: 1,
-      },
-      '& svg': {
-        stroke: Colors.white,
-        fontSize: '1.2rem',
+        opacity: 1,
       },
     },
     childLink: {
-      paddingLeft: theme.spacing(6),
+      paddingLeft: theme.spacing(5),
     },
     activeLink: {
-      'backgroundColor': Colors.bright_grey,
-      'color': Colors.white,
-      '& .MuiListItemText-primary': {
-        fontWeight: 'bold',
-      },
-      '&:hover': {
-        backgroundColor: Colors.bright_grey,
-        color: Colors.white,
-      },
-      '& svg': {
-        stroke: Colors.white,
-      },
+      backgroundColor: Colors.bright_grey,
+      color: Colors.white,
     },
-    itemIcon: {
+    itemIcon: ({ iconLink, open }) => ({
       color: 'inherit',
-      minWidth: '40px',
-    },
+      minWidth: 31,
+      alignContent: open ? 'flex-start' : 'center',
+      justifyContent: open ? 'flex-start' : 'center',
+    }),
     itemText: {
-      color: 'inherit !important',
-      letterSpacing: 0,
-      fontSize: '13px',
+      color: Colors.white,
+      fontSize: 13,
+      fontWeight: 400,
     },
     menu: {
-      paddingTop: 4,
-      paddingBottom: 4,
-      marginTop: 5,
-      fontSize: '11px',
       borderbottom: '1px solid transparent',
     },
     icon: ({ iconLink }) => ({
-      'width': 20,
-      'height': 20,
-      'backgroundColor': Colors.white,
-      'mask':
+      width: 16,
+      height: 16,
+      backgroundColor: Colors.white,
+      mask:
         `url(${iconLink}) no-repeat center / contain`,
       '-webkit-mask':
         `url(${iconLink}) no-repeat center / contain`,
     }),
-    iconActive: {
-      backgroundColor: `${Colors.white} !important`,
+    iconActive: ({ iconLink, open, isParent }) => ({
+      background: open || isParent ? `${Colors.white} !important` : `linear-gradient(0deg, ${Colors.cerulean_light_shade}, ${Colors.cerulean_light_shade})`,
+    }),
+    collapsedIcon: {
+      padding: theme.spacing(1.25),
+      borderRadius: 3,
     },
+    childTextItem: {
+      paddingLeft: theme.spacing(0.875),
+    },
+    otherChildMenus: {
+      background: `${Colors.mirage} !important`,
+    },
+    childMenuItems: {
+      color: Colors.light_gray,
+      width: 210,
+      height: 33,
+    },
+    childMenuActive: {
+      color: Colors.white,
+      background: `linear-gradient(0deg, ${Colors.cerulean_light_shade}, ${Colors.cerulean_light_shade}),${Colors.almost_black} !important`,
+    },
+    parentMenuItem: {
+      color: Colors.white,
+      background: `${Colors.mirage} !important`,
+      padding: theme.spacing(0.75, 1.25),
+      borderRadius: 4,
+      maxWidth: 155,
+      height: 28,
+    },
+    popover: {
+      pointerEvents: 'auto',
+    },
+    popoverContent: {
+      pointerEvents: 'none',
+    },
+    menuDivSeparator: {
+      height: 5,
+    },
+    childMenuLabel: {
+      opacity: 0.7,
+    },
+    firstChildMenuItem: {
+      borderRadius: theme.spacing(0.5, 0.5, 0, 0),
+    },
+    lastChildMenuItem: {
+      borderRadius: theme.spacing(0, 0, 0.5, 0.5),
+    },
+
   }),
 );

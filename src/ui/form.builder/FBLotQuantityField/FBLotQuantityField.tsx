@@ -4,6 +4,12 @@ import React from 'react';
 import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
 
+interface ConversionData {
+  conversion?: number
+  unitsBuy?: string
+  unitsUse?: string
+}
+
 const getUnitsLabel = (name: string) => {
   switch (name) {
     case 'lot_quantity':
@@ -15,33 +21,36 @@ const getUnitsLabel = (name: string) => {
   }
 };
 
+const getQuantityLabelPrefix = (name: string, conversionData?: ConversionData) => {
+  switch (name) {
+    case 'lot_quantity': {
+      const { unitsBuy, unitsUse, conversion } = conversionData ?? {};
+      return unitsBuy && unitsUse && conversion ? ` (1 ${unitsBuy} = ${conversion} ${unitsUse})` : '';
+    }
+    default:
+      return '';
+  }
+};
+
 const FBQuantityField: React.FC<FBInputProps> = ({
   name = '',
+  label = '',
   ...props
 }) => {
   const { workspaceState, formState } = FB.useStores();
-  const { workspaceMode: mode } = formState ?? {};
-  const value = formState?.getFieldValue(name) as number;
-  const unit = useObserver(() => workspaceState?.formInputSync.get(`${name}_unit`) as string);
+  const conversionData = useObserver(() => workspaceState?.formInputSync.get('part-conversion') as ConversionData);
   const unitsLabel = getUnitsLabel(name);
+  const quantityLabelPrefix = getQuantityLabelPrefix(name, conversionData);
+  const fieldLabel = `${label as string}${quantityLabelPrefix}`;
 
-  if (mode === FBWorkspaceModeOptions.PREVIEW) {
-    return (
-      <FBTextField
-        {...props}
-        name={undefined}
-        gutter={false}
-        defaultValue={`${value ?? ''} ${unit ?? ''}`}
-        disabled
-      />
-    );
-  }
+  const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
 
   return (
     <Grid container spacing={1}>
       <Grid item md={8} xs={6}>
         <FBTextField
           {...props}
+          label={fieldLabel}
           name={name}
           type="number"
           inputProps={{ min: '0' }}
@@ -50,12 +59,22 @@ const FBQuantityField: React.FC<FBInputProps> = ({
         />
       </Grid>
       <Grid item md={4} xs={6}>
-        <FBUnitMeasures
-          {...props}
-          label={unitsLabel}
-          gutter={false}
-          name={`${name}_unit`}
-        />
+        {isPreview ? (
+          <FBTextField
+            {...props}
+            label={unitsLabel}
+            name={`${name}_unit`}
+            gutter={false}
+            placeholder="0"
+          />
+        ) : (
+          <FBUnitMeasures
+            {...props}
+            label={unitsLabel}
+            gutter={false}
+            name={`${name}_unit`}
+          />
+        )}
       </Grid>
     </Grid>
   );

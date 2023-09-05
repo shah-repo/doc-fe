@@ -1,8 +1,21 @@
 import { FBInputProps } from '..';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
-import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { CellTemplateProps, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
+
+export interface SchemaOptions {
+  locations: CompanyLocation[]
+  existingLocations: string[]
+  builds: DocumentRevisionOption[]
+  records: DocumentRevisionOption[]
+  units?: string
+  onRowClick?: (e: LotTranferEditEvent) => void
+}
+
+export interface SchemaItem extends ColumnDefinition<EditableLotTransfer> {
+}
 
 export interface CompanyLocation {
   id: string
@@ -36,6 +49,7 @@ export enum LotTransferType {
   Return = 'return',
   Move = 'move',
   Issue = 'issue',
+  Backflush='backflush',
 }
 
 export interface LotTransfer {
@@ -53,6 +67,10 @@ export interface LotTransfer {
 
 export interface EditableLotTransfer extends LotTransfer {
   [MODE_FIELD]: Mode
+  [EMPLOYEE_FIELD]: string
+  [BUILD_FIELD]: string
+  [REFERENCE_FIELD]: string
+  [DATE_FIELD]: string
 }
 export type DraftLotTransfer = Partial<EditableLotTransfer>;
 export type CalculableLotTransfer = Pick<LotTransfer, 'type' | 'quantity'>;

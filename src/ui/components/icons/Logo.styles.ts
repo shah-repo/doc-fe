@@ -17,10 +17,10 @@ const styles = makeStyles((theme: Theme) =>
       background: '0% 0% no-repeat padding-box',
       backgroundColor: theme.palette.secondary.contrastText,
       width: '100%',
-      marginBottom: 20,
+      marginBottom: 10,
       display: 'flex',
       justifyContent: 'center',
-      height: '25px',
+      height: 25,
       alignItems: 'center',
     },
     evnTxt: {
@@ -40,8 +40,27 @@ const styles = makeStyles((theme: Theme) =>
     },
     logo: {
       maxWidth: '100%',
-      paddingLeft: 24,
-      paddingRight: 24,
+      padding: theme.spacing(0, 3),
+    },
+    smallLogo: {
+      width: 50,
+      height: 50,
+    },
+    mt0: {
+      marginTop: 0,
+    },
+    mt20: {
+      marginTop: 20,
+    },
+    avatar: {
+      width: 58,
+      height: 58,
+      borderRadius: '50%',
+      border: `1px solid ${Colors.mirage}`,
+    },
+    smallLogoContainer: {
+      display: 'flex',
+      margin: theme.spacing(0, 0.875),
     },
   }),
 );

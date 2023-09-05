@@ -1,7 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { companySelectors } from '../../../../state/ducks/company';
 import { RevisionStageOptions } from '../../../../state/ducks/documentRevisions/types';
 import RadioButton from '../../../components/forms/fields/RadioButton';
 import RadioGroup from '../../../components/forms/fields/RadioGroup';
@@ -9,6 +8,8 @@ import { required, validator } from '../../../components/forms/fields/validators
 import Text from '../../../components/Text';
 import { useRevisionStageSelect } from '../../../hooks/docCustomization/useCustomization';
 import { styles } from './styles/RevisionStage.styles';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { ApplicationState } from '../../../../state/reducers';
 
 interface Props {
   isDisabled: boolean
@@ -27,7 +28,9 @@ const RevisionStage: React.FunctionComponent<Props> = ({
 }) => {
   const { isVisible } = useRevisionStageSelect(documentTypeId);
   const classes = styles();
-  const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
+  const numOfRevStages = useSelector<ApplicationState, number>(
+    state => documentTypeSelectors.getDocTypeNumOfRevStages(state, documentTypeId),
+  );
   const revStageOptions = numOfRevStages === 2
     ? RevisionStageOptions.filter((stage) => stage.value !== 2)
     : RevisionStageOptions;
