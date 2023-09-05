@@ -26,6 +26,35 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 }) => {
   const classes = styles();
   const intl = useIntl();
+
+  const getMessage = (change, isRemovingApproverAction) => {
+    if (isRemovingApproverAction) {
+      return 'changeRequest.audit.approvers.ARRAY_DELETED';
+    } else if (change?.fbSchemaItem?.label) {
+      const label = change.fbSchemaItem.label;
+
+      let messageType = '';
+      switch (change.type) {
+        case 'ARRAY_DELETED': {
+          messageType = intl.formatMessage({ id: 'form.builder.audit.deleted' });
+          break;
+        }
+        case 'STRING_EDITED': {
+          messageType = intl.formatMessage({ id: 'form.builder.audit.updated' });
+          break;
+        }
+        default: {
+          messageType = intl.formatMessage({ id: 'form.builder.audit.added' });
+          break;
+        }
+      }
+
+      return `${label} ${messageType}`;
+    } else {
+      return `changeRequest.audit.${change.field}.${change.type}`;
+    }
+  };
+
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
@@ -97,17 +126,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               className={classes.auditKey}
             >
               <Text
-                message={
-                  isRemovingApproverAction
-                  // hack, since BE cannot make correct data for removing approvers
-                    ? 'changeRequest.audit.approvers.ARRAY_DELETED'
-                    : change?.fbSchemaItem?.label
-                      ? `${change?.fbSchemaItem?.label} ${change.type === 'ARRAY_DELETED'
-                      ? intl.formatMessage({ id: 'form.builder.audit.deleted' })
-                      : change.type === 'STRING_EDITED' ? intl.formatMessage({ id: 'form.builder.audit.updated' })
-                      : intl.formatMessage({ id: 'form.builder.audit.added' })}`
-                      : `changeRequest.audit.${change.field}.${change.type}`
-                }
+                message={getMessage(change, isRemovingApproverAction)}
               />
             </Typography>
             <div className={classes.auditValue}>
