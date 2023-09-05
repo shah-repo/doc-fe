@@ -1,93 +1,155 @@
-import { Dialog, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import { FBAutocomplete, FBLabel, FBTextField } from '../../../form.builder';
+import { MomentFormats } from '../../../../common/utils/date';
+import { FBLabel } from '../../../form.builder';
+import { Autocomplete, TextField } from '../../forms/fields-next';
+import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
+import { SelectOption } from '../../forms/fields/Select';
 import Text from '../../Text';
 import { styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
-const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = () => {
-  // const companyEmployes = useSelector(companySelectors.getActiveEmployees);
+const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
+  setSelectedOption,
+  closeDialog,
+  onQtyUnitsChange,
+  onLabelsToPrintChange,
+  onSerialChange,
+  onPrintClick,
+  isOpen,
+  companyEmployees,
+  selectedOption,
+  handleDateChange,
+  selectedDate,
+  initialValues,
+  labelsToPrint,
+  qtyUnits,
+  serial,
+  description,
+}) => {
+  const classes = styles();
 
-	const classes = styles();
-	return (
-		<Dialog open={false} fullWidth={true} maxWidth="sm">
-			<DialogTitle disableTypography className={classes.dialogTitle}>
-			<Typography variant="h6"><Text translation="change.owner" /></Typography>
-			<IconButton className={classes.closeIcon} data-cy="change-owner-close-icon">
+  const qtyUnitsRender = () => {
+    const gridSize = labelsToPrint < 5 ? (12 / labelsToPrint) : 3;
+    return (qtyUnits.map((item, i) => (
+      <Grid item xs={gridSize} key={i} >
+        <>
+          <FBLabel label="Quantity Units" />
+          <FBLabel label={`(Label ${i + 1})`} />
+          <TextField
+            type="number"
+            value={item}
+            onChange={e => onQtyUnitsChange(e, i)} />
+        </>
+      </Grid>
+    )));
+  };
+
+  return (
+    <Dialog open={isOpen} fullWidth={true} maxWidth="md" >
+      <DialogTitle disableTypography className={classes.dialogTitle}>
+        <Typography variant="h6"><Text translation="common.print" /></Typography>
+        <IconButton className={classes.closeIcon} data-cy="change-owner-close-icon" onClick={closeDialog}>
           <CloseIcon />
         </IconButton>
-			</DialogTitle>
-			<Divider />
-			<DialogContent>
-				<Grid
-				container
-				alignItems="center"
-        justify="space-between"
-        spacing={2}>
-<Grid item xs={8}>
-	<>
-	<FBLabel label="Part ID" />
-	<FBTextField disabled defaultValue="testing" value="testing" />
-	</>
-	</Grid>
-<Grid item xs={4}>
-<>
-	<FBLabel label="Revision" />
-	<FBTextField disabled defaultValue="testing" value="testing" />
-	</>
-</Grid>
-<Grid item xs={12}>
-<>
-	<FBLabel label="Description" />
-	<FBTextField disabled defaultValue="testing" value="testing" />
-	</>
-</Grid>
-<Grid item xs={6}>
-<>
-	<FBLabel label="Lot" />
-	<FBTextField disabled defaultValue="testing" value="testing" />
-	</>
-</Grid>
-<Grid item xs={6}>
-<>
-	<FBLabel label="Serial" />
-	<FBTextField defaultValue="testing" value="testing" />
-	</>
-</Grid>
-<Grid item xs={12}>
-<>
-	<FBLabel label="By" />
-	<FBAutocomplete
-	defaultValue="testing"
-	options={[]}
-	/>
-	</>
-</Grid>
-<Grid item xs={6}>
-<>
-	<FBLabel label="Quantity Units" />
-	<FBTextField defaultValue="testing" value="testing" />
-	</>
-</Grid>
-<Grid item xs={6}>
-<>
-	<FBLabel label="Date" />
-	{/* <DatePickerField
-            name="dueDate"
-            label="common.due.date"
-            size="sm"
-            datePickerProps={{ id: 'dueDate', minDate: toStartOfDay(undefined) }}
-            validate={validator(required)}
-          /> */}
-	<FBTextField defaultValue="testing" value="testing" />
-	</>
-</Grid>
-				</Grid>
-			</DialogContent>
-		</Dialog>
-	);
+      </DialogTitle>
+      <Divider />
+      <DialogContent className={classes.dialogContent}>
+        <Grid
+          container
+          alignItems="center"
+          justify="space-between"
+          spacing={2} >
+          <Grid item xs={8}>
+            <>
+              <FBLabel label="Part ID" />
+              <TextField disabled value={initialValues?.partId} />
+            </>
+          </Grid>
+          <Grid item xs={4}>
+            <>
+              <FBLabel label="Revision" />
+              <TextField disabled value={initialValues?.revision} />
+            </>
+          </Grid>
+          <Grid item xs={12}>
+            <>
+              <FBLabel label="Description" />
+              <TextField disabled value={description} multiline />
+            </>
+          </Grid>
+          <Grid item xs={6}>
+            <>
+              <FBLabel label="Lot" />
+              <TextField disabled value={initialValues?.lotId} />
+            </>
+          </Grid>
+          <Grid item xs={6}>
+            <>
+              <FBLabel label="Serial" />
+              <TextField
+                onChange={onSerialChange}
+                value={serial} />
+            </>
+          </Grid>
+          <Grid item xs={6}>
+            <>
+              <FBLabel label="By" />
+              <Autocomplete
+                value={selectedOption}
+                options={companyEmployees}
+                getOptionLabel={(option) => `${option.text} (${option.email})`}
+                onChange={(e, value: SelectOption) => setSelectedOption(value)}
+              />
+            </>
+          </Grid>
+          <Grid item xs={6} >
+            <>
+              <FBLabel label="Date" />
+              <Datepicker
+                value={selectedDate}
+                size="medium"
+                onChange={handleDateChange}
+                format={MomentFormats.MonthDateYearTwoDigit}
+              />
+            </>
+          </Grid>
+          <Grid item xs={12}>
+            <>
+              <FBLabel label="Number of Labels to Print" />
+              <TextField
+                type="number"
+                value={labelsToPrint}
+                onChange={(ev) => onLabelsToPrintChange(ev)} />
+            </>
+          </Grid>
+          {qtyUnitsRender()}
+        </Grid>
+      </DialogContent>
+      <DialogActions className={classes.dialogAction}>
+        <Button
+          variant="outlined"
+          className={classes.clearButton}
+          onClick={closeDialog}
+          id="printButton"
+          data-cy="printButton"
+        >
+          <Text translation="document.action.cancel" />
+        </Button>
+        <Button
+          variant="outlined"
+          className={classes.printButton}
+          onClick={onPrintClick}
+          id="printButton"
+          data-cy="printButton"
+        >
+          <Text translation="common.print" />
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default withPrintLabelDetailsDialog(PrintLabelDetailsDialog);
