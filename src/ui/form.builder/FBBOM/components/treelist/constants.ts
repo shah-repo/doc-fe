@@ -60,7 +60,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: IDCell,
   },
   {
-    field: 'revision',
+    field: 'displayRevision',
     title: 'REV',
     width: '106px',
     filter: TreeListTextFilter,

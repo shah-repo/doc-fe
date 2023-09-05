@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { ComponentType } from 'react';
+import React from 'react';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -12,7 +12,7 @@ import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
+const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
   dataItem,
   field,
   colSpan,
@@ -27,18 +27,18 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   const isAvailableRevsExists = isEditMode && !isEmpty(dataItem?.availableRevisions);
 
   const renderOptions = () => {
-    return [dataItem?.revision + '', dataItem?.availableRevisions?.revision + ''];
+    return [dataItem?.displayRevision + '', dataItem?.availableRevisions?.displayRevision + ''];
   };
   const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
   const fetchSelectedPartAsync = useAsync({
     onSuccess: (data: any[] = []) => {
       if (data && data.length > 0) {
         const {
-          revision, status, name, hasAttachments,
+          displayRevision, status, name, hasAttachments,
           hasPrimaryAttachment, docId, id,
         } = data[0];
 
-        setFieldValue('revision', revision);
+        setFieldValue('revision', displayRevision);
         setFieldValue('status', status);
         setFieldValue('name', name);
         setFieldValue('hasAttachments', hasAttachments);

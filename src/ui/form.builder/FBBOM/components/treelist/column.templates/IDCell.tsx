@@ -328,7 +328,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     return dataItem.isOwner
       && !isEditMode
       && !dataItem.isDisabled
-      && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided,
+      && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete,
         DocumentRevisionStatus.Released].includes(dataItem.status);
   };
 
