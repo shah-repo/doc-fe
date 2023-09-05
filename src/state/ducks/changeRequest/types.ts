@@ -2,9 +2,9 @@ import { FBTaskItem } from '../../../ui/form.builder';
 import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Approval, Id, Owner, User } from '../common/types';
-import { DocumentType } from '../documentRevisions/documentType/types';
-import { FBDocumentRevisionProps } from '../documentRevisions/types';
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from './constants';
+import { DocumentType, DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus, FBDocumentRevisionProps } from '../documentRevisions/types';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
 
 export enum ChangeRequestStatus {
   Approved = 'APPROVED',
@@ -113,6 +113,10 @@ export interface ChangeRequestTransitionResponse {
   crId: string
   title: string
   state: string
+  canBeReleased?: boolean
+  itemsPending?: number
+  draftItemsMap?: {[key: string]: DocumentRevision[]}
+  parentDetails?: {[key: string]: string}
 }
 
 export interface ChangeRequestAvailableApprovers {
@@ -141,3 +145,27 @@ export interface ChangeRequestAuditSetAction {
 }
 
 export type allIdsState = string[];
+
+// ts-unused-exports:disable-next-line
+export interface DependedDocRevDetails {
+  displayRevision: string
+  version: number
+  status: DocumentRevisionStatus
+  name: string
+  docId: string
+  group: DOC_TYPE_GROUP
+  id: string
+  documentId: string
+}
+
+export interface ChangeRequestDependentOnDocRevsState {
+  canBeReleased: boolean
+  itemsPending: 0
+  draftItemsMap: {[key: string]: DependedDocRevDetails[]}
+  parentDetails: {[key: string]: string}
+}
+
+export interface ChangeRequestDependentOnDocRevsSetAction {
+  type: typeof CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS
+  payload: ChangeRequestDependentOnDocRevsState
+}

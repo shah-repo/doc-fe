@@ -3,8 +3,8 @@ import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from '
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import FBRequest from '../FBApi/FBApi.request';
 import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 class FBAutocompleteAsyncState extends FBRequest<any, any> {
@@ -12,10 +12,12 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
+  private documentStatus?: string = '';
 
-  public constructor ({ optionId, urlValues }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, documentStatus }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
+    this.documentStatus = documentStatus;
     this.setOptionId(optionId);
   }
 
@@ -150,6 +152,11 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
+
+    if(id === FBAutocompleteAsyncOption.POList && this.documentStatus?.toUpperCase() === DocumentRevisionStatus.Released) {
+      return;
+    }
+
     if (this.urlValues) {
       this.set({
         url: FBEndpoint.FetchAutocompleteValue,
