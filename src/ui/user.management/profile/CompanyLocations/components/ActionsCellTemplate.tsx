@@ -3,7 +3,7 @@ import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDat
 import Actions, { ActionsProps } from '../../../../form.builder/FBApprovalMatrixRoles/components/Actions';
 import { EditableCompanyLocation } from '../types';
 
-interface Props extends CellTemplateProps<EditableCompanyLocation>, ActionsProps<EditableCompanyLocation> {}
+type Props = CellTemplateProps<EditableCompanyLocation> & ActionsProps;
 
 const ActionsCellTemplate: React.FC<Props> = (props) => (
   <Actions

@@ -90,6 +90,12 @@ export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
 
+export enum NavigationItems {
+  LINK = 'LINK',
+  MENU = 'MENU',
+  CATEGORY = 'CATEGORY',
+}
+
 export interface NavigationItem {
   label: string
   type: NavigationItemType

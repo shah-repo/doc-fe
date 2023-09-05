@@ -19,7 +19,7 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
   disabled,
   name = '',
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ disabled });
   const { purchaseOrderState } = FB.useStores();
   return (
     <Observer>

@@ -2,8 +2,8 @@ import { isEmpty, map, sortBy, union } from 'lodash';
 import { action, observable, set } from 'mobx';
 import * as generateUuid from 'uuid/v4';
 import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole, FBDAMFields } from '..';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 
 type DataKey = 'roles' | 'matrix';
 
@@ -76,6 +76,13 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
 
   @action public setMode = (mode: FBApprovalMatrixFieldMode) => {
     set(this, 'mode', mode);
+  };
+
+  @action public setData = (data: FBApprovalMatrixFieldData | undefined): void => {
+    set(this, 'data', {
+      approvalRoles: this.extractData(data, 'roles') ?? this.getCurrentData('roles') ?? [],
+      approvalMatrix: this.extractData(data, 'matrix') ?? this.getCurrentData('matrix') ?? [],
+    });
   };
 
   @action public setApprovalRoles = (approvalRoles?: FBApprovalRole[]) => {

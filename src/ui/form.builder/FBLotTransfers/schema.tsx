@@ -1,29 +1,18 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { BuildCellTemplate } from './components/BuildCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { EmployeeCellTemplate } from './components/EmployeeCellTemplate';
 import { LocationCellTemplate } from './components/LocationCellTemplate';
 import { QuantityCellTemplate } from './components/QuantityCellTemplate';
-import { ReferencesCellTemplate } from './components/ReferencesCellTemplate';
+import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { TransferTypeCellTemplate } from './components/TransferTypeCellTemplate';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD, TRANSFER_TYPE_OPTIONS } from './constants';
-import { CompanyLocation, DocumentRevisionOption, EditableLotTransfer, LotTranferEditEvent } from './types';
-
-interface SchemaOptions {
-  locations: CompanyLocation[]
-  existingLocations: string[]
-  builds: DocumentRevisionOption[]
-  records: DocumentRevisionOption[]
-  units?: string
-  onRowClick?: (e: LotTranferEditEvent) => void
-}
+import { SchemaItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   locations,
@@ -32,7 +21,7 @@ export const buildSchema = ({
   records,
   units,
   onRowClick,
-}: SchemaOptions): Array<ColumnDefinition<EditableLotTransfer>> => {
+}: SchemaOptions): SchemaItem[] => {
   const transferTypeOptions = TRANSFER_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
 
   const quantityTitle
@@ -91,23 +80,23 @@ export const buildSchema = ({
       field: BUILD_FIELD,
       title: 'form.builder.lot.transfers.build',
       filterCell: InputFilter,
-      template: (props) => <BuildCellTemplate {...props} options={builds} onClick={onRowClick} />,
-      width: 200,
+      template: (props) => <RevisionCellTemplate {...props} options={builds} onClick={onRowClick} fieldToEdit="build" />,
+      width: 250,
     },
     {
       id: 'reference',
       field: REFERENCE_FIELD,
       title: 'form.builder.lot.transfers.reference',
       filterCell: InputFilter,
-      template: (props) => <ReferencesCellTemplate {...props} options={records} onClick={onRowClick} />,
-      width: 200,
+      template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="reference" />,
+      width: 350,
     },
     {
       id: 'quantity',
       field: 'quantity',
       filterCell: InputFilter,
       title: quantityTitle,
-      template: QuantityCellTemplate,
+      template: (props) => <QuantityCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
     },
     {

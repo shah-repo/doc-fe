@@ -12,7 +12,7 @@ import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types'
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
+import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
@@ -20,9 +20,12 @@ import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
+import AuditCycleCount from './AuditCycleCount';
 import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
+import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
@@ -117,6 +120,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       lotTransfers () {
         return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
+      },
+      cycleCount () {
+        return <AuditCycleCount {...{ audit, dataCy, auditValue }} />;
+      },
+      partVendors () {
+        return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
@@ -237,6 +246,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           </>
         );
         break;
+      case 'lotStatus':
+        returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        break;
       case 'EMAIL_SENT':
         returnValue = (
           <>
@@ -334,13 +346,27 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { order, unitPrice } = value;
+          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description, partNumberTitle, units, glCode, tax } = value;
           const partNumberText = poDefinePartNumberText(value);
-
+          const values = {
+            ...value,
+            partNumber: partNumberText,
+            capitalEquipment: `${Boolean(capitalEquipment)}`,
+            supplierPartNumber: supplierPartNumber ?? '',
+            order: order ?? '',
+            unitPrice: unitPrice ?? '',
+            description: description ?? '',
+            partNumberTitle: partNumberTitle ?? '',
+            units: units ?? '',
+            glCode: glCode ?? '',
+            tax: `${Boolean(tax)}`,
+          };
           const text
-            = intl.formatMessage(
-              { id: 'documentRevision.audit.formInput.lineItems.MESSAGE' },
-              { partNumber: partNumberText, order, unitPrice });
+            = !serviceId
+              ? intl.formatMessage(
+                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
+                { ...values })
+              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...values });
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />

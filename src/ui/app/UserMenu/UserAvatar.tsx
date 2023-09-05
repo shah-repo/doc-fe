@@ -6,14 +6,14 @@ import Colors from '../../layout/theme/utils/colors';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
-    avatar: ({ initialColor }) => ({
-      width: '48px',
-      height: '48px',
+    avatar: ({ initialColor }: {initialColor: string}) => ({
+      width: 30,
+      height: 30,
       borderRadius: '50%',
-      margin: theme.spacing(0, 1, 0, 1),
-      fontSize: '18px',
+      margin: theme.spacing(0, 1),
+      fontSize: 12,
       color: Colors.white,
-      background: `${initialColor}`,
+      background: initialColor,
       fontWeight: 600,
     }),
   }));

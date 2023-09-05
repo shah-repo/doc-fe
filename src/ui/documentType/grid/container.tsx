@@ -15,8 +15,8 @@ import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { ApplicationState } from '../../../state/reducers';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
+import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
 import { TableColumnProps } from '../../components/table/column/types';
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from '../../constants/urls';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
@@ -147,6 +147,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
     } else if (columnDetails.searchOptions?.poStatusTemplate) {
       filterCellTemplate = KendoGridFilterCell.PO_STATUS;
+      dynamicCellTemplate = KendoCellTemplates.STATUS;
+    } else if (columnDetails.searchOptions?.lotStatusTemplate) {
+      filterCellTemplate = KendoGridFilterCell.LOT_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
     } else if (columnDetails.searchOptions?.statusTemplate) {
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
