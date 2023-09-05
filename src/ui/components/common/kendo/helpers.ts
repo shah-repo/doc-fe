@@ -165,6 +165,7 @@ export enum statusClassMapping {
   'Approved'='GREEN_STATUS',
   'Quarantine' = 'PENDING_STATUS',
   'Accepted'='GREEN_STATUS',
+  'RELEASED'='GREEN_STATUS',
   'Released'='GREEN_STATUS',
   'APPROVED' = 'GREEN_STATUS',
   'Obsolete'='GRAY_STATUS',

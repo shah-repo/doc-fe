@@ -3,16 +3,19 @@ import axios from 'axios';
 import { intl, translate } from '../../../common/intl';
 import { toastError } from '../../../ui/components/notifications';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
-import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
+import { BOM } from '../../../ui/form.builder/FBBOM/interface';
+import { Vendor } from '../../../ui/form.builder/FBPartVendors/types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, LOT_ROOT_URL, PO_ROOT_URL } from './constants';
-import { DOC_TYPE_GROUP_OPTION, DocRevQueryParam, DocumentGroupOptionsType } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentRevisionsListAction, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_ROOT_URL, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
+import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -401,6 +404,143 @@ const fetchAvailableParts = (
     handlers,
   });
 
+const fetchBOMBranch = (
+  docRevId,
+  docId,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_BOM_BRANCH}/${docId}/${docRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchBOMTree = (
+  docRevId,
+  docId,
+  handlers: Handlers,
+): ApiAction<{
+  bomTreeRelations: BOM[]
+  parentRevDetails: BOM
+}> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_BOM_TREE}/${docId}/${docRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchWhereUsedTree = (
+  docRevId,
+  handlers: Handlers,
+): ApiAction<WhereUsedTree[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_WHERE_USED_TREE}/${docRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchHasATree = (
+  docRevIds,
+  handlers: Handlers,
+): ApiAction<BOM[] | undefined> =>
+  apiActionWithCallbacks({
+    url: `${CHECK_IS_USED}`,
+    method: 'post',
+    data: {
+      ids: docRevIds,
+    },
+    handlers,
+  });
+
+const addBOMBranch = (
+  data,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${ADD_BOM_BRANCH}`,
+    method: 'post',
+    data,
+    handlers,
+  });
+
+const updateBOMBranch = (
+  parentNodeRevId,
+  childNodeRevId,
+  data,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${UPDATE_BOM_BRANCH}/${parentNodeRevId}`,
+    method: 'patch',
+    data: { ...data, childNodeRevId },
+    handlers,
+  });
+
+const changeOrderBOMBranch = (
+  parentNodeRevId,
+  data,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${CHANGE_ORDER_BOM_BRANCH}/${parentNodeRevId}`,
+    method: 'post',
+    data,
+    handlers,
+  });
+
+const deleteBOMBranch = (
+  parentNodeRevId,
+  childNodeRevId,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${DELETE_BOM_BRANCH}/${parentNodeRevId}/${childNodeRevId}`,
+    method: 'delete',
+    handlers,
+  });
+
+const fetchAlternateParts = (
+  parentNodeRevId,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_ALTERNATE_PART}/${parentNodeRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchVendors = (
+  parentNodeRevId,
+  handlers: Handlers,
+): ApiAction<Vendor[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_VENDORS}/${parentNodeRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const addAlternatePart = (
+  data,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${ADD_ALTERNATE_PART}`,
+    method: 'post',
+    data,
+    handlers,
+  });
+
+const deleteAlternatePart = (
+  parentRevId,
+  alternatePartNodeRevId,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}`,
+    method: 'delete',
+    handlers,
+  });
+
 const createFaiInspection = (
   data: CreateInspectionBody,
   handlers: Handlers,
@@ -509,5 +649,17 @@ export default {
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,
+  fetchBOMBranch,
+  fetchBOMTree,
+  addBOMBranch,
+  fetchAlternateParts,
+  addAlternatePart,
+  fetchVendors,
+  deleteAlternatePart,
+  deleteBOMBranch,
+  updateBOMBranch,
+  changeOrderBOMBranch,
+  fetchWhereUsedTree,
+  fetchHasATree,
   updateLotStatus,
 };
