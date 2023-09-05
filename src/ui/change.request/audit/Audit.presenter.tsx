@@ -1,6 +1,7 @@
 import { Box, List, Typography } from '@material-ui/core';
 import { orderBy } from 'lodash';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus } from '../../../state/ducks/common/types';
@@ -24,7 +25,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   isDrawerOpen,
 }) => {
   const classes = styles();
-
+  const intl = useIntl();
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
@@ -101,7 +102,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   // hack, since BE cannot make correct data for removing approvers
                     ? 'changeRequest.audit.approvers.ARRAY_DELETED'
                     : change?.fbSchemaItem?.label
-                      ? `${change?.fbSchemaItem?.label} ${change.type === 'STRING_EDITED' ? 'updated' : 'Added'}`
+                      ? `${change?.fbSchemaItem?.label} ${change.type === 'ARRAY_DELETED'
+                      ? intl.formatMessage({ id: 'form.builder.audit.deleted' })
+                      : change.type === 'STRING_EDITED' ? intl.formatMessage({ id: 'form.builder.audit.updated' })
+                      : intl.formatMessage({ id: 'form.builder.audit.added' })}`
                       : `changeRequest.audit.${change.field}.${change.type}`
                 }
               />
