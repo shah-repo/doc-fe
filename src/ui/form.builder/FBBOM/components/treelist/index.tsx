@@ -116,6 +116,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
 
   const partAsync = useAsync({
     onSuccess: () => {
+      _documentRevisionFormState?.setDirty(false);
       _documentRevisionFormState?.setBomChangesInProgress(false);
       treeListAsync.start(
         fetchBOMTreeList,
@@ -344,6 +345,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     if (isNewBOMAdditionInProgress()) {
       return;
     }
+    _documentRevisionFormState?.setDirty(true);
     const newBOM: EditableBOM = createNewItem();
     state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
       (data) => !data[ADD_FIELD],
@@ -363,6 +365,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       // skipping edit for parent and click on edit item itself
       return;
     }
+    _documentRevisionFormState?.setDirty(true);
     setSelectedPartLevel({ dataItem, level });
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
       state.data = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
@@ -396,6 +399,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         (data) => !data[ADD_FIELD],
       );
     }
+    _documentRevisionFormState?.setDirty(false);
     _documentRevisionFormState?.setBomChangesInProgress(false);
     updateState({
       ...state,

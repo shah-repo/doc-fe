@@ -333,6 +333,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const setChildInfo = (dataItem, level) => {
+    _documentRevisionFormState?.setDirty(true);
     if (!_documentRevisionFormState?.bomChangesInProgress) {
       _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level });
       _documentRevisionFormState?.setBomChangesInProgress(true);
