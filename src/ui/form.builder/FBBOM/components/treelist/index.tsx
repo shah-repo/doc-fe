@@ -759,10 +759,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   SM.reaction(
     () => _documentRevisionFormState?.childPartInfo,
     (info) => {
-      if (info?.dataItem) {
+      if (info?.dataItem && !_documentRevisionFormState?.bomChangesInProgress) {
         const dataItem = toJS(info?.dataItem) as EditableBOM;
         const level = toJS(info?.level);
         setSelectedPartLevel({ dataItem, level });
+        _documentRevisionFormState?.setBomChangesInProgress(true);
         onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBomInfo));
       }
     },

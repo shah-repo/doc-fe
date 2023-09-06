@@ -74,7 +74,7 @@ export const useHandleCreateDoc = () => {
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
       const path = documentVersionPath(documentRevision?.id || '', documentRevision?.document?.id || '');
-      if (_documentRevisionFormState?.showPartInDialoge) {
+      if (_documentRevisionFormState?.showPartInDialog) {
         _documentRevisionFormState?.setNewlyCreatedDocumentRevision(documentRevision);
       } else {
         history.push(path);
