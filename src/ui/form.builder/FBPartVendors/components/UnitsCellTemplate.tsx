@@ -4,7 +4,7 @@ import React, { ChangeEvent } from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CustomTemplateProps } from '../types';
+import { CustomTemplateProps, EditableVendor } from '../types';
 import OverflowingContent from './OveflowContent';
 
 interface Props extends CustomTemplateProps {
@@ -13,13 +13,13 @@ interface Props extends CustomTemplateProps {
 
 const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, setFieldValue, getFieldProps } = useFormikContext();
+  const { values, setFieldValue, getFieldProps } = useFormikContext<EditableVendor>();
 
   const handleChange = (event: ChangeEvent<unknown>, value?: string) => {
     setFieldValue(field, value);
   };
 
-  const value = dataItem[field] as string;
+  const value = values[field] as string;
 
   return (
     <FormikField
