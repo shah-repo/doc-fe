@@ -13,7 +13,7 @@ interface CustomColumnMenuProps extends ColumnMenuProps {
 export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) => {
   const { field, onLock, columns, onColumnShowHide } = props;
   const column: CustomTreeListColumnProps | undefined = columns.find(c => c.field === field);
-  const locked = Boolean(column?.locked);
+  const isLocked = Boolean(column?.locked);
 
   const itemsRender = (rendering: Array<React.ReactElement<HTMLDivElement, string | React.JSXElementConstructor<any>> | null>, colProps: { closeMenu: () => void, field?: string | undefined}) => {
     const items: Array<React.ReactElement<HTMLDivElement, string | React.JSXElementConstructor<any>> | null> = [...rendering];
@@ -29,12 +29,8 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
       <ColumnMenuItem
         {...props}
         iconClass={`k-icon k-grid-menu-icon ${column?.locked ? 'k-i-unlock' : 'k-i-lock'}`}
-        onClick={() => onLock({ ...colProps, locked, field })}
-        title={
-      column?.locked
-        ? translate(TranslatedText[DisplayText.UNLOCK_COLUMN])
-        : translate(TranslatedText[DisplayText.LOCK_COLUMN])
-        }
+        onClick={() => onLock({ ...colProps, locked: isLocked, field })}
+        title={translate(isLocked ? TranslatedText[DisplayText.UNLOCK_COLUMN] : TranslatedText[DisplayText.LOCK_COLUMN])}
       />));
     return items;
   };

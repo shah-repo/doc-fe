@@ -7,7 +7,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { WhereUsedTree } from './interface';
 import useStyles from './styles';
-import cx from 'classnames'
+import cx from 'classnames';
 
 const TEXT_LENGTH = 120;
 const OFFSET = 3;
@@ -131,7 +131,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
       });
 
     // adds each node as a group
-    const node = g.selectAll('.node')
+    const node = g.selectAll(classes.node)
       .data(nodes.descendants())
       .enter().append('g')
       .attr('class', d => cx(classes.node, d.children ? 'node--internal' : 'node--leaf'))

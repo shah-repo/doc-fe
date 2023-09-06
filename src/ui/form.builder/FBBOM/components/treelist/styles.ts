@@ -484,14 +484,14 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
     zIndex: 1,
   },
-  nodeCircle: {
-    fill: '#fff',
-    stroke: 'steelblue',
-    strokeWidth: '3px',
-  },
   node: {
     outline: 'solid 1px #999',
     outlineOffset: '3px',
+    '& circle': {
+      fill: '#fff',
+      stroke: 'steelblue',
+      strokeWidth: '3px',
+    },
   },
   link: {
     fill: 'none',

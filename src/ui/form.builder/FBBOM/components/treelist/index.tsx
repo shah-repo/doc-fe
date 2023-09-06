@@ -62,7 +62,7 @@ import {
   CustomTreeListColumnProps,
 } from './interface';
 import useStyles from './styles';
-import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSameParent, processBOMData, updateDataAtLevels } from './utils';
+import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 import { TreeColumns } from './schema';
 
@@ -681,7 +681,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   const onRowDrop = (event: TreeListRowDragEvent) => {
     if (
       event?.draggedOver
-      && isOfSameParent(event?.dragged, event?.draggedOver)
+      && hasSameParent(event?.dragged, event?.draggedOver)
     ) {
       const parentIndices: number[] = event.dragged.slice(0, -1);
       const draggedChildIndex: number = event.dragged.slice(-1)[0];

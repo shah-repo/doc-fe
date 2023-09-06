@@ -26,7 +26,7 @@ export const getCellValue = (dataItem: EditableBOM, field?: string): string => {
   return ((field && dataItem[field]) ?? CELL_EMPTY_VALUE) as string;
 };
 
-export const isOfSameParent = (arr1: number[], arr2: number[]): boolean => {
+export const hasSameParent = (arr1: number[], arr2: number[]): boolean => {
   if (arr1.length !== arr2.length) {
     return false;
   }
