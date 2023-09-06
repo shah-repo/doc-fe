@@ -66,7 +66,7 @@ import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, isOfSa
 import WhereUsedDialog from './WhereUsedDialog';
 import { TreeColumns } from './schema';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isShowedBOMDiff = false }) => {
   const classes = useStyles();
   const [state, setState] = React.useState<BOMState>({
     data: [],
@@ -96,7 +96,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         bomTreeRelations,
         parentRevDetails,
       );
-      _documentRevisionFormState?.setIsBomExists(bomTreeRelations.length > 0);
+      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       updateState({
         ...state,
         data: [...bomProccessedData],
@@ -110,7 +110,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   });
 
   const updateState = (stateInfo) => {
-    _documentRevisionFormState?.setBomInfo(stateInfo);
+    _documentRevisionFormState?.setBOMInfo(stateInfo);
     setState(stateInfo);
   };
 
@@ -150,18 +150,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     documentRevisionsActions.fetchBOMTree,
   );
   const deleteBOMBranch = useActionCreator(
-    documentRevisionsActions.deleteBomBranch,
+    documentRevisionsActions.deleteBOMBranch,
   );
-  const addBOMBranch = useActionCreator(documentRevisionsActions.addBomBranch);
+  const addBOMBranch = useActionCreator(documentRevisionsActions.addBOMBranch);
   const updateBOMBranch = useActionCreator(
-    documentRevisionsActions.updateBomBranch,
+    documentRevisionsActions.updateBOMBranch,
   );
   const reorderBOMBranch = useActionCreator(
-    documentRevisionsActions.changeOrderBomBranch,
+    documentRevisionsActions.changeOrderBOMBranch,
   );
 
   SM.reaction(
-    () => _documentRevisionFormState?.refreshBomTree,
+    () => _documentRevisionFormState?.refreshBOMTree,
     (loading) => {
       if (loading && documentRevision) {
         treeListAsync.start(
@@ -281,7 +281,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         if (!partInfo.parentNodeDocumentId) {
           partInfo.parentNodeDocumentId = documentRevision.documentId;
         }
-        partInfo.markAsDeleted = false;
+        partInfo.isMarkedAsDeleted = false;
         partAsync.start(addBOMBranch, partInfo, partAsync);
       } else {
         const payload = {
@@ -343,7 +343,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.markAsDeleted) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isMarkedAsDeleted) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -396,7 +396,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     const partInfo = dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR);
     const payload = {
       childNodeRevId: partInfo[0],
-      markAsDeleted: false,
+      isMarkedAsDeleted: false,
     };
     partAsync.start(
       updateBOMBranch,
@@ -418,7 +418,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     const newBOM: EditableBOM = createNewItem();
     newBOM.parentNodeDocumentId = dataItem.documentId;
     newBOM.parentNodeRevId = dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
-    const updatedBOMState = _documentRevisionFormState?.getBomInfo ? toJS(_documentRevisionFormState?.getBomInfo) : undefined;
+    const updatedBOMState = _documentRevisionFormState?.getBOMInfo ? toJS(_documentRevisionFormState?.getBOMInfo) : undefined;
     const level = updatedState ? toJS(_documentRevisionFormState?.getChildPartInfo?.level) : selectedPartLevel?.level;
     const stateData = updatedState ? updatedBOMState?.data : state.data;
     if (stateData) {
@@ -446,11 +446,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   useObserver(() => {
-    showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
+    isShowedBOMDiff = Boolean(_documentRevisionFormState?.isShowedBOMDiff);
   });
 
   const showHideDiff = () => {
-    _documentRevisionFormState?.toggleShowBOMDiff();
+    _documentRevisionFormState?.toggleIsShowedBOMDiff();
     handleExpandAll();
   };
 
@@ -465,7 +465,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.markAsDeleted || (showBOMDiff && item.replacesStatus),
+        [classes.deletedBg]: item.isMarkedAsDeleted || (isShowedBOMDiff && item.replacesStatus),
       }),
     };
     if (!item[MODE_FIELD]) {
@@ -591,10 +591,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
               className={classes.diffContainer}
             >
               <span className={classes.toggleIconContainer} onClick={showHideDiff}>
-                {showBOMDiff
+                {isShowedBOMDiff
                   ? <FontAwesomeIcon className={classes.toggleIcon} icon={regular('toggle-large-on')} size="lg" />
                   : <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
-                <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
+                <span className={classes.toggleIconLabel}>{translate(isShowedBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
             </Grid>
             <Grid item
@@ -739,7 +739,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         const dataItem = toJS(info?.dataItem) as EditableBOM;
         const level = toJS(info?.level);
         setSelectedPartLevel({ dataItem, level });
-        onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBomInfo));
+        onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBOMInfo));
       }
     },
   );

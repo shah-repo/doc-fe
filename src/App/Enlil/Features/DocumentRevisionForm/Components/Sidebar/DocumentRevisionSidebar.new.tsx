@@ -43,7 +43,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   docId = '',
   intl,
   edit,
-  minimizeRightPanel,
+  isMinimizedRightPanel,
 }) => {
   const classes = useStyles();
 
@@ -52,7 +52,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
     _documentRevisionFormState?.setRightPanelOpen();
   };
 
-  if (minimizeRightPanel && _documentRevisionSidebarState?.open) {
+  if (isMinimizedRightPanel && _documentRevisionSidebarState?.open) {
     handleRightPanelToggle();
   }
 

@@ -22,7 +22,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const { _documentRevisionFormState } = SM.useStores();
   const handleToggle = () => {
     if (!dataItem.isDisabled) {
-    _documentRevisionFormState?.setRefreshBomTree(false);
+    _documentRevisionFormState?.setRefreshBOMTree(false);
     }
     setOpenPartsDrawer(true);
   };
@@ -31,7 +31,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const closeDrawer = () => {
     setOpenPartsDrawer(false);
     if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBomTree(!_documentRevisionFormState?.refreshBomTree);
+      _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
   };
 

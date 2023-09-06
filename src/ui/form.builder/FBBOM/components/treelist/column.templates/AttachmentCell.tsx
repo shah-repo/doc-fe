@@ -24,13 +24,13 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
 
   const openDrawer = () => {
     if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBomTree(false);
+      _documentRevisionFormState?.setRefreshBOMTree(false);
     }
     setOpenPartsDrawer(true);
   };
   const closeDrawer = () => {
     if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBomTree(!_documentRevisionFormState?.refreshBomTree);
+      _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
     setOpenPartsDrawer(false);
   };
