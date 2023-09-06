@@ -36,9 +36,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
     const { formState } = FB.useStores();
+    const documentStatus = formState?.workspaceState?.document?.displayStatus;
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
+      documentStatus,
     });
     const {
       valueKey: optionValueKey = 'value',

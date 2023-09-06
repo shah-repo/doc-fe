@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import React from 'react';
 
 export const renderDefaultAttachment = (color, name) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46">
@@ -57,7 +56,7 @@ export const renderCOAPrimaryAttachment = (color, name) => (
   </svg>);
 
 export const renderPrimaryAttachment = (color, name, width = 49, height = 49) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 49 49">
+  <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
     <g id="file-vvt" transform="translate(-1 2)">
       <path id="Path_2246" data-name="Path 2246" d="M5,43v3a1,1,0,0,0,1,1H42a1,1,0,0,0,1-1V43Z" fill="#d4dbe1" />
       <path id="Path_2249" data-name="Path 2249" d="M46,23H2a1,1,0,0,0-1,1V40a1,1,0,0,0,1,1H46a1,1,0,0,0,1-1V24A1,1,0,0,0,46,23Z" fill={color} />
