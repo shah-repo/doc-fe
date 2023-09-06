@@ -484,4 +484,42 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
     zIndex: 1,
   },
+  nodeCircle: {
+    fill: '#fff',
+    stroke: 'steelblue',
+    strokeWidth: '3px',
+  },
+  node: {
+    outline: 'solid 1px #999',
+    outlineOffset: '3px',
+  },
+  link: {
+    fill: 'none',
+    stroke: '#777',
+    strokeWidth: '1px',
+  },
+  linkCircle: {
+    fill: '#0075FF',
+    stroke: '#F5F8FF',
+    strokeWidth: '1px',
+  },
+  whereUsedHeadingText: {
+    fontSize: '13px',
+  },
+  whereUsedStatusText: {
+    fontSize: '10px',
+    fill: '#777',
+  },
+  backgroundRect: {
+    fill: '#999',
+  },
+  statusReleased: {
+    fill: Colors.statusReleased,
+  },
+  statusDraft: {
+    fill: Colors.statusDraft,
+  },
+  statusPendingChange: {
+    fill: Colors.statusPendingChange,
+  },
 }));
