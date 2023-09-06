@@ -4,6 +4,7 @@ import { changeRequestPreviewPath } from '../../../../change.request/utils/paths
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
+import { CustomTreeListColumnProps } from './interface';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
@@ -95,22 +96,25 @@ export const updateDataAtLevels = (data?: BOM[], levels?: number[], newValue?: E
   return updatedData;
 };
 
-export const getExcelColumns = (columns) => {
+export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTreeListColumnProps[] => {
   return [...columns].map(col => {
-    if (['arId', 'hasChanges'].includes(col.field)) {
-      return { ...col, field: 'changeRequestDetails.crId' };
-    } else if (col.field === 'customDocId') {
-      return { ...col, field: 'docId' };
-    } else if (col.field === 'hasPrimaryAttachment') {
-      return { ...col, field: 'primaryAttachmentDetails.name', width: '240px' };
-    } else if (col.field === 'hasAttachments') {
-      return { ...col, field: 'attachmentsCount', width: '100px' };
-    } else if (col.field === 'vendors') {
-      return { ...col, field: 'vendorsCount' };
-    } else if (col.field === 'alternatePartsList') {
-      return { ...col, field: 'alternatePartsCount', width: '130px' };
+    switch (col.field) {
+      case 'arId':
+      case 'hasChanges':
+        return { ...col, field: 'changeRequestDetails.crId' };
+      case 'customDocId':
+        return { ...col, field: 'docId' };
+      case 'hasPrimaryAttachment':
+        return { ...col, field: 'primaryAttachmentDetails.name', width: '240px' };
+      case 'hasAttachments':
+        return { ...col, field: 'attachmentsCount', width: '100px' };
+      case 'vendors':
+        return { ...col, field: 'vendorsCount' };
+      case 'alternatePartsList':
+        return { ...col, field: 'alternatePartsCount', width: '130px' };
+      default:
+        return col;
     }
-    return col;
   });
 };
 

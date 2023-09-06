@@ -67,7 +67,10 @@ import WhereUsedDialog from './WhereUsedDialog';
 import { TreeColumns } from './schema';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isShowedBOMDiff = false }) => {
-  const classes = useStyles();
+  const { _tabsState } = SM.useStores();
+  const size = useObserver(() => _tabsState?.contentSize);
+
+  const classes = useStyles({ size });
   const [state, setState] = React.useState<BOMState>({
     data: [],
     dataState: {
@@ -675,9 +678,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     [columns],
   );
 
-  const { _tabsState } = SM.useStores();
-  const size = useObserver(() => _tabsState?.contentSize);
-
   const onRowDrop = (event: TreeListRowDragEvent) => {
     if (
       event?.draggedOver
@@ -767,17 +767,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
               <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy={true} fileName={EXCEL_FILE_NAME}>
                 <TreeList
                   {...state.dataState}
-                  style={{
-                    width: '100%',
-                    maxHeight: size ? size?.height - 160 : 'auto',
-                    overflow: 'auto',
-                  }}
                   tableProps={{ style: { width: '2561px' } }}
                   editField={MODE_FIELD}
                   expandField={EXPAND_FIELD}
                   dataItemKey={DATA_ITEM_KEY}
                   subItemsField={SUB_ITEMS_FIELD}
-                  className="containing-box-scrollbar"
+                  className={cx(classes.treeList, 'containing-box-scrollbar')}
                   onExpandChange={onExpandChange}
                   rowRender={rowRender}
                   data={processData()}

@@ -1,6 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 import OldColors from '../../../../layout/theme/utils/colors';
+import { Size } from 'react-virtualized';
 
 const BASE_COLOR = Colors.primaryBg;
 
@@ -522,4 +523,9 @@ export default makeStyles((theme) => ({
   statusPendingChange: {
     fill: Colors.statusPendingChange,
   },
+  treeList: ({ size }: { size?: Size }) => ({
+    width: '100%',
+    maxHeight: size ? size.height - 160 : 'auto',
+    overflow: 'auto',
+  }),
 }));
