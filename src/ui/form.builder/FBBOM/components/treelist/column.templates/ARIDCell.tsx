@@ -2,6 +2,7 @@ import { Link } from '@material-ui/core';
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
 import { useHistory } from 'react-router-dom';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { changeRequestEditPath } from '../../../../../change.request/utils/paths';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
 import { CELL_EMPTY_VALUE } from '../constants';
@@ -25,6 +26,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
     const id = changeReqDetails?.id;
     id && history.push(changeRequestEditPath(id));
   };
+  const isReleased = dataItem?.status === DocumentRevisionStatus.Released;
 
   return (
     <td
@@ -39,7 +41,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
       }}
     >
       <span className={classes.Cell}>
-        {arID && (
+        {arID && !isReleased && (
           <Tooltip
             data={changeReqDetails?.title ?? ''}
             childrenElement={
@@ -53,7 +55,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
             }
           />
         )}
-        {!arID && CELL_EMPTY_VALUE}
+        {(!arID || isReleased) && CELL_EMPTY_VALUE}
       </span>
     </td>
   );
