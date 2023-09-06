@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
-import { toastError, toastSuccess } from '../../../../components/notifications';
+import { RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import Text from '../../../../components/Text';
+import { toastError, toastSuccess } from '../../../../components/notifications';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -191,7 +191,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         docId: '',
         securityList: {
           securityEmployees: (get(documentRevision, 'document.securityEmployees', []))
-            .map((employee) => ({ id: employee.value })),
+            .map((employee) => ({ id: employee.id })),
           securityGroups: (get(documentRevision, 'document.securityGroups', []))
             .map((group) => ({ id: group.id })),
           operators: get(documentRevision, 'document.operators'),

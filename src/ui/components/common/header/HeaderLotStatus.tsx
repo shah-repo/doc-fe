@@ -67,6 +67,7 @@ const HeaderLotStatus: React.FC<Props> = ({ documentRevision }) => {
         label={statusLabel}
         options={options}
         disabled={!isLotStatusEditable}
+        data-cy="lot-status"
       />
       <AlertDialog
         confirmAction={updateLotStatus.current ?? noop}

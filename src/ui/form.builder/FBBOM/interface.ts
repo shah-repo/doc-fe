@@ -19,7 +19,7 @@ export interface BOM {
   refDesignator?: string
   depth?: number
   order?: number
-  markAsDeleted?: boolean
+  isMarkedAsDeleted?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
   primaryAttachmentDetails?: Attachment
@@ -38,8 +38,6 @@ export interface BOM {
 // ts-unused-exports:disable-next-line
 export interface EditableBOM extends BOM {
   [MODE_FIELD]: boolean
-  isNew?: boolean
-  parentNodeRevId?: string
   parentNodeDocumentId?: string
   childNodeRevId?: string
   childNodeDocumentId?: string

@@ -8,7 +8,7 @@ import { ALTERNATE_PART_KEY } from './constants';
 export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
-  showBOMDiff?: boolean
+  isShowedBOMDiff?: boolean
 }
 
 export interface BOMState {
