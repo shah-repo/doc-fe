@@ -266,9 +266,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         toastError('missing.form.error');
         return;
       }
-    _documentRevisionFormState?.toggleShowPartInDialog();
+    _documentRevisionFormState?.setShowPartInDialog(true);
     closeMultipleFormDialog();
     showFormDialog.open();
+    _documentRevisionFormState?.setDirty(false);
     handleCreateDocument(formIds[0] as DocumentRevision);
     },
     onError: (msg) => toastError(msg),
