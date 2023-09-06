@@ -7,6 +7,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { WhereUsedTree } from './interface';
 import useStyles from './styles';
+import cx from 'classnames'
 
 const TEXT_LENGTH = 120;
 const OFFSET = 3;
@@ -106,8 +107,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
 
     // adds the links between the nodes
     links.append('path')
-      .attr('class', `${classes.link}`)
-      // .style('stroke', d => d.depth)
+      .attr('class', classes.link)
       .attr('d', d => {
         const yEndPos = d.y - 10;
         const yStartPos = d.depth === 1 ? (d?.parent?.y ?? 0) + (2.5 * OFFSET)
@@ -134,7 +134,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
     const node = g.selectAll('.node')
       .data(nodes.descendants())
       .enter().append('g')
-      .attr('class', d => `${classes.node}` + (d.children ? ' node--internal' : ' node--leaf'))
+      .attr('class', d => cx(classes.node, d.children ? 'node--internal' : 'node--leaf'))
       // If it is leaf, then give some space between children
       .attr('transform', (d, index) => {
         return 'translate(' + d.y + ',' + xTransformation(d) + ')';
@@ -146,7 +146,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
       .attr('x', d => d.children ? 0 : 4)
       .attr('y', 0)
       .attr('textLength', TEXT_LENGTH)
-      .attr('class', d => `${classes.whereUsedStatusText} ${statusClassDecider(d) ? (classes as any).statusClassDecider(d) : ''}`)
+      .attr('class', d => cx(classes.whereUsedStatusText, statusClassDecider(d)))
       .style('text-anchor', d => d.depth === 0 ? 'end' : 'start')
       .text(d => `${d?.data?.name} - Rev${d?.data?.revision}`);
   }, [data]);
@@ -162,7 +162,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
     return childXPos;
   };
 
-  const statusClassDecider = (d: any): string => {
+  const statusClassDecider = (d: any): string | undefined => {
     if (d.data.status === DocumentRevisionStatus.Released) {
       return 'statusReleased';
     } else if (d.data.status === DocumentRevisionStatus.Draft) {

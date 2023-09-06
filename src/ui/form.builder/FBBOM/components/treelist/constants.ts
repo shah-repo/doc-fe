@@ -5,7 +5,6 @@ export const EXPAND_FIELD = 'expanded';
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
 export const MODE_FIELD = 'inEdit';
 export const ADD_FIELD = 'isNew';
-// ts-unused-exports:disable-next-line
 export const DELETE_FIELD = 'isMarkedAsDeleted';
 export const ALTERNATE_PART_KEY = 'alternatePartsList';
 export const ALTERNATE_PARTS_COUNT_KEY = 'alternatePartsCount';

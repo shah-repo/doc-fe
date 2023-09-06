@@ -1,6 +1,6 @@
 import { ColumnMenuItem, ColumnMenuProps, ColumnMenuTextColumn } from '@progress/kendo-react-data-tools';
 import React, { ComponentType } from 'react';
-import { useIntl } from 'react-intl';
+import { translate } from '../../../../../../common/intl';
 import { DisplayText, TranslatedText } from '../../../../../components/common/kendo/helpers';
 import { CustomTreeListColumnProps } from '../interface';
 
@@ -11,8 +11,6 @@ interface CustomColumnMenuProps extends ColumnMenuProps {
 }
 
 export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) => {
-  const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const { field, onLock, columns, onColumnShowHide } = props;
   const column: CustomTreeListColumnProps | undefined = columns.find(c => c.field === field);
   const locked = Boolean(column?.locked);
@@ -25,7 +23,7 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
         {...props}
         iconClass="k-i-preview k-i-eye k-grid-menu-icon"
         onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
-        title={getTranslatedText(TranslatedText[DisplayText.HIDE_COLUMN])}
+        title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
       />));
     items.push((
       <ColumnMenuItem
@@ -34,8 +32,8 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
         onClick={() => onLock({ ...colProps, locked, field })}
         title={
       column?.locked
-        ? getTranslatedText(TranslatedText[DisplayText.UNLOCK_COLUMN])
-        : getTranslatedText(TranslatedText[DisplayText.LOCK_COLUMN])
+        ? translate(TranslatedText[DisplayText.UNLOCK_COLUMN])
+        : translate(TranslatedText[DisplayText.LOCK_COLUMN])
         }
       />));
     return items;
@@ -43,7 +41,7 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
 
   return (
     <>
-      {column?.showMenu ?? <ColumnMenuTextColumn {...props} sortAsc={false} sortDesc={false} itemsRender={itemsRender} />}
+      {column?.isShowedMenu ?? <ColumnMenuTextColumn {...props} sortAsc={false} sortDesc={false} itemsRender={itemsRender} />}
     </>
   );
 };

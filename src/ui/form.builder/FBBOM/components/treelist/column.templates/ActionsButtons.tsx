@@ -82,23 +82,6 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
           </div>
         </Tooltip>
       )}
-      {/* {isPartEdit && onReorder && (
-        <Tooltip
-          title={translate('common.restore')}
-          placement="top"
-          arrow
-        >
-          <div>
-            <IconButton
-              kind="action"
-              size="small"
-              onClick={onReorder}
-            >
-              <FontAwesomeIcon icon={solid('up-down-left-right')} />
-            </IconButton>
-          </div>
-        </Tooltip>
-      )} */}
       {isPartEdit && onDelete && (
         <Tooltip
           title={translate('common.delete')}

@@ -68,8 +68,8 @@ export interface WhereUsedTree {
 }
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
-  hidden: boolean
-  showMenu?: boolean
+  hidden?: boolean
+  isShowedMenu?: boolean
   mainOrderIndex?: number
   disableShowOrHideSelection?: boolean
   filterable?: boolean
