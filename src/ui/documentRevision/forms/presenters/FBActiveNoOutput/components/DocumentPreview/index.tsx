@@ -96,7 +96,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
   const isPartForm = useSelector((state: ApplicationState) => documentRevision?.formTemplate
-    ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
+    ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
@@ -224,15 +225,15 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {(isPart || isPartForm)
-                         && <Grid item xs={12}>
-                           <RelatedPartsWrapper
-                             viewOnly={true}
-                             documentRevision={documentRevision}
-                             relatedPartsStatus= {documentRevision?.relatedPartsStatus}
-                           />
-                         </Grid>
-                        }
+                        {(isPart || isPartForm) && (
+                          <Grid item xs={12}>
+                            <RelatedPartsWrapper
+                              viewOnly={true}
+                              documentRevision={documentRevision}
+                              relatedPartsStatus= {documentRevision?.relatedPartsStatus}
+                            />
+                          </Grid>
+                        )}
                         {documentRevision && showTabContent
                         && <FBSchema
                           {...{ schema }}
