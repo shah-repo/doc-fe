@@ -97,8 +97,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const mode = FBWorkspaceModeOptions.FORM;
   const isPartForm = useSelector(
     (state: ApplicationState) => documentRevision?.formTemplate
-      ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as
-  FBOutputDocumentType)?.groupOptions)
+      ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
       : false,
   );
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
