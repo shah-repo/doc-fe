@@ -25,7 +25,7 @@ import {
   take,
   uniq,
 } from 'lodash';
-import { toJS } from 'mobx';
+import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -760,10 +760,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       .value();
   };
 
-  SM.reaction(
+  useEffect(() => reaction(
     () => _documentRevisionFormState?.childPartInfo,
     (info) => {
-      if (info?.dataItem && !_documentRevisionFormState?.bomChangesInProgress) {
+      if (info?.dataItem) {
         const dataItem = toJS(info?.dataItem) as EditableBOM;
         const level = toJS(info?.level);
         setSelectedPartLevel({ dataItem, level });
@@ -771,7 +771,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBomInfo));
       }
     },
-  );
+  ), [_documentRevisionFormState?.childPartInfo]);
 
   SM.reaction(
     () => _documentRevisionFormState?.getRestorePartInfo,

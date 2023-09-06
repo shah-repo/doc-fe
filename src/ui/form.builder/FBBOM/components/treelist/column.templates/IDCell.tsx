@@ -71,7 +71,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       if (data && data.length > 0) {
         const {
           revision, status, name, hasAttachments,
-          hasPrimaryAttachment, docId, id,
+          hasPrimaryAttachment, docId, id, quantity,
         } = data[0];
 
         setFieldValue('revision', revision);
@@ -80,10 +80,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         setFieldValue('hasAttachments', hasAttachments);
         setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
         setFieldValue('docId', docId);
+        setFieldValue('quantity', quantity ?? 1);
         if (dialog.isOpen) {
           setFieldValue('childNodeRevId', dataItem?.id.split(SELECTED_PART_KEY_SEPARATOR)[0]);
           setFieldValue('newChildNodeRevId', id);
-          setFieldValue('quantity', dataItem?.quantity);
+          setFieldValue('quantity', dataItem?.quantity ?? 1);
           setFieldValue('unit', dataItem?.unit);
           setFieldValue('comment', dataItem?.comment);
           setFieldValue('parentNodeRevId', dataItem?.parentNodeRevId);
@@ -179,6 +180,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         setFieldValue('revision', revision);
         setFieldValue('status', status);
         setFieldValue('name', name);
+        setFieldValue('quantity', 1);
         setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
       }
     }
