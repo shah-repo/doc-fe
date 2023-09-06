@@ -7,7 +7,7 @@ import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { GroupTag } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
@@ -205,8 +205,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
                       return (
                         <AutoSizer onResize={handleResize}>
-                          {(size) => (
-                            <SMBox key={index} {...size}>
+                          {({ width }) => (
+                            <SMBox key={index} width={width} pb={2}>
                               {tabType === 'MIXED' && (
                                 <>
                                   <DocumentRevisionFormPresenter
