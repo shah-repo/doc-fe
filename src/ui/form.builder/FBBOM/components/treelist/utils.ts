@@ -5,6 +5,7 @@ import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 import { CustomTreeListColumnProps } from './interface';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
@@ -118,22 +119,22 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
   });
 };
 
-const getChildPartId = (part) => {
+const getChildPartId = (part: DocumentRevision): string => {
   return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
 };
 
-const getDocLink = (part) => {
-  return `${Config.FrontendUrl}${documentPreviewPath(getChildPartId(part), part?.documentId)}`;
+const getDocLink = (part: DocumentRevision): string => {
+  return `${Config.FrontendUrl}${documentPreviewPath(getChildPartId(part), part.documentId ?? '')}`;
 };
 
-const getCrDocLink = (arId) => {
+const getCrDocLink = (arId: string): string => {
   return `${Config.FrontendUrl}${changeRequestPreviewPath(arId)}`;
 };
 
-export const getHyperLinkForIdCell = (part, value) => {
+export const getHyperLinkForIdCell = (part: DocumentRevision, value?: string): string => {
   return `=HYPERLINK("${getDocLink(part)}", "${value ?? '-'}")`;
 };
 
-export const getHyperLinkForArIdCell = (arId, value) => {
+export const getHyperLinkForArIdCell = (arId: string, value?: string): string => {
   return `=HYPERLINK("${getCrDocLink(arId)}", "${value ?? '-'}")`;
 };

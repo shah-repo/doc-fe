@@ -26,14 +26,11 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
   };
 
   function render () {
-    const arID = changeReqDetails?.crId;
-    const isReleased = dataItem.availableRevisions?.isReleased;
-
     if (!dataItem.availableRevisions) {
       return CELL_EMPTY_VALUE;
     }
 
-    if (isReleased) {
+    if (dataItem.availableRevisions?.isReleased) {
       return CELL_EMPTY_VALUE;
     }
 
@@ -49,7 +46,7 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
           onClick={openARDetailsPage}
           className={classes.link}
         >
-          {arID}
+          {changeReqDetails?.crId}
         </Link>
       }
     />;
