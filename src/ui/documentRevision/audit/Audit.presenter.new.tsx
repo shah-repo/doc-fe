@@ -520,7 +520,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Typography variant="subtitle1" className={classes.auditKey}>
-          <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
+          <Text dataCy={`change-value-${parentGroupKey}-${parentIndex}`}
             message={
               isRemovingApproverAction
                 ? `documentRevision.audit.${field}.ARRAY_DELETED`
