@@ -2,12 +2,14 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosRequestConfig } from 'axios';
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { PrintLabelDetailsDialogProps } from '..';
 import apiClient from '../../../../state/apiClient';
 import { companySelectors } from '../../../../state/ducks/company';
 import { store } from '../../../../state/store';
 import { FBEndpoint } from '../../../form.builder/defaults/FBEndpoint';
+import { toastSuccess } from '../../notifications';
 
 export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogProps>(
   Component: React.FunctionComponent<T>,
@@ -18,7 +20,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
   }: T) => {
     const companyEmployees = useSelector(companySelectors.getActiveEmployees);
     const authUser = store.getState().auth.user;
-
+    const intl = useIntl();
     const initialValues = {
       lotId: selectedItem?.document?.docId,
       partId: selectedItem?.precalc?.lot_part,
@@ -106,6 +108,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     const onPrintClick = () => {
       console.log('initial values---', { initialValues, selectedDate, selectedOption, labelsToPrint, qtyUnits, selectedItem });
+			toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
     };
 
     return Component({
