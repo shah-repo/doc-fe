@@ -122,6 +122,14 @@ export const bomDisabledChangeControl = (documentRevision: DocumentRevision | un
   return doesFieldChangeAffectRev(documentRevision, 'bom-line-changes');
 };
 
+export const disableOtherFieldsChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  let disableOtherFields = false;
+  if (documentRevision?.isBeingEditedAfterRelease && documentRevision?.changeControlOptions?.id !== '') {
+    disableOtherFields = true;
+  }
+  return disableOtherFields;
+};
+
 const doesFieldChangeAffectRev = (documentRevision: DocumentRevision | undefined, field: string) => {
   let fieldChangeAffectsRev = false;
   if (documentRevision?.isBeingEditedAfterRelease

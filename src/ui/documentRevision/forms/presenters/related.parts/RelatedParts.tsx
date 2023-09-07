@@ -72,6 +72,10 @@ const ParentPartSelector: React.FunctionComponent<{
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newOption: RELATED_PARTS_STATUS = event.target.value as RELATED_PARTS_STATUS;
 
+    if (relatedPartsState.viewOnlyMode) {
+      return;
+    }
+
     if (newOption !== selectedOption) {
       if (selectedOption !== RELATED_PARTS_STATUS.PARENT_NO) {
         if (selectedOption === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
