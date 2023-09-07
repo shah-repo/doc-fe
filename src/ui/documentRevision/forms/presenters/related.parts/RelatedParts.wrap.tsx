@@ -163,7 +163,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const updateRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId, suffixNumber, suffixName, rootDocId }: any) => {
       relatedPartsState.updateRelatedPartsList(docRevId, { suffixNumber, suffixName, rootDocId });
-			workspaceState?.saveDocRev();
+      workspaceState?.saveDocRev();
     },
   });
   const handleUpdate = (docRevId: string, suffixNumber: string, suffixName: string) => {
