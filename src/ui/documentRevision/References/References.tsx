@@ -14,6 +14,7 @@ import AvailableReferencesField from '../forms/presenters/AvailableReferences.ne
 import { toDocumentRevisionFormValues } from '../forms/transform';
 import { DocumentRevisionFormValues } from '../forms/types';
 import { isOwner } from '../helpers/documentRevisionPermissions';
+import { isDocumentRevisionInDraft } from '../helpers/documentRevisionStatus';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './References.styles';
 import { ReferencesProps } from './types';
@@ -35,6 +36,11 @@ const References = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isDisabledInput = initialValues && initialValues.id !== undefined
    && isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email);
+
+  const showChangeControlDetails = selectedDocument?.changeControlOptions?.id
+    && isDocumentRevisionInDraft(selectedDocument?.status)
+    && selectedDocument.releasedAt;
+
   return (
     <Box padding={1.875} width={1} data-cy="generalInfo">
       <Typography className={classes.generalInfo}>
@@ -92,24 +98,25 @@ const References = ({
         </Typography>
       </Box>
       <DocumentRevisionFooterNew />
-      <Box
-        pt={2.5}
-        display={selectedDocument?.changeControlOptions?.id ? 'block' : 'none'}
-      >
-        <Typography className={classes.releaseDate}>
-          <SMText label="documentRevision.pmccc.applied.title" />
-        </Typography>
-        <Typography component="div" className={classes.released}>
-          <>{selectedDocument?.changeControlOptions?.docId}</>,&nbsp;
-          <Text message="documentRevision.pmccc.applied.revision" /> {selectedDocument?.changeControlOptions?.displayRevision}, &nbsp;
-          <>
-            {getFormattedDateString(
-                  selectedDocument?.changeControlOptions?.releasedAt,
-                  MomentFormats.MonthDateYearTwoDigit,
-            )}
-          </>
-        </Typography>
-      </Box>
+      {
+        showChangeControlDetails && <Box
+          pt={2.5}
+        >
+          <Typography className={classes.releaseDate}>
+            <SMText label="documentRevision.pmccc.applied.title" />
+          </Typography>
+          <Typography component="div" className={classes.released}>
+            <>{selectedDocument?.changeControlOptions?.docId}</>,&nbsp;
+            <Text message="documentRevision.pmccc.applied.revision" /> {selectedDocument?.changeControlOptions?.displayRevision}, &nbsp;
+            <>
+              {getFormattedDateString(
+                      selectedDocument?.changeControlOptions?.releasedAt,
+                      MomentFormats.MonthDateYearTwoDigit,
+              )}
+            </>
+          </Typography>
+        </Box>
+      }
     </Box>
   );
 };
