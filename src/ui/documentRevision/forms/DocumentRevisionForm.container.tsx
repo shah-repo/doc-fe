@@ -64,7 +64,6 @@ interface OwnProps {
   canChangeOwnerShip?: boolean
   type?: DocumentCloneType
   isNewVersion?: boolean
-  minimizeRightPanel?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -87,7 +86,6 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
-  minimizeRightPanel,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -198,7 +196,7 @@ DocumentRevisionFormContainerProps
   // FB config
   const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
+  const isOutput = Boolean(outputGroup && !isEmpty(outputGroup));
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
   let mode: Partial<FBWorkspaceMode> = 'none';
 
@@ -283,7 +281,6 @@ DocumentRevisionFormContainerProps
         formInput,
         mode,
         isDAM,
-        minimizeRightPanel,
       }}
     />
   );
