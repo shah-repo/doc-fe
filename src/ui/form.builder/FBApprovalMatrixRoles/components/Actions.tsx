@@ -65,6 +65,7 @@ const Actions: React.FC<ActionsProps> = ({
               onClick={onDelete}
               ref={deleteRef}
               disabled={isDeleteDisabled}
+              data-cy="part-supplier-delete-icon"
             >
               <FontAwesomeIcon
                 className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
