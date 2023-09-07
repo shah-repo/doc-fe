@@ -131,9 +131,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
       set(dataToSubmit, 'formInput', {
         ...formInput,
-...{
-          [FBDAMFields.DAM]: FBStore.damData?..approvalMatrix,
-          [FBDAMFields.DAR]: FBStore.damData?..approvalRoles,
+        ...{
+          [FBDAMFields.DAM]: FBStore.damData?.approvalMatrix,
+          [FBDAMFields.DAR]: FBStore.damData?.approvalRoles,
         },
       });
     }

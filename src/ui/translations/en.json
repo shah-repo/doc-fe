@@ -1640,10 +1640,10 @@
   "bom.ar.child.draft.option": "Rev {revision} - {title}",
   "bom.ar.child.draft.add.action.message": "Action required on {itemsPending} item",
   "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:",
-  "bom.drawerTable.field.docId.title": "PART ID",
-  "bom.drawerTable.field.revision.title": "REV",
-  "bom.drawerTable.field.name.title": "TITLE",
-  "bom.drawerTable.field.cost.title": "COST",
-  "bom.drawerTable.field.leadTime.title": "LEAD TIME",
-  "bom.drawerTable.field.status.title": "STATUS"
+  "bom.drawerTable.field.docId.title": "Part Id",
+  "bom.drawerTable.field.revision.title": "Rev",
+  "bom.drawerTable.field.name.title": "Title",
+  "bom.drawerTable.field.cost.title": "Cost",
+  "bom.drawerTable.field.leadTime.title": "Lead Time",
+  "bom.drawerTable.field.status.title": "Status"
 }

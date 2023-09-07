@@ -79,6 +79,6 @@ export default makeStyles(theme => ({
     color: Colors.error,
   },
   addPartButton: {
-    marginTop: 4,
+    marginTop: -4,
   },
 }));

@@ -164,7 +164,6 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
         kind="add"
         fullWidth
         onClick={AddAlternatePart}
-        style={{ marginTop: '-4px' }}
         className={classes.addPartButton}
       >
         {translate('bom.alternate.part.add')}
