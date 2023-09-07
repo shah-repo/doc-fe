@@ -89,5 +89,9 @@ export default makeStyles((theme: Theme) =>
       height: '100%',
       width: 950,
     },
+    drawerDiv: {
+      margin: 30,
+      width: 950,
+    },
   }),
 );

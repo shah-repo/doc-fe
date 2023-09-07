@@ -10,14 +10,14 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
+import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import OldColors from '../../../../layout/theme/utils/colors';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
 
 interface FBBOMDetailDrawerProps {
-  openDrawer: boolean
+  isOpenedDrawer: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
@@ -26,7 +26,7 @@ interface FBBOMDetailDrawerProps {
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
-  openDrawer,
+  isOpenedDrawer,
   closeDrawer,
   parentRevId,
   docId,
@@ -36,9 +36,9 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" style={{ width: 950 }} open={openDrawer} onClose={closeDrawer}>
+    <Drawer anchor="right" open={isOpenedDrawer} onClose={closeDrawer}>
       {children ?? (
-        <Box margin="30px">
+        <Box className={classes.drawerDiv}>
           <Grid
             container={true}
             wrap="nowrap"

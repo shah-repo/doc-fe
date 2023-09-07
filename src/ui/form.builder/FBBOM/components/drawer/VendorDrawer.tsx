@@ -8,17 +8,18 @@ import {
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import classNames from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
+import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import { Colors } from '../../../../layout/theme-next';
 import { Vendor } from '../../../FBPartVendors/types';
 import PartVendorsTable from '../drawerTable/vendors';
 import useStyles from './styles';
 
 interface VendorTableProps {
-  openDrawer: boolean
+  isOpenedDrawer: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
@@ -28,7 +29,7 @@ interface VendorTableProps {
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
-  openDrawer,
+  isOpenedDrawer,
   closeDrawer,
   parentRevId,
   docId,
@@ -39,9 +40,9 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
+    <Drawer anchor="right" open={isOpenedDrawer} onClose={closeDrawer}>
       {children ?? (
-        <Box margin="30px" width="950px">
+        <Box className={classes.drawerDiv}>
           <Grid
             container={true}
             wrap="nowrap"
@@ -100,9 +101,10 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={`${classes.chip} ${
-                  classes[FormHeaderStatusClassMapping[status ?? '']]
-                }`}
+                className={classNames(
+                  classes.chip,
+                  classes[FormHeaderStatusClassMapping[status ?? '']],
+                )}
                 label={status}
                 data-cy="HeaderInfo-status"
               />

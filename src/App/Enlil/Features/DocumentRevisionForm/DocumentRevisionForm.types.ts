@@ -50,7 +50,7 @@ export type DocumentRevisionFormProps =
   isCreateUrl?: boolean
   isDAM?: boolean
   dirty?: boolean
-  minimizeRightPanel?: boolean
+  isMinimizedRightPanel?: boolean
 };
 
 export interface DocumentRevisionFormStateProps {

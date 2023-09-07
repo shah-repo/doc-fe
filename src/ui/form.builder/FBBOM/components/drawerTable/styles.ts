@@ -78,4 +78,7 @@ export default makeStyles(theme => ({
   deleteIcon: {
     color: Colors.error,
   },
+  addPartButton: {
+    marginTop: 4,
+  },
 }));

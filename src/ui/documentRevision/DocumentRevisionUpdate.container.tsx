@@ -10,10 +10,10 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
-import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -32,7 +32,7 @@ interface Props {
   onDirtyFlagChange?: (dirty: boolean) => void
   canChangeOwnerShip?: boolean
   isNewVersion?: boolean
-  minimizeRightPanel?: boolean
+  isMinimizedRightPanel?: boolean
 }
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
@@ -43,7 +43,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   documentId,
   canChangeOwnerShip,
   isNewVersion,
-  minimizeRightPanel,
+  isMinimizedRightPanel,
 }) => {
   const dispatch = useDispatch();
   const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -86,7 +86,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState) {
     return (
-      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, minimizeRightPanel }} />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isMinimizedRightPanel }} />
     );
   }
 
@@ -130,9 +130,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
     if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
       set(dataToSubmit, 'formInput', {
-        ...formInput, ...{
-          [FBDAMFields.DAM]: FBStore.damData?.['approvalMatrix'],
-          [FBDAMFields.DAR]: FBStore.damData?.['approvalRoles'],
+        ...formInput,
+...{
+          [FBDAMFields.DAM]: FBStore.damData?..approvalMatrix,
+          [FBDAMFields.DAR]: FBStore.damData?..approvalRoles,
         },
       });
     }
@@ -230,7 +231,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
-        minimizeRightPanel={minimizeRightPanel}
+        isMinimizedRightPanel={isMinimizedRightPanel}
       />
     </FormContext.Provider>
   );
