@@ -65,7 +65,7 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
         <Autocomplete
           {...getFieldProps(field)}
           options={renderOptions()}
-          value={'' + values[field]}
+          value={String(values[field])}
           disabled={dataItem[ADD_FIELD]}
           onChange={onRevChange}
           size="small"

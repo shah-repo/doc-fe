@@ -8,7 +8,7 @@ import { styles } from './styles';
 
 export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
   const classes = styles();
-  const [hover, setHover] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Grid
@@ -17,13 +17,19 @@ export const Vendors: React.FC<TreeListHeaderCellProps> = () => {
       alignContent="flex-start"
       justify="flex-start"
     >
-      <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <Tooltip
           title={translate('bom.table.title.vendors')}
           placement="top"
           arrow
         >
-          <FontAwesomeIcon icon={hover ? solid('receipt') : regular('receipt')} className={classes.icon} />
+          <FontAwesomeIcon
+            className={classes.icon}
+            icon={isHovered ? solid('receipt') : regular('receipt')}
+          />
         </Tooltip>
       </div>
     </Grid>

@@ -7,11 +7,7 @@ import { FBOption } from '../../../..';
 import { translate } from '../../../../../../common/intl';
 import unitsOptions from '../../../../FBData/unitsOptions.json';
 
-interface DropDownFilterProps extends TreeListFilterCellProps {
-  field: string
-}
-
-const DropDownFilter: React.ComponentType<DropDownFilterProps> = (props) => {
+const DropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
   const { field, onFilterChange } = props;
   const data = unitsOptions.map(item => ({ ...item, text: translate(item.text) }));
   const [value, setValue] = React.useState<FBOption>({} as FBOption);
@@ -46,7 +42,7 @@ const DropDownFilter: React.ComponentType<DropDownFilterProps> = (props) => {
     }
     onFilterChange?.({
       filter,
-      field,
+      field: field as string,
       syntheticEvent: event?.syntheticEvent,
     });
   };

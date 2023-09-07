@@ -149,7 +149,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     mainOrderIndex: 14,
     cell: BooleanCell,
     headerCell: Issues,
-    hidden: true,
+    isHidden: true,
   },
   {
     field: 'vendorsCount',

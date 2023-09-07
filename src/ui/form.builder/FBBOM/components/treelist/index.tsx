@@ -265,7 +265,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
     const dataColumns = map(columns, (column: CustomTreeListColumnProps) => {
       if (column.field === field) {
-        column.hidden = !column.hidden;
+        column.isHidden = !column.isHidden;
       }
       return column;
     });

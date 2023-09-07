@@ -17,7 +17,7 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
   style,
 }) => {
   const classes = styles();
-  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
   const attachmentNamesCount = dataItem.attachmentNames?.length ?? 0;
   const isAttachmentNamesExists = attachmentNamesCount > 0;
   const { _documentRevisionFormState } = SM.useStores();
@@ -26,13 +26,13 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
     if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(false);
     }
-    setOpenPartsDrawer(true);
+    setIsPartsDrawerOpened(true);
   };
   const closeDrawer = () => {
     if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
-    setOpenPartsDrawer(false);
+    setIsPartsDrawerOpened(false);
   };
 
   const fetchDotIcon = () => <FontAwesomeIcon
@@ -58,7 +58,7 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
         </Tooltip>
         {!isAttachmentNamesExists && fetchDotIcon()}
       </div>
-      <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, dataItem }} >
+      <FBBOMDetailDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, dataItem }} >
         <DocumentRevisionDrawerContent {...{ dataItem }} />
       </FBBOMDetailDrawer>
     </td>

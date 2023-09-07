@@ -31,7 +31,7 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const isOpened = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,7 +53,7 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
         id="bom-togglecolumns-menu"
         anchorEl={anchorEl}
         keepMounted
-        open={open}
+        open={isOpened}
         onClose={handleClose}
       >
         <Card>
@@ -82,13 +82,13 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
                 <ListItemText
                   id={item.field}
                   primary={
-                    <Typography className={classes.menuItem} data-cy={`${item.title}-${item.hidden}`}>
+                    <Typography className={classes.menuItem} data-cy={`${item.title}-${item.isHidden}`}>
                       {translate(item.title ?? '').toUpperCase()}
                     </Typography>
                   }
                 />
                 <Box flexGrow={1} mr={5} />
-                {item.hidden ? (
+                {item.isHidden ? (
                   <ViewChecked
                     onClick={() => {
                       onChange(item);

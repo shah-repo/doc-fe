@@ -24,12 +24,12 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
     if (!dataItem.isDisabled) {
     _documentRevisionFormState?.setRefreshBOMTree(false);
     }
-    setOpenPartsDrawer(true);
+    setIsPartsDrawerOpened(true);
   };
-  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
-    setOpenPartsDrawer(false);
+    setIsPartsDrawerOpened(false);
     if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
@@ -58,7 +58,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         </Tooltip>
         {!isAlteratePartsExists && fetchDotIcon()}
       </div>
-      <AlternatePartsDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
+      <AlternatePartsDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
     </td>
   );
 };

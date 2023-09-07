@@ -109,15 +109,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(false);
     }
-    setOpenPartsDrawer(true);
+    setIsPartsDrawerOpened(true);
   };
-  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
     if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
-    setOpenPartsDrawer(false);
+    setIsPartsDrawerOpened(false);
   };
 
   useEffect(() => {
@@ -171,7 +171,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   );
 
   const getDrawer = () => (
-    <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, dataItem }} >
+    <FBBOMDetailDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, dataItem }} >
       <DocumentRevisionDrawer {...{ dataItem }} />
     </FBBOMDetailDrawer>
   );
@@ -199,13 +199,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           }
         }
         if (i === props.level.length - 1 && hasChildren && !dataItem.isMarkedAsDeleted) {
-          return (<span className={cx('k-icon', classes.expand)}>
-            {(props.expanded
-              ? <FontAwesomeIcon onClick={onClick} size="sm" icon={regular('square-minus')} />
-              : <FontAwesomeIcon onClick={onClick} icon={solid('square-plus')} size="sm" />
-            )
-            }
-          </span>);
+          return (
+            <span className={cx('k-icon', classes.expand)}>
+              <FontAwesomeIcon
+                onClick={onClick}
+                size="sm"
+                icon={props.expanded ? regular('square-minus') : solid('square-plus')}
+              />
+            </span>
+          );
         }
         return !isEditMode && <span className="k-icon k-i-none" role="presentation" />;
       })
