@@ -1644,5 +1644,22 @@
   "bom.whereUsed.dialog.title": "Where Used View",
   "bom.ar.child.draft.option": "Rev {revision} - {title}",
   "bom.ar.child.draft.add.action.message": "Action required on {itemsPending} item",
-  "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:"
+  "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:",
+  "bom.treelist.treeColumns.field.customDocId.title": "Id",
+  "bom.treelist.treeColumns.field.revision.title": "Rev",
+  "bom.treelist.treeColumns.field.name.title": "Title",
+  "bom.treelist.treeColumns.field.arId.title": "AR Id",
+  "bom.treelist.treeColumns.field.status.title": "Status",
+  "bom.treelist.treeColumns.field.cost.title": "Cost (Cost Rollup)",
+  "bom.treelist.treeColumns.field.leadTime.title": "Lead Time (Days)",
+  "bom.treelist.treeColumns.field.quantity.title": "Qty.",
+  "bom.treelist.treeColumns.field.unity.title": "Unit",
+  "bom.treelist.treeColumns.field.hasChanges.title": "Has Changes",
+  "bom.treelist.treeColumns.field.refDesignator.title": "Ref. Designator",
+  "bom.treelist.treeColumns.field.comment.title": "Comments",
+  "bom.treelist.treeColumns.field.hasPrimaryAttachment.title": "Primary Attachments",
+  "bom.treelist.treeColumns.field.hasAttachments.title": "Attachments",
+  "bom.treelist.treeColumns.field.issues.title": "Issues",
+  "bom.treelist.treeColumns.field.vendorsCount.title": "Vendors",
+  "bom.treelist.treeColumns.field.alternatePartsList.title": "Alternate Parts List"
 }

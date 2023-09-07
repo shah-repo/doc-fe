@@ -1,18 +1,16 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
-import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import { TreeListColumnProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
 
-// ts-unused-exports:disable-next-line
 export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
   isShowedBOMDiff?: boolean
 }
 
-// ts-unused-exports:disable-next-line
 export interface BOMState {
   data: BOM[]
   dataState: DataState
@@ -53,21 +51,26 @@ export interface AlternatePart {
   [ALTERNATE_PART_KEY]?: boolean
 }
 
-// ts-unused-exports:disable-next-line
 export interface CustomTreeListRowProps extends TreeListRowProps {
   dataItem: BOM
 }
 
-// ts-unused-exports:disable-next-line
 export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEvent {
   dataItem: BOM
 }
 
-// ts-unused-exports:disable-next-line
 export interface WhereUsedTree {
   depth: number
   name: string
   parentDocId: string
   revision: number
   status: string
+}
+
+export interface CustomTreeListColumnProps extends TreeListColumnProps {
+  isHidden?: boolean
+  isShowedMenu?: boolean
+  mainOrderIndex?: number
+  disableShowOrHideSelection?: boolean
+  filterable?: boolean
 }
