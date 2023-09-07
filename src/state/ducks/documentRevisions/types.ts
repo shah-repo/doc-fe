@@ -153,6 +153,8 @@ export interface ChangeControlOptions {
   name: string
   status: DocumentRevisionStatus
   version: number
+  displayRevision: string
+  releasedAt: string
   formInput: Record<string, any>
   schemaMap: {[key: string]: string}
 }

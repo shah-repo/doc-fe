@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { ChangeControlOptions, DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
 
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Popover, Theme } from '@material-ui/core';
+import { Popover, Theme, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import Colors from '../../../layout/theme/utils/colors';
-
-import cx from 'classnames';
 
 interface Props {
   documentRevision: DocumentRevision
@@ -28,10 +26,18 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: `4px 4px 8px 4px ${Colors.blue_bell}`,
       right: '10px',
     },
+    heading: {
+      color: Colors.dark_gray,
+    },
+    formDetails: {
+      color: Colors.bright_grey,
+      paddingLeft: '4px',
+    },
     optionsList: {
       listStyle: 'none',
       paddingLeft: '0px',
       margin: '4px',
+      marginTop: '8px',
     },
     listItem: {
       marginBottom: '8px',
@@ -60,7 +66,6 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const showAssociatedControlOptions = (event) => {
-    console.log(documentRevision.changeControlOptions);
     handlePopoverOpen(event);
   };
 
@@ -72,9 +77,10 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
     setAnchorEl(null);
   };
 
-  const changeControlOptions = documentRevision.changeControlOptions;
+  const changeControlOptions = documentRevision.changeControlOptions as ChangeControlOptions;
   const formInput = changeControlOptions?.formInput ?? {};
   const schemaMap = changeControlOptions?.schemaMap ?? {};
+  const { docId, displayRevision } = changeControlOptions;
 
   return (
     <ButtonGroup
@@ -118,12 +124,14 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
+        <Typography variant="h5" component="h5" className={classes.heading}>Current Change Control Configuration from Form
+          <span className={classes.formDetails}>{docId} rev{displayRevision}</span>
+        </Typography>
         <ul className={classes.optionsList}>
           {Object.keys(formInput).map((key: string) => (
             <li key={key} className={classes.listItem}>
               <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
-              <span className={cx(classes.listItemValue, formInput[key] === 'No'
-                ? classes.allowed : classes.notAllowed)}>{formInput[key]}</span>
+              <span className={classes.listItemValue}>{formInput[key]}</span>
             </li>
           ))}
         </ul>

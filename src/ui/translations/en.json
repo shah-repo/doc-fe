@@ -586,6 +586,8 @@
   "documentRevision.revise.SUP": "Update Record",
   "documentRevision.form.references": "References",
   "documentRevision.form.release.date": "Release Date",
+  "documentRevision.pmccc.applied.title": "Change Control Config Applied",
+  "documentRevision.pmccc.applied.revision": "Rev",
   "documentRevision.form.processChange": "Process change",
   "documentRevision.form.nextRevision": "Next Revision",
   "documentRevision.form.nextRevision.PO": "Correction/Update",

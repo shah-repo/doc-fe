@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { DocumentRevisionFooterNew } from '../../../App';
+import { DocumentRevisionFooterNew, SMText } from '../../../App';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { authSelectors } from '../../../state/ducks/auth';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -92,6 +92,24 @@ const References = ({
         </Typography>
       </Box>
       <DocumentRevisionFooterNew />
+      <Box
+        pt={2.5}
+        display={selectedDocument?.changeControlOptions?.id ? 'block' : 'none'}
+      >
+        <Typography className={classes.releaseDate}>
+          <SMText label="documentRevision.pmccc.applied.title" />
+        </Typography>
+        <Typography component="div" className={classes.released}>
+          <>{selectedDocument?.changeControlOptions?.docId}</>,&nbsp;
+          <Text message="documentRevision.pmccc.applied.revision" /> {selectedDocument?.changeControlOptions?.displayRevision}, &nbsp;
+          <>
+            {getFormattedDateString(
+                  selectedDocument?.changeControlOptions?.releasedAt,
+                  MomentFormats.MonthDateYearTwoDigit,
+            )}
+          </>
+        </Typography>
+      </Box>
     </Box>
   );
 };
