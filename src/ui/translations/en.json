@@ -514,6 +514,7 @@
   "common.no.stay": "No, Stay",
   "common.search": "Search",
 	"common.print": "Print Label",
+	"common.send.to.print.success": "Print Sent Successfully!",
   "search.recent": "Recent Searches",
   "search.facets.header": "Refine By",
   "search.result": "Search Result",
