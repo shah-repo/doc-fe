@@ -16,7 +16,7 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import ScrollToError from '../../components/forms/ScrollToError';
 import AttachmentsField from '../../document.revision/form/attachments';
 import BuildsContainer from '../../document.revision/summary/builds.container';
-import { attachmentsDisabledChangeControl } from '../../document.revision/utils/helpers';
+import { attachmentsDisabledChangeControl, disableOtherFieldsChangeControl } from '../../document.revision/utils/helpers';
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from '../../form.builder';
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../hooks/docCustomization/useCustomization';
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
@@ -128,6 +128,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
   const isDCO = (documentRevision?.document?.documentType?.documentTypeName === 'Document Change Order');
+  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -247,7 +248,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocIdInput
               document={values.document}
               {...{
-                isDisabled: isDisabledInputInPreview,
+                isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
                 documentTypesById,
                 setDocId,
                 documentTypeId,
@@ -263,6 +264,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   {_documentRevisionFormState?.forceRender
                 && <RevisionStage {...{
                   isDisabled,
+                  inRestrictedEditMode,
                   isDocRevFirstDraft,
                   shouldShowRevStageForDocType,
                   documentTypeId,
@@ -271,6 +273,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   {!_documentRevisionFormState?.forceRender
                 && <RevisionStage {...{
                   isDisabled,
+                  inRestrictedEditMode,
                   isDocRevFirstDraft,
                   shouldShowRevStageForDocType,
                   documentTypeId,
@@ -284,7 +287,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <Grid item xs={6}>
             <RetrainField
               revisionChangeType={values.revisionChangeType}
-              isDisabled={isDisabledInput}
+              isDisabled={isDisabledInput || inRestrictedEditMode}
               {...{ documentTypeId, isRecord }}
             />
           </Grid></>)}
@@ -317,7 +320,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft
             && <Grid item xs={12}>
               <RevisionTypeChange
-                isDisabled={isDisabledInput}
+                isDisabled={isDisabledInput || inRestrictedEditMode}
                 {...{
                   documentTypeId,
                   isDocRevFirstDraft,
@@ -342,7 +345,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {(isPart || isPartForm)
             && <Grid item xs={12}>
               <RelatedPartsWrapper
-                viewOnly={isDisabledInputInPreview || hasOutput || !isOwner}
+                viewOnly={isDisabledInputInPreview || hasOutput || !isOwner || inRestrictedEditMode}
                 documentRevision={documentRevision}
                 relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
