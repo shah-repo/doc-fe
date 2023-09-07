@@ -4,7 +4,6 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import { SM } from '../../../../App';
 import { ReactComponent as NewTabIcon } from '../../../../assets/images/new_tab.svg';
-import { TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { AsyncStatus } from '../../../../state/types';
 import AsyncGate from '../../../components/AsyncGate';
 import Text from '../../../components/Text';
@@ -22,7 +21,7 @@ const DocumentRevisionDialog: React.FC<
 DocumentRevisionDialogProps
 > = ({ dialog }) => {
   const classes = styles();
-  const { _documentRevisionFormState, _tabsState } = SM.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
 
   const handleOpenNewTab = () => {
     const documentRevision = _documentRevisionFormState?.newlyCreatedDocumentRevision;
@@ -80,7 +79,6 @@ DocumentRevisionDialogProps
                       documentId={_documentRevisionFormState?.documentId as string}
                       canChangeOwnerShip={false}
                       isNewVersion={false}
-                      minimizeRightPanel={_tabsState?.isTabActive(TabTypeOptions.BOM)}
                     />
                   </Theme>
                 )}
