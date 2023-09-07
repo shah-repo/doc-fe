@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
-import Text from '../../../../components/Text';
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
 import { toastError, toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -163,6 +163,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const updateRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId, suffixNumber, suffixName, rootDocId }: any) => {
       relatedPartsState.updateRelatedPartsList(docRevId, { suffixNumber, suffixName, rootDocId });
+      workspaceState?.saveDocRev();
     },
   });
   const handleUpdate = (docRevId: string, suffixNumber: string, suffixName: string) => {
