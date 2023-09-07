@@ -47,6 +47,7 @@ export const styles = makeStyles((theme) => ({
     marginLeft: props.isEditMode ? 0 : theme.spacing(1.875),
   }),
   titleInfoCell: (props) => ({
+    maxWidth: 300,
     fontWeight: props?.hasChildren ? 600 : 400,
     fontFamily: 'Sora',
     fontSize: 14,
