@@ -594,9 +594,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
               className={classes.diffContainer}
             >
               <span className={classes.toggleIconContainer} onClick={showHideDiff}>
-                {isShowedBOMDiff
-                  ? <FontAwesomeIcon className={classes.toggleIcon} icon={regular('toggle-large-on')} size="lg" />
-                  : <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={regular('toggle-large-off')} size="lg" />}
+                <FontAwesomeIcon
+                  className={classes.toggleIcon}
+                  size="lg"
+                  icon={isShowedBOMDiff ? regular('toggle-large-on') : regular('toggle-large-off')}
+                />
                 <span className={classes.toggleIconLabel}>{translate(isShowedBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
             </Grid>
@@ -764,7 +766,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
         <FormikProvider value={formik}>
           <Grid container>
             <Grid item xs={12} ref={treeListRef}>
-              <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy={true} fileName={EXCEL_FILE_NAME}>
+              <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
                 <TreeList
                   {...state.dataState}
                   tableProps={{ style: { width: '2561px' } }}

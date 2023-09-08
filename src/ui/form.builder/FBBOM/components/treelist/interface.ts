@@ -24,17 +24,14 @@ export interface DataState {
   filter?: FilterDescriptor[]
 }
 
-// ts-unused-exports:disable-next-line
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
 }
 
-// ts-unused-exports:disable-next-line
 export interface EditableAlternatePart extends AlternatePart {
   [MODE_FIELD]: Mode
 }
 
-// ts-unused-exports:disable-next-line
 export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }

@@ -65,8 +65,8 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
     return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+  const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],

@@ -20,14 +20,14 @@ const WhereUsedDialog: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   return (
     <Dialog
-      disableBackdropClick={true}
+      disableBackdropClick
       disableEnforceFocus
       classes={{
         root: classes.root,
         paper: classes.paper,
       }}
       scroll="paper"
-      disableEscapeKeyDown={true}
+      disableEscapeKeyDown
       maxWidth={false}
       open={whereUsedDialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}

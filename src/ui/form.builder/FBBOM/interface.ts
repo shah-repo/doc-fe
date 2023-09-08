@@ -31,11 +31,10 @@ export interface BOM {
   isNew?: boolean
   isDeleted?: boolean
   availableRevisions?: AvailableRevisions
-  changeRequestDetails?: changeRequestDetails
+  changeRequestDetails?: ChangeRequestDetails
   costRollUp: number
 }
 
-// ts-unused-exports:disable-next-line
 export interface EditableBOM extends BOM {
   [MODE_FIELD]: boolean
   parentNodeDocumentId?: string
@@ -49,13 +48,12 @@ export interface EditableBOM extends BOM {
   replacesStatus?: string
 }
 
-// ts-unused-exports:disable-next-line
 export interface BOMEditEvent {
   dataItem: EditableBOM
   level: number[]
 }
 
-interface changeRequestDetails {
+interface ChangeRequestDetails {
   id: string
   title: string
   crId: string
@@ -69,5 +67,5 @@ export interface AvailableRevisions {
   documentId: string
   revision: number
   status: string
-  changeRequestDetails: changeRequestDetails
+  changeRequestDetails: ChangeRequestDetails
 }

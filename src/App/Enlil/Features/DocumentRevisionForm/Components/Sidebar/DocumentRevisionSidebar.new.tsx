@@ -42,7 +42,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   isNewOutput = false,
   docId = '',
   intl,
-  edit,
+  canEdit = false,
   isRightPanelMinimized,
 }) => {
   const classes = useStyles();
@@ -127,7 +127,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                       <Box display="flex" flexGrow={1} flexDirection="column">
                         <ReferencesContainer
                           selectedDocument={selectedDocument}
-                          edit={edit}
+                          edit={canEdit}
                         />
                         {showFormMigration && (
                           <ChangeDocumentFormContainer

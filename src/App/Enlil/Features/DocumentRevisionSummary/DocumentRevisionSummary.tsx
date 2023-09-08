@@ -129,7 +129,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
             <Observer>
               {() => (
                 <DocumentRevisionSidebar
-                  edit={false}
                   isRightPanelMinimized={isRightPanelMinimized ?? _tabsState?.isTabActive(TabTypeOptions.BOM)}
                 />
               )}

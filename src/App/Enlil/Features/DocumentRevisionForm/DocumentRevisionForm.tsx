@@ -167,7 +167,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             <Observer>
               {() => (
                 <DocumentRevisionSidebar
-                  edit={true}
+                  canEdit
                   isRightPanelMinimized={isRightPanelMinimized ?? _tabsState?.isTabActive(TabTypeOptions.BOM)}
                 />
               )}

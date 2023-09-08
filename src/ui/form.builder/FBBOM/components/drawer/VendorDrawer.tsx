@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import classNames from 'classnames';
+import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import Text from '../../../../components/Text';
@@ -19,7 +19,7 @@ import PartVendorsTable from '../drawerTable/vendors';
 import useStyles from './styles';
 
 interface VendorTableProps {
-  isOpenedDrawer: boolean
+  isDrawerOpened: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
@@ -29,7 +29,7 @@ interface VendorTableProps {
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
-  isOpenedDrawer,
+  isDrawerOpened,
   closeDrawer,
   parentRevId,
   docId,
@@ -40,11 +40,11 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" open={isOpenedDrawer} onClose={closeDrawer}>
+    <Drawer anchor="right" open={isDrawerOpened} onClose={closeDrawer}>
       {children ?? (
         <Box className={classes.drawerDiv}>
           <Grid
-            container={true}
+            container
             wrap="nowrap"
             justify="space-between"
             alignItems="center"
@@ -61,7 +61,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item>
               <div className={classes.iconContainer}>
                 <IconButton
-                  onClick={() => closeDrawer()}
+                  onClick={closeDrawer}
                   aria-label="Close"
                   disableFocusRipple
                   disableRipple
@@ -101,7 +101,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={classNames(
+                className={cx(
                   classes.chip,
                   classes[FormHeaderStatusClassMapping[status ?? '']],
                 )}

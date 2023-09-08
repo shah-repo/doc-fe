@@ -21,20 +21,18 @@ interface DocumentRevisionDrawerProps {
   dataItem?: EditableBOM
 }
 
-const DocumentRevisionDrawer: React.FC<
-DocumentRevisionDrawerProps
-> = ({ dataItem }) => {
+const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataItem }) => {
   const { _tabsState } = SM.useStores();
   const classes = useStyles();
   const documentRevisionId = dataItem?.id.split(
     SELECTED_PART_KEY_SEPARATOR,
-  )[0] as string;
+  )[0];
   const loadDocumentRevisionAsyncState = useSelector(
     documentRevisionsSelectors.getLoadAsyncDrawerState,
   );
-  const documentRevision = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId),
-  );
+  const documentRevision = useSelector((state: ApplicationState) => {
+    return documentRevisionId && documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId);
+  });
 
   const loadDocumentRevision = useActionCreator(documentRevisionsActions.load);
   const loadAction = () =>
@@ -49,14 +47,12 @@ DocumentRevisionDrawerProps
         <AsyncGate
           asyncAction={loadAction}
           asyncState={loadDocumentRevisionAsyncState}
-          startActionOnMount={true}
+          startActionOnMount
         >
-          {documentRevision && (
+          {dataItem && documentRevision && (
             <DocumentRevisionUpdateContainer
               documentRevision={documentRevision}
-              documentId={dataItem?.documentId as string}
-              canChangeOwnerShip={false}
-              isNewVersion={false}
+              documentId={dataItem.documentId}
               isRightPanelMinimized={_tabsState?.isTabActive(TabTypeOptions.BOM)}
             />
           )}

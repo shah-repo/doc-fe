@@ -88,8 +88,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+  const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],
@@ -171,7 +171,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   );
 
   const getDrawer = () => (
-    <FBBOMDetailDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, dataItem }} >
+    <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
       <DocumentRevisionDrawer {...{ dataItem }} />
     </FBBOMDetailDrawer>
   );
@@ -251,7 +251,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           <>
             {!isEditMode && _documentRevisionFormState?.isShowedBOMDiff && dataItem?.replacesStatus
             && <Grid
-              container={true}
+              container
               className={classes.replacedDocRevInfo}
               wrap="nowrap"
               justify="flex-end"
@@ -259,8 +259,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
             >
               <span className={classes.replacedDocRevInfoTitle} >{translate('bom.replaced.doc.rev')}</span>&nbsp;
               <FontAwesomeIcon icon={solid('arrow-right')} />&nbsp;{replaceDocumentRevision?.document?.docId}
-              <Grid item={true} className={classes.whiteDot} />
-              <Grid item={true}>
+              <Grid item className={classes.whiteDot} />
+              <Grid item>
                 <Text
                   translation="form.builder.header.rev"
                   values={{ revision: replaceDocumentRevision?.displayRevision }}

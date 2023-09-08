@@ -21,7 +21,6 @@ export default makeStyles((theme: Theme) =>
     },
     docId: {
       height: 24,
-      fontFamily: 'Sora',
       fontWeight: 700,
       fontSize: 17,
       color: Colors.textBlack,
@@ -31,7 +30,6 @@ export default makeStyles((theme: Theme) =>
     },
     headerInfo: {
       height: 24,
-      fontFamily: 'Sora',
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: 16,

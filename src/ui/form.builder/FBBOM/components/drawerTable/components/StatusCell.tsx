@@ -1,5 +1,5 @@
 import { Chip, Grid } from '@material-ui/core';
-import classNames from 'classnames';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
@@ -31,7 +31,7 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onC
         childrenElement={<span>
           {status && <Chip
             size="small"
-            className={classNames(
+            className={cx(
               classes.chip,
               classes[statusClassMapping[status]],
             )}

@@ -11,10 +11,10 @@ interface Props extends ActionsProps<EditableAlternatePart> {
 
 export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [showActions, setActionFlag] = useState(false);
+  const [areActionsShowed, setActionsShowed] = useState(false);
 
   useEffect(() => {
-    setActionFlag(true);
+    setActionsShowed(true);
   }, []);
 
   return (
@@ -22,7 +22,7 @@ export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
       <div ref={ref} className={props.rootClassName} />
       {ref.current && (
         <Popper
-          open={showActions}
+          open={areActionsShowed}
           placement="bottom-end"
           anchorEl={ref.current}
           modifiers={{

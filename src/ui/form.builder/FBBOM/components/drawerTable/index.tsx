@@ -130,8 +130,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
 
   const isAlternatePartAdded = editedAlternatePart?.[MODE_FIELD] === Mode.add;
 
-  const enableAddField = true;
-  const handleRowClick = enableAddField && !editedAlternatePart ? editAlternatePart : undefined;
+  const handleRowClick = editedAlternatePart ? undefined : editAlternatePart;
 
   const alternatePartList = alternateParts?.reduce((list, alternatePart) => {
     const isAlternatePartEdited = editedAlternatePart && editedAlternatePart.id === alternatePart.id;
@@ -160,14 +159,14 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
           fallback={<NoDataFound />}
         />
       </FormikProvider>
-      {enableAddField && <Button
+      <Button
         kind="add"
         fullWidth
         onClick={AddAlternatePart}
         className={classes.addPartButton}
       >
         {translate('bom.alternate.part.add')}
-      </Button>}
+      </Button>
     </Box>
   );
 };

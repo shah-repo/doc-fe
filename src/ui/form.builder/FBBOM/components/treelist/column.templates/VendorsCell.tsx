@@ -52,7 +52,7 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
         {!isSuppliersExist && fetchDotIcon()}
       </div>
       <VendorDrawer {...{
-        openDrawer: isPartsDrawerOpened,
+        isDrawerOpened: isPartsDrawerOpened,
         closeDrawer,
         parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
         revision: dataItem.revision,

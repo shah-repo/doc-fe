@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
+import cx from 'classnames';
 import { translate } from '../../../../../common/intl';
 import Text from '../../../../components/Text';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
@@ -17,7 +18,7 @@ import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
 
 interface FBBOMDetailDrawerProps {
-  isOpenedDrawer: boolean
+  isDrawerOpened: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
@@ -26,7 +27,7 @@ interface FBBOMDetailDrawerProps {
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
-  isOpenedDrawer,
+  isDrawerOpened,
   closeDrawer,
   parentRevId,
   docId,
@@ -36,11 +37,11 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" open={isOpenedDrawer} onClose={closeDrawer}>
+    <Drawer anchor="right" open={isDrawerOpened} onClose={closeDrawer}>
       {children ?? (
         <Box className={classes.drawerDiv}>
           <Grid
-            container={true}
+            container
             wrap="nowrap"
             justify="space-between"
             alignItems="center"
@@ -57,7 +58,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item>
               <div className={classes.iconContainer}>
                 <IconButton
-                  onClick={() => closeDrawer()}
+                  onClick={closeDrawer}
                   aria-label="Close"
                   disableFocusRipple
                   disableRipple
@@ -97,9 +98,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={`${classes.chip} ${
-                  classes[FormHeaderStatusClassMapping[status ?? '']]
-                }`}
+                className={cx(classes.chip, classes[FormHeaderStatusClassMapping[status ?? '']])}
                 label={status}
                 data-cy="HeaderInfo-status"
               />
