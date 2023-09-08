@@ -655,7 +655,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   };
 
   const getColumns = () => {
-    return columns.filter(({ hidden }) => !hidden);
+    return columns.filter(({ isHidden }) => !isHidden);
   };
 
   const onColumnReorder = (event: TreeListColumnReorderEvent) => {

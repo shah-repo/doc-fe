@@ -51,7 +51,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item>
               <Typography
                 className={classes.headerInfo}
-                data-cy="HeaderInfo-docId"
+                data-cy="header-info-parts"
                 component="span"
               >
                 {translate('bom.table.title.alternate.suppliers.list')}
@@ -83,7 +83,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item>
               <Typography
                 className={classes.docId}
-                data-cy="HeaderInfo-docId"
+                data-cy="header-info-docId"
                 component="span"
               >
                 {docId}
@@ -94,7 +94,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
               <Text
                 translation="form.builder.header.rev"
                 values={{ revision }}
-                dataCy="HeaderInfo-Rev"
+                dataCy="header-info-rev"
               />
             </Grid>
             <Grid item className={classes.chipContainer}>
@@ -105,7 +105,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
                   classes[FormHeaderStatusClassMapping[status ?? '']],
                 )}
                 label={status}
-                data-cy="HeaderInfo-status"
+                data-cy="header-info-status"
               />
             </Grid>
           </Grid>
