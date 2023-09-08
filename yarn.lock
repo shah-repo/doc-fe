@@ -2463,10 +2463,10 @@
     "@progress/kendo-draggable-common" dev
     prop-types "^15.6.0"
 
-"@progress/kendo-react-common@5.14.0":
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-react-common/-/kendo-react-common-5.14.0.tgz#b97f37fc221c4f92646d5aa7ac5cbb48bd74cda4"
-  integrity sha512-IiffARzPEEDWob2LW+xzndTNMsYWtigVBYimZV2iIztNquFPxY+akrnrH2f0LsJUy20Qn4+3iFCJ+0B3j+4z9w==
+"@progress/kendo-react-common@5.16.1":
+  version "5.16.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-common/-/kendo-react-common-5.16.1.tgz#ee252f30bb521e10e2322e3532ee19378f958b8a"
+  integrity sha512-SGXqTzR6uBWGKUVb1ZxGX/oYvHmB2AZPxJRdZq88qwatOrs+VP2FEvt8YlsDkS7OzWIRPyRrTgz9t897pjVJJw==
   dependencies:
     "@progress/kendo-draggable-common" "^0.2.3"
     prop-types "^15.6.0"
@@ -2580,11 +2580,11 @@
     prop-types "^15.6.0"
 
 "@progress/kendo-react-treelist@^5.14.0":
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-react-treelist/-/kendo-react-treelist-5.14.0.tgz#84a3fc5de3c80ff9fe6ed852cc7a4872fdefc69b"
-  integrity sha512-TW0YDQ8ub7n6a30KigVkzUGl93qVBl1fjyqFEnTZbDb9lw6Gr391a/fSmYN3LGJmndnvJDa0iUL546WnJJ+Fww==
+  version "5.16.1"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-treelist/-/kendo-react-treelist-5.16.1.tgz#a1e189cc35a709d7bf653b8dda1737ff01048e5e"
+  integrity sha512-C643ejk07wrqblC5Olq8PKtE+RQbiVzHolqCIciv2E4Vc7+VzC7LL9CA1MBrpznaynieeE9a87d9bF67CEZXZQ==
   dependencies:
-    "@progress/kendo-react-common" "5.14.0"
+    "@progress/kendo-react-common" "5.16.1"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-treeview@^4.13.0":
@@ -2596,9 +2596,9 @@
     prop-types "^15.6.0"
 
 "@progress/kendo-svg-icons@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-svg-icons/-/kendo-svg-icons-1.5.0.tgz#39b1df823745cd9e52e8292edc5b7d457711fb51"
-  integrity sha512-mEMDFemkBGqDfjiXzouHTjlw75V6Lgk3RygG1ZeojzBItj/FsiwCBqv3sM72GSAKNTwkFh6YI5+zM1Kiovwh6g==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-svg-icons/-/kendo-svg-icons-1.9.0.tgz#5a0427b154d31ceaaccd2c3e3c6461f1626c4be3"
+  integrity sha512-Hgf52EPLx0wfSpo3h9WXqEHBlcYUGi9iIjuIrcKfBCKaNax/d3StcjrXruj2CX3F66CisqWrgUJAmMc22KNinw==
 
 "@progress/pako-esm@^1.0.1":
   version "1.0.1"

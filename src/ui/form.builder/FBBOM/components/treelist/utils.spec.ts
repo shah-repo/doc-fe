@@ -13,6 +13,7 @@ describe('Testing BOM Utils', () => {
   it('processes BOM Data correctly', () => {
     const response = processBOMData(bomTreeRelations, parentRevDetails);
     expect(response[0].childNodes).toHaveLength(6);
-    // console.log(response);
   });
 });
+
+export { };

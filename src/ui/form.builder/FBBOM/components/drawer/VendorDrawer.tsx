@@ -8,27 +8,28 @@ import {
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
-import { Colors } from '../../../../layout/theme-next';
+import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import { Vendor } from '../../../FBPartVendors/types';
 import PartVendorsTable from '../drawerTable/vendors';
 import useStyles from './styles';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 
 interface VendorTableProps {
-  openDrawer: boolean
+  isDrawerOpened: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: string
+  status?: DocumentRevisionStatus
   revision?: string
   vendors: Vendor[]
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
-  openDrawer,
+  isDrawerOpened,
   closeDrawer,
   parentRevId,
   docId,
@@ -39,11 +40,11 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" open={openDrawer} onClose={closeDrawer}>
+    <Drawer anchor="right" open={isDrawerOpened} onClose={closeDrawer}>
       {children ?? (
-        <Box margin="30px" width="950px">
+        <Box className={classes.drawerDiv}>
           <Grid
-            container={true}
+            container
             wrap="nowrap"
             justify="space-between"
             alignItems="center"
@@ -51,7 +52,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item>
               <Typography
                 className={classes.headerInfo}
-                data-cy="HeaderInfo-docId"
+                data-cy="header-info-parts"
                 component="span"
               >
                 {translate('bom.table.title.alternate.suppliers.list')}
@@ -60,7 +61,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item>
               <div className={classes.iconContainer}>
                 <IconButton
-                  onClick={() => closeDrawer()}
+                  onClick={closeDrawer}
                   aria-label="Close"
                   disableFocusRipple
                   disableRipple
@@ -68,7 +69,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
                   data-cy="close-alternate-part-list"
                   className={classes.closeIcon}
                 >
-                  <CloseIcon style={{ color: Colors.light_gray }} />
+                  <CloseIcon />
                 </IconButton>
               </div>
             </Grid>
@@ -83,7 +84,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
             <Grid item>
               <Typography
                 className={classes.docId}
-                data-cy="HeaderInfo-docId"
+                data-cy="header-info-docId"
                 component="span"
               >
                 {docId}
@@ -94,17 +95,18 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
               <Text
                 translation="form.builder.header.rev"
                 values={{ revision }}
-                dataCy="HeaderInfo-Rev"
+                dataCy="header-info-rev"
               />
             </Grid>
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={`${classes.chip} ${
-                  classes[FormHeaderStatusClassMapping[status ?? '']]
-                }`}
+                className={cx(
+                  classes.chip,
+                  classes[FormHeaderStatusClassMapping[status ?? '']],
+                )}
                 label={status}
-                data-cy="HeaderInfo-status"
+                data-cy="header-info-status"
               />
             </Grid>
           </Grid>

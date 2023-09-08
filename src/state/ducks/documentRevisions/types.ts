@@ -247,6 +247,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   changeControlOptions?: ChangeControlOptions
   isBeingEditedAfterRelease?: boolean
   lotStatus: LotStatus
+  hasAttachments?: boolean
+  hasPrimaryAttachment?: boolean
 }
 
 export interface SmartReference {

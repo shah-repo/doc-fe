@@ -20,20 +20,20 @@ const WhereUsedDialog: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   return (
     <Dialog
-      disableBackdropClick={true}
+      disableBackdropClick
       disableEnforceFocus
       classes={{
         root: classes.root,
         paper: classes.paper,
       }}
       scroll="paper"
-      disableEscapeKeyDown={true}
+      disableEscapeKeyDown
       maxWidth={false}
       open={whereUsedDialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
       id="WhereUsed-dialog"
     >
-      <DialogTitle style={{ display: 'flex' }} disableTypography>
+      <DialogTitle className={classes.title} disableTypography>
         <Typography className={classes.heading}>
           <Text translation="bom.whereUsed.dialog.title" />
         </Typography>

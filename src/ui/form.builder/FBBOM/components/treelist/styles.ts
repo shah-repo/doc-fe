@@ -1,5 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
+import OldColors from '../../../../layout/theme/utils/colors';
+import { Size } from 'react-virtualized';
 
 const BASE_COLOR = Colors.primaryBg;
 
@@ -388,7 +390,7 @@ export default makeStyles((theme) => ({
     },
   },
   borderBottom: {
-    borderBottom: `1px solid ${Colors.alice_blue} !important`,
+    borderBottom: `1px solid ${OldColors.alice_blue} !important`,
     borderLeft: '0 !important',
   },
   toggleExpandCollapse: {
@@ -396,6 +398,9 @@ export default makeStyles((theme) => ({
     fontSize: 12,
     fontWeight: 400,
     cursor: 'pointer',
+  },
+  tableContainer: {
+    paddingTop: theme.spacing(2.5),
   },
   bottomAddButtom: {
     width: '100%',
@@ -483,4 +488,47 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
     zIndex: 1,
   },
+  node: {
+    outline: 'solid 1px #999',
+    outlineOffset: '3px',
+    '& circle': {
+      fill: '#fff',
+      stroke: 'steelblue',
+      strokeWidth: '3px',
+    },
+  },
+  link: {
+    fill: 'none',
+    stroke: '#777',
+    strokeWidth: '1px',
+  },
+  linkCircle: {
+    fill: '#0075FF',
+    stroke: '#F5F8FF',
+    strokeWidth: '1px',
+  },
+  whereUsedHeadingText: {
+    fontSize: '13px',
+  },
+  whereUsedStatusText: {
+    fontSize: '10px',
+    fill: '#777',
+  },
+  backgroundRect: {
+    fill: '#999',
+  },
+  statusReleased: {
+    fill: Colors.statusReleased,
+  },
+  statusDraft: {
+    fill: Colors.statusDraft,
+  },
+  statusPendingChange: {
+    fill: Colors.statusPendingChange,
+  },
+  treeList: ({ size }: { size?: Size }) => ({
+    width: '100%',
+    maxHeight: size ? size.height - 160 : 'auto',
+    overflow: 'auto',
+  }),
 }));

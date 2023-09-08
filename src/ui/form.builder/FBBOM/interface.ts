@@ -34,7 +34,7 @@ export interface BOM {
   inEdit?: boolean
   isNew?: boolean
   availableRevisions?: AvailableRevisions
-  changeRequestDetails?: changeRequestDetails
+  changeRequestDetails?: ChangeRequestDetails
   costRollUp?: number
 }
 
@@ -52,12 +52,13 @@ export interface EditableBOM extends BOM {
   isDisabled?: boolean
   replacementStatus?: string
 }
+
 export interface BOMEditEvent {
   dataItem: EditableBOM
   level: number[]
 }
 
-interface changeRequestDetails {
+interface ChangeRequestDetails {
   id: string
   title: string
   crId: string
@@ -71,5 +72,5 @@ export interface AvailableRevisions {
   revision: number
   displayRevision: string
   status: string
-  changeRequestDetails: changeRequestDetails
+  changeRequestDetails: ChangeRequestDetails
 }

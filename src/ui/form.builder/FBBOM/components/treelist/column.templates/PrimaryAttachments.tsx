@@ -35,7 +35,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
       downloadInfo && window.open(downloadInfo.url, '_parent');
     },
     onError: (message) => {
-      message && toastError(message as unknown as string);
+      message && toastError(message);
     },
   });
   const downloadAttachment = useActionCreator(attachmentsActions.download);
@@ -68,7 +68,6 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
         <ViewFile
           isOpen={dialogHandler.isOpen}
           handleClose={dialogHandler.close}
-          password={undefined}
           attachments={[primaryAttachmentDeails]}
           attachment={primaryAttachmentDeails}
         />

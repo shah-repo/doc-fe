@@ -384,7 +384,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               needsSignature={
                  _documentRevisionFormState?.docInfo.needsSignature || false
               }
-              isBOMExists={_documentRevisionFormState?.isBomExists}
+              isBOMExists={_documentRevisionFormState?.isBOMExists}
               isQms={_documentRevisionFormState?.docInfo.isQms || false}
               documentName={_documentRevisionFormState?.docInfo.name || ''}
               docRevId={values.id as string}

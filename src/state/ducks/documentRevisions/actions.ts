@@ -463,7 +463,7 @@ const fetchHasATree = (
     handlers,
   });
 
-const addBomBranch = (
+const addBOMBranch = (
   data,
   handlers: Handlers,
 ): ApiAction<BOM[]> =>
@@ -474,7 +474,7 @@ const addBomBranch = (
     handlers,
   });
 
-const updateBomBranch = (
+const updateBOMBranch = (
   parentNodeRevId,
   childNodeRevId,
   data,
@@ -487,7 +487,7 @@ const updateBomBranch = (
     handlers,
   });
 
-const changeOrderBomBranch = (
+const changeOrderBOMBranch = (
   parentNodeRevId,
   data,
   handlers: Handlers,
@@ -499,7 +499,7 @@ const changeOrderBomBranch = (
     handlers,
   });
 
-const deleteBomBranch = (
+const deleteBOMBranch = (
   parentNodeRevId,
   childNodeRevId,
   handlers: Handlers,
@@ -663,14 +663,14 @@ export default {
   fetchAvailableParts,
   fetchBOMBranch,
   fetchBOMTree,
-  addBomBranch,
+  addBOMBranch,
   fetchAlternateParts,
   addAlternatePart,
   fetchVendors,
   deleteAlternatePart,
-  deleteBomBranch,
-  updateBomBranch,
-  changeOrderBomBranch,
+  deleteBOMBranch,
+  updateBOMBranch,
+  changeOrderBOMBranch,
   fetchWhereUsedTree,
   fetchHasATree,
   updateLotStatus,

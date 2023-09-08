@@ -28,8 +28,8 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
     onSuccess: (response?: Vendor[]) => {
       setVendors(response ?? []);
     },
-    onError: (response) => {
-      toastError(response);
+    onError: (error) => {
+      toastError(error);
     },
   });
 

@@ -1,10 +1,11 @@
 import { Chip, Grid } from '@material-ui/core';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
+import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
 import { styles } from '../../../../../components/common/kendo.column.templates/Status.styles';
-import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
-import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { statusClassMapping } from '../../../../../components/common/kendo/helpers';
 import { EditableAlternatePart } from '../../treelist/interface';
 import { CustomTemplateProps } from '../types';
 
@@ -30,9 +31,10 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onC
         childrenElement={<span>
           {status && <Chip
             size="small"
-            className={`${classes.chip} ${
-                classes[statusClassMapping[status]]
-              }`}
+            className={cx(
+              classes.chip,
+              classes[statusClassMapping[status]],
+            )}
             label={status}
           />}
         </span>

@@ -12,17 +12,17 @@ interface Props extends BOMActionsProps<EditableBOM> {
 
 export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [showActions, setActionFlag] = useState(false);
+  const [areActionsShowed, setActionsShowed] = useState(false);
 
   useEffect(() => {
-    setActionFlag(true);
+    setActionsShowed(true);
   }, []);
 
   return (
     <>
       <div ref={ref} className={props.rootClassName} />
       <Popper
-        open={showActions}
+        open={areActionsShowed}
         placement="bottom-end"
         anchorEl={ref.current}
         modifiers={{

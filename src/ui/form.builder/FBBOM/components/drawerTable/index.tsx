@@ -5,11 +5,11 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import NoDataFound from '../../../../components/common/kendo/NoDataFound';
-import { Button } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import NoDataFound from '../../../../components/common/kendo/NoDataFound';
+import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -130,8 +130,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
 
   const isAlternatePartAdded = editedAlternatePart?.[MODE_FIELD] === Mode.add;
 
-  const enableAddField = true;
-  const handleRowClick = enableAddField && !editedAlternatePart ? editAlternatePart : undefined;
+  const handleRowClick = editedAlternatePart ? undefined : editAlternatePart;
 
   const alternatePartList = alternateParts?.reduce((list, alternatePart) => {
     const isAlternatePartEdited = editedAlternatePart && editedAlternatePart.id === alternatePart.id;
@@ -160,14 +159,14 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
           fallback={<NoDataFound />}
         />
       </FormikProvider>
-      {enableAddField && <Button
+      <Button
         kind="add"
         fullWidth
         onClick={AddAlternatePart}
-        style={{ marginTop: '-4px' }}
+        className={classes.addPartButton}
       >
         {translate('bom.alternate.part.add')}
-      </Button>}
+      </Button>
     </Box>
   );
 };

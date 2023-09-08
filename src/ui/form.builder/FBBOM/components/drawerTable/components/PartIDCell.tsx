@@ -26,18 +26,18 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
     },
   });
 
-  const fetchSelectedPartAsync = useAsync({
-    onSuccess: (data: any[] = []) => {
-      if (data && data.length > 0) {
-        const {
-          revision, status, name, id,
-        } = data[0];
-
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
-        setFieldValue('name', name);
-        setFieldValue('id', id);
+  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
+    onSuccess: (data) => {
+      if (!Array.isArray(data) || !data.length) {
+        return;
       }
+
+      const { revision, status, name, id } = data[0];
+
+      setFieldValue('revision', revision);
+      setFieldValue('status', status);
+      setFieldValue('name', name);
+      setFieldValue('id', id);
     },
   });
 
@@ -65,8 +65,8 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
     return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+  const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],

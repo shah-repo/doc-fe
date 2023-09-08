@@ -49,13 +49,11 @@ export const styles = makeStyles((theme) => ({
   titleInfoCell: (props) => ({
     maxWidth: 300,
     fontWeight: props?.hasChildren ? 600 : 400,
-    fontFamily: 'Sora',
     fontSize: 14,
     lineHeight: '16.64px',
   }),
   Cell: {
     fontWeight: 400,
-    fontFamily: 'Sora',
     fontSize: 14,
     lineHeight: '17.64px',
   },

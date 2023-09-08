@@ -26,15 +26,15 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public releasedDocRev?: DocumentRevision;
   @observable public forceRender?: any;
   @observable public disabledAction = false;
-  @observable public isBomExists = false;
-  @observable public showBOMDiff = false;
+  @observable public isBOMExists = false;
+  @observable public isShowedBOMDiff = false;
   @observable public showPartInDialog = false;
   @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
   @observable public bomChangesInProgress = false;
   @observable public restorePartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
-  @observable public refreshBomTree = false;
+  @observable public refreshBOMTree = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
   @observable public expanded = false;
@@ -109,7 +109,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.formSchema;
   }
 
-  @computed public get getBomInfo (): BOMState| undefined {
+  @computed public get getBOMInfo (): BOMState | undefined {
     return this.bomInfo;
   }
 
@@ -182,16 +182,16 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'disabledAction', disabledAction);
   };
 
-  @action public setIsBomExists = (isBomExists: boolean) => {
-    set(this, 'isBomExists', isBomExists);
+  @action public setIsBOMExists = (isBOMExists: boolean) => {
+    set(this, 'isBOMExists', isBOMExists);
   };
 
-  @action public toggleShowBOMDiff = () => {
-    this.setShowBOMDiff(!this.showBOMDiff);
+  @action public toggleIsShowedBOMDiff = () => {
+    this.setIsShowedBOMDiff(!this.isShowedBOMDiff);
   };
 
-  @action public setShowBOMDiff = (showBOMDiff: boolean) => {
-    set(this, 'showBOMDiff', showBOMDiff);
+  @action public setIsShowedBOMDiff = (isShowedBOMDiff: boolean) => {
+    set(this, 'isShowedBOMDiff', isShowedBOMDiff);
   };
 
   @action public toggleShowPartInDialog = () => {
@@ -206,7 +206,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'childPartInfo', data);
   };
 
-  @action public setBomChangesInProgress = (status: boolean) => {
+  @action public setBOMChangesInProgress = (status: boolean) => {
     set(this, 'bomChangesInProgress', status);
   };
 
@@ -214,12 +214,12 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'restorePartInfo', data);
   };
 
-  @action public setBomInfo = (data) => {
+  @action public setBOMInfo = (data) => {
     set(this, 'bomInfo', data);
   };
 
-  @action public setRefreshBomTree = (data) => {
-    set(this, 'refreshBomTree', data);
+  @action public setRefreshBOMTree = (data) => {
+    set(this, 'refreshBOMTree', data);
   };
 
   @action public setDirty = (isDirty: boolean) => {

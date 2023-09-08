@@ -1,6 +1,7 @@
 import { Box, List, Typography } from '@material-ui/core';
 import { orderBy } from 'lodash';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus } from '../../../state/ducks/common/types';
@@ -24,6 +25,34 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   isDrawerOpen,
 }) => {
   const classes = styles();
+
+  const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
+    if (isRemovingApproverAction) {
+      return 'changeRequest.audit.approvers.ARRAY_DELETED';
+    }
+    if (change?.fbSchemaItem?.label) {
+      const label = change.fbSchemaItem.label;
+
+      let messageType: string;
+      switch (change.type) {
+        case 'ARRAY_DELETED': {
+          messageType = translate('form.builder.audit.deleted');
+          break;
+        }
+        case 'STRING_EDITED': {
+          messageType = translate('form.builder.audit.updated');
+          break;
+        }
+        default: {
+          messageType = translate('form.builder.audit.added');
+          break;
+        }
+      }
+
+      return `${label} ${messageType}`;
+    }
+    return `changeRequest.audit.${change.field}.${change.type}`;
+  };
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
@@ -69,7 +98,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           change.field === 'approvals.status' && change.nextValue === ApprovalStatus.Abandoned
         );
         if (isRemovingApproverAction) {
-          const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
+          const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id);
           if (removedApproverById) {
             change = {
               ...change,
@@ -96,12 +125,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               className={classes.auditKey}
             >
               <Text
-                message={
-                  isRemovingApproverAction
-                  // hack, since BE cannot make correct data for removing approvers
-                    ? 'changeRequest.audit.approvers.ARRAY_DELETED'
-                    : `changeRequest.audit.${change.field}.${change.type}`
-                }
+                message={getMessage(change, isRemovingApproverAction)}
               />
             </Typography>
             <div className={classes.auditValue}>
