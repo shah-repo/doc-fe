@@ -233,6 +233,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
   lotStatus: LotStatus
+  hasAttachments?: boolean
+  hasPrimaryAttachment?: boolean
 }
 
 export interface SmartReference {

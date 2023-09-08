@@ -34,6 +34,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
   isSideBarHidden = false,
+  isRightPanelMinimized,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
@@ -126,7 +127,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         {..._documentRevisionFormState?.documentRevision && !isSideBarHidden && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={false} />}
+              {() => (
+                <DocumentRevisionSidebar
+                  isRightPanelMinimized={isRightPanelMinimized ?? _tabsState?.isTabActive(TabTypeOptions.BOM)}
+                />
+              )}
             </Observer>
           ),
         }}
