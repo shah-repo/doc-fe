@@ -53,7 +53,8 @@ const ParentPartSelector: React.FunctionComponent<{
   const isOwner = documentRevision?.owner ? documentRevision?.owner?.user.email === email : true;
   const disabled = documentRevision?.version > 1
     || ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)
-    || !isOwner;
+    || !isOwner
+    || relatedPartsState.viewOnlyMode;
 
   const subPartStatusCheckAction = useActionCreator(relatedPartsActions.subPartStatusCheck);
   const subPartStatusCheckAsync = useAsync({
