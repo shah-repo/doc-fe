@@ -13,5 +13,5 @@ export type DocumentRevisionSummaryProps =
   canChangeOwnerShip?: boolean
   isFB?: boolean
   isSideBarHidden?: boolean
-  minimizeRightPanel?: boolean
+  isRightPanelMinimized?: boolean
 };

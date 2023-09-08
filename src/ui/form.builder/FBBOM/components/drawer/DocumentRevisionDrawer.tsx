@@ -57,7 +57,7 @@ DocumentRevisionDrawerProps
               documentId={dataItem?.documentId as string}
               canChangeOwnerShip={false}
               isNewVersion={false}
-              isMinimizedRightPanel={_tabsState?.isTabActive(TabTypeOptions.BOM)}
+              isRightPanelMinimized={_tabsState?.isTabActive(TabTypeOptions.BOM)}
             />
           )}
         </AsyncGate>

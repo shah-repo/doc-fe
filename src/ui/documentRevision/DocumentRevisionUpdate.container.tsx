@@ -32,7 +32,7 @@ interface Props {
   onDirtyFlagChange?: (dirty: boolean) => void
   canChangeOwnerShip?: boolean
   isNewVersion?: boolean
-  isMinimizedRightPanel?: boolean
+  isRightPanelMinimized?: boolean
 }
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
@@ -43,7 +43,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   documentId,
   canChangeOwnerShip,
   isNewVersion,
-  isMinimizedRightPanel,
+  isRightPanelMinimized,
 }) => {
   const dispatch = useDispatch();
   const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -86,7 +86,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState) {
     return (
-      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isMinimizedRightPanel }} />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isRightPanelMinimized }} />
     );
   }
 
@@ -231,7 +231,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
-        isMinimizedRightPanel={isMinimizedRightPanel}
+        isRightPanelMinimized={isRightPanelMinimized}
       />
     </FormContext.Provider>
   );
