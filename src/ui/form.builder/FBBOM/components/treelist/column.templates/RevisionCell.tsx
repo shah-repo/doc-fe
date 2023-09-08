@@ -11,6 +11,7 @@ import { ADD_FIELD } from '../constants';
 import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 
 const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   dataItem,
@@ -30,22 +31,24 @@ const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
     return [dataItem?.revision + '', dataItem?.availableRevisions?.revision + ''];
   };
   const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
-  const fetchSelectedPartAsync = useAsync({
-    onSuccess: (data: any[] = []) => {
-      if (data && data.length > 0) {
-        const {
-          revision, status, name, hasAttachments,
-          hasPrimaryAttachment, docId, id,
-        } = data[0];
-
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
-        setFieldValue('name', name);
-        setFieldValue('hasAttachments', hasAttachments);
-        setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
-        setFieldValue('docId', docId);
-        setFieldValue('newChildNodeRevId', id);
+  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
+    onSuccess: (data) => {
+      if (!Array.isArray(data) || !data.length) {
+        return;
       }
+
+      const {
+        revision, status, name, hasAttachments,
+        hasPrimaryAttachment, docId, id,
+      } = data[0];
+
+      setFieldValue('revision', revision);
+      setFieldValue('status', status);
+      setFieldValue('name', name);
+      setFieldValue('hasAttachments', hasAttachments);
+      setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
+      setFieldValue('docId', docId);
+      setFieldValue('newChildNodeRevId', id);
     },
   });
 

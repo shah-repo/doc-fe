@@ -20,7 +20,7 @@ export type DocumentRevisionSidebarProps =
   formDocument?: FBDocumentRevisionProps
   isNewOutput?: boolean
   title?: string
-  edit: boolean
+  canEdit?: boolean
   isRightPanelMinimized?: boolean
 };
 

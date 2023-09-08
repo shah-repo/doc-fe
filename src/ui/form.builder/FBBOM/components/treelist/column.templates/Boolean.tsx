@@ -40,7 +40,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
           className={cx(classes.dot, { selectedDot: flag, deselectedDot: !flag })}
         />
       </div>
-      <FBBOMDetailDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
     </td>
   );
 };

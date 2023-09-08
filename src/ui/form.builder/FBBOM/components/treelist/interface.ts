@@ -4,6 +4,7 @@ import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/t
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
+import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 
 export interface FBBOMProps {
   documentRevision: DocumentRevision
@@ -24,17 +25,14 @@ export interface DataState {
   filter?: FilterDescriptor[]
 }
 
-// ts-unused-exports:disable-next-line
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
 }
 
-// ts-unused-exports:disable-next-line
 export interface EditableAlternatePart extends AlternatePart {
   [MODE_FIELD]: Mode
 }
 
-// ts-unused-exports:disable-next-line
 export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
@@ -44,7 +42,7 @@ export interface AlternatePart {
   id: string
   name?: string
   revision?: string
-  status?: string
+  status?: FormHeaderStatusClassMapping
   cost?: string
   docId?: string
   leadTime?: string

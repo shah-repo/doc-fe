@@ -58,7 +58,7 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
         </Tooltip>
         {!isAttachmentNamesExists && fetchDotIcon()}
       </div>
-      <FBBOMDetailDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, dataItem }} >
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
         <DocumentRevisionDrawerContent {...{ dataItem }} />
       </FBBOMDetailDrawer>
     </td>

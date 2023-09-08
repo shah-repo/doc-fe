@@ -45,7 +45,7 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
         placement="top"
         arrow
       >
-        <IconButton onClick={handleClick} data-cy="manageColumnsBtn">
+        <IconButton onClick={handleClick} data-cy="manage-columns-btn">
           <ViewGridIcon className={classes.viewIcon} />
         </IconButton>
       </StyleTooltip>
