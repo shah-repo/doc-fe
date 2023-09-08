@@ -31,4 +31,7 @@ export default makeStyles((theme) => ({
     flex: 1,
     color: Colors.almost_black,
   },
+  title: {
+    display: 'flex',
+  },
 }));

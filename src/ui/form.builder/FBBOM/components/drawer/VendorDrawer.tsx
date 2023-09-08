@@ -13,7 +13,6 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import Text from '../../../../components/Text';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
-import { Colors } from '../../../../layout/theme-next';
 import { Vendor } from '../../../FBPartVendors/types';
 import PartVendorsTable from '../drawerTable/vendors';
 import useStyles from './styles';
@@ -69,7 +68,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
                   data-cy="close-alternate-part-list"
                   className={classes.closeIcon}
                 >
-                  <CloseIcon style={{ color: Colors.light_gray }} />
+                  <CloseIcon />
                 </IconButton>
               </div>
             </Grid>

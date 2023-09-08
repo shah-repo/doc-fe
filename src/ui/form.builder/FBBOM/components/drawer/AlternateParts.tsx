@@ -13,7 +13,6 @@ import cx from 'classnames';
 import { translate } from '../../../../../common/intl';
 import Text from '../../../../components/Text';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
-import OldColors from '../../../../layout/theme/utils/colors';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
 
@@ -66,7 +65,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
                   data-cy="close-alternate-part-list"
                   className={classes.closeIcon}
                 >
-                  <CloseIcon style={{ color: OldColors.light_gray }} />
+                  <CloseIcon />
                 </IconButton>
               </div>
             </Grid>

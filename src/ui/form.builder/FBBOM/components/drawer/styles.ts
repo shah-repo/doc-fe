@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import OldColors from '../../../../layout/theme/utils/colors';
 import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme: Theme) =>
@@ -7,7 +8,7 @@ export default makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
       borderRadius: 3,
-      background: Colors.light_cyan,
+      background: OldColors.light_cyan,
       fontWeight: 600,
       fontSize: 10,
       lineHeight: 1.3,
@@ -66,19 +67,22 @@ export default makeStyles((theme: Theme) =>
       height: 24,
       width: 24,
       color: Colors.textGray,
+      '& *': {
+        color: Colors.textGray,
+      },
     },
     GREEN_STATUS: {
-      background: Colors.carla,
-      color: Colors.light_forest_green,
-      border: `1px solid ${Colors.light_forest_green_border}`,
+      background: OldColors.carla,
+      color: OldColors.light_forest_green,
+      border: `1px solid ${OldColors.light_forest_green_border}`,
     },
     PENDING_STATUS: {
-      background: Colors.old_lace,
-      color: Colors.tawny,
-      border: `1px solid ${Colors.ochre}`,
+      background: OldColors.old_lace,
+      color: OldColors.tawny,
+      border: `1px solid ${OldColors.ochre}`,
     },
     GRAY_STATUS: {
-      background: Colors.lily_white,
+      background: OldColors.lily_white,
       color: Colors.textGray,
       border: `1px solid ${Colors.textGray}`,
     },

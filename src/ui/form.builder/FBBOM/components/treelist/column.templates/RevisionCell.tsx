@@ -11,7 +11,7 @@ import { ADD_FIELD } from '../constants';
 import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
-import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types'
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 
 const RevisionCell: ComponentType<CustomTreeListCellProps> = ({
   dataItem,

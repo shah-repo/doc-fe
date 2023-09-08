@@ -33,7 +33,7 @@ const WhereUsedDialog: React.FunctionComponent<Props> = ({
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
       id="WhereUsed-dialog"
     >
-      <DialogTitle style={{ display: 'flex' }} disableTypography>
+      <DialogTitle className={classes.title} disableTypography>
         <Typography className={classes.heading}>
           <Text translation="bom.whereUsed.dialog.title" />
         </Typography>
