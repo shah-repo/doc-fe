@@ -163,8 +163,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
                       return (
                         <AutoSizer onResize={handleResize}>
-                          {(size) => (
-                            <SMBox {...size} onScroll={onScroll} id="Presenter-FBWorkspace">
+                          {({ width }) => (
+                            <SMBox width={width} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
                               {tabType === TabTypeOptions.MIXED && <>
                                 <SummaryPresenter
                                   dataProp={documentRevision}

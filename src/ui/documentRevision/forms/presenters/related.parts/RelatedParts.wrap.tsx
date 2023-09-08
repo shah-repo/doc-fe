@@ -163,6 +163,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const updateRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId, suffixNumber, suffixName, rootDocId }: any) => {
       relatedPartsState.updateRelatedPartsList(docRevId, { suffixNumber, suffixName, rootDocId });
+      workspaceState?.saveDocRev();
     },
   });
   const handleUpdate = (docRevId: string, suffixNumber: string, suffixName: string) => {
@@ -191,7 +192,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         docId: '',
         securityList: {
           securityEmployees: (get(documentRevision, 'document.securityEmployees', []))
-            .map((employee) => ({ id: employee.value })),
+            .map((employee) => ({ id: employee.id })),
           securityGroups: (get(documentRevision, 'document.securityGroups', []))
             .map((group) => ({ id: group.id })),
           operators: get(documentRevision, 'document.operators'),

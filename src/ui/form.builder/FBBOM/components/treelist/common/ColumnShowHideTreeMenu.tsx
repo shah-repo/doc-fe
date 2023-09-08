@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { translate } from '../../../../../../common/intl';
 import { ReactComponent as ViewGridIcon } from '../../../../../../assets/images/grid_view.svg';
 import { ReactComponent as SolidIcon } from '../../../../../../assets/images/view.svg';
 import { ReactComponent as ViewChecked } from '../../../../../../assets/images/view_checked.svg';
@@ -29,12 +29,9 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
   columnDefinition,
   onChange,
 }) => {
-  const intl = useIntl();
-  const getTranslatedText = (key: string) =>
-    key ? intl.formatMessage({ id: key }) : '';
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const isOpened = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -56,7 +53,7 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
         id="bom-togglecolumns-menu"
         anchorEl={anchorEl}
         keepMounted
-        open={open}
+        open={isOpened}
         onClose={handleClose}
       >
         <Card>
@@ -85,13 +82,13 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
                 <ListItemText
                   id={item.field}
                   primary={
-                    <Typography className={classes.menuItem} data-cy={`${item.title}-${item.hidden}`}>
-                      {getTranslatedText(item.title ?? '').toUpperCase()}
+                    <Typography className={classes.menuItem} data-cy={`${item.title}-${item.isHidden}`}>
+                      {translate(item.title ?? '').toUpperCase()}
                     </Typography>
                   }
                 />
                 <Box flexGrow={1} mr={5} />
-                {item.hidden ? (
+                {item.isHidden ? (
                   <ViewChecked
                     onClick={() => {
                       onChange(item);

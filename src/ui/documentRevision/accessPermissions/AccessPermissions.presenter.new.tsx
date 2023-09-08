@@ -4,15 +4,15 @@ import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import { filter, isEmpty, isEqual, some, truncate } from 'lodash';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import Select, { components, OptionProps } from 'react-select';
+import Select, { OptionProps, components } from 'react-select';
 import { ReactComponent as CloseIcon } from '../../../assets/images/trash.svg';
 import { Group } from '../../../state/ducks/auth/types';
 import { Owner, TypographySize } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOCUMENT_REVISION_SECURITY_GET_ASYNC } from '../../../state/ducks/documentRevisions/constants';
+import Text from '../../components/Text';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { getInitalsFromName } from '../../components/icons/avatar/helpers';
-import Text from '../../components/Text';
 import { FBTooltip } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -28,6 +28,7 @@ interface OwnProps {
   documentId: string
   documentRevisionId: string
   isVisible: boolean
+  isDisabled: boolean
   label?: string
 }
 
@@ -42,6 +43,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   documentId,
   documentRevisionId,
   isVisible,
+  isDisabled,
   label,
 }) => {
   const classes = styles();
@@ -65,12 +67,14 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
       securityEmployees: deleteAccessEmployees,
       securityGroups: deleteAccessGroup,
     };
-    async.start(
-      updateAction,
-      documentId,
-      securityDeleted,
-      async,
-    );
+    if (!isDisabled) {
+      async.start(
+        updateAction,
+        documentId,
+        securityDeleted,
+        async,
+      );
+    }
   };
 
   const handleDeleteOperatorAccess = (deletedId: string) => {
@@ -102,8 +106,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   });
 
   useEffect(() => {
-    if (accessElement?.value)
-    { handleUpdate(null); }
+    if (accessElement?.value) { handleUpdate(null); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessElement]);
 
@@ -160,7 +163,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   };
   const intl = useIntl();
 
-  const DropdownIndicator = (props) => ( <components.DropdownIndicator
+  const DropdownIndicator = (props) => (<components.DropdownIndicator
     {...props}
   >
     <button data-cy="add-user" onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
@@ -179,7 +182,6 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
 
   const [usersOpen, setUsersOpen] = React.useState(true);
   const [groupsOpen, setGroupsOpen] = React.useState(true);
-
   const handleClick = () => {
     setUsersOpen(!usersOpen);
   };
@@ -228,6 +230,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                 <>
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
+                      isDisabled={isDisabled}
                       options={employeeSelectOptions}
                       menuPlacement="auto"
                       styles={{
@@ -276,7 +279,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                             </Typography>
                           </Grid>
                           <Grid item className={classes.deleteIcon}>
-                            <CloseIcon cursor="pointer" onClick={() => handleDelete(id)} />
+                            {!isDisabled && <CloseIcon cursor="pointer" onClick={() => handleDelete(id)} />}
                           </Grid>
                         </Grid>
                       ))}
@@ -308,6 +311,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                 <>
                   <Box width={203} height={40} fontFamily="Sora">
                     <Select
+                      isDisabled={isDisabled}
                       options={groupSelectOptions}
                       menuPlacement="auto"
                       placeholder={intl.formatMessage({
@@ -342,7 +346,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                         </Typography>
                       </Grid>
                       <Grid item className={classes.deleteIcon}>
-                        <CloseIcon cursor="pointer" onClick={() => handleDelete(e.id)} />
+                        {!isDisabled && <CloseIcon cursor="pointer" onClick={() => handleDelete(e.id)} />}
                       </Grid>
                     </Grid>
                   ))}

@@ -18,13 +18,13 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
   const flag = dataItem[field ?? ''] as boolean;
   const handleToggle = () => {
     if (field === ALTERNATE_PART_KEY) {
-      setOpenPartsDrawer(true);
+      setIsPartsDrawerOpened(true);
     }
   };
-  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
-    setOpenPartsDrawer(false);
+    setIsPartsDrawerOpened(false);
   };
 
   return (
@@ -40,7 +40,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
           className={cx(classes.dot, { selectedDot: flag, deselectedDot: !flag })}
         />
       </div>
-      <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
+      <FBBOMDetailDrawer {...{ openDrawer: isPartsDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.revision, status: dataItem.status, docId: dataItem.docId }} />
     </td>
   );
 };

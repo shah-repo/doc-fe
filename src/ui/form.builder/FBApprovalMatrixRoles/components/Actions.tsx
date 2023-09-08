@@ -60,6 +60,7 @@ const Actions: React.FC<ActionsProps> = ({
         >
           <div>
             <IconButton
+              data-cy="action-delete"
               kind="action"
               size="small"
               onClick={onDelete}

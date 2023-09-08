@@ -8,7 +8,7 @@ import { ALTERNATE_PART_KEY } from './constants';
 export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
-  showBOMDiff?: boolean
+  isShowedBOMDiff?: boolean
 }
 
 export interface BOMState {
@@ -68,8 +68,8 @@ export interface WhereUsedTree {
 }
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
-  hidden: boolean
-  showMenu?: boolean
+  isHidden?: boolean
+  isShowedMenu?: boolean
   mainOrderIndex?: number
   disableShowOrHideSelection?: boolean
   filterable?: boolean

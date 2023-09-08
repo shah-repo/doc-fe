@@ -18,13 +18,15 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
   const classes = styles();
   const suppliersLength = (dataItem[field ?? ''] ?? 0) as number;
   const isSuppliersExist = suppliersLength > 0;
-  const handleToggle = () => {
-    setOpenPartsDrawer(true);
+  const handleClick = () => {
+    if (isSuppliersExist) {
+      setIsPartsDrawerOpened(true);
+    }
   };
-  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
-    setOpenPartsDrawer(false);
+    setIsPartsDrawerOpened(false);
   };
   const fetchDotIcon = () => <FontAwesomeIcon
     icon={isSuppliersExist ? solid('circle') : regular('circle')}
@@ -38,7 +40,7 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
     >
-      <div onClick={isSuppliersExist ? handleToggle : undefined}>
+      <div onClick={handleClick}>
         <Tooltip
           title={suppliersLength}
           placement="top"
@@ -50,7 +52,7 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
         {!isSuppliersExist && fetchDotIcon()}
       </div>
       <VendorDrawer {...{
-        openDrawer: openPartsDrawer,
+        openDrawer: isPartsDrawerOpened,
         closeDrawer,
         parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
         revision: dataItem.revision,
