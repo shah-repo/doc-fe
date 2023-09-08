@@ -23,7 +23,7 @@ interface VendorTableProps {
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: string
+  status?: FormHeaderStatusClassMapping
   revision?: string
   vendors: Vendor[]
 }

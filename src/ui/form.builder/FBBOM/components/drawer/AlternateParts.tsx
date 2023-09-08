@@ -22,7 +22,7 @@ interface FBBOMDetailDrawerProps {
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: string
+  status?: FormHeaderStatusClassMapping
   revision?: string
 }
 

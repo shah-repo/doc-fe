@@ -26,18 +26,18 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
     },
   });
 
-  const fetchSelectedPartAsync = useAsync({
-    onSuccess: (data: any[] = []) => {
-      if (data && data.length > 0) {
-        const {
-          revision, status, name, id,
-        } = data[0];
-
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
-        setFieldValue('name', name);
-        setFieldValue('id', id);
+  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
+    onSuccess: (data) => {
+      if (!Array.isArray(data) || !data.length) {
+        return;
       }
+
+      const { revision, status, name, id } = data[0];
+
+      setFieldValue('revision', revision);
+      setFieldValue('status', status);
+      setFieldValue('name', name);
+      setFieldValue('id', id);
     },
   });
 

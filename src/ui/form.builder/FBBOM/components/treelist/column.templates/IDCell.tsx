@@ -46,21 +46,23 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     },
   });
 
-  const fetchSelectedPartAsync = useAsync({
-    onSuccess: (data: any[] = []) => {
-      if (data && data.length > 0) {
-        const {
-          revision, status, name, hasAttachments,
-          hasPrimaryAttachment, docId,
-        } = data[0];
-
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
-        setFieldValue('name', name);
-        setFieldValue('hasAttachments', hasAttachments);
-        setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
-        setFieldValue('docId', docId);
+  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
+    onSuccess: (data) => {
+      if (!Array.isArray(data) || !data.length) {
+        return;
       }
+
+      const {
+        revision, status, name, hasAttachments,
+        hasPrimaryAttachment, docId,
+      } = data[0];
+
+      setFieldValue('revision', revision);
+      setFieldValue('status', status);
+      setFieldValue('name', name);
+      setFieldValue('hasAttachments', hasAttachments);
+      setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
+      setFieldValue('docId', docId);
     },
   });
 
