@@ -14,7 +14,7 @@ import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.deta
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../ui/document.revision/form/attachments';
-import { bomDisabledChangeControl, referencesDisabledChangeControl } from '../../../../ui/document.revision/utils/helpers';
+import { bomDisabledChangeControl, disableOtherFieldsChangeControl, referencesDisabledChangeControl } from '../../../../ui/document.revision/utils/helpers';
 import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisplay.container';
 import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
@@ -83,6 +83,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -201,6 +202,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
                 type={type}
+                inRestrictedEditMode={inRestrictedEditMode}
                 documentTypeId={formValues.values.document?.documentType?.id}
               />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}

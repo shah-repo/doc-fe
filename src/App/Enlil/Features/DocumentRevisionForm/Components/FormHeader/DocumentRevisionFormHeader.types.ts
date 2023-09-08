@@ -5,6 +5,7 @@ export type DocumentRevisionFormHeaderProps =
 & Pick<SMProviderProps, '_documentRevisionFormState'>
 & {
   isDisabledInput?: boolean
+  inRestrictedEditMode?: boolean
   type?: DocumentCloneType
   documentTypeId?: string
 };
