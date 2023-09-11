@@ -42,29 +42,40 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
   const bomList: BOM[] = bomTreeRelations.concat(parentRevDetails);
 
   const hashTable = {};
+  const revIdHashMap = {};
+
   bomList.forEach((aData: BOM) => {
-    hashTable[aData.id] = { ...aData, childNodes: [] };
+    revIdHashMap[aData.id] = aData;
+    if (aData.parentNodeRevId) {
+      hashTable[`${aData.parentNodeRevId}_${aData.id}`] = { ...aData, childNodes: [] };
+    } else {
+      hashTable[aData.id] = { ...aData, childNodes: [] };
+    }
   });
 
   const dataTree: EditableBOM[] = [];
   bomList.forEach((aData: BOM) => {
     if (aData.parentNodeRevId) {
-      hashTable[aData.parentNodeRevId].childNodes.push(
-        {
-          ...hashTable[aData.id],
-          ...{
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
-            parentNodeRevId: aData.parentNodeRevId,
-            parentNodeDocumentId: hashTable[aData.parentNodeRevId].documentId,
-            isParentOwner: hashTable[aData.parentNodeRevId].isOwner,
-          },
-        },
-      );
+      const parentDetails = revIdHashMap[aData.parentNodeRevId];
+      if (parentDetails) {
+        let keyToUse = '';
+        if (parentDetails.parentNodeRevId) {
+          keyToUse = `${parentDetails.parentNodeRevId}_${parentDetails.id}`;
+        } else {
+          keyToUse = parentDetails.id;
+        }
+
+        hashTable[keyToUse].childNodes.push({
+          ...hashTable[`${aData.parentNodeRevId}_${aData.id}`],
+          id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
+          parentNodeDocumentId: parentDetails.documentId,
+          isParentOwner: parentDetails.isOwner,
+        });
+      }
     } else {
       dataTree.push(hashTable[aData.id]);
     }
   });
-
   return dataTree;
 };
 
