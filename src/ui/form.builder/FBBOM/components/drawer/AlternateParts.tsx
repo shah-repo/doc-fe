@@ -8,21 +8,20 @@ import {
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
-import Text from '../../../../components/Text';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import Text from '../../../../components/Text';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 
 interface FBBOMDetailDrawerProps {
   isDrawerOpened: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: DocumentRevisionStatus
+  status?: string
   revision?: string
 }
 

@@ -1,6 +1,7 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid } from '@material-ui/core';
+import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
@@ -45,27 +46,26 @@ import useDialog from '../../../../hooks/useDialog';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
-import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
+import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
+  DOC_ID_FIELD,
   EXCEL_FILE_NAME,
-  EXPAND_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
+  EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
 import {
-  BOMState,
-  CustomTreeListExpandChangeEvent,
+  BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   FBBOMProps,
-  CustomTreeListColumnProps,
 } from './interface';
+import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
-import { TreeColumns } from './schema';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isShowedBOMDiff = false }) => {
   const { _tabsState } = SM.useStores();
@@ -258,8 +258,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
 
   const processData = () => {
     const { data, dataState } = state;
+    const filter = [...dataState.filter as FilterDescriptor[]];
+    const docIDField = filter?.find(val => val.field === ID_FIELD);
+    const docIDFieldIndex = filter?.findIndex(val => val.field === ID_FIELD);
+
+    if (docIDField) {
+      filter?.splice(docIDFieldIndex, 1, { ...docIDField, field: DOC_ID_FIELD });
+    }
     const filteredData
-      = dataState.filter && filterBy(data, dataState.filter, SUB_ITEMS_FIELD);
+  = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
       = dataState.sort
       && filteredData
@@ -699,7 +706,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
       const column = columns[index];
       if (column) {
         const newColumns = [...columns];
-        newColumns.splice(index, 1, { ...column, locked: !locked });
+        newColumns.splice(index, 1, { ...column, locked: !locked, reorderable: locked, orderIndex: !locked ? 0 : column.mainOrderIndex });
         setColumns(newColumns);
         closeMenu?.();
       }
@@ -753,11 +760,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   ): CustomTreeListColumnProps[] => {
     return chain([...columnDefinitions])
       .orderBy(['locked'], ['desc'])
-      .map((column, index) => {
-        column.reorderable = !column.locked;
-        column.orderIndex = column.locked ? 0 : column.mainOrderIndex;
-        return column;
-      })
       .value();
   };
 
@@ -792,54 +794,56 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     <>
       <Grid item className={classes.tableContainer}>
         <FormikProvider value={formik}>
-          <Grid container>
-            <Grid item xs={12} ref={treeListRef}>
-              <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
-                <TreeList
-                  {...state.dataState}
-                  tableProps={{ style: { width: '2561px' } }}
-                  editField={MODE_FIELD}
-                  expandField={EXPAND_FIELD}
-                  dataItemKey={DATA_ITEM_KEY}
-                  subItemsField={SUB_ITEMS_FIELD}
-                  className={cx(classes.treeList, 'containing-box-scrollbar')}
-                  onExpandChange={onExpandChange}
-                  rowRender={rowRender}
-                  data={processData()}
-                  onDataStateChange={handleDataStateChange}
-                  columns={sortedColumnDefinitions}
-                  columnMenu={(props) => (
-                    <CustomColumnMenu
-                      {...props}
-                      columns={getColumns()}
-                      {...{
-                        onLock,
-                        onColumnShowHide,
-                      }}
-                    />
-                  )}
-                  onRowClick={editBOM}
-                  onColumnReorder={onColumnReorder}
-                  resizable={TREELIST_CONFIG.resizable}
-                  reorderable={TREELIST_CONFIG.reorderable}
-                  sortable={TREELIST_CONFIG.sortable}
-                  toolbar={renderToolbar}
-                  cellRender={cellRender}
-                  onRowDrop={onRowDrop}
-                  row={TreeListDraggableRow}
+          <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide }}>
+            <Grid container>
+              <Grid item xs={12} ref={treeListRef}>
+                <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
+                  <TreeList
+                    {...state.dataState}
+                    tableProps={{ style: { width: '2561px' } }}
+                    editField={MODE_FIELD}
+                    expandField={EXPAND_FIELD}
+                    dataItemKey={DATA_ITEM_KEY}
+                    subItemsField={SUB_ITEMS_FIELD}
+                    className={cx(classes.treeList, 'containing-box-scrollbar')}
+                    onExpandChange={onExpandChange}
+                    rowRender={rowRender}
+                    data={processData()}
+                    onDataStateChange={handleDataStateChange}
+                    columns={sortedColumnDefinitions}
+                    columnMenu={(props) => (
+                      <CustomColumnMenu
+                        {...props}
+                        columns={getColumns()}
+                        {...{
+                          onLock,
+                          onColumnShowHide,
+                        }}
+                      />
+                    )}
+                    onRowClick={editBOM}
+                    onColumnReorder={onColumnReorder}
+                    resizable={TREELIST_CONFIG.resizable}
+                    reorderable={TREELIST_CONFIG.reorderable}
+                    sortable={TREELIST_CONFIG.sortable}
+                    toolbar={renderToolbar}
+                    cellRender={cellRender}
+                    onRowDrop={onRowDrop}
+                    row={TreeListDraggableRow}
+                  />
+                </ExcelExport>
+                {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
+              </Grid>
+              {confirmationDialog.isOpen && (
+                <AlertDialog
+                  dialog={confirmationDialog}
+                  confirmAction={confirmDeletePart}
+                  cancelAction={cancelDeletePart}
+                  message="bom.item.delete.alert"
                 />
-              </ExcelExport>
-              {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
+              )}
             </Grid>
-            {confirmationDialog.isOpen && (
-              <AlertDialog
-                dialog={confirmationDialog}
-                confirmAction={confirmDeletePart}
-                cancelAction={cancelDeletePart}
-                message="bom.item.delete.alert"
-              />
-            )}
-          </Grid>
+          </ColumnMenuContext.Provider>
         </FormikProvider>
       </Grid>
       <Grid item>

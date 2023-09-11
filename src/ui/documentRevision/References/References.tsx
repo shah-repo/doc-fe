@@ -14,7 +14,6 @@ import AvailableReferencesField from '../forms/presenters/AvailableReferences.ne
 import { toDocumentRevisionFormValues } from '../forms/transform';
 import { DocumentRevisionFormValues } from '../forms/types';
 import { isOwner } from '../helpers/documentRevisionPermissions';
-import { isDocumentRevisionInDraft } from '../helpers/documentRevisionStatus';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './References.styles';
 import { ReferencesProps } from './types';
@@ -38,8 +37,7 @@ const References = ({
    && isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email);
 
   const showChangeControlDetails = selectedDocument?.changeControlOptions?.id
-    && isDocumentRevisionInDraft(selectedDocument?.status)
-    && selectedDocument.releasedAt;
+    && selectedDocument.isBeingEditedAfterRelease;
 
   return (
     <Box padding={1.875} width={1} data-cy="generalInfo">

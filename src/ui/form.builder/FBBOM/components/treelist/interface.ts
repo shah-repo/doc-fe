@@ -39,7 +39,9 @@ export interface AlternatePart {
   id: string
   name?: string
   revision?: string
+  displayRevision?: string
   status?: DocumentRevisionStatus
+  displayStatus?: string
   cost?: string
   docId?: string
   leadTime?: string

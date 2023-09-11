@@ -11,7 +11,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
 import { Vendor } from '../../../FBPartVendors/types';
@@ -23,7 +22,7 @@ interface VendorTableProps {
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: DocumentRevisionStatus
+  status?: string
   revision?: string
   vendors?: Vendor[]
 }
