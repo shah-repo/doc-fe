@@ -11,6 +11,7 @@ import { ADD_FIELD } from '../constants';
 import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 
 const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
   dataItem,
@@ -30,22 +31,24 @@ const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
     return [dataItem?.displayRevision + '', dataItem?.availableRevisions?.displayRevision + ''];
   };
   const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
-  const fetchSelectedPartAsync = useAsync({
-    onSuccess: (data: any[] = []) => {
-      if (data && data.length > 0) {
-        const {
-          displayRevision, status, name, hasAttachments,
-          hasPrimaryAttachment, docId, id,
-        } = data[0];
-
-        setFieldValue('revision', displayRevision);
-        setFieldValue('status', status);
-        setFieldValue('name', name);
-        setFieldValue('hasAttachments', hasAttachments);
-        setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
-        setFieldValue('docId', docId);
-        setFieldValue('newChildNodeRevId', id);
+  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
+    onSuccess: (data) => {
+      if (!Array.isArray(data) || !data.length) {
+        return;
       }
+
+      const {
+        displayRevision, status, name, hasAttachments,
+        hasPrimaryAttachment, docId, id,
+      } = data[0];
+
+      setFieldValue('revision', displayRevision);
+      setFieldValue('status', status);
+      setFieldValue('name', name);
+      setFieldValue('hasAttachments', hasAttachments);
+      setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
+      setFieldValue('docId', docId);
+      setFieldValue('newChildNodeRevId', id);
     },
   });
 
@@ -65,7 +68,7 @@ const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
         <Autocomplete
           {...getFieldProps(field)}
           options={renderOptions()}
-          value={'' + values[field]}
+          value={String(values[field])}
           disabled={dataItem[ADD_FIELD]}
           onChange={onRevChange}
           size="small"

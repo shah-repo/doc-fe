@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
@@ -34,6 +34,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
   isSideBarHidden = false,
+  isRightPanelMinimized,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
@@ -135,7 +136,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         {..._documentRevisionFormState?.documentRevision && !isSideBarHidden && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={false} />}
+              {() => (
+                <DocumentRevisionSidebar
+                  isRightPanelMinimized={isRightPanelMinimized ?? _tabsState?.isTabActive(TabTypeOptions.BOM)}
+                />
+              )}
             </Observer>
           ),
         }}
@@ -166,8 +171,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
                       return (
                         <AutoSizer onResize={handleResize}>
-                          {(size) => (
-                            <SMBox {...size} onScroll={onScroll} id="Presenter-FBWorkspace">
+                          {({ width }) => (
+                            <SMBox width={width} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
                               {tabType === TabTypeOptions.MIXED && <>
                                 <SummaryPresenter
                                   dataProp={documentRevision}

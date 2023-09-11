@@ -131,9 +131,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    const docInfo = value?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
-    setValue(value as OptionType);
+  const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+    setValue(option as OptionType);
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],
@@ -151,17 +151,17 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const openDrawer = () => {
     if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBomTree(false);
+      _documentRevisionFormState?.setRefreshBOMTree(false);
     }
-    setOpenPartsDrawer(true);
+    setIsPartsDrawerOpened(true);
   };
-  const [openPartsDrawer, setOpenPartsDrawer] = React.useState(false);
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
     if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBomTree(!_documentRevisionFormState?.refreshBomTree);
+      _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
-    setOpenPartsDrawer(false);
+    setIsPartsDrawerOpened(false);
   };
 
   useEffect(() => {
@@ -249,7 +249,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   );
 
   const getDrawer = () => (
-    <FBBOMDetailDrawer {...{ openDrawer: openPartsDrawer, closeDrawer, dataItem }} >
+    <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
       <DocumentRevisionDrawer {...{ dataItem }} />
     </FBBOMDetailDrawer>
   );
@@ -342,7 +342,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     _documentRevisionFormState?.setDirty(true);
     if (!_documentRevisionFormState?.bomChangesInProgress) {
       _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level });
-      _documentRevisionFormState?.setBomChangesInProgress(true);
+      _documentRevisionFormState?.setBOMChangesInProgress(true);
     }
   };
 
@@ -369,13 +369,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           }
         }
         if (i === props.level.length - 1 && hasChildren && !dataItem.isDeleted) {
-          return (<span className={cx('k-icon', classes.expand)}>
-            {(props.expanded
-              ? <FontAwesomeIcon onClick={onClick} size="sm" icon={regular('square-minus')} />
-              : <FontAwesomeIcon onClick={onClick} icon={solid('square-plus')} size="sm" />
-            )
-            }
-          </span>);
+          return (
+            <span className={cx('k-icon', classes.expand)}>
+              <FontAwesomeIcon
+                onClick={onClick}
+                size="sm"
+                icon={props.expanded ? regular('square-minus') : solid('square-plus')}
+              />
+            </span>
+          );
         }
         return !isEditMode && <span className="k-icon k-i-none" role="presentation" />;
       })
@@ -429,7 +431,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <Observer>
         {() => (
           <>
-            {!isEditMode && _documentRevisionFormState?.showBOMDiff && dataItem?.replacementStatus
+            {!isEditMode && _documentRevisionFormState?.isShowedBOMDiff && dataItem?.replacementStatus
             && <Grid
               container
               className={classes.replacedDocRevInfo}

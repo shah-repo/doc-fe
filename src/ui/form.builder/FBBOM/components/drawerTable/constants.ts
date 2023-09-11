@@ -1,3 +1,4 @@
+import { translate } from '../../../../../common/intl';
 import { CostCell } from './components/CostCell';
 import { LeadTimeCell } from './components/LeadTimeCell';
 import PartIDCell from './components/PartIDCell';
@@ -8,43 +9,43 @@ import { TitleCell } from './components/TitleCell';
 export const schema = [{
   id: 'id',
   field: 'docId',
-  title: 'PART ID',
-  width: '150px',
+  title: translate('bom.drawerTable.field.docId.title'),
+  width: 150,
   template: PartIDCell,
 },
 {
   id: 'revision',
   field: 'revision',
-  title: 'REV',
-  width: '70px',
+  title: translate('bom.drawerTable.field.revision.title'),
+  width: 70,
   template: RevCell,
 },
 {
   id: 'name',
   field: 'name',
-  title: 'TITLE',
-  width: '160px',
+  title: translate('bom.drawerTable.field.name.title'),
+  width: 160,
   template: TitleCell,
 },
 {
   id: 'cost',
   field: 'cost',
-  title: 'COST',
-  width: '90px',
+  title: translate('bom.drawerTable.field.cost.title'),
+  width: 90,
   template: CostCell,
 },
 {
   id: 'leadTime',
   field: 'leadTime',
-  title: 'LEAD TIME',
-  width: '110px',
+  title: translate('bom.drawerTable.field.leadTime.title'),
+  width: 110,
   template: LeadTimeCell,
 },
 {
   id: 'status',
   field: 'status',
-  title: 'STATUS',
+  title: translate('bom.drawerTable.field.status.title'),
   template: StatusCell,
-  width: '170px',
+  width: 170,
 },
 ];

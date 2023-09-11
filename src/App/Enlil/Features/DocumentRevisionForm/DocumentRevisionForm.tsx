@@ -178,8 +178,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar
-                edit={isPart ? !referencesDisabledChangeControl(documentRevision) : true} />}
+              {() => (
+                <DocumentRevisionSidebar
+                  canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
+                />
+              )}
             </Observer>
           ),
         }}
@@ -221,8 +224,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
                       return (
                         <AutoSizer onResize={handleResize}>
-                          {(size) => (
-                            <SMBox key={index} {...size}>
+                          {({ width }) => (
+                            <SMBox key={index} width={width} pb={2}>
                               {tabType === 'MIXED' && (
                                 <>
                                   <DocumentRevisionFormPresenter

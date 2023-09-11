@@ -98,7 +98,6 @@ export const auditsAllId = (
   }
 };
 
-// ts-unused-exports:disable-next-line
 export const dependentOnDocRevs = (
   state: ChangeRequestDependentOnDocRevsState = {
     canBeReleased: true,

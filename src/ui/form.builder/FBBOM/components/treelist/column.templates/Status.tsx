@@ -45,9 +45,7 @@ export const Status: React.ComponentType<CustomTreeListCellProps> | undefined = 
           childrenElement={
             <Chip
               size="small"
-              className={`${classes.chip} ${
-                classes[statusClassMapping[status]]
-              }`}
+              className={cx(classes.chip, classes[statusClassMapping[status]])}
               label={status}
             />
           }

@@ -9,24 +9,25 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
+import cx from 'classnames';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
-import { Colors } from '../../../../layout/theme-next';
+import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 
 interface FBBOMDetailDrawerProps {
-  openDrawer: boolean
+  isDrawerOpened: boolean
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: string
+  status?: DocumentRevisionStatus
   revision?: string
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
-  openDrawer,
+  isDrawerOpened,
   closeDrawer,
   parentRevId,
   docId,
@@ -36,11 +37,11 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Drawer anchor="right" style={{ width: 950 }} open={openDrawer} onClose={closeDrawer}>
+    <Drawer anchor="right" open={isDrawerOpened} onClose={closeDrawer}>
       {children ?? (
-        <Box margin="30px">
+        <Box className={classes.drawerDiv}>
           <Grid
-            container={true}
+            container
             wrap="nowrap"
             justify="space-between"
             alignItems="center"
@@ -48,7 +49,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item>
               <Typography
                 className={classes.headerInfo}
-                data-cy="HeaderInfo-docId"
+                data-cy="header-info-parts"
                 component="span"
               >
                 {translate('bom.table.title.alternate.parts.list')}
@@ -57,7 +58,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item>
               <div className={classes.iconContainer}>
                 <IconButton
-                  onClick={() => closeDrawer()}
+                  onClick={closeDrawer}
                   aria-label="Close"
                   disableFocusRipple
                   disableRipple
@@ -65,7 +66,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
                   data-cy="close-alternate-part-list"
                   className={classes.closeIcon}
                 >
-                  <CloseIcon style={{ color: Colors.light_gray }} />
+                  <CloseIcon />
                 </IconButton>
               </div>
             </Grid>
@@ -80,7 +81,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item>
               <Typography
                 className={classes.docId}
-                data-cy="HeaderInfo-docId"
+                data-cy="header-info-docId"
                 component="span"
               >
                 {docId}
@@ -91,17 +92,15 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
               <Text
                 translation="form.builder.header.rev"
                 values={{ revision }}
-                dataCy="HeaderInfo-Rev"
+                dataCy="header-info-rev"
               />
             </Grid>
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={`${classes.chip} ${
-                  classes[FormHeaderStatusClassMapping[status ?? '']]
-                }`}
+                className={cx(classes.chip, classes[FormHeaderStatusClassMapping[status ?? '']])}
                 label={status}
-                data-cy="HeaderInfo-status"
+                data-cy="header-info-status"
               />
             </Grid>
           </Grid>
