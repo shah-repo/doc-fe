@@ -4,10 +4,13 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../../../common/intl';
+import { ColumnMenuContext, CustomColumnMenu } from '../column.templates/CustomColumnMenu';
 import { styles } from './styles';
 
-export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = () => {
+export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = (props) => {
   const classes = styles();
+  const { onLock, columns, onColumnShowHide } = React.useContext(ColumnMenuContext);
+  const { field } = props;
 
   return (
     <Grid
@@ -25,6 +28,16 @@ export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = () => {
           <FontAwesomeIcon icon={solid('star')} className={classes.star} />
         </span>
       </Tooltip>
+      <div>
+        <CustomColumnMenu
+          {...{
+            field,
+            onLock,
+            columns,
+            onColumnShowHide,
+          }}
+        />
+      </div>
     </Grid>
   );
 };
