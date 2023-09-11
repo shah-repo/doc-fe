@@ -65,7 +65,7 @@ const TopSection: React.FunctionComponent<{
 };
 
 const ItemsAndDetails: React.FunctionComponent<{
-  changeRequest: ChangeRequest | undefined
+  changeRequest?: ChangeRequest
   formState: FBFormState
   handleAdd: () => void
   handleRemove: (docRevId: string) => void
