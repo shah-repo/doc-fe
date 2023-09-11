@@ -60,7 +60,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
   );
 
   const async = useAsync<ChangeRequest>({
-    onSuccess: dialog.close(),
+    onSuccess: dialog.close,
   });
 
   const saveChangeRequest = useActionCreator(changeRequestsActions.save);
@@ -115,14 +115,14 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
 
   return (
     <Dialog
-      disableBackdropClick={true}
+      disableBackdropClick
       disableEnforceFocus
       classes={{
         root: classes.root,
         paper: classes.paper,
       }}
       scroll="paper"
-      disableEscapeKeyDown={true}
+      disableEscapeKeyDown
       maxWidth="sm"
       open={dialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
@@ -146,8 +146,8 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                 >
                   {translate('bom.ar.child.draft.add.action.message', {
                     itemsRequiringAttention: details.itemsInDraft,
+                    count: details.itemsInDraft,
                   })}
-                  {details.itemsInDraft > 1 ? 's' : ''}
                 </Typography>
                 <Typography
                   data-cy="dialog-message"
@@ -229,9 +229,8 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                   className={classes.alertTitle}
                 >
                   {translate('bom.ar.child.draft.add.action.message', {
-                    itemsRequiringAttention: details.itemsPending,
+                    count: details.itemsPending,
                   })}
-                  {details.itemsPending > 1 ? 's' : ''}
                 </Typography>
                 <Typography
                   data-cy="dialog-message"
@@ -271,9 +270,8 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                   className={classes.alertTitle}
                 >
                   {translate('bom.ar.child.draft.add.action.message', {
-                    itemsRequiringAttention: details.itemsInvalid,
+                    count: details.itemsInvalid,
                   })}
-                  {details.itemsInvalid > 1 ? 's' : ''}
                 </Typography>
                 <Typography
                   data-cy="dialog-message"
