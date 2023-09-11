@@ -59,7 +59,7 @@ const AttachmentCell: React.FC<CustomTreeListCellProps> | undefined = ({
         {!isAttachmentNamesExists && fetchDotIcon()}
       </div>
       <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-        <DocumentRevisionDrawerContent {...{ dataItem }} />
+        <DocumentRevisionDrawerContent {...{ dataItem, closeDrawer }} />
       </FBBOMDetailDrawer>
     </td>
   );

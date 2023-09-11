@@ -1,4 +1,6 @@
-import { Box } from '@material-ui/core';
+import { Box, Grid, IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -17,9 +19,10 @@ import useStyles from './styles';
 
 interface DocumentRevisionDrawerProps {
   dataItem?: EditableBOM
+  closeDrawer: () => void
 }
 
-const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataItem }) => {
+const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataItem, closeDrawer }) => {
   const classes = useStyles();
   const documentRevisionId = dataItem?.id.split(
     SELECTED_PART_KEY_SEPARATOR,
@@ -41,6 +44,21 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataIte
   return (
     <Theme>
       <Box className={classes.drawer}>
+        <Grid item>
+          <div className={classes.iconContainer}>
+            <IconButton
+              onClick={closeDrawer}
+              aria-label="Close"
+              disableFocusRipple
+              disableRipple
+              disableTouchRipple
+              data-cy="close-alternate-part-list"
+              className={classes.closeIcon}
+            >
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </Grid>
         <AsyncGate
           asyncAction={loadAction}
           asyncState={loadDocumentRevisionAsyncState}

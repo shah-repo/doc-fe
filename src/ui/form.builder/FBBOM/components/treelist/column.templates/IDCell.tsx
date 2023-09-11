@@ -17,11 +17,11 @@ import { DocumentTypeById } from '../../../../../../state/ducks/documentRevision
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../../components/Text';
+import { FormContext } from '../../../../../components/forms/FormContext';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
-import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
-import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionDeprecated, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
@@ -250,7 +250,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem }} />
+      <DocumentRevisionDrawer {...{ dataItem, closeDrawer }} />
     </FBBOMDetailDrawer>
   );
 
