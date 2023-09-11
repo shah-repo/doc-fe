@@ -10,6 +10,14 @@ interface CustomColumnMenuProps extends ColumnMenuProps {
   onLock: ({ field, locked, closeMenu }) => void
 }
 
+interface ColumnMenuContextProps {
+  columns: CustomTreeListColumnProps[]
+  onColumnShowHide: (params) => void
+  onLock: (params) => void
+}
+
+export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);
+
 export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) => {
   const { field, onLock, columns, onColumnShowHide } = props;
   const column: CustomTreeListColumnProps | undefined = columns.find(c => c.field === field);
