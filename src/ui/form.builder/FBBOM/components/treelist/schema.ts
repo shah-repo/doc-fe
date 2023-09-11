@@ -1,7 +1,7 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { translate } from '../../../../../common/intl';
-import ARIDCell from './column.templates/ARIDCell';
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
+import ARIDCell from './column.templates/ARIDCell';
 import AttachmentCell from './column.templates/AttachmentCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
@@ -38,7 +38,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: IDCell,
   },
   {
-    field: 'revision',
+    field: 'displayRevision',
     title: translate('bom.treelist.treeColumns.field.revision.title'),
     width: 106,
     filter: TreeListTextFilter,
@@ -62,7 +62,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: ARIDCell,
   },
   {
-    field: 'status',
+    field: 'displayStatus',
     title: translate('bom.treelist.treeColumns.field.status.title'),
     width: 157,
     cell: Status,
