@@ -482,7 +482,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
     _documentRevisionFormState?.toggleIsShowedBOMDiff();
-    handleExpandAll();
+    if (isShowedBOMDiff) {
+      updateState({
+        ...state,
+        expanded: [state.data[0].id],
+      });
+    } else {
+      handleExpandAll();
+    }
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
@@ -800,7 +807,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
                 <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
                   <TreeList
                     {...state.dataState}
-                    tableProps={{ style: { width: '2561px' } }}
+                    tableProps={{ style: { width: '2681px' } }}
                     editField={MODE_FIELD}
                     expandField={EXPAND_FIELD}
                     dataItemKey={DATA_ITEM_KEY}

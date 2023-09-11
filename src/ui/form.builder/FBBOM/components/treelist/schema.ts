@@ -88,6 +88,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'costRollUp',
     title: translate('bom.treelist.treeColumns.field.costRollup.title'),
     width: 120,
+    locked: false,
     filter: TreeListTextFilter,
     mainOrderIndex: 6,
     cell: CostRollupCell,
