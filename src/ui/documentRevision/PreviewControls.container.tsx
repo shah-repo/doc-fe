@@ -160,7 +160,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
   const setDocRevToDraft = () => {
-    // console.log('setting docRevToDraft');
     dispatch(documentRevisionsActions.update(documentRevision.id, {
       status: DocumentRevisionStatus.Draft,
       displayStatus: 'Draft',

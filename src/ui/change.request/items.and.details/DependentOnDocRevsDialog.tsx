@@ -29,7 +29,7 @@ import { Translation } from '../../translations/types';
 import useStyles from './dialog.styles';
 
 interface Props {
-  changeRequest: ChangeRequest | undefined
+  changeRequest?: ChangeRequest
   details: ChangeRequestDependentOnDocRevsState
   dialog: DialogHandler
   closeAction?: () => void
@@ -60,7 +60,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
   );
 
   const async = useAsync<ChangeRequest>({
-    onSuccess: () => dialog.close(),
+    onSuccess: dialog.close(),
   });
 
   const saveChangeRequest = useActionCreator(changeRequestsActions.save);

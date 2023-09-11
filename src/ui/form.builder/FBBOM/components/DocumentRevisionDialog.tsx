@@ -44,7 +44,7 @@ DocumentRevisionDialogProps
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
       id="DocumentRevision-dialog"
     >
-      <DialogTitle style={{ display: 'flex' }} disableTypography>
+      <DialogTitle className={classes.title} disableTypography>
         <Typography className={classes.heading}>
           <Text translation="bom.documentRevision.dialog.title" />
         </Typography>

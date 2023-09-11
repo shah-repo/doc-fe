@@ -17,8 +17,11 @@ export const styles = makeStyles((theme) => ({
     color: Colors.lochmara,
     cursor: 'pointer',
   },
+  title: {
+    display: 'flex',
+  },
   GREEN_STATUS: {
-    background: Colors.carla,
+    background: Colors.snow_flurry,
     color: Colors.light_forest_green,
     border: `1px solid ${Colors.light_forest_green_border}`,
   },

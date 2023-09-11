@@ -84,7 +84,7 @@ enum Colors {
   pale_green = '#f0f7d2',
   latest_green_varient = '#0DB78D',
   olivine = '#9EB774',
-  carla='#E6FCD9',
+  snow_flurry='#E6FCD9',
   light_forest_green='#4C9646',
   green_blue='#0DB78D',
   light_forest_green_border='#509849',

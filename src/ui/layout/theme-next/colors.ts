@@ -9,7 +9,7 @@ enum Colors {
   hover='#EBEFF7',
   background='#F9FBFF',
   fieldDisabled='#EBEDF2',
-  carla = '#E6FCD9',
+  snow_flurry = '#E6FCD9',
   light_forest_green = '#4C9646',
   light_forest_green_border='#509849',
   old_lace='#FEF8EE',
