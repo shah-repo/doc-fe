@@ -28,7 +28,6 @@ const CostCell: ComponentType<CustomTreeListCellProps> = ({
     >
       <span className={classes.Cell}>
         {`${getCellValue(dataItem, field)} `}
-        (<span className={classes.costRollup}>{dataItem.costRollUp}</span>)
       </span>
     </td>
   );

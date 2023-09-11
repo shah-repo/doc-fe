@@ -54,7 +54,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
       .map((item) => {
         return {
           ...item,
-          checked: false,
+          isChecked: false,
         };
       }),
   );
@@ -66,29 +66,29 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
   const saveChangeRequest = useActionCreator(changeRequestsActions.save);
 
   const handleDocRevSelection = (
-    checked: boolean,
+    isChecked: boolean,
     docRevChecked: DependedDocRevDetails,
   ) => {
     const updatedDocRevs = docRevs.map((docRev) =>
-      docRev.id === docRevChecked?.id ? { ...docRev, checked } : docRev,
+      docRev.id === docRevChecked?.id ? { ...docRev, isChecked } : docRev,
     );
     setDocRevs(updatedDocRevs);
-    const allChecked = updatedDocRevs.every((docRev) => docRev.checked);
+    const allChecked = updatedDocRevs.every((docRev) => docRev.isChecked);
     setSelectAll(allChecked);
   };
 
-  const handleDocRevSelectionAll = (checked: boolean) => {
-    setSelectAll(checked);
+  const handleDocRevSelectionAll = (isChecked: boolean) => {
+    setSelectAll(isChecked);
     const updatedDocRevs = docRevs.map((docRev) => ({
       ...docRev,
-      checked,
+      isChecked,
     }));
     setDocRevs(updatedDocRevs);
   };
 
   const addToChangeRequest = () => {
     const crFormInput = changeRequest?.formInput;
-    const docRevsSelected = docRevs.filter((docRev) => docRev.checked);
+    const docRevsSelected = docRevs.filter((docRev) => docRev.isChecked);
     if (docRevsSelected.length > 0) {
       // Update FormInput - documentRevisions list with the ones selected
       if (crFormInput && 'documentRevisions' in crFormInput) {
@@ -181,7 +181,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={value.checked ?? false}
+                                checked={value.isChecked ?? false}
                                 classes={{
                                   root: classes.checkbox,
                                   checked: classes.checked,

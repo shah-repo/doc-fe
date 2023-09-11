@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core';
+import { Size } from 'react-virtualized';
 import { Colors } from '../../../../layout/theme-next';
 import OldColors from '../../../../layout/theme/utils/colors';
-import { Size } from 'react-virtualized';
 
 const BASE_COLOR = Colors.primaryBg;
 
@@ -209,9 +209,7 @@ export default makeStyles((theme) => ({
         },
       },
     },
-    '.k-master-row .k-grid-content-sticky': {
-      backgroundColor: 'inherit',
-    },
+
     '.k-grid-container': {
       overflow: 'hidden',
 

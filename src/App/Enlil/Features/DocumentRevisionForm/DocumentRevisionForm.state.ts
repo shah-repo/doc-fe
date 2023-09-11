@@ -109,7 +109,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.formSchema;
   }
 
-  @computed public get getBOMInfo (): BOMState | undefined {
+  @computed public get getBOMInfo (): BOMState| undefined {
     return this.bomInfo;
   }
 

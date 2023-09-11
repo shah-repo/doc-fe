@@ -26,7 +26,8 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
     const id = changeReqDetails?.id;
     id && history.push(changeRequestEditPath(id));
   };
-  const isReleased = dataItem?.status === DocumentRevisionStatus.Released;
+  const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
+  const isArIdVisible = ArIdAllowedStatusList.includes(dataItem?.status);
 
   return (
     <td
@@ -41,7 +42,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
       }}
     >
       <span className={classes.Cell}>
-        {arID && !isReleased && (
+        {arID && isArIdVisible && (
           <Tooltip
             data={changeReqDetails?.title ?? ''}
             childrenElement={
@@ -55,7 +56,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
             }
           />
         )}
-        {(!arID || isReleased) && CELL_EMPTY_VALUE}
+        {(!arID || !isArIdVisible) && CELL_EMPTY_VALUE}
       </span>
     </td>
   );
