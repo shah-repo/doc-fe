@@ -1,11 +1,12 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { translate } from '../../../../../common/intl';
-import ARIDCell from './column.templates/ARIDCell';
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
+import ARIDCell from './column.templates/ARIDCell';
 import AttachmentCell from './column.templates/AttachmentCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
+import CostRollupCell from './column.templates/CostRollupCell';
 import DropdownFilterCell from './column.templates/DropDownFilterCell';
 import HasChangesCell from './column.templates/HasChangesCell';
 import IDCell from './column.templates/IDCell';
@@ -78,11 +79,19 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: CostCell,
   },
   {
+    field: 'costRollUp',
+    title: translate('bom.treelist.treeColumns.field.costRollup.title'),
+    width: 120,
+    filter: TreeListTextFilter,
+    mainOrderIndex: 6,
+    cell: CostRollupCell,
+  },
+  {
     field: 'leadTime',
     title: translate('bom.treelist.treeColumns.field.leadTime.title'),
     width: 171,
     filter: TreeListTextFilter,
-    mainOrderIndex: 6,
+    mainOrderIndex: 7,
     cell: LeadTimeCell,
   },
   {
@@ -90,7 +99,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.quantity.title'),
     width: 139,
     filter: TreeListTextFilter,
-    mainOrderIndex: 7,
+    mainOrderIndex: 8,
     cell: QuantityCell,
   },
   {
@@ -98,7 +107,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.unit.title'),
     width: 232,
     filter: DropdownFilterCell,
-    mainOrderIndex: 8,
+    mainOrderIndex: 9,
     cell: UnitCell,
   },
   {
@@ -106,7 +115,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.hasChanges.title'),
     width: 171,
     filter: TreeListTextFilter,
-    mainOrderIndex: 9,
+    mainOrderIndex: 10,
     cell: HasChangesCell,
   },
   {
@@ -114,7 +123,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.refDesignator.title'),
     width: 207,
     filter: TreeListTextFilter,
-    mainOrderIndex: 10,
+    mainOrderIndex: 11,
     cell: RefDesignatorCell,
   },
   {
@@ -122,14 +131,14 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.comment.title'),
     width: 241,
     filter: TreeListTextFilter,
-    mainOrderIndex: 11,
+    mainOrderIndex: 12,
     cell: CommentsCell,
   },
   {
     field: 'hasPrimaryAttachment',
     title: translate('bom.treelist.treeColumns.field.hasPrimaryAttachment.title'),
     width: 81,
-    mainOrderIndex: 12,
+    mainOrderIndex: 13,
     headerCell: PrimaryAttachments,
     cell: PrimaryAttachmentsCell,
   },
@@ -137,7 +146,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'hasAttachments',
     title: translate('bom.treelist.treeColumns.field.hasAttachments.title'),
     width: 80,
-    mainOrderIndex: 13,
+    mainOrderIndex: 14,
     headerCell: Attachments,
     cell: AttachmentCell,
   },
@@ -146,7 +155,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.issues.title'),
     width: 80,
     filter: TreeListTextFilter,
-    mainOrderIndex: 14,
+    mainOrderIndex: 15,
     cell: BooleanCell,
     headerCell: Issues,
     isHidden: true,
@@ -156,7 +165,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.vendorsCount.title'),
     width: 80,
     cell: VendorsCell,
-    mainOrderIndex: 15,
+    mainOrderIndex: 16,
     headerCell: Vendors,
   },
   {
@@ -164,7 +173,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.alternatePartsList.title'),
     width: 80,
     cell: AlternatePartsCell,
-    mainOrderIndex: 16,
+    mainOrderIndex: 17,
     headerCell: AlternatePartsList,
   },
 ];
