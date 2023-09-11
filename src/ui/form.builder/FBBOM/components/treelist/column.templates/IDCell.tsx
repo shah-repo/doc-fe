@@ -222,10 +222,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
-              <li className={classes.createPartOption} onClick={handleAddButtonClick}>
+              {/* <li className={classes.createPartOption} onClick={handleAddButtonClick}>
                 <FontAwesomeIcon icon={regular('plus')} />&nbsp;
                 <span >{translate('form.builder.create.new.part')}</span>
-              </li>
+              </li> */}
               {children}
             </ul>
           </>);
@@ -269,9 +269,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         toastError('missing.form.error');
         return;
       }
-    _documentRevisionFormState?.setShowPartInDialog(true);
-    closeMultipleFormDialog();
-    showFormDialog.open();
+      _documentRevisionFormState?.setShowPartInDialog(true);
+      closeMultipleFormDialog();
+      showFormDialog.open();
     _documentRevisionFormState?.setDirty(false);
     handleCreateDocument(formIds[0] as DocumentRevision);
     },
@@ -300,7 +300,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     onError: (msg) => toastError(msg),
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAddButtonClick = () => {
+    // commented create new part temporarily
     categoryAsync.start(getDocTypesByCategory, { category: 'Parts' }, categoryAsync);
   };
 
@@ -386,13 +388,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
-          <Tooltip
+          {/* <Tooltip
             title={translate('form.builder.create.new.part')}
             placement="top"
             arrow
           >
             <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
-          </Tooltip>
+          </Tooltip> */}
         </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId

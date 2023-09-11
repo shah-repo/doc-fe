@@ -1656,7 +1656,7 @@
   "bom.treelist.treeColumns.field.cost.title": "Cost (Cost Rollup)",
   "bom.treelist.treeColumns.field.leadTime.title": "Lead Time (Days)",
   "bom.treelist.treeColumns.field.quantity.title": "Qty.",
-  "bom.treelist.treeColumns.field.unity.title": "Unit",
+  "bom.treelist.treeColumns.field.unit.title": "Unit",
   "bom.treelist.treeColumns.field.hasChanges.title": "Has Changes",
   "bom.treelist.treeColumns.field.refDesignator.title": "Ref. Designator",
   "bom.treelist.treeColumns.field.comment.title": "Comments",
