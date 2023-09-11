@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React from 'react';
-import FBBOMDetailDrawer from '../../drawer';
+import FBBOMDetailDrawer from '../../drawer/VendorDrawer';
 import { ALTERNATE_PART_KEY, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';

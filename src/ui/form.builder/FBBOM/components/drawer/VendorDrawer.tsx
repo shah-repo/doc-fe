@@ -11,12 +11,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import Text from '../../../../components/Text';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import Text from '../../../../components/Text';
 import { Vendor } from '../../../FBPartVendors/types';
 import PartVendorsTable from '../drawerTable/vendors';
 import useStyles from './styles';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 
 interface VendorTableProps {
   isDrawerOpened: boolean
@@ -25,7 +25,7 @@ interface VendorTableProps {
   docId?: string
   status?: DocumentRevisionStatus
   revision?: string
-  vendors: Vendor[]
+  vendors?: Vendor[]
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
