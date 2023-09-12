@@ -172,7 +172,7 @@ export enum statusClassMapping {
   'Voided'='GRAY_STATUS',
   'CLOSED' = 'GRAY_STATUS',
   'VOIDED' = 'GRAY_STATUS',
-  'Superseded'='GRAY_STATUS',
+  'Superseded'='GREEN_STATUS',
   'Void'='GRAY_STATUS',
   'QUARANTINE' = 'PENDING_STATUS',
   'EXPIRED'='GRAY_STATUS',

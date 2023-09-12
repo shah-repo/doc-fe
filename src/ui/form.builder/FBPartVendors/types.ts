@@ -1,6 +1,6 @@
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { FBInputProps } from '../FBInput/FBInput.types';
 
 export interface SchemaOptions {
@@ -10,8 +10,8 @@ export interface SchemaOptions {
   isActive: boolean
   isInEditMode: boolean
   actionsClass: string
-  onConfirm: () => void
-  onDiscard: () => void
+  onConfirm?: () => void
+  onDiscard?: () => void
   onDelete?: () => void
   onRowClick?: (e: VendorEditEvent) => void
   onPrimaryChange?: (id: string) => void

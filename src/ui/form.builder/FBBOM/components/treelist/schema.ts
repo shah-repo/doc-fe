@@ -1,11 +1,12 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { translate } from '../../../../../common/intl';
-import ARIDCell from './column.templates/ARIDCell';
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
+import ARIDCell from './column.templates/ARIDCell';
 import AttachmentCell from './column.templates/AttachmentCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
+import CostRollupCell from './column.templates/CostRollupCell';
 import DropdownFilterCell from './column.templates/DropDownFilterCell';
 import HasChangesCell from './column.templates/HasChangesCell';
 import IDCell from './column.templates/IDCell';
@@ -36,9 +37,11 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     mainOrderIndex: 0,
     disableShowOrHideSelection: true,
     cell: IDCell,
+    sortable: false,
   },
   {
-    field: 'revision',
+    field: 'displayRevision',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.revision.title'),
     width: 106,
     filter: TreeListTextFilter,
@@ -47,6 +50,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   },
   {
     field: 'name',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.name.title'),
     width: 240,
     filter: TreeListTextFilter,
@@ -55,6 +59,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
   },
   {
     field: 'arId',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.arId.title'),
     width: 172,
     filter: TreeListTextFilter,
@@ -62,7 +67,8 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: ARIDCell,
   },
   {
-    field: 'status',
+    field: 'displayStatus',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.status.title'),
     width: 157,
     cell: Status,
@@ -70,23 +76,26 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     mainOrderIndex: 4,
   },
   {
+    field: 'costRollUp',
+    title: translate('bom.treelist.treeColumns.field.costRollup.title'),
+    width: 120,
+    locked: false,
+    filter: TreeListTextFilter,
+    mainOrderIndex: 5,
+    cell: CostRollupCell,
+  },
+  {
     field: 'cost',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.cost.title'),
     width: 120,
     filter: TreeListTextFilter,
-    mainOrderIndex: 5,
+    mainOrderIndex: 6,
     cell: CostCell,
   },
   {
-    field: 'leadTime',
-    title: translate('bom.treelist.treeColumns.field.leadTime.title'),
-    width: 171,
-    filter: TreeListTextFilter,
-    mainOrderIndex: 6,
-    cell: LeadTimeCell,
-  },
-  {
     field: 'quantity',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.quantity.title'),
     width: 139,
     filter: TreeListTextFilter,
@@ -94,77 +103,95 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     cell: QuantityCell,
   },
   {
+    field: 'leadTime',
+    locked: false,
+    title: translate('bom.treelist.treeColumns.field.leadTime.title'),
+    width: 171,
+    filter: TreeListTextFilter,
+    mainOrderIndex: 8,
+    cell: LeadTimeCell,
+  },
+  {
     field: 'unit',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.unit.title'),
     width: 232,
     filter: DropdownFilterCell,
-    mainOrderIndex: 8,
+    mainOrderIndex: 9,
     cell: UnitCell,
   },
   {
     field: 'hasChanges',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.hasChanges.title'),
     width: 171,
     filter: TreeListTextFilter,
-    mainOrderIndex: 9,
+    mainOrderIndex: 10,
     cell: HasChangesCell,
   },
   {
     field: 'refDesignator',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.refDesignator.title'),
     width: 207,
     filter: TreeListTextFilter,
-    mainOrderIndex: 10,
+    mainOrderIndex: 11,
     cell: RefDesignatorCell,
   },
   {
     field: 'comment',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.comment.title'),
     width: 241,
     filter: TreeListTextFilter,
-    mainOrderIndex: 11,
+    mainOrderIndex: 12,
     cell: CommentsCell,
   },
   {
     field: 'hasPrimaryAttachment',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.hasPrimaryAttachment.title'),
     width: 81,
-    mainOrderIndex: 12,
+    mainOrderIndex: 13,
     headerCell: PrimaryAttachments,
     cell: PrimaryAttachmentsCell,
   },
   {
     field: 'hasAttachments',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.hasAttachments.title'),
     width: 80,
-    mainOrderIndex: 13,
+    mainOrderIndex: 14,
     headerCell: Attachments,
     cell: AttachmentCell,
   },
   {
     field: 'issues',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.issues.title'),
     width: 80,
     filter: TreeListTextFilter,
-    mainOrderIndex: 14,
+    mainOrderIndex: 15,
     cell: BooleanCell,
     headerCell: Issues,
     isHidden: true,
   },
   {
     field: 'vendorsCount',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.vendorsCount.title'),
     width: 80,
     cell: VendorsCell,
-    mainOrderIndex: 15,
+    mainOrderIndex: 16,
     headerCell: Vendors,
   },
   {
     field: 'alternatePartsList',
+    locked: false,
     title: translate('bom.treelist.treeColumns.field.alternatePartsList.title'),
     width: 80,
     cell: AlternatePartsCell,
-    mainOrderIndex: 16,
+    mainOrderIndex: 17,
     headerCell: AlternatePartsList,
   },
 ];

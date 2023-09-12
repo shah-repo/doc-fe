@@ -87,7 +87,6 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
-  isRightPanelMinimized,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -283,7 +282,6 @@ DocumentRevisionFormContainerProps
         formInput,
         mode,
         isDAM,
-        isRightPanelMinimized,
       }}
     />
   );

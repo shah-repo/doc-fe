@@ -13,7 +13,7 @@ const TEXT_LENGTH = 120;
 const OFFSET = 3;
 
 const Loader = () => {
-  const classes = useStyles();
+  const classes = useStyles({ size: undefined });
 
   return (
     <div
@@ -29,7 +29,7 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
   const [data, setData] = React.useState<WhereUsedTree[]>();
   const [isLoading, setLoading] = React.useState(false);
 
-  const classes = useStyles();
+  const classes = useStyles({ size: undefined });
 
   const fetchWhereUsedTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedTree);
   const fetchWhereUsedTreesAsync = useAsync({
@@ -164,11 +164,11 @@ export default function TreeCreator ({ docRevId }: { docRevId: string }) {
 
   const statusClassDecider = (d: any): string | undefined => {
     if (d.data.status === DocumentRevisionStatus.Released) {
-      return 'statusReleased';
+      return classes.statusReleased;
     } else if (d.data.status === DocumentRevisionStatus.Draft) {
-      return 'statusDraft';
+      return classes.statusDraft;
     } else if (d.data.status === DocumentRevisionStatus.PendingChange) {
-      return 'statusPendingChange';
+      return classes.statusPendingChange;
     }
   };
 
