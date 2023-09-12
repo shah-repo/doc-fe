@@ -290,7 +290,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       )}
                       {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                         <FBBOM documentRevision={documentRevision}
-                          isDisabled={true} showOnly={true} />
+                          isDisabled={true} isShowOnly={true} />
                       )}
                     </SMBox>
                   );

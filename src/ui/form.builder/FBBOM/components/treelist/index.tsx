@@ -67,7 +67,7 @@ import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false, showOnly = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -141,7 +141,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   });
 
   useEffect(() => {
-    if (!documentRevision || showOnly) {
+    if (!documentRevision || isShowOnly) {
       return;
     }
     _documentRevisionFormState?.setBOMChangesInProgress(false);
@@ -224,7 +224,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   useEffect(() => {
-    if (!showOnly) {
+    if (!isShowOnly) {
       fetchHasATree(documentRevision?.id);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
