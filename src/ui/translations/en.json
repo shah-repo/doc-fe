@@ -261,6 +261,7 @@
   "common.description.SUP": "Supplier Address/Phone",
   "common.state": "State",
   "common.save": "Save",
+	"common.save.changes": "Save Changes",
   "common.type": "Type",
   "common.title": "Title",
   "common.title.SUP": "Supplier Name",
@@ -1644,5 +1645,7 @@
   "bom.whereUsed.dialog.title": "Where Used View",
   "bom.ar.child.draft.option": "Rev {revision} - {title}",
   "bom.ar.child.draft.add.action.message": "Action required on {itemsPending} item",
-  "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:"
+  "bom.ar.child.draft.add.message": "All line items in the bom should be released before releasing the bom.\nAdd the following items in this change request or add them seperately:",
+	"administration.generalsettings.title": "General Settings",
+	"administration.generalsettings.sub.title": "Manage your general settings and preferences."
 }

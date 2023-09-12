@@ -44,12 +44,13 @@ const selectedCompany = (
 ): SelectCompanyState => {
   switch (action.type) {
     case SELECT_COMPANY:
+			console.log('------action--------');
       return {
         ...action.payload,
-        navigation:
-          action.payload.navigation?.length
-            ? action.payload.navigation
-            : DEFAULT_NAVIGATION_ITEMS,
+        navigation: DEFAULT_NAVIGATION_ITEMS
+          // action.payload.navigation?.length
+          //   ? action.payload.navigation
+          //   : DEFAULT_NAVIGATION_ITEMS,
       };
     case LOGOUT_USER:
       return { ...COMPANY_DEFAULT_STATE };

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, USER_MANAGEMENT_ROOT_URL } from '../../../ui/constants/urls';
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GENERAL_SETTINGS_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, USER_MANAGEMENT_ROOT_URL } from '../../../ui/constants/urls';
 import { GroupTag } from '../auth/types';
 import { NavigationItem } from './types';
 
@@ -154,5 +154,21 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     path: '/async_tasks',
     type: 'LINK',
     restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+  },
+	{
+    label: 'Administration',
+    type: 'MENU',
+    icon: '/navigation_icons/tools.svg',
+    isOpen: false,
+    menu: [
+      {
+        label: 'General Settings',
+        type: 'LINK',
+        path: GENERAL_SETTINGS_URL,
+        icon: '/navigation_icons/tag-check.svg',
+        // restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
+      },
+    ],
+    // restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
   },
 ];
