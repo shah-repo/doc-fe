@@ -3,6 +3,8 @@ clone:
 
 definitions:
   caches:
+    yarncustom:
+      path: ./node_modules
   steps:
     - step: &COMMON
         image:
@@ -14,6 +16,7 @@ definitions:
         size: 2x
         caches:
           - node
+          - yarncustom
 
     - step: &COMMON_BUILD
         image:
@@ -25,6 +28,7 @@ definitions:
         size: 2x
         caches:
           - node
+          - yarncustom
 
     - step: &COMMON_DEPLOY
         image:
@@ -54,6 +58,7 @@ definitions:
         size: 2x
         caches:
           - node
+          - yarncustom
         artifacts:
           - test-results/**
           - jest-config/**
