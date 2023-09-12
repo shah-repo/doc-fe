@@ -209,5 +209,11 @@
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "d3": "d3/dist/d3.min.js",
+      "d3-array": "d3-array/dist/d3-array.min.js"
+    }
   }
 }
