@@ -22,17 +22,17 @@ export const DOCUMENT_REVISION_FAI_INSPECTION_URL = `${DOCUMENT_REVISION_ROOT_UR
 export const DOCUMENT_REVISION_PARTS_URL = `${DOCUMENT_REVISION_ROOT_URL}/available_parts`;
 
 export const FETCH_BOM_TREE = 'bom/parent_tree';
-export const FETCH_BOM_BRANCH = 'bom/add_branch/details';
-export const ADD_BOM_BRANCH = 'bom/add_branch';
-export const UPDATE_BOM_BRANCH = 'bom/update_branch';
-export const DELETE_BOM_BRANCH = 'bom/remove_branch';
+export const FETCH_BOM_BRANCH = 'bom/branch/details';
+export const ADD_BOM_BRANCH = 'bom/branch';
+export const UPDATE_BOM_BRANCH = 'bom/branch';
+export const DELETE_BOM_BRANCH = 'bom/branch';
 export const CHANGE_ORDER_BOM_BRANCH = 'bom/change_order';
 export const FETCH_WHERE_USED_TREE = 'bom/where_used';
 export const CHECK_IS_USED = 'bom/where_used_status';
 
-export const FETCH_ALTERNATE_PART = 'bom/alternate_parts';
-export const ADD_ALTERNATE_PART = 'bom/add_alternate_parts';
-export const DELETE_ALTERNATE_PART = 'bom/remove_alternate_parts';
+export const FETCH_ALTERNATE_PART = 'bom/alternate_part';
+export const ADD_ALTERNATE_PART = 'bom/alternate_part';
+export const DELETE_ALTERNATE_PART = 'bom/alternate_part';
 
 export const FETCH_VENDORS = 'bom/supplier_list';
 

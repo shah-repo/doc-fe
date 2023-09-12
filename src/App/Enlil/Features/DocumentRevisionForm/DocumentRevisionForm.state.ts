@@ -28,7 +28,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public disabledAction = false;
   @observable public isBOMExists = false;
   @observable public isShowedBOMDiff = false;
+  @observable public showPartInDialog = false;
+  @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
+  @observable public bomChangesInProgress = false;
   @observable public restorePartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
   @observable public refreshBOMTree = false;
@@ -191,8 +194,20 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'isShowedBOMDiff', isShowedBOMDiff);
   };
 
+  @action public toggleShowPartInDialog = () => {
+    this.setShowPartInDialog(!this.showPartInDialog);
+  };
+
+  @action public setShowPartInDialog = (showPartInDialog: boolean) => {
+    set(this, 'showPartInDialog', showPartInDialog);
+  };
+
   @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
     set(this, 'childPartInfo', data);
+  };
+
+  @action public setBOMChangesInProgress = (status: boolean) => {
+    set(this, 'bomChangesInProgress', status);
   };
 
   @action public setRestorePartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
@@ -221,6 +236,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
     this.documentRevision = documentRevision;
+  };
+
+  public setNewlyCreatedDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
+    this.newlyCreatedDocumentRevision = documentRevision;
   };
 
   public setScrollOffset = (offset: number) => {

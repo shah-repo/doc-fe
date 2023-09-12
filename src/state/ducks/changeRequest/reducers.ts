@@ -98,8 +98,7 @@ export const auditsAllId = (
   }
 };
 
-// ts-unused-exports:disable-next-line
-export const dependentOnDocRevs = (
+const dependentOnDocRevs = (
   state: ChangeRequestDependentOnDocRevsState = {
     canBeReleased: true,
     itemsPending: 0,

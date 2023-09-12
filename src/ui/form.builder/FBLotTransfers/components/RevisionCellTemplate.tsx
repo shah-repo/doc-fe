@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { CustomTemplateProps, DocumentRevisionOption, EditableLotTransfer } from '../types';
 import { getOptionLabel } from '../utils';
@@ -56,6 +56,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
           getOptionLabel={getOptionLabel}
           renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
           value={value}
+          defaultValue={value}
           onChange={handleChange}
           size="small"
         />

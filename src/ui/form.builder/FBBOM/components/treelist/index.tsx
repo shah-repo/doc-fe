@@ -1,6 +1,7 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid } from '@material-ui/core';
+import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
@@ -25,7 +26,7 @@ import {
   take,
   uniq,
 } from 'lodash';
-import { toJS } from 'mobx';
+import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -33,6 +34,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
@@ -44,27 +46,26 @@ import useDialog from '../../../../hooks/useDialog';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
-import { CustomColumnMenu } from './column.templates/CustomColumnMenu';
+import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
+  DOC_ID_FIELD,
   EXCEL_FILE_NAME,
-  EXPAND_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
+  EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
 import {
-  BOMState,
-  CustomTreeListExpandChangeEvent,
+  BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   FBBOMProps,
-  CustomTreeListColumnProps,
 } from './interface';
+import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
-import { TreeColumns } from './schema';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isShowedBOMDiff = false }) => {
   const { _tabsState } = SM.useStores();
@@ -119,6 +120,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
 
   const partAsync = useAsync({
     onSuccess: () => {
+      _documentRevisionFormState?.setDirty(false);
+      _documentRevisionFormState?.setBOMChangesInProgress(false);
       treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
@@ -141,6 +144,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     if (!documentRevision) {
       return;
     }
+    _documentRevisionFormState?.setBOMChangesInProgress(false);
     treeListAsync.start(
       fetchBOMTreeList,
       documentRevision.id,
@@ -167,6 +171,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     () => _documentRevisionFormState?.refreshBOMTree,
     (loading) => {
       if (loading && documentRevision) {
+        _documentRevisionFormState?.setBOMChangesInProgress(false);
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
@@ -253,8 +258,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
 
   const processData = () => {
     const { data, dataState } = state;
+    const filter = [...dataState.filter as FilterDescriptor[]];
+    const docIDField = filter?.find(val => val.field === ID_FIELD);
+    const docIDFieldIndex = filter?.findIndex(val => val.field === ID_FIELD);
+
+    if (docIDField) {
+      filter?.splice(docIDFieldIndex, 1, { ...docIDField, field: DOC_ID_FIELD });
+    }
     const filteredData
-      = dataState.filter && filterBy(data, dataState.filter, SUB_ITEMS_FIELD);
+  = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
       = dataState.sort
       && filteredData
@@ -284,8 +296,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
         if (!partInfo.parentNodeDocumentId) {
           partInfo.parentNodeDocumentId = documentRevision.documentId;
         }
-        partInfo.isMarkedAsDeleted = false;
-        partAsync.start(addBOMBranch, partInfo, partAsync);
+        partInfo.isDeleted = false;
+        partInfo.quantity = partInfo.quantity ? +partInfo.quantity : 0;
+        if (validate(partInfo)) {
+          partAsync.start(addBOMBranch, partInfo, partAsync);
+        }
       } else {
         const payload = {
           childNodeRevId: partInfo.childNodeRevId,
@@ -310,11 +325,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     return {
       id: uuidv4(),
       revision: '',
-      status: '',
+      displayRevision: '',
+      status: '' as DocumentRevisionStatus,
+      displayStatus: '',
       name: '',
       docId: '',
       cost: '',
-      quantity: '',
+      quantity: 1,
       leadTime: '',
       unit: '',
       comment: '',
@@ -325,18 +342,25 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     };
   };
 
-  const isNewBOMAdditionInProgress = () => {
-    return (state.inEdit.length > 0);
+  const validate = (partInfo: Partial<Partial<EditableBOM>>) => {
+    return partInfo.childNodeRevId;
   };
+
+  const isNewBOMAdditionInProgress = () => {
+    return _documentRevisionFormState?.bomChangesInProgress;
+  };
+
   const addBOM = () => {
     if (isNewBOMAdditionInProgress()) {
       return;
     }
+    _documentRevisionFormState?.setDirty(true);
     const newBOM: EditableBOM = createNewItem();
     state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
       (data) => !data[ADD_FIELD],
     );
     state.data[0][SUB_ITEMS_FIELD]?.push(newBOM);
+    _documentRevisionFormState?.setBOMChangesInProgress(true);
     updateState({
       ...state,
       data: [...state.data],
@@ -346,10 +370,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isMarkedAsDeleted) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted) {
       // skipping edit for parent and click on edit item itself
       return;
     }
+    _documentRevisionFormState?.setDirty(true);
     setSelectedPartLevel({ dataItem, level });
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
       state.data = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
@@ -359,6 +384,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     editBOMInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editBOMInfo.documentId}`;
     editBOMInfo.childNodeRevId = childRevId;
     formik?.setFieldValue('revision', editBOMInfo?.revision);
+    _documentRevisionFormState?.setBOMChangesInProgress(true);
     updateState({
       ...state,
       data: [...state.data],
@@ -382,6 +408,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
         (data) => !data[ADD_FIELD],
       );
     }
+    _documentRevisionFormState?.setDirty(false);
+    _documentRevisionFormState?.setBOMChangesInProgress(false);
     updateState({
       ...state,
       inEdit: [],
@@ -399,7 +427,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     const partInfo = dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR);
     const payload = {
       childNodeRevId: partInfo[0],
-      isMarkedAsDeleted: false,
+      isDeleted: false,
     };
     partAsync.start(
       updateBOMBranch,
@@ -451,15 +479,25 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   useObserver(() => {
     isShowedBOMDiff = Boolean(_documentRevisionFormState?.isShowedBOMDiff);
   });
-
+  const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
     _documentRevisionFormState?.toggleIsShowedBOMDiff();
-    handleExpandAll();
+    if (isShowedBOMDiff) {
+      updateState({
+        ...state,
+        expanded: [state.data[0].id],
+      });
+    } else {
+      handleExpandAll();
+    }
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
+    if (item.isDeleted && !_documentRevisionFormState?.isShowedBOMDiff) {
+      return;
+    }
 
     if (isEmpty(item.refDesignator)) {
       item.refDesignator = '-';
@@ -468,14 +506,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.isMarkedAsDeleted || (isShowedBOMDiff && item.replacesStatus),
+        [classes.deletedBg]: item.isDeleted || (isShowedBOMDiff && item.replacementStatus),
+        [classes.inprogressBg]: item.inProgress && isShowedBOMDiff,
       }),
     };
     if (!item[MODE_FIELD]) {
       return React.cloneElement(row, modifiedProps);
     }
     const isOwner = item.isOwner;
-
+    const isAddPartEnabled = isOwner
+      && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete,
+        DocumentRevisionStatus.Released].includes(item.status);
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
@@ -485,7 +526,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
           onDelete={(isOwner || item.isParentOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
           onRestore={onRestore}
           onReorder={onReorder}
-          isAddPartEnabled={isOwner}
+          isAddPartEnabled={isAddPartEnabled}
           onChildPartAdd={onChildPartAdd}
           rootClassName={classes.popperHolder}
         />
@@ -589,7 +630,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
         </Grid>
         <Grid item>
           <Grid container justify="flex-end">
-            <Grid item
+            {showDiffView && <Grid item
               data-cy="show-hide-diff"
               className={classes.diffContainer}
             >
@@ -601,7 +642,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
                 />
                 <span className={classes.toggleIconLabel}>{translate(isShowedBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
-            </Grid>
+            </Grid>}
             <Grid item
               data-cy="excel-export"
             >
@@ -672,7 +713,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
       const column = columns[index];
       if (column) {
         const newColumns = [...columns];
-        newColumns.splice(index, 1, { ...column, locked: !locked });
+        newColumns.splice(index, 1, { ...column, locked: !locked, reorderable: locked, orderIndex: !locked ? 0 : column.mainOrderIndex });
         setColumns(newColumns);
         closeMenu?.();
       }
@@ -726,25 +767,21 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   ): CustomTreeListColumnProps[] => {
     return chain([...columnDefinitions])
       .orderBy(['locked'], ['desc'])
-      .map((column, index) => {
-        column.reorderable = !column.locked;
-        column.orderIndex = column.locked ? 0 : column.mainOrderIndex;
-        return column;
-      })
       .value();
   };
 
-  SM.reaction(
+  useEffect(() => reaction(
     () => _documentRevisionFormState?.childPartInfo,
     (info) => {
       if (info?.dataItem) {
         const dataItem = toJS(info?.dataItem) as EditableBOM;
         const level = toJS(info?.level);
         setSelectedPartLevel({ dataItem, level });
+        _documentRevisionFormState?.setBOMChangesInProgress(true);
         onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBOMInfo));
       }
     },
-  );
+  ), [_documentRevisionFormState?.childPartInfo]);
 
   SM.reaction(
     () => _documentRevisionFormState?.getRestorePartInfo,
@@ -764,54 +801,56 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
     <>
       <Grid item className={classes.tableContainer}>
         <FormikProvider value={formik}>
-          <Grid container>
-            <Grid item xs={12} ref={treeListRef}>
-              <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
-                <TreeList
-                  {...state.dataState}
-                  tableProps={{ style: { width: '2561px' } }}
-                  editField={MODE_FIELD}
-                  expandField={EXPAND_FIELD}
-                  dataItemKey={DATA_ITEM_KEY}
-                  subItemsField={SUB_ITEMS_FIELD}
-                  className={cx(classes.treeList, 'containing-box-scrollbar')}
-                  onExpandChange={onExpandChange}
-                  rowRender={rowRender}
-                  data={processData()}
-                  onDataStateChange={handleDataStateChange}
-                  columns={sortedColumnDefinitions}
-                  columnMenu={(props) => (
-                    <CustomColumnMenu
-                      {...props}
-                      columns={getColumns()}
-                      {...{
-                        onLock,
-                        onColumnShowHide,
-                      }}
-                    />
-                  )}
-                  onRowClick={editBOM}
-                  onColumnReorder={onColumnReorder}
-                  resizable={TREELIST_CONFIG.resizable}
-                  reorderable={TREELIST_CONFIG.reorderable}
-                  sortable={TREELIST_CONFIG.sortable}
-                  toolbar={renderToolbar}
-                  cellRender={cellRender}
-                  onRowDrop={onRowDrop}
-                  row={TreeListDraggableRow}
+          <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide }}>
+            <Grid container>
+              <Grid item xs={12} ref={treeListRef}>
+                <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
+                  <TreeList
+                    {...state.dataState}
+                    tableProps={{ style: { width: '2681px' } }}
+                    editField={MODE_FIELD}
+                    expandField={EXPAND_FIELD}
+                    dataItemKey={DATA_ITEM_KEY}
+                    subItemsField={SUB_ITEMS_FIELD}
+                    className={cx(classes.treeList, 'containing-box-scrollbar')}
+                    onExpandChange={onExpandChange}
+                    rowRender={rowRender}
+                    data={processData()}
+                    onDataStateChange={handleDataStateChange}
+                    columns={sortedColumnDefinitions}
+                    columnMenu={(props) => (
+                      <CustomColumnMenu
+                        {...props}
+                        columns={getColumns()}
+                        {...{
+                          onLock,
+                          onColumnShowHide,
+                        }}
+                      />
+                    )}
+                    onRowClick={editBOM}
+                    onColumnReorder={onColumnReorder}
+                    resizable={TREELIST_CONFIG.resizable}
+                    reorderable={TREELIST_CONFIG.reorderable}
+                    sortable={TREELIST_CONFIG.sortable}
+                    toolbar={renderToolbar}
+                    cellRender={cellRender}
+                    onRowDrop={onRowDrop}
+                    row={TreeListDraggableRow}
+                  />
+                </ExcelExport>
+                {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
+              </Grid>
+              {confirmationDialog.isOpen && (
+                <AlertDialog
+                  dialog={confirmationDialog}
+                  confirmAction={confirmDeletePart}
+                  cancelAction={cancelDeletePart}
+                  message="bom.item.delete.alert"
                 />
-              </ExcelExport>
-              {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
+              )}
             </Grid>
-            {confirmationDialog.isOpen && (
-              <AlertDialog
-                dialog={confirmationDialog}
-                confirmAction={confirmDeletePart}
-                cancelAction={cancelDeletePart}
-                message="bom.item.delete.alert"
-              />
-            )}
-          </Grid>
+          </ColumnMenuContext.Provider>
         </FormikProvider>
       </Grid>
       <Grid item>
@@ -838,5 +877,4 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   );
 };
 
-// ts-unused-exports:disable-next-line
 export default withThemeNext(React.forwardRef(FBBOMTreeList));

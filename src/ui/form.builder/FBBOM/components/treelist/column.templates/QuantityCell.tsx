@@ -20,7 +20,7 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const { values, getFieldProps } = useFormikContext<EditableBOM>();
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
 
   const getFieldInfo = () =>
@@ -28,7 +28,11 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
       <FormikField name={field}>
         <TextField
           {...getFieldProps(field)}
-          type="text"
+          type="number"
+          onChange={(e) => {
+            const val = e.target.value;
+            if (!isNaN(val) && Number(val) >= 0) { setFieldValue(field, val); }
+          }}
           inputProps={{ min: 0 }}
           disabled={!enableFieldAfterPartSelection(dataItem, values.docId)}
           size="small"

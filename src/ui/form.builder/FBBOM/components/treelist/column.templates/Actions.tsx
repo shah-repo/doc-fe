@@ -1,4 +1,4 @@
-import { Popper } from '@material-ui/core';
+import { makeStyles, Popper } from '@material-ui/core';
 import PopperJs from 'popper.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { EditableBOM } from '../../../interface';
@@ -10,7 +10,14 @@ interface Props extends BOMActionsProps<EditableBOM> {
   popperRef?: React.RefObject<PopperJs>
 }
 
+const useStyles = makeStyles({
+  popper: {
+    zIndex: 1400,
+  },
+});
+
 export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
+  const classes = useStyles();
   const ref = useRef<HTMLDivElement>(null);
   const [areActionsShowed, setActionsShowed] = useState(false);
 
@@ -33,6 +40,7 @@ export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
             enabled: false,
           },
         }}
+        className={classes.popper}
       >
         <ActionButtons
           scrollBehavior="smooth"

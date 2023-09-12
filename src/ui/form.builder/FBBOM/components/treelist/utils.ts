@@ -5,15 +5,9 @@ import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 import { CustomTreeListColumnProps } from './interface';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
-};
-
-// ts-unused-exports:disable-next-line
-export const isEditOnly = (dataItem: EditableBOM): boolean => {
-  return dataItem[MODE_FIELD] ?? false;
 };
 
 export const isEditBOM = (dataItem: EditableBOM): boolean => {
@@ -44,29 +38,40 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
   const bomList: BOM[] = bomTreeRelations.concat(parentRevDetails);
 
   const hashTable = {};
+  const revIdHashMap = {};
+
   bomList.forEach((aData: BOM) => {
-    hashTable[aData.id] = { ...aData, childNodes: [] };
+    revIdHashMap[aData.id] = aData;
+    if (aData.parentNodeRevId) {
+      hashTable[`${aData.parentNodeRevId}_${aData.id}`] = { ...aData, childNodes: [] };
+    } else {
+      hashTable[aData.id] = { ...aData, childNodes: [] };
+    }
   });
 
   const dataTree: EditableBOM[] = [];
   bomList.forEach((aData: BOM) => {
     if (aData.parentNodeRevId) {
-      hashTable[aData.parentNodeRevId].childNodes.push(
-        {
-          ...hashTable[aData.id],
-          ...{
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
-            parentNodeRevId: aData.parentNodeRevId,
-            parentNodeDocumentId: hashTable[aData.parentNodeRevId].documentId,
-            isParentOwner: hashTable[aData.parentNodeRevId].isOwner,
-          },
-        },
-      );
+      const parentDetails = revIdHashMap[aData.parentNodeRevId];
+      if (parentDetails) {
+        let keyToUse = '';
+        if (parentDetails.parentNodeRevId) {
+          keyToUse = `${parentDetails.parentNodeRevId}_${parentDetails.id}`;
+        } else {
+          keyToUse = parentDetails.id;
+        }
+
+        hashTable[keyToUse].childNodes.push({
+          ...hashTable[`${aData.parentNodeRevId}_${aData.id}`],
+          id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
+          parentNodeDocumentId: parentDetails.documentId,
+          isParentOwner: parentDetails.isOwner,
+        });
+      }
     } else {
       dataTree.push(hashTable[aData.id]);
     }
   });
-
   return dataTree;
 };
 
@@ -119,11 +124,11 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
   });
 };
 
-const getChildPartId = (part: DocumentRevision): string => {
+export const getChildPartId = (part: EditableBOM): string => {
   return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
 };
 
-const getDocLink = (part: DocumentRevision): string => {
+const getDocLink = (part: EditableBOM): string => {
   return `${Config.FrontendUrl}${documentPreviewPath(getChildPartId(part), part.documentId ?? '')}`;
 };
 
@@ -131,7 +136,7 @@ const getCrDocLink = (arId: string): string => {
   return `${Config.FrontendUrl}${changeRequestPreviewPath(arId)}`;
 };
 
-export const getHyperLinkForIdCell = (part: DocumentRevision, value?: string): string => {
+export const getHyperLinkForIdCell = (part: EditableBOM, value?: string): string => {
   return `=HYPERLINK("${getDocLink(part)}", "${value ?? '-'}")`;
 };
 

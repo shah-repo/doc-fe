@@ -17,7 +17,6 @@ import useAsync from '../../../../hooks/useAsync';
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
-
 interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
@@ -238,20 +237,22 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   };
 
   return useObserver(() => (
-    <RelatedParts
-      parentStatus = {parentPartStatus}
-      parentStatusChanged = {parentPartStatusChanged}
-      {...{
-        documentRevision,
-        createNewDocument,
-        viewRelatedPart,
-        handleRemove,
-        handleUpdate,
-        fetchRelatedParts,
-        voidRelatedPart,
-        relatedPartsState,
-      }}
-    />
+    <>
+      <RelatedParts
+        parentStatus = {parentPartStatus}
+        parentStatusChanged = {parentPartStatusChanged}
+        {...{
+          documentRevision,
+          createNewDocument,
+          viewRelatedPart,
+          handleRemove,
+          handleUpdate,
+          fetchRelatedParts,
+          voidRelatedPart,
+          relatedPartsState,
+        }}
+      />
+    </>
   ));
 };
 

@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import OldColors from '../../../../layout/theme/utils/colors';
 import { Colors } from '../../../../layout/theme-next';
+import OldColors from '../../../../layout/theme/utils/colors';
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +72,7 @@ export default makeStyles((theme: Theme) =>
       },
     },
     GREEN_STATUS: {
-      background: OldColors.carla,
+      background: OldColors.snow_flurry,
       color: OldColors.light_forest_green,
       border: `1px solid ${OldColors.light_forest_green_border}`,
     },

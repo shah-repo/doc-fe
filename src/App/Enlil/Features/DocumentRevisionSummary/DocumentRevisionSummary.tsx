@@ -17,7 +17,7 @@ import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
@@ -68,6 +68,15 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       labelId: 'tabId.training',
       tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PART]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: 'tabId.bom',
+      tabId: TabTypeOptions.BOM.toLowerCase(),
+      type: TabTypeOptions.BOM,
     }];
   }
 
@@ -225,6 +234,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                   documentRevisionId={documentRevision?.id}
                                   docRevStatus={documentRevision.status}
                                 />
+                              )}
+                              {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                                <FBBOM documentRevision={documentRevision} isDisabled={true} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

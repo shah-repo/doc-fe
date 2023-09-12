@@ -37,6 +37,7 @@
     "@progress/kendo-react-progressbars": "^4.13.0",
     "@progress/kendo-react-treelist": "^5.14.0",
     "@progress/kendo-react-treeview": "^4.13.0",
+    "@progress/kendo-svg-icons": "^1.5.0",
     "@types/pdf-parse": "^1.1.1",
     "Base64": "^1.1.0",
     "array-move": "2.2.1",
@@ -208,5 +209,11 @@
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "d3": "d3/dist/d3.min.js",
+      "d3-array": "d3-array/dist/d3-array.min.js"
+    }
   }
 }

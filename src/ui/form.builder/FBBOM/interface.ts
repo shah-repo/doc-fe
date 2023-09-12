@@ -1,4 +1,5 @@
 import { Attachment } from '../../../state/ducks/attachments/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { Vendor } from '../FBPartVendors/types';
 import { MODE_FIELD } from './components/treelist/constants';
 
@@ -10,7 +11,9 @@ export interface BOM {
   version?: string
   revision: string
   isOwner?: boolean
-  status: string
+  status: DocumentRevisionStatus
+  displayStatus: string
+  displayRevision: string
   cost: string
   docId: string
   leadTime?: string
@@ -19,7 +22,8 @@ export interface BOM {
   refDesignator?: string
   depth?: number
   order?: number
-  isMarkedAsDeleted?: boolean
+  isDeleted?: boolean
+  inProgress?: boolean
   hasPrimaryAttachments?: string
   hasAttachments?: boolean
   primaryAttachmentDetails?: Attachment
@@ -29,14 +33,15 @@ export interface BOM {
   childNodes?: BOM[]
   inEdit?: boolean
   isNew?: boolean
-  isDeleted?: boolean
   availableRevisions?: AvailableRevisions
   changeRequestDetails?: ChangeRequestDetails
-  costRollUp: number
+  costRollUp?: number
 }
 
 export interface EditableBOM extends BOM {
   [MODE_FIELD]: boolean
+  isNew?: boolean
+  parentNodeRevId?: string
   parentNodeDocumentId?: string
   childNodeRevId?: string
   childNodeDocumentId?: string
@@ -45,7 +50,7 @@ export interface EditableBOM extends BOM {
   alternatePartsCount?: number
   attachmentNames: string[]
   isDisabled?: boolean
-  replacesStatus?: string
+  replacementStatus?: string
 }
 
 export interface BOMEditEvent {
@@ -59,13 +64,13 @@ interface ChangeRequestDetails {
   crId: string
 }
 
-// ts-unused-exports:disable-next-line
-export interface AvailableRevisions {
+interface AvailableRevisions {
   isReleased: boolean
   name: string
   id: string
   documentId: string
   revision: number
+  displayRevision: string
   status: string
   changeRequestDetails: ChangeRequestDetails
 }

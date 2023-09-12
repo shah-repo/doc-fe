@@ -15,7 +15,7 @@ export const schema = [{
 },
 {
   id: 'revision',
-  field: 'revision',
+  field: 'displayRevision',
   title: translate('bom.drawerTable.field.revision.title'),
   width: 70,
   template: RevCell,
@@ -43,7 +43,7 @@ export const schema = [{
 },
 {
   id: 'status',
-  field: 'status',
+  field: 'displayStatus',
   title: translate('bom.drawerTable.field.status.title'),
   template: StatusCell,
   width: 170,

@@ -5,9 +5,9 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
@@ -16,11 +16,10 @@ import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
-import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
+import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
-import Text from '../components/Text';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -30,6 +29,7 @@ import { RequestType } from '../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
+import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
@@ -41,13 +41,13 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
-import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from './PreviewControls.container.types';
-import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from './PreviewControls.container.types';
 
 interface OwnProps {
   documentRevision: DocumentRevision
@@ -99,6 +99,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isPart = checkIsDocumentPart(groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
@@ -110,6 +111,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
+
+  const showEditButton = isPart && documentRevision?.changeControlOptions?.id && isStatusReleased && isUserDocumentOwner;
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
   && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
@@ -156,6 +159,15 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
+  const setDocRevToDraft = () => {
+    dispatch(documentRevisionsActions.update(documentRevision.id, {
+      status: DocumentRevisionStatus.Draft,
+      displayStatus: 'Draft',
+    }));
+
+    dispatch(documentRevisionsActions.load(documentRevision.id));
+  };
+
   const cloneOutputDocument = () => {
     if (isAR) {
       const revisionId = documentRevision.id;
@@ -166,6 +178,19 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   };
 
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+
+  const renderEditPartButton = () => {
+    return (
+      <StyledButton
+        color="primary"
+        onClick={setDocRevToDraft}
+        id="PreviewControlsContainer-revise"
+        data-cy="updateRecord"
+      >
+        <Text message="controlConfig.editPart.button.text" />
+      </StyledButton>
+    );
+  };
 
   const renderCloneButton = (renderAsButton) => {
     if (hasAccess && canCreate() && showRevise) {
@@ -387,6 +412,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   );
 
   const accessableButtons: PreviewControlButtons[] = [];
+
+  if (showEditButton) {
+    accessableButtons.push(PreviewControlButtons.EditPartButton);
+  }
   if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
     accessableButtons.push(PreviewControlButtons.CloneButton);
   }
@@ -467,6 +496,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
+      {buttons.includes(PreviewControlButtons.EditPartButton) && renderEditPartButton()}
       {buttons.includes(PreviewControlButtons.CloneButton) && renderCloneButton(renderAsButton)}
       {buttons.includes(PreviewControlButtons.UpdateButton) && renderUpdateButton(renderAsButton)}
       {buttons.includes(PreviewControlButtons.NewCloneEB) && (
