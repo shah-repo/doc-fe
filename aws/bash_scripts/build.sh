@@ -24,6 +24,11 @@ echo "-------- Generating Build Info --------"
 # Building
 echo "-------- Building Application --------"
 
+# generate .npmrc file
+
+echo "@fortawesome:registry=https://npm.fontawesome.com/
+ //npm.fontawesome.com/:_authToken=${FONTAWESOME_TOKEN}" > ".npmrc"
+
 # https://classic.yarnpkg.com/en/docs/installing-dependencies/#toc-installing-options
 # we need dependencies and devDependencies so NODE_ENV should NOT be production
 NODE_ENV=development yarn install --frozen-lockfile
