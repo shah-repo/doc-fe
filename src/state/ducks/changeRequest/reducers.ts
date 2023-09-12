@@ -98,7 +98,7 @@ export const auditsAllId = (
   }
 };
 
-export const dependentOnDocRevs = (
+const dependentOnDocRevs = (
   state: ChangeRequestDependentOnDocRevsState = {
     canBeReleased: true,
     itemsPending: 0,

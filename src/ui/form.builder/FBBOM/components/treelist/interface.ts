@@ -18,7 +18,7 @@ export interface BOMState {
   inEdit: Array<{id: string }>
 }
 
-export interface DataState {
+interface DataState {
   sort?: SortDescriptor[]
   filter?: FilterDescriptor[]
 }
@@ -35,7 +35,7 @@ export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
 
-export interface AlternatePart {
+interface AlternatePart {
   id: string
   name?: string
   revision?: string

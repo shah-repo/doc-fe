@@ -10,10 +10,6 @@ export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
 
-export const isEditOnly = (dataItem: EditableBOM): boolean => {
-  return dataItem[MODE_FIELD] ?? false;
-};
-
 export const isEditBOM = (dataItem: EditableBOM): boolean => {
   return (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
 };
