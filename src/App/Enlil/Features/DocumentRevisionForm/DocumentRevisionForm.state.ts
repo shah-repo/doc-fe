@@ -27,7 +27,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public forceRender?: any;
   @observable public disabledAction = false;
   @observable public isBOMExists = false;
-  @observable public isShowedBOMDiff = false;
+  @observable public showBOMDiff = false;
   @observable public showPartInDialog = false;
   @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
@@ -186,12 +186,12 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'isBOMExists', isBOMExists);
   };
 
-  @action public toggleIsShowedBOMDiff = () => {
-    this.setIsShowedBOMDiff(!this.isShowedBOMDiff);
+  @action public toggleShowBOMDiff = () => {
+    this.setShowBOMDiff(!this.showBOMDiff);
   };
 
-  @action public setIsShowedBOMDiff = (isShowedBOMDiff: boolean) => {
-    set(this, 'isShowedBOMDiff', isShowedBOMDiff);
+  @action public setShowBOMDiff = (showBOMDiff: boolean) => {
+    set(this, 'showBOMDiff', showBOMDiff);
   };
 
   @action public toggleShowPartInDialog = () => {

@@ -67,7 +67,7 @@ import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isShowedBOMDiff = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -141,7 +141,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   });
 
   useEffect(() => {
-    if (!documentRevision) {
+    if (!documentRevision || isShowOnly) {
       return;
     }
     _documentRevisionFormState?.setBOMChangesInProgress(false);
@@ -224,7 +224,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   };
 
   useEffect(() => {
-    fetchHasATree(documentRevision?.id);
+    if (!isShowOnly) {
+      fetchHasATree(documentRevision?.id);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevision?.id]);
 
@@ -477,12 +479,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   };
 
   useObserver(() => {
-    isShowedBOMDiff = Boolean(_documentRevisionFormState?.isShowedBOMDiff);
+    showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
   });
   const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
-    _documentRevisionFormState?.toggleIsShowedBOMDiff();
-    if (isShowedBOMDiff) {
+    _documentRevisionFormState?.toggleShowBOMDiff();
+    if (showBOMDiff) {
       updateState({
         ...state,
         expanded: [state.data[0].id],
@@ -495,7 +497,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
-    if (item.isDeleted && !_documentRevisionFormState?.isShowedBOMDiff) {
+    if (item.isDeleted && !_documentRevisionFormState?.showBOMDiff) {
       return;
     }
 
@@ -506,8 +508,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.isDeleted || (isShowedBOMDiff && item.replacementStatus),
-        [classes.inprogressBg]: item.inProgress && isShowedBOMDiff,
+        [classes.deletedBg]: item.isDeleted || (showBOMDiff && item.replacementStatus),
+        [classes.inprogressBg]: item.inProgress && showBOMDiff,
       }),
     };
     if (!item[MODE_FIELD]) {
@@ -638,9 +640,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
                 <FontAwesomeIcon
                   className={classes.toggleIcon}
                   size="lg"
-                  icon={isShowedBOMDiff ? regular('toggle-large-on') : regular('toggle-large-off')}
+                  icon={showBOMDiff ? regular('toggle-large-on') : regular('toggle-large-off')}
                 />
-                <span className={classes.toggleIconLabel}>{translate(isShowedBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
+                <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
             </Grid>}
             <Grid item
