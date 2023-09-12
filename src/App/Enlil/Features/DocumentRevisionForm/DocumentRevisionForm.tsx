@@ -124,7 +124,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }];
   }
 
-  // Remove once configuration coming from BE
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = tabConfig && [...tabConfig, {

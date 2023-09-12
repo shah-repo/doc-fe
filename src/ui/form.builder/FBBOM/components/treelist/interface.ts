@@ -9,6 +9,7 @@ export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
   showBOMDiff?: boolean
+  showOnly?: boolean
 }
 
 export interface BOMState {
