@@ -44,6 +44,7 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
+          - ./aws/bash_scripts/inject.sh
           - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
@@ -58,6 +59,7 @@ definitions:
           - test-results/**
           - jest-config/**
         script:
+          - ./aws/bash_scripts/inject.sh
           - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
 
