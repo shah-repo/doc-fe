@@ -17,8 +17,11 @@ export const styles = makeStyles((theme) => ({
     color: Colors.lochmara,
     cursor: 'pointer',
   },
+  title: {
+    display: 'flex',
+  },
   GREEN_STATUS: {
-    background: Colors.carla,
+    background: Colors.snow_flurry,
     color: Colors.light_forest_green,
     border: `1px solid ${Colors.light_forest_green_border}`,
   },
@@ -129,7 +132,7 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   replacedDocRevInfo: {
-    color: ThemeColors.darkPeach,
+    color: Colors.darkPeach,
     fontSize: 12,
     textAlign: 'right',
     padding: theme.spacing(1.5, 0, 1.25),
@@ -143,7 +146,7 @@ export const styles = makeStyles((theme) => ({
     marginLeft: '5px',
     marginRight: '5px',
     position: 'relative',
-    background: ThemeColors.darkPeach,
+    background: Colors.darkPeach,
   },
   link: {
     color: `${Colors.navy_active} !important`,

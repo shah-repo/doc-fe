@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { ChangeControlOptions, DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
-import { Button, ButtonGroup } from '../../../components/forms/fields-next';
-import Text from '../../../components/Text';
-
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popover, Theme, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/styles';
+import React, { useState } from 'react';
+import { translate } from '../../../../common/intl';
+import { ChangeControlOptions, DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { Button, ButtonGroup } from '../../../components/forms/fields-next';
+import Text from '../../../components/Text';
 import Colors from '../../../layout/theme/utils/colors';
 
 interface Props {
@@ -16,38 +16,39 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    popover: {
-      // pointerEvents: 'none',
-    },
     paper: {
       padding: theme.spacing(1, 2, 1, 1),
-      marginTop: '4px',
+      marginTop: theme.spacing(0.5),
       backgroundColor: Colors.white,
       boxShadow: `4px 4px 8px 4px ${Colors.blue_bell}`,
-      right: '10px',
+      right: theme.spacing(1.25),
+    },
+    controlOptionsInfo: {
+      width: 16,
+      height: 16,
+      color: Colors.light_slate_blue,
     },
     heading: {
       color: Colors.dark_gray,
     },
     formDetails: {
       color: Colors.bright_grey,
-      paddingLeft: '4px',
+      paddingLeft: theme.spacing(0.5),
     },
     optionsList: {
       listStyle: 'none',
-      paddingLeft: '0px',
-      margin: '4px',
-      marginTop: '8px',
+      paddingLeft: 0,
+      margin: theme.spacing(1, 0.5, 0.5, 0.5),
     },
     listItem: {
-      marginBottom: '8px',
+      marginBottom: theme.spacing(1),
     },
     listItemLabel: {
       fontSize: '13px',
       color: Colors.dark_gray,
     },
     listItemValue: {
-      marginLeft: '4px',
+      marginLeft: theme.spacing(0.5),
     },
     allowed: {
       color: Colors.green,
@@ -100,14 +101,13 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
         onClick={showAssociatedControlOptions}
       >
         <FontAwesomeIcon
-          style={{ width: 16, height: 16, color: Colors.light_slate_blue }}
+          className={classes.controlOptionsInfo}
           color="secondary"
           icon={regular('circle-exclamation')}
         />
       </Button>
       <Popover
         id="controlOptions-popover"
-        className={classes.popover}
         classes={{
           paper: classes.paper,
         }}
@@ -124,7 +124,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography variant="h5" component="h5" className={classes.heading}>Current Change Control Configuration from Form
+        <Typography variant="h5" component="h5" className={classes.heading}>{translate('documentRevision.change.control.config.title')}
           <span className={classes.formDetails}>{docId} rev{displayRevision}</span>
         </Typography>
         <ul className={classes.optionsList}>

@@ -211,8 +211,9 @@
     "@typescript-eslint/parser": "4.33.0"
   },
   "jest": {
-    "transformIgnorePatterns": [
-      "/node_modules/(?!d3|d3-array|internmap|delaunator|robust-predicates)"
-    ]
+    "moduleNameMapper": {
+      "d3": "d3/dist/d3.min.js",
+      "d3-array": "d3-array/dist/d3-array.min.js"
+    }
   }
 }

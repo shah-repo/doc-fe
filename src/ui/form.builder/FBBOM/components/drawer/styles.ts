@@ -74,7 +74,7 @@ export default makeStyles((theme: Theme) =>
       },
     },
     GREEN_STATUS: {
-      background: OldColors.carla,
+      background: OldColors.snow_flurry,
       color: OldColors.light_forest_green,
       border: `1px solid ${OldColors.light_forest_green_border}`,
     },
