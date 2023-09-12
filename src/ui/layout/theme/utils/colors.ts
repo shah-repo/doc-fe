@@ -107,6 +107,7 @@ enum Colors {
   peri_winkle_blue='#8295FA',
   bright_gray='#EBEDF2',
   light_gray_border='#CCD4D9',
+  darkPeach='#B24736',
   // Platinum
   platinum='#E5E5E5',
   chinese_silver='#C8CACF',

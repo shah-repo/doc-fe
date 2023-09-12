@@ -132,7 +132,7 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   replacedDocRevInfo: {
-    color: ThemeColors.darkPeach,
+    color: Colors.darkPeach,
     fontSize: 12,
     textAlign: 'right',
     padding: theme.spacing(1.5, 0, 1.25),
@@ -146,7 +146,7 @@ export const styles = makeStyles((theme) => ({
     marginLeft: '5px',
     marginRight: '5px',
     position: 'relative',
-    background: ThemeColors.darkPeach,
+    background: Colors.darkPeach,
   },
   link: {
     color: `${Colors.navy_active} !important`,
