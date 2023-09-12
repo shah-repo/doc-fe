@@ -24,8 +24,6 @@ echo "-------- Generating Build Info --------"
 # Building
 echo "-------- Building Application --------"
 
-"${BASH_SCRIPTS_DIR}/inject.sh"
-
 # https://classic.yarnpkg.com/en/docs/installing-dependencies/#toc-installing-options
 # we need dependencies and devDependencies so NODE_ENV should NOT be production
 NODE_ENV=development yarn install --frozen-lockfile
