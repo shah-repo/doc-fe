@@ -67,7 +67,7 @@ import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false, isShowOnly = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -479,12 +479,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   useObserver(() => {
-    showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
+    isDiffViewEnabled = Boolean(_documentRevisionFormState?.isDiffViewEnabled);
   });
   const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
-    _documentRevisionFormState?.toggleShowBOMDiff();
-    if (showBOMDiff) {
+    _documentRevisionFormState?.toggleDiffView();
+    if (isDiffViewEnabled) {
       updateState({
         ...state,
         expanded: [state.data[0].id],
@@ -497,7 +497,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
-    if (item.isDeleted && !_documentRevisionFormState?.showBOMDiff) {
+    if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }
 
@@ -508,8 +508,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.isDeleted || (showBOMDiff && item.replacementStatus),
-        [classes.inprogressBg]: item.inProgress && showBOMDiff,
+        [classes.deletedBg]: item.isDeleted || (isDiffViewEnabled && item.replacementStatus),
+        [classes.inprogressBg]: item.inProgress && isDiffViewEnabled,
       }),
     };
     if (!item[MODE_FIELD]) {
@@ -640,9 +640,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
                 <FontAwesomeIcon
                   className={classes.toggleIcon}
                   size="lg"
-                  icon={showBOMDiff ? regular('toggle-large-on') : regular('toggle-large-off')}
+                  icon={isDiffViewEnabled ? regular('toggle-large-on') : regular('toggle-large-off')}
                 />
-                <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
+                <span className={classes.toggleIconLabel}>{translate(isDiffViewEnabled ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
             </Grid>}
             <Grid item
