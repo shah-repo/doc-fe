@@ -11,14 +11,14 @@ import { ReactComponent as EyeIcon } from '../../../../../../../src/assets/image
 import { ReactComponent as TimelineIcon } from '../../../../../../../src/assets/images/history.svg';
 import { ReactComponent as NoteIcon } from '../../../../../../../src/assets/images/note.svg';
 import { ChangeRequest } from '../../../../../../state/ducks/changeRequest/types';
+import AccessPermissionsContainer from '../../../../../../ui/documentRevision/accessPermissions/AccessPermissions.container';
+import DocumentRevisionAuditContainer from '../../../../../../ui/documentRevision/audit/Audit.container';
 import DocumentRevisionListContainer from '../../../../../../ui/documentRevision/DocumentRevisionList.container.new';
+import ChangeDocumentFormContainer from '../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container';
 import ReferencesContainer from '../../../../../../ui/documentRevision/References/References.container';
 import Bookmarks from '../../../../../../ui/documentRevision/Sidebar/Bookmarks.new';
 import RevisionHistory from '../../../../../../ui/documentRevision/Sidebar/RevisionHistory.new';
 import SidebarContainer from '../../../../../../ui/documentRevision/Sidebar/Sidebar.container';
-import AccessPermissionsContainer from '../../../../../../ui/documentRevision/accessPermissions/AccessPermissions.container';
-import DocumentRevisionAuditContainer from '../../../../../../ui/documentRevision/audit/Audit.container';
-import ChangeDocumentFormContainer from '../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container';
 import { FBTooltip } from '../../../../../../ui/form.builder';
 import Colors from '../../../../../../ui/layout/theme/utils/colors';
 import useStyles from './DocumentRevisionSidebar.new.styles';
@@ -43,7 +43,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   docId = '',
   intl,
   canEdit = false,
-  isRightPanelMinimized,
 }) => {
   const classes = useStyles();
 
@@ -51,10 +50,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
     _documentRevisionSidebarState?.setOpen();
     _documentRevisionFormState?.setRightPanelOpen();
   };
-
-  if (isRightPanelMinimized && _documentRevisionSidebarState?.open) {
-    handleRightPanelToggle();
-  }
 
   return (
     <Observer>

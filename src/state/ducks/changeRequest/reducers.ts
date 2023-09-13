@@ -101,9 +101,13 @@ export const auditsAllId = (
 const dependentOnDocRevs = (
   state: ChangeRequestDependentOnDocRevsState = {
     canBeReleased: true,
+    itemsInDraft: 0,
     itemsPending: 0,
-    parentDetails: {},
+    itemsInvalid: 0,
     draftItemsMap: {},
+    blockingItemsMap: {},
+    itemsInvalidMap: {},
+    parentDetails: {},
   },
   action: ChangeRequestDependentOnDocRevsSetAction,
 ): ChangeRequestDependentOnDocRevsState => {

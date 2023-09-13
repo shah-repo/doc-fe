@@ -12,7 +12,7 @@ export const ALTERNATE_PART_KEY = 'alternatePartsList';
 export const ALTERNATE_PARTS_COUNT_KEY = 'alternatePartsCount';
 export const CELL_EMPTY_VALUE = '-';
 export const TREELIST_CONFIG = {
-  sortable: true,
+  sortable: false,
   reorderable: true,
   resizable: true,
 };

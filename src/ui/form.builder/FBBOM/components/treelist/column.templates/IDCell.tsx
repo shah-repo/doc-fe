@@ -17,13 +17,13 @@ import { DocumentTypeById } from '../../../../../../state/ducks/documentRevision
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../../components/Text';
+import { FormContext } from '../../../../../components/forms/FormContext';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
-import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
-import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
-import { isDocumentRevisionDeprecated, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
 import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -52,8 +52,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const isRevisionAvailable = isEditMode && dataItem?.availableRevisions?.isReleased;
 
-  const notAllowedToUpgrade = isDocumentRevisionReleased(_documentRevisionFormState?.documentRevision?.status)
-    || isDocumentRevisionDeprecated(_documentRevisionFormState?.documentRevision?.status);
+  const isAllowedToUpgrade = isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
+    || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status);
 
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
@@ -73,12 +73,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     onSuccess: (data: any[] = []) => {
       if (data && data.length > 0) {
         const {
-          revision, status, name, hasAttachments,
+          displayRevision, displayStatus, name, hasAttachments,
           hasPrimaryAttachment, docId, id, quantity,
         } = data[0];
 
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
         setFieldValue('name', name);
         setFieldValue('hasAttachments', hasAttachments);
         setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
@@ -175,13 +175,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
       if (!isEmpty(part) && showFormDialog.isOpen) {
         const {
-          revision, status, name,
+          displayRevision, displayStatus, name,
         } = part as DocumentRevision;
         fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
         setFieldValue('childNodeRevId', part?.id);
         setFieldValue('childNodeDocumentId', part?.document?.id);
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
         setFieldValue('name', name);
         setFieldValue('quantity', 1);
         setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
@@ -243,14 +243,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const getInfoIcon = () => (
     <span className={cx('k-icon', classes.infoIcon)}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <FontAwesomeIcon onClick={() => { !notAllowedToUpgrade && dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
+        <FontAwesomeIcon onClick={() => { isAllowedToUpgrade && dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem }} />
+      <DocumentRevisionDrawer {...{ dataItem, closeDrawer }} />
     </FBBOMDetailDrawer>
   );
 
