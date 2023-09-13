@@ -9,16 +9,6 @@ enum Colors {
   hover='#EBEFF7',
   background='#F9FBFF',
   fieldDisabled='#EBEDF2',
-  carla = '#E6FCD9',
-  light_forest_green = '#4C9646',
-  light_forest_green_border='#509849',
-  old_lace='#FEF8EE',
-  tawny='#B25F00',
-  ochre='#CE8723',
-  lily_white='#F8F9F9',
-  light_cyan='#DCF4FD',
-  light_gray = '#8A9DAD',
-  alice_blue='#E2E8F0',
 
   // Primary
   primary='#011FBB',
@@ -54,7 +44,6 @@ enum Colors {
   gray='#F9F9F9',
   darkGray='#F5F5F5',
   black='#000',
-  darkPeach='#B24736',
 
   // Statuses
   statusDraft='#4D88FF',

@@ -29,7 +29,7 @@ import { Translation } from '../../translations/types';
 import useStyles from './dialog.styles';
 
 interface Props {
-  changeRequest: ChangeRequest | undefined
+  changeRequest?: ChangeRequest
   details: ChangeRequestDependentOnDocRevsState
   dialog: DialogHandler
   closeAction?: () => void
@@ -54,41 +54,41 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
       .map((item) => {
         return {
           ...item,
-          checked: false,
+          isChecked: false,
         };
       }),
   );
 
   const async = useAsync<ChangeRequest>({
-    onSuccess: () => dialog.close(),
+    onSuccess: dialog.close,
   });
 
   const saveChangeRequest = useActionCreator(changeRequestsActions.save);
 
   const handleDocRevSelection = (
-    checked: boolean,
+    isChecked: boolean,
     docRevChecked: DependedDocRevDetails,
   ) => {
     const updatedDocRevs = docRevs.map((docRev) =>
-      docRev.id === docRevChecked?.id ? { ...docRev, checked } : docRev,
+      docRev.id === docRevChecked?.id ? { ...docRev, isChecked } : docRev,
     );
     setDocRevs(updatedDocRevs);
-    const allChecked = updatedDocRevs.every((docRev) => docRev.checked);
+    const allChecked = updatedDocRevs.every((docRev) => docRev.isChecked);
     setSelectAll(allChecked);
   };
 
-  const handleDocRevSelectionAll = (checked: boolean) => {
-    setSelectAll(checked);
+  const handleDocRevSelectionAll = (isChecked: boolean) => {
+    setSelectAll(isChecked);
     const updatedDocRevs = docRevs.map((docRev) => ({
       ...docRev,
-      checked,
+      isChecked,
     }));
     setDocRevs(updatedDocRevs);
   };
 
   const addToChangeRequest = () => {
     const crFormInput = changeRequest?.formInput;
-    const docRevsSelected = docRevs.filter((docRev) => docRev.checked);
+    const docRevsSelected = docRevs.filter((docRev) => docRev.isChecked);
     if (docRevsSelected.length > 0) {
       // Update FormInput - documentRevisions list with the ones selected
       if (crFormInput && 'documentRevisions' in crFormInput) {
@@ -115,14 +115,14 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
 
   return (
     <Dialog
-      disableBackdropClick={true}
+      disableBackdropClick
       disableEnforceFocus
       classes={{
         root: classes.root,
         paper: classes.paper,
       }}
       scroll="paper"
-      disableEscapeKeyDown={true}
+      disableEscapeKeyDown
       maxWidth="sm"
       open={dialog.isOpen}
       onSubmit={(event: React.FormEvent) => event.stopPropagation()}
@@ -146,8 +146,8 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                 >
                   {translate('bom.ar.child.draft.add.action.message', {
                     itemsRequiringAttention: details.itemsInDraft,
+                    count: details.itemsInDraft,
                   })}
-                  {details.itemsInDraft > 1 ? 's' : ''}
                 </Typography>
                 <Typography
                   data-cy="dialog-message"
@@ -181,7 +181,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={value.checked ?? false}
+                                checked={value.isChecked ?? false}
                                 classes={{
                                   root: classes.checkbox,
                                   checked: classes.checked,
@@ -229,9 +229,8 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                   className={classes.alertTitle}
                 >
                   {translate('bom.ar.child.draft.add.action.message', {
-                    itemsRequiringAttention: details.itemsPending,
+                    count: details.itemsPending,
                   })}
-                  {details.itemsPending > 1 ? 's' : ''}
                 </Typography>
                 <Typography
                   data-cy="dialog-message"
@@ -271,9 +270,8 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                   className={classes.alertTitle}
                 >
                   {translate('bom.ar.child.draft.add.action.message', {
-                    itemsRequiringAttention: details.itemsInvalid,
+                    count: details.itemsInvalid,
                   })}
-                  {details.itemsInvalid > 1 ? 's' : ''}
                 </Typography>
                 <Typography
                   data-cy="dialog-message"

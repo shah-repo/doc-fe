@@ -44,7 +44,6 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   const dependentOnDocRevs = useSelector(changeRequestsSelectors?.getDependentOnDocRevsState);
   const [openDependentDialog, setOpenDependentDialog] = useState(false);
   useEffect(() => {
-    console.log(dependentOnDocRevs);
     if ((dependentOnDocRevs.itemsPending > 0 || dependentOnDocRevs.itemsInDraft > 0 || dependentOnDocRevs.itemsInvalid > 0)
       && openDependentDialog) {
       openDependentOnDocRevsDialog();

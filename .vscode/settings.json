@@ -12,13 +12,6 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
-  "colorize.languages": [
-    "typescriptreact",
-    "typescript",
-    "javascript",
-    "css",
-    "scss"
-  ],
   "editor.formatOnSave": true,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,

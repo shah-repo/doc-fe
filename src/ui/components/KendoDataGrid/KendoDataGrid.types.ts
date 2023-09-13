@@ -22,7 +22,7 @@ export type CellComponent<T = unknown, R = Record<string, unknown>> = ComponentT
 
 export type CellTemplate<T = unknown, R = Record<string, unknown>> = (props: CellTemplateProps<T> & R) => React.ReactNode;
 
-export type HeaderCellComponent = ComponentType<CustomGridHeaderCellProps>;
+type HeaderCellComponent = ComponentType<CustomGridHeaderCellProps>;
 
 export interface GenericColumnDefinition<T = unknown> extends Omit<GridColumnProps, 'id' | 'cell' | 'headerCell' | 'children'> {
   id: string
