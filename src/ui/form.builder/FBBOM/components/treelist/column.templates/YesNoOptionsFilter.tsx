@@ -5,12 +5,11 @@ import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { FBOption } from '../../../..';
 import { translate } from '../../../../../../common/intl';
-import yesNoOptions from '../../../../FBData/yesNoOptions.json';
+import yesNoFilterOptions from '../../../../FBData/yesNoFilterOptions.json';
 
 const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
   const { field, onFilterChange } = props;
-  console.log({ props });
-  const data = yesNoOptions.map(item => ({ ...item, text: translate(item.text) }));
+  const data = yesNoFilterOptions.map(item => ({ ...item, text: translate(item.text) }));
   const [value, setValue] = React.useState<FBOption>({} as FBOption);
 
   const onChange = React.useCallback(
@@ -38,7 +37,7 @@ const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props)
       filter.push({
         value: value.value,
         field,
-        operator: 'contains',
+        operator: value.value === 0 ? 'gt' : 'lt',
       });
     }
     onFilterChange?.({

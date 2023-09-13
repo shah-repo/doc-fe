@@ -5,15 +5,16 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy,
   TreeList, TreeListCellProps,
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent, treeToFlat,
+  TreeListRowDragEvent,
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy,
+  treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -45,11 +46,14 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
+  ALTERNATE_PARTS_COUNT_KEY,
+  ALTERNATE_PART_KEY,
   DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
@@ -65,7 +69,6 @@ import {
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
-import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
@@ -262,13 +265,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     const { data, dataState } = state;
     const filter = [...dataState.filter as FilterDescriptor[]];
     const docIDField = filter?.find(val => val.field === ID_FIELD);
+    const alternatePartField = filter?.find(val => val.field === ALTERNATE_PART_KEY);
     const docIDFieldIndex = filter?.findIndex(val => val.field === ID_FIELD);
+    const alternatePartFieldIndex = filter?.findIndex(val => val.field === ALTERNATE_PART_KEY);
 
     if (docIDField) {
       filter?.splice(docIDFieldIndex, 1, { ...docIDField, field: DOC_ID_FIELD });
     }
-    const filteredData
-  = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+    if (alternatePartField) {
+      filter?.splice(alternatePartFieldIndex, 1, { ...alternatePartField, field: ALTERNATE_PARTS_COUNT_KEY });
+    }
+    const filteredData = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
       = dataState.sort
       && filteredData
