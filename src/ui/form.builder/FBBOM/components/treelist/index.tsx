@@ -621,7 +621,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
         <Grid
           item
           data-cy="collapse-expand-collapse"
-          className={classes.toggleExpandCollapse}
+          className={cx(classes.toggleExpandCollapse, { [classes.disabled]: isShowOnly })}
         >
           <span onClick={handleExpandAll}>
             {translate('common.expand.all')} /{' '}
@@ -634,7 +634,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
           <Grid container justify="flex-end">
             {showDiffView && <Grid item
               data-cy="show-hide-diff"
-              className={classes.diffContainer}
+              className={cx(classes.diffContainer, { [classes.disabled]: isShowOnly })}
             >
               <span className={classes.toggleIconContainer} onClick={showHideDiff}>
                 <FontAwesomeIcon
@@ -647,6 +647,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
             </Grid>}
             <Grid item
               data-cy="excel-export"
+              className ={cx({ [classes.disabled]: isShowOnly })}
             >
               <StyleTooltip
                 title={translate('common.download')}
@@ -658,6 +659,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
             </Grid>
             { showTree && <Grid item
               data-cy="where-used-view"
+              className ={cx({ [classes.disabled]: isShowOnly })}
             >
               <StyleTooltip
                 title={translate('bom.whereUsed.dialog.title')}
@@ -669,7 +671,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                 />
               </StyleTooltip>
             </Grid>}
-            <Grid item data-cy="show-hide-columns">
+            <Grid item data-cy="show-hide-columns" className ={cx({ [classes.disabled]: isShowOnly })}>
               <ColumnShowHideTreeMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}

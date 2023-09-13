@@ -524,6 +524,9 @@ export default makeStyles((theme) => ({
   statusPendingChange: {
     fill: Colors.statusPendingChange,
   },
+  disabled: {
+    pointerEvents: 'none',
+  },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',
     maxHeight: size ? size.height - 160 : 'auto',
