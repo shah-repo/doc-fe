@@ -1,6 +1,7 @@
 import { Box, Grid, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
 
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -55,7 +56,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataIte
               data-cy="close-alternate-part-list"
               className={classes.closeIcon}
             >
-              <CloseIcon />
+              <FontAwesomeIcon icon={regular('xmark')} />
             </IconButton>
           </div>
         </Grid>
