@@ -100,7 +100,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   };
 
   const getTableItemElementData = () => {
-    return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z]*)(.*)/, '$1')}</span>;
+    return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
   };
 
   return (
