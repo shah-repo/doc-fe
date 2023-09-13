@@ -21,7 +21,6 @@ export type DocumentRevisionSidebarProps =
   isNewOutput?: boolean
   title?: string
   canEdit?: boolean
-  isRightPanelMinimized?: boolean
 };
 
 export interface DocumentRevisionSidebarStateProps {
