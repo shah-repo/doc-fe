@@ -73,12 +73,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     onSuccess: (data: any[] = []) => {
       if (data && data.length > 0) {
         const {
-          revision, status, name, hasAttachments,
+          displayRevision, displayStatus, name, hasAttachments,
           hasPrimaryAttachment, docId, id, quantity,
         } = data[0];
 
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
         setFieldValue('name', name);
         setFieldValue('hasAttachments', hasAttachments);
         setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
@@ -175,13 +175,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
       if (!isEmpty(part) && showFormDialog.isOpen) {
         const {
-          revision, status, name,
+          displayRevision, displayStatus, name,
         } = part as DocumentRevision;
         fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
         setFieldValue('childNodeRevId', part?.id);
         setFieldValue('childNodeDocumentId', part?.document?.id);
-        setFieldValue('revision', revision);
-        setFieldValue('status', status);
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
         setFieldValue('name', name);
         setFieldValue('quantity', 1);
         setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
