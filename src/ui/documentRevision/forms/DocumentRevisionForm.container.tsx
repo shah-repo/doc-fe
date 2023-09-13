@@ -64,7 +64,6 @@ interface OwnProps {
   canChangeOwnerShip?: boolean
   type?: DocumentCloneType
   isNewVersion?: boolean
-  isRightPanelMinimized?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;

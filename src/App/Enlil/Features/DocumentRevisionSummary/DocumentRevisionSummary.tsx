@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
@@ -34,7 +34,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
   isSideBarHidden = false,
-  isRightPanelMinimized,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
@@ -137,9 +136,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           rightSidebar: (
             <Observer>
               {() => (
-                <DocumentRevisionSidebar
-                  isRightPanelMinimized={isRightPanelMinimized ?? _tabsState?.isTabActive(TabTypeOptions.BOM)}
-                />
+                <DocumentRevisionSidebar />
               )}
             </Observer>
           ),
