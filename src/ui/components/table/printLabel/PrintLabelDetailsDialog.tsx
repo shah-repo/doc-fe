@@ -95,10 +95,15 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           </Grid>
           <Grid item xs={6}>
             <>
-              <FBLabel label="Serial" />
+             <Box display="flex">
+                <FBLabel label="Serial" />
+                <FBLabel label="(10 characters max)"
+                  fontSize="14px"
+                  labelProps={{ color: 'grey', display: 'flex', alignItems: 'center', marginLeft: '10px' }} />
+              </Box>
               <TextField
                 onChange={onSerialChange}
-                value={serial} />
+                value={serial.slice(0, 10)} />
             </>
           </Grid>
           <Grid item xs={6}>

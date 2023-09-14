@@ -1,5 +1,6 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosRequestConfig } from 'axios';
+import { isEmptyArray } from 'formik';
 import moment from 'moment';
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +11,7 @@ import { SM_APP_CONFIG } from '../../../../common/constants';
 import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import apiClient from '../../../../state/apiClient';
 import { companySelectors } from '../../../../state/ducks/company';
+import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { store } from '../../../../state/store';
 import { FBEndpoint } from '../../../form.builder/defaults/FBEndpoint';
 import { toastError, toastSuccess } from '../../notifications';
@@ -57,7 +59,12 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         .request(requestConfig)
         .then((resp) => resp)
         .then(({ data }) => {
-          setDescription(convertHtmlEntities(data?.description.replace(/(<([^>]+)>|\/n)/g, '')));
+          const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
+          if(!isEmptyArray(referenceTo)) {
+            const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
+            const description = documentRevision[documentRevision.length - 1].description;
+            setDescription(convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')));
+          }
           setData(data);
         });
     }, []);
@@ -113,6 +120,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange = (event: any) => {
+      if(event.target.value.length > 10) {
+        return;
+      }
       setSerial(event.target.value);
       initialValues.serial = event.target.value;
     };
@@ -142,7 +152,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       const requestConfig: AxiosRequestConfig = {
         method: 'post',
         url: FBEndpoint.PrintLabels,
-        params: params,
+        params: JSON.parse(JSON.stringify(params)),
         headers: {
           Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
         },
