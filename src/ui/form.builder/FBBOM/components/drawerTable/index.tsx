@@ -24,7 +24,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
   const classes = useStyles();
   const dispatch = useDispatch();
   const { _documentRevisionFormState } = SM.useStores();
-  const basePartNodeRevId = _documentRevisionFormState?.documentRevision?.id || '';
+  const basePartNodeRevId = _documentRevisionFormState?.documentRevision?.id ?? '';
 
   const fetchAlternateParts = useActionCreator(
     documentRevisionsActions.fetchAlternateParts,

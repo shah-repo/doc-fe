@@ -13,7 +13,7 @@ import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { FBPurchaseOrderItemType } from '../form.builder';
@@ -301,16 +301,82 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       }
       case 'bomParts':
         if (audit.type.includes('ARRAY_EDITED')) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as {docId: string, quantity: string, unit: string, refDesignator: string, comment: string};
+          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as BOMTreeData;
+
           returnValue = (
-            <>{ docId && <div data-cy={dataCy}>{` DocId -  updated to ${docId}`}</div>}  { quantity && <div data-cy={dataCy}>{` Quantity -  updated to ${quantity}`}</div> } { unit && <div data-cy={dataCy}>{`Unit - updated to ${unit}`}</div> } { (refDesignator && refDesignator !== '-') && <div data-cy={dataCy}>{`refDesignator - updated to ${refDesignator}`}</div> } { comment && <div data-cy={dataCy}>{`Comments - updated to ${comment}`}</div> }</>
+            <>
+              { docId && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.docId-updated"
+                values={{
+                  docId,
+                }}
+              />
+              }
+              { quantity && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.quantity-updated"
+                values={{ quantity }}
+              />
+              }
+              { unit && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.unit-updated"
+                values={{ unit }}
+              />
+              }
+              { refDesignator && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.refDesignator-updated"
+                values={{ refDesignator }}
+              />
+              }
+              { comment && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.comment-updated"
+                values={{ comment }}
+              />
+              }
+            </>
           );
         } else if (audit.type.includes('ARRAY_NEW')) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as {docId: string, quantity: string, unit: string, refDesignator: string, comment: string};
+          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as BOMTreeData;
+
           returnValue = (
-            <>{ docId && <div data-cy={dataCy}>{` DocId -  added to ${docId}`}</div>}  { quantity && <div data-cy={dataCy}>{` Quantity -  added to ${quantity}`}</div> } { unit && <div data-cy={dataCy}>{`Unit - added to ${unit}`}</div> } { (refDesignator && refDesignator !== '-') && <div data-cy={dataCy}>{`refDesignator - added to ${refDesignator}`}</div> } { comment && <div data-cy={dataCy}>{`Comments - added to ${comment}`}</div> }</>
+            <>
+              { docId && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.docId-added"
+                values={{
+                  docId,
+                }}
+              />
+              }
+              { quantity && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.quantity-added"
+                values={{ quantity }}
+              />
+              }
+              { unit && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.unit-added"
+                values={{ unit }}
+              />
+              }
+              { refDesignator && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.refDesignator-added"
+                values={{ refDesignator }}
+              />
+              }
+              { comment && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.comment-added"
+                values={{ comment }}
+              />
+              }
+            </>
           );
         } else {
           returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
