@@ -32,10 +32,10 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
         return;
       }
 
-      const { revision, status, name, id } = data[0];
+      const { displayRevision, displayStatus, name, id } = data[0];
 
-      setFieldValue('revision', revision);
-      setFieldValue('status', status);
+      setFieldValue('displayRevision', displayRevision);
+      setFieldValue('displayStatus', displayStatus);
       setFieldValue('name', name);
       setFieldValue('id', id);
     },

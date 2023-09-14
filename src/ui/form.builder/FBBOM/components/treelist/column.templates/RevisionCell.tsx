@@ -3,6 +3,7 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
@@ -11,7 +12,6 @@ import { ADD_FIELD } from '../constants';
 import { getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
-import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 
 const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
   dataItem,
@@ -42,8 +42,8 @@ const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
         hasPrimaryAttachment, docId, id,
       } = data[0];
 
-      setFieldValue('revision', displayRevision);
-      setFieldValue('status', status);
+      setFieldValue('displayRevision', displayRevision);
+      setFieldValue('displayStatus', status);
       setFieldValue('name', name);
       setFieldValue('hasAttachments', hasAttachments);
       setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
@@ -53,7 +53,7 @@ const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
   });
 
   const onRevChange = (evt) => {
-    setFieldValue('revision', evt.target.innerHTML);
+    setFieldValue('displayRevision', evt.target.innerHTML);
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       dataItem?.availableRevisions?.id,
