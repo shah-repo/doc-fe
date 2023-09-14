@@ -37,16 +37,23 @@ const SearchBar: React.FC = () => {
     setPopperClass(isFocused ? classes.popperFocused : undefined);
   }, [isFocused, classes.popperFocused]);
 
+  const initialSearchQuery = useSearchQuery();
+  console.log('initialSearchQuery', initialSearchQuery);
+
+  useEffect(() => {
+    if (!initialSearchQuery) {
+      console.log('initialSearchQuery000', initialSearchQuery);
+      setSearchQuery('');
+    }
+  }, [initialSearchQuery]);
+
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => {
     setIsFocused(false);
+    console.log('inputField', inputField);
     if (inputField) {
       inputField.blur();
     }
-  };
-
-  const resetSearchInput = () => {
-    setSearchQuery('');
   };
 
   const handleSearch = (event: React.ChangeEvent<unknown>, value: Option): void => {
@@ -58,13 +65,11 @@ const SearchBar: React.FC = () => {
 
     if (value.document?.id && value.document.typeName === FacetCategoryId.ChangeRequest) {
       history.push(changeRequestPreviewPath(value.document.id));
-      resetSearchInput();
       return;
     }
 
     if (value.document?.id && value.document.docId) {
       history.push(documentVersionPath(value.document.id, value.document.docId));
-      resetSearchInput();
       return;
     }
 
@@ -74,7 +79,6 @@ const SearchBar: React.FC = () => {
       setLastRecentSearch(trimmedQuery);
       setSearchQuery(trimmedQuery);
       history.push(searchPath(trimmedQuery));
-      resetSearchInput();
       return;
     }
 
@@ -100,7 +104,9 @@ const SearchBar: React.FC = () => {
     if (event?.type === 'blur') {
       return;
     }
-    setSearchQuery(value);
+    if (event?.type === 'change') {
+      setSearchQuery(value);
+    }
   };
 
   const requestSearch = useMemo(
