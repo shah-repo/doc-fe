@@ -1,63 +1,23 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Popover, Theme, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { Popover, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { ChangeControlOptions, DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
-import Colors from '../../../layout/theme/utils/colors';
+import { styles } from './cancelEditPartButton.styles';
 
 interface Props {
   documentRevision: DocumentRevision
   cancelPartEdit: () => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      padding: theme.spacing(1, 2, 1, 1),
-      marginTop: theme.spacing(0.5),
-      backgroundColor: Colors.white,
-      boxShadow: `4px 4px 8px 4px ${Colors.blue_bell}`,
-      right: theme.spacing(1.25),
-    },
-    controlOptionsInfo: {
-      width: 16,
-      height: 16,
-      color: Colors.light_slate_blue,
-    },
-    heading: {
-      color: Colors.dark_gray,
-    },
-    formDetails: {
-      color: Colors.bright_grey,
-      paddingLeft: theme.spacing(0.5),
-    },
-    optionsList: {
-      listStyle: 'none',
-      paddingLeft: 0,
-      margin: theme.spacing(1, 0.5, 0.5, 0.5),
-    },
-    listItem: {
-      marginBottom: theme.spacing(1),
-    },
-    listItemLabel: {
-      fontSize: '13px',
-      color: Colors.dark_gray,
-    },
-    listItemValue: {
-      marginLeft: theme.spacing(0.5),
-    },
-  }),
-);
-
 const CancelEditPartButton: React.FunctionComponent<Props> = ({
   documentRevision,
   cancelPartEdit,
 }) => {
-  const classes = useStyles();
+  const classes = styles();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const showAssociatedControlOptions = (event) => {

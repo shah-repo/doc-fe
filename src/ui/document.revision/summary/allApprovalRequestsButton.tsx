@@ -1,43 +1,21 @@
-import { Link, Popover, Table, TableBody, TableCell, TableHead, TableRow, Theme } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { Link, Popover, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import React, { useState } from 'react';
 import { MomentFormats } from '../../../common/utils/date';
 
 import { IAssociatedChangeRequest } from '../../../state/ducks/documentRevisions/types';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
-import Colors from '../../layout/theme/utils/colors';
+
+import { styles } from './allApprovalRequests.styles';
 
 interface Props {
   associatedChangeRequests: IAssociatedChangeRequest[]
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      padding: theme.spacing(1, 2, 1, 1),
-      marginTop: theme.spacing(0.5),
-      backgroundColor: Colors.white,
-      boxShadow: `4px 4px 8px 4px ${Colors.blue_bell}`,
-      right: theme.spacing(1.25),
-      maxWidth: 'fit-content',
-    },
-    link: {
-      color: Colors.navy,
-    },
-    table: {
-      width: '100%',
-    },
-    heading: {
-      color: Colors.dark_gray,
-    },
-  }),
-);
-
 const ApprovalRequestTable: React.FunctionComponent<Props> = ({
   associatedChangeRequests,
 }) => {
-  const classes = useStyles();
+  const classes = styles();
   return (
     <Table className={classes.table} size="small" aria-label="Approval requests table">
       <TableHead>
@@ -73,7 +51,7 @@ const ApprovalRequestTable: React.FunctionComponent<Props> = ({
 const AllApprovalRequestsButton: React.FunctionComponent<Props> = ({
   associatedChangeRequests,
 }) => {
-  const classes = useStyles();
+  const classes = styles();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const showApprovalRequests = (event) => {
