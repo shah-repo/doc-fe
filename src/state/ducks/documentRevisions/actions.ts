@@ -544,10 +544,11 @@ const addAlternatePart = (
 const deleteAlternatePart = (
   parentRevId,
   alternatePartNodeRevId,
+  basePartNodeRevId,
   handlers: Handlers,
 ): ApiAction<BOM[]> =>
   apiActionWithCallbacks({
-    url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}`,
+    url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}/${basePartNodeRevId}`,
     method: 'delete',
     handlers,
   });
