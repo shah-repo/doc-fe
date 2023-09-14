@@ -8,8 +8,13 @@ const GeneralSettingsContainer: React.FunctionComponent<RouteComponentProps<Rout
 }) => {
 	const { categoryName, docTypeId, label } = match.params;
 	console.log('----categoryName----', { categoryName, label, match }, match.params);
+
+	// const onSaveChanges = () => {
+
+	// };
+
 	return (
-		<GeneralSettingsPresenter categoryName />
+		<GeneralSettingsPresenter />
 	);
 };
 

@@ -15,6 +15,8 @@ interface PrinterProps {
 	onCollapsedClick: () => void
 }
 
+const labelProps = { marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px', color: '#080B11' };
+
 const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
 	collapsed,
 	consumerKey,
@@ -28,7 +30,6 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
 	console.log('----collapsed-----', { collapsed });
 	return (
 		<Box paddingLeft={3} paddingRight={3} minWidth="60%">
-		{/* <div> */}
 			<Collapse in={!collapsed} collapsedHeight={60} style={{ border: '2px lightgrey solid', padding: '20px', borderRadius: '4px' }}>
 				<Box display="flex">
 			{collapsed ? (
@@ -45,19 +46,30 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
 			<Divider />
 			<FBLabel
 			label="administration.generalsettings.printing.tab.consumer.key"
-			labelProps={{ marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px' }} />
-			<TextField variant="outlined" fullWidth />
+			labelProps={labelProps} />
+			<TextField
+			value={consumerKey}
+			variant="outlined"
+			fullWidth
+			onChange={onConsumerKeyChange} />
 			<FBLabel
 			label="administration.generalsettings.printing.tab.tenant.id"
-			labelProps={{ marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px' }} />
-			<TextField variant="outlined" fullWidth />
+			labelProps={labelProps} />
+			<TextField
+			value={tenantID}
+			variant="outlined"
+			fullWidth
+			onChange={onTenantIDChange} />
 			<FBLabel
 			label="administration.generalsettings.printing.tab.printer.serial"
-			labelProps={{ marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px', color: '#080B11' }} />
-			<TextField variant="outlined" fullWidth />
+			labelProps={labelProps} />
+			<TextField
+			value={printerSerial}
+			variant="outlined"
+			fullWidth
+			onChange={onPrinterSerialChange} />
 			</Box>
 			</Collapse>
-		{/* </div> */}
 		</Box>
 	);
 };
