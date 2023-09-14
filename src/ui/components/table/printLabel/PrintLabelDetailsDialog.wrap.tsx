@@ -79,13 +79,16 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onQtyUnitsChange = (event, index) => {
+      if (event.target.value < 0) {
+        return;
+      }
       const newQtyUnits = [...qtyUnits];
       newQtyUnits[index] = event.target.value;
       setQtyUnits(newQtyUnits);
     };
 
     const onLabelsToPrintChange = (event: any) => {
-      if (event.target.value > 100 || event.target.value < 1) {
+      if (event.target.value > 10 || event.target.value < 1) {
         return;
       }
       if (labelsToPrint < event.target.value) {
@@ -104,6 +107,10 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const onSerialChange = (event: any) => {
       setSerial(event.target.value);
       initialValues.serial = event.target.value;
+    };
+
+    const onDescriptionChange = (event:any) => {
+      setDescription(event.target.value);
     };
 
     const onPrintClick = () => {
@@ -128,6 +135,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       serial,
       onPrintClick,
       description,
+      onDescriptionChange
     });
   };
 

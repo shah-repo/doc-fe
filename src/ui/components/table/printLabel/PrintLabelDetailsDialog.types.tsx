@@ -10,6 +10,7 @@ export interface PrintLabelDetailsDialogProps {
   onLabelsToPrintChange: (event: any) => void;
   onSerialChange: () => void;
   onPrintClick: () => void;
+  onDescriptionChange: (event: any) => void;
   isOpen: boolean;
   companyEmployees: Employee[];
   selectedOption: SelectOption;

@@ -18,6 +18,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   onLabelsToPrintChange,
   onSerialChange,
   onPrintClick,
+	onDescriptionChange,
   isOpen,
   companyEmployees,
   selectedOption,
@@ -77,7 +78,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={12}>
             <>
               <FBLabel label="Description" />
-              <TextField disabled value={description} multiline />
+              <TextField
+                value={description.slice(0, 90)}
+                onChange={onDescriptionChange} />
             </>
           </Grid>
           <Grid item xs={6}>
