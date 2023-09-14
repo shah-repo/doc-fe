@@ -2,14 +2,16 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import { SM } from "../../../../../App";
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import NoDataFound from '../../../../components/common/kendo/NoDataFound';
 import { Button } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -20,6 +22,9 @@ import useStyles from './styles';
 
 const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { _documentRevisionFormState } = SM.useStores();
+  const basePartNodeRevId = _documentRevisionFormState?.documentRevision?.id || '';
 
   const fetchAlternateParts = useActionCreator(
     documentRevisionsActions.fetchAlternateParts,
@@ -40,6 +45,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
         {
           parentNodeRevId: parentRevId,
           alternatePartNodeRevId: values.id,
+          basePartNodeRevId
         },
         alternatePartAsync,
       );
@@ -52,6 +58,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
         parentRevId,
         fetchAlternatePartAsync,
       );
+      dispatch(documentRevisionsActions.loadAudit(basePartNodeRevId));
     },
     onError: (response) => {
       toastError(response);

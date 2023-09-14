@@ -13,7 +13,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
-  TreeListRowDragEvent, treeToFlat,
+  TreeListRowDragEvent, treeToFlat
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -24,12 +24,13 @@ import {
   replace,
   tail,
   take,
-  uniq,
+  uniq
 } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
@@ -55,12 +56,12 @@ import {
   EXCEL_FILE_NAME,
   EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
-  TREELIST_CONFIG,
+  TREELIST_CONFIG
 } from './constants';
 import {
   BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBBOMProps,
+  FBBOMProps
 } from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
@@ -69,6 +70,7 @@ import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
+  const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
 
   const classes = useStyles({ size });
@@ -128,6 +130,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
         documentRevision.documentId,
         treeListAsync,
       );
+      dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
     },
     onError: (response) => {
       toastError(response);

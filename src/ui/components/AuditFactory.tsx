@@ -299,6 +299,26 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);
         break;
       }
+      case 'bomParts':
+        if (audit.type.includes('ARRAY_EDITED')) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as {docId: string, quantity: string, unit: string, refDesignator: string, comment: string};
+          returnValue = (
+            <>{ docId && <div data-cy={dataCy}>{` DocId -  updated to ${docId}`}</div>}  { quantity && <div data-cy={dataCy}>{` Quantity -  updated to ${quantity}`}</div> } { unit && <div data-cy={dataCy}>{`Unit - updated to ${unit}`}</div> } { (refDesignator && refDesignator !== '-') && <div data-cy={dataCy}>{`refDesignator - updated to ${refDesignator}`}</div> } { comment && <div data-cy={dataCy}>{`Comments - updated to ${comment}`}</div> }</>
+          );
+        } else if (audit.type.includes('ARRAY_NEW')) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as {docId: string, quantity: string, unit: string, refDesignator: string, comment: string};
+          returnValue = (
+            <>{ docId && <div data-cy={dataCy}>{` DocId -  added to ${docId}`}</div>}  { quantity && <div data-cy={dataCy}>{` Quantity -  added to ${quantity}`}</div> } { unit && <div data-cy={dataCy}>{`Unit - added to ${unit}`}</div> } { (refDesignator && refDesignator !== '-') && <div data-cy={dataCy}>{`refDesignator - added to ${refDesignator}`}</div> } { comment && <div data-cy={dataCy}>{`Comments - added to ${comment}`}</div> }</>
+          );
+        } else {
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        }
+        break;
+      case 'bomAlternateParts':
+        returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
           returnValue = (
