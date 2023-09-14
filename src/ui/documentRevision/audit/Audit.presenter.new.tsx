@@ -437,16 +437,16 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           >
             <>
               {!isFBField && !isSmartRef && isArrayEdited && isDocIdORDescriptionChanged && (
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.auditKey}
-                    >
-                      <Text
-                        dataCy={`change-key-${groupKey}-docId-${key}`}
-                        message={`documentRevision.audit.${change.field}.${change.type}`}
-                        values={{ nextStatus: change.nextValue }}
-                      />
-                    </Typography>
+                <Typography
+                  variant="subtitle1"
+                  className={classes.auditKey}
+                >
+                  <Text
+                    dataCy={`change-key-${groupKey}-docId-${key}`}
+                    message={`documentRevision.audit.${change.field}.${change.type}`}
+                    values={{ nextStatus: change.nextValue }}
+                  />
+                </Typography>
               )}
               {!isFBField && !isSmartRef && !isArrayEdited && (
                 <Typography
@@ -520,7 +520,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Typography variant="subtitle1" className={classes.auditKey}>
-          <Text dataCy={`change-value-${parentGroupKey}-${parentIndex}`}
+          <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
             message={
               isRemovingApproverAction
                 ? `documentRevision.audit.${field}.ARRAY_DELETED`

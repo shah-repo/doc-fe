@@ -183,7 +183,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'approvals.status':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
-          returnValue = (audit.nextValue as Employee).user?.name;
+          returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name}</div>);
           break;
         }
         // falls through intentionally

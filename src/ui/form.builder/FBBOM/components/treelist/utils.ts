@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
 import Config from '../../../../../config';
+import { DocumentRevisionStatusDisplay } from '../../../../../state/ducks/documentRevisions/types';
 import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { BOM, EditableBOM } from '../../interface';
@@ -66,6 +67,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
           id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
           parentNodeDocumentId: parentDetails.documentId,
           isParentOwner: parentDetails.isOwner,
+          isEditEnabled: parentDetails.displayStatus !== DocumentRevisionStatusDisplay.Released,
         });
       }
     } else {
