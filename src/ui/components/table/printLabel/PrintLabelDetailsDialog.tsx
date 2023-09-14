@@ -1,8 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import { MomentFormats } from '../../../../common/utils/date';
-import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import { FBLabel } from '../../../form.builder';
 import { Autocomplete, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
@@ -32,7 +30,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   description,
 }) => {
   const classes = styles();
-  const sanitizedDescription = description ? convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')) : '';
+
   const qtyUnitsRender = () => {
     const gridSize = labelsToPrint < 5 ? (12 / labelsToPrint) : 3;
     return (qtyUnits.map((item, i) => (
@@ -78,9 +76,14 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           </Grid>
           <Grid item xs={12}>
             <>
-              <FBLabel label="Description" />
+              <Box display="flex">
+                <FBLabel label="Description" />
+                <FBLabel label="(90 characters max)"
+                  fontSize="14px"
+                  labelProps={{ color: 'grey', display: 'flex', alignItems: 'center', marginLeft: '10px' }} />
+              </Box>
               <TextField
-                value={sanitizedDescription.slice(0, 90)}
+                value={description.slice(0, 90)}
                 onChange={onDescriptionChange} />
             </>
           </Grid>
@@ -116,7 +119,6 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 value={selectedDate}
                 size="medium"
                 onChange={handleDateChange}
-                format={MomentFormats.MonthDateYearTwoDigit}
               />
             </>
           </Grid>

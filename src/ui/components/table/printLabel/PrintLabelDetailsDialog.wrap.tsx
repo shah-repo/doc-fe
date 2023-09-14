@@ -1,21 +1,25 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosRequestConfig } from 'axios';
+import moment from 'moment';
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { PrintLabelDetailsDialogProps } from '..';
+import { SM_APP_CONFIG } from '../../../../common/constants';
+import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import apiClient from '../../../../state/apiClient';
 import { companySelectors } from '../../../../state/ducks/company';
 import { store } from '../../../../state/store';
 import { FBEndpoint } from '../../../form.builder/defaults/FBEndpoint';
-import { toastSuccess } from '../../notifications';
+import { toastError, toastSuccess } from '../../notifications';
 
 export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     selectedItem,
+    closeDialog,
     ...props
   }: T) => {
     const companyEmployees = useSelector(companySelectors.getActiveEmployees);
@@ -32,12 +36,13 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     const [employees, setEmployees] = useState <SelectOption[]>([]);
     const [selectedOption, setSelectedOption] = useState <SelectOption>();
-    const [selectedDate, setSelectedDate] = useState();
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const [labelsToPrint, setLabelsToPrint] = useState(initialValues?.labelsToPrint);
     const [qtyUnits, setQtyUnits] = useState([initialValues?.qtyUnits]);
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
+    const [data, setData] = useState({});
 
     useEffect(() => {
       const requestConfig: AxiosRequestConfig = {
@@ -51,7 +56,10 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       apiClient
         .request(requestConfig)
         .then((resp) => resp)
-        .then(({ data }) => { setDescription(data?.description); });
+        .then(({ data }) => {
+          setDescription(convertHtmlEntities(data?.description.replace(/(<([^>]+)>|\/n)/g, '')));
+          setData(data);
+        });
     }, []);
 
     useEffect(() => {
@@ -75,7 +83,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     }, [companyEmployees]);
 
     const handleDateChange = (date: MaterialUiPickersDate) => {
-      setSelectedDate(date?.toISOString());
+      setSelectedDate(new Date(date?.toISOString()));
     };
 
     const onQtyUnitsChange = (event, index) => {
@@ -109,13 +117,43 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       initialValues.serial = event.target.value;
     };
 
-    const onDescriptionChange = (event:any) => {
+    const onDescriptionChange = (event: any) => {
       setDescription(event.target.value);
     };
 
     const onPrintClick = () => {
-      console.log('initial values---', { initialValues, selectedDate, selectedOption, labelsToPrint, qtyUnits, selectedItem });
-      toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
+      const quantity = qtyUnits.map((item, i) => ({ [i + 1]: item }));
+      const params = {
+        status: selectedItem?.lotStatus,
+        description: description,
+        partDocId: initialValues.partId,
+        revision: initialValues.revision,
+        actor: selectedOption?.text,
+        lotNumber: initialValues.lotId,
+        lotRevId: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
+        serial: serial,
+        expireDate: selectedItem?.formInput?.lot_expiry_date,
+        printDate: moment(selectedDate).format('MMM DD, YYYY'),
+        labelQuantity: {
+          labelsToPrint: labelsToPrint,
+          quantity: quantity,
+        },
+      };
+      const requestConfig: AxiosRequestConfig = {
+        method: 'post',
+        url: FBEndpoint.PrintLabels,
+        params: params,
+        headers: {
+          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        },
+      };
+      apiClient
+        .request(requestConfig)
+        .then((resp) => {
+          toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
+          closeDialog();
+        })
+        .catch((exception) => { toastError(intl.formatMessage({ id: 'errors.somethingWentWrong' })); });
     };
 
     return Component({
@@ -136,6 +174,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       onPrintClick,
       description,
       onDescriptionChange,
+      closeDialog,
     });
   };
 
