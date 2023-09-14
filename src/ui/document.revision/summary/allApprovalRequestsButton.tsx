@@ -54,11 +54,9 @@ const ApprovalRequestTable: React.FunctionComponent<Props> = ({
       <TableBody>
         {associatedChangeRequests.map((changeRequest) => (
           <TableRow key={changeRequest.crId}>
-            <TableCell component="th" scope="row">{changeRequest.crId}</TableCell>
-            <TableCell>{changeRequest.revChanges}</TableCell>
-            <TableCell>{changeRequest.title}</TableCell>
-            <TableCell>{changeRequest.owner}</TableCell>
-            <TableCell>{changeRequest.state}</TableCell>
+            { ['crId', 'revChanges', 'title', 'owner', 'state'].map((fieldName) =>
+              <TableCell>{changeRequest[fieldName]}</TableCell>,
+            )}
             <TableCell>
               <DateTime
                 value={changeRequest.updatedAt}
