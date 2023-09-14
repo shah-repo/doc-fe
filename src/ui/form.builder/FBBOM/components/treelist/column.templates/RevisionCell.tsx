@@ -38,12 +38,12 @@ const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
       }
 
       const {
-        displayRevision, status, name, hasAttachments,
+        displayRevision, displayStatus, name, hasAttachments,
         hasPrimaryAttachment, docId, id,
       } = data[0];
 
       setFieldValue('displayRevision', displayRevision);
-      setFieldValue('displayStatus', status);
+      setFieldValue('displayStatus', displayStatus);
       setFieldValue('name', name);
       setFieldValue('hasAttachments', hasAttachments);
       setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);

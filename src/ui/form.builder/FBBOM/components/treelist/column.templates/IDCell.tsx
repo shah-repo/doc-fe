@@ -175,13 +175,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
       if (!isEmpty(part) && showFormDialog.isOpen) {
         const {
-          revision, status, name,
+          displayRevision, displayStatus, name,
         } = part as DocumentRevision;
         fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
         setFieldValue('childNodeRevId', part?.id);
         setFieldValue('childNodeDocumentId', part?.document?.id);
-        setFieldValue('displayRevision', revision);
-        setFieldValue('displayStatus', status);
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
         setFieldValue('name', name);
         setFieldValue('quantity', 1);
         setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
@@ -250,7 +250,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem }} />
+      <DocumentRevisionDrawer {...{ dataItem, closeDrawer }} />
     </FBBOMDetailDrawer>
   );
 

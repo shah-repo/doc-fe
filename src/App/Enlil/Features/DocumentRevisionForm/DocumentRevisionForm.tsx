@@ -7,8 +7,8 @@ import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { GroupTag } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, EFormType, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
@@ -66,11 +66,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
-  const isEFormType = get(documentRevision?.document?.documentType, 'documentTypeName');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
+  const isPartForm = checkIsDocumentPart(
+    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -124,7 +125,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }];
   }
 
-  // Remove once configuration coming from BE
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = tabConfig && [...tabConfig, {
@@ -314,7 +314,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                                 <FBBOM documentRevision={documentRevision}
-                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision) || isEFormType === EFormType} />
+                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm}
+                                  isShowOnly={isPartForm}
+                                />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

@@ -12,12 +12,12 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
-import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
@@ -146,6 +146,15 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     }];
   }
 
+  if (tabConfig && [DOC_TYPE_GROUP.PART]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: 'tabId.bom',
+      tabId: TabTypeOptions.BOM.toLowerCase(),
+      type: TabTypeOptions.BOM,
+    }];
+  }
+
   const prevMode = useRef<FBWorkspaceMode>();
 
   useEffect(() => {
@@ -227,7 +236,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {(isPart || isPartForm) && (
+                        {((isPart || isPartForm) && formPreview) && (
                           <Grid item xs={12}>
                             <RelatedPartsWrapper
                               viewOnly={true}
@@ -278,6 +287,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           documentRevisionId={documentRevision?.id}
                           docRevStatus={documentRevision?.status}
                         />
+                      )}
+                      {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                        <FBBOM documentRevision={documentRevision}
+                          isDisabled={true} isShowOnly={true} />
                       )}
                     </SMBox>
                   );
