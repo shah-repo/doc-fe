@@ -18,7 +18,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   onLabelsToPrintChange,
   onSerialChange,
   onPrintClick,
-	onDescriptionChange,
+  onDescriptionChange,
   isOpen,
   companyEmployees,
   selectedOption,
