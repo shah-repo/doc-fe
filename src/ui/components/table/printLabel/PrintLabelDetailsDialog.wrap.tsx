@@ -144,10 +144,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         serial: serial,
         expireDate: selectedItem?.formInput?.lot_expiry_date,
         printDate: moment(selectedDate).format('MMM DD, YYYY'),
-        labelQuantity: {
-          labelsToPrint: labelsToPrint,
-          quantity: quantity,
-        },
+        labelsToPrint: labelsToPrint,
+        quantity: quantity,
       };
       const requestConfig: AxiosRequestConfig = {
         method: 'post',
