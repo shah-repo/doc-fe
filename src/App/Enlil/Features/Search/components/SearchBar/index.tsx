@@ -38,11 +38,8 @@ const SearchBar: React.FC = () => {
   }, [isFocused, classes.popperFocused]);
 
   const initialSearchQuery = useSearchQuery();
-  console.log('initialSearchQuery', initialSearchQuery);
-
   useEffect(() => {
     if (!initialSearchQuery) {
-      console.log('initialSearchQuery000', initialSearchQuery);
       setSearchQuery('');
     }
   }, [initialSearchQuery]);
@@ -50,7 +47,6 @@ const SearchBar: React.FC = () => {
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => {
     setIsFocused(false);
-    console.log('inputField', inputField);
     if (inputField) {
       inputField.blur();
     }
