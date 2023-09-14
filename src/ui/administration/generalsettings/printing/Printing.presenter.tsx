@@ -29,15 +29,15 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
 	return (
 		<Box paddingLeft={3} paddingRight={3} minWidth="60%">
 		{/* <div> */}
-			<Collapse in={!collapsed} collapsedHeight={40} style={{ border: '2px lightgrey solid', padding: '20px', borderRadius: '4px' }}>
+			<Collapse in={!collapsed} collapsedHeight={60} style={{ border: '2px lightgrey solid', padding: '20px', borderRadius: '4px' }}>
 				<Box display="flex">
 			{collapsed ? (
-			<ExpandLess onClick={onCollapsedClick} />)
-			:	<ExpandMore onClick={onCollapsedClick} />
+			<ExpandLess onClick={onCollapsedClick} style={{ color: '#011FBB' }} />)
+			:	<ExpandMore onClick={onCollapsedClick} style={{ color: '#011FBB' }} />
 			}
 			<FBLabel
 			label={GeneralSettingsTabs.Printing}
-			labelProps={{ paddingLeft: '10px' }} />
+			labelProps={{ paddingLeft: '10px', lineHeight: '20px', fontWeight: '600', color: '#011FBB' }} />
 			</Box>
 			<Box paddingLeft={4}>
 			<FBLabel label="administration.generalsettings.printing.tab.title"
@@ -53,7 +53,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
 			<TextField variant="outlined" fullWidth />
 			<FBLabel
 			label="administration.generalsettings.printing.tab.printer.serial"
-			labelProps={{ marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px' }} />
+			labelProps={{ marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px', color: '#080B11' }} />
 			<TextField variant="outlined" fullWidth />
 			</Box>
 			</Collapse>
