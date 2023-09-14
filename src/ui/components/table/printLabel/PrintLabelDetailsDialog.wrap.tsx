@@ -139,7 +139,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         partDocId: initialValues.partId,
         revision: initialValues.revision,
         actor: selectedOption?.text,
-        lotNumber: initialValues.lotId,
+        lotNumber: initialValues?.lotId?.split('#')[1],
         lotRevId: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
         serial: serial,
         expireDate: selectedItem?.formInput?.lot_expiry_date,
