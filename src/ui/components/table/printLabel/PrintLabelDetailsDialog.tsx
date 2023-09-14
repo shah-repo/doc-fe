@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Gri
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { MomentFormats } from '../../../../common/utils/date';
+import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import { FBLabel } from '../../../form.builder';
 import { Autocomplete, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
@@ -31,7 +32,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   description,
 }) => {
   const classes = styles();
-
+  const sanitizedDescription = description ? convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')) : '';
   const qtyUnitsRender = () => {
     const gridSize = labelsToPrint < 5 ? (12 / labelsToPrint) : 3;
     return (qtyUnits.map((item, i) => (
@@ -79,7 +80,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             <>
               <FBLabel label="Description" />
               <TextField
-                value={description.slice(0, 90)}
+                value={sanitizedDescription.slice(0, 90)}
                 onChange={onDescriptionChange} />
             </>
           </Grid>
