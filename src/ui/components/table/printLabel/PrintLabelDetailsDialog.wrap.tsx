@@ -132,7 +132,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onPrintClick = () => {
-      const quantity = qtyUnits.map((item, i) => ({ [i + 1]: item }));
+      const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
         status: selectedItem?.lotStatus,
         description: description,
@@ -145,7 +145,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         expireDate: selectedItem?.formInput?.lot_expiry_date,
         printDate: moment(selectedDate).format('MMM DD, YYYY'),
         labelsToPrint: labelsToPrint,
-        quantity: quantity,
+        quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: item.value	}), {}),
       };
       const requestConfig: AxiosRequestConfig = {
         method: 'post',
