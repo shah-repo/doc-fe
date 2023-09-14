@@ -1,18 +1,8 @@
 import { Grid, IconButton } from '@material-ui/core';
 import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
-import {
-	setExpandedState,
-	setGroupIds
-} from '@progress/kendo-react-data-tools';
-import {
-	GridColumn,
-	GridColumn as KendoColumn, GridColumnReorderEvent,
-	GridColumnResizeEvent,
-	GridDataStateChangeEvent,
-	GridExpandChangeEvent,
-	GridFilterCellProps, GridNoRecords, GridToolbar
-} from '@progress/kendo-react-grid';
+import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
+import { GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, map, set, toUpper } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -40,15 +30,7 @@ import { DropdownFilterTemplate } from '../common/kendo.column.templates/Dropdow
 import { RenderCustomCell } from '../common/kendo.column.templates/RenderCellTemplate';
 import ColumnHeader from '../common/kendo/ColumnHeader';
 import ColumnShowHideMenu from '../common/kendo/ColumnShowHideMenu';
-import {
-	DisplayText,
-	hideColumnTitleOnResize,
-	hideOperatorTooltip,
-	orderByLockedState,
-	pagerSettings,
-	setColumnWidth,
-	TranslatedText
-} from '../common/kendo/helpers';
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, orderByLockedState, pagerSettings, setColumnWidth, TranslatedText } from '../common/kendo/helpers';
 import NoDataFound from '../common/kendo/NoDataFound';
 import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
 import { toastError } from '../notifications';

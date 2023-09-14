@@ -23,7 +23,7 @@ const styles = makeStyles((theme: Theme) =>
   ));
 
 const PrintLabelButton: React.FunctionComponent<Props> = ({
-  printLabel, disabled
+  printLabel, disabled,
 }) => {
   const classes = styles();
   return (
@@ -33,7 +33,7 @@ const PrintLabelButton: React.FunctionComponent<Props> = ({
       onClick={printLabel}
       id="printButton"
       data-cy="printButton"
-			{...{ disabled }}
+      {...{ disabled }}
     >
       <Text translation="common.print" />
     </Button>

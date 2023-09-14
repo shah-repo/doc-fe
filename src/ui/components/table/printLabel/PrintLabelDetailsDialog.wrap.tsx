@@ -60,7 +60,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           return ({
             value: employee.id as string,
             text: employee.user?.name || '',
-            email: employee.user?.email || ''
+            email: employee.user?.email || '',
           });
         }
       }).filter(Boolean);
@@ -115,7 +115,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     const onPrintClick = () => {
       console.log('initial values---', { initialValues, selectedDate, selectedOption, labelsToPrint, qtyUnits, selectedItem });
-			toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
+      toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
     };
 
     return Component({
@@ -135,7 +135,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       serial,
       onPrintClick,
       description,
-      onDescriptionChange
+      onDescriptionChange,
     });
   };
 
