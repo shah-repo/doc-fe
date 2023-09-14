@@ -50,12 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
     listItemValue: {
       marginLeft: theme.spacing(0.5),
     },
-    allowed: {
-      color: Colors.green,
-    },
-    notAllowed: {
-      color: Colors.error_red,
-    },
   }),
 );
 

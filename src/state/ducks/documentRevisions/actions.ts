@@ -542,10 +542,10 @@ const addAlternatePart = (
   });
 
 const deleteAlternatePart = (
-  parentRevId,
-  alternatePartNodeRevId,
+  parentRevId: string,
+  alternatePartNodeRevId: string,
   handlers: Handlers,
-): ApiAction<BOM[]> =>
+): ApiAction =>
   apiActionWithCallbacks({
     url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}`,
     method: 'delete',
@@ -621,6 +621,15 @@ const updateLotStatus = (id: string, body: { lotStatus: LotStatus }): ApiAction<
   },
 });
 
+const getAllApprovalRequests = (
+  id: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/all_approval_requests`,
+  method: 'get',
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -674,4 +683,5 @@ export default {
   fetchWhereUsedTree,
   fetchHasATree,
   updateLotStatus,
+  getAllApprovalRequests,
 };
