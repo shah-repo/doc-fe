@@ -369,7 +369,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled || !dataItem.isParentOwner) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -509,7 +509,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isS
         [classes.inprogressBg]: item.inProgress && isShowedBOMDiff,
       }),
     };
-    if (!item[MODE_FIELD] || (!isNil(item.isEditEnabled) && !item.isEditEnabled)) {
+    if (!item[MODE_FIELD] || (!isNil(item.isEditEnabled) && !item.isEditEnabled) || (!isNil(item.isEditEnabled) && !item.isParentOwner)) {
       return React.cloneElement(row, modifiedProps);
     }
     const isOwner = item.isOwner;
