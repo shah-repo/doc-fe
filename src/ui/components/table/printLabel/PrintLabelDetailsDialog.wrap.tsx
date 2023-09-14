@@ -152,7 +152,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       const requestConfig: AxiosRequestConfig = {
         method: 'post',
         url: FBEndpoint.PrintLabels,
-        params: JSON.parse(JSON.stringify(params)),
+        data: JSON.parse(JSON.stringify(params)),
         headers: {
           Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
         },
