@@ -4,7 +4,7 @@ import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { SM } from "../../../../../App";
+import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import NoDataFound from '../../../../components/common/kendo/NoDataFound';
@@ -45,7 +45,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
         {
           parentNodeRevId: parentRevId,
           alternatePartNodeRevId: values.id,
-          basePartNodeRevId
+          basePartNodeRevId,
         },
         alternatePartAsync,
       );
@@ -102,6 +102,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
       deleteAlternateParts,
       parentRevId,
       dataItem.id,
+      basePartNodeRevId,
       alternatePartAsync,
     );
   };
