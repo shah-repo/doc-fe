@@ -551,7 +551,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
       ids.push(item.id);
       if (
         item[SUB_ITEMS_FIELD]
-        && (item?.depth || 0) < 2
         && !isEmpty(item[SUB_ITEMS_FIELD])
       ) {
         ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD] as BOM[]));
@@ -725,6 +724,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   );
 
   const onRowDrop = (event: TreeListRowDragEvent) => {
+    if (isDisabled) {
+      return false;
+    }
     if (
       event?.draggedOver
       && hasSameParent(event?.dragged, event?.draggedOver)
