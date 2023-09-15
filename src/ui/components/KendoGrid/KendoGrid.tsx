@@ -43,6 +43,7 @@ import KendoGridStyles from './KendoGrid.styles';
 
 const lotStatusOptions = Object.values(LotStatus).map(value => createOption(value, getLotStatusLabel(value)));
 const SELECTED_FIELD = 'print';
+const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
 
 export function KendoGrid<T extends any> ({
   tableName,
@@ -68,6 +69,7 @@ export function KendoGrid<T extends any> ({
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
+  const [isPrintColumnVisible, setIsPrintColumnVisible] = useState(true);
   let isLotDocument = false;
 
   useEffect(() => {
@@ -75,6 +77,17 @@ export function KendoGrid<T extends any> ({
       setDataState(tableCriteria?.queryDict?.dataState);
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
+        if (documentTypeCategory === DocumentCategory.Lot) {
+          const dataColumns = JSON.parse(tableCriteria.columnConfig);
+          if(dataColumns.findIndex(item => item.field === SELECTED_FIELD) === -1) {
+            dataColumns.push(printColumnProps);
+            setColumns(dataColumns);
+          }
+          else {
+            const printColumn = dataColumns.find(item => item.field === SELECTED_FIELD);
+            setIsPrintColumnVisible(printColumn?.show);
+          }
+        }
       }
     }
   }, [didMount, tableCriteria]);
@@ -359,6 +372,9 @@ export function KendoGrid<T extends any> ({
       toastError(getTranslatedText('common.no.hide'));
       return;
     }
+    if(field === SELECTED_FIELD && documentTypeCategory === DocumentCategory.Lot) {
+      setIsPrintColumnVisible(!isPrintColumnVisible);
+    }
     const dataColumns = map(columns, (column) => {
       if (column.field === field) {
         column.show = !column.show;
@@ -467,13 +483,9 @@ export function KendoGrid<T extends any> ({
             </Grid>
           </Grid>
         </GridToolbar>
-        {isLotDocument && (
+        {isLotDocument && isPrintColumnVisible && (
           <GridColumn
-            locked
-            sortable={false}
-            field={SELECTED_FIELD}
-            title={toUpper(SELECTED_FIELD)}
-            width={80}
+            {...printColumnProps }
             filterCell={() => <input disabled style={{ height: '24px', width: '40px' }} />}
             cell={(props) => <td className={props?.className} style={props?.style} >
               <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
