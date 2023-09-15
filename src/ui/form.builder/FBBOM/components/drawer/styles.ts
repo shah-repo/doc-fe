@@ -41,9 +41,11 @@ export default makeStyles((theme: Theme) =>
     },
     iconContainer: {
       display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
       height: 24,
       flex: 'none',
-      margin: theme.spacing(0, 0.25),
+      margin: theme.spacing(0, 0.25, 1.25),
     },
     whiteDot: {
       width: 4,
@@ -87,7 +89,7 @@ export default makeStyles((theme: Theme) =>
       border: `1px solid ${Colors.textGray}`,
     },
     drawer: {
-      margin: theme.spacing(1.25),
+      margin: theme.spacing(3.75),
       height: '100%',
       width: 950,
     },

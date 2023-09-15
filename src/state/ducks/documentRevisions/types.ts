@@ -159,6 +159,15 @@ export interface ChangeControlOptions {
   schemaMap: {[key: string]: string}
 }
 
+export interface IAssociatedChangeRequest {
+  crId: string
+  revChanges: string
+  title?: string
+  owner: string
+  state: string
+  updatedAt: string
+}
+
 interface LSHS{
   lhr: LHR
   lot: LOT
