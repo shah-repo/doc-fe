@@ -1,3 +1,4 @@
+import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { CostCell } from './components/CostCell';
 import { LeadTimeCell } from './components/LeadTimeCell';
@@ -5,8 +6,10 @@ import PartIDCell from './components/PartIDCell';
 import { RevCell } from './components/RevCell';
 import { StatusCell } from './components/StatusCell';
 import { TitleCell } from './components/TitleCell';
+import { ActionsCell } from './components/Actions';
+import { SchemaOptions } from './types';
 
-export default [
+export const buildSchema = ({ onConfirm, onDiscard, onDelete, actionsClass }: SchemaOptions) => ([
   {
     id: 'id',
     field: 'docId',
@@ -49,4 +52,18 @@ export default [
     template: StatusCell,
     width: 170,
   },
-];
+  {
+    id: 'actions',
+    title: 'actions',
+    className: actionsClass,
+    template: (props) => (
+      <ActionsCell
+        {...props}
+        onConfirm={onConfirm}
+        onDiscard={onDiscard}
+        onDelete={onDelete}
+      />
+    ),
+    width: 1,
+  },
+]);
