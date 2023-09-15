@@ -1,64 +1,54 @@
-import { DropDownList } from '@progress/kendo-react-dropdowns';
-import { FilterDescriptor } from '@progress/kendo-react-dropdowns/dist/npm/common/filterDescriptor';
+import { FilterDescriptor } from '@progress/kendo-data-query';
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import { TreeListFilterCellProps } from '@progress/kendo-react-treelist/dist/npm/interfaces/TreeListFilterCellProps';
-import { isEmpty } from 'lodash';
+import { unionBy } from 'lodash';
 import * as React from 'react';
-import { FBOption } from '../../../..';
 import { translate } from '../../../../../../common/intl';
-import yesNoFilterOptions from '../../../../FBData/yesNoFilterOptions.json';
+import DropdownFilter from '../../../../FBApprovalMatrix/components/DropdownFilter';
+import { createOption } from '../../../../FBApprovalMatrix/components/Grid/constants';
 
 const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
-  const { field, onFilterChange } = props;
-  const data = yesNoFilterOptions.map(item => ({ ...item, text: translate(item.text) }));
-  const [value, setValue] = React.useState<FBOption>({} as FBOption);
+  const { field = '', filter = [], onFilterChange } = props;
+  const onChange: GridFilterCellProps['onChange'] = (event) => {
+    const { operator, value, syntheticEvent } = event;
 
-  const onChange = React.useCallback(
-    (event) => {
-      const value = event?.target?.value;
-      setValue(value);
-      updateFilter(value, event);
-    },
-    [props?.filter, field, onFilterChange],
-  );
+    const activeFilter = {
+      operator,
+      field,
+      value,
+    };
 
-  const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    setValue({} as FBOption);
-    updateFilter({}, event);
-  };
+    const nextFilter = unionBy(filter, [activeFilter], 'field').reduce((filters, currentFilter) => {
+      if (currentFilter.field === field && value !== undefined) {
+        return [...filters, activeFilter];
+      }
+      return filters;
+    }, [] as FilterDescriptor[]);
 
-  const updateFilter = (value, event) => {
-    const filter = [...props.filter as FilterDescriptor[]];
-    const currentFilterIndex = filter.findIndex((f) => f.field === field);
-    if (currentFilterIndex !== -1) {
-      filter.splice(currentFilterIndex, 1);
-    }
-    if (!isEmpty(value)) {
-      filter.push({
-        value: value.value,
-        field,
-        operator: value.value === 0 ? 'gt' : 'lt',
-      });
-    }
     onFilterChange?.({
-      filter,
-      field: field as string,
-      syntheticEvent: event?.syntheticEvent,
+      filter: nextFilter,
+      field,
+      syntheticEvent,
     });
   };
 
+  const currentFilter = filter?.find(f => f.field === field);
+  const value = currentFilter?.value;
+
   return (
-    <div className="k-filtercell">
-      <DropDownList data={data} textField="text" dataItemKey="value" value={value} onChange={onChange} />
-      <button
-        className="k-button k-button-icon k-clear-button-visible"
-        title={translate('common.clear')}
-        disabled={isEmpty(value)}
-        onClick={onClearButtonClick}
-      >
-        <span className="k-icon k-i-filter-clear" />
-      </button>
-    </div>
+    <DropdownFilter
+      {...props}
+      onChange={onChange}
+      operators={[]}
+      booleanValues={[]}
+      filterType="boolean"
+      value={value}
+      data={[
+        createOption(true, translate('common.true')),
+        createOption(false, translate('common.false')),
+      ]}
+      defaultItem={createOption(undefined, translate('common.all'))} />
   );
 };
+
 export default YesNoOptionsFilter;

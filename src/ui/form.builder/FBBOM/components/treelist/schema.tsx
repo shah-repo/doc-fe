@@ -26,6 +26,8 @@ import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 import { CustomTreeListColumnProps } from './interface';
+import React from 'react';
+import CountFilter from './column.templates/CountFilter';
 
 export const TreeColumns: CustomTreeListColumnProps[] = [
   {
@@ -153,7 +155,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.hasPrimaryAttachment.title'),
     width: 81,
-    filter: YesNoOptionsFilter,
+    filterCell: YesNoOptionsFilter,
     mainOrderIndex: 13,
     headerCell: PrimaryAttachments,
     cell: PrimaryAttachmentsCell,
@@ -163,7 +165,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.hasAttachments.title'),
     width: 80,
-    filter: YesNoOptionsFilter,
+    filterCell: YesNoOptionsFilter,
     mainOrderIndex: 14,
     headerCell: Attachments,
     cell: AttachmentCell,
@@ -173,7 +175,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.issues.title'),
     width: 80,
-    filter: YesNoOptionsFilter,
+    filterCell: YesNoOptionsFilter,
     mainOrderIndex: 15,
     cell: BooleanCell,
     headerCell: Issues,
@@ -185,7 +187,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.vendorsCount.title'),
     width: 80,
     cell: VendorsCell,
-    filter: YesNoOptionsFilter,
+    filterCell: (props) => <CountFilter {...props} field="vendorsCount" />,
     mainOrderIndex: 16,
     headerCell: Vendors,
   },
@@ -194,7 +196,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.alternatePartsList.title'),
     width: 80,
-    filter: YesNoOptionsFilter,
+    filterCell: (props) => <CountFilter {...props} field="alternatePartsCount" />,
     cell: AlternatePartsCell,
     mainOrderIndex: 17,
     headerCell: AlternatePartsList,
