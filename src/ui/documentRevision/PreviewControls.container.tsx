@@ -18,6 +18,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from '../../stat
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
+import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
@@ -112,7 +113,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
 
-  const showEditButton = isPart && documentRevision?.changeControlOptions?.id && isStatusReleased && isUserDocumentOwner;
+  const isNotRelatedTogetherPart = documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
+  const showEditButton = isPart && documentRevision?.changeControlOptions?.id
+    && isStatusReleased && isUserDocumentOwner && isNotRelatedTogetherPart;
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
   && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
