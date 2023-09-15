@@ -49,7 +49,7 @@ export interface EditableBOM extends BOM {
   isParentOwner?: boolean
   isEditEnabled?: boolean
   alternatePartsCount?: number
-  attachmentNames: string[]
+  attachmentNames?: string[]
   isDisabled?: boolean
   replacementStatus?: string
 }
