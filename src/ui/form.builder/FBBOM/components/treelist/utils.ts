@@ -39,29 +39,27 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
   bomTreeRelations.unshift(parentRevDetails);
   const dataTree: EditableBOM[] = [];
 
-  bomTreeRelations.reverse().forEach((aData: BOM) => {
+  bomTreeRelations = bomTreeRelations.map(relation => ({
+    ...relation,
+    childNodes: [],
+  }));
+
+  bomTreeRelations.reverse();
+  bomTreeRelations.forEach((aData: BOM) => {
     if (aData.parentNodeRevId) {
       const parentPartRelations = bomTreeRelations.filter(relation => relation.id === aData.parentNodeRevId);
-      if (parentPartRelations.length > 0) {
-        parentPartRelations.forEach(parentPartRelation => {
-          if (!parentPartRelation.childNodes) {
-            parentPartRelation.childNodes = [];
-          }
-          parentPartRelation.childNodes.unshift(
-            Object.assign({
-              ...aData,
-              id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
-              parentNodeDocumentId: parentPartRelation.documentId,
-              isParentOwner: parentPartRelation.isOwner,
-              isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,
-            }),
-          );
-        });
-      }
+      parentPartRelations.forEach(parentPartRelation => {
+        parentPartRelation.childNodes?.unshift(
+          Object.assign({
+            ...aData,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
+            parentNodeDocumentId: parentPartRelation.documentId,
+            isParentOwner: parentPartRelation.isOwner,
+            isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,
+          }),
+        );
+      });
     } else {
-      if (!aData.childNodes) {
-        aData.childNodes = [];
-      }
       dataTree.push({ ...aData, [MODE_FIELD]: false });
     }
   });
