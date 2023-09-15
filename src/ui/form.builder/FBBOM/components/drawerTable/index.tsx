@@ -15,7 +15,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { AlternatePartEditEvent, EditableAlternatePart, FBBOMDrawerTableProps } from '../treelist/interface';
 import { ActionsCell } from './components/Actions';
-import { schema } from './constants';
+import schema from './schema';
 import useStyles from './styles';
 
 const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId }) => {
@@ -79,7 +79,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     );
   }, [parentRevId]);
 
-  const AddAlternatePart = () => setEditedAlternatePart({
+  const handleAddAlternatePart = () => setEditedAlternatePart({
     id: uuidv4(),
     [MODE_FIELD]: Mode.add,
   });
@@ -162,7 +162,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
       <Button
         kind="add"
         fullWidth
-        onClick={AddAlternatePart}
+        onClick={handleAddAlternatePart}
         className={classes.addPartButton}
       >
         {translate('bom.alternate.part.add')}
