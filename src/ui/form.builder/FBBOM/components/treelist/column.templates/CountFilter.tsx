@@ -6,6 +6,7 @@ import * as React from 'react';
 import { translate } from '../../../../../../common/intl';
 import DropdownFilter from '../../../../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../../../../FBApprovalMatrix/components/Grid/constants';
+import { styles } from './styles';
 
 const getShapedValue = ({ operator }: FilterDescriptor) => {
   switch (operator) {
@@ -42,6 +43,7 @@ const getShapedFilter = (field: string, { value }: FilterDescriptor) => {
 };
 
 const CountFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
+  const classes = styles();
   const { field = '', filter = [], onFilterChange } = props;
   const onChange: GridFilterCellProps['onChange'] = (event) => {
     const { value, syntheticEvent } = event;
@@ -65,7 +67,7 @@ const CountFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
   const currentFilter = filter?.find(f => f.field === field);
   const value = currentFilter ? getShapedValue(currentFilter) : undefined;
 
-  return (
+  return (<div className={classes.filterCell}>
     <DropdownFilter
       {...props}
       onChange={onChange}
@@ -78,7 +80,7 @@ const CountFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
         createOption(false, translate('common.false')),
       ]}
       defaultItem={createOption(undefined, translate('common.all'))} />
-  );
+  </div>);
 };
 
 export default CountFilter;

@@ -6,8 +6,11 @@ import * as React from 'react';
 import { translate } from '../../../../../../common/intl';
 import DropdownFilter from '../../../../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../../../../FBApprovalMatrix/components/Grid/constants';
+import { styles } from './styles';
 
 const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
+  const classes = styles();
+
   const { field = '', filter = [], onFilterChange } = props;
   const onChange: GridFilterCellProps['onChange'] = (event) => {
     const { operator, value, syntheticEvent } = event;
@@ -18,12 +21,12 @@ const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props)
       value,
     };
 
-    const nextFilter = unionBy(filter, [activeFilter], 'field').reduce((filters, currentFilter) => {
+    const nextFilter = unionBy(filter, [activeFilter], 'field').reduce<FilterDescriptor[]>((filters, currentFilter) => {
       if (currentFilter.field === field && value !== undefined) {
         return [...filters, activeFilter];
       }
       return filters;
-    }, [] as FilterDescriptor[]);
+    }, []);
 
     onFilterChange?.({
       filter: nextFilter,
@@ -35,7 +38,7 @@ const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props)
   const currentFilter = filter?.find(f => f.field === field);
   const value = currentFilter?.value;
 
-  return (
+  return (<div className={classes.filterCell}>
     <DropdownFilter
       {...props}
       onChange={onChange}
@@ -48,6 +51,7 @@ const YesNoOptionsFilter: React.ComponentType<TreeListFilterCellProps> = (props)
         createOption(false, translate('common.false')),
       ]}
       defaultItem={createOption(undefined, translate('common.all'))} />
+  </div>
   );
 };
 

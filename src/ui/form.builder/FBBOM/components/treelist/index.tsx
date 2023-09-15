@@ -52,8 +52,6 @@ import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomCo
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
-  ALTERNATE_PARTS_COUNT_KEY,
-  ALTERNATE_PART_KEY,
   DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
@@ -265,15 +263,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     const { data, dataState } = state;
     const filter = [...dataState.filter as FilterDescriptor[]];
     const docIDField = filter?.find(val => val.field === ID_FIELD);
-    const alternatePartField = filter?.find(val => val.field === ALTERNATE_PART_KEY);
     const docIDFieldIndex = filter?.findIndex(val => val.field === ID_FIELD);
-    const alternatePartFieldIndex = filter?.findIndex(val => val.field === ALTERNATE_PART_KEY);
 
     if (docIDField) {
       filter?.splice(docIDFieldIndex, 1, { ...docIDField, field: DOC_ID_FIELD });
-    }
-    if (alternatePartField) {
-      filter?.splice(alternatePartFieldIndex, 1, { ...alternatePartField, field: ALTERNATE_PARTS_COUNT_KEY });
     }
     const filteredData = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
