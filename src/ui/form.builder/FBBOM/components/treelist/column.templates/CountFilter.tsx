@@ -6,13 +6,14 @@ import * as React from 'react';
 import { translate } from '../../../../../../common/intl';
 import DropdownFilter from '../../../../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../../../../FBApprovalMatrix/components/Grid/constants';
+import { EQUAL_OPERATOR, GREATER_THAN_OPERATOR } from '../constants';
 import { styles } from './styles';
 
 const getShapedValue = ({ operator }: FilterDescriptor) => {
   switch (operator) {
-    case 'eq':
+    case EQUAL_OPERATOR:
       return false;
-    case 'gt':
+    case GREATER_THAN_OPERATOR:
       return true;
     default:
       return undefined;
@@ -24,19 +25,19 @@ const getShapedFilter = (field: string, { value }: FilterDescriptor) => {
     case true:
       return {
         field,
-        operator: 'gt',
+        operator: GREATER_THAN_OPERATOR,
         value: 0,
       };
     case false:
       return {
         field,
-        operator: 'eq',
+        operator: EQUAL_OPERATOR,
         value: 0,
       };
     default:
       return {
         field,
-        operator: 'eq',
+        operator: EQUAL_OPERATOR,
         value: undefined,
       };
   }
