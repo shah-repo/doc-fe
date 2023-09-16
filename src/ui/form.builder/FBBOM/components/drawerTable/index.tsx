@@ -135,6 +135,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     onConfirm: formik.submitForm,
     onDiscard: discardAlternatePart,
     onDelete: deleteAlternatePart,
+    isDisabled,
   });
 
   return (
