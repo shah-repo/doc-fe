@@ -37,7 +37,7 @@ export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
 
-interface AlternatePart {
+export interface AlternatePart {
   id: string
   name?: string
   revision?: string
