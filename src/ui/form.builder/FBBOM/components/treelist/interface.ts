@@ -26,6 +26,7 @@ interface DataState {
 
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
+  isDisabled?: boolean
 }
 
 export interface EditableAlternatePart extends AlternatePart {
