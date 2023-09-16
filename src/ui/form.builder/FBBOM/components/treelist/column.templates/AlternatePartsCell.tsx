@@ -4,6 +4,7 @@ import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { SM } from '../../../../../../App';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import AlternatePartsDrawer from '../../drawer/AlternateParts';
 import { ALTERNATE_PARTS_COUNT_KEY, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
@@ -27,6 +28,9 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
     setIsDrawerOpened(true);
   };
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false);
+
+  const drawerActionsDisabled = dataItem.isDisabled || !dataItem.isOwner
+    || ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(dataItem.status);
 
   const closeDrawer = () => {
     setIsDrawerOpened(false);
@@ -58,7 +62,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         </Tooltip>
         {!isAlteratePartsExists && fetchDotIcon()}
       </div>
-      <AlternatePartsDrawer {...{ isDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.displayRevision, status: dataItem.displayStatus, docId: dataItem.docId, isDisabled: dataItem.isDisabled }} />
+      <AlternatePartsDrawer {...{ isDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.displayRevision, status: dataItem.displayStatus, docId: dataItem.docId, isDisabled: drawerActionsDisabled }} />
     </td>
   );
 };
