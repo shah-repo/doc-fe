@@ -10,29 +10,31 @@ import { styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
+const NumbersOfLabelsOption = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ];
+
 const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   setSelectedOption,
   closeDialog,
   onQtyUnitsChange,
-  onLabelsToPrintChange,
   onSerialChange,
   onPrintClick,
   onDescriptionChange,
+  onNumberOfLabelChange,
   isOpen,
   companyEmployees,
   selectedOption,
   handleDateChange,
   selectedDate,
   initialValues,
-  labelsToPrint,
   qtyUnits,
   serial,
   description,
+  selectedNumberOfLabel
 }) => {
   const classes = styles();
 
   const qtyUnitsRender = () => {
-    const gridSize = labelsToPrint < 5 ? (12 / labelsToPrint) : 3;
+    const gridSize = Number(selectedNumberOfLabel) < 5 ? (12 / Number(selectedNumberOfLabel)) : 3;
     return (qtyUnits.map((item, i) => (
       <Grid item xs={gridSize} key={i} >
         <>
@@ -130,10 +132,11 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={12}>
             <>
               <FBLabel label="Number of Labels to Print" />
-              <TextField
-                type="number"
-                value={labelsToPrint}
-                onChange={(ev) => onLabelsToPrintChange(ev)} />
+              <Autocomplete
+                value={selectedNumberOfLabel}
+                options={NumbersOfLabelsOption}
+                renderInput={(params) => <TextField {...params} label="Controllable" />}
+                onChange={(e, value: string) => onNumberOfLabelChange(value)} />
             </>
           </Grid>
           {qtyUnitsRender()}

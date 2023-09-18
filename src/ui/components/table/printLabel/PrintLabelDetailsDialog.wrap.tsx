@@ -14,6 +14,7 @@ import { companySelectors } from '../../../../state/ducks/company';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { store } from '../../../../state/store';
 import { FBEndpoint } from '../../../form.builder/defaults/FBEndpoint';
+import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
 
 export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogProps>(
@@ -32,15 +33,13 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       partId: selectedItem?.precalc?.lot_part,
       revision: selectedItem?.precalc?.lot_part_revision,
       qtyUnits: selectedItem?.precalc?.lot_on_hand_quantity,
-      labelsToPrint: 1,
       serial: '',
     };
 
     const [employees, setEmployees] = useState <SelectOption[]>([]);
     const [selectedOption, setSelectedOption] = useState <SelectOption>();
     const [selectedDate, setSelectedDate] = useState(new Date());
-
-    const [labelsToPrint, setLabelsToPrint] = useState(initialValues?.labelsToPrint);
+    const [selectedNumberOfLabel, setSelectedNumberOfLabel] = useState <string>('1');
     const [qtyUnits, setQtyUnits] = useState([initialValues?.qtyUnits]);
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
@@ -102,23 +101,6 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setQtyUnits(newQtyUnits);
     };
 
-    const onLabelsToPrintChange = (event: any) => {
-      if (event.target.value > 10 || event.target.value < 1) {
-        return;
-      }
-      if (labelsToPrint < event.target.value) {
-        const newQtyUnits = [...qtyUnits];
-        for (let index = 0; index < event.target.value - Number(labelsToPrint); index++) {
-          newQtyUnits.push(initialValues?.qtyUnits);
-        }
-        setQtyUnits(newQtyUnits);
-      }
-      else {
-        qtyUnits.splice(event.target.value);
-      }
-      setLabelsToPrint(event.target.value);
-    };
-
     const onSerialChange = (event: any) => {
       if(event.target.value.length > 14) {
         return;
@@ -129,6 +111,20 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     const onDescriptionChange = (event: any) => {
       setDescription(event.target.value);
+    };
+
+    const onNumberOfLabelChange = (value: string) => {
+      if (Number(selectedNumberOfLabel) < Number(value)) {
+        const newQtyUnits = [...qtyUnits];
+        for (let index = 0; index < Number(value) - Number(selectedNumberOfLabel); index++) {
+          newQtyUnits.push(initialValues?.qtyUnits);
+        }
+        setQtyUnits(newQtyUnits);
+      }
+      else {
+        qtyUnits.splice(Number(value));
+      }
+      setSelectedNumberOfLabel(String(value));
     };
 
     const onPrintClick = () => {
@@ -144,7 +140,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         serial: serial,
         expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
         printDate: moment(selectedDate).format('MMM DD, YYYY'),
-        labelsToPrint: labelsToPrint,
+        labelsToPrint: Number(selectedNumberOfLabel),
         quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: Number(item.value) }), {}),
       };
       const requestConfig: AxiosRequestConfig = {
@@ -174,15 +170,15 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       selectedItem,
       initialValues,
       onQtyUnitsChange,
-      onLabelsToPrintChange,
       onSerialChange,
-      labelsToPrint,
       qtyUnits,
       serial,
       onPrintClick,
       description,
       onDescriptionChange,
       closeDialog,
+      onNumberOfLabelChange,
+      selectedNumberOfLabel
     });
   };
 
