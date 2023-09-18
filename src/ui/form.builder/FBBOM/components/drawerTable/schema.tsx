@@ -9,7 +9,7 @@ import { TitleCell } from './components/TitleCell';
 import { ActionsCell } from './components/Actions';
 import { SchemaOptions } from './types';
 
-export const buildSchema = ({ onConfirm, onDiscard, onDelete, actionsClass }: SchemaOptions) => ([
+export const buildSchema = ({ onConfirm, onDiscard, onDelete, actionsClass, isDisabled }: SchemaOptions) => ([
   {
     id: 'id',
     field: 'docId',
@@ -62,6 +62,7 @@ export const buildSchema = ({ onConfirm, onDiscard, onDelete, actionsClass }: Sc
         onConfirm={onConfirm}
         onDiscard={onDiscard}
         onDelete={onDelete}
+        isDisabled={isDisabled}
       />
     ),
     width: 1,

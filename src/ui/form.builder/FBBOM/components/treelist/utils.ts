@@ -3,6 +3,7 @@ import Config from '../../../../../config';
 import { DocumentRevisionStatusDisplay } from '../../../../../state/ducks/documentRevisions/types';
 import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
+import { FB } from '../../../helpers';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 import { CustomTreeListColumnProps } from './interface';
@@ -52,7 +53,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
         parentPartRelation.childNodes?.unshift(
           Object.assign({
             ...aData,
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
             isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,

@@ -13,6 +13,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
+  TreeListFilterChangeEvent,
   TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
@@ -95,11 +96,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
       parentRevDetails: BOM
     }) => {
       formik.setValues({});
+      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       const bomProccessedData = processBOMData(
-        bomTreeRelations,
+        [...bomTreeRelations],
         parentRevDetails,
       );
-      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       updateState({
         ...state,
         data: [...bomProccessedData],
@@ -212,7 +213,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
   const fetchHasATreeAsync = useAsync({
-    onSuccess: (statusObj: BOM) => {
+    onSuccess: (statusObj: BOM | undefined) => {
       if (statusObj && statusObj[documentRevision?.id]) {
         setShowTree(true);
       }
@@ -705,6 +706,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
+  const onFilterChange = (event: TreeListFilterChangeEvent) => {
+    const { dataState, data } = state;
+    dataState.filter = event.filter;
+    const expanded = getAllItemIds(data);
+    updateState({
+      ...state,
+      dataState: dataState,
+      expanded: isEmpty(event.filter) ? data[0]?.id : expanded,
+    });
+  };
+
   const onLock = React.useCallback(
     ({
       field,
@@ -835,6 +847,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                     )}
                     onRowClick={editBOM}
                     onColumnReorder={onColumnReorder}
+                    onFilterChange={onFilterChange}
                     resizable={TREELIST_CONFIG.resizable}
                     reorderable={TREELIST_CONFIG.reorderable}
                     sortable={TREELIST_CONFIG.sortable}
