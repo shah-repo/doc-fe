@@ -1,19 +1,15 @@
 import { isNil } from 'lodash';
 import Config from '../../../../../config';
+import { DocumentRevisionStatusDisplay } from '../../../../../state/ducks/documentRevisions/types';
 import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
+import { FB } from '../../../helpers';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 import { CustomTreeListColumnProps } from './interface';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;
-};
-
-// ts-unused-exports:disable-next-line
-export const isEditOnly = (dataItem: EditableBOM): boolean => {
-  return dataItem[MODE_FIELD] ?? false;
 };
 
 export const isEditBOM = (dataItem: EditableBOM): boolean => {
@@ -41,32 +37,35 @@ export const hasSameParent = (arr1: number[], arr2: number[]): boolean => {
 };
 
 export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): EditableBOM[] => {
-  const bomList: BOM[] = bomTreeRelations.concat(parentRevDetails);
-
-  const hashTable = {};
-  bomList.forEach((aData: BOM) => {
-    hashTable[aData.id] = { ...aData, childNodes: [] };
-  });
-
+  bomTreeRelations.unshift(parentRevDetails);
   const dataTree: EditableBOM[] = [];
-  bomList.forEach((aData: BOM) => {
+
+  bomTreeRelations = bomTreeRelations.map(relation => ({
+    ...relation,
+    childNodes: [],
+  }));
+
+  bomTreeRelations.reverse();
+  bomTreeRelations.forEach((aData: BOM) => {
     if (aData.parentNodeRevId) {
-      hashTable[aData.parentNodeRevId].childNodes.push(
-        {
-          ...hashTable[aData.id],
-          ...{
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
-            parentNodeRevId: aData.parentNodeRevId,
-            parentNodeDocumentId: hashTable[aData.parentNodeRevId].documentId,
-            isParentOwner: hashTable[aData.parentNodeRevId].isOwner,
-          },
-        },
-      );
+      const parentPartRelations = bomTreeRelations.filter(relation => relation.id === aData.parentNodeRevId);
+      parentPartRelations.forEach(parentPartRelation => {
+        parentPartRelation.childNodes?.unshift(
+          Object.assign({
+            ...aData,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}
+            ${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
+            revId: aData.id,
+            parentNodeDocumentId: parentPartRelation.documentId,
+            isParentOwner: parentPartRelation.isOwner,
+            isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,
+          }),
+        );
+      });
     } else {
-      dataTree.push(hashTable[aData.id]);
+      dataTree.push({ ...aData, [MODE_FIELD]: false });
     }
   });
-
   return dataTree;
 };
 
@@ -119,11 +118,11 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
   });
 };
 
-const getChildPartId = (part: DocumentRevision): string => {
+export const getChildPartId = (part: EditableBOM): string => {
   return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
 };
 
-const getDocLink = (part: DocumentRevision): string => {
+const getDocLink = (part: EditableBOM): string => {
   return `${Config.FrontendUrl}${documentPreviewPath(getChildPartId(part), part.documentId ?? '')}`;
 };
 
@@ -131,7 +130,7 @@ const getCrDocLink = (arId: string): string => {
   return `${Config.FrontendUrl}${changeRequestPreviewPath(arId)}`;
 };
 
-export const getHyperLinkForIdCell = (part: DocumentRevision, value?: string): string => {
+export const getHyperLinkForIdCell = (part: EditableBOM, value?: string): string => {
   return `=HYPERLINK("${getDocLink(part)}", "${value ?? '-'}")`;
 };
 

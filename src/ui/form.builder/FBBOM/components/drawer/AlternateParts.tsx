@@ -8,11 +8,11 @@ import {
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
-import Text from '../../../../components/Text';
 import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import Text from '../../../../components/Text';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
 
@@ -21,8 +21,9 @@ interface FBBOMDetailDrawerProps {
   closeDrawer: () => void
   parentRevId?: string
   docId?: string
-  status?: FormHeaderStatusClassMapping
+  status?: string
   revision?: string
+  isDisabled?: boolean
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
@@ -32,6 +33,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
   docId,
   status,
   revision,
+  isDisabled,
   children,
 }) => {
   const classes = useStyles();
@@ -104,7 +106,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             </Grid>
           </Grid>
           <Divider className={classes.divider} />
-          <FBBOMDrawerTable parentRevId={parentRevId} />
+          <FBBOMDrawerTable parentRevId={parentRevId} isDisabled={isDisabled} />
         </Box>
       )}
     </Drawer>

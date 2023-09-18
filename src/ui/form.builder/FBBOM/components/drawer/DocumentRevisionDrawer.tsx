@@ -1,13 +1,14 @@
-import { Box } from '@material-ui/core';
+import { Box, Grid, IconButton } from '@material-ui/core';
+
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { SM } from '../../../../../App';
 import {
   documentRevisionsActions,
   documentRevisionsSelectors,
 } from '../../../../../state/ducks/documentRevisions';
 import { DOCUMENT_REVISION_GET_ASYNC_DRAWER } from '../../../../../state/ducks/documentRevisions/constants';
-import { TabTypeOptions } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import AsyncGate from '../../../../components/AsyncGate';
 import DocumentRevisionUpdateContainer from '../../../../documentRevision/DocumentRevisionUpdate.container';
@@ -19,10 +20,10 @@ import useStyles from './styles';
 
 interface DocumentRevisionDrawerProps {
   dataItem?: EditableBOM
+  closeDrawer: () => void
 }
 
-const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataItem }) => {
-  const { _tabsState } = SM.useStores();
+const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataItem, closeDrawer }) => {
   const classes = useStyles();
   const documentRevisionId = dataItem?.id.split(
     SELECTED_PART_KEY_SEPARATOR,
@@ -44,6 +45,21 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataIte
   return (
     <Theme>
       <Box className={classes.drawer}>
+        <Grid item>
+          <div className={classes.iconContainer}>
+            <IconButton
+              onClick={closeDrawer}
+              aria-label="Close"
+              disableFocusRipple
+              disableRipple
+              disableTouchRipple
+              data-cy="close-alternate-part-list"
+              className={classes.closeIcon}
+            >
+              <FontAwesomeIcon icon={regular('xmark')} />
+            </IconButton>
+          </div>
+        </Grid>
         <AsyncGate
           asyncAction={loadAction}
           asyncState={loadDocumentRevisionAsyncState}
@@ -53,7 +69,6 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataIte
             <DocumentRevisionUpdateContainer
               documentRevision={documentRevision}
               documentId={dataItem.documentId}
-              isRightPanelMinimized={_tabsState?.isTabActive(TabTypeOptions.BOM)}
             />
           )}
         </AsyncGate>

@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { isEmpty, map, some } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
@@ -64,12 +65,14 @@ const TopSection: React.FunctionComponent<{
 };
 
 const ItemsAndDetails: React.FunctionComponent<{
+  changeRequest?: ChangeRequest
   formState: FBFormState
   handleAdd: () => void
   handleRemove: (docRevId: string) => void
   handleUpdate: () => void
   itemsAndDetailsState: ItemsAndDetailsState
 }> = ({
+  changeRequest,
   formState,
   handleAdd,
   handleRemove,
@@ -95,11 +98,11 @@ const ItemsAndDetails: React.FunctionComponent<{
     }
   };
 
-  function disabledOptions(): string[] {
+  function disabledOptions (): string[] {
     return map(itemsAndDetailsState?.approvalRequestItemsList, 'proposedDocumentRevision.id');
   }
 
-  function resetAndCancelEdit() {
+  function resetAndCancelEdit () {
     // remove values for formState for keys
     removePrePopulatedField();
 
@@ -114,7 +117,7 @@ const ItemsAndDetails: React.FunctionComponent<{
     });
   };
 
-  function addRevisionToChangeRequest() {
+  function addRevisionToChangeRequest () {
     const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
       = formState?.getValues() as FBDocumentRevisionsValue;
 

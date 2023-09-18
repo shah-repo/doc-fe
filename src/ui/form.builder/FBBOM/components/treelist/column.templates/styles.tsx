@@ -17,8 +17,11 @@ export const styles = makeStyles((theme) => ({
     color: Colors.lochmara,
     cursor: 'pointer',
   },
+  title: {
+    display: 'flex',
+  },
   GREEN_STATUS: {
-    background: Colors.carla,
+    background: Colors.snow_flurry,
     color: Colors.light_forest_green,
     border: `1px solid ${Colors.light_forest_green_border}`,
   },
@@ -47,6 +50,7 @@ export const styles = makeStyles((theme) => ({
     marginLeft: props.isEditMode ? 0 : theme.spacing(1.875),
   }),
   titleInfoCell: (props) => ({
+    maxWidth: 300,
     fontWeight: props?.hasChildren ? 600 : 400,
     fontSize: 14,
     lineHeight: '16.64px',
@@ -116,6 +120,7 @@ export const styles = makeStyles((theme) => ({
   },
   infoIcon: (props) => ({
     marginRight: props?.hasChildren ? theme.spacing(1.5) : 0,
+    cursor: 'pointer',
   }),
   ownerIcon: {
     color: ThemeColors.primaryLight,
@@ -127,7 +132,7 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   replacedDocRevInfo: {
-    color: ThemeColors.darkPeach,
+    color: Colors.darkPeach,
     fontSize: 12,
     textAlign: 'right',
     padding: theme.spacing(1.5, 0, 1.25),
@@ -141,7 +146,7 @@ export const styles = makeStyles((theme) => ({
     marginLeft: '5px',
     marginRight: '5px',
     position: 'relative',
-    background: ThemeColors.darkPeach,
+    background: Colors.darkPeach,
   },
   link: {
     color: `${Colors.navy_active} !important`,
@@ -157,5 +162,39 @@ export const styles = makeStyles((theme) => ({
   restoreParentIcon: {
     color: ThemeColors.primaryLight,
     marginLeft: theme.spacing(1.5),
+  },
+  root: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    pointerEvents: 'auto',
+    width: '80%',
+    maxWidth: '80%',
+    minHeight: '80vh',
+  },
+  heading: {
+    fontWeight: 600,
+    fontSize: '14px',
+    flex: 1,
+    color: Colors.almost_black,
+  },
+  close: {
+    height: '24px',
+    width: '24px',
+    backgroundColor: Colors.athens_gray,
+    borderRadius: '6px',
+    margin: theme.spacing(0, 1.25),
+  },
+  idCellEditWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  createPartOption: {
+    background: Colors.light_blue2,
+    fontSize: 14,
+    fontWeight: 600,
+    color: Colors.dodger_blue,
+    padding: theme.spacing(0.5, 1.5),
+    cursor: 'pointer',
   },
 }));

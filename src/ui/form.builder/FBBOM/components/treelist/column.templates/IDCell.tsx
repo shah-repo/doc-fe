@@ -1,39 +1,60 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Link, Tooltip } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
-import { useFormikContext } from 'formik';
+import { Formik, FormikProps, useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
-import React, { ChangeEvent, ComponentType, useEffect } from 'react';
+import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
-import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import { documentTypeActions, documentTypeSelectors } from '../../../../../../state/ducks/documentRevisions/documentType';
+import { DocumentTypeById } from '../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
+import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../../../../components/forms/FormContext';
+import { toastError } from '../../../../../components/notifications';
 import Text from '../../../../../components/Text';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
+import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
+import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
+import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../../drawer/DocumentRevisionDrawer';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
-import { isEditBOM } from '../utils';
+import { getChildPartId, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
+
+interface MultipleFormInitialValues {
+  selectType: OptionType[]
+}
 
 const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { _documentRevisionFormState } = SM.useStores();
   const { colSpan, id, style, dataItem, field, level } = props;
   const isEditMode = isEditBOM(dataItem);
   const classes = styles({ hasChildren, isEditMode });
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
+  const { getFieldProps, setFieldValue, submitForm } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const isRevisionAvailable = isEditMode && dataItem?.availableRevisions?.isReleased;
+
+  const isAllowedToUpgrade = (isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
+    || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status)) && !dataItem.isDisabled;
+
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
   };
@@ -46,25 +67,45 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     },
   });
 
-  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
-    onSuccess: (data) => {
-      if (!Array.isArray(data) || !data.length) {
-        return;
+  const dialog = useDialog();
+
+  const fetchSelectedPartAsync = useAsync({
+    onSuccess: (data: any[] = []) => {
+      if (data && data.length > 0) {
+        const {
+          displayRevision, displayStatus, name, hasAttachments,
+          hasPrimaryAttachment, docId, id, quantity,
+        } = data[0];
+
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
+        setFieldValue('name', name);
+        setFieldValue('hasAttachments', hasAttachments);
+        setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
+        setFieldValue('docId', docId);
+        setFieldValue('quantity', quantity ?? 1);
+        if (dialog.isOpen) {
+          setFieldValue('childNodeRevId', dataItem?.id.split(SELECTED_PART_KEY_SEPARATOR)[0]);
+          setFieldValue('newChildNodeRevId', id);
+          setFieldValue('quantity', dataItem?.quantity ?? 1);
+          setFieldValue('unit', dataItem?.unit);
+          setFieldValue('comment', dataItem?.comment);
+          setFieldValue('parentNodeRevId', dataItem?.parentNodeRevId);
+          dialog.close();
+          submitForm();
+        }
       }
-
-      const {
-        revision, status, name, hasAttachments,
-        hasPrimaryAttachment, docId,
-      } = data[0];
-
-      setFieldValue('revision', revision);
-      setFieldValue('status', status);
-      setFieldValue('name', name);
-      setFieldValue('hasAttachments', hasAttachments);
-      setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
-      setFieldValue('docId', docId);
     },
   });
+
+  const onRevChange = () => {
+    fetchSelectedPartAsync.start(
+      fetchSelectedPartsAction,
+      dataItem?.availableRevisions?.id,
+      dataItem?.availableRevisions?.documentId,
+      fetchSelectedPartAsync,
+    );
+  };
 
   useEffect(() => {
     if (!isEditMode) {
@@ -92,6 +133,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+    setValue(option as OptionType);
     fetchSelectedPartAsync.start(
       fetchSelectedPartsAction,
       docInfo[0],
@@ -126,26 +168,47 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (!isEditMode) {
       return;
     }
-    const fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+    let fieldValue = '';
+    if (!dataItem[ADD_FIELD]) {
+      fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+    } else {
+      const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
+      if (!isEmpty(part) && showFormDialog.isOpen) {
+        const {
+          displayRevision, displayStatus, name,
+        } = part as DocumentRevision;
+        fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
+        setFieldValue('childNodeRevId', part?.id);
+        setFieldValue('childNodeDocumentId', part?.document?.id);
+        setFieldValue('displayRevision', displayRevision);
+        setFieldValue('displayStatus', displayStatus);
+        setFieldValue('name', name);
+        setFieldValue('quantity', 1);
+        setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+      }
+    }
     const value = renderOptions().find((option) => option.value === fieldValue);
     if (value && field) {
       setFieldValue(field, value);
+      setValue(value);
     }
   }, [parts]);
 
   const replaceDocumentRevision = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, dataItem?.replacesStatus ?? ''),
+    documentRevisionsSelectors.getDocumentRevision(state, dataItem?.replacementStatus ?? ''),
   );
 
   const loadDocumentRevision = useActionCreator(documentRevisionsActions.load);
   const loadAction = () =>
-    loadDocumentRevision(dataItem?.replacesStatus, '');
+    loadDocumentRevision(dataItem?.replacementStatus, '');
 
   useEffect(() => {
-    if (dataItem?.replacesStatus) {
+    if (dataItem?.replacementStatus) {
       loadAction();
     }
   }, []);
+
+  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
 
   const getFieldInfo = () => (
     field && <FormikField
@@ -153,7 +216,20 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     >
       <Autocomplete
         {...getFieldProps(field)}
+        value={value}
+        disableOpenOnFocus={true}
         blurOnSelect
+        ListboxComponent={({ children, ...otherProps }) => {
+          return (<>
+            <ul {...otherProps} >
+              {/* <li className={classes.createPartOption} onClick={handleAddButtonClick}>
+                <FontAwesomeIcon icon={regular('plus')} />&nbsp;
+                <span >{translate('form.builder.create.new.part')}</span>
+              </li> */}
+              {children}
+            </ul>
+          </>);
+        }}
         options={renderOptions()}
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
@@ -167,16 +243,110 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const getInfoIcon = () => (
     <span className={cx('k-icon', classes.infoIcon)}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <FontAwesomeIcon color={Colors.primaryLight} icon={solid('circle-exclamation')} />
+        <FontAwesomeIcon onClick={() => { isAllowedToUpgrade && dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem }} />
+      <DocumentRevisionDrawer {...{ dataItem, closeDrawer }} />
     </FBBOMDetailDrawer>
   );
+
+  const [initialValues, setInitialValues] = React.useState<MultipleFormInitialValues>({ selectType: [] });
+  const multipleFormDialog = useDialog();
+  const showFormDialog = useDialog();
+  const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
+  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
+  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+  const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
+  const handleCreateDocument = useHandleCreateDoc();
+
+  const idAsync = useAsync<DocumentTypeById>({
+    onSuccess: () => {
+      if (isEmpty(formIds)) {
+        toastError('missing.form.error');
+        return;
+      }
+      _documentRevisionFormState?.setShowPartInDialog(true);
+      closeMultipleFormDialog();
+      showFormDialog.open();
+    _documentRevisionFormState?.setDirty(false);
+    handleCreateDocument(formIds[0] as DocumentRevision);
+    },
+    onError: (msg) => toastError(msg),
+  });
+
+  useEffect(() => {
+    const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
+    if (!isEmpty(part) && showFormDialog.isOpen) {
+      fetchAvailablePartsAsync.start(
+        fetchAvailablePartsAction,
+        fetchAvailablePartsAsync,
+      );
+    }
+  }, [_documentRevisionFormState?.newlyCreatedDocumentRevision]);
+
+  const categoryAsync = useAsync<DocumentType[]>({
+    onSuccess: () => {
+      if (isEmpty(documentTypes)) {
+        toastError('missing.type.error');
+        return;
+      }
+      setInitialValues({ selectType: [] });
+      multipleFormDialog.open();
+    },
+    onError: (msg) => toastError(msg),
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleAddButtonClick = () => {
+    // commented create new part temporarily
+    categoryAsync.start(getDocTypesByCategory, { category: 'Parts' }, categoryAsync);
+  };
+
+  const handleDocTypeSelection = (docTypeId) => {
+    if (!docTypeId) {
+      return;
+    }
+    idAsync.start(getDocRevByIds, docTypeId, idAsync);
+  };
+
+  const closeMultipleFormDialog = () => {
+    multipleFormDialog.close();
+  };
+
+  const renderFormTemplateDialog = (props: FormikProps<any>) => (
+    <MultipleFormTemplateDialog
+      {...props}
+      dialog={multipleFormDialog}
+      handleSelection={handleDocTypeSelection}
+      {...{
+        documentTypes,
+        formIds: [],
+        isRecord: false,
+        closeMultipleFormDialog,
+        isLHR: false,
+      }}
+    />
+  );
+
+  const canAddChildren = (dataItem: EditableBOM) => {
+    return dataItem.isOwner
+      && !isEditMode
+      && !dataItem.isDisabled
+      && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete,
+        DocumentRevisionStatus.Released].includes(dataItem.status);
+  };
+
+  const setChildInfo = (dataItem, level) => {
+    _documentRevisionFormState?.setDirty(true);
+    if (!_documentRevisionFormState?.bomChangesInProgress) {
+      _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level });
+      _documentRevisionFormState?.setBOMChangesInProgress(true);
+    }
+  };
 
   return (
     <td
@@ -200,7 +370,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
             return getInfoIcon();
           }
         }
-        if (i === props.level.length - 1 && hasChildren && !dataItem.isMarkedAsDeleted) {
+        if (i === props.level.length - 1 && hasChildren && !dataItem.isDeleted) {
           return (
             <span className={cx('k-icon', classes.expand)}>
               <FontAwesomeIcon
@@ -216,10 +386,22 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       }
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-        {isEditMode && getFieldInfo()}
+        {isEditMode && <div className={classes.idCellEditWrapper}>
+          { getFieldInfo()}
+          {/* <Tooltip
+            title={translate('form.builder.create.new.part')}
+            placement="top"
+            arrow
+          >
+            <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          </Tooltip> */}
+        </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
-          ? <Link underline="hover" onClick={openDrawer} className={classes.link}>
+          ? <Link onClick={e => { e.preventDefault(); openDrawer(); }} className={classes.link}
+            to={documentVersionPath(getChildPartId(dataItem), dataItem.documentId!)}
+            target="_blank"
+          >
             {dataItem.docId}
           </Link>
           : dataItem.docId) }
@@ -230,14 +412,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         >
           <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />
         </Tooltip>}
-        {dataItem.isOwner && !isEditMode && !dataItem.isDisabled && dataItem.status?.toLowerCase() !== 'released' && <Tooltip
+        {canAddChildren(dataItem) && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >
-          <FontAwesomeIcon onClick={() => _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level })} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          <FontAwesomeIcon onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
         </Tooltip>}
-        {dataItem.isMarkedAsDeleted && !dataItem.isDisabled && <Tooltip
+        {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
           title={translate('common.restore')}
           placement="top"
           arrow
@@ -251,7 +433,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <Observer>
         {() => (
           <>
-            {!isEditMode && _documentRevisionFormState?.isShowedBOMDiff && dataItem?.replacesStatus
+            {!isEditMode && _documentRevisionFormState?.isDiffViewEnabled && dataItem?.replacementStatus
             && <Grid
               container
               className={classes.replacedDocRevInfo}
@@ -273,6 +455,20 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         )}
       </Observer>
       {getDrawer()}
+      <AlertDialog
+        confirmAction={onRevChange}
+        cancelAction={dialog.close}
+        confirmLabel="common.yes.proceed"
+        cancelLabel="common.cancel"
+        message="bom.revision.alert.message"
+        {...{ dialog }}
+      />
+      <FormContext.Provider value={{ submitOnChange: false }}>
+        <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
+          {renderFormTemplateDialog}
+        </Formik>
+      </FormContext.Provider>
+      <DocumentRevisionDialog dialog={showFormDialog} />
     </td>
   );
 };

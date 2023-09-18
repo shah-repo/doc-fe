@@ -115,6 +115,17 @@ const update = (id: string, body: FBDocumentRevisionProps): ApiAction<DocumentRe
   },
 });
 
+const cancelPartEdit = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/cancel_edit/part/${id}`,
+  method: 'patch',
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  onFailure: (err) => {
+    toastError(err as string);
+  },
+});
+
 const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
@@ -531,10 +542,10 @@ const addAlternatePart = (
   });
 
 const deleteAlternatePart = (
-  parentRevId,
-  alternatePartNodeRevId,
+  parentRevId: string,
+  alternatePartNodeRevId: string,
   handlers: Handlers,
-): ApiAction<BOM[]> =>
+): ApiAction =>
   apiActionWithCallbacks({
     url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}`,
     method: 'delete',
@@ -610,6 +621,15 @@ const updateLotStatus = (id: string, body: { lotStatus: LotStatus }): ApiAction<
   },
 });
 
+const getAllApprovalRequests = (
+  id: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/all_approval_requests`,
+  method: 'get',
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -618,6 +638,7 @@ export default {
   loadWithCallback,
   save,
   update,
+  cancelPartEdit,
   create,
   loadDocument,
   documentSet,
@@ -662,4 +683,5 @@ export default {
   fetchWhereUsedTree,
   fetchHasATree,
   updateLotStatus,
+  getAllApprovalRequests,
 };

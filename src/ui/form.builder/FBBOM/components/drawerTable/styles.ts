@@ -8,11 +8,17 @@ export default makeStyles(theme => ({
     margin: theme.spacing(3, 0),
   },
   grid: {
+    '& .k-grid-container': {
+      borderBottomLeftRadius: '0 !important',
+      borderBottomRightRadius: '0 !important',
+    },
+
     '& .k-column-title': {
       fontSize: 12,
       textTransform: 'uppercase',
       whiteSpace: 'normal',
     },
+
     '& td': {
       height: ROW_HEIGHT,
       boxSizing: 'border-box',
@@ -24,28 +30,23 @@ export default makeStyles(theme => ({
       },
     },
   },
-  gridWithButton: {
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottom: 'none',
-    '& .k-grid-container': {
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-    },
-  },
   updatingRow: {
     position: 'relative',
     outline: `1px solid ${Colors.primaryLight}`,
+    zIndex: 2,
     outlineOffset: -1,
+    borderRadius: 'unset',
     '& td': {
       whiteSpace: 'normal !important' as 'normal',
+    },
+    '& td:last-child': {
+      borderLeft: `1px solid ${Colors.primaryLight} !important`,
     },
   },
   actionsCell: {
     width: 0,
     overflow: 'visible !important',
     position: 'sticky',
-    borderLeft: `1px solid ${Colors.primaryLight} !important`,
     right: 0,
     padding: '0 !important',
   },

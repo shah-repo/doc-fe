@@ -4,11 +4,14 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React, { useState } from 'react';
 import { translate } from '../../../../../../common/intl';
+import { ColumnMenuContext, CustomColumnMenu } from '../column.templates/CustomColumnMenu';
 import { styles } from './styles';
 
-export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = () => {
+export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = (props) => {
   const classes = styles();
   const [isHovered, setIsHovered] = useState(false);
+  const { onLock, columns, onColumnShowHide } = React.useContext(ColumnMenuContext);
+  const { field } = props;
 
   return (
     <Grid
@@ -31,6 +34,16 @@ export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = () => {
             icon={isHovered ? solid('screwdriver-wrench') : regular('screwdriver-wrench')}
           />
         </Tooltip>
+      </div>
+      <div>
+        <CustomColumnMenu
+          {...{
+            field,
+            onLock,
+            columns,
+            onColumnShowHide,
+          }}
+        />
       </div>
     </Grid>
   );

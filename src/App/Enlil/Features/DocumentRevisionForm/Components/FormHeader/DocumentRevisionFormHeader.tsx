@@ -11,9 +11,10 @@ import { withDocumentRevisionFormHeader } from './DocumentRevisionFormHeader.wra
 const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHeaderProps> = ({
   _documentRevisionFormState,
   isDisabledInput,
+  inRestrictedEditMode,
   documentTypeId,
   type,
-}) =>  (
+}) => (
   <Observer>
     {() => (
       <Box
@@ -31,13 +32,13 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
           <Title
             name="name"
             documentTypeId={documentTypeId}
-            disabled={isDisabledInput}
+            disabled={isDisabledInput || inRestrictedEditMode}
           />
         </Box>
         <Description
           isQms={_documentRevisionFormState?.docInfo.isQms || false}
           documentTypeId={documentTypeId}
-          isDisabled={isDisabledInput}
+          isDisabled={isDisabledInput || inRestrictedEditMode}
         />
       </Box>
     )}

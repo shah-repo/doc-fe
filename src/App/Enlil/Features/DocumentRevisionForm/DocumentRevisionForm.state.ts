@@ -27,8 +27,11 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public forceRender?: any;
   @observable public disabledAction = false;
   @observable public isBOMExists = false;
-  @observable public isShowedBOMDiff = false;
+  @observable public isDiffViewEnabled = false;
+  @observable public showPartInDialog = false;
+  @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
+  @observable public bomChangesInProgress = false;
   @observable public restorePartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
   @observable public refreshBOMTree = false;
@@ -183,16 +186,28 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'isBOMExists', isBOMExists);
   };
 
-  @action public toggleIsShowedBOMDiff = () => {
-    this.setIsShowedBOMDiff(!this.isShowedBOMDiff);
+  @action public toggleDiffView = () => {
+    this.setDiffViewEnabled(!this.isDiffViewEnabled);
   };
 
-  @action public setIsShowedBOMDiff = (isShowedBOMDiff: boolean) => {
-    set(this, 'isShowedBOMDiff', isShowedBOMDiff);
+  @action public setDiffViewEnabled = (isDiffViewEnabled: boolean) => {
+    set(this, 'isDiffViewEnabled', isDiffViewEnabled);
+  };
+
+  @action public toggleShowPartInDialog = () => {
+    this.setShowPartInDialog(!this.showPartInDialog);
+  };
+
+  @action public setShowPartInDialog = (showPartInDialog: boolean) => {
+    set(this, 'showPartInDialog', showPartInDialog);
   };
 
   @action public setChildPartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
     set(this, 'childPartInfo', data);
+  };
+
+  @action public setBOMChangesInProgress = (status: boolean) => {
+    set(this, 'bomChangesInProgress', status);
   };
 
   @action public setRestorePartInfo = (data: {dataItem: EditableBOM, level: number[]}) => {
@@ -221,6 +236,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
     this.documentRevision = documentRevision;
+  };
+
+  public setNewlyCreatedDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
+    this.newlyCreatedDocumentRevision = documentRevision;
   };
 
   public setScrollOffset = (offset: number) => {

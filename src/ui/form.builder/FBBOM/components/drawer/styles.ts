@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import OldColors from '../../../../layout/theme/utils/colors';
 import { Colors } from '../../../../layout/theme-next';
+import OldColors from '../../../../layout/theme/utils/colors';
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -41,9 +41,11 @@ export default makeStyles((theme: Theme) =>
     },
     iconContainer: {
       display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
       height: 24,
       flex: 'none',
-      margin: theme.spacing(0, 0.25),
+      margin: theme.spacing(0, 0.25, 1.25),
     },
     whiteDot: {
       width: 4,
@@ -72,7 +74,7 @@ export default makeStyles((theme: Theme) =>
       },
     },
     GREEN_STATUS: {
-      background: OldColors.carla,
+      background: OldColors.snow_flurry,
       color: OldColors.light_forest_green,
       border: `1px solid ${OldColors.light_forest_green_border}`,
     },
@@ -87,7 +89,7 @@ export default makeStyles((theme: Theme) =>
       border: `1px solid ${Colors.textGray}`,
     },
     drawer: {
-      margin: theme.spacing(1.25),
+      margin: theme.spacing(3.75),
       height: '100%',
       width: 950,
     },

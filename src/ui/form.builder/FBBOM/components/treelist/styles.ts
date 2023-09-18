@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core';
+import { Size } from 'react-virtualized';
 import { Colors } from '../../../../layout/theme-next';
 import OldColors from '../../../../layout/theme/utils/colors';
-import { Size } from 'react-virtualized';
 
 const BASE_COLOR = Colors.primaryBg;
 
@@ -200,6 +200,7 @@ export default makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         fontWeight: 600,
+        textTransform: 'uppercase',
       },
       '& .k-grid-column-menu': {
         top: theme.spacing(0.5),
@@ -209,9 +210,7 @@ export default makeStyles((theme) => ({
         },
       },
     },
-    '.k-master-row .k-grid-content-sticky': {
-      backgroundColor: 'inherit',
-    },
+
     '.k-grid-container': {
       overflow: 'hidden',
 
@@ -437,6 +436,9 @@ export default makeStyles((theme) => ({
   deletedBg: {
     backgroundColor: Colors.errorLightShadow,
   },
+  inprogressBg: {
+    backgroundColor: Colors.successHighlight,
+  },
   viewIcon: {
     fill: Colors.textBlack,
     marginRight: theme.spacing(0.625),
@@ -522,6 +524,9 @@ export default makeStyles((theme) => ({
   },
   statusPendingChange: {
     fill: Colors.statusPendingChange,
+  },
+  disabled: {
+    pointerEvents: 'none',
   },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',

@@ -1,15 +1,15 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListColumnProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 
 export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
-  isShowedBOMDiff?: boolean
+  isDiffViewEnabled?: boolean
+  isShowOnly?: boolean
 }
 
 export interface BOMState {
@@ -19,14 +19,14 @@ export interface BOMState {
   inEdit: Array<{id: string }>
 }
 
-// ts-unused-exports:disable-next-line
-export interface DataState {
+interface DataState {
   sort?: SortDescriptor[]
   filter?: FilterDescriptor[]
 }
 
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
+  isDisabled?: boolean
 }
 
 export interface EditableAlternatePart extends AlternatePart {
@@ -37,12 +37,13 @@ export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
 
-// ts-unused-exports:disable-next-line
 export interface AlternatePart {
   id: string
   name?: string
   revision?: string
-  status?: FormHeaderStatusClassMapping
+  displayRevision?: string
+  status?: DocumentRevisionStatus
+  displayStatus?: string
   cost?: string
   docId?: string
   leadTime?: string

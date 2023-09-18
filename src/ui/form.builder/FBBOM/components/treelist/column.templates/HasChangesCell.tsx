@@ -1,6 +1,6 @@
 import { Link } from '@material-ui/core';
 import cx from 'classnames';
-import React, { ComponentType } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { changeRequestEditPath } from '../../../../../change.request/utils/paths';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
@@ -8,7 +8,7 @@ import { CELL_EMPTY_VALUE } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
+const HasChangesCell: React.ComponentType<CustomTreeListCellProps> = ({
   dataItem,
   field,
   colSpan,
@@ -26,16 +26,19 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
   };
 
   function render () {
+    const arID = changeReqDetails?.crId;
+    const isReleased = dataItem.availableRevisions?.isReleased;
+
     if (!dataItem.availableRevisions) {
       return CELL_EMPTY_VALUE;
     }
 
-    if (dataItem.availableRevisions?.isReleased) {
+    if (isReleased) {
       return CELL_EMPTY_VALUE;
     }
 
     if (!changeReqDetails) {
-      return dataItem.availableRevisions?.revision;
+      return dataItem.availableRevisions?.displayRevision;
     }
 
     return <Tooltip
@@ -46,7 +49,7 @@ const HasChangesCell: ComponentType<CustomTreeListCellProps> = ({
           onClick={openARDetailsPage}
           className={classes.link}
         >
-          {changeReqDetails?.crId}
+          {arID}
         </Link>
       }
     />;

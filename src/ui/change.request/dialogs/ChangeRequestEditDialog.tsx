@@ -1,13 +1,14 @@
 /* eslint-disable arrow-body-style */
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ReactComponent as NewTabIcon } from '../../../assets/images/new_tab.svg';
 import { changeRequestsActions, changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { ApplicationState } from '../../../state/reducers';
 import AsyncGate from '../../components/AsyncGate';
 import Text from '../../components/Text';
+import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../hooks/useActionCreator';
 import { DialogHandler } from '../../hooks/useDialog';
 import ChangeRequestUpdateContainer from '../ChangeRequestUpdate.container';
@@ -27,10 +28,9 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   closeDialog,
   currentDocRevId,
 }) => {
-
   const classes = useStyles();
 
-  const loadAsyncState =  useSelector(changeRequestsSelectors.getLoadAsyncState);
+  const loadAsyncState = useSelector(changeRequestsSelectors.getLoadAsyncState);
   const changeRequestDetails = useSelector((state: ApplicationState) =>
     changeRequestsSelectors.getChangeRequest(state, changeRequestId));
 
@@ -40,6 +40,10 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   const handleOpenNewTab = () => {
     window.open(changeRequestPreviewPath(changeRequestId));
   };
+
+  useEffect(() => {
+    FBDataStore?.setRefreshData({ ...FBDataStore?.refreshData, changeRequest: changeRequestDetails });
+  }, [changeRequestDetails]);
 
   return (
     <AsyncGate asyncAction={loadAction} asyncState={loadAsyncState} startActionOnMount={true}>
