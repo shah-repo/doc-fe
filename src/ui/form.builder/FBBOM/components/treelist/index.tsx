@@ -13,6 +13,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
+  TreeListFilterChangeEvent,
   TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
@@ -705,7 +706,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
-  const onFilterChange = (event) => {
+  const onFilterChange = (event: TreeListFilterChangeEvent) => {
     const { dataState, data } = state;
     dataState.filter = event.filter;
     const expanded = getAllItemIds(data);
