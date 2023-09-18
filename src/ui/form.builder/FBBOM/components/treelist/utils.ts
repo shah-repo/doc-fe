@@ -55,7 +55,6 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
             ...aData,
             id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}
             ${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
-            revId: aData.id,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
             isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,

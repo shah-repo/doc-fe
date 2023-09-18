@@ -95,11 +95,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
       parentRevDetails: BOM
     }) => {
       formik.setValues({});
+      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       const bomProccessedData = processBOMData(
-        bomTreeRelations,
+        [...bomTreeRelations],
         parentRevDetails,
       );
-      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       updateState({
         ...state,
         data: [...bomProccessedData],
