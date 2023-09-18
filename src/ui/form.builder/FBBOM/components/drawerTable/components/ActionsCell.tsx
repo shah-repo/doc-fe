@@ -17,6 +17,7 @@ export interface ActionsProps<EditableAlternatePart> {
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: (dataItem: EditableAlternatePart) => void
+  isDisabled?: boolean
 }
 
 export default function Actions <EditableAlternatePart> (props: ActionsProps<EditableAlternatePart>): React.ReactElement | null {
@@ -28,6 +29,7 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
     onConfirm,
     onDiscard,
     onDelete,
+    isDisabled,
   } = props;
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -41,6 +43,10 @@ export default function Actions <EditableAlternatePart> (props: ActionsProps<Edi
   }, [scrollBehavior]);
 
   if (!isEditMode) {
+    return null;
+  }
+
+  if (isDisabled) {
     return null;
   }
 

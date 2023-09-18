@@ -3,6 +3,7 @@ import Config from '../../../../../config';
 import { DocumentRevisionStatusDisplay } from '../../../../../state/ducks/documentRevisions/types';
 import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
+import { FB } from '../../../helpers';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 import { CustomTreeListColumnProps } from './interface';
@@ -36,42 +37,31 @@ export const hasSameParent = (arr1: number[], arr2: number[]): boolean => {
 };
 
 export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): EditableBOM[] => {
-  const bomList: BOM[] = bomTreeRelations.concat(parentRevDetails);
-
-  const hashTable = {};
-  const revIdHashMap = {};
-
-  bomList.forEach((aData: BOM) => {
-    revIdHashMap[aData.id] = aData;
-    if (aData.parentNodeRevId) {
-      hashTable[`${aData.parentNodeRevId}_${aData.id}`] = { ...aData, childNodes: [] };
-    } else {
-      hashTable[aData.id] = { ...aData, childNodes: [] };
-    }
-  });
-
+  bomTreeRelations.unshift(parentRevDetails);
   const dataTree: EditableBOM[] = [];
-  bomList.forEach((aData: BOM) => {
-    if (aData.parentNodeRevId) {
-      const parentDetails = revIdHashMap[aData.parentNodeRevId];
-      if (parentDetails) {
-        let keyToUse = '';
-        if (parentDetails.parentNodeRevId) {
-          keyToUse = `${parentDetails.parentNodeRevId}_${parentDetails.id}`;
-        } else {
-          keyToUse = parentDetails.id;
-        }
 
-        hashTable[keyToUse].childNodes.push({
-          ...hashTable[`${aData.parentNodeRevId}_${aData.id}`],
-          id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}`,
-          parentNodeDocumentId: parentDetails.documentId,
-          isParentOwner: parentDetails.isOwner,
-          isEditEnabled: parentDetails.displayStatus !== DocumentRevisionStatusDisplay.Released,
-        });
-      }
+  bomTreeRelations = bomTreeRelations.map(relation => ({
+    ...relation,
+    childNodes: [],
+  }));
+
+  bomTreeRelations.reverse();
+  bomTreeRelations.forEach((aData: BOM) => {
+    if (aData.parentNodeRevId) {
+      const parentPartRelations = bomTreeRelations.filter(relation => relation.id === aData.parentNodeRevId);
+      parentPartRelations.forEach(parentPartRelation => {
+        parentPartRelation.childNodes?.unshift(
+          Object.assign({
+            ...aData,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
+            parentNodeDocumentId: parentPartRelation.documentId,
+            isParentOwner: parentPartRelation.isOwner,
+            isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,
+          }),
+        );
+      });
     } else {
-      dataTree.push(hashTable[aData.id]);
+      dataTree.push({ ...aData, [MODE_FIELD]: false });
     }
   });
   return dataTree;

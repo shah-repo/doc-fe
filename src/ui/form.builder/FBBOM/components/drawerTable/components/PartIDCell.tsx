@@ -12,6 +12,7 @@ import useAsync from '../../../../../hooks/useAsync';
 import { EditableBOM } from '../../../interface';
 import { SELECTED_PART_KEY_SEPARATOR } from '../../treelist/constants';
 import { CustomTemplateProps } from '../types';
+import { AlternatePart } from '../../treelist/interface';
 
 const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
   const { dataItem, field } = props;
@@ -26,18 +27,20 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
     },
   });
 
-  const fetchSelectedPartAsync = useAsync<DocumentRevision[]>({
+  const fetchSelectedPartAsync = useAsync<AlternatePart[]>({
     onSuccess: (data) => {
       if (!Array.isArray(data) || !data.length) {
         return;
       }
 
-      const { displayRevision, displayStatus, name, id } = data[0];
+      const { displayRevision, displayStatus, name, id, cost, leadTime } = data[0];
 
       setFieldValue('displayRevision', displayRevision);
       setFieldValue('displayStatus', displayStatus);
       setFieldValue('name', name);
       setFieldValue('id', id);
+      setFieldValue('cost', cost);
+      setFieldValue('leadTime', leadTime);
     },
   });
 

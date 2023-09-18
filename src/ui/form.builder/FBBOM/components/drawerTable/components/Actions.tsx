@@ -22,7 +22,7 @@ export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
       <div ref={ref} className={props.rootClassName} />
       {ref.current && (
         <Popper
-          open={areActionsShowed}
+          open={areActionsShowed && !props.isDisabled}
           placement="bottom-end"
           anchorEl={ref.current}
           modifiers={{

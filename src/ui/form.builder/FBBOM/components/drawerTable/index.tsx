@@ -15,12 +15,11 @@ import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGri
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { AlternatePartEditEvent, EditableAlternatePart, FBBOMDrawerTableProps } from '../treelist/interface';
-import { ActionsCell } from './components/Actions';
-import { schema } from './constants';
+import { AlternatePart, AlternatePartEditEvent, EditableAlternatePart, FBBOMDrawerTableProps } from '../treelist/interface';
+import { buildSchema } from './schema';
 import useStyles from './styles';
 
-const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId }) => {
+const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId, isDisabled }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { _documentRevisionFormState } = SM.useStores();
@@ -86,7 +85,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     );
   }, [parentRevId]);
 
-  const AddAlternatePart = () => setEditedAlternatePart({
+  const handleAddAlternatePart = () => setEditedAlternatePart({
     id: uuidv4(),
     [MODE_FIELD]: Mode.add,
   });
@@ -97,14 +96,17 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     setEditedAlternatePart(undefined);
     formik.resetForm();
   };
-  const deleteAlternatePart = (dataItem) => {
-    alternatePartAsync.start(
-      deleteAlternateParts,
-      parentRevId,
-      dataItem.id,
-      basePartNodeRevId,
-      alternatePartAsync,
-    );
+
+  const deleteAlternatePart = (dataItem: AlternatePart) => {
+    if (!isDisabled) {
+      alternatePartAsync.start(
+        deleteAlternateParts,
+        parentRevId,
+        basePartNodeRevId,
+        dataItem.id,
+        alternatePartAsync,
+      );
+    }
   };
 
   const rowRender: DataGridProps<EditableAlternatePart>['rowRender'] = (row, { dataItem }) => {
@@ -115,25 +117,9 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
       return row;
     }
 
-    const actions = (
-      <td className={classes.actionsCell} key="actions">
-        <ActionsCell
-          dataItem={item}
-          onConfirm={formik.submitForm}
-          onDiscard={discardAlternatePart}
-          onDelete={deleteAlternatePart}
-          rootClassName={classes.popperHolder}
-        />
-      </td>
-    );
-
-    return React.cloneElement(
-      row,
-      {
-        className: cx(row.props.className, classes.updatingRow),
-      },
-      [row.props.children, actions],
-    );
+    return React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
   };
 
   const isAlternatePartAdded = editedAlternatePart?.[MODE_FIELD] === Mode.add;
@@ -152,6 +138,14 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     ];
   }, isAlternatePartAdded ? [editedAlternatePart] : []);
 
+  const schema = buildSchema({
+    actionsClass: classes.actionsCell,
+    onConfirm: formik.submitForm,
+    onDiscard: discardAlternatePart,
+    onDelete: deleteAlternatePart,
+    isDisabled,
+  });
+
   return (
     <Box position="relative">
       <FormikProvider value={formik}>
@@ -165,16 +159,17 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
           rowRender={rowRender}
           onRowClick={handleRowClick}
           fallback={<NoDataFound />}
+          className={classes.grid}
         />
       </FormikProvider>
-      <Button
+      {!isDisabled && <Button
         kind="add"
         fullWidth
-        onClick={AddAlternatePart}
+        onClick={handleAddAlternatePart}
         className={classes.addPartButton}
       >
         {translate('bom.alternate.part.add')}
-      </Button>
+      </Button> }
     </Box>
   );
 };
