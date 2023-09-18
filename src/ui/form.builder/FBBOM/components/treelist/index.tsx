@@ -705,6 +705,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
+  const onFilterChange = (event) => {
+    const { dataState, data } = state;
+    dataState.filter = event.filter;
+    const expanded = getAllItemIds(data);
+    updateState({
+      ...state,
+      dataState: dataState,
+      expanded: isEmpty(event.filter) ? data[0]?.id : expanded,
+    });
+  };
+
   const onLock = React.useCallback(
     ({
       field,
@@ -835,6 +846,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                     )}
                     onRowClick={editBOM}
                     onColumnReorder={onColumnReorder}
+                    onFilterChange={onFilterChange}
                     resizable={TREELIST_CONFIG.resizable}
                     reorderable={TREELIST_CONFIG.reorderable}
                     sortable={TREELIST_CONFIG.sortable}
