@@ -29,7 +29,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   qtyUnits,
   serial,
   description,
-  selectedNumberOfLabel
+  selectedNumberOfLabel,
 }) => {
   const classes = styles();
 
