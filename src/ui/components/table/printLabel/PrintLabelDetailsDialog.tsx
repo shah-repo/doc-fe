@@ -133,6 +133,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             <>
               <FBLabel label="Number of Labels to Print" />
               <Autocomplete
+                disableClearable
                 value={selectedNumberOfLabel}
                 options={NumbersOfLabelsOption}
                 renderInput={(params) => <TextField {...params} label="Controllable" />}
