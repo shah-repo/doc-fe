@@ -5,15 +5,17 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
 import { ReactComponent as WithDrawSubmissionIcon } from '../../assets/images/withdraw_submission.svg';
+import { getHasPermission } from '../../common/utils/selectors';
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
+import { Permission } from '../../state/ducks/auth/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
@@ -21,6 +23,7 @@ import { documentsActions } from '../../state/ducks/documents';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
+import Text from '../components/Text';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -30,7 +33,6 @@ import { RequestType } from '../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
-import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
@@ -42,13 +44,13 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
-import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
-import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
-import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from './PreviewControls.container.types';
+import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 
 interface OwnProps {
   documentRevision: DocumentRevision
@@ -113,9 +115,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
 
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const isNotRelatedTogetherPart = documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const showEditButton = isPart && documentRevision?.changeControlOptions?.id
-    && isStatusReleased && isUserDocumentOwner && isNotRelatedTogetherPart;
+    && isStatusReleased && (isUserDocumentOwner || hasPermisstionToEditRestrictedPart) && isNotRelatedTogetherPart;
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
   && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
