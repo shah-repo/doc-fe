@@ -53,8 +53,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
         parentPartRelation.childNodes?.unshift(
           Object.assign({
             ...aData,
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}
-            ${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
             isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,
