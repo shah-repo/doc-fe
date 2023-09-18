@@ -80,7 +80,7 @@ export function KendoGrid<T extends any> ({
         if (documentTypeCategory === DocumentCategory.Lot) {
           const dataColumns = JSON.parse(tableCriteria.columnConfig);
           if(dataColumns.findIndex(item => item.field === SELECTED_FIELD) === -1) {
-            dataColumns.push(printColumnProps);
+            dataColumns.splice(JSON.parse(tableCriteria.columnConfig), 0, printColumnProps);
             setColumns(dataColumns);
           }
           else {
@@ -296,7 +296,7 @@ export function KendoGrid<T extends any> ({
   const renderKendoColumns = (gridWidth: number) =>
     sortedColumnDefinitions.map(
       (column, index) =>
-        column.show && (
+        column.show && column.field !== SELECTED_FIELD && (
           <KendoColumn
             key={index}
             {...column}
@@ -486,7 +486,7 @@ export function KendoGrid<T extends any> ({
         {isLotDocument && isPrintColumnVisible && (
           <GridColumn
             {...printColumnProps }
-            filterCell={() => <input disabled style={{ height: '24px', width: '40px' }} />}
+            filterable={false}
             cell={(props) => <td className={props?.className} style={props?.style} >
               <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
                 <PrintOutlined />

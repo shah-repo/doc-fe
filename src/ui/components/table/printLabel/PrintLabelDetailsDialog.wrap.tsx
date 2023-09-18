@@ -120,7 +120,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange = (event: any) => {
-      if(event.target.value.length > 10) {
+      if(event.target.value.length > 14) {
         return;
       }
       setSerial(event.target.value);
@@ -142,10 +142,10 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         lotNumber: initialValues?.lotId?.split('#')[1],
         lotRevId: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
         serial: serial,
-        expireDate: selectedItem?.formInput?.lot_expiry_date,
+        expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
         printDate: moment(selectedDate).format('MMM DD, YYYY'),
         labelsToPrint: labelsToPrint,
-        quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: item.value }), {}),
+        quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: Number(item.value) }), {}),
       };
       const requestConfig: AxiosRequestConfig = {
         method: 'post',
