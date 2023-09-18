@@ -155,10 +155,10 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     type: 'LINK',
     restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
   },
-	{
+  {
     label: 'Administration',
     type: 'MENU',
-    icon: '/navigation_icons/tools.svg',
+    icon: '/navigation_icons/settings.svg',
     isOpen: false,
     menu: [
       {
@@ -166,9 +166,8 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         type: 'LINK',
         path: GENERAL_SETTINGS_URL,
         icon: '/navigation_icons/tag-check.svg',
-        // restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
+        restrictedToUsersWithTags: [GroupTag.DASHBOARD_ADMIN],
       },
     ],
-    // restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
   },
 ];

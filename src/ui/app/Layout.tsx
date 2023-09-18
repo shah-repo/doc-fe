@@ -3,7 +3,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
-import GeneralSettingsContainer from '../administration/generalsettings/container';
+import GeneralSettingsContainer from '../administration/generalsettings/GeneralSettings.container';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
 import ChangeRequestContainer from '../change.request/Container';
@@ -135,7 +135,7 @@ const Layout: React.FunctionComponent = () => {
             path={GLOBAL_SEARCH_URL}
             component={SearchPage}
           />
-					<Route
+          <Route
             path={GENERAL_SETTINGS_URL}
             component={GeneralSettingsContainer}
           />

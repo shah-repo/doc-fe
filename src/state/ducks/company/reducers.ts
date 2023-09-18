@@ -44,7 +44,7 @@ const selectedCompany = (
 ): SelectCompanyState => {
   switch (action.type) {
     case SELECT_COMPANY:
-			console.log('------action--------');
+      console.log('------action--------');
       return {
         ...action.payload,
         navigation: DEFAULT_NAVIGATION_ITEMS
