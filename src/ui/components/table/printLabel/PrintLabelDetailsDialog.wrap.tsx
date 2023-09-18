@@ -178,7 +178,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       onDescriptionChange,
       closeDialog,
       onNumberOfLabelChange,
-      selectedNumberOfLabel
+      selectedNumberOfLabel,
     });
   };
 
