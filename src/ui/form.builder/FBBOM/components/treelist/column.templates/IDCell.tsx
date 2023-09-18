@@ -52,8 +52,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const navigationAttributes = useTableKeyboardNavigation(props.id);
   const isRevisionAvailable = isEditMode && dataItem?.availableRevisions?.isReleased;
 
-  const isAllowedToUpgrade = isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
-    || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status);
+  const isAllowedToUpgrade = (isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
+    || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status)) && !dataItem.isDisabled;
 
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
@@ -433,7 +433,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       <Observer>
         {() => (
           <>
-            {!isEditMode && _documentRevisionFormState?.isShowedBOMDiff && dataItem?.replacementStatus
+            {!isEditMode && _documentRevisionFormState?.isDiffViewEnabled && dataItem?.replacementStatus
             && <Grid
               container
               className={classes.replacedDocRevInfo}

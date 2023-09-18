@@ -23,6 +23,7 @@ interface FBBOMDetailDrawerProps {
   docId?: string
   status?: string
   revision?: string
+  isDisabled?: boolean
 }
 
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
@@ -32,6 +33,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
   docId,
   status,
   revision,
+  isDisabled,
   children,
 }) => {
   const classes = useStyles();
@@ -104,7 +106,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             </Grid>
           </Grid>
           <Divider className={classes.divider} />
-          <FBBOMDrawerTable parentRevId={parentRevId} />
+          <FBBOMDrawerTable parentRevId={parentRevId} isDisabled={isDisabled} />
         </Box>
       )}
     </Drawer>

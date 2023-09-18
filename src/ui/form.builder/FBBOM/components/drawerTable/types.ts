@@ -10,4 +10,5 @@ export interface SchemaOptions {
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: (dataItem) => void
+  isDisabled?: boolean
 }

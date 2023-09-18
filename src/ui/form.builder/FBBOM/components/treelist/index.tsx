@@ -212,7 +212,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
   const fetchHasATreeAsync = useAsync({
-    onSuccess: (statusObj: BOM) => {
+    onSuccess: (statusObj: BOM | undefined) => {
       if (statusObj && statusObj[documentRevision?.id]) {
         setShowTree(true);
       }
