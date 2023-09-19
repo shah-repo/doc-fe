@@ -19,5 +19,8 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
       color: Colors.almost_black,
     },
+    isDisabled: {
+      color: Colors.font_gray,
+    },
   }),
 );
