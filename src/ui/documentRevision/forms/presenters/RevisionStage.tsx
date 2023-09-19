@@ -48,7 +48,7 @@ const RevisionStage: React.FunctionComponent<Props> = ({
       <RadioGroup name="revisionStage" validate={validator(required)}>
         {revStageOptions.map((option) =>
           <FormControlLabel
-            control={<Radio color="primary" disableRipple={true} />}
+            control={<Radio color="primary" disableRipple />}
             key={`${option.value}-${option.text}`}
             className={classes.radioButton}
             label={<Text message={option.text} />}

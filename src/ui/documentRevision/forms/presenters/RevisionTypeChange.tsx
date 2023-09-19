@@ -87,7 +87,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
               <>
                 <FormControlLabel
                   value={RevisionChangeType.NextRevision}
-                  control={<Radio color="primary" disableRipple={true} />}
+                  control={<Radio color="primary" disableRipple />}
                   label={<Typography variant="body1"
                     className={cx(classes.labelSubTitle, {
                       [classes.isDisabled]: isDisabled,
@@ -114,7 +114,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             && <CustomLabelTooltip tooltipConfig={revisionStageTooltipConfig}>
               <>
                 <FormControlLabel
-                  control={<Radio color="primary" disableRipple={true} />}
+                  control={<Radio color="primary" disableRipple />}
                   label={<Typography variant="body1"
                     className={cx(classes.labelSubTitle, {
                       [classes.isDisabled]: isDisabled,
@@ -143,7 +143,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             && <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
               <>
                 <FormControlLabel
-                  control={<Radio color="primary" disableRipple={true} />}
+                  control={<Radio color="primary" disableRipple />}
                   label={
                     <Typography variant="body1"
                       className={cx(classes.labelSubTitle, {
@@ -167,7 +167,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             && <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
               <>
                 <FormControlLabel
-                  control={<Radio color="primary" disableRipple={true} />}
+                  control={<Radio color="primary" disableRipple />}
                   label={
                     <Typography variant="body1"
                       className={cx(classes.labelSubTitle, {
