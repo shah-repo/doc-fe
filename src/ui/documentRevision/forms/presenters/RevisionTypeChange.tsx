@@ -1,8 +1,10 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, FormControlLabel, Radio, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
-import RadioButton from '../../../components/forms/fields/RadioButton';
+import { ApplicationState } from '../../../../state/reducers';
 import RadioGroup from '../../../components/forms/fields/RadioGroup';
 import { required, validator } from '../../../components/forms/fields/validators';
 import Text from '../../../components/Text';
@@ -10,8 +12,6 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from '../../../hooks/docCustomization/useCustomization';
 import { versionNumber } from '../../helpers/generateRevisionNumber';
 import { styles } from './RevisionTypeChange.styles';
-import { ApplicationState } from '../../../../state/reducers';
-import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 
 interface Props {
   documentTypeId?: string
@@ -85,17 +85,23 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             showNextRevisionLevel && !showAdministrativeAndVoidChange
             && <CustomLabelTooltip tooltipConfig={revisionLevelTooltipConfig}>
               <>
-                <RadioButton
-                  label={
-                    <Typography variant="body1" className={classes.labelSubTitle}>
-                      <Text message={nextRevisionLevelLabel} />
-                    </Typography>}
+                <FormControlLabel
                   value={RevisionChangeType.NextRevision}
+                  control={<Radio color="primary" disableRipple />}
+                  label={<Typography variant="body1"
+                    className={cx(classes.labelSubTitle, {
+                      [classes.isDisabled]: isDisabled,
+                    })}>
+                    <Text message={nextRevisionLevelLabel} />
+                  </Typography>}
                   id="RevisionTypeChange-nextRevision"
                   disabled={isDisabled}
                   className={classes.label}
                 />
-                <Typography variant="body1" display="inline" className={classes.labelSubTitle}>
+                <Typography variant="body1" display="inline"
+                  className={cx(classes.labelSubTitle, {
+                    [classes.isDisabled]: isDisabled,
+                  })}>
                   {generateVersionPrediction(RevisionChangeType.NextRevision)}
                 </Typography>
               </>
@@ -107,19 +113,24 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             showNextRevisionStage && !showAdministrativeAndVoidChange && !isAlphaReleased
             && <CustomLabelTooltip tooltipConfig={revisionStageTooltipConfig}>
               <>
-                <RadioButton
-                  label={
-                    <Typography variant="body1" className={classes.labelSubTitle}>
-                      <Text message={nextRevisionStageLabel} />
-                    </Typography>
-                  }
+                <FormControlLabel
+                  control={<Radio color="primary" disableRipple />}
+                  label={<Typography variant="body1"
+                    className={cx(classes.labelSubTitle, {
+                      [classes.isDisabled]: isDisabled,
+                    })}>
+                    <Text message={nextRevisionStageLabel} />
+                  </Typography>}
                   data-cy="upgradeNextRevisionStage"
                   value={RevisionChangeType.NextRevisionStage}
                   id="RevisionTypeChange-nextRevisionStage"
                   disabled={isDisabled}
                   className={classes.label}
                 />
-                <Typography variant="body1" display="inline" className={classes.labelSubTitle}>
+                <Typography variant="body1" display="inline"
+                  className={cx(classes.labelSubTitle, {
+                    [classes.isDisabled]: isDisabled,
+                  })}>
                   {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
                 </Typography>
               </>
@@ -131,9 +142,13 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             showObsolete && !isDocRevFirstDraft && !isPORecord
             && <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
               <>
-                <RadioButton
+                <FormControlLabel
+                  control={<Radio color="primary" disableRipple />}
                   label={
-                    <Typography variant="body1" className={classes.labelSubTitle}>
+                    <Typography variant="body1"
+                      className={cx(classes.labelSubTitle, {
+                        [classes.isDisabled]: isDisabled,
+                      })}>
                       <Text message={ showAdministrativeAndVoidChange ? 'common.void' : obsoleteLabel} />
                     </Typography>}
                   value={RevisionChangeType.Obsolete}
@@ -151,9 +166,13 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
             showAdministrationChange && !isPORecord && !isDocRevFirstDraft
             && <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
               <>
-                <RadioButton
+                <FormControlLabel
+                  control={<Radio color="primary" disableRipple />}
                   label={
-                    <Typography variant="body1" className={classes.labelSubTitle}>
+                    <Typography variant="body1"
+                      className={cx(classes.labelSubTitle, {
+                        [classes.isDisabled]: isDisabled,
+                      })}>
                       <Text message={administrationChangeLabel} />
                     </Typography>}
                   value={RevisionChangeType.AdministrativeChange}
