@@ -8,6 +8,8 @@ import { changeRequestsActions, changeRequestsSelectors } from '../../../state/d
 import { ApplicationState } from '../../../state/reducers';
 import AsyncGate from '../../components/AsyncGate';
 import Text from '../../components/Text';
+import { FBAutocompleteAsyncOption } from '../../form.builder';
+import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../hooks/useActionCreator';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -43,6 +45,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     FBDataStore?.setRefreshData({ ...FBDataStore?.refreshData, changeRequest: changeRequestDetails });
+    return () => FBAutocompleteAsyncStore.reset(FBAutocompleteAsyncOption.DRAFTdocumentRevisions);
   }, [changeRequestDetails]);
 
   return (
