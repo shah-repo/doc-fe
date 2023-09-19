@@ -23,7 +23,7 @@ import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
 import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
-import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
+import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
 import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -52,7 +52,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const navigationAttributes = useTableKeyboardNavigation(props.id);
 
   const isAllowedToUpgrade = (isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
-    || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status)) && !dataItem.isDisabled;
+    || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status))
+    && !dataItem.isDisabled
+    && !isDocumentRevisionObsolete(dataItem.availableRevisions?.status);
 
   const onClick = (ev) => {
     props.onExpandChange(ev, dataItem, props.level);
