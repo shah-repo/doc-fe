@@ -12,14 +12,15 @@ import { ApplicationState } from '../../../../state/reducers';
 import { AsyncStatus } from '../../../../state/types';
 import { FormHeaderSummaryContext } from '../../../document.revision/header/SummaryHeader';
 import { isOperator } from '../../../documentRevision/DocumentRevisionDisplay.container';
-import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
 import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
+import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
 import { documentTypeContext, isOwnerContext } from '../../../documentRevision/forms/DocumentRevisionForm.container';
 import FBDynamicValidatorStore from '../../../form.builder/stores/ui/FBDynamicValidatorStore';
 import FBStore from '../../../form.builder/stores/ui/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
+import { useLatestRevision } from '../../../hooks/useLatestRevision';
 import { Translation } from '../../../translations/types';
 import { useFormContext } from '../../forms/FormContext';
 import { withFormik } from '../../hoc/formik';
@@ -75,6 +76,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
   const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
+
+  useLatestRevision(documentRevision, DocumentRevisionStatus.Released);
 
   const passwordState = {
     status: AsyncStatus.Idle,
@@ -172,7 +175,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     setAnchorEl(evt.currentTarget);
   };
 
-  const startWaterMarkRequest  = (
+  const startWaterMarkRequest = (
     attachment: Attachment,
     attachmentType: AttachmentType,
     documentRevisionId?: string,
@@ -215,11 +218,9 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
       openWarningDialog();
       closeContextMenu();
-    }
-    else {
+    } else {
       startWaterMarkRequest(attachment, attachmentType);
     }
-
   };
 
   const passwordSubmit = (values: Password) => {
@@ -261,11 +262,9 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       default:
         break;
     }
-
   };
 
   const warningPasswordText = (): Translation => {
-
     if (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete) {
       return 'common.attachment.redline.warning.download.obsoleted';
     }
@@ -319,8 +318,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     } else if (cleanCopyRequiresPassword(attachment)) {
       setSelectedAttachment(attachment);
       needPasswordHandler(attachment);
-    }
-    else {
+    } else {
       setSelectedAttachment(attachment);
       noNeedPasswordHandler(attachment);
     }

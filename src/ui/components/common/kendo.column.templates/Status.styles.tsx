@@ -22,7 +22,7 @@ export const styles = makeStyles({
     cursor: 'pointer',
   },
   GREEN_STATUS: {
-    background: Colors.carla,
+    background: Colors.snow_flurry,
     color: Colors.light_forest_green,
     border: `1px solid ${Colors.light_forest_green_border}`,
   },

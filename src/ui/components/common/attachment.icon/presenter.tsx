@@ -1,18 +1,18 @@
 import { Box, Button, ButtonBase, CircularProgress, Tooltip, Typography } from '@material-ui/core';
 import classNames from 'classnames';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ReactComponent as RemoveDocument } from '../../../../assets/images/trash.svg';
 import { ReactComponent as RemoveDocumentActive } from '../../../../assets/images/trashHover.svg';
 import { Attachment } from '../../../../state/ducks/attachments/types';
-import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
-import { Document, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
-import { ApplicationState } from '../../../../state/reducers';
+import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import Text from '../../../components/Text';
 import { CustomStyleTooltip } from '../../../dashboard.new/line.items/common/CustomStyleTooltip';
+import { attachmentsDisabledChangeControl } from '../../../document.revision/utils/helpers';
 import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
-import { isDocumentRevisionReleased } from '../../../documentRevision/helpers/documentRevisionStatus';
+import { useLatestRevisionId } from '../../../hooks/useLatestRevision';
 import FileIcon from './icon';
 import { styles } from './utils/styles';
 import { AttachmentIconProps } from './utils/types';
@@ -45,7 +45,7 @@ AttachmentIconProps
   const intl = useIntl();
   const fileSize = useMemo(() => {
     const size = file.fileSizeS3Link;
-    const i = size !== 0 ? Math.floor( Math.log(size) / Math.log(1024)) : 0.00;
+    const i = size !== 0 ? Math.floor(Math.log(size) / Math.log(1024)) : 0.00;
     return `${(size / Math.pow(1024, i)).toFixed(2)} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`;
   }, [file.fileSizeS3Link]);
   const fileTypeDescription = useMemo(() => {
@@ -66,26 +66,14 @@ AttachmentIconProps
   );
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
 
-  const formDocumentId = documentRevisionData?.document.id || '';
-  const formDocuments: Document = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocument(state, formDocumentId),
-  );
-  const releasedVersions = formDocuments?.documentRevisions.filter((e) => isDocumentRevisionReleased(e.status));
-  const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1]?.id;
   const docRevById = useSelector(documentRevisionsSelectors.byId);
-  const dispatch = useDispatch();
+  const latestReleasedDocRevId = useLatestRevisionId(documentRevisionData, DocumentRevisionStatus.Released);
+  const latestDocRevId = useLatestRevisionId(documentRevisionData);
+  const attachmentsFromReleased = latestReleasedDocRevId ? docRevById[latestReleasedDocRevId]?.attachments ?? [] : [];
+  const isAttachedFromReleased = attachmentsFromReleased.some(releasedAttachment => releasedAttachment.id === attachment?.id);
 
-  useEffect(() => {
-    if ((!lastReleasedDocRevId || docRevById[lastReleasedDocRevId]?.attachments)) {
-      return;
-    }
-    dispatch(documentRevisionsActions.load(lastReleasedDocRevId));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const isTransferred = isNewVersion
-  || lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1]?.id
-  ?  docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
+  const isLastVersionReleased = latestReleasedDocRevId === latestDocRevId;
+  const isTransferred = isLastVersionReleased || isNewVersion ? isAttachedFromReleased : false;
 
   const deleteButtonRenderer = canDeleteFile && (
     <Box
@@ -96,7 +84,7 @@ AttachmentIconProps
       onMouseEnter={() => setRemoveHover?.(!disabled)}
       onMouseLeave={() => setRemoveHover?.(false)}
     >
-      <Button
+      { !attachmentsDisabledChangeControl(documentRevisionData) && <Button
         className={classes.removeButton}
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
@@ -115,7 +103,7 @@ AttachmentIconProps
         ) : (
           <RemoveDocument />
         )}
-      </Button>
+      </Button> }
     </Box>
   );
 
@@ -144,7 +132,7 @@ AttachmentIconProps
                 isRedLine={isRedLine}
                 isPrimary={isPrimary}
                 isTransferred={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft
-                  || documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransferred : false}
+                  || documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange) ? isTransferred : false}
               />
             }
           </ButtonBase>

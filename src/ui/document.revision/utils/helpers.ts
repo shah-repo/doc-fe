@@ -99,3 +99,43 @@ export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, Documen
   const getFormInputHasTextField = fieldsWithNoResponse?.find((field) => has(dataToSubmit.formInput, field.name));
   return has(dataToSubmit, "description") || getFormInputHasTextField;
 }; */
+
+// Based on the controlOptions - if attribute-changes is set to yes,
+// then editing any of these will need a new revision
+export const formFieldsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'attribute-changes');
+};
+
+export const suppliersDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'approved-supplier-list');
+};
+
+export const attachmentsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'changes-to-attachments');
+};
+
+export const referencesDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'changes-to-references');
+};
+
+export const bomDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'bom-line-changes');
+};
+
+export const disableOtherFieldsChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  let disableOtherFields = false;
+  if (documentRevision?.isBeingEditedAfterRelease && documentRevision?.changeControlOptions?.id !== '') {
+    disableOtherFields = true;
+  }
+  return disableOtherFields;
+};
+
+const doesFieldChangeAffectRev = (documentRevision: DocumentRevision | undefined, field: string) => {
+  let fieldChangeAffectsRev = false;
+  if (documentRevision?.isBeingEditedAfterRelease
+    && documentRevision?.changeControlOptions
+    && documentRevision?.changeControlOptions.formInput) {
+    fieldChangeAffectsRev = documentRevision.changeControlOptions.formInput[field] === 'Yes';
+  }
+  return fieldChangeAffectsRev;
+};

@@ -1,18 +1,18 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, FormControlLabel, Radio, Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { RevisionStageOptions } from '../../../../state/ducks/documentRevisions/types';
-import RadioButton from '../../../components/forms/fields/RadioButton';
+import { ApplicationState } from '../../../../state/reducers';
 import RadioGroup from '../../../components/forms/fields/RadioGroup';
 import { required, validator } from '../../../components/forms/fields/validators';
 import Text from '../../../components/Text';
 import { useRevisionStageSelect } from '../../../hooks/docCustomization/useCustomization';
 import { styles } from './styles/RevisionStage.styles';
-import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { ApplicationState } from '../../../../state/reducers';
 
 interface Props {
   isDisabled: boolean
+  inRestrictedEditMode?: boolean
   isDocRevFirstDraft: boolean
   shouldShowRevStageForDocType: boolean
   documentTypeId: string
@@ -21,6 +21,7 @@ interface Props {
 
 const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
+  inRestrictedEditMode,
   isDocRevFirstDraft,
   shouldShowRevStageForDocType,
   documentTypeId,
@@ -46,16 +47,19 @@ const RevisionStage: React.FunctionComponent<Props> = ({
       </Typography>
       <RadioGroup name="revisionStage" validate={validator(required)}>
         {revStageOptions.map((option) =>
-          <RadioButton
+          <FormControlLabel
+            control={<Radio color="primary" disableRipple />}
             key={`${option.value}-${option.text}`}
             className={classes.radioButton}
             label={<Text message={option.text} />}
+            disabled={inRestrictedEditMode}
             // had to covert to string
             // if value is number, cheking radio buttons doesn't work correctly
             value={option.value.toString()}
             data-cy={option.text}
             style={{ width: 'fit-content', marginLeft: 0 }}
-          />)
+          />,
+        )
         }
       </RadioGroup>
     </Box>

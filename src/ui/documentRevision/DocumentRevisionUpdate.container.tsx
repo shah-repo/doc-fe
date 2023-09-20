@@ -101,7 +101,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
       if (FBStore?.isHistoryTabSelected) {
-        dispatch(documentRevisionsActions.loadAudit(documentRevision.id ));
+        dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
         FBStore.audit.set({
           url: FBEndpoint.DocumentRevisionAudit,
           urlValues: { documentId: documentRevision.id },
@@ -128,9 +128,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
     if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
       set(dataToSubmit, 'formInput', {
-        ...formInput, ...{
-          [FBDAMFields.DAM]: FBStore.damData?.['approvalMatrix'],
-          [FBDAMFields.DAR]: FBStore.damData?.['approvalRoles'],
+        ...formInput,
+        ...{
+          [FBDAMFields.DAM]: FBStore.damData?.approvalMatrix,
+          [FBDAMFields.DAR]: FBStore.damData?.approvalRoles,
         },
       });
     }
@@ -164,7 +165,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       });
       set(dataToSubmit, 'formInput', {
         ...formInput,
-        [FBDAMFields.DAR]: approvalRoles, [FBDAMFields.DAM]: approvalMatrix,
+        [FBDAMFields.DAR]: approvalRoles,
+        [FBDAMFields.DAM]: approvalMatrix,
       });
     }
     const redlineDataToSubmit = pick(values, 'schema', 'formInput', 'redline');
@@ -188,7 +190,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         dispatch(companyActions.redlineConfig(false));
         redlineDataToSubmit.redline = false;
       }
-      return handleSave( redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
+      return handleSave(redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
     if (isEmpty(dataToSubmit)) {

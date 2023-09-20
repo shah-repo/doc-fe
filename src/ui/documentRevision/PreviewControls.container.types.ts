@@ -20,4 +20,6 @@ export enum PreviewControlButtons {
   WithdrawSubmission='withdrawSubmission',
   Pdf='pdf',
   ExportToEmail='exportToEmail',
+  EditPartButton='restrictedEditPart',
+  CancelEditPartButton='cancelEditPart',
 }

@@ -8,20 +8,21 @@ import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRe
 import { GroupTag } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../ui/document.revision/form/attachments';
+import { bomDisabledChangeControl, disableOtherFieldsChangeControl, referencesDisabledChangeControl } from '../../../../ui/document.revision/utils/helpers';
 import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisplay.container';
 import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
@@ -68,6 +69,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isPart = checkIsDocumentPart(groupOptions);
+  const isPartForm = checkIsDocumentPart(
+    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -81,6 +85,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -117,6 +122,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       labelId: 'tabId.training',
       tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PART]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: 'tabId.bom',
+      tabId: TabTypeOptions.BOM.toLowerCase(),
+      type: TabTypeOptions.BOM,
     }];
   }
 
@@ -164,7 +178,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={true} />}
+              {() => (
+                <DocumentRevisionSidebar
+                  canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
+                />
+              )}
             </Observer>
           ),
         }}
@@ -188,6 +206,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
                 type={type}
+                inRestrictedEditMode={inRestrictedEditMode}
                 documentTypeId={formValues.values.document?.documentType?.id}
               />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
@@ -205,8 +224,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
                       return (
                         <AutoSizer onResize={handleResize}>
-                          {(size) => (
-                            <SMBox key={index} {...size}>
+                          {({ width }) => (
+                            <SMBox key={index} width={width} pb={2}>
                               {tabType === 'MIXED' && (
                                 <>
                                   <DocumentRevisionFormPresenter
@@ -291,6 +310,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 <FBTrainingInfoContainer
                                   documentRevisionId={documentRevision?.id}
                                   docRevStatus={documentRevision?.status}
+                                />
+                              )}
+                              {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                                <FBBOM documentRevision={documentRevision}
+                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm}
+                                  isShowOnly={isPartForm}
                                 />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (

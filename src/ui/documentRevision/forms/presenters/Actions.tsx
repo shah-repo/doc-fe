@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../../App';
-import { MomentFormats, getFormattedDateString } from '../../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
@@ -23,8 +23,8 @@ import { default as OwnerChangerContainer } from '../../../components/common/own
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
-import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../../form.builder';
@@ -35,23 +35,24 @@ import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustom
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from '../../PreviewControls.container.types';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
+import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
-import CancelButton from './CancelButton';
-import GenerateHtmlPreview from './GenerateHtmlPreview';
-import { SubmitForApproval } from './SubmitForApproval';
-import VoidButton from './VoidButton';
 import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
+import CancelButton from './CancelButton';
+import CancelEditPartButton from './CancelEditPartButton';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
 import ExportToEmail from './export.to.email/ExportToEmail';
+import GenerateHtmlPreview from './GenerateHtmlPreview';
 import RedlineButton from './redline/Redline.button';
+import { SubmitForApproval } from './SubmitForApproval';
 import UpgradeToLatestContainer from './upgrade.to.latest/UpgradeToLatest.container';
+import VoidButton from './VoidButton';
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isNewLayout = SM.isNewLayout;
@@ -119,6 +120,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
@@ -260,6 +262,15 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
+  const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease;
+
+  if (showCancelEditPartButton) {
+    accessableButtons.push(PreviewControlButtons.CancelEditPartButton);
+  }
+
+  const cancelPartEdit = () => {
+    dispatch(documentRevisionsActions.cancelPartEdit(documentRevision.id));
+  };
 
   if (
     !isRecord
@@ -295,7 +306,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   if (
     !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords)
-    && canShowCancelButton
+    && canShowCancelButton && !showCancelEditPartButton
   ) {
     accessableButtons.push(PreviewControlButtons.CancelButton);
   }
@@ -316,6 +327,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     !(isRecord && isInlineApproval)
     && isUserDocumentOwner
     && showVoidButton
+    && !showCancelEditPartButton
   ) {
     accessableButtons.push(PreviewControlButtons.VoidButton);
   }
@@ -332,10 +344,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const initialButtons
     = accessableButtons.length >= 1
-      ? accessableButtons.slice(0, 1)
+      ? accessableButtons.slice(0, showCancelEditPartButton ? 2 : 1)
       : accessableButtons;
   const restButtons
-    = accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
+    = accessableButtons.length >= 1 ? accessableButtons.slice(showCancelEditPartButton ? 2 : 1) : [];
 
   const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
@@ -358,6 +370,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           renderAsButton={renderAsButton}
         />
       )}
+      {buttons.includes(PreviewControlButtons.CancelEditPartButton) && (
+        <CancelEditPartButton
+          documentRevision = {documentRevision}
+          cancelPartEdit = {cancelPartEdit} />
+      )}
       {buttons.includes(PreviewControlButtons.ApproveAndReleaseButton) && (
         <Observer>
           {() => (
@@ -367,6 +384,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               needsSignature={
                  _documentRevisionFormState?.docInfo.needsSignature || false
               }
+              isBOMExists={_documentRevisionFormState?.isBOMExists}
               isQms={_documentRevisionFormState?.docInfo.isQms || false}
               documentName={_documentRevisionFormState?.docInfo.name || ''}
               docRevId={values.id as string}
@@ -377,6 +395,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 documentTypeId,
                 revisionStage,
                 isInlineApproval,
+                isPart,
               }}
             />
           )}

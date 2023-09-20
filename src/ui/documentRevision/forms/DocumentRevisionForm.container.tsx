@@ -194,11 +194,11 @@ DocumentRevisionFormContainerProps
   }, [documentTypeAcronym]);
 
   // FB config
-  const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType || {};
-  const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
+  const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType ?? {};
+  const { docId: outputGroup } = cleanInitialValues.formDocument?.document ?? {};
+  const isOutput = !isEmpty(outputGroup);
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
-  let mode: Partial<FBWorkspaceMode> = 'none';
+  let mode: FBWorkspaceMode = 'none';
 
   let { schema: originScheme = [] } = (
     (cleanInitialValues)?.formTemplate
