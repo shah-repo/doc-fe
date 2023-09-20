@@ -3,10 +3,8 @@ import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { FBLabel } from '../../../form.builder';
-import Colors from '../../../layout/theme/utils/colors';
+import { labelStyle, styles } from '../GeneralSettings.styles';
 import { GeneralSettingsTabs, PrinterProps } from '../GeneralSettings.types';
-
-const labelProps = { marginTop: '20px', lineHeight: '15px', fontWeight: '600', fontSize: '12px', color: Colors.almost_black };
 
 const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
   collapsed,
@@ -17,26 +15,26 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
   generalSettingsState,
 }) => {
   const { consumerKey, tenantID, printerSerial } = generalSettingsState;
-
+  const classes = styles();
   return (
     <Box paddingLeft={3} paddingRight={3} minWidth="60%">
-      <Collapse in={!collapsed} collapsedHeight={60} style={{ border: '2px lightgrey solid', padding: '20px', borderRadius: '4px' }}>
+      <Collapse in={!collapsed} collapsedHeight={60} className={classes.collapseContainer}>
         <Box display="flex">
           {collapsed ? (
-            <ExpandLess onClick={onCollapsedClick} style={{ color: Colors.navy }} />)
-            : <ExpandMore onClick={onCollapsedClick} style={{ color: Colors.navy }} />
+            <ExpandLess onClick={onCollapsedClick} className={classes.expandIcon} />)
+            : <ExpandMore onClick={onCollapsedClick} className={classes.expandIcon} />
           }
           <FBLabel
             label={GeneralSettingsTabs.Printing}
-            labelProps={{ paddingLeft: '10px', lineHeight: '20px', fontWeight: '600', color: Colors.navy }} />
+            labelProps={labelStyle.printingTitle} />
         </Box>
         <Box paddingLeft={4}>
           <FBLabel label="administration.generalsettings.printing.tab.title"
-            labelProps={{ marginTop: '20px', fontWeight: '600', color: Colors.almost_black  }} />
+            labelProps={labelStyle.printingSubTitle} />
           <Divider />
           <FBLabel
             label="administration.generalsettings.printing.tab.consumer.key"
-            labelProps={labelProps} />
+            labelProps={labelStyle.labelProps} />
           <TextField
             value={consumerKey}
             variant="outlined"
@@ -44,7 +42,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
             onChange={onConsumerKeyChange} />
           <FBLabel
             label="administration.generalsettings.printing.tab.tenant.id"
-            labelProps={labelProps} />
+            labelProps={labelStyle.labelProps} />
           <TextField
             value={tenantID}
             variant="outlined"
@@ -52,7 +50,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
             onChange={onTenantIDChange} />
           <FBLabel
             label="administration.generalsettings.printing.tab.printer.serial"
-            labelProps={labelProps} />
+            labelProps={labelStyle.labelProps} />
           <TextField
             value={printerSerial}
             variant="outlined"

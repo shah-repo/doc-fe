@@ -3,7 +3,7 @@ import React from 'react';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import Text from '../../components/Text';
 import { FBButton, FBLabel } from '../../form.builder';
-import { Colors } from '../../layout/theme-next';
+import { styles } from './GeneralSettings.styles';
 import { GeneralSettingsProps, GeneralSettingsTabs } from './GeneralSettings.types';
 import PrintingContainer from './printing/Printing.container';
 
@@ -14,7 +14,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
   tabValue,
 }) => {
   const classes = KendoGridStyles();
-
+  const generalSettingsStyle = styles();
   return (
     <Grid container >
       <Grid container xs={12} className={classes.headerGridItem}>
@@ -25,7 +25,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
             fontSize={21} />
           <Text translation="administration.generalsettings.sub.title" />
         </Grid>
-        <Grid item xs={4} style={{ display: 'flex', justifyContent: 'end' }}>
+        <Grid item xs={4} className={generalSettingsStyle.saveButton}>
           <FBButton
             label="common.save.changes"
             variant="contained"
@@ -33,7 +33,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
         </Grid>
       </Grid>
       <Grid item lg={12} >
-        <Divider style={{ margin: '0px 32px 0px 28px' }} />
+        <Divider className={generalSettingsStyle.divider} />
         <Box
           padding={4}
           display="flex"
@@ -48,7 +48,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
             <Tab
               value={GeneralSettingsTabs.Printing}
               label={GeneralSettingsTabs.Printing}
-              style={{ backgroundColor: Colors.primaryBg, textTransform: 'none' }} />
+              className={generalSettingsStyle.printingTab} />
           </Tabs>
           {tabValue === GeneralSettingsTabs.Printing && <PrintingContainer generalSettingsState={generalSettingsState} />}
         </Box>
