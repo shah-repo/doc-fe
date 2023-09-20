@@ -40,6 +40,6 @@ export const styles = makeStyles({
   },
   printingTab: {
     backgroundColor: ThemeColors.primaryBg,
-    textTransform: 'none'
-  }
+    textTransform: 'none',
+  },
 });
