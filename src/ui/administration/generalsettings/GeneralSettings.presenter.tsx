@@ -48,19 +48,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
             <Tab
               value={GeneralSettingsTabs.Printing}
               label={GeneralSettingsTabs.Printing}
-              style={{ backgroundColor: Colors.primaryBg }} />
-            <Tab
-              value={GeneralSettingsTabs.AccountCodes}
-              label={GeneralSettingsTabs.AccountCodes}
-              hidden />
-            <Tab
-              value={GeneralSettingsTabs.Navigation}
-              label={GeneralSettingsTabs.Navigation}
-              hidden />
-            <Tab
-              value={GeneralSettingsTabs.APITokens}
-              label={GeneralSettingsTabs.APITokens}
-              hidden />
+              style={{ backgroundColor: Colors.primaryBg, textTransform: 'none' }} />
           </Tabs>
           {tabValue === GeneralSettingsTabs.Printing && <PrintingContainer generalSettingsState={generalSettingsState} />}
         </Box>
