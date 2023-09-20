@@ -62,7 +62,6 @@ export default (theme: Theme) =>
     },
 
     [theme.breakpoints.down('sm')]: {
-
       title: {
         width: '100%',
         marginBottom: theme.spacing(2.5),
