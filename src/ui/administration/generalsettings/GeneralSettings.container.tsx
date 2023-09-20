@@ -7,7 +7,7 @@ import GeneralSettingsState from './GeneralSettings.state';
 import { GeneralSettingsTabs } from './GeneralSettings.types';
 
 const GeneralSettingsContainer: React.FunctionComponent<RouteComponentProps<RouteParams>> = ({
-  match
+  match,
 }) => {
   const generalSettingsState = FB.useRef<GeneralSettingsState>(GeneralSettingsState, {});
   const [value, setValue] = React.useState(GeneralSettingsTabs.Printing);

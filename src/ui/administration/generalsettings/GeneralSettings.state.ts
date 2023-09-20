@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import { first, get, has, isArray, join } from 'lodash';
+import { isArray } from 'lodash';
 import { action, observable, set } from 'mobx';
 import { intl } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
@@ -32,16 +32,6 @@ class GeneralSettingsState {
     set(this, 'printerSerial', printerSerial);
   };
 
-  public onError(error) {
-    let { message } = error;
-    if (isArray(message) && has(first(message), 'message')) {
-      message = join(get(first(message), 'message'), '\n');
-    } else {
-      message = Array.isArray(message) ? message.join('; ') : message;
-    }
-    toastError(message);
-  }
-
   private fetchPrinterData = () => {
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
@@ -59,8 +49,9 @@ class GeneralSettingsState {
         this.setTenantID(tenantId);
         this.setPrinterSerial(printers?.sn);
       })
-      .catch((execption) => {
-        this.onError(execption);
+      .catch((exception) => {
+        const errorMessage = exception?.response?.data?.message;
+        toastError(isArray(errorMessage) ? errorMessage[0] : errorMessage);
       });
   };
 
@@ -71,8 +62,8 @@ class GeneralSettingsState {
         tenantId: String(this.tenantID),
         printers: {
           sn: String(this.printerSerial),
-          isActive: true
-        }
+          isActive: true,
+        },
       }
     };
     const requestConfig: AxiosRequestConfig = {
@@ -93,8 +84,9 @@ class GeneralSettingsState {
         this.setPrinterSerial(printers?.sn);
         toastSuccess(intl.formatMessage({ id: 'administration.generalsettings.save.successful' }));
       })
-      .catch((execption) => {
-        this.onError(execption);
+      .catch((exception) => {
+        const errorMessage = exception?.response?.data?.message;
+        toastError(isArray(errorMessage) ? errorMessage[0] : errorMessage);
       });
   };
 }
