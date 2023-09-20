@@ -64,7 +64,7 @@ class GeneralSettingsState {
           sn: String(this.printerSerial),
           isActive: true,
         },
-      }
+      },
     };
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
