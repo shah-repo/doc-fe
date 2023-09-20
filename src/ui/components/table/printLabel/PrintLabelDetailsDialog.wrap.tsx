@@ -1,6 +1,7 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosRequestConfig } from 'axios';
 import { isEmptyArray } from 'formik';
+import { first, get, has, isArray, join } from 'lodash';
 import moment from 'moment';
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
@@ -136,7 +137,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         revision: initialValues.revision,
         actor: selectedOption?.text,
         lotNumber: initialValues?.lotId?.split('#')[1],
-        lotRevId: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
+        lotRevUrl: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
         serial: serial,
         expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
         printDate: moment(selectedDate).format('MMM DD, YYYY'),
@@ -157,7 +158,15 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
           closeDialog();
         })
-        .catch((exception) => { toastError(intl.formatMessage({ id: 'errors.somethingWentWrong' })); });
+        .catch((exception) => {
+          let { message } = exception;
+          if (isArray(message) && has(first(message), 'message')) {
+            message = join(get(first(message), 'message'), '\n');
+          } else {
+            message = Array.isArray(message) ? message.join('; ') : message;
+          }
+          toastError(message);
+        });
     };
 
     return Component({
