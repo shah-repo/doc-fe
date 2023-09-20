@@ -60,4 +60,19 @@ export default (theme: Theme) =>
     input: {
       marginTop: '5px !important',
     },
+
+    '@media (max-width: 600px)': {
+      title: {
+        width: '100%',
+        marginBottom: '20px',
+        justifyContent: 'space-around',
+      },
+      formStyle: {
+        width: '90%',
+      },
+      submit: {
+        marginLeft: '15px',
+      },
+
+    },
   });
