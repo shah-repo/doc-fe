@@ -47,7 +47,7 @@ class GeneralSettingsState {
         const { apiKey, tenantId, printers } = data?.zebraPrint;
         this.setConsumerKey(apiKey);
         this.setTenantID(tenantId);
-        this.setPrinterSerial(printers?.sn);
+        this.setPrinterSerial(printers[0]?.sn);
       })
       .catch((exception) => {
         const errorMessage = exception?.response?.data?.message;
@@ -60,10 +60,10 @@ class GeneralSettingsState {
       zebraPrint: {
         apiKey: String(this.consumerKey),
         tenantId: String(this.tenantID),
-        printers: {
+        printers: [{
           sn: String(this.printerSerial),
           isActive: true,
-        },
+        }],
       },
     };
     const requestConfig: AxiosRequestConfig = {
@@ -78,10 +78,6 @@ class GeneralSettingsState {
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        const { apiKey, tenantId, printers } = data?.zebraPrint;
-        this.setConsumerKey(apiKey);
-        this.setTenantID(tenantId);
-        this.setPrinterSerial(printers?.sn);
         toastSuccess(intl.formatMessage({ id: 'administration.generalsettings.save.successful' }));
       })
       .catch((exception) => {
