@@ -60,7 +60,6 @@ export default (theme: Theme) =>
     input: {
       marginTop: '5px !important',
     },
-
     [theme.breakpoints.down('sm')]: {
       title: {
         width: '100%',
@@ -70,7 +69,5 @@ export default (theme: Theme) =>
       formStyle: {
         width: '100%',
       },
-
     },
-
   });
