@@ -10,6 +10,7 @@ import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevi
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import Text from '../../../components/Text';
 import { CustomStyleTooltip } from '../../../dashboard.new/line.items/common/CustomStyleTooltip';
+import { attachmentsDisabledChangeControl } from '../../../document.revision/utils/helpers';
 import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
 import { useLatestRevisionId } from '../../../hooks/useLatestRevision';
 import FileIcon from './icon';
@@ -83,7 +84,7 @@ AttachmentIconProps
       onMouseEnter={() => setRemoveHover?.(!disabled)}
       onMouseLeave={() => setRemoveHover?.(false)}
     >
-      <Button
+      { !attachmentsDisabledChangeControl(documentRevisionData) && <Button
         className={classes.removeButton}
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
@@ -102,7 +103,7 @@ AttachmentIconProps
         ) : (
           <RemoveDocument />
         )}
-      </Button>
+      </Button> }
     </Box>
   );
 

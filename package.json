@@ -28,13 +28,16 @@
     "@progress/kendo-react-data-tools": "^4.13.0",
     "@progress/kendo-react-dateinputs": "^4.13.0",
     "@progress/kendo-react-dropdowns": "^4.13.0",
+    "@progress/kendo-react-excel-export": "^5.16.1",
     "@progress/kendo-react-form": "^4.13.0",
     "@progress/kendo-react-grid": "^4.13.0",
     "@progress/kendo-react-inputs": "^4.13.0",
     "@progress/kendo-react-intl": "^4.13.0",
     "@progress/kendo-react-layout": "^4.13.0",
     "@progress/kendo-react-progressbars": "^4.13.0",
+    "@progress/kendo-react-treelist": "^5.14.0",
     "@progress/kendo-react-treeview": "^4.13.0",
+    "@progress/kendo-svg-icons": "^1.5.0",
     "@types/pdf-parse": "^1.1.1",
     "Base64": "^1.1.0",
     "array-move": "2.2.1",
@@ -45,6 +48,7 @@
     "classnames": "2.2.6",
     "copy-to-clipboard": "^3.3.1",
     "crc-32": "^1.2.0",
+    "d3": "^7.8.5",
     "date-fns": "^2.0.0-beta.5",
     "debug": "^4.3.4",
     "dexie": "^3.2.3",
@@ -142,6 +146,7 @@
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.4.0",
     "@types/classnames": "2.2.9",
+    "@types/d3": "^7.4.0",
     "@types/diff": "4.0.2",
     "@types/dompurify": "2.0.1",
     "@types/enzyme": "3.10.4",
@@ -204,5 +209,11 @@
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "d3": "d3/dist/d3.min.js",
+      "d3-array": "d3-array/dist/d3-array.min.js"
+    }
   }
 }

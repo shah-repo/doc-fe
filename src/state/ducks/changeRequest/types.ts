@@ -146,7 +146,6 @@ export interface ChangeRequestAuditSetAction {
 
 export type allIdsState = string[];
 
-// ts-unused-exports:disable-next-line
 export interface DependedDocRevDetails {
   displayRevision: string
   version: number
@@ -156,12 +155,17 @@ export interface DependedDocRevDetails {
   group: DOC_TYPE_GROUP
   id: string
   documentId: string
+  isChecked?: boolean
 }
 
 export interface ChangeRequestDependentOnDocRevsState {
   canBeReleased: boolean
+  itemsInDraft: 0
   itemsPending: 0
+  itemsInvalid: 0
   draftItemsMap: {[key: string]: DependedDocRevDetails[]}
+  blockingItemsMap: {[key: string]: DependedDocRevDetails[]}
+  itemsInvalidMap: {[key: string]: DependedDocRevDetails[]}
   parentDetails: {[key: string]: string}
 }
 

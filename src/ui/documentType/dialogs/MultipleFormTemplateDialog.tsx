@@ -22,7 +22,7 @@ interface DocumentTypeDialogProps extends FormikProps<any> {
   areFormIdsLoading?: boolean
   dialog: DialogHandler
   handleSelection: (id: string) => void
-  handleTemplateSelection: (id: string) => void
+  handleTemplateSelection?: (id: string) => void
   isRecord: boolean
   closeMultipleFormDialog: () => void
   isLHR: boolean
@@ -107,7 +107,6 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       label: renderPartLabel(form),
       value: form.id,
     }));
-
   };
 
   return (
@@ -165,7 +164,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                 size="sm"
                 autocompleteProps={{ id: 'MultipleFormTemplate-selectDocType' }}
                 options={renderOptions()}
-                onClick={(option) => handleTemplateSelection(option.value)}
+                onClick={(option) => handleTemplateSelection?.(option.value)}
                 label={isRecord ? 'record.select.template' : 'supplier.select.form'}
                 data-cy={isRecord ? 'record.select.template' : 'supplier.select.form'}
               />

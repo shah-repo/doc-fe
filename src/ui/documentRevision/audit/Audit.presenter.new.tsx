@@ -437,16 +437,16 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           >
             <>
               {!isFBField && !isSmartRef && isArrayEdited && isDocIdORDescriptionChanged && (
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.auditKey}
-                    >
-                      <Text
-                        dataCy={`change-key-${groupKey}-docId-${key}`}
-                        message={`documentRevision.audit.${change.field}.${change.type}`}
-                        values={{ nextStatus: change.nextValue }}
-                      />
-                    </Typography>
+                <Typography
+                  variant="subtitle1"
+                  className={classes.auditKey}
+                >
+                  <Text
+                    dataCy={`change-key-${groupKey}-docId-${key}`}
+                    message={`documentRevision.audit.${change.field}.${change.type}`}
+                    values={{ nextStatus: change.nextValue }}
+                  />
+                </Typography>
               )}
               {!isFBField && !isSmartRef && !isArrayEdited && (
                 <Typography

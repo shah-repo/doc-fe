@@ -131,7 +131,6 @@ export enum DOC_TYPE_GROUP_OPTION {
   TABS_CONFIG_OPTIONS = 'TABS_CONFIG_OPTIONS',
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
-
 export enum TabTypeOptions {
   TABS_MEQ = 'MEQ',
   DYNAMIC = 'DYNAMIC',
