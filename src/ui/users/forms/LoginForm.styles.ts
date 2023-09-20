@@ -61,18 +61,17 @@ export default (theme: Theme) =>
       marginTop: '5px !important',
     },
 
-    '@media (max-width: 600px)': {
+    [theme.breakpoints.down('sm')]: {
+
       title: {
         width: '100%',
         marginBottom: '20px',
         justifyContent: 'space-around',
       },
       formStyle: {
-        width: '90%',
-      },
-      submit: {
-        marginLeft: '15px',
+        width: '100%',
       },
 
     },
+
   });
