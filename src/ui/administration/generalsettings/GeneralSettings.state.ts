@@ -40,7 +40,7 @@ class GeneralSettingsState {
       message = Array.isArray(message) ? message.join('; ') : message;
     }
     toastError(message);
-  };
+  }
 
   private fetchPrinterData = () => {
     const requestConfig: AxiosRequestConfig = {
