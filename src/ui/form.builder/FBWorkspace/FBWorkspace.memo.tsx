@@ -4,14 +4,14 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from '..';
 import { ReactComponent as AddIcon } from '../../../assets/images/formBuilder/add_icon.svg';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import {
-  DOC_TYPE_GROUP,
-  DocumentGroupType,
+  DocumentGroupType, DOC_TYPE_GROUP,
 } from '../../../state/ducks/documentRevisions/documentType/types';
 import SummaryInfo from '../../common/summary/SummaryInfo';
 import Text from '../../components/Text';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
+import { disableOtherFieldsChangeControl } from '../../document.revision/utils/helpers';
 import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
@@ -58,6 +58,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const isInlineApproval = isFormWithInlineApproval(documentInfo?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(documentInfo?.document?.documentType?.groupOptions);
   const isFirstAlphaReleased = isDocumentAlphaReleased(documentInfo?.revisionStage) && documentInfo?.subRevision === 0;
+  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentInfo);
+
   const renderReleaseDetails = () => (
     <Box>
       <Typography variant="h6" style={{ paddingBottom: 8 }}>
@@ -110,7 +112,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 <Text translation="form.builder.add.step" />
               </Button>
             )}
-          {isStarter && <FBStarter index={size(schema)} />}
+          {isStarter && !inRestrictedEditMode && <FBStarter index={size(schema)} />}
           {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}

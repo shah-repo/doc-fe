@@ -5,7 +5,8 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
-import { GroupTag } from '../../../../state/ducks/auth/types';
+import { getHasPermission } from '../../../../common/utils/selectors';
+import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
@@ -86,6 +87,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
+  const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -314,7 +316,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                                 <FBBOM documentRevision={documentRevision}
-                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm}
+                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm
+                                  || !hasPermissionToEditBOM}
                                   isShowOnly={isPartForm}
                                 />
                               )}

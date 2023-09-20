@@ -219,6 +219,7 @@ export enum Permission {
   DEVELOPERS = 'DEVELOPERS',
   // restricted edit part
   RESTRICTED_PART_EDIT_ADMIN = 'RESTRICTED_PART_EDIT_ADMIN',
+  EDIT_BOM = 'EDIT_BOM',
 }
 
 export enum GroupTag {
