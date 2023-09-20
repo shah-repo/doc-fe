@@ -4,22 +4,14 @@ import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import Text from '../../components/Text';
 import { FBButton, FBLabel } from '../../form.builder';
 import { Colors } from '../../layout/theme-next';
-import GeneralSettingsState from './GeneralSettings.state';
-import { GeneralSettingsTabs } from './GeneralSettings.types';
+import { GeneralSettingsProps, GeneralSettingsTabs } from './GeneralSettings.types';
 import PrintingContainer from './printing/Printing.container';
-
-interface GeneralSettingsProps {
-  generalSettingsState:  GeneralSettingsState
-  onSaveChanges: () => void
-  handleTabChange: (ev: any) => void
-  tabValue: string
-}
 
 const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = ({
   generalSettingsState,
   onSaveChanges,
   handleTabChange,
-  tabValue
+  tabValue,
 }) => {
   const classes = KendoGridStyles();
 
@@ -52,8 +44,6 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
             variant="scrollable"
             value={tabValue}
             onChange={handleTabChange}
-            aria-label="Vertical tabs example"
-            sx={{ borderRight: 1, borderColor: 'divider' }}
           >
             <Tab
               value={GeneralSettingsTabs.Printing}
@@ -62,7 +52,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
             <Tab
               value={GeneralSettingsTabs.AccountCodes}
               label={GeneralSettingsTabs.AccountCodes}
-              />
+              hidden />
             <Tab
               value={GeneralSettingsTabs.Navigation}
               label={GeneralSettingsTabs.Navigation}
@@ -72,7 +62,7 @@ const GeneralSettingsPresenter: React.FunctionComponent<GeneralSettingsProps> = 
               label={GeneralSettingsTabs.APITokens}
               hidden />
           </Tabs>
-          {value === GeneralSettingsTabs.Printing && <PrintingContainer generalSettingsState={generalSettingsState} />}
+          {tabValue === GeneralSettingsTabs.Printing && <PrintingContainer generalSettingsState={generalSettingsState} />}
         </Box>
       </Grid>
     </Grid>

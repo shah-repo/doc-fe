@@ -1651,5 +1651,6 @@
 	"administration.generalsettings.printing.tab.title": "Zebra Cloud Printing",
 	"administration.generalsettings.printing.tab.consumer.key": "Consumer Key",
 	"administration.generalsettings.printing.tab.tenant.id": "Tenant ID",
-	"administration.generalsettings.printing.tab.printer.serial": "Printer Serial"
+	"administration.generalsettings.printing.tab.printer.serial": "Printer Serial",
+	"administration.generalsettings.save.successful": "Save Changes Successfully!"
 }

@@ -13,19 +13,19 @@ const GeneralSettingsContainer: React.FunctionComponent<RouteComponentProps<Rout
   const [value, setValue] = React.useState(GeneralSettingsTabs.Printing);
 
   const onSaveChanges = () => {
-    console.log('------onSaveChanges-----', { generalSettingsState });
+    generalSettingsState.savePrinterData();
   };
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue) => {
-    setValue(newValue);
+  const handleTabChange = (event: React.ChangeEvent<{}>, value: any) => {
+    setValue(value);
   };
 
   return (
     <GeneralSettingsPresenter
-    {... { handleTabChange }}
-    generalSettingsState={generalSettingsState}
-    onSaveChanges={onSaveChanges}
-    tabValue={value} />
+      {... { handleTabChange }}
+      generalSettingsState={generalSettingsState}
+      onSaveChanges={onSaveChanges}
+      tabValue={value} />
   );
 };
 

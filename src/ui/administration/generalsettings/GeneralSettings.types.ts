@@ -7,6 +7,13 @@ export enum GeneralSettingsTabs {
   APITokens = 'API Tokens',
 }
 
+export interface GeneralSettingsProps {
+  generalSettingsState:  GeneralSettingsState
+  onSaveChanges: () => void
+  handleTabChange: (event: React.ChangeEvent<{}>, value: any) => void
+  tabValue: string
+}
+
 export interface PrinterProps {
   collapsed: boolean
   onConsumerKeyChange: (ev: any) => void

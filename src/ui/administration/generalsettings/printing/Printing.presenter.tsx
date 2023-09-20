@@ -1,5 +1,6 @@
 import { Box, Collapse, Divider, TextField } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import { observer } from 'mobx-react';
 import React from 'react';
 import { FBLabel } from '../../../form.builder';
 import Colors from '../../../layout/theme/utils/colors';
@@ -13,10 +14,10 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
   onTenantIDChange,
   onPrinterSerialChange,
   onCollapsedClick,
-  generalSettingsState
+  generalSettingsState,
 }) => {
-  console.log('----collapsed-----', { collapsed });
   const { consumerKey, tenantID, printerSerial } = generalSettingsState;
+
   return (
     <Box paddingLeft={3} paddingRight={3} minWidth="60%">
       <Collapse in={!collapsed} collapsedHeight={60} style={{ border: '2px lightgrey solid', padding: '20px', borderRadius: '4px' }}>
@@ -63,4 +64,4 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
   );
 };
 
-export default PrintingPresenter;
+export default observer(PrintingPresenter);

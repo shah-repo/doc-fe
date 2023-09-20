@@ -1,4 +1,11 @@
+import { AxiosRequestConfig } from 'axios';
+import { first, get, has, isArray, join } from 'lodash';
 import { action, observable, set } from 'mobx';
+import { intl } from '../../../common/intl';
+import apiClient from '../../../state/apiClient';
+import { store } from '../../../state/store';
+import { toastError, toastSuccess } from '../../components/notifications';
+import { COMPANY_SETTINGS_URL } from '../../constants/urls';
 import { PrinterProps } from './GeneralSettings.types';
 
 class GeneralSettingsState {
@@ -10,6 +17,7 @@ class GeneralSettingsState {
     this.consumerKey = consumerKey;
     this.tenantID = tenantID;
     this.printerSerial = printerSerial;
+    this.fetchPrinterData();
   }
 
   @action public setConsumerKey = (consumerKey: string) => {
@@ -22,6 +30,72 @@ class GeneralSettingsState {
 
   @action public setPrinterSerial = (printerSerial: string) => {
     set(this, 'printerSerial', printerSerial);
+  };
+
+  public onError(error) {
+    let { message } = error;
+    if (isArray(message) && has(first(message), 'message')) {
+      message = join(get(first(message), 'message'), '\n');
+    } else {
+      message = Array.isArray(message) ? message.join('; ') : message;
+    }
+    toastError(message);
+  };
+
+  private fetchPrinterData = () => {
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: COMPANY_SETTINGS_URL,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        const { apiKey, tenantId, printers } = data?.zebraPrint;
+        this.setConsumerKey(apiKey);
+        this.setTenantID(tenantId);
+        this.setPrinterSerial(printers?.sn);
+      })
+      .catch((execption) => {
+        this.onError(execption);
+      });
+  };
+
+  @action public savePrinterData = () => {
+    const param = {
+      zebraPrint: {
+        apiKey: String(this.consumerKey),
+        tenantId: String(this.tenantID),
+        printers: {
+          sn: String(this.printerSerial),
+          isActive: true
+        }
+      }
+    };
+    const requestConfig: AxiosRequestConfig = {
+      method: 'post',
+      url: COMPANY_SETTINGS_URL,
+      data: param,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        const { apiKey, tenantId, printers } = data?.zebraPrint;
+        this.setConsumerKey(apiKey);
+        this.setTenantID(tenantId);
+        this.setPrinterSerial(printers?.sn);
+        toastSuccess(intl.formatMessage({ id: 'administration.generalsettings.save.successful' }));
+      })
+      .catch((execption) => {
+        this.onError(execption);
+      });
   };
 }
 
