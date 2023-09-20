@@ -11,7 +11,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
   onConsumerKeyChange,
   onTenantIDChange,
   onPrinterSerialChange,
-  onCollapsedClick,
+  onCollapsedToggle,
   generalSettingsState,
 }) => {
   const { consumerKey, tenantID, printerSerial } = generalSettingsState;
@@ -21,8 +21,8 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
       <Collapse in={!collapsed} collapsedHeight={60} className={classes.collapseContainer}>
         <Box display="flex">
           {collapsed ? (
-            <ExpandLess onClick={onCollapsedClick} className={classes.expandIcon} />)
-            : <ExpandMore onClick={onCollapsedClick} className={classes.expandIcon} />
+            <ExpandLess onClick={onCollapsedToggle} className={classes.expandIcon} />)
+            : <ExpandMore onClick={onCollapsedToggle} className={classes.expandIcon} />
           }
           <FBLabel
             label={GeneralSettingsTabs.Printing}

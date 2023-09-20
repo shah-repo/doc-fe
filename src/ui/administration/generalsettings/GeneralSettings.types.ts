@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import GeneralSettingsState from './GeneralSettings.state';
 
 export enum GeneralSettingsTabs {
@@ -16,10 +17,10 @@ export interface GeneralSettingsProps {
 
 export interface PrinterProps {
   collapsed: boolean
-  onConsumerKeyChange: (ev: any) => void
-  onTenantIDChange: (ev: any) => void
-  onPrinterSerialChange: (ev: any) => void
-  onCollapsedClick: () => void
+  onConsumerKeyChange: (ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>)
+  onTenantIDChange: (ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>)
+  onPrinterSerialChange: (ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>)
+  onCollapsedToggle: () => void
   generalSettingsState: GeneralSettingsState
   consumerKey?: string
   tenantID?: string
