@@ -32,7 +32,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
         </Box>
         <Box paddingLeft={4}>
           <FBLabel label="administration.generalsettings.printing.tab.title"
-            labelProps={{ marginTop: '20px' }} />
+            labelProps={{ marginTop: '20px', fontWeight: '600', color: Colors.almost_black  }} />
           <Divider />
           <FBLabel
             label="administration.generalsettings.printing.tab.consumer.key"
