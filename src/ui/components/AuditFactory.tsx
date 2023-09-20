@@ -307,7 +307,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <>
               { docId && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.docId-updated"
+                translation="documentRevision.audit.bomParts.docId.updated"
                 values={{
                   docId,
                 }}
@@ -315,25 +315,25 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               }
               { quantity && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.quantity-updated"
+                translation="documentRevision.audit.bomParts.quantity.updated"
                 values={{ quantity }}
               />
               }
               { unit && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.unit-updated"
+                translation="documentRevision.audit.bomParts.unit.updated"
                 values={{ unit }}
               />
               }
               { refDesignator && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.refDesignator-updated"
+                translation="documentRevision.audit.bomParts.refDesignator.updated"
                 values={{ refDesignator }}
               />
               }
               { comment && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.comment-updated"
+                translation="documentRevision.audit.bomParts.comment.updated"
                 values={{ comment }}
               />
               }
@@ -346,7 +346,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <>
               { docId && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.docId-added"
+                translation="documentRevision.audit.bomParts.docId.added"
                 values={{
                   docId,
                 }}
@@ -354,25 +354,25 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               }
               { quantity && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.quantity-added"
+                translation="documentRevision.audit.bomParts.quantity.added"
                 values={{ quantity }}
               />
               }
               { unit && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.unit-added"
+                translation="documentRevision.audit.bomParts.unit.added"
                 values={{ unit }}
               />
               }
               { refDesignator && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.refDesignator-added"
+                translation="documentRevision.audit.bomParts.refDesignator.added"
                 values={{ refDesignator }}
               />
               }
               { comment && <Text
                 dataCy={dataCy}
-                translation="documentRevision.audit.bomParts.comment-added"
+                translation="documentRevision.audit.bomParts.comment.added"
                 values={{ comment }}
               />
               }
