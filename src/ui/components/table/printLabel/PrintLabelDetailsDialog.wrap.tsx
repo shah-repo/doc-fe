@@ -1,7 +1,7 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosRequestConfig } from 'axios';
 import { isEmptyArray } from 'formik';
-import { first, get, has, isArray, join } from 'lodash';
+import { isArray } from 'lodash';
 import moment from 'moment';
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
@@ -159,13 +159,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           closeDialog();
         })
         .catch((exception) => {
-          let { message } = exception;
-          if (isArray(message) && has(first(message), 'message')) {
-            message = join(get(first(message), 'message'), '\n');
-          } else {
-            message = Array.isArray(message) ? message.join('; ') : message;
-          }
-          toastError(message);
+          const errorMessage = exception?.response?.data?.message;
+          toastError(isArray(errorMessage) ? errorMessage[0] : errorMessage);
         });
     };
 
