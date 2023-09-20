@@ -399,7 +399,7 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
   },
   tableContainer: {
-    paddingTop: theme.spacing(2.5),
+    // paddingTop: theme.spacing(2.5),
   },
   bottomAddButtom: {
     width: '100%',
