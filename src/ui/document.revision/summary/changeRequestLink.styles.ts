@@ -3,9 +3,15 @@ import Colors from '../../layout/theme/utils/colors';
 
 export default makeStyles((theme) =>
   createStyles({
+    arLinkContainer: {
+      fontSize: 14,
+      fontWeight: 600,
+      lineHeight: '25px',
+    },
     link: {
       textDecoration: 'none',
-      fontSize: '14px',
+      fontSize: 14,
+      fontWeight: 600,
     },
 
     listItemPadding: {
@@ -18,6 +24,7 @@ export default makeStyles((theme) =>
       position: 'relative',
       left: theme.spacing(-2),
       opacity: 0,
+      top: 5,
       fontSize: '1.2rem',
       cursor: 'pointer',
 
@@ -28,7 +35,6 @@ export default makeStyles((theme) =>
     },
 
     linkContainer: {
-      display: 'flex',
       alignItems: 'center',
 
       '&:hover': {

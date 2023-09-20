@@ -200,7 +200,7 @@ export default makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         fontWeight: 600,
-        textTransform: 'uppercase',
+        fontSize: 14,
       },
       '& .k-grid-column-menu': {
         top: theme.spacing(0.5),
