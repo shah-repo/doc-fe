@@ -2,7 +2,9 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import NoDataFound from '../../../../components/common/kendo/NoDataFound';
@@ -19,6 +21,9 @@ import useStyles from './styles';
 
 const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId, isDisabled }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { _documentRevisionFormState } = SM.useStores();
+  const basePartNodeRevId = _documentRevisionFormState?.documentRevision?.id ?? '';
 
   const fetchAlternateParts = useActionCreator(
     documentRevisionsActions.fetchAlternateParts,
@@ -39,6 +44,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
         {
           parentNodeRevId: parentRevId,
           alternatePartNodeRevId: values.id,
+          basePartNodeRevId,
         },
         alternatePartAsync,
       );
@@ -51,6 +57,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
         parentRevId,
         fetchAlternatePartAsync,
       );
+      dispatch(documentRevisionsActions.loadAudit(basePartNodeRevId));
     },
     onError: (response) => {
       toastError(response);
@@ -95,6 +102,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
       alternatePartAsync.start(
         deleteAlternateParts,
         parentRevId,
+        basePartNodeRevId,
         dataItem.id,
         alternatePartAsync,
       );

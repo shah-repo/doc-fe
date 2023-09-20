@@ -30,6 +30,7 @@ import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
@@ -69,6 +70,7 @@ import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
+  const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
 
   const classes = useStyles({ size });
@@ -128,6 +130,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
         documentRevision.documentId,
         treeListAsync,
       );
+      dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
     },
     onError: (response) => {
       toastError(response);

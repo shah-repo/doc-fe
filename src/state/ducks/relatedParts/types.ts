@@ -53,3 +53,10 @@ export interface ListItemUpdateData {
   suffixName?: string
   rootDocId?: string
 }
+export interface BOMTreeData {
+  docId?: string
+  quantity?: string
+  unit?: string
+  refDesignator?: string
+  comment?: string
+}
