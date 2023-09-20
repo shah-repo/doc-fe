@@ -197,4 +197,9 @@ export const styles = makeStyles((theme) => ({
     padding: theme.spacing(0.5, 1.5),
     cursor: 'pointer',
   },
+  filterCell: {
+    '& .k-filtercell': {
+      width: 72,
+    },
+  },
 }));

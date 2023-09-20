@@ -1,7 +1,7 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { translate } from '../../../../../common/intl';
-import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import ARIDCell from './column.templates/ARIDCell';
+import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import AttachmentCell from './column.templates/AttachmentCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
@@ -19,12 +19,15 @@ import { Status } from './column.templates/Status';
 import TitleCell from './column.templates/TitleCell';
 import UnitCell from './column.templates/UnitCell';
 import { VendorsCell } from './column.templates/VendorsCell';
+import YesNoOptionsFilter from './column.templates/YesNoOptionsFilter';
 import { AlternatePartsList } from './header.templates/AlternatePartsList';
 import { Attachments } from './header.templates/Attachments';
 import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 import { CustomTreeListColumnProps } from './interface';
+import React from 'react';
+import CountFilter from './column.templates/CountFilter';
 
 export const TreeColumns: CustomTreeListColumnProps[] = [
   {
@@ -152,6 +155,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.hasPrimaryAttachment.title'),
     width: 81,
+    filterCell: YesNoOptionsFilter,
     mainOrderIndex: 13,
     headerCell: PrimaryAttachments,
     cell: PrimaryAttachmentsCell,
@@ -161,6 +165,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.hasAttachments.title'),
     width: 80,
+    filterCell: YesNoOptionsFilter,
     mainOrderIndex: 14,
     headerCell: Attachments,
     cell: AttachmentCell,
@@ -170,7 +175,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.issues.title'),
     width: 80,
-    filter: TreeListTextFilter,
+    filterCell: YesNoOptionsFilter,
     mainOrderIndex: 15,
     cell: BooleanCell,
     headerCell: Issues,
@@ -182,6 +187,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.vendorsCount.title'),
     width: 80,
     cell: VendorsCell,
+    filterCell: (props) => <CountFilter {...props} field="vendorsCount" />,
     mainOrderIndex: 16,
     headerCell: Vendors,
   },
@@ -190,6 +196,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     locked: false,
     title: translate('bom.treelist.treeColumns.field.alternatePartsList.title'),
     width: 80,
+    filterCell: (props) => <CountFilter {...props} field="alternatePartsCount" />,
     cell: AlternatePartsCell,
     mainOrderIndex: 17,
     headerCell: AlternatePartsList,
