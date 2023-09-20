@@ -9,6 +9,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
+  TreeListFilterChangeEvent,
   TreeListRowDragEvent,
   extendDataItem,
   filterBy,
@@ -19,8 +20,7 @@ import {
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, has, isEmpty,
-  map,
+  chain, get, has, isEmpty, isNil, map,
   omit,
   replace,
   tail,
@@ -31,6 +31,7 @@ import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
@@ -68,8 +69,9 @@ import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, showBOMDiff = false, isShowOnly = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
+  const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
 
   const classes = useStyles({ size });
@@ -97,11 +99,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       parentRevDetails: BOM
     }) => {
       formik.setValues({});
+      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       const bomProccessedData = processBOMData(
-        bomTreeRelations,
+        [...bomTreeRelations],
         parentRevDetails,
       );
-      _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       updateState({
         ...state,
         data: [...bomProccessedData],
@@ -129,6 +131,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         documentRevision.documentId,
         treeListAsync,
       );
+      dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
     },
     onError: (response) => {
       toastError(response);
@@ -214,7 +217,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
 
   const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
   const fetchHasATreeAsync = useAsync({
-    onSuccess: (statusObj: BOM) => {
+    onSuccess: (statusObj: BOM | undefined) => {
       if (statusObj && statusObj[documentRevision?.id]) {
         setShowTree(true);
       }
@@ -268,7 +271,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     if (docIDField) {
       filter?.splice(docIDFieldIndex, 1, { ...docIDField, field: DOC_ID_FIELD });
     }
-    const filteredData = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+    const filteredData
+  = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
       = dataState.sort
       && filteredData
@@ -372,7 +376,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled || !dataItem.isParentOwner) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -479,12 +483,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   };
 
   useObserver(() => {
-    showBOMDiff = Boolean(_documentRevisionFormState?.showBOMDiff);
+    isDiffViewEnabled = Boolean(_documentRevisionFormState?.isDiffViewEnabled);
   });
   const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
-    _documentRevisionFormState?.toggleShowBOMDiff();
-    if (showBOMDiff) {
+    _documentRevisionFormState?.toggleDiffView();
+    if (isDiffViewEnabled) {
       updateState({
         ...state,
         expanded: [state.data[0].id],
@@ -497,7 +501,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
-    if (item.isDeleted && !_documentRevisionFormState?.showBOMDiff) {
+    if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }
 
@@ -508,11 +512,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.isDeleted || (showBOMDiff && item.replacementStatus),
-        [classes.inprogressBg]: item.inProgress && showBOMDiff,
+        [classes.deletedBg]: item.isDeleted || (isDiffViewEnabled && item.replacementStatus),
+        [classes.inprogressBg]: item.inProgress && isDiffViewEnabled,
       }),
     };
-    if (!item[MODE_FIELD]) {
+    if (!item[MODE_FIELD] || (!isNil(item.isEditEnabled) && !item.isEditEnabled) || (!isNil(item.isEditEnabled) && !item.isParentOwner)) {
       return React.cloneElement(row, modifiedProps);
     }
     const isOwner = item.isOwner;
@@ -552,7 +556,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
       ids.push(item.id);
       if (
         item[SUB_ITEMS_FIELD]
-        && (item?.depth || 0) < 2
         && !isEmpty(item[SUB_ITEMS_FIELD])
       ) {
         ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD] as BOM[]));
@@ -621,7 +624,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
         <Grid
           item
           data-cy="collapse-expand-collapse"
-          className={classes.toggleExpandCollapse}
+          className={cx(classes.toggleExpandCollapse, { [classes.disabled]: isShowOnly })}
         >
           <span onClick={handleExpandAll}>
             {translate('common.expand.all')} /{' '}
@@ -634,19 +637,20 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
           <Grid container justify="flex-end">
             {showDiffView && <Grid item
               data-cy="show-hide-diff"
-              className={classes.diffContainer}
+              className={cx(classes.diffContainer, { [classes.disabled]: isShowOnly })}
             >
               <span className={classes.toggleIconContainer} onClick={showHideDiff}>
                 <FontAwesomeIcon
                   className={classes.toggleIcon}
                   size="lg"
-                  icon={showBOMDiff ? regular('toggle-large-on') : regular('toggle-large-off')}
+                  icon={isDiffViewEnabled ? regular('toggle-large-on') : regular('toggle-large-off')}
                 />
-                <span className={classes.toggleIconLabel}>{translate(showBOMDiff ? 'bom.hide.diff' : 'bom.show.diff')}</span>
+                <span className={classes.toggleIconLabel}>{translate(isDiffViewEnabled ? 'bom.hide.diff' : 'bom.show.diff')}</span>
               </span>
             </Grid>}
             <Grid item
               data-cy="excel-export"
+              className ={cx({ [classes.disabled]: isShowOnly })}
             >
               <StyleTooltip
                 title={translate('common.download')}
@@ -658,6 +662,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
             </Grid>
             { showTree && <Grid item
               data-cy="where-used-view"
+              className ={cx({ [classes.disabled]: isShowOnly })}
             >
               <StyleTooltip
                 title={translate('bom.whereUsed.dialog.title')}
@@ -669,7 +674,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
                 />
               </StyleTooltip>
             </Grid>}
-            <Grid item data-cy="show-hide-columns">
+            <Grid item data-cy="show-hide-columns" className ={cx({ [classes.disabled]: isShowOnly })}>
               <ColumnShowHideTreeMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
@@ -705,6 +710,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
+  const onFilterChange = (event: TreeListFilterChangeEvent) => {
+    const { dataState, data } = state;
+    dataState.filter = event.filter;
+    const expanded = getAllItemIds(data);
+    updateState({
+      ...state,
+      dataState: dataState,
+      expanded: isEmpty(event.filter) ? data[0]?.id : expanded,
+    });
+  };
+
   const onLock = React.useCallback(
     ({
       field,
@@ -724,6 +740,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
   );
 
   const onRowDrop = (event: TreeListRowDragEvent) => {
+    if (isDisabled) {
+      return false;
+    }
     if (
       event?.draggedOver
       && hasSameParent(event?.dragged, event?.draggedOver)
@@ -832,6 +851,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, sho
                     )}
                     onRowClick={editBOM}
                     onColumnReorder={onColumnReorder}
+                    onFilterChange={onFilterChange}
                     resizable={TREELIST_CONFIG.resizable}
                     reorderable={TREELIST_CONFIG.reorderable}
                     sortable={TREELIST_CONFIG.sortable}
