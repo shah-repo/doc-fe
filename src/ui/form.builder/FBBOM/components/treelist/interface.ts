@@ -8,7 +8,7 @@ import { ALTERNATE_PART_KEY } from './constants';
 export interface FBBOMProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
-  showBOMDiff?: boolean
+  isDiffViewEnabled?: boolean
   isShowOnly?: boolean
 }
 
@@ -26,6 +26,7 @@ interface DataState {
 
 export interface FBBOMDrawerTableProps {
   parentRevId?: string
+  isDisabled?: boolean
 }
 
 export interface EditableAlternatePart extends AlternatePart {
@@ -36,7 +37,7 @@ export interface AlternatePartEditEvent {
   dataItem: EditableAlternatePart
 }
 
-interface AlternatePart {
+export interface AlternatePart {
   id: string
   name?: string
   revision?: string

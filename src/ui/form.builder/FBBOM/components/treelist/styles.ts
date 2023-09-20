@@ -200,6 +200,7 @@ export default makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         fontWeight: 600,
+        textTransform: 'uppercase',
       },
       '& .k-grid-column-menu': {
         top: theme.spacing(0.5),
@@ -523,6 +524,9 @@ export default makeStyles((theme) => ({
   },
   statusPendingChange: {
     fill: Colors.statusPendingChange,
+  },
+  disabled: {
+    pointerEvents: 'none',
   },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',

@@ -9,7 +9,7 @@ import { CustomTemplateProps } from '../types';
 export const RevCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const { values } = useFormikContext<EditableAlternatePart>();
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
-  const displayValue = (isAddMode ? values.revision : dataItem[field]) as string;
+  const displayValue = (isAddMode ? values[field] : dataItem[field]) as string;
 
   const onRowClick = (evt) => {
     evt.preventDefault();

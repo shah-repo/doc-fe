@@ -4,3 +4,11 @@ import { AlternatePartEditEvent, EditableAlternatePart } from '../treelist/inter
 export interface CustomTemplateProps extends CellTemplateProps<EditableAlternatePart> {
   onClick?: (event: AlternatePartEditEvent) => void
 }
+
+export interface SchemaOptions {
+  actionsClass: string
+  onConfirm?: () => void
+  onDiscard?: () => void
+  onDelete?: (dataItem) => void
+  isDisabled?: boolean
+}

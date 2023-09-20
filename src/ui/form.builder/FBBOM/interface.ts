@@ -47,8 +47,9 @@ export interface EditableBOM extends BOM {
   childNodeDocumentId?: string
   newChildNodeRevId?: string
   isParentOwner?: boolean
+  isEditEnabled?: boolean
   alternatePartsCount?: number
-  attachmentNames: string[]
+  attachmentNames?: string[]
   isDisabled?: boolean
   replacementStatus?: string
 }

@@ -9,13 +9,12 @@ interface Props extends FBInputProps {
 }
 
 const FBNumericField: React.FunctionComponent<Props> = ({
-  name,
   ...props
 }) => {
   const { formState } = FB.useStores();
   const prefix = props[ADDITIONAL_SETTINGS].prefix;
   const suffix = props[ADDITIONAL_SETTINGS].suffix;
-  const fieldValue = props.defaultValue ?? formState?.getFieldValue(name);
+  const fieldValue = props.defaultValue ?? formState?.getFieldValue(props.name);
   const defaultValue = fieldValue && `${prefix ?? ''}${fieldValue}${suffix ?? ''}`;
 
   const InputProps = {
