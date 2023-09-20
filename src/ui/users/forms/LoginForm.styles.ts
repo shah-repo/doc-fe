@@ -65,7 +65,7 @@ export default (theme: Theme) =>
 
       title: {
         width: '100%',
-        marginBottom: '20px',
+        marginBottom: theme.spacing(2.5),
         justifyContent: 'space-around',
       },
       formStyle: {
