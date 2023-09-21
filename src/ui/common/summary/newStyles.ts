@@ -22,9 +22,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: '14px',
       color: Colors.navy,
     },
-    container: {
-      paddingTop: '6px !important',
-    },
     title: {
       fontWeight: 600,
       fontSize: '19px',

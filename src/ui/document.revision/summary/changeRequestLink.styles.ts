@@ -16,6 +16,7 @@ export default makeStyles((theme) =>
 
     listItemPadding: {
       padding: 0,
+      paddingBottom: theme.spacing(1),
     },
 
     viewIcon: {

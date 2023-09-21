@@ -28,13 +28,11 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
           type !== 'newOutput' && _documentRevisionFormState?.documentRevision
             && <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
         }
-        <Box>
-          <Title
-            name="name"
-            documentTypeId={documentTypeId}
-            disabled={isDisabledInput || inRestrictedEditMode}
-          />
-        </Box>
+        <Title
+          name="name"
+          documentTypeId={documentTypeId}
+          disabled={isDisabledInput || inRestrictedEditMode}
+        />
         <Description
           isQms={_documentRevisionFormState?.docInfo.isQms || false}
           documentTypeId={documentTypeId}
