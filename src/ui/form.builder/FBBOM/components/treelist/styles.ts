@@ -136,7 +136,6 @@ export default makeStyles((theme) => ({
           clipPath: 'inset(0 0 0 -20px)',
         },
         '&.k-grid-header-sticky': {
-          backgroundColor: BASE_COLOR,
           border: 'none',
           borderRight: `1px solid ${Colors.white}`,
 
