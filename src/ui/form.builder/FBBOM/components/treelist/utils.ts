@@ -1,8 +1,5 @@
 import { isNil } from 'lodash';
-import Config from '../../../../../config';
 import { DocumentRevisionStatusDisplay } from '../../../../../state/ducks/documentRevisions/types';
-import { changeRequestPreviewPath } from '../../../../change.request/utils/paths';
-import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../helpers';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
@@ -118,20 +115,4 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
 
 export const getChildPartId = (part: EditableBOM): string => {
   return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
-};
-
-const getDocLink = (part: EditableBOM): string => {
-  return `${Config.FrontendUrl}${documentPreviewPath(getChildPartId(part), part.documentId ?? '')}`;
-};
-
-const getCrDocLink = (arId: string): string => {
-  return `${Config.FrontendUrl}${changeRequestPreviewPath(arId)}`;
-};
-
-export const getHyperLinkForIdCell = (part: EditableBOM, value?: string): string => {
-  return `=HYPERLINK("${getDocLink(part)}", "${value ?? '-'}")`;
-};
-
-export const getHyperLinkForArIdCell = (arId: string, value?: string): string => {
-  return `=HYPERLINK("${getCrDocLink(arId)}", "${value ?? '-'}")`;
 };
