@@ -43,7 +43,8 @@ export default makeStyles((theme) => ({
       color: Colors.textBlack,
     },
     '.k-grid-toolbar': {
-      padding: theme.spacing(1.25, 2, 0),
+      padding: theme.spacing(0.625, 1.875, 0.625, 1.875),
+      height: 34,
       backgroundColor: Colors.hover,
       border: 'none',
       overflow: 'hidden',
@@ -136,7 +137,6 @@ export default makeStyles((theme) => ({
           clipPath: 'inset(0 0 0 -20px)',
         },
         '&.k-grid-header-sticky': {
-          backgroundColor: BASE_COLOR,
           border: 'none',
           borderRight: `1px solid ${Colors.white}`,
 
@@ -200,7 +200,7 @@ export default makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         fontWeight: 600,
-        textTransform: 'uppercase',
+        fontSize: 12,
       },
       '& .k-grid-column-menu': {
         top: theme.spacing(0.5),
@@ -258,6 +258,19 @@ export default makeStyles((theme) => ({
       margin: theme.spacing(0.5, 0),
       borderRadius: theme.shape.borderRadius / 2,
       overflow: 'hidden',
+    },
+    '.k-list-container': {
+      '& > .k-popup': {
+        '& .k-state-selected': {
+          color: Colors.textBlack,
+          backgroundColor: Colors.primaryHighlight,
+
+          '&:hover': {
+            color: Colors.textBlack,
+            backgroundColor: Colors.primaryHighlight,
+          },
+        },
+      },
     },
     '.k-grid-columnmenu-popup': {
       '& .k-columnmenu-item': {
@@ -397,9 +410,7 @@ export default makeStyles((theme) => ({
     fontSize: 12,
     fontWeight: 400,
     cursor: 'pointer',
-  },
-  tableContainer: {
-    paddingTop: theme.spacing(2.5),
+    height: 24,
   },
   bottomAddButtom: {
     width: '100%',
@@ -441,31 +452,30 @@ export default makeStyles((theme) => ({
   },
   viewIcon: {
     fill: Colors.textBlack,
-    marginRight: theme.spacing(0.625),
-    padding: theme.spacing(1),
-    width: 22,
-    height: 17,
+    paddingRight: theme.spacing(1.25),
+    width: 14,
+    height: 14,
     cursor: 'pointer',
   },
   exportExcelIcon: {
     color: Colors.textBlack,
-    padding: theme.spacing(1.25),
-    width: 13,
-    height: 17,
+    paddingRight: theme.spacing(1.25),
+    width: 14,
+    height: 14,
     cursor: 'pointer',
   },
   diffContainer: {
-    paddingTop: theme.spacing(0.625),
-    height: 17,
+    height: 14,
     cursor: 'pointer',
   },
   toggleIconContainer: {
-    paddingRight: theme.spacing(0.625),
-    verticalAlign: 'sub',
+    paddingRight: theme.spacing(1.25),
   },
   toggleIcon: {
     color: Colors.primaryLight,
     cursor: 'pointer',
+    height: 14,
+    width: 14,
   },
   toggleIconLabel: {
     fontSize: 12,
@@ -527,6 +537,9 @@ export default makeStyles((theme) => ({
   },
   disabled: {
     pointerEvents: 'none',
+  },
+  toolbarContainer: {
+    height: 24,
   },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',

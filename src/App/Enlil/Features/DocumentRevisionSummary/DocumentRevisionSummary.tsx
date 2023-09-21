@@ -119,7 +119,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
-      headerBoxProps={{ maxHeight: '30%', minHeight: 84 }}
+      headerBoxProps={{ maxHeight: '30%', minHeight: 76 }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={documentRevision}
       header= {

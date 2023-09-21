@@ -1,6 +1,7 @@
 import { Link, Popover, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import React, { useState } from 'react';
 import { MomentFormats } from '../../../common/utils/date';
+import { STATUS_TYPES_LABEL } from '../../../state/ducks/dashboard.new/my.feeds/types';
 
 import { IAssociatedChangeRequest } from '../../../state/ducks/documentRevisions/types';
 import DateTime from '../../components/DateTime';
@@ -32,9 +33,12 @@ const ApprovalRequestTable: React.FunctionComponent<Props> = ({
       <TableBody>
         {associatedChangeRequests.map((changeRequest) => (
           <TableRow key={changeRequest.crId}>
-            { ['crId', 'revChanges', 'title', 'owner', 'state'].map((fieldName) =>
+            { ['crId', 'revChanges', 'title', 'owner'].map((fieldName) =>
               <TableCell>{changeRequest[fieldName]}</TableCell>,
             )}
+            <TableCell>
+              {STATUS_TYPES_LABEL[changeRequest.state]}
+            </TableCell>
             <TableCell>
               <DateTime
                 value={changeRequest.updatedAt}

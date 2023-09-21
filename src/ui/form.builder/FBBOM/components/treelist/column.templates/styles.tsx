@@ -17,6 +17,20 @@ export const styles = makeStyles((theme) => ({
     color: Colors.lochmara,
     cursor: 'pointer',
   },
+  levelWidth: {
+    width: '22px !important',
+  },
+  levelWithRevIcon: {
+    width: '8px !important',
+  },
+  defaultIcon: {
+    height: 14,
+    width: 14,
+  },
+  disabled: {
+    color: Colors.gray,
+    pointerEvents: 'none',
+  },
   title: {
     display: 'flex',
   },
@@ -47,7 +61,7 @@ export const styles = makeStyles((theme) => ({
   },
   nameCell: (props) => ({
     'vertical-align': 'middle',
-    marginLeft: props.isEditMode ? 0 : theme.spacing(1.875),
+    marginLeft: props.isEditMode ? 0 : theme.spacing(1),
   }),
   titleInfoCell: (props) => ({
     maxWidth: 300,
@@ -119,12 +133,13 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   infoIcon: (props) => ({
-    marginRight: props?.hasChildren ? theme.spacing(1.5) : 0,
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(-1),
     cursor: 'pointer',
   }),
   ownerIcon: {
     color: ThemeColors.primaryLight,
-    marginLeft: theme.spacing(1.5),
+    marginLeft: theme.spacing(1),
   },
   childePartAddIcon: {
     color: ThemeColors.primaryLight,
@@ -199,7 +214,10 @@ export const styles = makeStyles((theme) => ({
   },
   filterCell: {
     '& .k-filtercell': {
-      width: 72,
+      width: 66,
     },
+  },
+  unitCell: {
+    width: 140,
   },
 }));

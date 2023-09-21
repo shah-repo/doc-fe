@@ -67,6 +67,7 @@ export enum DocumentCategory {
   Supplier = 'Supplier',
   Equipment = 'Equipment',
   TrainingCurriculums = 'Training Curriculums',
+  Lot = 'Lot',
 }
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',
@@ -182,6 +183,8 @@ interface Precalc {
   pm_due_date?: string
   lshs_subtitle?: LSHS
   lot_on_hand_quantity?: string
+  lot_part?: string
+  lot_part_revision?: string
 }
 
 interface DocumentsInLHRS {

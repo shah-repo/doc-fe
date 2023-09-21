@@ -16,7 +16,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
 }) => {
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   return (
-    <Box minHeight={isCreateUrl ? 64 : 84 }>
+    <Box minHeight={isCreateUrl ? 64 : 76 }>
       <Observer>
         {() => (
           <FormHeader

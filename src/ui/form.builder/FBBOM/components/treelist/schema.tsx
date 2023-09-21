@@ -1,12 +1,14 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
-import ARIDCell from './column.templates/ARIDCell';
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
+import ARIDCell from './column.templates/ARIDCell';
 import AttachmentCell from './column.templates/AttachmentCell';
 import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
 import CostRollupCell from './column.templates/CostRollupCell';
+import CountFilter from './column.templates/CountFilter';
 import DropdownFilterCell from './column.templates/DropDownFilterCell';
 import HasChangesCell from './column.templates/HasChangesCell';
 import IDCell from './column.templates/IDCell';
@@ -26,8 +28,6 @@ import { Issues } from './header.templates/Issues';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 import { CustomTreeListColumnProps } from './interface';
-import React from 'react';
-import CountFilter from './column.templates/CountFilter';
 
 export const TreeColumns: CustomTreeListColumnProps[] = [
   {
@@ -118,7 +118,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'unit',
     locked: false,
     title: translate('bom.treelist.treeColumns.field.unit.title'),
-    width: 232,
+    width: 160,
     filter: DropdownFilterCell,
     mainOrderIndex: 9,
     cell: UnitCell,

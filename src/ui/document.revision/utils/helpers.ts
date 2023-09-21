@@ -122,6 +122,10 @@ export const bomDisabledChangeControl = (documentRevision: DocumentRevision | un
   return doesFieldChangeAffectRev(documentRevision, 'bom-line-changes');
 };
 
+export const substitutingSupersededDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
+  return doesFieldChangeAffectRev(documentRevision, 'substituting-superseded');
+};
+
 export const disableOtherFieldsChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   let disableOtherFields = false;
   if (documentRevision?.isBeingEditedAfterRelease && documentRevision?.changeControlOptions?.id !== '') {
