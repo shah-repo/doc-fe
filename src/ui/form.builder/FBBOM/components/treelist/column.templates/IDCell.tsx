@@ -342,8 +342,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         DocumentRevisionStatus.Released].includes(dataItem.status);
   };
 
-  const getRevInfoIcon = (i, hasChildren, props, availableRevs) => {
-    if (availableRevs?.isReleased && i === (props.level.length - (hasChildren ? 2 : 1))) {
+  const getRevInfoIcon = (i, hasChildren, availableRevs) => {
+    if (availableRevs?.isReleased && (hasChildren ? isPrevLevel(i) : isFinalLevel(i))) {
       return getInfoIcon();
     }
   };
@@ -376,7 +376,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           if (isFinalLevel(i) && !dataItem.isDeleted) {
             return (
               <>
-                {getRevInfoIcon(i, hasChildren, props, availableRevs)}
+                {getRevInfoIcon(i, hasChildren, availableRevs)}
                 <span
                   className={cx(
                     classes.defaultIcon,
