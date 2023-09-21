@@ -259,6 +259,19 @@ export default makeStyles((theme) => ({
       borderRadius: theme.shape.borderRadius / 2,
       overflow: 'hidden',
     },
+    '.k-list-container': {
+      '& > .k-popup': {
+        '& .k-state-selected': {
+          color: Colors.textBlack,
+          backgroundColor: Colors.primaryHighlight,
+
+          '&:hover': {
+            color: Colors.textBlack,
+            backgroundColor: Colors.primaryHighlight,
+          },
+        },
+      },
+    },
     '.k-grid-columnmenu-popup': {
       '& .k-columnmenu-item': {
         padding: theme.spacing(1, 1.5),
