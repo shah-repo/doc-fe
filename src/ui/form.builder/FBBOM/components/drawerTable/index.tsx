@@ -102,8 +102,8 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
       alternatePartAsync.start(
         deleteAlternateParts,
         parentRevId,
-        basePartNodeRevId,
         dataItem.id,
+        basePartNodeRevId,
         alternatePartAsync,
       );
     }

@@ -59,3 +59,7 @@ export const ASYNC_TASKS_URL = '/async_tasks';
 export const COMPANY_EMAIL = 'enlil-feedback@shifamed.com';
 
 export const GLOBAL_SEARCH_URL = '/search';
+
+export const GENERAL_SETTINGS_URL = '/general_settings';
+
+export const COMPANY_SETTINGS_URL = '/company/settings';

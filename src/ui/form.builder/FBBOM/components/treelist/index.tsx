@@ -8,8 +8,7 @@ import {
   extendDataItem,
   filterBy,
   mapTree,
-  orderBy,
-  TreeList, TreeListCellProps,
+  orderBy, TreeList, TreeListCellProps,
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
@@ -41,6 +40,7 @@ import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -88,6 +88,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   const treeListRef = useRef(null);
 
   const [showTree, setShowTree] = useState(false);
+  const isUpgradeDisabled = substitutingSupersededDisabledChangeControl(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -500,6 +501,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
+    item.isUpgradeDisabled = isUpgradeDisabled;
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }
