@@ -19,9 +19,6 @@ export default () =>
       },
       whiteSpace: 'pre-line',
     },
-    root: {
-      // marginBottom: -24,
-    },
     button: {
       fontSize: 14,
       color: Colors.navy,

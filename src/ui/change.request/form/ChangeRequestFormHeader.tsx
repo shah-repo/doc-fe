@@ -15,7 +15,7 @@ const ChangeRequestFormHeader: React.FunctionComponent<ChangeRequestFormHeaderPr
   description,
   isDisabledInput,
   documentTypeId,
-}) => (
+}) =>  (
   <Box id="SMHeaderTmpl"
     paddingTop={0.25}
     paddingBottom={1.25}

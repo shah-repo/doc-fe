@@ -618,7 +618,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   const renderToolbar = (
     <GridToolbar>
-      <Grid container justify="space-between" style={{ height: 24 }}>
+      <Grid container justify="space-between" className={classes.toolbarContainer}>
         <Grid
           item
           data-cy="collapse-expand-collapse"
@@ -651,8 +651,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
             <Grid item
               data-cy="excel-export"
               className ={cx({ [classes.disabled]: isShowOnly })}
-              alignItems="center"
-              justify="center"
             >
               <StyleTooltip
                 title={translate('common.download')}
@@ -665,8 +663,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
             { showTree && <Grid item
               data-cy="where-used-view"
               className ={cx({ [classes.disabled]: isShowOnly })}
-              alignItems="center"
-              justify="center"
             >
               <StyleTooltip
                 title={translate('bom.whereUsed.dialog.title')}
@@ -678,8 +674,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                 />
               </StyleTooltip>
             </Grid>}
-            <Grid item data-cy="show-hide-columns" className ={cx({ [classes.disabled]: isShowOnly })} alignItems="center"
-              justify="center">
+            <Grid item
+              data-cy="show-hide-columns"
+              className ={cx({ [classes.disabled]: isShowOnly })}>
               <ColumnShowHideTreeMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
@@ -825,7 +822,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   return (
     <>
-      <Grid item className={classes.tableContainer}>
+      <Grid item>
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide }}>
             <Grid container>

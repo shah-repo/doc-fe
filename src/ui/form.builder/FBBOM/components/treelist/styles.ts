@@ -399,9 +399,6 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
     height: 24,
   },
-  tableContainer: {
-    // paddingTop: theme.spacing(2.5),
-  },
   bottomAddButtom: {
     width: '100%',
     borderTopLeftRadius: 0,
@@ -527,6 +524,9 @@ export default makeStyles((theme) => ({
   },
   disabled: {
     pointerEvents: 'none',
+  },
+  toolbarContainer: {
+    height: 24,
   },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',
