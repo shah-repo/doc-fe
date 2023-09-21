@@ -11,7 +11,7 @@ export enum GeneralSettingsTabs {
 export interface GeneralSettingsProps {
   generalSettingsState:  GeneralSettingsState
   onSaveChanges: () => void
-  handleTabChange: (event: React.ChangeEvent<{}>, value: any) => void
+  handleTabChange: (event: React.ChangeEvent<{}>, value: GeneralSettingsTabs) => void
   tabValue: string
 }
 

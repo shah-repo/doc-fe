@@ -16,7 +16,7 @@ const GeneralSettingsContainer: React.FunctionComponent<RouteComponentProps<Rout
     generalSettingsState.savePrinterData();
   };
 
-  const handleTabChange = (event: React.ChangeEvent<{}>, value: any) => {
+  const handleTabChange = (event: React.ChangeEvent<{}>, value: GeneralSettingsTabs) => {
     setValue(value);
   };
 
