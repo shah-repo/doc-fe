@@ -51,6 +51,7 @@ export interface EditableBOM extends BOM {
   alternatePartsCount?: number
   attachmentNames?: string[]
   isDisabled?: boolean
+  isUpgradeDisabled?: boolean
   replacementStatus?: string
 }
 

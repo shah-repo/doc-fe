@@ -5,17 +5,15 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  TreeList, TreeListCellProps,
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy, TreeList, TreeListCellProps,
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
   TreeListFilterChangeEvent,
-  TreeListRowDragEvent,
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy,
-  treeToFlat,
+  TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -42,12 +40,12 @@ import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
-import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -68,6 +66,7 @@ import {
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
+import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
@@ -89,6 +88,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   const treeListRef = useRef(null);
 
   const [showTree, setShowTree] = useState(false);
+  const isUpgradeDisabled = substitutingSupersededDisabledChangeControl(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -501,6 +501,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
+    item.isUpgradeDisabled = isUpgradeDisabled;
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }

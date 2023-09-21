@@ -10,6 +10,7 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
       boxShadow: `4px 4px 8px 4px ${Colors.blue_bell}`,
       right: theme.spacing(1.25),
+      width: '560px',
     },
     controlOptionsInfo: {
       width: 16,
