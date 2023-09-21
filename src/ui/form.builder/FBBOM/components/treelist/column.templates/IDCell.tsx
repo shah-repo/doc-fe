@@ -53,7 +53,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const isAllowedToUpgrade = (isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
     || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status))
-    && !dataItem.isDisabled
+    && !dataItem.isUpgradeDisabled
     && !isDocumentRevisionObsolete(dataItem.availableRevisions?.status);
 
   const onClick = (ev) => {
