@@ -217,4 +217,7 @@ export const styles = makeStyles((theme) => ({
       width: 66,
     },
   },
+  unitCell: {
+    width: 140,
+  },
 }));
