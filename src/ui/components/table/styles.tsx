@@ -62,3 +62,10 @@ export const styles = makeStyles((theme) => ({
     border: `1px solid ${Colors.navy}`,
   },
 }));
+
+export const labelPropsStyle = {
+  color: Colors.gray,
+  display: 'flex',
+  alignItems: 'center',
+  marginLeft: '10px',
+};

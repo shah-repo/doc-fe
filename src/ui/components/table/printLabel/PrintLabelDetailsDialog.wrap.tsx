@@ -1,22 +1,25 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { AxiosRequestConfig } from 'axios';
 import { isEmptyArray } from 'formik';
-import { isArray } from 'lodash';
+import { toUpper } from 'lodash';
 import moment from 'moment';
-import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { PrintLabelDetailsDialogProps } from '..';
 import { SM_APP_CONFIG } from '../../../../common/constants';
 import { convertHtmlEntities } from '../../../../common/utils/helpers';
-import apiClient from '../../../../state/apiClient';
 import { companySelectors } from '../../../../state/ducks/company';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
+import { printLabelsActions } from '../../../../state/ducks/printLabels';
 import { store } from '../../../../state/store';
-import { FBEndpoint } from '../../../form.builder/defaults/FBEndpoint';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
 import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
+
+const SELECTED_FIELD = 'print';
+export const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
 
 export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogProps>(
   Component: React.FunctionComponent<T>,
@@ -37,36 +40,45 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       serial: '',
     };
 
-    const [employees, setEmployees] = useState <SelectOption[]>([]);
-    const [selectedOption, setSelectedOption] = useState <SelectOption>();
+    const [employees, setEmployees] = useState<SelectOption[]>([]);
+    const [selectedOption, setSelectedOption] = useState<SelectOption>();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [selectedNumberOfLabel, setSelectedNumberOfLabel] = useState <string>('1');
+    const [selectedNumberOfLabel, setSelectedNumberOfLabel] = useState<string>('1');
     const [qtyUnits, setQtyUnits] = useState([initialValues?.qtyUnits]);
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
     const [data, setData] = useState({});
+    const executeDocumentRevisionAsyncTask = useActionCreator(printLabelsActions.getDocumentRevisionAsyncTask);
+    const executePrintLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLabelAsyncTask);
 
-    useEffect(() => {
-      const requestConfig: AxiosRequestConfig = {
-        method: 'get',
-        url: `${FBEndpoint.DocumentRevisionsUrl}/${selectedItem?.id}`,
-        paramsSerializer: (params) => qs.stringify(params),
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-        },
-      };
-      apiClient
-        .request(requestConfig)
-        .then((resp) => resp)
-        .then(({ data }) => {
-          const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
-          if(!isEmptyArray(referenceTo)) {
+    const async = useAsync({
+      onSuccess: ( data ) => {
+        const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
+          if (!isEmptyArray(referenceTo)) {
             const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
             const description = documentRevision[documentRevision.length - 1].description;
             setDescription(convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')));
           }
           setData(data);
-        });
+      },
+    });
+
+    const asyncPrintLabel = useAsync({
+      onSuccess: () => {
+        toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
+        closeDialog();
+      },
+      onError: (message) => {
+        toastError(message);
+      },
+    });
+
+    useEffect(() => {
+      async.start(
+        executeDocumentRevisionAsyncTask,
+        selectedItem?.id,
+        async,
+      );
     }, []);
 
     useEffect(() => {
@@ -103,7 +115,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange = (event: any) => {
-      if(event.target.value.length > 14) {
+      if (event.target.value.length > 14) {
         return;
       }
       setSerial(event.target.value);
@@ -144,24 +156,11 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         labelsToPrint: Number(selectedNumberOfLabel),
         quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: Number(item.value) }), {}),
       };
-      const requestConfig: AxiosRequestConfig = {
-        method: 'post',
-        url: FBEndpoint.PrintLabels,
-        data: JSON.parse(JSON.stringify(params)),
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-        },
-      };
-      apiClient
-        .request(requestConfig)
-        .then((resp) => {
-          toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
-          closeDialog();
-        })
-        .catch((exception) => {
-          const errorMessage = exception?.response?.data?.message;
-          toastError(isArray(errorMessage) ? errorMessage[0] : errorMessage);
-        });
+      asyncPrintLabel.start(
+        executePrintLabelAsyncTask,
+        params,
+        asyncPrintLabel,
+      );
     };
 
     return Component({

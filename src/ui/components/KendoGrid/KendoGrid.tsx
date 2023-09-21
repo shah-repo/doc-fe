@@ -1,9 +1,10 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
-import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
-import { cloneDeep, find, findIndex, map, set, toUpper } from 'lodash';
+import { cloneDeep, find, findIndex, map, set } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -37,13 +38,13 @@ import { toastError } from '../notifications';
 import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../table/ClearFilters';
 import PrintLabelDetailsDialog from '../table/printLabel/PrintLabelDetailsDialog';
+import { printColumnProps } from '../table/printLabel/PrintLabelDetailsDialog.wrap';
 import { DataLoader } from './DataLoader';
 import { KendoGridFilterCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
 
 const lotStatusOptions = Object.values(LotStatus).map(value => createOption(value, getLotStatusLabel(value)));
 const SELECTED_FIELD = 'print';
-const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
 
 export function KendoGrid<T extends any> ({
   tableName,
@@ -70,14 +71,14 @@ export function KendoGrid<T extends any> ({
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [isPrintColumnVisible, setIsPrintColumnVisible] = useState(true);
-  let isLotDocument = false;
+  const isLotDocument = documentTypeCategory === DocumentCategory.Lot;
 
   useEffect(() => {
     if (didMount) {
       setDataState(tableCriteria?.queryDict?.dataState);
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
-        if (documentTypeCategory === DocumentCategory.Lot) {
+        if (isLotDocument) {
           const dataColumns = JSON.parse(tableCriteria.columnConfig);
           if(dataColumns.findIndex(item => item.field === SELECTED_FIELD) === -1) {
             dataColumns.splice(JSON.parse(tableCriteria.columnConfig), 0, printColumnProps);
@@ -372,7 +373,7 @@ export function KendoGrid<T extends any> ({
       toastError(getTranslatedText('common.no.hide'));
       return;
     }
-    if(field === SELECTED_FIELD && documentTypeCategory === DocumentCategory.Lot) {
+    if(field === SELECTED_FIELD && isLotDocument) {
       setIsPrintColumnVisible(!isPrintColumnVisible);
     }
     const dataColumns = map(columns, (column) => {
@@ -432,8 +433,7 @@ export function KendoGrid<T extends any> ({
   // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
   hideOperatorTooltip();
 
-  if (documentTypeCategory === DocumentCategory.Lot) {
-    isLotDocument = true;
+  if (isLotDocument) {
     result = result.map(items => ({ ...items, [SELECTED_FIELD]: true }));
   }
 
@@ -489,7 +489,7 @@ export function KendoGrid<T extends any> ({
             filterable={false}
             cell={(props) => <td className={props?.className} style={props?.style} >
               <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
-                <PrintOutlined />
+                <FontAwesomeIcon icon={regular('print')} />
               </IconButton>
             </td>}
           />)}

@@ -1700,5 +1700,16 @@
   "bom.drawerTable.field.status.title": "Status",
   "bom.ar.child.pending.message": "All line items in the BOM should be released before releasing the BOM. \nClose the ARs for these items, before proceeding with this BOM/AR:",
   "bom.ar.child.invalid.message": "All line items in the BOM should be released before releasing the BOM. \nRemove these {obsolete} / {void} items, before proceeding with this BOM/AR:",
-  "controlConfig.editPart.button.text": "Restricted Edit"
+  "controlConfig.editPart.button.text": "Restricted Edit",
+  "print.label.dialog.field.quantity.units": "Quantity Units",
+  "print.label.dialog.field.partId": "Part ID",
+  "print.label.dialog.field.revision": "Revision",
+  "print.label.dialog.field.description": "Description",
+  "print.label.dialog.field.description.info": "(90 characters max)",
+  "print.label.dialog.field.lot": "Lot",
+  "print.label.dialog.field.serial": "Serial",
+  "print.label.dialog.field.serial.info": "(14 characters max)",
+  "print.label.dialog.field.by": "By",
+  "print.label.dialog.field.date": "Date",
+  "print.label.dialog.field.number.of.labels": "Number of Labels to Print"
 }

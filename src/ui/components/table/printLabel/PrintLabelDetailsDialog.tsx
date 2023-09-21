@@ -1,16 +1,15 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { range } from 'lodash';
 import React from 'react';
 import { FBLabel } from '../../../form.builder';
-import { Autocomplete, TextField } from '../../forms/fields-next';
+import { Autocomplete, FormField, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
 import { SelectOption } from '../../forms/fields/Select';
 import Text from '../../Text';
-import { styles } from '../styles';
+import { labelPropsStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
-
-const NumbersOfLabelsOption = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ];
 
 const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   setSelectedOption,
@@ -37,14 +36,13 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
     const gridSize = Number(selectedNumberOfLabel) < 5 ? (12 / Number(selectedNumberOfLabel)) : 3;
     return (qtyUnits.map((item, i) => (
       <Grid item xs={gridSize} key={i} >
-        <>
-          <FBLabel label="Quantity Units" />
-          <FBLabel label={`(Label ${i + 1})`} />
+        <FormField label="print.label.dialog.field.quantity.units" />
+        <FormField label={`(Label ${i + 1})`} >
           <TextField
             type="number"
             value={item}
             onChange={e => onQtyUnitsChange(e, i)} />
-        </>
+        </FormField>
       </Grid>
     )));
   };
@@ -65,80 +63,70 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           justify="space-between"
           spacing={2} >
           <Grid item xs={8}>
-            <>
-              <FBLabel label="Part ID" />
+            <FormField label="print.label.dialog.field.partId">
               <TextField disabled value={initialValues?.partId} />
-            </>
+            </FormField>
           </Grid>
           <Grid item xs={4}>
-            <>
-              <FBLabel label="Revision" />
+            <FormField label="print.label.dialog.field.revision">
               <TextField disabled value={initialValues?.revision} />
-            </>
+            </FormField>
           </Grid>
           <Grid item xs={12}>
-            <>
-              <Box display="flex">
-                <FBLabel label="Description" />
-                <FBLabel label="(90 characters max)"
-                  fontSize="14px"
-                  labelProps={{ color: 'grey', display: 'flex', alignItems: 'center', marginLeft: '10px' }} />
-              </Box>
-              <TextField
-                value={description.slice(0, 90)}
-                onChange={onDescriptionChange} />
-            </>
+            <Box display="flex">
+              <FormField label="print.label.dialog.field.description" fullWidth={false} />
+              <FBLabel label="print.label.dialog.field.description.info"
+                fontSize="12px"
+                labelProps={labelPropsStyle} />
+            </Box>
+            <TextField
+              value={description.slice(0, 90)}
+              onChange={onDescriptionChange} />
           </Grid>
           <Grid item xs={6}>
-            <>
-              <FBLabel label="Lot" />
+            <FormField label="print.label.dialog.field.lot">
               <TextField disabled value={initialValues?.lotId} />
-            </>
+            </FormField>
           </Grid>
           <Grid item xs={6}>
-            <>
-             <Box display="flex">
-                <FBLabel label="Serial" />
-                <FBLabel label="(14 characters max)"
-                  fontSize="14px"
-                  labelProps={{ color: 'grey', display: 'flex', alignItems: 'center', marginLeft: '10px' }} />
-              </Box>
-              <TextField
-                onChange={onSerialChange}
-                value={serial.slice(0, 14)} />
-            </>
+            <Box display="flex">
+              <FormField label="print.label.dialog.field.serial" fullWidth={false} />
+              <FBLabel label="print.label.dialog.field.serial.info"
+                fontSize="12px"
+                labelProps={labelPropsStyle} />
+            </Box>
+            <TextField
+              onChange={onSerialChange}
+              value={serial.slice(0, 14)} />
           </Grid>
           <Grid item xs={6}>
-            <>
-              <FBLabel label="By" />
+            <FormField label="print.label.dialog.field.by">
               <Autocomplete
                 value={selectedOption}
                 options={companyEmployees}
                 getOptionLabel={(option) => `${option.text} (${option.email})`}
                 onChange={(e, value: SelectOption) => setSelectedOption(value)}
               />
-            </>
+            </FormField>
           </Grid>
           <Grid item xs={6} >
-            <>
-              <FBLabel label="Date" />
+            <FormField label="print.label.dialog.field.date">
               <Datepicker
                 value={selectedDate}
                 size="medium"
                 onChange={handleDateChange}
               />
-            </>
+            </FormField>
           </Grid>
           <Grid item xs={12}>
-            <>
-              <FBLabel label="Number of Labels to Print" />
+            <FormField label="print.label.dialog.field.number.of.labels">
               <Autocomplete
                 disableClearable
                 value={selectedNumberOfLabel}
-                options={NumbersOfLabelsOption}
+                options={range(1, 10, 1)}
                 renderInput={(params) => <TextField {...params} label="Controllable" />}
                 onChange={(e, value: string) => onNumberOfLabelChange(value)} />
-            </>
+            </FormField>
           </Grid>
           {qtyUnitsRender()}
         </Grid>
