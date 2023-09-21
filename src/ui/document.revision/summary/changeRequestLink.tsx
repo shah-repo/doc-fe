@@ -45,7 +45,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp }) => {
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataProp?.id]);
+  }, [dataProp?.id, dataProp?.changeRequest?.state]);
 
   const { documentRevision } = React.useContext(FormHeaderContext) ?? {};
   let changeRequest = dataProp.changeRequest;
