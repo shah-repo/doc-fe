@@ -240,8 +240,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     </FormikField>
   );
 
+  const openRevChangeDialog = () => { isAllowedToUpgrade && dialog.open(); };
+
   const getInfoIcon = () => (
-    <span className={cx(classes.infoIcon, classes.defaultIcon)} onClick={() => { isAllowedToUpgrade && dialog.open(); }}>
+    <span className={cx(classes.infoIcon, classes.defaultIcon)} onClick={openRevChangeDialog}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
         <FontAwesomeIcon color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
@@ -341,14 +343,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const getRevInfoIcon = (i, hasChildren, props, availableRevs) => {
-    if (hasChildren) {
-      if (i === props.level.length - 2 && availableRevs?.isReleased) {
-        return getInfoIcon();
-      }
-    } else {
-      if (i === props.level.length - 1 && availableRevs?.isReleased) {
-        return getInfoIcon();
-      }
+    if (availableRevs?.isReleased && i === (props.level.length - (hasChildren ? 2 : 1))) {
+      return getInfoIcon();
     }
   };
   const setChildInfo = (dataItem, level) => {
@@ -358,6 +354,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       _documentRevisionFormState?.setBOMChangesInProgress(true);
     }
   };
+
+  const isFinalLevel = (i: number) => i === props.level.length - 1;
+  const isPrevLevel = (i: number) => i === props.level.length - 2;
 
   return (
     <td
@@ -373,8 +372,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       {!isEditMode
         && [...(Array(props.level.length) as number[])].map((e, i) => {
           const availableRevs = dataItem?.availableRevisions;
-          const isPrevLevelOfAvailableRevsExistsRow = i === props.level.length - 2 && availableRevs?.isReleased;
-          if (i === props.level.length - 1 && !dataItem.isDeleted) {
+          const isPrevLevelOfAvailableRevsExistsRow = isPrevLevel(i) && availableRevs?.isReleased;
+          if (isFinalLevel(i) && !dataItem.isDeleted) {
             return (
               <>
                 {getRevInfoIcon(i, hasChildren, props, availableRevs)}
