@@ -18,7 +18,7 @@ import {
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, has, isEmpty, isNil, map,
+  chain, get, isEmpty, isNil, map,
   omit,
   replace,
   tail,
@@ -44,7 +44,7 @@ import { substitutingSupersededDisabledChangeControl } from '../../../../documen
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import { Colors, withThemeNext } from '../../../../layout/theme-next';
+import { withThemeNext } from '../../../../layout/theme-next';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
@@ -65,7 +65,7 @@ import {
 } from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
-import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
+import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
@@ -592,30 +592,30 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
       }));
     const tableColumns = getExcelColumns(columns);
 
-    const dataMap = data.reduce((acc, val) => {
-      acc.docIdMap[val?.docId] = val;
-    val?.changeRequestDetails && (acc.arIdMap[val?.changeRequestDetails?.crId] = val?.changeRequestDetails);
-    return acc;
-    }, { docIdMap: {}, arIdMap: {} });
+    // const dataMap = data.reduce((acc, val) => {
+    //   acc.docIdMap[val?.docId] = val;
+    // val?.changeRequestDetails && (acc.arIdMap[val?.changeRequestDetails?.crId] = val?.changeRequestDetails);
+    // return acc;
+    // }, { docIdMap: {}, arIdMap: {} });
 
-    const { docIdMap, arIdMap } = dataMap;
+    // const { docIdMap, arIdMap } = dataMap;
     const options = _export.workbookOptions(data, tableColumns);
 
-    const rows = options?.sheets[0]?.rows;
-    rows.forEach((row) => {
-      if (row.type === 'data') {
-        row.cells.forEach((cell) => {
-          if (has(docIdMap, cell?.value)) {
-            cell.color = Colors.primaryDark;
-            cell.formula = getHyperLinkForIdCell(docIdMap[cell?.value], cell?.value);
-          }
-          if (has(arIdMap, cell?.value)) {
-            cell.color = Colors.primaryDark;
-            cell.formula = getHyperLinkForArIdCell(arIdMap[cell?.value]?.id, cell.value);
-          }
-        });
-      }
-    });
+    // const rows = options?.sheets[0]?.rows;
+    // rows.forEach((row) => {
+    //   if (row.type === 'data') {
+    //     row.cells.forEach((cell) => {
+    //       if (has(docIdMap, cell?.value)) {
+    //         cell.color = Colors.primaryDark;
+    //         cell.formula = getHyperLinkForIdCell(docIdMap[cell?.value], cell?.value);
+    //       }
+    //       if (has(arIdMap, cell?.value)) {
+    //         cell.color = Colors.primaryDark;
+    //         cell.formula = getHyperLinkForArIdCell(arIdMap[cell?.value]?.id, cell.value);
+    //       }
+    //     });
+    //   }
+    // });
     _export.save(options);
   };
 
