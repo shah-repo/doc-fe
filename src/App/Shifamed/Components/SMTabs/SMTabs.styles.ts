@@ -8,13 +8,13 @@ export default makeStyles({
   tabs: {
     zIndex: 4,
     backgroundColor: Colors.alabaster,
-    height: 'auto',
+    height: 26,
     width: '100%',
     fontSize: 12,
     padding: 0,
     borderBottom: `1px solid ${Colors.chinese_silver}`,
-    minHeight: 44,
-    maxHeight: 44,
+    minHeight: 26,
+    maxHeight: 26,
     position: 'sticky',
     left: 0,
     right: 0,
@@ -23,8 +23,11 @@ export default makeStyles({
   tab: {
     width: 'auto',
     minWidth: 40,
+    height: 15,
+    minHeight: 15,
     padding: 0,
     marginRight: 30,
+    fontSize: 12,
   },
   indicator: {
     background: Colors.cerulean,

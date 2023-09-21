@@ -22,13 +22,13 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
         paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0}
         pl={3.25}
         pr={3.75}
-        pb={0}
+        pb={1.5}
       >
         {
           type !== 'newOutput' && _documentRevisionFormState?.documentRevision
             && <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
         }
-        <Box pb={0.5}>
+        <Box>
           <Title
             name="name"
             documentTypeId={documentTypeId}
