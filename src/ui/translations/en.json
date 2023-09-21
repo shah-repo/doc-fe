@@ -261,6 +261,7 @@
   "common.description.SUP": "Supplier Address/Phone",
   "common.state": "State",
   "common.save": "Save",
+  "common.save.changes": "Save Changes",
   "common.type": "Type",
   "common.title": "Title",
   "common.title.SUP": "Supplier Name",
@@ -1669,7 +1670,7 @@
   "bom.order.error.message": "Change the order of the parts within the same parent",
   "bom.whereUsed.dialog.title": "Where Used View",
   "bom.documentRevision.dialog.title": "Quick View",
-  "bom.ar.child.draft.option": "Rev {revision} - {title}",
+  "bom.ar.child.draft.option": "Rev {revision} - {title}",  
   "bom.ar.child.draft.add.action.message": "{count, plural, one {Action required on # item} other {Action required on # items}}",
   "bom.ar.child.draft.add.message": "All line items in the BOM should be released before releasing the BOM.\nAdd the following items in this change request or add them separately:",
   "bom.treelist.treeColumns.field.customDocId.title": "Id",
@@ -1698,5 +1699,12 @@
   "bom.drawerTable.field.status.title": "Status",
   "bom.ar.child.pending.message": "All line items in the BOM should be released before releasing the BOM. \nClose the ARs for these items, before proceeding with this BOM/AR:",
   "bom.ar.child.invalid.message": "All line items in the BOM should be released before releasing the BOM. \nRemove these {obsolete} / {void} items, before proceeding with this BOM/AR:",
-  "controlConfig.editPart.button.text": "Restricted Edit"
+  "controlConfig.editPart.button.text": "Restricted Edit",
+  "administration.generalsettings.title": "General Settings",
+  "administration.generalsettings.sub.title": "Manage your general settings and preferences.",
+  "administration.generalsettings.printing.tab.title": "Zebra Cloud Printing",
+  "administration.generalsettings.printing.tab.consumer.key": "Consumer Key",
+  "administration.generalsettings.printing.tab.tenant.id": "Tenant ID",
+  "administration.generalsettings.printing.tab.printer.serial": "Printer Serial",
+  "administration.generalsettings.save.successful": "Changes successfully saved!"
 }
