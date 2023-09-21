@@ -11,7 +11,7 @@ const getDocumentRevisionAsyncTask = (id: string, handlers: Handlers) => apiActi
   const postPrintLabelAsyncTask = (params: Object, handlers: Handlers) => apiActionWithCallbacks({
     url: FBEndpoint.PrintLabels,
     method: 'post',
-    data: JSON.parse(JSON.stringify(params)),
+    data: params,
     handlers,
   });
 

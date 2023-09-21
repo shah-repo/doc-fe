@@ -5,7 +5,6 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { PrintLabelDetailsDialogProps } from '..';
 import { SM_APP_CONFIG } from '../../../../common/constants';
 import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import { companySelectors } from '../../../../state/ducks/company';
@@ -17,6 +16,7 @@ import useAsync from '../../../hooks/useAsync';
 import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
 import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
+import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
 const SELECTED_FIELD = 'print';
 export const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
@@ -43,7 +43,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [employees, setEmployees] = useState<SelectOption[]>([]);
     const [selectedOption, setSelectedOption] = useState<SelectOption>();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [selectedNumberOfLabel, setSelectedNumberOfLabel] = useState<string>('1');
+    const [selectedNumberOfLabel, setSelectedNumberOfLabel] = useState(1);
     const [qtyUnits, setQtyUnits] = useState([initialValues?.qtyUnits]);
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
@@ -54,7 +54,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const async = useAsync({
       onSuccess: ( data ) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
-          if (!isEmptyArray(referenceTo)) {
+          if(!isEmptyArray(referenceTo)) {
             const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
             const description = documentRevision[documentRevision.length - 1].description;
             setDescription(convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')));
@@ -83,7 +83,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     useEffect(() => {
       const activeEmployees = companyEmployees.map((employee) => {
-        if (employee.user?.name) {
+        if(employee.user?.name) {
           return ({
             value: employee.id as string,
             text: employee.user?.name || '',
@@ -96,7 +96,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       }
 
       const defaultEmployee = activeEmployees.find(item => item?.email === authUser.email);
-      if (defaultEmployee) {
+      if(defaultEmployee) {
         setSelectedOption(defaultEmployee);
       }
     }, [companyEmployees]);
@@ -105,8 +105,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setSelectedDate(new Date(date?.toISOString()));
     };
 
-    const onQtyUnitsChange = (event, index) => {
-      if (event.target.value < 0) {
+    const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: Number) => {
+      if(event.target.value < 0) {
         return;
       }
       const newQtyUnits = [...qtyUnits];
@@ -114,22 +114,22 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setQtyUnits(newQtyUnits);
     };
 
-    const onSerialChange = (event: any) => {
-      if (event.target.value.length > 14) {
+    const onSerialChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+      if(event.target.value.length > 14) {
         return;
       }
       setSerial(event.target.value);
       initialValues.serial = event.target.value;
     };
 
-    const onDescriptionChange = (event: any) => {
+    const onDescriptionChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
       setDescription(event.target.value);
     };
 
-    const onNumberOfLabelChange = (value: string) => {
-      if (Number(selectedNumberOfLabel) < Number(value)) {
+    const onNumberOfLabelChange = (value: Number) => {
+      if(selectedNumberOfLabel < value) {
         const newQtyUnits = [...qtyUnits];
-        for (let index = 0; index < Number(value) - Number(selectedNumberOfLabel); index++) {
+        for (let index = 0; index < (value - selectedNumberOfLabel); index++) {
           newQtyUnits.push(initialValues?.qtyUnits);
         }
         setQtyUnits(newQtyUnits);
@@ -137,14 +137,14 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       else {
         qtyUnits.splice(Number(value));
       }
-      setSelectedNumberOfLabel(String(value));
+      setSelectedNumberOfLabel(value);
     };
 
     const onPrintClick = () => {
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
         status: selectedItem?.lotStatus,
-        description: description,
+        description: description.slice(0, 90),
         partDocId: initialValues.partId,
         revision: initialValues.revision,
         actor: selectedOption?.text,

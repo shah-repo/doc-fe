@@ -33,7 +33,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   const classes = styles();
 
   const qtyUnitsRender = () => {
-    const gridSize = Number(selectedNumberOfLabel) < 5 ? (12 / Number(selectedNumberOfLabel)) : 3;
+    const gridSize = selectedNumberOfLabel < 5 ? (12 / selectedNumberOfLabel) : 3;
     return (qtyUnits.map((item, i) => (
       <Grid item xs={gridSize} key={i} >
         <FormField label="print.label.dialog.field.quantity.units" />
@@ -124,8 +124,8 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 disableClearable
                 value={selectedNumberOfLabel}
                 options={range(1, 10, 1)}
-                renderInput={(params) => <TextField {...params} label="Controllable" />}
-                onChange={(e, value: string) => onNumberOfLabelChange(value)} />
+                getOptionLabel={(option) => typeof (option) == 'number' ? String(option) : option}
+                onChange={(e, value: Number) => onNumberOfLabelChange(value)} />
             </FormField>
           </Grid>
           {qtyUnitsRender()}
