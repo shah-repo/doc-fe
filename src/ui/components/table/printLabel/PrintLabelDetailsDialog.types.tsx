@@ -1,6 +1,6 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { Employee } from '../../../../state/ducks/company/types';
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { SelectOption } from '../../forms/fields/Select';
 
 export interface PrintLabelDetailsDialogProps {
