@@ -5,17 +5,15 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  TreeList, TreeListCellProps,
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy, TreeList, TreeListCellProps,
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
   TreeListFilterChangeEvent,
-  TreeListRowDragEvent,
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy,
-  treeToFlat,
+  TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -47,7 +45,6 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { Colors, withThemeNext } from '../../../../layout/theme-next';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
-import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -68,6 +65,7 @@ import {
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, getHyperLinkForArIdCell, getHyperLinkForIdCell, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
+import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
@@ -620,11 +618,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   const renderToolbar = (
     <GridToolbar>
-      <Grid container justify="space-between">
+      <Grid container justify="space-between" style={{ height: 24 }}>
         <Grid
           item
           data-cy="collapse-expand-collapse"
           className={cx(classes.toggleExpandCollapse, { [classes.disabled]: isShowOnly })}
+          alignItems="center"
+          justify="center"
         >
           <span onClick={handleExpandAll}>
             {translate('common.expand.all')} /{' '}
@@ -651,6 +651,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
             <Grid item
               data-cy="excel-export"
               className ={cx({ [classes.disabled]: isShowOnly })}
+              alignItems="center"
+              justify="center"
             >
               <StyleTooltip
                 title={translate('common.download')}
@@ -663,6 +665,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
             { showTree && <Grid item
               data-cy="where-used-view"
               className ={cx({ [classes.disabled]: isShowOnly })}
+              alignItems="center"
+              justify="center"
             >
               <StyleTooltip
                 title={translate('bom.whereUsed.dialog.title')}
@@ -674,7 +678,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                 />
               </StyleTooltip>
             </Grid>}
-            <Grid item data-cy="show-hide-columns" className ={cx({ [classes.disabled]: isShowOnly })}>
+            <Grid item data-cy="show-hide-columns" className ={cx({ [classes.disabled]: isShowOnly })} alignItems="center"
+              justify="center">
               <ColumnShowHideTreeMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
