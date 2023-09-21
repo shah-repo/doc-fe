@@ -8,9 +8,9 @@ type Props = SummaryBaseProps;
 const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = '-' }) => {
   const classes = styles();
   return (
-    <Grid item={true} xs={12} className={classes.container}>
+    <Grid item={true} xs={12}>
       <Typography id="field-name" data-cy="field-name" className={classes.title} variant="h5">
-        {value ? value : noValueOption}
+      {value ? value : noValueOption}
       </Typography>
     </Grid>
   );

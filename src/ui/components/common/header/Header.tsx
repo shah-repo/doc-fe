@@ -14,15 +14,15 @@ import { FormHeaderStatusClassMapping } from './Helpers';
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     headerSection: {
-      minHeight: '64px',
+      minHeight: 56,
       borderRadius: '6px',
     },
     appbar: {
       zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: (createUrl) => ({
-      minHeight: createUrl ? '' : '84px',
-      padding: createUrl ? '' : '10px',
+      minHeight: createUrl ? '' : 76,
+      padding: createUrl ? '' : theme.spacing(1.25),
       display: 'flex',
       justifyContent: 'flex-end',
       borderBottom: createUrl ? `1px solid ${Colors.medium_gray}` : '',
@@ -75,6 +75,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
         </Grid>
       </Toolbar>
     </AppBar>
-  ); };
+  );
+};
 
 export default Header;

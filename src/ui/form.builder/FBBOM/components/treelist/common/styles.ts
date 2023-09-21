@@ -27,8 +27,9 @@ export const styles = makeStyles((theme) =>
     },
     viewIcon: {
       color: Colors.almost_black,
-      marginTop: theme.spacing(0.625),
       cursor: 'pointer',
+      height: 14,
+      width: 14,
     },
   }),
 );

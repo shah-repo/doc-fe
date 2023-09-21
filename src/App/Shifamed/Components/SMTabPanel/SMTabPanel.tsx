@@ -1,6 +1,8 @@
+import cx from 'classnames';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { SMBox, SMTabPanelProps } from '../../..';
+import { TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import useStyles from './SMTabPanel.styles';
 import { withSMTabPanelWrap } from './SMTabPanel.wrap';
 
@@ -17,13 +19,14 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   if (!active) {
     return null;
   }
+  const isBOMTabActive = _tabsState?.activeTabId === TabTypeOptions.BOM.toLowerCase();
 
   return (
     <Observer>
       {() => (
         <SMBox
           id={`sm-tabpanel-${tabIndex ?? tabId}`}
-          className={classes.content}
+          className={cx({ [classes.bomTabContent]: isBOMTabActive, [classes.content]: !isBOMTabActive }) }
           {...panelProps}
         >
           {children}

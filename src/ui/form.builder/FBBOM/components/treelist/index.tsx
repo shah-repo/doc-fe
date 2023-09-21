@@ -621,11 +621,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   const renderToolbar = (
     <GridToolbar>
-      <Grid container justify="space-between">
+      <Grid container justify="space-between" className={classes.toolbarContainer}>
         <Grid
           item
           data-cy="collapse-expand-collapse"
           className={cx(classes.toggleExpandCollapse, { [classes.disabled]: isShowOnly })}
+          alignItems="center"
+          justify="center"
         >
           <span onClick={handleExpandAll}>
             {translate('common.expand.all')} /{' '}
@@ -675,7 +677,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                 />
               </StyleTooltip>
             </Grid>}
-            <Grid item data-cy="show-hide-columns" className ={cx({ [classes.disabled]: isShowOnly })}>
+            <Grid item
+              data-cy="show-hide-columns"
+              className ={cx({ [classes.disabled]: isShowOnly })}>
               <ColumnShowHideTreeMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
@@ -821,7 +825,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
 
   return (
     <>
-      <Grid item className={classes.tableContainer}>
+      <Grid item>
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide }}>
             <Grid container>

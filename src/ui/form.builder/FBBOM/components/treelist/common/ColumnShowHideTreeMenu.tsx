@@ -11,10 +11,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { translate } from '../../../../../../common/intl';
 import { ReactComponent as ViewGridIcon } from '../../../../../../assets/images/grid_view.svg';
 import { ReactComponent as SolidIcon } from '../../../../../../assets/images/view.svg';
 import { ReactComponent as ViewChecked } from '../../../../../../assets/images/view_checked.svg';
+import { translate } from '../../../../../../common/intl';
 import Text from '../../../../../components/Text';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
 import { CustomTreeListColumnProps } from '../interface';

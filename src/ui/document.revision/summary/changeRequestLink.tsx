@@ -74,11 +74,9 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp }) => {
   return (
     <ListItem className={classes.listItemPadding}>
       <Typography variant="h6">
-        <Box fontSize={12}>
-          <Text translation="common.crid" />
-        </Box>
-        <div>
-          <div className={classes.linkContainer}>
+        <Box className={classes.arLinkContainer}>
+          <Text translation="common.crid" />:&nbsp;
+          <span className={classes.linkContainer}>
             <Link
               to={changeRequestEditPath(changeRequest.id)}
               target="_blank"
@@ -92,12 +90,12 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp }) => {
             <VisibilityOutlinedIcon
               className={classes.viewIcon}
               onClick={openChangeRequestDialog} />
-          </div>
-          {
-            associatedChangeRequests.length > 0
+            {
+              associatedChangeRequests.length > 0
                 && <AllApprovalRequestsButton associatedChangeRequests={associatedChangeRequests} />
-          }
-        </div>
+            }
+          </span>
+        </Box>
       </Typography>
       {
         approvalRequestDialog.isOpen
