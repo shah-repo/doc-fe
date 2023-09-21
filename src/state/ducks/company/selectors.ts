@@ -63,7 +63,7 @@ const getActiveLocations = (state: ApplicationState) =>
 const getActiveEmployees = (state: ApplicationState) =>
   chain(state.company.companyMine.employees)
     .filter({ active: true })
-    .map((employee) => pick(employee, ['id', 'user.name']))
+    .map((employee) => pick(employee, ['id', 'user.name', 'user.email']))
     .value()
     .sort(sortStringsByKey('user.name'));
 
