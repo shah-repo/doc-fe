@@ -51,7 +51,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
     const executePrintLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLabelAsyncTask);
 
-		const async = useAsync({
+    const async = useAsync({
       onSuccess: ( data ) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
           if(!isEmptyArray(referenceTo)) {
