@@ -241,9 +241,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   );
 
   const getInfoIcon = () => (
-    <span className={cx('k-icon', classes.infoIcon)}>
+    <span className={cx(classes.infoIcon, classes.defaultIcon)} onClick={() => { isAllowedToUpgrade && dialog.open(); }}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <FontAwesomeIcon onClick={() => { isAllowedToUpgrade && dialog.open(); }} color={Colors.primaryLight} icon={solid('circle-exclamation')} />
+        <FontAwesomeIcon color={Colors.primaryLight} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );
@@ -340,6 +340,17 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         DocumentRevisionStatus.Released].includes(dataItem.status);
   };
 
+  const getRevInfoIcon = (i, hasChildren, props, availableRevs) => {
+    if (hasChildren) {
+      if (i === props.level.length - 2 && availableRevs?.isReleased) {
+        return getInfoIcon();
+      }
+    } else {
+      if (i === props.level.length - 1 && availableRevs?.isReleased) {
+        return getInfoIcon();
+      }
+    }
+  };
   const setChildInfo = (dataItem, level) => {
     _documentRevisionFormState?.setDirty(true);
     if (!_documentRevisionFormState?.bomChangesInProgress) {
@@ -359,31 +370,47 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       aria-selected="false"
       {...{ colSpan, id, style }}
     >
-      {!isEditMode && [...(Array(props.level.length) as number[])].map((e, i) => {
-        const availableRevs = dataItem?.availableRevisions;
-        if (hasChildren) {
-          if (i === props.level.length - 2 && availableRevs?.isReleased) {
-            return getInfoIcon();
+      {!isEditMode
+        && [...(Array(props.level.length) as number[])].map((e, i) => {
+          const availableRevs = dataItem?.availableRevisions;
+          const isPrevLevelOfAvailableRevsExistsRow = i === props.level.length - 2 && availableRevs?.isReleased;
+          if (i === props.level.length - 1 && !dataItem.isDeleted) {
+            return (
+              <>
+                {getRevInfoIcon(i, hasChildren, props, availableRevs)}
+                <span
+                  className={cx(
+                    classes.defaultIcon,
+                    { [classes.expand]: hasChildren },
+                    { [classes.disabled]: !hasChildren },
+                  )}
+                >
+                  <FontAwesomeIcon
+                    onClick={hasChildren ? onClick : undefined}
+                    size="sm"
+                    icon={
+                      props.expanded || !hasChildren
+                        ? regular('square-minus')
+                        : solid('square-plus')
+                    }
+                  />
+                </span>
+              </>
+            );
           }
-        } else {
-          if (i === props.level.length - 1 && availableRevs?.isReleased) {
-            return getInfoIcon();
-          }
-        }
-        if (i === props.level.length - 1 && hasChildren && !dataItem.isDeleted) {
           return (
-            <span className={cx('k-icon', classes.expand)}>
-              <FontAwesomeIcon
-                onClick={onClick}
-                size="sm"
-                icon={props.expanded ? regular('square-minus') : solid('square-plus')}
+            !isEditMode && (
+              <span
+                className={cx('k-icon', 'k-i-none', i, {
+                  [classes.levelWidth]: !isPrevLevelOfAvailableRevsExistsRow,
+                  [classes.levelWithRevIcon]: isPrevLevelOfAvailableRevsExistsRow,
+                })}
+                onClick={() => { isPrevLevelOfAvailableRevsExistsRow && isAllowedToUpgrade && dialog.open(); }}
+                role="presentation"
               />
-            </span>
+            )
           );
-        }
-        return !isEditMode && <span className="k-icon k-i-none" role="presentation" />;
-      })
-      }
+        })}
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
@@ -410,14 +437,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           placement="top"
           arrow
         >
-          <FontAwesomeIcon className={classes.ownerIcon} icon={solid('user-pen')} />
+          <FontAwesomeIcon className={cx(classes.defaultIcon, classes.ownerIcon)} icon={solid('user-pen')} />
         </Tooltip>}
         {canAddChildren(dataItem) && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >
-          <FontAwesomeIcon onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          <FontAwesomeIcon className={classes.defaultIcon} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
         </Tooltip>}
         {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
           title={translate('common.restore')}
@@ -425,7 +452,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           arrow
         >
           <FontAwesomeIcon
-            className={classes.restoreParentIcon}
+            className={cx(classes.restoreParentIcon, classes.defaultIcon)}
             onClick={() => _documentRevisionFormState?.setRestorePartInfo({ dataItem: dataItem, level })}
             icon={solid('arrow-rotate-left')} />
         </Tooltip>}
