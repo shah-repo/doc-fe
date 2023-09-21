@@ -8,13 +8,13 @@ import { useSelector } from 'react-redux';
 import { SM_APP_CONFIG } from '../../../../common/constants';
 import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import { companySelectors } from '../../../../state/ducks/company';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../../state/ducks/printLabels';
 import { store } from '../../../../state/store';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
-import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
@@ -48,10 +48,10 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
     const [data, setData] = useState({});
-    const executeDocumentRevisionAsyncTask = useActionCreator(printLabelsActions.getDocumentRevisionAsyncTask);
+    const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
     const executePrintLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLabelAsyncTask);
 
-    const async = useAsync({
+		const async = useAsync({
       onSuccess: ( data ) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
           if(!isEmptyArray(referenceTo)) {
