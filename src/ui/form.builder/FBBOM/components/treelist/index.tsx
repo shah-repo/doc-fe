@@ -591,31 +591,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
         vendorsCount: part?.vendors?.length,
       }));
     const tableColumns = getExcelColumns(columns);
-
-    // const dataMap = data.reduce((acc, val) => {
-    //   acc.docIdMap[val?.docId] = val;
-    // val?.changeRequestDetails && (acc.arIdMap[val?.changeRequestDetails?.crId] = val?.changeRequestDetails);
-    // return acc;
-    // }, { docIdMap: {}, arIdMap: {} });
-
-    // const { docIdMap, arIdMap } = dataMap;
     const options = _export.workbookOptions(data, tableColumns);
 
-    // const rows = options?.sheets[0]?.rows;
-    // rows.forEach((row) => {
-    //   if (row.type === 'data') {
-    //     row.cells.forEach((cell) => {
-    //       if (has(docIdMap, cell?.value)) {
-    //         cell.color = Colors.primaryDark;
-    //         cell.formula = getHyperLinkForIdCell(docIdMap[cell?.value], cell?.value);
-    //       }
-    //       if (has(arIdMap, cell?.value)) {
-    //         cell.color = Colors.primaryDark;
-    //         cell.formula = getHyperLinkForArIdCell(arIdMap[cell?.value]?.id, cell.value);
-    //       }
-    //     });
-    //   }
-    // });
     _export.save(options);
   };
 
