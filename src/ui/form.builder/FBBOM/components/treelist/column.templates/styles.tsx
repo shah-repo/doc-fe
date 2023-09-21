@@ -214,7 +214,7 @@ export const styles = makeStyles((theme) => ({
   },
   filterCell: {
     '& .k-filtercell': {
-      width: 72,
+      width: 66,
     },
   },
 }));

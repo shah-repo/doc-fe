@@ -18,10 +18,11 @@ const ChangeRequestFormHeader: React.FunctionComponent<ChangeRequestFormHeaderPr
 }) => (
   <Box id="SMHeaderTmpl"
     paddingTop={0.25}
+    paddingBottom={1.25}
     pl={3.25}
     pr={3.75}
   >
-    <Box pb={0.5} pt={0.5}>
+    <Box paddingBottom={1.25}>
       <Title
         name="title"
         documentTypeId={documentTypeId}
