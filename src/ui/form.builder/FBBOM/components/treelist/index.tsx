@@ -32,7 +32,7 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import { ADD_FIELD, DATA_ITEM_KEY, DOC_ID_FIELD, EXCEL_FILE_NAME, EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TREELIST_CONFIG } from './constants';
+import { ADD_FIELD, CELL_EMPTY_VALUE, DATA_ITEM_KEY, DOC_ID_FIELD, EXCEL_FILE_NAME, EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TREELIST_CONFIG } from './constants';
 import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
@@ -556,12 +556,29 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   let _export;
 
   const exportToExcel = () => {
+    const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD)
-      .map(part => ({
-        ...part,
-        attachmentsCount: part?.attachmentNames?.length,
-        vendorsCount: part?.vendors?.length,
-      }));
+      .map(part => {
+        const availableRevisions = part?.availableRevisions;
+        const changeReqDetails = availableRevisions?.changeRequestDetails;
+        const isReleased = availableRevisions?.isReleased;
+        let cellValue;
+        if (!availableRevisions) {
+          cellValue = CELL_EMPTY_VALUE;
+        } else if (isReleased) {
+          cellValue = CELL_EMPTY_VALUE;
+        } else if (!changeReqDetails) {
+          cellValue = availableRevisions?.displayRevision;
+        } else {
+          cellValue = changeReqDetails?.crId;
+        }
+        return ({
+          ...part,
+          attachmentsCount: part?.attachmentNames?.length,
+          changeRequestDetails: { crId: ArIdAllowedStatusList.includes(part?.status) ? part?.changeRequestDetails?.crId : '' },
+          hasChanges: cellValue,
+        });
+      });
     const tableColumns = getExcelColumns(columns);
     const options = _export.workbookOptions(data, tableColumns);
 
