@@ -151,6 +151,7 @@ export const styles = makeStyles((theme) => ({
     fontSize: 12,
     textAlign: 'right',
     padding: theme.spacing(1.5, 0, 1.25),
+    cursor: 'pointer',
   },
   replacedDocRevInfoTitle: {
     fontWeight: 600,
@@ -177,6 +178,7 @@ export const styles = makeStyles((theme) => ({
   restoreParentIcon: {
     color: ThemeColors.primaryLight,
     marginLeft: theme.spacing(1.5),
+    cursor: 'pointer',
   },
   root: {
     pointerEvents: 'none',

@@ -343,7 +343,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const getRevInfoIcon = (i, hasChildren, availableRevs) => {
-    if (availableRevs?.isReleased && (hasChildren ? isPrevLevel(i) : isFinalLevel(i))) {
+    if (availableRevs?.isReleased && !dataItem.isDeleted && (hasChildren ? isPrevLevel(i) : isFinalLevel(i))) {
       return getInfoIcon();
     }
   };
@@ -373,7 +373,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         && [...(Array(props.level.length) as number[])].map((e, i) => {
           const availableRevs = dataItem?.availableRevisions;
           const isPrevLevelOfAvailableRevsExistsRow = isPrevLevel(i) && availableRevs?.isReleased;
-          if (isFinalLevel(i) && !dataItem.isDeleted) {
+          if (isFinalLevel(i)) {
             return (
               <>
                 {getRevInfoIcon(i, hasChildren, availableRevs)}
@@ -443,7 +443,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           placement="top"
           arrow
         >
-          <FontAwesomeIcon className={classes.defaultIcon} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          <FontAwesomeIcon className={cx(classes.defaultIcon, classes.childePartAddIcon)} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} />
         </Tooltip>}
         {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
           title={translate('common.restore')}

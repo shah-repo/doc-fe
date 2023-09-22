@@ -210,6 +210,9 @@ export default makeStyles((theme) => ({
         },
       },
     },
+    '.k-master-row .k-grid-content-sticky': {
+      backgroundColor: 'inherit',
+    },
 
     '.k-grid-container': {
       overflow: 'hidden',
@@ -418,6 +421,7 @@ export default makeStyles((theme) => ({
     borderTopRightRadius: 0,
   },
   updatingRow: {
+    backgroundColor: Colors.gray,
     position: 'relative',
     zIndex: 2,
     outline: `1px solid ${Colors.primaryLight}`,
