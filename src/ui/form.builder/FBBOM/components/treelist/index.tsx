@@ -4,27 +4,10 @@ import { Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy, TreeList, TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent,
-  TreeListDraggableRow,
-  TreeListFilterChangeEvent,
-  TreeListRowDragEvent, treeToFlat,
-} from '@progress/kendo-react-treelist';
+import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import {
-  chain, get, isEmpty, isNil, map,
-  omit,
-  replace,
-  tail,
-  take,
-  uniq,
-} from 'lodash';
+import { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -49,20 +32,8 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import {
-  ADD_FIELD,
-  DATA_ITEM_KEY,
-  DOC_ID_FIELD,
-  EXCEL_FILE_NAME,
-  EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
-  SUB_ITEMS_FIELD,
-  TREELIST_CONFIG,
-} from './constants';
-import {
-  BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent,
-  CustomTreeListRowProps,
-  FBBOMProps,
-} from './interface';
+import { ADD_FIELD, CELL_EMPTY_VALUE, DATA_ITEM_KEY, DOC_ID_FIELD, EXCEL_FILE_NAME, EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TREELIST_CONFIG } from './constants';
+import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
@@ -518,7 +489,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
       }),
     };
     if (!item[MODE_FIELD] || (!isNil(item.isEditEnabled) && !item.isEditEnabled) || (!isNil(item.isEditEnabled) && !item.isParentOwner)) {
-      return React.cloneElement(row, modifiedProps);
+      return React.cloneElement(row, { ...modifiedProps, ['data-cy' as string]: `bom-row-${item.docId}` });
     }
     const isOwner = item.isOwner;
     const isAddPartEnabled = isOwner
@@ -544,6 +515,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
       row,
       {
         ...modifiedProps,
+        ['data-cy' as string]: `bom-row-${item.docId}`,
         className: cx(row.props.className, classes.updatingRow),
       },
       [row.props.children, actions],
@@ -584,12 +556,29 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   let _export;
 
   const exportToExcel = () => {
+    const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD)
-      .map(part => ({
-        ...part,
-        attachmentsCount: part?.attachmentNames?.length,
-        vendorsCount: part?.vendors?.length,
-      }));
+      .map(part => {
+        const availableRevisions = part?.availableRevisions;
+        const changeReqDetails = availableRevisions?.changeRequestDetails;
+        const isReleased = availableRevisions?.isReleased;
+        let cellValue;
+        if (!availableRevisions) {
+          cellValue = CELL_EMPTY_VALUE;
+        } else if (isReleased) {
+          cellValue = CELL_EMPTY_VALUE;
+        } else if (!changeReqDetails) {
+          cellValue = availableRevisions?.displayRevision;
+        } else {
+          cellValue = changeReqDetails?.crId;
+        }
+        return ({
+          ...part,
+          attachmentsCount: part?.attachmentNames?.length,
+          changeRequestDetails: { crId: ArIdAllowedStatusList.includes(part?.status) ? part?.changeRequestDetails?.crId : '' },
+          hasChanges: cellValue,
+        });
+      });
     const tableColumns = getExcelColumns(columns);
     const options = _export.workbookOptions(data, tableColumns);
 
@@ -619,7 +608,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
               data-cy="show-hide-diff"
               className={cx(classes.diffContainer, { [classes.disabled]: isShowOnly })}
             >
-              <span className={classes.toggleIconContainer} onClick={showHideDiff}>
+              <span data-cy="bom-hide-show-diff-button" className={classes.toggleIconContainer} onClick={showHideDiff}>
                 <FontAwesomeIcon
                   className={classes.toggleIcon}
                   size="lg"
@@ -637,7 +626,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                 placement="top"
                 arrow
               >
-                <FontAwesomeIcon className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
+                <FontAwesomeIcon data-cy="excel-download" className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
               </StyleTooltip>
             </Grid>
             { showTree && <Grid item
