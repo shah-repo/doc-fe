@@ -25,6 +25,7 @@ const CostCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.cost"
     >
       <span className={classes.Cell}>
         {`${getCellValue(dataItem, field)} `}

@@ -1,10 +1,7 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
-import {
-  FormikField,
-  TextField,
-} from '../../../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../../../components/forms/fields-next';
 import { EditableBOM } from '../../../interface';
 import { enableFieldAfterPartSelection, getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -45,6 +42,7 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.ref-designator"
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (

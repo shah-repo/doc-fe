@@ -40,6 +40,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.ar-id"
     >
       <span className={classes.Cell}>
         {arID && isArIdVisible && (

@@ -53,6 +53,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
       style={style}
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
+      data-cy="cell.primary-attachment"
     >
       {type && (
         <Tooltip title={fileName} placement="top" arrow>

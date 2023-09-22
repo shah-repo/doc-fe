@@ -39,6 +39,7 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
       style={style}
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
+      data-cy="cell.vendor"
     >
       <div onClick={handleClick}>
         <Tooltip

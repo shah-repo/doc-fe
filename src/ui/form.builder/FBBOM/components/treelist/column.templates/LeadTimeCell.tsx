@@ -29,6 +29,7 @@ const LeadTimeCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.lead-time"
     >
       <span className={classes.Cell}>
         {getCellValue(isEditMode ? values : dataItem, field)}

@@ -2,10 +2,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import { translate } from '../../../../../../common/intl';
-import {
-  FormikField,
-  TextField,
-} from '../../../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../../../components/forms/fields-next';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { EditableBOM } from '../../../interface';
 import { CELL_EMPTY_VALUE } from '../constants';
@@ -55,6 +52,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.comments"
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && displayValue && (

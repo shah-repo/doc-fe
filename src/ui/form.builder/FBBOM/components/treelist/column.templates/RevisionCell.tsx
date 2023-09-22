@@ -31,6 +31,7 @@ const RevisionCell: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.revision"
     >
       <span className={classes.Cell}>
         {getCellValue(isEditMode ? values : dataItem, field)}

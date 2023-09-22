@@ -56,6 +56,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
             <IconButton
               kind="action"
               size="small"
+              data-cy="action-add.child.part"
               onClick={() => onChildPartAdd(dataItem)}
             >
               <FontAwesomeIcon icon={solid('plus')} />
@@ -73,6 +74,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
             <IconButton
               kind="action"
               size="small"
+              data-cy="action-restore"
               onClick={() => onRestore(dataItem)}
             >
               <FontAwesomeIcon
@@ -94,6 +96,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
               size="small"
               onClick={() => onDelete(dataItem)}
               ref={deleteRef}
+              data-cy="action-delete"
               disabled={isDeleteDisabled}
             >
               <FontAwesomeIcon

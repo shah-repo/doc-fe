@@ -4,9 +4,7 @@ import { useFormikContext } from 'formik';
 import { find, isString } from 'lodash';
 import React, { ComponentType } from 'react';
 import { translate } from '../../../../../../common/intl';
-import {
-  FormikField,
-} from '../../../../../components/forms/fields-next';
+import { FormikField } from '../../../../../components/forms/fields-next';
 import unitsOptions from '../../../../FBData/unitsOptions.json';
 import { EditableBOM } from '../../../interface';
 import { enableFieldAfterPartSelection, getCellValue, isEditBOM } from '../utils';
@@ -52,6 +50,7 @@ const UnitCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell.unit"
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (
