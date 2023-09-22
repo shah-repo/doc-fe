@@ -50,7 +50,11 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   }, [changeRequestDetails]);
 
   return (
-    <AsyncGate asyncAction={loadAction} asyncState={loadAsyncState} startActionOnMount={true}>
+    <AsyncGate
+      asyncAction={loadAction}
+      asyncState={loadAsyncState}
+      startActionOnMount={true}
+    >
       <Dialog
         disableBackdropClick={true}
         disableEnforceFocus
@@ -84,21 +88,29 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers
-          id="ApprovalRequest-content"
-        >
+        <DialogContent dividers id="ApprovalRequest-content">
           <Observer>
-            {() => (<>
-              {FBDataStore.isDraftPartsAdded && <ChangeRequestUpdateContainer
-                changeRequest={changeRequestDetails}
-                hideSideBar
-                currentDocRevId={currentDocRevId}
-                inDialog={true} />}
-              {!FBDataStore.isDraftPartsAdded && <ChangeRequestUpdateContainer
-                changeRequest={changeRequestDetails}
-                hideSideBar
-                currentDocRevId={currentDocRevId}
-                inDialog={true} />}</>)}</Observer>
+            {() => (
+              <>
+                {FBDataStore.isDraftPartsAdded && (
+                  <ChangeRequestUpdateContainer
+                    changeRequest={changeRequestDetails}
+                    hideSideBar
+                    currentDocRevId={currentDocRevId}
+                    inDialog={true}
+                  />
+                )}
+                {!FBDataStore.isDraftPartsAdded && (
+                  <ChangeRequestUpdateContainer
+                    changeRequest={changeRequestDetails}
+                    hideSideBar
+                    currentDocRevId={currentDocRevId}
+                    inDialog={true}
+                  />
+                )}
+              </>
+            )}
+          </Observer>
         </DialogContent>
       </Dialog>
     </AsyncGate>
