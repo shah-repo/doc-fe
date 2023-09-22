@@ -95,7 +95,6 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
   return [...columns].map(col => {
     switch (col.field) {
       case 'arId':
-      case 'hasChanges':
         return { ...col, field: 'changeRequestDetails.crId' };
       case 'customDocId':
         return { ...col, field: 'docId' };
