@@ -66,7 +66,7 @@ const HasChangesCell: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell.has-changes"
+      data-cy="cell-has-changes"
     >
       <span className={classes.titleInfoCell}>
         {render()}

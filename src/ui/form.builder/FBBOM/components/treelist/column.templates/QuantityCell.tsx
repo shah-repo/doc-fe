@@ -47,7 +47,7 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell.quantity"
+      data-cy="cell-quantity"
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (

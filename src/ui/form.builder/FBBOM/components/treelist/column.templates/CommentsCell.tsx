@@ -52,7 +52,7 @@ const CommentsCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell.comments"
+      data-cy="cell-comments"
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && displayValue && (

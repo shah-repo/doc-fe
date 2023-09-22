@@ -33,7 +33,7 @@ export const Status: React.ComponentType<CustomTreeListCellProps> | undefined = 
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell.status"
+      data-cy="cell-status"
     >
       {status && <Grid
         container

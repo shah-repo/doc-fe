@@ -608,7 +608,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
               data-cy="show-hide-diff"
               className={cx(classes.diffContainer, { [classes.disabled]: isShowOnly })}
             >
-              <span data-cy="bom.hide.show.diff.button" className={classes.toggleIconContainer} onClick={showHideDiff}>
+              <span data-cy="bom-hide-show-diff-button" className={classes.toggleIconContainer} onClick={showHideDiff}>
                 <FontAwesomeIcon
                   className={classes.toggleIcon}
                   size="lg"
@@ -626,7 +626,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
                 placement="top"
                 arrow
               >
-                <FontAwesomeIcon data-cy="excel.download" className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
+                <FontAwesomeIcon data-cy="excel-download" className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
               </StyleTooltip>
             </Grid>
             { showTree && <Grid item

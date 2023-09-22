@@ -50,7 +50,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
       style={style}
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
-      data-cy="cell.alternate-parts"
+      data-cy="cell-alternate-parts"
     >
       <div onClick={handleToggle}>
         <Tooltip

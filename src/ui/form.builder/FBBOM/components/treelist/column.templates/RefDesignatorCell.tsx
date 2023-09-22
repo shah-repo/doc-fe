@@ -42,7 +42,7 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell.ref-designator"
+      data-cy="cell-ref-designator"
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && (

@@ -56,7 +56,7 @@ export default function ActionButtons (props: BOMActionsProps<EditableBOM>): Rea
             <IconButton
               kind="action"
               size="small"
-              data-cy="action-add.child.part"
+              data-cy="action-add-child-part"
               onClick={() => onChildPartAdd(dataItem)}
             >
               <FontAwesomeIcon icon={solid('plus')} />
