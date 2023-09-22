@@ -592,7 +592,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
         const changeReqDetails = availableRevisions?.changeRequestDetails;
         const isReleased = availableRevisions?.isReleased;
         let cellValue;
-        if (!part?.availableRevisions) {
+        if (!availableRevisions) {
           cellValue = CELL_EMPTY_VALUE;
         } else if (isReleased) {
           cellValue = CELL_EMPTY_VALUE;
