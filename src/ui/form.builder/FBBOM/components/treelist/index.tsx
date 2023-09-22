@@ -51,6 +51,7 @@ import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomCo
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
+  CELL_EMPTY_VALUE,
   DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
@@ -584,12 +585,29 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   let _export;
 
   const exportToExcel = () => {
+    const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD)
-      .map(part => ({
-        ...part,
-        attachmentsCount: part?.attachmentNames?.length,
-        vendorsCount: part?.vendors?.length,
-      }));
+      .map(part => {
+        const availableRevisions = part?.availableRevisions;
+        const changeReqDetails = availableRevisions?.changeRequestDetails;
+        const isReleased = availableRevisions?.isReleased;
+        let cellValue;
+        if (!availableRevisions) {
+          cellValue = CELL_EMPTY_VALUE;
+        } else if (isReleased) {
+          cellValue = CELL_EMPTY_VALUE;
+        } else if (!changeReqDetails) {
+          cellValue = availableRevisions?.displayRevision;
+        } else {
+          cellValue = changeReqDetails?.crId;
+        }
+        return ({
+          ...part,
+          attachmentsCount: part?.attachmentNames?.length,
+          changeRequestDetails: { crId: ArIdAllowedStatusList.includes(part?.status) ? part?.changeRequestDetails?.crId : '' },
+          hasChanges: cellValue,
+        });
+      });
     const tableColumns = getExcelColumns(columns);
     const options = _export.workbookOptions(data, tableColumns);
 
