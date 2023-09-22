@@ -68,7 +68,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp }) => {
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
-    dispatch(documentRevisionsActions.reload(dataProp?.id));
+    dispatch(documentRevisionsActions.load(dataProp?.id));
   };
 
   return (
