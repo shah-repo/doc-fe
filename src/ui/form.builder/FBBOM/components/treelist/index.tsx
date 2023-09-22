@@ -588,15 +588,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
     const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD)
       .map(part => {
-        const changeReqDetails = part?.availableRevisions?.changeRequestDetails;
-        const isReleased = part?.availableRevisions?.isReleased;
+        const availableRevisions = part?.availableRevisions;
+        const changeReqDetails = availableRevisions?.changeRequestDetails;
+        const isReleased = availableRevisions?.isReleased;
         let cellValue;
         if (!part?.availableRevisions) {
           cellValue = CELL_EMPTY_VALUE;
         } else if (isReleased) {
           cellValue = CELL_EMPTY_VALUE;
         } else if (!changeReqDetails) {
-          cellValue = part?.availableRevisions?.displayRevision;
+          cellValue = availableRevisions?.displayRevision;
         } else {
           cellValue = changeReqDetails?.crId;
         }
