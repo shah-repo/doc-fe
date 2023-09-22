@@ -123,7 +123,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               <Autocomplete
                 disableClearable
                 value={selectedNumberOfLabel}
-                options={range(1, 10, 1)}
+                options={range(1, 11, 1)}
                 getOptionLabel={(option) => typeof (option) == 'number' ? String(option) : option}
                 onChange={(e, value: Number) => onNumberOfLabelChange(value)} />
             </FormField>
