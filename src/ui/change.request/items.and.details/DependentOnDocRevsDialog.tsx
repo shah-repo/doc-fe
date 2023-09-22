@@ -22,6 +22,7 @@ import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/t
 import { Button, Checkbox } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
 import { FB } from '../../form.builder';
+import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -60,7 +61,10 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
   );
 
   const async = useAsync<ChangeRequest>({
-    onSuccess: dialog.close,
+    onSuccess: () => {
+      FBDataStore.setIsDraftPartsAdded(!FBDataStore.isDraftPartsAdded);
+      dialog.close();
+    },
   });
 
   const saveChangeRequest = useActionCreator(changeRequestsActions.save);
