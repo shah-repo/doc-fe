@@ -33,6 +33,7 @@ export const BooleanCell: React.FC<CustomTreeListCellProps> | undefined = ({
       style={style}
       role="gridcell"
       className={cx(className, classes.cellborderBottom)}
+      data-cy="cell-boolean"
     >
       <div onClick={flag ? handleToggle : handleToggle}>
         <FontAwesomeIcon

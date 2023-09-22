@@ -245,7 +245,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   const getInfoIcon = () => (
     <span className={cx(classes.infoIcon, classes.defaultIcon)} onClick={openRevChangeDialog}>
       <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
-        <FontAwesomeIcon color={Colors.primaryLight} icon={solid('circle-exclamation')} />
+        <FontAwesomeIcon data-cy="new-revision-available" color={Colors.primaryLight} className={cx(classes.defaultIcon)} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
   );
@@ -368,6 +368,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       aria-expanded={props.expanded}
       aria-selected="false"
       {...{ colSpan, id, style }}
+      data-cy="cell-id"
     >
       {!isEditMode
         && [...(Array(props.level.length) as number[])].map((e, i) => {
@@ -385,6 +386,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
                   )}
                 >
                   <FontAwesomeIcon
+                    data-cy="minimize-row-button"
                     onClick={hasChildren ? onClick : undefined}
                     size="sm"
                     icon={
@@ -436,14 +438,14 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           placement="top"
           arrow
         >
-          <FontAwesomeIcon className={cx(classes.defaultIcon, classes.ownerIcon)} icon={solid('user-pen')} />
+          <FontAwesomeIcon data-cy="owner" className={cx(classes.defaultIcon, classes.ownerIcon)} icon={solid('user-pen')} />
         </Tooltip>}
         {canAddChildren(dataItem) && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >
-          <FontAwesomeIcon className={cx(classes.defaultIcon, classes.childePartAddIcon)} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} />
+          <FontAwesomeIcon data-cy="add-child-part-button" className={cx(classes.defaultIcon, classes.childePartAddIcon)} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} />
         </Tooltip>}
         {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
           title={translate('common.restore')}
