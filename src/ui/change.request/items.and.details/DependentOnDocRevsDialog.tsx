@@ -1,23 +1,10 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Box,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  FormControlLabel,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Box, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { translate } from '../../../common/intl';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
-import {
-  ChangeRequest,
-  ChangeRequestDependentOnDocRevsState,
-  ChangeRequestEditRequestBody,
-  DependedDocRevDetails,
-} from '../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestDependentOnDocRevsState, ChangeRequestEditRequestBody, DependedDocRevDetails } from '../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { Button, Checkbox } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
@@ -173,6 +160,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                           }}
                           checked={selectAll}
                           className={classes.check}
+                          data-cy="select-all"
                         />
                       }
                       label={translate('common.select.all')}
@@ -198,6 +186,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                                 }
                                 name={value.id}
                                 className={classes.check}
+                                data-cy={`field-${value.id}`}
                               />
                             }
                             label={
