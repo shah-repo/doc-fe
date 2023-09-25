@@ -12,7 +12,6 @@ export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHea
     isDisabledInput,
     ...props
   }: T) => {
-
     // MARK: @config
     const { _documentRevisionFormState } = SM.useStores();
 
@@ -29,8 +28,7 @@ export const withDocumentRevisionFormHeader = <T extends DocumentRevisionFormHea
     isDisabledInput = (
       !isUndefined(_documentRevisionFormState?.documentRevision?.id)
       && isCurrentUserOperator
-      && !isOwner
-    );
+      && !isOwner && !_documentRevisionFormState?.documentRevision?.isBeingEditedAfterRelease);
 
     // MARK: @state
 

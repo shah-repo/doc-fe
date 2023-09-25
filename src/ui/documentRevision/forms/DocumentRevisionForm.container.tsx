@@ -224,7 +224,7 @@ DocumentRevisionFormContainerProps
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabled: boolean = initialValues.id !== undefined;
 
-  isOwnerContext = React.createContext(isOwner);
+  isOwnerContext = React.createContext(isOwner || (documentRevision.isBeingEditedAfterRelease ?? false));
   documentTypeContext = React.createContext(documentTypeAcronym);
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
