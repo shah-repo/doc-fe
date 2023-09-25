@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { Observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ReactComponent as NewTabIcon } from '../../../assets/images/new_tab.svg';
@@ -49,7 +50,11 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   }, [changeRequestDetails]);
 
   return (
-    <AsyncGate asyncAction={loadAction} asyncState={loadAsyncState} startActionOnMount={true}>
+    <AsyncGate
+      asyncAction={loadAction}
+      asyncState={loadAsyncState}
+      startActionOnMount={true}
+    >
       <Dialog
         disableBackdropClick={true}
         disableEnforceFocus
@@ -83,14 +88,29 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers
-          id="ApprovalRequest-content"
-        >
-          <ChangeRequestUpdateContainer
-            changeRequest={changeRequestDetails}
-            hideSideBar
-            currentDocRevId={currentDocRevId}
-            inDialog={true} />
+        <DialogContent dividers id="ApprovalRequest-content">
+          <Observer>
+            {() => (
+              <>
+                {FBDataStore.isDraftPartsAdded && (
+                  <ChangeRequestUpdateContainer
+                    changeRequest={changeRequestDetails}
+                    hideSideBar
+                    currentDocRevId={currentDocRevId}
+                    inDialog={true}
+                  />
+                )}
+                {!FBDataStore.isDraftPartsAdded && (
+                  <ChangeRequestUpdateContainer
+                    changeRequest={changeRequestDetails}
+                    hideSideBar
+                    currentDocRevId={currentDocRevId}
+                    inDialog={true}
+                  />
+                )}
+              </>
+            )}
+          </Observer>
         </DialogContent>
       </Dialog>
     </AsyncGate>
