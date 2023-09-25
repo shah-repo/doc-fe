@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
+import { TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, extendDataItem, filterBy, mapTree, orderBy, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
@@ -28,7 +28,10 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import FBDataStore from '../../../FBStore/FBDataStore';
+import { FB } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -37,10 +40,10 @@ import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, C
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
-import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
   const { _tabsState } = SM.useStores();
+  const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -147,6 +150,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
     (loading) => {
       if (loading && documentRevision) {
         _documentRevisionFormState?.setBOMChangesInProgress(false);
+        workspaceState?.setFormInputData(documentRevision);
+        FBDataStore.setRefreshData(documentRevision);
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
