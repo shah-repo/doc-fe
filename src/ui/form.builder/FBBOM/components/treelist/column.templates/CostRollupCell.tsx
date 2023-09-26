@@ -24,6 +24,7 @@ const CostRollupCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
+      data-cy="cell-cost-roll-up"
     >
       <span className={classes.Cell}>
         {dataItem.costRollUp}

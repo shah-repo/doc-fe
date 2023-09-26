@@ -4,27 +4,10 @@ import { Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy, TreeList, TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent,
-  TreeListDraggableRow,
-  TreeListFilterChangeEvent,
-  TreeListRowDragEvent, treeToFlat,
-} from '@progress/kendo-react-treelist';
+import { TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, extendDataItem, filterBy, mapTree, orderBy, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import {
-  chain, get, isEmpty, isNil, map,
-  omit,
-  replace,
-  tail,
-  take,
-  uniq,
-} from 'lodash';
+import { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -45,33 +28,23 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import FBDataStore from '../../../FBStore/FBDataStore';
+import { FB } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import {
-  ADD_FIELD,
-  CELL_EMPTY_VALUE,
-  DATA_ITEM_KEY,
-  DOC_ID_FIELD,
-  EXCEL_FILE_NAME,
-  EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR,
-  SUB_ITEMS_FIELD,
-  TREELIST_CONFIG,
-} from './constants';
-import {
-  BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent,
-  CustomTreeListRowProps,
-  FBBOMProps,
-} from './interface';
+import { ADD_FIELD, CELL_EMPTY_VALUE, DATA_ITEM_KEY, DOC_ID_FIELD, EXCEL_FILE_NAME, EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TREELIST_CONFIG } from './constants';
+import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
-import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = (
   { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
   const { _tabsState } = SM.useStores();
+  const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -178,6 +151,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     (loading) => {
       if (loading && documentRevision) {
         _documentRevisionFormState?.setBOMChangesInProgress(false);
+        workspaceState?.setFormInputData(documentRevision);
+        FBDataStore.setRefreshData(documentRevision);
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
@@ -520,7 +495,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       }),
     };
     if (!item[MODE_FIELD] || (!isNil(item.isEditEnabled) && !item.isEditEnabled) || (!isNil(item.isEditEnabled) && !item.isParentOwner)) {
-      return React.cloneElement(row, modifiedProps);
+      return React.cloneElement(row, { ...modifiedProps, ['data-cy' as string]: `bom-row-${item.docId}` });
     }
     const isOwner = item.isOwner;
     const isAddPartEnabled = isOwner
@@ -546,6 +521,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       row,
       {
         ...modifiedProps,
+        ['data-cy' as string]: `bom-row-${item.docId}`,
         className: cx(row.props.className, classes.updatingRow),
       },
       [row.props.children, actions],
@@ -638,7 +614,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
               data-cy="show-hide-diff"
               className={cx(classes.diffContainer, { [classes.disabled]: isShowOnly })}
             >
-              <span className={classes.toggleIconContainer} onClick={showHideDiff}>
+              <span data-cy="bom-hide-show-diff-button" className={classes.toggleIconContainer} onClick={showHideDiff}>
                 <FontAwesomeIcon
                   className={classes.toggleIcon}
                   size="lg"
@@ -656,7 +632,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
                 placement="top"
                 arrow
               >
-                <FontAwesomeIcon className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
+                <FontAwesomeIcon data-cy="excel-download" className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
               </StyleTooltip>
             </Grid>
             { showTree && <Grid item
