@@ -103,7 +103,7 @@ export default makeStyles((theme) =>
       },
     },
     cellOne: {
-      width: '24%',
+      width: '18%',
       display: 'flex',
       alignItems: 'center',
       columnGap: theme.spacing(1.25),
@@ -119,15 +119,26 @@ export default makeStyles((theme) =>
       },
     },
     cellOther: {
-      width: '38%',
+      width: '25%',
       '& .MuiOutlinedInput-multiline': {
         padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
       },
+    },
+    cellRev: {
+      width: '18%',
+    },
+    cellWhereUsed: {
+      width: '14%',
+      textAlign: 'center',
     },
     hiddenLegend: {
       '& legend': {
         display: 'none',
       },
+    },
+    dot: {
+      height: 10,
+      width: 10,
     },
     itemLeftPadding: {
       paddingLeft: `calc(${theme.spacing(1.25)}px + 1px)`,

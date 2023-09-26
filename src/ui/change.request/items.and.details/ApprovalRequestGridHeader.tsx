@@ -1,9 +1,9 @@
 import useStyles from './ApprovalRequestGrid.styles';
 
-import React from 'react';
-import Text from '../../components/Text';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
+import React from 'react';
+import Text from '../../components/Text';
 
 const ApprovalRequestGridHeader: React.FunctionComponent<{
   lineItemPartCanSubstitute?: boolean}> = ({ lineItemPartCanSubstitute }) => {
@@ -22,6 +22,11 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{
           <Text translation="approvalRequest.grid.heading.item" />
         </span>
       </div>
+      <div className={classes.cellRev}>
+        <span className={classes.verticalDivider}>
+          <Text translation="approvalRequest.grid.heading.rev" />
+        </span>
+      </div>
       <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther)}>
         <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.description.of.change" />
@@ -30,6 +35,11 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{
       <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther)}>
         <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.justification.of.change" />
+        </span>
+      </div>
+      <div className={classes.cellWhereUsed}>
+        <span className={classes.verticalDivider}>
+          <Text translation="approvalRequest.grid.heading.where.used" />
         </span>
       </div>
     </div>

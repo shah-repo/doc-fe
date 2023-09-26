@@ -1,4 +1,4 @@
-import { FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
+import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
