@@ -34,7 +34,7 @@ const References = ({
   const groupOptions = selectedDocument?.document.documentType.groupOptions;
   const email = useSelector(authSelectors.currentUserEmail);
   const isDisabledInput = initialValues && initialValues.id !== undefined
-   && isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email);
+   && isCurrentUserOperator && !isOwner(selectedDocument as DocumentRevision, email) && !selectedDocument?.isBeingEditedAfterRelease;
 
   const showChangeControlDetails = selectedDocument?.changeControlOptions?.id
     && selectedDocument.isBeingEditedAfterRelease;

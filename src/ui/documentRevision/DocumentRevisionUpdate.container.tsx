@@ -82,7 +82,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
-  if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState) {
+  if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState && !documentRevision?.isBeingEditedAfterRelease) {
     return (
       <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }} />
     );
