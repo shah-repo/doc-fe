@@ -69,7 +69,8 @@ import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = (
+  { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
   const { _tabsState } = SM.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -89,7 +90,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   const treeListRef = useRef(null);
 
   const [showTree, setShowTree] = useState(false);
-  const isUpgradeDisabled = substitutingSupersededDisabledChangeControl(documentRevision);
+  isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
