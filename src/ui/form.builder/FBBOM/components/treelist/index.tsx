@@ -41,7 +41,8 @@ import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = (
+  { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
   const { _tabsState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({ documentRevision, isDisabled, isD
   const treeListRef = useRef(null);
 
   const [showTree, setShowTree] = useState(false);
-  const isUpgradeDisabled = substitutingSupersededDisabledChangeControl(documentRevision);
+  isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({

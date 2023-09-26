@@ -15,6 +15,7 @@ import { documentRevisionsActions } from '../../../../state/ducks/documentRevisi
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
@@ -262,7 +263,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
-  const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease;
+  const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease
+    && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
 
   if (showCancelEditPartButton) {
     accessableButtons.push(PreviewControlButtons.CancelEditPartButton);
