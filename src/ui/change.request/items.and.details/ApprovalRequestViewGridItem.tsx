@@ -1,3 +1,5 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
@@ -103,6 +105,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
   };
 
+  const fetchDotIcon = () => <FontAwesomeIcon
+    icon={regular('circle')}
+    className={classes.dot}
+  />;
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -129,11 +136,17 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </Link>
           }
         </div>
+        <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data="" childrenElement={getTableElementData('', 'rev-from-to')} />
+        </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
+        </div>
+        <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data="" childrenElement={fetchDotIcon()} />
         </div>
       </div>
       {

@@ -1,4 +1,6 @@
-import { Button } from '@material-ui/core';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
@@ -9,6 +11,7 @@ import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } f
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
+import KendoTextField from './KendoTextField';
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
   disabledOptions: string[]
@@ -34,6 +37,11 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId);
 
+  const fetchDotIcon = () => <FontAwesomeIcon
+    icon={regular('circle')}
+    className={classes.dot}
+  />;
+
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
@@ -54,6 +62,14 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             }
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
+          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
+            <KendoTextField
+              name="revFromTo"
+              label="form.builder.rev"
+              placeholder="form.builder.enter"
+              rules="required"
+            />
+          </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="descriptionOfChange"
@@ -69,6 +85,15 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               placeholder="form.builder.enter"
               rules="required"
             />
+          </div>
+          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)}>
+            <Tooltip
+              title=""
+              placement="top"
+              arrow
+            >
+              {fetchDotIcon()}
+            </Tooltip>
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
