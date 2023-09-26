@@ -186,7 +186,7 @@ const DependentOnDocRevsDialog: React.FunctionComponent<Props> = ({
                                 }
                                 name={value.id}
                                 className={classes.check}
-                                data-cy={`field-${value.id}`}
+                                data-cy={`field-${value.docId}`}
                               />
                             }
                             label={
