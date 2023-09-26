@@ -99,7 +99,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
   const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
-  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
+  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) || documentRevision?.isBeingEditedAfterRelease;
   const isPOEditState
     = useGetHasTag(GroupTag.PO_ADMIN)
     && checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)
@@ -128,7 +128,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
     && canEditDocRev;
 
   const canPreview
-    = documentRevision && !(canEdit || isNewVersion || isNewOutput || isPOEditState);
+    = documentRevision && !(canEdit || isNewVersion || isNewOutput || isPOEditState || documentRevision?.isBeingEditedAfterRelease);
 
   const subscribeToSocket = documentRevision
     && <DocumentRevisionUpdatedSubscriptions documentRevision={documentRevision} />;

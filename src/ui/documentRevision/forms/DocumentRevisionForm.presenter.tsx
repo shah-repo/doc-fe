@@ -114,7 +114,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabled: boolean = initialValues.id !== undefined;
-  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner && !documentRevision?.isBeingEditedAfterRelease;
   const isDisabledInputInPreview = isPreview || isDisabledInput;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
