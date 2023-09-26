@@ -1,25 +1,25 @@
 import { Box, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import React, { FC, ComponentProps, useState, useCallback, useEffect } from 'react';
+import React, { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactComponent as TodoIcon } from '../../../assets/images/todo.svg';
 import { ReactComponent as MyFeedIcon } from '../../../assets/images/my_feed.svg';
-import { ReactComponent as TrainingIcon } from '../../../assets/images/training_tab.svg';
 import { ReactComponent as RecentIcon } from '../../../assets/images/recent.svg';
+import { ReactComponent as TodoIcon } from '../../../assets/images/todo.svg';
+import { ReactComponent as TrainingIcon } from '../../../assets/images/training_tab.svg';
 import { GroupTag } from '../../../state/ducks/auth/types';
-import { dashboardTodoSelectors } from '../../../state/ducks/dashboard.new/todo';
 import { dashboardMyFeedsActions, dashboardMyFeedsSelectors } from '../../../state/ducks/dashboard.new/my.feeds';
+import { dashboardTodoSelectors } from '../../../state/ducks/dashboard.new/todo';
 import Text from '../../components/Text';
 import useGetHasTag from '../../hooks/useGetHasTag';
-import useStyles from './Tabs.styles';
-import StyledTabs from './common/StyledTabs';
-import StyledTab from './common/StyledTab';
-import { DashboardTabValues } from './Tabs.types';
-import Todo from '../my.feeds/Todo.container';
+import { Translation } from '../../translations/types';
 import MyFeeds from '../my.feeds/MyFeeds.container';
+import Todo from '../my.feeds/Todo.container';
 import Recents from '../recents/Recents.container';
 import Trainings from '../trainings/Trainings.container';
-import { Translation } from '../../translations/types';
+import StyledTab from './common/StyledTab';
+import StyledTabs from './common/StyledTabs';
+import useStyles from './Tabs.styles';
+import { DashboardTabValues } from './Tabs.types';
 
 type TabProps = ComponentProps<typeof StyledTab> & {
   title: Translation
@@ -111,13 +111,13 @@ const Tabs: FC = () => {
           count={feedItems.total ?? 0}
         />
         {isDashboardAdmin && (
-          <Tab
+          <Tab className={classes.MobileTab}
             value={DashboardTabValues.Training}
             icon={<TrainingIcon />}
             title="common.trainings"
           />
         )}
-        <Tab
+        <Tab className={classes.MobileTab}
           value={DashboardTabValues.Recent}
           icon={<RecentIcon />}
           title="common.recent"

@@ -259,7 +259,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid lg={12} className={classes.innerwrap}>
+              <Grid item={true} lg={12} className={classes.innerwrap}>
                 <Grid
                   container={true}
                   wrap="nowrap"
@@ -513,7 +513,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     />
                   )}
                   {poItem.isAttachments && (
-                    <Grid
+                    <Grid item
                       container
                       justify="space-between"
                       alignContent="center"

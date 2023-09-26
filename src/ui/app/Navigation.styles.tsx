@@ -104,4 +104,9 @@ export default (theme: Theme) =>
     userInfo: {
       height: 55,
     },
+    [theme.breakpoints.down('xs')]: {
+      drawer: {
+        display: 'none',
+      },
+    },
   });
