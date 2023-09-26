@@ -49,7 +49,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [description, setDescription] = useState('');
     const [data, setData] = useState({});
     const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
-    const executePrintLotLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLotLabelAsyncTask);
+    const executePrintLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLabelAsyncTask);
 
     const async = useAsync({
       onSuccess: ( data ) => {
@@ -157,7 +157,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: Number(item.value) }), {}),
       };
       asyncPrintLabel.start(
-        executePrintLotLabelAsyncTask,
+        executePrintLabelAsyncTask,
         params,
         asyncPrintLabel,
       );
