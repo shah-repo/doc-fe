@@ -6,6 +6,7 @@ import React, { cloneElement, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
 import { useFormContext } from '../../components/forms/FormContext';
+import { CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME } from '../../document.revision/utils/helpers';
 import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
 import { FBClasses } from '../defaults/layout';
@@ -75,6 +76,7 @@ export const withFBInput = <T extends FBInputProps>(
     isInputOwner,
     lockOwnerName,
     includeNotes,
+    isChangeControlConfigTooltipsEnabled,
     isFbEditorField = false,
     ...props
   }: T) => {
@@ -90,6 +92,14 @@ export const withFBInput = <T extends FBInputProps>(
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,
     }));
+
+    isChangeControlConfigTooltipsEnabled
+      = workspaceState?.document?.document?.documentType?.documentTypeName
+        === CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME
+      || get(
+        workspaceState?.document?.formTemplate?.outputDocumentTypes[0],
+        'documentTypeName',
+      ) === CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME;
 
     useEffect(() => {
       includeNotes
@@ -293,7 +303,7 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     if (isFbEditorField) {
-      if(isUndefined(defaultValue)) {
+      if (isUndefined(defaultValue)) {
         defaultValue = formState?.getFieldValue(name);
       }
       value = defaultValue;
@@ -432,6 +442,7 @@ export const withFBInput = <T extends FBInputProps>(
       deleted,
       isOutput,
       lockOwnerName,
+      isChangeControlConfigTooltipsEnabled,
       includeNotes,
       isFbEditorField,
     });
