@@ -24,7 +24,7 @@ const FBRadioGroup: React.FunctionComponent<FBRadioGroupProps> = ({
   const classes = styles();
   return (
     <FBInput {...props} {...{ type }} labelProps={FBFontStyle.labelProps}>
-      <RadioGroup {...props} {...{ row  }} className={classes.radio}>
+      <RadioGroup {...props} {...{ row }} className={classes.radio}>
         {controls}
       </RadioGroup>
     </FBInput>
