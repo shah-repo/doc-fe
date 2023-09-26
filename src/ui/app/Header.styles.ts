@@ -51,7 +51,7 @@ export default (theme: Theme) =>
     welcomeTextName: {
       fontWeight: 700,
     },
-    MobileMake: {
+    mobileMake: {
       display: 'none',
     },
     [theme.breakpoints.down('xs')]: {
@@ -63,7 +63,7 @@ export default (theme: Theme) =>
       MobileStyle: {
         display: 'none',
       },
-      MobileMake: {
+      mobileMake: {
         background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
         paddingLeft: 24,
         height: '52px',

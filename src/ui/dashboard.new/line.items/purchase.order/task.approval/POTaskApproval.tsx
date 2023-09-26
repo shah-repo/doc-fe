@@ -547,8 +547,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
-          <Grid style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button className={classes.RejectButton} onClick={handleRejectClick}>
+          <Grid className={classes.gridWeb}>
+            <Button className={classes.rejectButton} onClick={handleRejectClick}>
               <span className={classes.actionIcon}>
                 {!rejectHover && (
                   <MobileRejectIcon
@@ -567,7 +567,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 )}
               </span>  <Text message="common.reject" />
             </Button>
-            <Button className={classes.ApprovalButton} onClick={handleApproveClick}>
+            <Button className={classes.approvalButton} onClick={handleApproveClick}>
               <span className={classes.actionIcon}>
                 {!approveHover && (
                   <MobileApproveIcon

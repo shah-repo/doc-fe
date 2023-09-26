@@ -18,19 +18,19 @@ export default makeStyles((theme) => ({
   seemoreButton: {
     display: 'none',
   },
-  ApprovalButton: {
+  approvalButton: {
     display: 'none',
   },
   innerwrap: {
     display: 'inline-flex',
   },
-  RejectButton: {
+  rejectButton: {
     display: 'none',
   },
-  DocIcon: {
-    display: 'none',
+  gridWeb: {
+    display: 'flex',
+    justifyContent: 'center',
   },
-
   [theme.breakpoints.down('xs')]: {
     poActionIconsWidth: {
       display: 'none',
@@ -38,24 +38,20 @@ export default makeStyles((theme) => ({
     innerwrap: {
       display: 'block',
     },
-    RejectButton: {
+    rejectButton: {
       borderRadius: 25,
       background: Colors.latest_red_varient,
       color: Colors.white_smoke,
       display: 'inline-flex',
       paddingRight: 20,
     },
-    ApprovalButton: {
+    approvalButton: {
       borderRadius: 25,
       background: Colors.latest_green_varient,
       color: Colors.white_smoke,
       display: 'inline-flex',
       paddingRight: 20,
 
-    },
-    DocIcon: {
-      marginRight: 10,
-      display: 'inline-flex',
     },
     nested: {
       borderLeft: 'none',

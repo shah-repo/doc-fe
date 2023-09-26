@@ -28,7 +28,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   canToggleCustomLabels,
 }) => (
   <AppBar className={classes.appBar}>
-    <Grid className={classes.MobileMake}> <MobileLogo />
+    <Grid className={classes.mobileMake}> <MobileLogo />
       <Typography variant="caption" className={classes.TextMake} component="div">
         <Text translation="header.design.make" />
       </Typography>
