@@ -94,8 +94,7 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isOutput (): boolean {
-    const { id } = this.document?.formDocument || {};
-    return !isEmpty(id);
+    return Boolean(this.document?.formDocumentId);
   }
 
   public get isLHRProductionBuild (): boolean {
