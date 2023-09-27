@@ -1720,5 +1720,10 @@
   "administration.generalsettings.printing.tab.consumer.key": "Consumer Key",
   "administration.generalsettings.printing.tab.tenant.id": "Tenant ID",
   "administration.generalsettings.printing.tab.printer.serial": "Printer Serial",
-  "administration.generalsettings.save.successful": "Changes successfully saved!"
+  "administration.generalsettings.save.successful": "Changes successfully saved!",
+  "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
+  "ccc.bom.line.changes.tooltip": "Line changes are additions, removals, edits, replacements, upgrades, ordering, alternate part additions, removals",
+  "ccc.approved.supplier.list.changes.tooltip": "Supplier list changes CRUD",
+  "ccc.changes.to.attachments.tooltip": "Attachments changes means any additions, deletions of attachments",
+  "ccc.changes.to.references.tooltip": "Reference changes means any additions or deletions"
 }

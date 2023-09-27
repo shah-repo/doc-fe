@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import moment from 'moment';
 import 'moment-timezone';
+import { translate } from '../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -92,6 +93,21 @@ export const getLatestRevisionId = (revisions: DocumentRevision[] = []): string 
 
 export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
 
+const ATTRIBUTE_CHANGES_KEY = 'attribute-changes';
+const BOM_LINE_CHANGES_KEY = 'bom-line-changes';
+const APPROVED_SUPPLIER_LIST_KEY = 'approved-supplier-list';
+const CHANGES_TO_ATTACHMENTS_KEY = 'changes-to-attachments';
+const CHANGES_TO_REFERENCES_KEY = 'changes-to-references';
+export const SUBSTITUTING_SUPERSEDED_KEY = 'substituting-superseded';
+export const CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME = 'Change Control Configuration';
+
+export const CHANGE_CONTROL_OPTIONS_TOOLTIP_MAPPING = {
+  [ATTRIBUTE_CHANGES_KEY]: translate('ccc.attribute.changes.tooltip'),
+  [BOM_LINE_CHANGES_KEY]: translate('ccc.bom.line.changes.tooltip'),
+  [APPROVED_SUPPLIER_LIST_KEY]: translate('ccc.approved.supplier.list.changes.tooltip'),
+  [CHANGES_TO_ATTACHMENTS_KEY]: translate('ccc.changes.to.attachments.tooltip'),
+  [CHANGES_TO_REFERENCES_KEY]: translate('ccc.changes.to.references.tooltip'),
+};
 // Disabled because of ENC-7826
 /* export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {
   const schema = get(documentRevision, "formDocument.formTemplate.schema");
@@ -103,27 +119,27 @@ export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, Documen
 // Based on the controlOptions - if attribute-changes is set to yes,
 // then editing any of these will need a new revision
 export const formFieldsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
-  return doesFieldChangeAffectRev(documentRevision, 'attribute-changes');
+  return doesFieldChangeAffectRev(documentRevision, ATTRIBUTE_CHANGES_KEY);
 };
 
 export const suppliersDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
-  return doesFieldChangeAffectRev(documentRevision, 'approved-supplier-list');
+  return doesFieldChangeAffectRev(documentRevision, APPROVED_SUPPLIER_LIST_KEY);
 };
 
 export const attachmentsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
-  return doesFieldChangeAffectRev(documentRevision, 'changes-to-attachments');
+  return doesFieldChangeAffectRev(documentRevision, CHANGES_TO_ATTACHMENTS_KEY);
 };
 
 export const referencesDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
-  return doesFieldChangeAffectRev(documentRevision, 'changes-to-references');
+  return doesFieldChangeAffectRev(documentRevision, CHANGES_TO_REFERENCES_KEY);
 };
 
 export const bomDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
-  return doesFieldChangeAffectRev(documentRevision, 'bom-line-changes');
+  return doesFieldChangeAffectRev(documentRevision, BOM_LINE_CHANGES_KEY);
 };
 
 export const substitutingSupersededDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
-  return doesFieldChangeAffectRev(documentRevision, 'substituting-superseded');
+  return doesFieldChangeAffectRev(documentRevision, SUBSTITUTING_SUPERSEDED_KEY);
 };
 
 export const disableOtherFieldsChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {

@@ -7,6 +7,7 @@ import { authSelectors } from '../../state/ducks/auth';
 import { GroupTag, Permission } from '../../state/ducks/auth/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import { AsyncState } from '../../state/types';
 import AsyncGate from '../components/AsyncGate';
@@ -99,7 +100,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
   const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
-  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
+  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) || (documentRevision?.isBeingEditedAfterRelease && documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER);
   const isPOEditState
     = useGetHasTag(GroupTag.PO_ADMIN)
     && checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)

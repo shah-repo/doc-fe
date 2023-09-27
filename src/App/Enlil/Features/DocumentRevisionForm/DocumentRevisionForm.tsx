@@ -10,6 +10,7 @@ import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
@@ -83,11 +84,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = React.useContext(isOperator);
-  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner && !documentRevision.isBeingEditedAfterRelease;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
+
+  const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
+  const isBomDisabled = isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm
+    || !hasPermissionToEditBOM || isRelatedTogetherPart;
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -315,10 +320,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision}
-                                  isDisabled={isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm
-                                  || !hasPermissionToEditBOM}
-                                  isShowOnly={isPartForm}
+                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled} isShowOnly={isPartForm}
+                                  isUpgradeDisabled={isRelatedTogetherPart}
                                 />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
