@@ -453,6 +453,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           arrow
         >
           <FontAwesomeIcon
+            data-cy="field-restore"
             className={cx(classes.restoreParentIcon, classes.defaultIcon)}
             onClick={() => _documentRevisionFormState?.setRestorePartInfo({ dataItem: dataItem, level })}
             icon={solid('arrow-rotate-left')} />
