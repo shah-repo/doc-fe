@@ -17,6 +17,7 @@ import { getInitalsFromName } from '../../../../../components/icons/avatar/helpe
 import Text from '../../../../../components/Text';
 import Colors from '../../../../../layout/theme/utils/colors';
 import ApprovalTitle from '../../../common/ApprovalTitle/presenter';
+import DismissAction from '../../../common/DismissAction';
 import { getDocIcon } from '../../../common/DocIcon';
 import DocId from '../../../common/DocId/presenter';
 import { HoverStyleChip } from '../../../common/HoverStyleChipApprovalApproved';
@@ -27,7 +28,6 @@ import { StyledListItem } from '../../../common/StyledListItem';
 import { StyleTooltip } from '../../../common/StyleTooltip';
 import { DocTypeGroups } from '../../../common/types';
 import useStyles from './approverActions.styles';
-import DismissAction from '../../../common/DismissAction';
 
 interface Props {
   id: string
@@ -37,7 +37,7 @@ interface Props {
   arTitle: string
   approvalStatusChanged: string
   timestamp: string
-  docRevs: {
+  docRevs: Array<{
     docTypeGroup: DocTypeGroups
     documentRevisionId: string
     documentId: string
@@ -46,7 +46,7 @@ interface Props {
     name: string
     justificationOfChange: string
     descriptionOfChange: string
-  }[]
+  }>
   approverName: string
   approverAvatar: Nullable<string>
   approverInitialColor: string
@@ -124,7 +124,7 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemAvatar>
           {approverAvatar ? (

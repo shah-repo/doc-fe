@@ -15,9 +15,6 @@ export default makeStyles((theme) => ({
   nonPoActionIconsWidth: {
     width: 112,
   },
-  seemoreButton: {
-    display: 'none',
-  },
   approvalButton: {
     display: 'none',
   },
@@ -30,9 +27,16 @@ export default makeStyles((theme) => ({
   gridWeb: {
     display: 'flex',
     justifyContent: 'center',
+    background: Colors.background_white,
+  },
+  buttoncursor: {
+    paddingLeft: 1,
   },
   [theme.breakpoints.down('xs')]: {
     poActionIconsWidth: {
+      display: 'none',
+    },
+    nonPoActionIconsWidth: {
       display: 'none',
     },
     innerWrap: {
@@ -56,6 +60,9 @@ export default makeStyles((theme) => ({
     nested: {
       borderLeft: 'none',
       marginLeft: 0,
+    },
+    cursorPointer: {
+      marginRight: 8,
     },
   },
 }));

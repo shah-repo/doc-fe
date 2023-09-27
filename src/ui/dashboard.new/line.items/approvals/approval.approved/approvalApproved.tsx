@@ -19,6 +19,7 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import DismissAction from '../../common/DismissAction';
 import { getDocIcon } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
@@ -28,7 +29,6 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import { DocTypeGroups } from '../../common/types';
 import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
 import useStyles from './approvalApproved.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -38,7 +38,7 @@ interface Props {
   arChangeRequestId: string
   arStatus: string
   timestamp: string
-  docRevs: {
+  docRevs: Array<{
     docTypeGroup: DocTypeGroups
     documentRevisionId: string
     documentId: string
@@ -47,7 +47,7 @@ interface Props {
     name: string
     justificationOfChange: string
     descriptionOfChange: string
-  }[]
+  }>
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
   pinned: boolean
