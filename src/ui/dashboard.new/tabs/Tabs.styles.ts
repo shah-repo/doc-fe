@@ -37,7 +37,7 @@ export default makeStyles((theme) => ({
     marginLeft: 5,
   },
   [theme.breakpoints.down('xs')]: {
-    MobileTab: {
+    mobileTab: {
       display: 'none',
     },
   },

@@ -60,7 +60,7 @@ export default (theme: Theme) =>
         marginRight: 0,
 
       },
-      MobileStyle: {
+      mobileStyle: {
         display: 'none',
       },
       mobileMake: {
@@ -72,13 +72,13 @@ export default (theme: Theme) =>
         display: 'flex',
         alignItems: 'center',
       },
-      TextMake: {
+      textMake: {
         marginLeft: 16,
         fontSize: 15,
         fontWeight: 600,
 
       },
-      MobileGrwFlex: {
+      mobileGrwFlex: {
         display: 'none',
       },
       toolbar: {

@@ -111,13 +111,13 @@ const Tabs: FC = () => {
           count={feedItems.total ?? 0}
         />
         {isDashboardAdmin && (
-          <Tab className={classes.MobileTab}
+          <Tab className={classes.mobileTab}
             value={DashboardTabValues.Training}
             icon={<TrainingIcon />}
             title="common.trainings"
           />
         )}
-        <Tab className={classes.MobileTab}
+        <Tab className={classes.mobileTab}
           value={DashboardTabValues.Recent}
           icon={<RecentIcon />}
           title="common.recent"

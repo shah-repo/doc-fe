@@ -29,7 +29,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
 }) => (
   <AppBar className={classes.appBar}>
     <Grid className={classes.mobileMake}> <MobileLogo />
-      <Typography variant="caption" className={classes.TextMake} component="div">
+      <Typography variant="caption" className={classes.textMake} component="div">
         <Text translation="header.design.make" />
       </Typography>
     </Grid>
@@ -41,8 +41,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         wrap="nowrap"
         spacing={2}
       >
-
-        <Grid item xs className={classes.MobileGrwFlex}>
+        <Grid item xs className={classes.mobileGrwFlex}>
           {!fullHeight && (
             <SearchBar />
           )}
@@ -57,13 +56,13 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             </Typography>
           )}
           {canToggleCustomLabels && (
-            <FormControlLabel className={classes.MobileStyle}
+            <FormControlLabel className={classes.mobileStyle}
               control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
               label={<Text translation="form.builder.header.control.label" />}
             />
           )}
-          <AutosaveToggle className={classes.MobileStyle} />
-          <HelpCenter className={classes.MobileStyle} />
+          <AutosaveToggle className={classes.mobileStyle} />
+          <HelpCenter className={classes.mobileStyle} />
         </Grid>
       </Grid>
     </Toolbar>

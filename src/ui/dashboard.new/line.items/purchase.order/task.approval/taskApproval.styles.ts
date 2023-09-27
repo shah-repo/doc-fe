@@ -21,7 +21,7 @@ export default makeStyles((theme) => ({
   approvalButton: {
     display: 'none',
   },
-  innerwrap: {
+  innerWrap: {
     display: 'inline-flex',
   },
   rejectButton: {
@@ -35,7 +35,7 @@ export default makeStyles((theme) => ({
     poActionIconsWidth: {
       display: 'none',
     },
-    innerwrap: {
+    innerWrap: {
       display: 'block',
     },
     rejectButton: {
