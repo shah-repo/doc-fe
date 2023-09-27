@@ -63,6 +63,12 @@ export const styles = makeStyles((theme) => ({
   },
 }));
 
+export const qtyLabelStyle = makeStyles({
+  qtyLabel: (gridSize : Number) => ({
+    width: `${gridSize}px`,
+  }),
+});
+
 export const labelPropsStyle = {
   color: Colors.gray,
   display: 'flex',
