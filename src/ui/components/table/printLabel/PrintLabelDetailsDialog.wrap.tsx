@@ -1,6 +1,6 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { isEmptyArray } from 'formik';
-import { toUpper } from 'lodash';
+import { isEmpty, toUpper } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -14,6 +14,7 @@ import { printLabelsActions } from '../../../../state/ducks/printLabels';
 import { store } from '../../../../state/store';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import { getLotStatusLabel } from '../../common/header/HeaderLotStatus';
 import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
 import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
@@ -143,7 +144,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const onPrintClick = () => {
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
-        status: selectedItem?.lotStatus,
+        status: getLotStatusLabel(selectedItem?.lotStatus),
         description: description.slice(0, 90),
         partDocId: initialValues.partId,
         revision: initialValues.revision,
@@ -154,7 +155,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
         printDate: moment(selectedDate).format('MMM DD, YYYY'),
         labelsToPrint: Number(selectedNumberOfLabel),
-        quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: Number(item.value) }), {}),
+        quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: isEmpty(item.value) ? null : Number(item.value) }), {}),
       };
       asyncPrintLabel.start(
         executePrintLotLabelAsyncTask,

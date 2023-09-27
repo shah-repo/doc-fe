@@ -451,7 +451,7 @@ export function KendoGrid<T extends any> ({
 
   const onPrintIconClick = (props: GridCellProps) => {
     if(documentTypeCategory === DocumentCategory.Equipment) {
-      const param = { equipIds: [ props?.dataItem?.id] };
+      const param = { equipments: [ props?.dataItem?.document?.docId] };
       async.start(
         executePrintEquimentLabelAsyncTask,
         param,

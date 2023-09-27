@@ -11,6 +11,8 @@ import { labelPropsStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
+const gridMaxWidth = 920;
+
 const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   setSelectedOption,
   closeDialog,
@@ -31,11 +33,10 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   selectedNumberOfLabel,
 }) => {
   const classes = styles();
-
   const qtyUnitsRender = () => {
-    const gridSize = selectedNumberOfLabel < 5 ? (12 / selectedNumberOfLabel) : 3;
+    const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
     return (qtyUnits.map((item, i) => (
-      <Grid item xs={gridSize} key={i} >
+      <Grid item key={i} style={{ width: `${gridSize}px` }} >
         <FormField label="print.label.dialog.field.quantity.units" />
         <FormField label={`(Label ${i + 1})`} >
           <TextField
@@ -60,7 +61,6 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
         <Grid
           container
           alignItems="center"
-          justify="space-between"
           spacing={2} >
           <Grid item xs={8}>
             <FormField label="print.label.dialog.field.partId">
