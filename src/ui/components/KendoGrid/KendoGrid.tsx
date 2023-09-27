@@ -77,12 +77,8 @@ export function KendoGrid<T extends any> ({
   const isPrintColumnAvailable = documentTypeCategory === DocumentCategory.Lot || documentTypeCategory === DocumentCategory.Equipment;
   const executePrintEquimentLabelAsyncTask = useActionCreator(printLabelsActions.postPrintEquipmentLabelAsyncTask);
   const async = useAsync({
-    onSuccess: () => {
-      toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' }));
-    },
-    onError: (message) => {
-      toastError(message);
-    },
+    onSuccess: () => toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' })),
+    onError: toastError,
   });
 
   useEffect(() => {
