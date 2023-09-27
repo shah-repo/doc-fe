@@ -7,7 +7,7 @@ import { Autocomplete, FormField, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
 import { SelectOption } from '../../forms/fields/Select';
 import Text from '../../Text';
-import { labelPropsStyle, styles } from '../styles';
+import { labelPropsStyle, qtyLabelStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
@@ -35,8 +35,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   const classes = styles();
   const qtyUnitsRender = () => {
     const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
+    const qtyClasses = qtyLabelStyle(gridSize);
     return (qtyUnits.map((item, i) => (
-      <Grid item key={i} style={{ width: `${gridSize}px` }} >
+      <Grid item key={i} className={qtyClasses.qtyLabel} >
         <FormField label="print.label.dialog.field.quantity.units" />
         <FormField label={`(Label ${i + 1})`} >
           <TextField
