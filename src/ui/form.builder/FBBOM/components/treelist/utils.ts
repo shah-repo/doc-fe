@@ -1,5 +1,5 @@
 import { isNil } from 'lodash';
-import { DocumentRevisionStatusDisplay } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { FB } from '../../../helpers';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
@@ -53,7 +53,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
             id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
-            isEditEnabled: parentPartRelation.displayStatus !== DocumentRevisionStatusDisplay.Released,
+            isEditEnabled: ![DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(parentPartRelation.status),
           }),
         );
       });
