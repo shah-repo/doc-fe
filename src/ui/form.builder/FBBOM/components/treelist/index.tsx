@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, Grid, IconButton } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
+import { ReactComponent as CloseIcon } from '../../../../../assets/images/leftPanel/close.svg';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
@@ -22,6 +23,7 @@ import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -30,7 +32,7 @@ import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
 import { withThemeNext } from '../../../../layout/theme-next';
 import FBDataStore from '../../../FBStore/FBDataStore';
-import { FB } from '../../../index';
+import { FB, FBBOM } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
@@ -43,7 +45,7 @@ import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } fr
 import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = (
-  { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
+  { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false, isMaxDialogOpen = false }) => {
   const { _tabsState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     expanded: [],
     inEdit: [],
   });
+  const maxDialog = useDialog();
   const { _documentRevisionFormState } = SM.useStores();
   const [selectedPartLevel, setSelectedPartLevel] = React.useState<{level: number[], dataItem: EditableBOM}>();
   const treeListRef = useRef(null);
@@ -119,18 +122,20 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       toastError(response);
     },
   });
-
+  const reloadBOM = () => {
+  _documentRevisionFormState?.setBOMChangesInProgress(false);
+  treeListAsync.start(
+    fetchBOMTreeList,
+    documentRevision.id,
+    documentRevision.documentId,
+    treeListAsync,
+  );
+  };
   useEffect(() => {
     if (!documentRevision || isShowOnly) {
       return;
     }
-    _documentRevisionFormState?.setBOMChangesInProgress(false);
-    treeListAsync.start(
-      fetchBOMTreeList,
-      documentRevision.id,
-      documentRevision.documentId,
-      treeListAsync,
-    );
+    reloadBOM();
   }, [documentRevision?.id]);
 
   const fetchBOMTreeList = useActionCreator(
@@ -335,7 +340,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   };
 
   const addBOM = () => {
-    if (isNewBOMAdditionInProgress()) {
+    if (isNewBOMAdditionInProgress() || maxDialog.isOpen) {
       return;
     }
     _documentRevisionFormState?.setDirty(true);
@@ -354,7 +359,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled || !dataItem.isParentOwner) {
+    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled || !dataItem.isParentOwner || maxDialog.isOpen) {
       // skipping edit for parent and click on edit item itself
       return;
     }
@@ -425,9 +430,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   const onReorder = () => {
     // TODO
   };
-
+  const isExactBOMViewWindow = () => {
+    return (_documentRevisionFormState?.isMaximizedView && isMaxDialogOpen) || (!isMaxDialogOpen && !_documentRevisionFormState?.isMaximizedView);
+  };
   const onChildPartAdd = (dataItem: EditableBOM, updatedState?: BOMState) => {
-    if (isDisabled) {
+    if (isDisabled || !isExactBOMViewWindow()) {
       return;
     }
     const newBOM: EditableBOM = createNewItem();
@@ -479,6 +486,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
+    item.isMaximizedWindow = isMaxDialogOpen;
     item.isUpgradeDisabled = isUpgradeDisabled;
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
@@ -591,6 +599,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
 
     _export.save(options);
   };
+  const openMaximizeDialog = () => {
+    maxDialog.open();
+  _documentRevisionFormState?.setIsMaximizedView(true);
+  };
+  const closeMaximizeDialog = () => {
+    maxDialog.close();
+  _documentRevisionFormState?.setIsMaximizedView(false);
+  reloadBOM();
+  };
   const [maxmizeIconContainerRef, isMaxIconHovered] = useHover<HTMLButtonElement>();
   const renderToolbar = (
     <GridToolbar>
@@ -658,16 +675,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
                 onChange={onColumnShowHide}
               />
             </Grid>
-            <Grid item data-cy="maximize" className={classes.maximizeIconContainer}>
+            {!isMaxDialogOpen && <Grid item data-cy="maximize" className={classes.maximizeIconContainer}>
               <StyleTooltip
                 title={translate('bom.maximize.tooltip')}
                 placement="top"
                 arrow
                 ref={maxmizeIconContainerRef}
+                onClick={openMaximizeDialog}
               >
                 <FontAwesomeIcon icon={isMaxIconHovered ? solid('arrows-maximize') : regular('arrows-maximize')} />
               </StyleTooltip>
-            </Grid>
+            </Grid>}
           </Grid>
         </Grid>
 
@@ -883,6 +901,32 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
           closeDialog = {closeWhereUsedDialog}
         />
       }
+      <Dialog
+        open={maxDialog.isOpen}
+        fullScreen
+        onEscapeKeyDown={maxDialog.close}
+        onBackdropClick={maxDialog.close}
+      >
+        <DialogTitle classes={{ root: classes.customDialogTitle }}>
+          <IconButton
+            className={classes.closeButton}
+            onClick={closeMaximizeDialog}
+          >
+            <StyleTooltip
+              title={<Text translation="common.close" />}
+              placement="top"
+              arrow
+            >
+              <CloseIcon />
+            </StyleTooltip>
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <FBBOM documentRevision={documentRevision} isDisabled={isDisabled} isShowOnly={isShowOnly}
+            isUpgradeDisabled={isUpgradeDisabled} isMaxDialogOpen={true}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

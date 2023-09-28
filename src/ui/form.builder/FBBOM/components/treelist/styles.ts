@@ -549,6 +549,15 @@ export default makeStyles((theme) => ({
   toolbarContainer: {
     height: 24,
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1.5),
+    top: theme.spacing(1),
+  },
+  customDialogTitle: {
+    minHeight: 20,
+    padding: theme.spacing(0),
+  },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',
     maxHeight: size ? size.height - 160 : 'auto',
