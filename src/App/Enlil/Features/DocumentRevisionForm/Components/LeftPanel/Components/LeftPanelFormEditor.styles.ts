@@ -10,16 +10,16 @@ export default makeStyles((theme: Theme) =>
       flexWrap: 'nowrap',
     },
     grid: {
-      'flexGrow': 1,
-      'overflow': 'auto',
-      'padding': theme.spacing(2),
+      flexGrow: 1,
+      overflow: 'auto',
+      padding: theme.spacing(2),
       '& .MuiFormHelperText-root': {
         lineHeight: 1.35,
         paddingLeft: theme.spacing(4),
       },
     },
     actions: {
-      padding: theme.spacing(.5, 1, 0),
+      padding: theme.spacing(0.5, 1, 0),
     },
   }),
 );

@@ -5,8 +5,6 @@ import { ReactComponent as ApproveIcon } from '../../../../../assets/images/appr
 import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
-// import { ReactComponent as MobileApproveIcon } from '../../../../../assets/images/mobile_approve.svg';
-import { ReactComponent as MobileRejectIcon } from '../../../../../assets/images/mobile_reject.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
@@ -251,7 +249,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           >
             <span>
               {!rejectHover && (
-                <RejectIcon
+                <RejectIcon fill={Colors.raven} stroke={Colors.raven}
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
                   className={classes.cursorPointer}
@@ -274,7 +272,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon
+                <ApproveIcon fill={Colors.raven}
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
                   className={classes.cursorPointer}
@@ -366,14 +364,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           <Button className={classes.rejectButton} onClick={handleRejectClick}>
             <span className={classes.actionIcon}>
               {!rejectHover && (
-                <MobileRejectIcon
+                <RejectIcon fill={Colors.white_smoke} stroke={Colors.white_smoke}
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
                   className={classes.cursorPointer}
                 />
               )}
               {rejectHover && (
-                <MobileRejectIcon
+                <RejectIcon fill={Colors.white_smoke}
                   data-cy="transition-reject"
                   onClick={handleRejectClick}
                   onMouseLeave={onMouseLeaveActionIcons}
@@ -385,7 +383,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           <Button className={classes.approvalButton} onClick={handleApproveClick}>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon fill="red"
+                <ApproveIcon fill={Colors.white_smoke}
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
                   className={classes.cursorPointer}
@@ -393,7 +391,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
               {approveHover && (
 
-                <ApproveIcon fill="red"
+                <ApproveIcon fill={Colors.white_smoke}
                   data-cy="transition-approve"
                   onClick={handleApproveClick}
                   onMouseLeave={onMouseLeaveActionIcons}

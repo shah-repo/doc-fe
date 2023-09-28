@@ -22,6 +22,9 @@ export default makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  viewIconMobile: {
+    display: 'block',
+  },
   [theme.breakpoints.down('xs')]: {
     actionIcons: {
       display: 'none',
@@ -50,6 +53,9 @@ export default makeStyles((theme) => ({
     },
     cursorPointer: {
       marginRight: 8,
+    },
+    viewIconMobile: {
+      display: 'none',
     },
   },
 }));

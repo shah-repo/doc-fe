@@ -22,6 +22,9 @@ export const styles = makeStyles((theme) =>
       link: {
         pointerEvents: 'none',
       },
+      typographyBold: {
+        whiteSpace: 'normal',
+      },
     },
   }),
 );
