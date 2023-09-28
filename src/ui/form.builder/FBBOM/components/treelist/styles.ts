@@ -461,6 +461,10 @@ export default makeStyles((theme) => ({
     height: 14,
     cursor: 'pointer',
   },
+  maximizeIconContainer: {
+    marginLeft: theme.spacing(1.25),
+    cursor: 'pointer',
+  },
   exportExcelIcon: {
     color: Colors.textBlack,
     paddingRight: theme.spacing(1.25),

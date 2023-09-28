@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, extendDataItem, filterBy, mapTree, orderBy, treeToFlat } from '@progress/kendo-react-treelist';
+import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
@@ -27,11 +27,11 @@ import { substitutingSupersededDisabledChangeControl } from '../../../../documen
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
+import useHover from '../../../../hooks/useHover';
 import { withThemeNext } from '../../../../layout/theme-next';
 import FBDataStore from '../../../FBStore/FBDataStore';
 import { FB } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
-import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -40,6 +40,7 @@ import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, C
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
+import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = (
   { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
@@ -590,7 +591,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
 
     _export.save(options);
   };
-
+  const [maxmizeIconContainerRef, isMaxIconHovered] = useHover<HTMLButtonElement>();
   const renderToolbar = (
     <GridToolbar>
       <Grid container justify="space-between" className={classes.toolbarContainer}>
@@ -656,6 +657,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
               />
+            </Grid>
+            <Grid item data-cy="maximize" className={classes.maximizeIconContainer}>
+              <StyleTooltip
+                title={translate('bom.maximize.tooltip')}
+                placement="top"
+                arrow
+                ref={maxmizeIconContainerRef}
+              >
+                <FontAwesomeIcon icon={isMaxIconHovered ? solid('arrows-maximize') : regular('arrows-maximize')} />
+              </StyleTooltip>
             </Grid>
           </Grid>
         </Grid>
