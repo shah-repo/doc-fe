@@ -32,6 +32,12 @@ export default makeStyles((theme) => ({
   buttoncursor: {
     paddingLeft: 1,
   },
+  collapseIcon: {
+    visibility: 'hidden',
+  },
+  path: {
+    color: 'red',
+  },
   [theme.breakpoints.down('xs')]: {
     poActionIconsWidth: {
       display: 'none',
@@ -63,6 +69,9 @@ export default makeStyles((theme) => ({
     },
     cursorPointer: {
       marginRight: 8,
+    },
+    collapseIcon: {
+      visibility: 'unset',
     },
   },
 }));

@@ -5,7 +5,7 @@ import { ReactComponent as ApproveIcon } from '../../../../../assets/images/appr
 import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
-import { ReactComponent as MobileApproveIcon } from '../../../../../assets/images/mobile_approve.svg';
+// import { ReactComponent as MobileApproveIcon } from '../../../../../assets/images/mobile_approve.svg';
 import { ReactComponent as MobileRejectIcon } from '../../../../../assets/images/mobile_reject.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
@@ -155,9 +155,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         className={classes.buttoncursor}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
+          <CollapseIcon className={`${classes.icon} ${classes.collapseIcon}`} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={`${classes.icon} ${classes.collapseIcon}`} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
@@ -179,45 +179,47 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyBold} ${classes.margin5}`}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {docRevOwnerName}
-                  </Typography>
+              <Grid item={true} lg={12} className={classes.innerWrap}>
+                <Grid
+                  container={true}
+                  wrap="nowrap"
+                  justify="flex-start"
+                  alignItems="center"
+                >
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyBold} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docRevOwnerName}
+                    </Typography>
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="require.approval" />
+                    </Typography>
+                  </Grid>
                 </Grid>
                 <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={`${classes.typography} ${classes.margin5}`}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text translation="require.approval" />
-                  </Typography>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    docId={docId}
+                  />
+                  <DocTitle
+                    url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
-              </Grid>
-              <Grid item={true}>
-                <DocId
-                  url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
-                  docId={docId}
-                />
-                <DocTitle
-                  url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
-                  docRevVersion={docRevVersion}
-                  docRevName={docRevName}
-                />
               </Grid>
               <Grid
                 container={true}
@@ -383,7 +385,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           <Button className={classes.approvalButton} onClick={handleApproveClick}>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <MobileApproveIcon
+                <ApproveIcon fill="red"
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
                   className={classes.cursorPointer}
@@ -391,7 +393,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
               {approveHover && (
 
-                <MobileApproveIcon
+                <ApproveIcon fill="red"
                   data-cy="transition-approve"
                   onClick={handleApproveClick}
                   onMouseLeave={onMouseLeaveActionIcons}
