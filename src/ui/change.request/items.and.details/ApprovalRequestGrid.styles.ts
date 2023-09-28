@@ -95,7 +95,7 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
     cellOne: {
-      width: '16%',
+      width: '24%',
       display: 'flex',
       alignItems: 'center',
       columnGap: theme.spacing(1.25),
@@ -105,7 +105,7 @@ export default makeStyles((theme) =>
       },
     },
     cellOther: {
-      width: '42%',
+      width: '38%',
       '& .MuiOutlinedInput-multiline': {
         padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
       },

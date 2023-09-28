@@ -1,4 +1,4 @@
-import { Theme, makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
 const BASE_COLOR = Colors.primaryBg;
@@ -198,6 +198,7 @@ export default makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         fontWeight: 600,
+        fontSize: 12,
       },
       '& .k-grid-column-menu': {
         top: theme.spacing(0.5),

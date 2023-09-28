@@ -135,6 +135,7 @@ ItemsAndDetailsWrapperProps & {name: string}
 
   return useObserver(() => (
     <ItemsAndDetails
+      changeRequest = {changeRequest}
       formState = {formState}
       handleAdd = {handleAdd}
       handleRemove = {handleRemove}

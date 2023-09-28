@@ -210,6 +210,7 @@ export type FBInputProps =
      */
     labelProps?: BoxProps
     isAddAction?: boolean
+    isChangeControlConfigTooltipsEnabled?: boolean
   };
 
 export const OmitInputClones: FBInputType[] = [

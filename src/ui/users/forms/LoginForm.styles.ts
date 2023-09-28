@@ -60,4 +60,14 @@ export default (theme: Theme) =>
     input: {
       marginTop: '5px !important',
     },
+    [theme.breakpoints.down('xs')]: {
+      title: {
+        width: '100%',
+        marginBottom: theme.spacing(2.5),
+        justifyContent: 'space-around',
+      },
+      formStyle: {
+        width: '100%',
+      },
+    },
   });

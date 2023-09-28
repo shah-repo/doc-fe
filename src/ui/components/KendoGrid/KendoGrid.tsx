@@ -1,19 +1,9 @@
-import { Grid } from '@material-ui/core';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Grid, IconButton } from '@material-ui/core';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
-import {
-  setExpandedState,
-  setGroupIds,
-} from '@progress/kendo-react-data-tools';
-import {
-  GridColumnReorderEvent,
-  GridColumnResizeEvent,
-  GridDataStateChangeEvent,
-  GridExpandChangeEvent,
-  GridFilterCellProps,
-  GridNoRecords,
-  GridToolbar,
-  GridColumn as KendoColumn,
-} from '@progress/kendo-react-grid';
+import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
+import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, map, set } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -22,6 +12,7 @@ import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
+import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
@@ -35,31 +26,28 @@ import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
 import { getLotStatusLabel } from '../common/header/HeaderLotStatus';
 import { DropdownFilterTemplate } from '../common/kendo.column.templates/DropdownFilterTemplate';
 import { RenderCustomCell } from '../common/kendo.column.templates/RenderCellTemplate';
 import ColumnHeader from '../common/kendo/ColumnHeader';
 import ColumnShowHideMenu from '../common/kendo/ColumnShowHideMenu';
-import {
-  DisplayText,
-  hideColumnTitleOnResize,
-  hideOperatorTooltip,
-  orderByLockedState,
-  pagerSettings,
-  setColumnWidth,
-  TranslatedText,
-} from '../common/kendo/helpers';
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, orderByLockedState, pagerSettings, setColumnWidth, TranslatedText } from '../common/kendo/helpers';
 import NoDataFound from '../common/kendo/NoDataFound';
 import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
-import { toastError } from '../notifications';
+import { toastError, toastSuccess } from '../notifications';
 import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../table/ClearFilters';
+import PrintLabelDetailsDialog from '../table/printLabel/PrintLabelDetailsDialog';
+import { printColumnProps } from '../table/printLabel/PrintLabelDetailsDialog.wrap';
 import { DataLoader } from './DataLoader';
 import { KendoGridFilterCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
 
 const lotStatusOptions = Object.values(LotStatus).map(value => createOption(value, getLotStatusLabel(value)));
+const SELECTED_FIELD = 'print';
 
 export function KendoGrid<T extends any> ({
   tableName,
@@ -83,12 +71,32 @@ export function KendoGrid<T extends any> ({
   );
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
+  const [isPrintColumnVisible, setIsPrintColumnVisible] = useState(true);
+  const isPrintColumnAvailable = documentTypeCategory === DocumentCategory.Lot || documentTypeCategory === DocumentCategory.Equipment;
+  const executePrintEquimentLabelAsyncTask = useActionCreator(printLabelsActions.postPrintEquipmentLabelAsyncTask);
+  const async = useAsync({
+    onSuccess: () => toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' })),
+    onError: toastError,
+  });
 
   useEffect(() => {
     if (didMount) {
       setDataState(tableCriteria?.queryDict?.dataState);
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
+        if (isPrintColumnAvailable) {
+          const dataColumns = JSON.parse(tableCriteria.columnConfig);
+          if(dataColumns.findIndex(item => item.field === SELECTED_FIELD) === -1) {
+            dataColumns.splice(JSON.parse(tableCriteria.columnConfig), 0, printColumnProps);
+            setColumns(dataColumns);
+          }
+          else {
+            const printColumn = dataColumns.find(item => item.field === SELECTED_FIELD);
+            setIsPrintColumnVisible(printColumn?.show);
+          }
+        }
       }
     }
   }, [didMount, tableCriteria]);
@@ -294,11 +302,10 @@ export function KendoGrid<T extends any> ({
   };
 
   const sortedColumnDefinitions = orderByLockedState(columns, []);
-
   const renderKendoColumns = (gridWidth: number) =>
     sortedColumnDefinitions.map(
       (column, index) =>
-        column.show && (
+        column.show && column.field !== SELECTED_FIELD && (
           <KendoColumn
             key={index}
             {...column}
@@ -308,11 +315,10 @@ export function KendoGrid<T extends any> ({
             headerCell={
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
-            cell={(props) =>
-            {
-              props.dataItem.displayStatus =  ((documentTypeCategory === DocumentCategory.PurchaseOrder
-                 && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
-                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus );
+            cell={(props) => {
+              props.dataItem.displayStatus = ((documentTypeCategory === DocumentCategory.PurchaseOrder
+                && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
+                ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus);
               return RenderCustomCell(
                 {
                   ...props,
@@ -321,7 +327,8 @@ export function KendoGrid<T extends any> ({
                   tooltipField: column.tooltipField,
                 },
                 column.cell || '',
-              ); }
+              );
+            }
             }
             filterCell={
               filterCellMapping[column.filterCell as string]
@@ -374,6 +381,9 @@ export function KendoGrid<T extends any> ({
       toastError(getTranslatedText('common.no.hide'));
       return;
     }
+    if(field === SELECTED_FIELD && isPrintColumnAvailable) {
+      setIsPrintColumnVisible(!isPrintColumnVisible);
+    }
     const dataColumns = map(columns, (column) => {
       if (column.field === field) {
         column.show = !column.show;
@@ -423,13 +433,35 @@ export function KendoGrid<T extends any> ({
     updateDataColumnsState(dataColumns);
   };
 
-  const result = setExpandedState({
+  let result = setExpandedState({
     data: resultState.data,
     collapsedIds: collapsedState,
   });
 
   // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
   hideOperatorTooltip();
+
+  if (isPrintColumnAvailable) {
+    result = result.map(items => ({ ...items, [SELECTED_FIELD]: true }));
+  }
+
+  const onPrintIconClick = (props: GridCellProps) => {
+    if(documentTypeCategory === DocumentCategory.Equipment) {
+      const param = { equipments: [ props?.dataItem?.document?.docId] };
+      async.start(
+        executePrintEquimentLabelAsyncTask,
+        param,
+        async,
+        );
+      return;
+    }
+    setSelectedItem(props?.dataItem);
+    setDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
 
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
@@ -467,10 +499,26 @@ export function KendoGrid<T extends any> ({
             </Grid>
           </Grid>
         </GridToolbar>
+        {isPrintColumnAvailable && isPrintColumnVisible && (
+          <GridColumn
+            {...printColumnProps }
+            filterable={false}
+            cell={(props) => <td className={props?.className} style={props?.style} >
+              <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
+                <FontAwesomeIcon icon={regular('print')} />
+              </IconButton>
+            </td>}
+          />)}
         {renderKendoColumns(width)}
         <GridNoRecords>{noDataMessage}</GridNoRecords>
       </StyledKendoGrid>
-
+      {isPrintColumnAvailable && isDialogOpen && (
+        <PrintLabelDetailsDialog
+          isOpen={isDialogOpen}
+          closeDialog={closeDialog}
+          selectedItem={selectedItem}
+        />
+      )}
       {dataState && (
         <DataLoader
           dataState={dataState}

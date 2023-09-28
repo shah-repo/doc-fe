@@ -3,23 +3,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InputAdornment, ListSubheader, Popper } from '@material-ui/core';
 import { RenderGroupParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
+import { History } from 'history';
+import { debounce } from 'lodash';
+import { observer } from 'mobx-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { History } from 'history';
-import { Autocomplete } from '../../../../../../ui/components/forms/fields-next';
-import { withThemeNext } from '../../../../../../ui/layout/theme-next';
-import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
-import useStyles from './styles';
-import { FacetCategoryId, Option } from '../../types';
-import { FB } from '../../../../../../ui/form.builder';
-import SearchState from '../../state';
-import { observer } from 'mobx-react';
 import { translate } from '../../../../../../common/intl';
-import { debounce } from 'lodash';
-import Text from '../../../../../../ui/components/Text';
 import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
-import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
+import Text from '../../../../../../ui/components/Text';
+import { Autocomplete } from '../../../../../../ui/components/forms/fields-next';
 import { INPUT_DEBOUNCE_TIMEOUT } from '../../../../../../ui/constants/general';
+import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
+import { FB } from '../../../../../../ui/form.builder';
+import { withThemeNext } from '../../../../../../ui/layout/theme-next';
+import { MAX_TOP_RESULTS, getRecentSearch, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
+import SearchState from '../../state';
+import { FacetCategoryId, Option } from '../../types';
+import useStyles from './styles';
 
 const MIN_QUERY_LENGTH = 3;
 
@@ -36,6 +36,13 @@ const SearchBar: React.FC = () => {
   useEffect(() => {
     setPopperClass(isFocused ? classes.popperFocused : undefined);
   }, [isFocused, classes.popperFocused]);
+
+  const initialSearchQuery = useSearchQuery();
+  useEffect(() => {
+    if (!initialSearchQuery) {
+      setSearchQuery('');
+    }
+  }, [initialSearchQuery]);
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => {
@@ -93,7 +100,9 @@ const SearchBar: React.FC = () => {
     if (event?.type === 'blur') {
       return;
     }
-    setSearchQuery(value);
+    if (event?.type === 'change') {
+      setSearchQuery(value);
+    }
   };
 
   const requestSearch = useMemo(

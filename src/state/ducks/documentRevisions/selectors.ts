@@ -130,7 +130,7 @@ const makeGetAudit = () => createSelector(
       audits[groupId].forEach((audit: Audit) => {
         if (audit.field === 'description') {
           const html = audit.nextValue as string;
-          audit.nextValue = stripTags(html).substring(0, 30);
+          audit.nextValue = stripTags(html);
         }
       });
     });
@@ -140,6 +140,8 @@ const makeGetAudit = () => createSelector(
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncInfo;
+const getLoadAsyncDrawerState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadAsyncDrawerInfo;
 const getLoadAsyncSecurityState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncSecurityInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState =>
@@ -154,6 +156,7 @@ export default {
   getDocumentRevisionsList,
   getDocumentRevision,
   getLoadAsyncState,
+  getLoadAsyncDrawerState,
   getLoadAsyncSecurityState,
   getLoadListAsyncState,
   getLoadDocumentAsyncState,

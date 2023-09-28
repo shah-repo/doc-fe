@@ -7,7 +7,7 @@ import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionStatus, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import { FormContext } from '../../../../ui/components/forms/FormContext';
@@ -16,8 +16,8 @@ import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader
 import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
@@ -41,6 +41,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
+  const isPartForm = checkIsDocumentPart(
+    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
   const smartReferencesFrom
   = documentRevision?.smartReferencesFrom?.filter(
     (ref) =>
@@ -67,6 +69,15 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       labelId: 'tabId.training',
       tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PART]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: 'tabId.bom',
+      tabId: TabTypeOptions.BOM.toLowerCase(),
+      type: TabTypeOptions.BOM,
     }];
   }
 
@@ -108,7 +119,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
-      headerBoxProps={{ maxHeight: '30%', minHeight: 84 }}
+      headerBoxProps={{ maxHeight: '30%', minHeight: 76 }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={documentRevision}
       header= {
@@ -126,7 +137,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         {..._documentRevisionFormState?.documentRevision && !isSideBarHidden && {
           rightSidebar: (
             <Observer>
-              {() => <DocumentRevisionSidebar edit={false} />}
+              {() => (
+                <DocumentRevisionSidebar />
+              )}
             </Observer>
           ),
         }}
@@ -157,8 +170,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
                       return (
                         <AutoSizer onResize={handleResize}>
-                          {(size) => (
-                            <SMBox {...size} onScroll={onScroll} id="Presenter-FBWorkspace">
+                          {({ width }) => (
+                            <SMBox width={width} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
                               {tabType === TabTypeOptions.MIXED && <>
                                 <SummaryPresenter
                                   dataProp={documentRevision}
@@ -219,6 +232,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 <FBTrainingInfoContainer
                                   documentRevisionId={documentRevision?.id}
                                   docRevStatus={documentRevision.status}
+                                />
+                              )}
+                              {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                                <FBBOM documentRevision={documentRevision} isDisabled={true} isShowOnly={isPartForm}
+                                  isUpgradeDisabled={true}
                                 />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (

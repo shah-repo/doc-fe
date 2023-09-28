@@ -26,6 +26,10 @@ const Permissions: React.FunctionComponent<Props> = ({
     currentEmployeeTags.push(GroupTag.PO_ADMIN);
   }
 
+  if (!currentEmployeePermissions.includes(Permission.EDIT_BOM)) {
+    currentEmployeePermissions.push(Permission.EDIT_BOM);
+  }
+
   const permissionsRenderer = () => (
     <Box width={700} mt={5}>
       <Typography variant="h4" style={{ marginBottom: '16px' }}>

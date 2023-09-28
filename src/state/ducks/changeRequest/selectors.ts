@@ -4,6 +4,7 @@ import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
 import { Audit, AuditGroupType } from '../audit/types';
+import { ChangeRequestDependentOnDocRevsState } from './types';
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -59,7 +60,7 @@ const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByC
 
 const makeGetAudit = () => createSelector(
   getAudit,
-  (audits: AuditGroupType = {}) =>  {
+  (audits: AuditGroupType = {}) => {
     Object.keys(audits).forEach((groupId) => {
       audits[groupId].map((audit: Audit) => {
         switch (audit.field) {
@@ -88,6 +89,9 @@ const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.cha
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
 
+const getDependentOnDocRevsState = (state: ApplicationState): ChangeRequestDependentOnDocRevsState =>
+  state.changeRequests.dependentOnDocRevs;
+
 export default {
   byId,
   getChangeRequestsList,
@@ -101,4 +105,5 @@ export default {
   getAudit,
   getAssignessList,
   makeGetAudit,
+  getDependentOnDocRevsState,
 };

@@ -67,6 +67,7 @@ export enum DocumentCategory {
   Supplier = 'Supplier',
   Equipment = 'Equipment',
   TrainingCurriculums = 'Training Curriculums',
+  Lot = 'Lot',
 }
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',
@@ -147,6 +148,27 @@ export interface RelatedParentPartDetails {
   docRevId: string
 }
 
+export interface ChangeControlOptions {
+  docId: string
+  id: string
+  name: string
+  status: DocumentRevisionStatus
+  version: number
+  displayRevision: string
+  releasedAt: string
+  formInput: Record<string, any>
+  schemaMap: {[key: string]: string}
+}
+
+export interface IAssociatedChangeRequest {
+  crId: string
+  revChanges: string
+  title?: string
+  owner: string
+  state: string
+  updatedAt: string
+}
+
 interface LSHS{
   lhr: LHR
   lot: LOT
@@ -161,6 +183,8 @@ interface Precalc {
   pm_due_date?: string
   lshs_subtitle?: LSHS
   lot_on_hand_quantity?: string
+  lot_part?: string
+  lot_part_revision?: string
 }
 
 interface DocumentsInLHRS {
@@ -232,7 +256,11 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
+  changeControlOptions?: ChangeControlOptions
+  isBeingEditedAfterRelease?: boolean
   lotStatus: LotStatus
+  hasAttachments?: boolean
+  hasPrimaryAttachment?: boolean
 }
 
 export interface SmartReference {
@@ -402,6 +430,7 @@ export interface FBDocumentRevisionProps {
   renderHTML?: string
   renderHTMLDefined?: boolean
   status?: DocumentRevisionStatus
+  displayStatus?: string
   tasks?: FBTaskItem[]
   notes?: FBNoteItem[]
 }

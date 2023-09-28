@@ -1,3 +1,4 @@
+import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
@@ -16,13 +17,14 @@ import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../.
 import { ApplicationState } from '../../../../../../../state/reducers';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
-import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
+import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
 import styles from './styles';
 
 interface ContainerProps {
@@ -84,6 +86,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
+  const isPart = checkIsDocumentPart(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = useContext(isOperator);
@@ -92,13 +95,16 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
-
+  const isPartForm = useSelector(
+    (state: ApplicationState) => documentRevision?.formTemplate
+      ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+      : false,
+  );
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
 
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
-
   useEffect(() => {
     if (isLHR) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,6 +143,15 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       labelId: 'tabId.training',
       tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PART]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: 'tabId.bom',
+      tabId: TabTypeOptions.BOM.toLowerCase(),
+      type: TabTypeOptions.BOM,
     }];
   }
 
@@ -221,6 +236,15 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
+                        {((isPart || isPartForm) && formPreview) && (
+                          <Grid item xs={12}>
+                            <RelatedPartsWrapper
+                              viewOnly={true}
+                              documentRevision={documentRevision}
+                              relatedPartsStatus= {documentRevision?.relatedPartsStatus}
+                            />
+                          </Grid>
+                        )}
                         {documentRevision && showTabContent
                         && <FBSchema
                           {...{ schema }}
@@ -263,6 +287,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           documentRevisionId={documentRevision?.id}
                           docRevStatus={documentRevision?.status}
                         />
+                      )}
+                      {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                        <FBBOM documentRevision={documentRevision}
+                          isDisabled={true} isShowOnly={true} />
                       )}
                     </SMBox>
                   );

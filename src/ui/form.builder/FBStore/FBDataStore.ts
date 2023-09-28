@@ -9,11 +9,15 @@ class FBDataStore {
   @observable public refreshData: DocumentRevision | undefined;
   @observable public poApprovals: FBInlineApprovalBody[] | Approval[] = [];
   @observable public inlineApprovals: FBInlineApprovalBody[] | Approval[] = [];
+  @observable public isDraftPartsAdded = false;
 
-  @computed public get revisionChangeType() {
+  @computed public get revisionChangeType () {
     return this.refreshData?.revisionChangeType;
   }
 
+  @action public setIsDraftPartsAdded = (value) => {
+    set(this, 'isDraftPartsAdded', value);
+  };
   @action public setRefreshData = (value) => {
     set(this, 'refreshData', value);
   };
