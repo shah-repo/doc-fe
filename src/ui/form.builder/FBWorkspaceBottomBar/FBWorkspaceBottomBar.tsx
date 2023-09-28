@@ -20,7 +20,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
   const classes = FBWorkspaceBottomBarStyles();
 
   return (
-    <Box display="flex" className="formOptionsBox" justifyContent="center" p={1} { ...boxProps }>
+    <Box display="flex" className="formOptionsBox" justifyContent="center" pt={1} { ...boxProps }>
       <Grid container justify="space-between" alignItems="center" className={classes.formOptionsBox}>
         <Grid item>
           <Typography className={classes.formOptionsText} data-cy="form-options-text">

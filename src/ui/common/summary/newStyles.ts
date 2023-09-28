@@ -4,26 +4,23 @@ import Colors from '../../layout/theme/utils/colors';
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     descriptionContainer: {
-      'border': '0 !important',
-      'maxHeight': '150px',
-      'overflow': 'auto',
-      'fontSize': '14px',
-      'display': 'flex',
+      border: '0 !important',
+      maxHeight: 150,
+      overflow: 'auto',
+      fontSize: 14,
+      display: 'flex',
       '&.ql-container.ql-snow': {
-        'border': 0,
+        border: 0,
         '& .ql-editor': {
           padding: 0,
           color: '#474747 !important',
         },
       },
-      'whiteSpace': 'pre-line',
+      whiteSpace: 'pre-line',
     },
     btnStyle: {
       fontSize: '14px',
       color: Colors.navy,
-    },
-    container: {
-      paddingTop: '6px !important',
     },
     title: {
       fontWeight: 600,
@@ -33,12 +30,12 @@ export const styles = makeStyles((theme: Theme) =>
       top: '40px',
     },
     moreOrLess: (isClamped: boolean) => ({
-      'color': Colors.dodger_blue,
-      'padding': '0',
-      'fontSize': '14px',
-      'display': isClamped ? 'inherit' : 'none',
-      'margin': 0,
-      'textTransform': 'lowercase',
+      color: Colors.dodger_blue,
+      padding: 0,
+      fontSize: 14,
+      display: isClamped ? 'inherit' : 'none',
+      margin: 0,
+      textTransform: 'lowercase',
       '&:hover': {
         background: 'unset',
       },

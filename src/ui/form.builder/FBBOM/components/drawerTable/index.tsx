@@ -1,0 +1,177 @@
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import { FormikProvider, useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { SM } from '../../../../../App';
+import { translate } from '../../../../../common/intl';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import NoDataFound from '../../../../components/common/kendo/NoDataFound';
+import { Button } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../../../components/notifications';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import { AlternatePart, AlternatePartEditEvent, EditableAlternatePart, FBBOMDrawerTableProps } from '../treelist/interface';
+import { buildSchema } from './schema';
+import useStyles from './styles';
+
+const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId, isDisabled }) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const { _documentRevisionFormState } = SM.useStores();
+  const basePartNodeRevId = _documentRevisionFormState?.documentRevision?.id ?? '';
+
+  const fetchAlternateParts = useActionCreator(
+    documentRevisionsActions.fetchAlternateParts,
+  );
+  const addAlternateParts = useActionCreator(
+    documentRevisionsActions.addAlternatePart,
+  );
+  const deleteAlternateParts = useActionCreator(
+    documentRevisionsActions.deleteAlternatePart,
+  );
+  const [alternateParts, setAlternateParts] = useState<EditableAlternatePart[]>();
+  const [editedAlternatePart, setEditedAlternatePart] = useState<EditableAlternatePart>();
+  const formik = useFormik<Partial<EditableAlternatePart>>({
+    initialValues: {},
+    onSubmit: (values) => {
+      alternatePartAsync.start(
+        addAlternateParts,
+        {
+          parentNodeRevId: parentRevId,
+          alternatePartNodeRevId: values.id,
+          basePartNodeRevId,
+        },
+        alternatePartAsync,
+      );
+    },
+  });
+  const alternatePartAsync = useAsync({
+    onSuccess: () => {
+      fetchAlternatePartAsync.start(
+        fetchAlternateParts,
+        parentRevId,
+        fetchAlternatePartAsync,
+      );
+      dispatch(documentRevisionsActions.loadAudit(basePartNodeRevId));
+    },
+    onError: (response) => {
+      toastError(response);
+    },
+  });
+
+  const fetchAlternatePartAsync = useAsync({
+    onSuccess: (response?: EditableAlternatePart[]) => {
+      setAlternateParts(response);
+      discardAlternatePart();
+    },
+    onError: (response) => {
+      toastError(response);
+    },
+  });
+
+  useEffect(() => {
+    if (!parentRevId) {
+      return;
+    }
+    fetchAlternatePartAsync.start(
+      fetchAlternateParts,
+      parentRevId,
+      fetchAlternatePartAsync,
+    );
+  }, [parentRevId]);
+
+  const handleAddAlternatePart = () => setEditedAlternatePart({
+    id: uuidv4(),
+    [MODE_FIELD]: Mode.add,
+  });
+
+  const editAlternatePart = ({ dataItem }: AlternatePartEditEvent) => setEditedAlternatePart(dataItem);
+
+  const discardAlternatePart = () => {
+    setEditedAlternatePart(undefined);
+    formik.resetForm();
+  };
+
+  const deleteAlternatePart = (dataItem: AlternatePart) => {
+    if (!isDisabled) {
+      alternatePartAsync.start(
+        deleteAlternateParts,
+        parentRevId,
+        dataItem.id,
+        basePartNodeRevId,
+        alternatePartAsync,
+      );
+    }
+  };
+
+  const rowRender: DataGridProps<EditableAlternatePart>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableAlternatePart;
+    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
+
+    if (!isUpdating) {
+      return row;
+    }
+
+    return React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
+  };
+
+  const isAlternatePartAdded = editedAlternatePart?.[MODE_FIELD] === Mode.add;
+
+  const handleRowClick = editedAlternatePart ? undefined : editAlternatePart;
+
+  const alternatePartList = alternateParts?.reduce((list, alternatePart) => {
+    const isAlternatePartEdited = editedAlternatePart && editedAlternatePart.id === alternatePart.id;
+
+    return [
+      {
+        ...(isAlternatePartEdited ? editedAlternatePart : alternatePart),
+        [MODE_FIELD]: isAlternatePartEdited ? Mode.edit : Mode.show,
+      },
+      ...list,
+    ];
+  }, isAlternatePartAdded ? [editedAlternatePart] : []);
+
+  const schema = buildSchema({
+    actionsClass: classes.actionsCell,
+    onConfirm: formik.submitForm,
+    onDiscard: discardAlternatePart,
+    onDelete: deleteAlternatePart,
+    isDisabled,
+  });
+
+  return (
+    <Box position="relative">
+      <FormikProvider value={formik}>
+        <KendoDataGrid<EditableAlternatePart>
+          fullWidth={false}
+          filterable={false}
+          hasBoxScrollbars
+          schema={schema}
+          loading= {fetchAlternatePartAsync.isLoading || alternatePartAsync.isLoading}
+          data={alternatePartList ?? []}
+          rowRender={rowRender}
+          onRowClick={handleRowClick}
+          fallback={<NoDataFound />}
+          className={classes.grid}
+        />
+      </FormikProvider>
+      {!isDisabled && <Button
+        kind="add"
+        fullWidth
+        onClick={handleAddAlternatePart}
+        className={classes.addPartButton}
+      >
+        {translate('bom.alternate.part.add')}
+      </Button> }
+    </Box>
+  );
+};
+
+export default FBBOMDrawerTable;

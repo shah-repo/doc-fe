@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { getStartOfDayDateString, TIME_ZONE } from '../../../../../common/utils/date';
+import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
@@ -25,11 +25,12 @@ import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRe
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
-import { Button } from '../../../../components/forms/fields-next';
-import { FormContext } from '../../../../components/forms/FormContext';
-import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { FormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
+import { toastError } from '../../../../components/notifications';
 import { FB } from '../../../../form.builder';
+import { BOM } from '../../../../form.builder/FBBOM/interface';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -55,6 +56,8 @@ interface Props {
   isRecord: boolean
   isInlineApproval: boolean
   renderAsButton?: boolean
+  isBOMExists?: boolean
+  isPart?: boolean
 }
 
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
@@ -70,8 +73,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
   renderAsButton,
+  isBOMExists = false,
+  isPart = false,
 }) => {
-
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const documentRevision = useSelector(
@@ -179,7 +183,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // Existing Draft CO calls
   const getDraftApprovalRequestsAction = useActionCreator(changeRequestsActions.draftApprovalRequestsList);
   const asyncGetDraftApprovalRequests = useAsync({
-    onSuccess: (data: Pick<ChangeRequest, 'crId' | 'title' | 'id'>[] = []) => {
+    onSuccess: (data: Array<Pick<ChangeRequest, 'crId' | 'title' | 'id'>> = []) => {
       const options = data.map((option) => ({
         label: `${option.crId} - ${option.title}`,
         value: option.id,
@@ -206,6 +210,34 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       toastError(err as string);
     },
   });
+  const [isBomRecord, setIsBomRecord] = useState<boolean>(isBOMExists);
+  const bomInfoAsync = useAsync({
+    onSuccess: ({
+      bomTreeRelations,
+      parentRevDetails,
+    }: {
+      bomTreeRelations: BOM[]
+      parentRevDetails: BOM
+    }) => {
+      setIsBomRecord(bomTreeRelations.length > 0);
+    },
+  });
+  const fetchBOMTreeList = useActionCreator(
+    documentRevisionsActions.fetchBOMTree,
+  );
+
+  useEffect(() => {
+    if (isBomRecord || !isPart) {
+      return;
+    }
+    setIsBomRecord(isBOMExists);
+    bomInfoAsync.start(
+      fetchBOMTreeList,
+      documentRevision.id,
+      documentRevision.documentId,
+      bomInfoAsync,
+    );
+  }, []);
 
   useEffect(() => {
     if (templateOptions.length === 1 && optionChosen === ARActions.NEW) {
@@ -351,7 +383,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
-    dispatch(documentRevisionsActions.reload(docRevId));
+    dispatch(documentRevisionsActions.load(docRevId));
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
@@ -431,7 +463,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             ? (
               <SplitReleaseButton
                 className={classes.button}
-                disableExpessAR={revisionStage !== 1}
+                disableExpessAR={isBomRecord || isBOMExists || revisionStage !== 1}
                 onClick={openDialog}
               />
             )

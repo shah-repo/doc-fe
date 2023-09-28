@@ -11,33 +11,32 @@ import { withDocumentRevisionFormHeader } from './DocumentRevisionFormHeader.wra
 const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHeaderProps> = ({
   _documentRevisionFormState,
   isDisabledInput,
+  inRestrictedEditMode,
   documentTypeId,
   type,
-}) =>  (
+}) => (
   <Observer>
     {() => (
       <Box
         id="SMHeaderTmpl"
-        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0.25}
-        paddingBottom={1.25}
+        paddingTop={SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL) ? 2 : 0}
         pl={3.25}
         pr={3.75}
+        pb={1.5}
       >
         {
           type !== 'newOutput' && _documentRevisionFormState?.documentRevision
             && <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
         }
-        <Box paddingBottom={1.25} paddingTop={1.25}>
-          <Title
-            name="name"
-            documentTypeId={documentTypeId}
-            disabled={isDisabledInput}
-          />
-        </Box>
+        <Title
+          name="name"
+          documentTypeId={documentTypeId}
+          disabled={isDisabledInput || inRestrictedEditMode}
+        />
         <Description
           isQms={_documentRevisionFormState?.docInfo.isQms || false}
           documentTypeId={documentTypeId}
-          isDisabled={isDisabledInput}
+          isDisabled={isDisabledInput || inRestrictedEditMode}
         />
       </Box>
     )}

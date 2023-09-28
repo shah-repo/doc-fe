@@ -1,6 +1,6 @@
 import { InputAdornment } from '@material-ui/core';
 import React from 'react';
-import { FBInputProps, FBTextField } from '..';
+import { FB, FBInputProps, FBTextField } from '..';
 
 const ADDITIONAL_SETTINGS = 'editor-additions';
 
@@ -11,8 +11,11 @@ interface Props extends FBInputProps {
 const FBNumericField: React.FunctionComponent<Props> = ({
   ...props
 }) => {
+  const { formState } = FB.useStores();
   const prefix = props[ADDITIONAL_SETTINGS].prefix;
   const suffix = props[ADDITIONAL_SETTINGS].suffix;
+  const fieldValue = props.defaultValue ?? formState?.getFieldValue(props.name);
+  const defaultValue = fieldValue && `${prefix ?? ''}${fieldValue}${suffix ?? ''}`;
 
   const InputProps = {
     inputProps: {
@@ -22,7 +25,7 @@ const FBNumericField: React.FunctionComponent<Props> = ({
     startAdornment: prefix ? <InputAdornment position="start">{prefix}</InputAdornment> : undefined,
     endAdornment: suffix ? <InputAdornment position="end">{suffix}</InputAdornment> : undefined,
   };
-  return <FBTextField {...props} type="number" InputProps={InputProps} />;
+  return <FBTextField {...props} type="number" InputProps={InputProps} defaultValue={defaultValue} />;
 };
 
 export default FBNumericField;

@@ -22,6 +22,16 @@ import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import useMqttSubscription from '../../../hooks/useMqttSubscription';
 
+interface Message {
+  data: {
+    message: string
+  }
+}
+
+interface MessageData {
+  url: string
+}
+
 interface Props {
   id?: string
   renderHTMLDefined?: Nullable<boolean>
@@ -29,7 +39,7 @@ interface Props {
   isPO?: boolean
 }
 const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
-  id,
+  id = '',
   renderHTMLDefined,
   showDownloadButton = false,
   isPO,
@@ -55,11 +65,14 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   };
 
   const callback = React.useCallback((message: string) => {
-    const json = JSON.parse(message).data.message;
-    const { url } = JSON.parse(json);
+    if (!htmlRequested) {
+      return;
+    }
+    const json = JSON.parse(message) as Message;
+    const { url } = JSON.parse(json.data.message) as MessageData;
     assetAsync.start(assetAction, url, id, assetAsync);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [htmlRequested]);
 
   const topic = React.useMemo(() =>
     `${employeeId}/document_revisions/${id}/pdf`
@@ -71,7 +84,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   const assetAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       setHtmlRequested(false);
-      setURL(downloadInfo?.url || '');
+      setURL(downloadInfo?.url ?? '');
       dialog.open();
     },
     onError: () => {

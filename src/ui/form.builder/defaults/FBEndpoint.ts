@@ -64,4 +64,6 @@ export enum FBEndpoint {
   ApprovalLevels = '/document_revisions/threshold',
   GlobalSearch = '/global_search/documents',
   TrainingRecord = '/training_record',
+  PrintLotLabels ='/zebra/labels/lot',
+  PrintEquipmentLabels ='/zebra/labels/equipment',
 }

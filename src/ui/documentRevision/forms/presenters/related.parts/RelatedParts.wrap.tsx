@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
-import Text from '../../../../components/Text';
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
 import { toastError, toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -17,7 +17,6 @@ import useAsync from '../../../../hooks/useAsync';
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
-
 interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
@@ -163,6 +162,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const updateRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId, suffixNumber, suffixName, rootDocId }: any) => {
       relatedPartsState.updateRelatedPartsList(docRevId, { suffixNumber, suffixName, rootDocId });
+      workspaceState?.saveDocRev();
     },
   });
   const handleUpdate = (docRevId: string, suffixNumber: string, suffixName: string) => {
@@ -237,20 +237,22 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   };
 
   return useObserver(() => (
-    <RelatedParts
-      parentStatus = {parentPartStatus}
-      parentStatusChanged = {parentPartStatusChanged}
-      {...{
-        documentRevision,
-        createNewDocument,
-        viewRelatedPart,
-        handleRemove,
-        handleUpdate,
-        fetchRelatedParts,
-        voidRelatedPart,
-        relatedPartsState,
-      }}
-    />
+    <>
+      <RelatedParts
+        parentStatus = {parentPartStatus}
+        parentStatusChanged = {parentPartStatusChanged}
+        {...{
+          documentRevision,
+          createNewDocument,
+          viewRelatedPart,
+          handleRemove,
+          handleUpdate,
+          fetchRelatedParts,
+          voidRelatedPart,
+          relatedPartsState,
+        }}
+      />
+    </>
   ));
 };
 

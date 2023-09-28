@@ -36,6 +36,7 @@ enum Colors {
   // Destructive/Error
   error='#EC2B00',
   errorHighlight='#FEF4F2',
+  errorLightShadow='#FAE1DD',
 
   // Shades
   white='#FFF',
@@ -50,13 +51,14 @@ enum Colors {
   statusReleased='#0DB78D',
   statusVoid='#EC2B00',
   statusClosed='#A2A2A2',
+  statusPendingChange='#FEAA2C',
 
   // Tables
   tableHeader='#F4F7FC',
   tableStroke='#DBE0EB',
 
   // Header
-  headerBg= '#1533CD',
+  headerBg='#1533CD',
 }
 
 export default Colors;

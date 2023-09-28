@@ -1,0 +1,553 @@
+import { makeStyles, Theme } from '@material-ui/core';
+import { Size } from 'react-virtualized';
+import { Colors } from '../../../../layout/theme-next';
+import OldColors from '../../../../layout/theme/utils/colors';
+
+const BASE_COLOR = Colors.primaryBg;
+
+const baseInputStyles = (theme: Theme) => ({
+  width: '100%',
+  height: 30,
+  background: 'none',
+  backgroundColor: Colors.white,
+  borderRadius: theme.shape.borderRadius / 2,
+  border: `1px solid ${Colors.stroke}`,
+
+  // TODO check and remove if needed after upgrading Kendo Grid
+  '&::selection': {
+    backgroundColor: 'highlight !important',
+    color: 'highlighttext !important',
+  },
+
+  '&:hover': {
+    backgroundColor: Colors.gray,
+    borderColor: Colors.stroke,
+  },
+  '&:focus': {
+    boxShadow: 'none',
+    backgroundColor: Colors.white,
+    borderColor: Colors.primaryLight,
+  },
+  '&.k-state-focused': {
+    boxShadow: 'none',
+    backgroundColor: Colors.white,
+    borderColor: Colors.primaryLight,
+  },
+});
+
+export default makeStyles((theme) => ({
+  '@global': {
+    '.k-grid': {
+      borderRadius: theme.shape.borderRadius,
+      border: `1px solid ${Colors.tableStroke}`,
+      color: Colors.textBlack,
+    },
+    '.k-grid-toolbar': {
+      padding: theme.spacing(0.625, 1.875, 0.625, 1.875),
+      height: 34,
+      backgroundColor: Colors.hover,
+      border: 'none',
+      overflow: 'hidden',
+
+      '&:first-child': {
+        borderTopLeftRadius: theme.shape.borderRadius,
+        borderTopRightRadius: theme.shape.borderRadius,
+      },
+    },
+    '.k-grouping-header': {
+      padding: theme.spacing(1.25, 1),
+      backgroundColor: BASE_COLOR,
+      border: 'none',
+      fontSize: 12,
+
+      '&.k-grouping-header-flex': {
+        gap: `${theme.spacing(2)}px`,
+      },
+      '& .k-indicator-container': {
+        padding: 0,
+        margin: 0,
+      },
+      '& .k-group-indicator': {
+        borderRadius: 30,
+        backgroundColor: Colors.white,
+        height: 30,
+        padding: theme.spacing(0.5, 1.25),
+        border: 'none',
+
+        '& .k-link .k-icon': {
+          margin: theme.spacing(0, 1.25, 0, 0),
+          color: Colors.textGray,
+          fontSize: 12,
+          fontWeight: 600,
+        },
+        '& .k-button-icon, & .k-filtercell-operator': {
+          margin: theme.spacing(0, 0, 0, 1.25),
+          color: Colors.primaryLight,
+          minWidth: 0,
+          opacity: 1,
+
+          '&:hover': {
+            color: Colors.primary,
+          },
+        },
+      },
+    },
+    '.k-grid-header': {
+      backgroundColor: Colors.hover,
+      border: 'none',
+      paddingInlineEnd: 0,
+      overflow: 'hidden',
+
+      '&:first-child': {
+        borderTopLeftRadius: theme.shape.borderRadius,
+        borderTopRightRadius: theme.shape.borderRadius,
+      },
+      '& .k-grid-header-wrap': {
+        borderColor: 'transparent',
+        borderWidth: '0 0 0 0',
+        marginRight: 0,
+      },
+      '& table': {
+        minWidth: '100%',
+      },
+      '& tr': {
+        '&:first-child th': {
+          paddingTop: theme.spacing(1.25),
+        },
+        '&:last-child th': {
+          paddingBottom: theme.spacing(1.25),
+        },
+      },
+      '& th': {
+        padding: theme.spacing(0.5, 1.5),
+        border: 'none',
+        borderRight: `1px solid ${Colors.white}`,
+        verticalAlign: 'middle',
+
+        '& .k-cell-inner': {
+          margin: theme.spacing(-0.5, -1.5),
+
+          '& > .k-link': {
+            padding: theme.spacing(0.5, 1.5),
+          },
+        },
+        '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {
+          borderRight: `1px solid ${Colors.white}`,
+          boxShadow: '-5px 12px 10px 2px rgba(0, 0, 0, .1)',
+          clipPath: 'inset(0 0 0 -20px)',
+        },
+        '&.k-grid-header-sticky': {
+          border: 'none',
+          borderRight: `1px solid ${Colors.white}`,
+
+          '&.k-sorted': {
+            backgroundColor: Colors.primaryHighlight,
+          },
+          '&:has(+ :not(.k-grid-header-sticky))': {
+            borderRightColor: 'transparent',
+            boxShadow: '5px 12px 10px 2px rgba(0, 0, 0, .1)',
+            clipPath: 'inset(0 -20px 0 0)',
+          },
+        },
+        '&.k-sorted': {
+          backgroundColor: Colors.primaryHighlight, // TODO check with UX team
+        },
+        '&:last-child': {
+          borderRight: 'none',
+        },
+        '&[role=presentation]': {
+          borderRight: 'none',
+        },
+      },
+      '& .k-filter-row': {
+        '& th:not([aria-label])': {
+          borderRight: 'none',
+        },
+        '& th': {
+          '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {
+            boxShadow: '-5px 0 10px 2px rgba(0, 0, 0, .1)',
+          },
+          '&.k-grid-header-sticky': {
+            '&:has(+ :not(.k-grid-header-sticky))': {
+              boxShadow: '5px 0 10px 2px rgba(0, 0, 0, .1)',
+            },
+          },
+        },
+        '& .k-button': {
+          marginLeft: theme.spacing(0.5),
+        },
+        '& .k-button:not(.k-clear-button-visible)': {
+          display: 'none',
+        },
+      },
+      '& .k-link .k-icon': {
+        color: Colors.textGray,
+        fontWeight: 600,
+        fontSize: 12,
+        verticalAlign: '0.1em',
+        marginLeft: theme.spacing(0.5),
+      },
+      '& .k-cell-inner .k-link .k-icon': {
+        marginLeft: theme.spacing(0.5),
+      },
+      '& .k-header': {
+        verticalAlign: 'middle',
+      },
+      '& .k-column-title': {
+        minWidth: 0,
+        flexShrink: 1,
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        fontWeight: 600,
+        fontSize: 12,
+      },
+      '& .k-grid-column-menu': {
+        top: theme.spacing(0.5),
+
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
+    '.k-master-row .k-grid-content-sticky': {
+      backgroundColor: 'inherit',
+    },
+
+    '.k-grid-container': {
+      overflow: 'hidden',
+
+      '&:last-child': {
+        borderBottomLeftRadius: theme.shape.borderRadius,
+        borderBottomRightRadius: `${theme.shape.borderRadius}px`,
+      },
+    },
+    '.k-textbox': {
+      ...baseInputStyles(theme),
+    },
+    '.k-numerictextbox': {
+      '& .k-numeric-wrap': {
+        ...baseInputStyles(theme),
+      },
+      '& .k-select': {
+        backgroundImage: 'none',
+        border: 'none',
+        backgroundColor: Colors.white,
+        borderLeft: `1px solid ${Colors.tableStroke}`,
+
+        '& .k-link': {
+          '&:hover': {
+            backgroundColor: Colors.hover,
+          },
+        },
+      },
+    },
+    '.k-dropdown': {
+      '& .k-dropdown-wrap': {
+        ...baseInputStyles(theme),
+        justifyContent: 'space-between',
+      },
+    },
+    '.k-select': {
+      '& .k-icon': {
+        color: Colors.textGray,
+      },
+      '& .k-i-arrow-s': {
+        fontSize: 12,
+      },
+    },
+    '.k-popup': {
+      border: `1px solid ${Colors.stroke}`,
+      margin: theme.spacing(0.5, 0),
+      borderRadius: theme.shape.borderRadius / 2,
+      overflow: 'hidden',
+    },
+    '.k-list-container': {
+      '& > .k-popup': {
+        '& .k-state-selected': {
+          color: Colors.textBlack,
+          backgroundColor: Colors.primaryHighlight,
+
+          '&:hover': {
+            color: Colors.textBlack,
+            backgroundColor: Colors.primaryHighlight,
+          },
+        },
+      },
+    },
+    '.k-grid-columnmenu-popup': {
+      '& .k-columnmenu-item': {
+        padding: theme.spacing(1, 1.5),
+        minHeight: 48,
+        display: 'flex',
+        alignItems: 'center',
+
+        '&:hover': {
+          backgroundColor: Colors.hover,
+        },
+      },
+      '& .k-icon': {
+        minWidth: 20,
+        fontSize: 16,
+        color: Colors.textGray,
+        marginRight: theme.spacing(1.75),
+      },
+    },
+    '.k-animation-container': {
+      boxShadow: 'none',
+
+      '& > .k-popup': {
+        boxShadow: 'none',
+      },
+      '&.k-animation-container-shown': {
+        '& > .k-popup': {
+          boxShadow: theme.shadows[2],
+        },
+      },
+    },
+    '.k-icon': {
+      '&.k-i-arrow-s::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f107'",
+      },
+      '&.k-i-arrow-n::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f106'",
+      },
+      '&.k-i-filter::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f0b0'",
+      },
+      '&.k-i-filter-clear::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\e17d'",
+      },
+      '&.k-i-more-vertical::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f142'",
+      },
+      '&.k-i-sort-asc-sm::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\2191'",
+      },
+      '&.k-i-sort-desc-sm::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\2193'",
+      },
+      '&.k-i-eye::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f06e'",
+      },
+      '&.k-i-unlock::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f2dc'",
+      },
+      '&.k-i-lock::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f2dc'",
+      },
+      '&.k-i-group::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f247'",
+      },
+      '&.k-i-ungroup::before': {
+        fontFamily: 'FontAwesome',
+        content: "'\\f248'",
+      },
+      '&.k-i-group-delete::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f057'",
+      },
+      '&.k-i-arrow-end-left::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f323'",
+      },
+      '&.k-i-arrow-end-right::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f324'",
+      },
+      '&.k-i-arrow-60-left::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f104'",
+      },
+      '&.k-i-arrow-60-right::before': {
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f105'",
+      },
+    },
+    '.k-svg-icon': {
+      '&.k-svg-i-caret-alt-right': {
+        '& svg': {
+          fontFamily: 'FontAwesome',
+          fontWeight: '600',
+          content: "'\\f105'",
+        },
+      },
+      '&.k-svg-i-caret-alt-down': {
+        '& svg': {
+          fontFamily: 'FontAwesome',
+          fontWeight: '600',
+          content: "'\\f105'",
+        },
+        fontFamily: 'FontAwesome',
+        fontWeight: '600',
+        content: "'\\f105'",
+      },
+    },
+  },
+  borderBottom: {
+    borderBottom: `1px solid ${OldColors.alice_blue} !important`,
+    borderLeft: '0 !important',
+  },
+  toggleExpandCollapse: {
+    color: Colors.primary,
+    fontSize: 12,
+    fontWeight: 400,
+    cursor: 'pointer',
+    height: 24,
+  },
+  bottomAddButtom: {
+    width: '100%',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+  },
+  updatingRow: {
+    backgroundColor: Colors.gray,
+    position: 'relative',
+    zIndex: 2,
+    outline: `1px solid ${Colors.primaryLight}`,
+    outlineOffset: -1,
+    '& td': {
+      whiteSpace: 'normal !important' as 'normal',
+    },
+  },
+  actionsCell: {
+    overflow: 'visible !important',
+    position: 'sticky',
+    right: 0,
+    width: '0 !important',
+    padding: '0 !important',
+    verticalAlign: 'bottom !important',
+    borderLeft: `1px solid ${Colors.primaryLight} !important`,
+  },
+  popperHolder: {
+    height: '100%',
+  },
+  WhiteBg: {
+    backgroundColor: Colors.white,
+  },
+  grayBg: {
+    backgroundColor: Colors.gray,
+  },
+  deletedBg: {
+    backgroundColor: Colors.errorLightShadow,
+  },
+  inprogressBg: {
+    backgroundColor: Colors.successHighlight,
+  },
+  viewIcon: {
+    fill: Colors.textBlack,
+    paddingRight: theme.spacing(1.25),
+    width: 14,
+    height: 14,
+    cursor: 'pointer',
+  },
+  exportExcelIcon: {
+    color: Colors.textBlack,
+    paddingRight: theme.spacing(1.25),
+    width: 14,
+    height: 14,
+    cursor: 'pointer',
+  },
+  diffContainer: {
+    height: 14,
+    cursor: 'pointer',
+  },
+  toggleIconContainer: {
+    paddingRight: theme.spacing(1.25),
+  },
+  toggleIcon: {
+    color: Colors.primaryLight,
+    cursor: 'pointer',
+    height: 14,
+    width: 14,
+  },
+  toggleIconLabel: {
+    fontSize: 12,
+    fontWeight: 600,
+    lineHeight: '15px',
+    paddingLeft: theme.spacing(0.625),
+  },
+  loader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.white,
+    opacity: 0.7,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    zIndex: 1,
+  },
+  node: {
+    outline: 'solid 1px #999',
+    outlineOffset: '3px',
+    '& circle': {
+      fill: '#fff',
+      stroke: 'steelblue',
+      strokeWidth: '3px',
+    },
+  },
+  link: {
+    fill: 'none',
+    stroke: '#777',
+    strokeWidth: '1px',
+  },
+  linkCircle: {
+    fill: '#0075FF',
+    stroke: '#F5F8FF',
+    strokeWidth: '1px',
+  },
+  whereUsedHeadingText: {
+    fontSize: '13px',
+  },
+  whereUsedStatusText: {
+    fontSize: '10px',
+    fill: '#777',
+  },
+  backgroundRect: {
+    fill: '#999',
+  },
+  statusReleased: {
+    fill: Colors.statusReleased,
+  },
+  statusDraft: {
+    fill: Colors.statusDraft,
+  },
+  statusPendingChange: {
+    fill: Colors.statusPendingChange,
+  },
+  disabled: {
+    pointerEvents: 'none',
+  },
+  toolbarContainer: {
+    height: 24,
+  },
+  treeList: ({ size }: { size?: Size }) => ({
+    width: '100%',
+    maxHeight: size ? size.height - 160 : 'auto',
+    overflow: 'auto',
+  }),
+}));

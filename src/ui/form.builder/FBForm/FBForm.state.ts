@@ -329,8 +329,7 @@ class FBFormState extends FBSchemaState {
         if (!val && reqs === inputValue) {
           return passes(
             false,
-          `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} is 
-          ${attributeNames[reqs] ?? reqs}`);
+          `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} is ${attributeNames[reqs] ?? reqs}`);
         }
 
         return passes();

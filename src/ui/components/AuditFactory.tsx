@@ -13,7 +13,7 @@ import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { FBPurchaseOrderItemType } from '../form.builder';
@@ -183,7 +183,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'approvals.status':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
-          returnValue = (audit.nextValue as Employee).user?.name;
+          returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name}</div>);
           break;
         }
         // falls through intentionally
@@ -299,6 +299,92 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);
         break;
       }
+      case 'bomParts':
+        if (audit.type.includes('ARRAY_EDITED')) {
+          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as BOMTreeData;
+
+          returnValue = (
+            <>
+              { docId && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.docId.updated"
+                values={{
+                  docId,
+                }}
+              />
+              }
+              { quantity && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.quantity.updated"
+                values={{ quantity }}
+              />
+              }
+              { unit && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.unit.updated"
+                values={{ unit }}
+              />
+              }
+              { refDesignator && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.refDesignator.updated"
+                values={{ refDesignator }}
+              />
+              }
+              { comment && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.comment.updated"
+                values={{ comment }}
+              />
+              }
+            </>
+          );
+        } else if (audit.type.includes('ARRAY_NEW')) {
+          const { docId, quantity, unit, refDesignator, comment } = JSON.parse(auditValue) as BOMTreeData;
+
+          returnValue = (
+            <>
+              { docId && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.docId.added"
+                values={{
+                  docId,
+                }}
+              />
+              }
+              { quantity && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.quantity.added"
+                values={{ quantity }}
+              />
+              }
+              { unit && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.unit.added"
+                values={{ unit }}
+              />
+              }
+              { refDesignator && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.refDesignator.added"
+                values={{ refDesignator }}
+              />
+              }
+              { comment && <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.bomParts.comment.added"
+                values={{ comment }}
+              />
+              }
+            </>
+          );
+        } else {
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        }
+        break;
+      case 'bomAlternateParts':
+        returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
           returnValue = (
