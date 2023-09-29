@@ -16,6 +16,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { getLotStatusLabel } from '../../common/header/HeaderLotStatus';
 import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
+import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
@@ -141,6 +142,10 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setSelectedNumberOfLabel(value);
     };
 
+    const onActorChange = ( event: React.ChangeEvent<{}>, value: SelectOption ) => {
+      setSelectedOption(value);
+    };
+
     const onPrintClick = () => {
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
@@ -167,7 +172,6 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     return Component({
       ...(props as T),
       companyEmployees: employees,
-      setSelectedOption,
       handleDateChange,
       selectedOption,
       selectedDate,
@@ -183,6 +187,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       closeDialog,
       onNumberOfLabelChange,
       selectedNumberOfLabel,
+      onActorChange,
     });
   };
 
