@@ -21,6 +21,7 @@ export enum KendoCellTemplates {
   PO_AMOUNT='POAmount',
   DOCUMENT_TYPE='DocumentTypeCellTemplate',
   DURATION='DurationCell',
+  MULTI_SELECT_LIST='MultiSelectList',
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings
