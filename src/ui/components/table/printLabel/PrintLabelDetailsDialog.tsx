@@ -103,10 +103,12 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.by">
               <Autocomplete
+                freeSolo
                 value={selectedOption}
                 options={companyEmployees}
-                getOptionLabel={(option) => `${option.text} (${option.email})`}
+                getOptionLabel={(option) => option?.text ? `${option.text} (${option.email})` : option }
                 onChange={(e, value: SelectOption) => setSelectedOption(value)}
+                onInputChange={(e, value: SelectOption) => setSelectedOption(value)}
               />
             </FormField>
           </Grid>

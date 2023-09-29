@@ -148,7 +148,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         description: description.slice(0, 90),
         partDocId: initialValues.partId,
         revision: initialValues.revision,
-        actor: selectedOption?.text,
+        actor: selectedOption?.text ?? selectedOption,
         lotNumber: initialValues?.lotId?.split('#')[1],
         lotRevUrl: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
         serial: serial,
