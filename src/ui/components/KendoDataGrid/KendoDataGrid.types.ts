@@ -38,6 +38,8 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
   // TODO after upgrading typescript switch to object-deep-keys generic type
   field?: keyof T | string
   children?: Array<ColumnDefinition<T>> | Array<ReactElement<ColumnDefinition<T>>>
+  show?: boolean
+  disabled?: boolean
 }
 
 export interface DataGridProps<T> extends StyledKendoGridProps {

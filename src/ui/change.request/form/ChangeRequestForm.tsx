@@ -14,6 +14,7 @@ import { AsyncState } from '../../../state/types';
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
+import FBMaterialDisposition from '../FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
 import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
@@ -170,10 +171,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && (
-                              <>
-                              </>
-                            )}
+                            && <FBMaterialDisposition />
+                          }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                             && <FBWorkspace

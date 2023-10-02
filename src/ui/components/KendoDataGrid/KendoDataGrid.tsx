@@ -1,14 +1,14 @@
-import { State, process } from '@progress/kendo-data-query';
+import { process, State } from '@progress/kendo-data-query';
 import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import invariant from 'invariant';
 import { flatMapDeep, kebabCase } from 'lodash';
-import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { PropsWithChildren, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
+import { Mode, MODE_FIELD, SOLO_OPERATORS } from './constants';
 import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
-import { MODE_FIELD, Mode, SOLO_OPERATORS } from './constants';
 
 const DEFAULT_DATA_STATE: State = {
   filter: {
@@ -148,6 +148,7 @@ function KendoDataGrid<T> ({
   skipDataProcessing,
   loading,
   schema,
+  children,
   fullWidth,
   fullHeight,
   fallback,
@@ -160,7 +161,7 @@ function KendoDataGrid<T> ({
   style,
   onResize,
   ...props
-}: DataGridProps<T>): React.ReactElement {
+}: PropsWithChildren<DataGridProps<T>>): React.ReactElement {
   const gridRef = ref ?? useRef<Grid>();
   const gridContainerRef = containerRef ?? useRef<HTMLDivElement>(null);
   const [columnsSchema, setColumnsSchema] = useState<Array<ColumnDefinition<T>>>(processSchema(schema));
@@ -296,6 +297,7 @@ function KendoDataGrid<T> ({
             {fallback && (
               <GridNoRecords>{fallback}</GridNoRecords>
             )}
+            {children}
           </StyledKendoGrid>
           {loading && (
             <Loader gridRef={gridContainerRef} />
