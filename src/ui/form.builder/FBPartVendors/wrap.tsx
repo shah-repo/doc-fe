@@ -16,8 +16,8 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
-    const { suppliers, units, statuses } = useOptions();
     const [vendors, setVendors] = useState<Vendor[]>(prepareData(workspaceState?.formInputSync.get(name) ?? []));
+    const { suppliers, units, statuses } = useOptions(vendors.map(v => v.vendor));
 
     const updateState = (state: Vendor[]) => {
       setVendors(prepareData(state));

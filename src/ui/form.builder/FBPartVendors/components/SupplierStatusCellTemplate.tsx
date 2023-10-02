@@ -1,4 +1,4 @@
-import { Box, Chip } from '@material-ui/core';
+import { Box, Chip, CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
@@ -52,7 +52,7 @@ export const SupplierStatusCellTemplate: React.FC<CustomTemplateProps> = (props)
   }
 
   if (!value) {
-    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+    return <CircularProgress size={16} />;
   }
 
   const handleClick = () => onClick?.({ dataItem });
