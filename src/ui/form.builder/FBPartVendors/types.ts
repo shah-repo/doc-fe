@@ -48,7 +48,7 @@ export interface UnitOption {
   text: string
 }
 
-export type UseOptionsHook = () => {
+export type UseOptionsHook = (suppliersList: Supplier[]) => {
   units: string[]
   statuses: string[]
   suppliers: SupplierOption[]
