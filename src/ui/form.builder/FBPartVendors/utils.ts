@@ -65,6 +65,7 @@ export const useOptions: UseOptionsHook = (vendors) => {
       if (data) {
         FBAutocompleteAsyncStore.add(FBAutocompleteAsyncOption.suppliers, data.id, {
           ...data,
+          isUnselectable: true,
         });
       }
     },

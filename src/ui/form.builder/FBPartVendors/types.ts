@@ -81,6 +81,7 @@ export type SupplierOption =
 & Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision'>
 & {
   document: VendorOptionDocument
+  isUnselectable?: boolean
 };
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableVendor> {
