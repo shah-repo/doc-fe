@@ -1,4 +1,6 @@
-import { Button, Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Checkbox as MuiCheckbox, FormControlLabel, Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
@@ -92,6 +94,11 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               placeholder="form.builder.enter"
               rules="required"
             />
+          </div>
+          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)}>
+            <Tooltip title="" placement="top" arrow >
+              <FontAwesomeIcon icon={regular('circle')} className={classes.dot} />
+            </Tooltip>
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>

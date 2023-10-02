@@ -1,3 +1,5 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -151,6 +153,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         </div>
         <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
+        </div>
+        <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data=""
+            childrenElement={<FontAwesomeIcon icon={regular('circle')} className={classes.dot} />}
+          />
         </div>
       </div>
       {
