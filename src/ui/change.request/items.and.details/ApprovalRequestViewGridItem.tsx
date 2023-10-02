@@ -105,11 +105,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
   };
 
-  const fetchDotIcon = () => <FontAwesomeIcon
-    icon={regular('circle')}
-    className={classes.dot}
-  />;
-
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -146,7 +141,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data="" childrenElement={fetchDotIcon()} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data=""
+            childrenElement={<FontAwesomeIcon icon={regular('circle')} className={classes.dot} />}
+          />
         </div>
       </div>
       {

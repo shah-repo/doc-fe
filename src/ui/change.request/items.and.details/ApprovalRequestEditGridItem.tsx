@@ -37,11 +37,6 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId);
 
-  const fetchDotIcon = () => <FontAwesomeIcon
-    icon={regular('circle')}
-    className={classes.dot}
-  />;
-
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
@@ -87,12 +82,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             />
           </div>
           <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <Tooltip
-              title=""
-              placement="top"
-              arrow
-            >
-              {fetchDotIcon()}
+            <Tooltip title="" placement="top" arrow >
+              <FontAwesomeIcon icon={regular('circle')} className={classes.dot} />
             </Tooltip>
           </div>
         </div>
