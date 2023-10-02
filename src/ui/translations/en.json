@@ -1572,6 +1572,7 @@
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
   "tabId.items": "Items",
+  "tabId.materialDisposition": "Material Disposition",
   "tabId.bom": "BOM",
   "documentRevision.form.PO.matrix.duplicate": "PO matrix can't have duplicate limits or level names",
   "meq.chip.nextCalDate": "Next Callibration Due:",

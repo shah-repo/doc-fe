@@ -81,6 +81,14 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+    tabConfig.splice(2, 0, {
+      labelId: 'tabId.materialDisposition',
+      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
+      type: TabTypeOptions.MATERIAL_DISPOSITION,
+    });
+  }
+
   useEffect(() => {
     if (inDialog) {
       _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
@@ -136,7 +144,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index} pt={.25}>
+                        <SMBox key={index} pt={0.25}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
                               && <FBWorkspace
                                 isPortal={false}
@@ -160,6 +168,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
+                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
+                            && (
+                              <>
+                              </>
+                            )}
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                             && <FBWorkspace
