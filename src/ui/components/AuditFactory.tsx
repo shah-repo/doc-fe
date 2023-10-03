@@ -313,7 +313,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 }}
               />
               }
-              { quantity && <Text
+              { (quantity !== undefined) && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.quantity.updated"
                 values={{ quantity }}
@@ -352,7 +352,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 }}
               />
               }
-              { quantity && <Text
+              { (quantity !== undefined) && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.quantity.added"
                 values={{ quantity }}
