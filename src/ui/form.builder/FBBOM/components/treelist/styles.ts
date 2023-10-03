@@ -558,6 +558,9 @@ export default makeStyles((theme) => ({
     minHeight: 20,
     padding: theme.spacing(0),
   },
+  maximizeDialog: {
+    zIndex: 30,
+  },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',
     maxHeight: size ? size.height - 160 : 'auto',

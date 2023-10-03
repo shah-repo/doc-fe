@@ -906,6 +906,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
         fullScreen
         onEscapeKeyDown={maxDialog.close}
         onBackdropClick={maxDialog.close}
+        className={classes.maximizeDialog}
       >
         <DialogTitle classes={{ root: classes.customDialogTitle }}>
           <IconButton
@@ -917,7 +918,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
               placement="top"
               arrow
             >
-              <CloseIcon />
+              <CloseIcon onClick={closeMaximizeDialog} />
             </StyleTooltip>
           </IconButton>
         </DialogTitle>
