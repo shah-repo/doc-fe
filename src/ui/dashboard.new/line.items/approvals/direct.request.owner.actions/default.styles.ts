@@ -8,4 +8,18 @@ export default makeStyles((theme) => ({
     marginLeft: 4,
     marginRight: 5,
   }),
+  innerLotRelease: {
+    display: 'flex',
+  },
+  innerRelease: {
+    flexWrap: 'initial',
+  },
+  [theme.breakpoints.down('xs')]: {
+    innerLotRelease: {
+      display: 'block',
+    },
+    innerRelease: {
+      flexWrap: 'wrap',
+    },
+  },
 }));

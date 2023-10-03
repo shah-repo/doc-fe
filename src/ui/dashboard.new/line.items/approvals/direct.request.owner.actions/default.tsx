@@ -8,6 +8,7 @@ import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import { getDocIcon, getStatusLabel } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
@@ -17,7 +18,6 @@ import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { DocTypeGroups } from '../../common/types';
 import useStyles from './default.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -99,6 +99,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
               wrap="nowrap"
               justify="flex-start"
               alignItems="center"
+              className={classes.innerRelease}
             >
               <Grid item={true}>
                 <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />

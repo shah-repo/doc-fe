@@ -58,7 +58,7 @@ export default (theme: Theme) =>
       welcomeText: {
         fontSize: '1.25rem',
         marginRight: 0,
-
+        whiteSpace: 'nowrap',
       },
       mobileStyle: {
         display: 'none',

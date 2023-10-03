@@ -413,6 +413,3 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 };
 
 export default TaskApprovalPresenter;
-// function setOpen (arg0: boolean) {
-//   throw new Error('Function not implemented.');
-// }

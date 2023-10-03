@@ -28,7 +28,8 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   canToggleCustomLabels,
 }) => (
   <AppBar className={classes.appBar}>
-    <Grid className={classes.mobileMake}> <MobileLogo />
+    <Grid className={classes.mobileMake}>
+      <MobileLogo />
       <Typography variant="caption" className={classes.textMake} component="div">
         <Text translation="header.design.make" />
       </Typography>
@@ -46,7 +47,6 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             <SearchBar />
           )}
         </Grid>
-
         <Grid item>
           {fullHeight && (
             <Typography variant="caption" className={classes.welcomeText} component="div">
