@@ -362,7 +362,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     _documentRevisionFormState?.setDirty(true);
     setSelectedPartLevel({ dataItem, level });
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
-      state.data = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
+      state.data = updateDataAtLevels([...state.data], level, dataItem, false) as BOM[];
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
