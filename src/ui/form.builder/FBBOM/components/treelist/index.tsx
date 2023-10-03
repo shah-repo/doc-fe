@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
+import { TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, extendDataItem, filterBy, mapTree, orderBy, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { chain, get, isEmpty, isNil, isObject, map, omit, replace, tail, take, uniq } from 'lodash';
@@ -31,6 +31,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import FBDataStore from '../../../FBStore/FBDataStore';
 import { FB } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
@@ -39,7 +40,6 @@ import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, C
 import { TreeColumns } from './schema';
 import useStyles from './styles';
 import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
-import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = (
   { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
@@ -353,9 +353,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       inEdit: [newBOM],
     });
   };
-
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled || !dataItem.isParentOwner) {
+    const isInEditableState = dataItem.isParentOwner
+    && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(dataItem.status);
+    if (dataItem.id === documentRevision.id
+      || dataItem.inEdit
+      || isDisabled
+      || dataItem.isDeleted
+      || !dataItem.isEditEnabled
+      || !dataItem.isParentOwner
+      || !isInEditableState
+    ) {
       // skipping edit for parent and click on edit item itself
       return;
     }
