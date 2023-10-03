@@ -558,12 +558,9 @@ export default makeStyles((theme) => ({
     minHeight: 20,
     padding: theme.spacing(0),
   },
-  maximizeDialog: {
-    zIndex: 30,
-  },
-  treeList: ({ size }: { size?: Size }) => ({
+  treeList: ({ size, isMaximizeView }: { size?: Size, isMaximizeView?: boolean }) => ({
     width: '100%',
-    maxHeight: size ? size.height - 160 : 'auto',
+    maxHeight: size ? (isMaximizeView ? '100%' : size.height - 160) : 'auto',
     overflow: 'auto',
   }),
 }));

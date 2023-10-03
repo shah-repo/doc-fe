@@ -50,8 +50,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
+  const { _documentRevisionFormState } = SM.useStores();
 
-  const classes = useStyles({ size });
+  const classes = useStyles({ size, isMaximizeView: _documentRevisionFormState?.isMaximizedView });
   const [state, setState] = React.useState<BOMState>({
     data: [],
     dataState: {
@@ -62,7 +63,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     inEdit: [],
   });
   const maxDialog = useDialog();
-  const { _documentRevisionFormState } = SM.useStores();
   const [selectedPartLevel, setSelectedPartLevel] = React.useState<{level: number[], dataItem: EditableBOM}>();
   const treeListRef = useRef(null);
 
@@ -906,7 +906,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
         fullScreen
         onEscapeKeyDown={maxDialog.close}
         onBackdropClick={maxDialog.close}
-        className={classes.maximizeDialog}
+        style={{ zIndex: 30 }}
       >
         <DialogTitle classes={{ root: classes.customDialogTitle }}>
           <IconButton
