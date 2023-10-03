@@ -7,7 +7,7 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
+import _, { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -271,7 +271,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     initialValues: {},
     onSubmit: (values) => {
       const partInfo = omit(values, [MODE_FIELD, 'dataItem']);
-      if (typeof partInfo.unit === 'object') {
+      if (_.isObject(partInfo.unit)) {
         partInfo.unit = get(partInfo, 'unit.value');
       }
       if (values[ADD_FIELD]) {
