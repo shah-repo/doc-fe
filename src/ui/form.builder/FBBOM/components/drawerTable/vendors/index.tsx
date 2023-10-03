@@ -34,7 +34,6 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
   });
 
   useEffect(() => {
-    console.log(parentNodeRevId);
     if (!parentNodeRevId) {
       return;
     }
