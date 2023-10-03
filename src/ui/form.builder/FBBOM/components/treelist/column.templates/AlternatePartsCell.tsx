@@ -6,7 +6,7 @@ import React from 'react';
 import { SM } from '../../../../../../App';
 import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import AlternatePartsDrawer from '../../drawer/AlternateParts';
-import { ALTERNATE_PARTS_COUNT_KEY, SELECTED_PART_KEY_SEPARATOR } from '../constants';
+import { ALTERNATE_PARTS_COUNT_KEY, CELL_EMPTY_VALUE, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -22,6 +22,9 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const isAlteratePartsExists = alternatePartsCount > 0;
   const { _documentRevisionFormState } = SM.useStores();
   const handleToggle = () => {
+    if (!dataItem.parentNodeRevId) {
+      return;
+    }
     if (!dataItem.isDisabled) {
     _documentRevisionFormState?.setRefreshBOMTree(false);
     }
@@ -39,10 +42,10 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
     }
   };
 
-  const fetchDotIcon = () => <FontAwesomeIcon
+  const fetchDotIcon = () => dataItem.parentNodeRevId ? <FontAwesomeIcon
     icon={isAlteratePartsExists ? solid('circle') : regular('circle')}
     className={cx(classes.dot, { selectedDot: isAlteratePartsExists, deselectedDot: !isAlteratePartsExists })}
-  />;
+  /> : <span> {CELL_EMPTY_VALUE} </span>;
 
   return (
     <td
@@ -63,7 +66,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         </Tooltip>
         {!isAlteratePartsExists && fetchDotIcon()}
       </div>
-      <AlternatePartsDrawer {...{ isDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.displayRevision, status: dataItem.displayStatus, docId: dataItem.docId, isDisabled: drawerActionsDisabled }} />
+      <AlternatePartsDrawer {...{ isDrawerOpened, closeDrawer, partRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], basePartRevId: dataItem.parentNodeRevId, revision: dataItem.displayRevision, status: dataItem.displayStatus, docId: dataItem.docId, isDisabled: drawerActionsDisabled }} />
     </td>
   );
 };

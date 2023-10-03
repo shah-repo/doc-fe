@@ -19,7 +19,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
 }) => {
   const classes = useStyles();
   const [vendors, setVendors] = useState<Vendor[]>([]);
-  const { suppliers, units, statuses } = useOptions();
+  const { suppliers, units, statuses } = useOptions([]);
   const fetchVendors = useActionCreator(
     documentRevisionsActions.fetchVendors,
   );
@@ -34,6 +34,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
   });
 
   useEffect(() => {
+    console.log(parentNodeRevId);
     if (!parentNodeRevId) {
       return;
     }
