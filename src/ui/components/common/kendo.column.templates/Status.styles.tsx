@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
-export const styles = makeStyles({
+export default makeStyles({
   wrapper: {
     display: 'flex',
     alignItems: 'center',

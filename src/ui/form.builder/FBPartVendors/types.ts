@@ -48,7 +48,7 @@ export interface UnitOption {
   text: string
 }
 
-export type UseOptionsHook = () => {
+export type UseOptionsHook = (suppliersList: Supplier[]) => {
   units: string[]
   statuses: string[]
   suppliers: SupplierOption[]
@@ -81,6 +81,7 @@ export type SupplierOption =
 & Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision'>
 & {
   document: VendorOptionDocument
+  isUnselectable?: boolean
 };
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableVendor> {

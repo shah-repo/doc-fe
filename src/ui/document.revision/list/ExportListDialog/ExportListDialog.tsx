@@ -43,8 +43,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   }, [dialog.isOpen]);
 
   const handleFileName = (ev: React.ChangeEvent<any>) => {
-    const { value } = ev.target;
-    saveFileName(value);
+    saveFileName(ev.target.value);
   };
   return (
     <>

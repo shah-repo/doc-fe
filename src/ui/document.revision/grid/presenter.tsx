@@ -21,10 +21,8 @@ export function DocumentListPresenter({
 }: KendoPresenterProps) {
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
-  const handleExportData = (dataToBeExported: DocumentRevision[]) => {
-    setDataToBeExported(dataToBeExported);
-  };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
+
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -44,7 +42,7 @@ export function DocumentListPresenter({
           tableCriteria={tableCriteria}
           schema={schema}
           statuses={statuses}
-          exportDataChanges={handleExportData}
+          exportDataChanges={setDataToBeExported}
           onRowClick={onRowClick}
           queryUrl={queryUrl}
           defaultPayloadData={{

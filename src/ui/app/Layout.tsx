@@ -9,11 +9,34 @@ import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.
 import ChangeRequestContainer from '../change.request/Container';
 import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
-import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GENERAL_SETTINGS_URL, GLOBAL_SEARCH_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from '../constants/urls';
+import {
+  ASYNC_TASKS_URL,
+  CHANGE_REQUEST_CREATE_URL,
+  CHANGE_REQUEST_LIST_URL,
+  CHANGE_REQUEST_ROOT_URL,
+  DASHBOARD_URL,
+  DOCUMENT_BY_CATEGORY_LIST_URL,
+  DOCUMENT_BY_TYPE_LIST_URL,
+  DOCUMENT_REVISION_CREATE_URL,
+  DOCUMENT_REVISION_LIST_URL,
+  DOCUMENT_REVISION_ROOT_URL,
+  DOCUMENT_TYPE_MANAGEMENT_URL,
+  EQUIPMENT_SPECIFICATION_LIST_URL,
+  GENERAL_SETTINGS_URL,
+  GLOBAL_SEARCH_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
+  HOME_URL,
+  PAGE_DETAILS_MANAGEMENT_URL,
+  SLACK_ROOT_URL,
+  TRAINING_DETAIL_URL,
+  TRAINING_URL,
+  USER_MANAGEMENT_ROOT_URL,
+} from '../constants/urls';
 import DashboardLayout from '../dashboard.new/Dashboard.layout';
 import DashboardContainer from '../dashboard/Dashboard.container';
 import DocumentRevisionContainer from '../document.revision/container';
 import DocumentRevisionListContainer from '../document.revision/grid/container';
+import EquipmentSpecificationListContainer from '../equipment.specification/grid/container';
 import { DocumentTypeManagementContainer } from '../document.type.management/kendo/container';
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
@@ -54,6 +77,11 @@ const Layout: React.FunctionComponent = () => {
         <DataFetcherContainer />
         <Switch>
           <Route
+            path={DOCUMENT_REVISION_LIST_URL}
+            exact
+            component={DocumentRevisionListContainer}
+          />
+          <Route
             path={DOCUMENT_REVISION_CREATE_URL}
             exact
             component={DocumentRevisionCreateContainer}
@@ -73,6 +101,11 @@ const Layout: React.FunctionComponent = () => {
             component={DashboardLayout}
           />
           <Route
+            path={EQUIPMENT_SPECIFICATION_LIST_URL}
+            exact
+            component={EquipmentSpecificationListContainer}
+          />
+          <Route
             path={CHANGE_REQUEST_CREATE_URL}
             exact
             component={ChangeRequestCreateContainer}
@@ -85,11 +118,6 @@ const Layout: React.FunctionComponent = () => {
             path={CHANGE_REQUEST_LIST_URL}
             exact
             component={ChangeRequestListContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_LIST_URL}
-            exact
-            component={DocumentRevisionListContainer}
           />
           <Route
             path={TRAINING_DETAIL_URL}

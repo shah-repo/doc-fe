@@ -7,7 +7,7 @@ import { getLotStatusLabel } from '../header/HeaderLotStatus';
 import Tooltip from '../kendo/Tooltip';
 import { statusClassMapping } from '../kendo/helpers';
 import { CustomGridCellProps } from '../kendo/types';
-import { styles } from './Status.styles';
+import useStyles from './Status.styles';
 
 export const Status: React.FC<CustomGridCellProps> = ({
   dataItem,
@@ -18,7 +18,7 @@ export const Status: React.FC<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const status = dataItem[field] as string;
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
