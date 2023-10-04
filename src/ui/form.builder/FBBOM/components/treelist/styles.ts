@@ -126,9 +126,8 @@ export default makeStyles((theme) => ({
 
         '& .k-cell-inner': {
           margin: theme.spacing(-0.5, -1.5),
-
           '& > .k-link': {
-            padding: theme.spacing(0.5, 1.5),
+            padding: theme.spacing(0.5, 0, 0.5, 1.5),
           },
         },
         '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {
