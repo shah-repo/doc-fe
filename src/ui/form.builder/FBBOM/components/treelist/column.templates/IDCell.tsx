@@ -339,11 +339,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
       && !isEditMode
       && !dataItem.isDisabled
       && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete,
-        DocumentRevisionStatus.Released].includes(dataItem.status);
+        DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(dataItem.status);
   };
 
   const getRevInfoIcon = (i, hasChildren, availableRevs) => {
-    if (availableRevs?.isReleased && !dataItem.isDeleted && (hasChildren ? isPrevLevel(i) : isFinalLevel(i))) {
+    if (availableRevs?.isReleased && !dataItem.isDeleted) {
       return getInfoIcon();
     }
   };
@@ -453,6 +453,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           arrow
         >
           <FontAwesomeIcon
+            data-cy="field-restore"
             className={cx(classes.restoreParentIcon, classes.defaultIcon)}
             onClick={() => _documentRevisionFormState?.setRestorePartInfo({ dataItem: dataItem, level })}
             icon={solid('arrow-rotate-left')} />

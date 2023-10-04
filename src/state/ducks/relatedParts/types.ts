@@ -55,7 +55,7 @@ export interface ListItemUpdateData {
 }
 export interface BOMTreeData {
   docId?: string
-  quantity?: string
+  quantity?: number
   unit?: string
   refDesignator?: string
   comment?: string

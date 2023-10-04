@@ -63,3 +63,13 @@ export const GLOBAL_SEARCH_URL = '/search';
 export const GENERAL_SETTINGS_URL = '/general_settings';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
+
+// TODO: fix after backend will be done
+export const EQUIPMENT_SPECIFICATION_LIST_URL = '/equipment_specification';
+export const EQUIPMENT_SPECIFICATION_CREATE_URL = `${EQUIPMENT_SPECIFICATION_LIST_URL}/create`;
+export const EQUIPMENT_SPECIFICATION_RECORD_URL = `${EQUIPMENT_SPECIFICATION_LIST_URL}/:documentId`;
+// export const EQUIPMENT_SPECIFICATION_VERSION_URL = `${EQUIPMENT_SPECIFICATION_RECORD_URL}/version/:equipmentSpecificationId`;
+export const EQUIPMENT_SPECIFICATION_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/version/:equipmentSpecificationId`;
+
+export const EQUIPMENT_SPECIFICATION_ROOT_URL = '/document_revisions';
+export const EQUIPMENT_SPECIFICATION_SEARCH_ROOT_URL = `${EQUIPMENT_SPECIFICATION_ROOT_URL}/search`;

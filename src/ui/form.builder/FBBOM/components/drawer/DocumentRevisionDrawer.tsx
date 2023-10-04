@@ -1,13 +1,9 @@
-import { Box, Grid, IconButton } from '@material-ui/core';
-
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Grid, IconButton } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  documentRevisionsActions,
-  documentRevisionsSelectors,
-} from '../../../../../state/ducks/documentRevisions';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { DOCUMENT_REVISION_GET_ASYNC_DRAWER } from '../../../../../state/ducks/documentRevisions/constants';
 import { ApplicationState } from '../../../../../state/reducers';
 import AsyncGate from '../../../../components/AsyncGate';
@@ -44,7 +40,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({ dataIte
 
   return (
     <Theme>
-      <Box className={classes.drawer}>
+      <Box className={classes.drawer} data-cy="document-revision-drawer">
         <Grid item>
           <div className={classes.iconContainer}>
             <IconButton

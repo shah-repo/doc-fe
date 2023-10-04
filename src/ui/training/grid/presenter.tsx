@@ -19,9 +19,6 @@ export function TrainingListPresenter({
 }: KendoPresenterProps) {
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<TrainingListData[]>([]);
-  const handleExportData = (dataToBeExported: TrainingListData[]) => {
-    setDataToBeExported(dataToBeExported);
-  };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
 
   return (
@@ -41,7 +38,7 @@ export function TrainingListPresenter({
           tableName={tableName}
           tableCriteria={tableCriteria}
           schema={schema}
-          exportDataChanges={handleExportData}
+          exportDataChanges={setDataToBeExported}
           onRowClick={onRowClick}
           queryUrl={queryUrl}
           defaultPayloadData={defaultPayloadData}

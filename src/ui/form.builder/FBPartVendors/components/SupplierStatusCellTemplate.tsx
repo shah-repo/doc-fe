@@ -1,9 +1,9 @@
-import { Box, Chip } from '@material-ui/core';
+import { Box, Chip, CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import { styles as useStyles } from '../../../components/common/kendo.column.templates/Status.styles';
+import useStyles from '../../../components/common/kendo.column.templates/Status.styles';
 import { statusClassMapping } from '../../../components/common/kendo/helpers';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableVendor } from '../types';
@@ -52,7 +52,7 @@ export const SupplierStatusCellTemplate: React.FC<CustomTemplateProps> = (props)
   }
 
   if (!value) {
-    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+    return <CircularProgress size={16} />;
   }
 
   const handleClick = () => onClick?.({ dataItem });
