@@ -61,6 +61,7 @@ export const styles = makeStyles((theme: Theme) =>
     [theme.breakpoints.down('xs')]: {
       paper: {
         width: 'auto',
+        padding: 10,
       },
       boldTitle: {
         width: 'auto',
