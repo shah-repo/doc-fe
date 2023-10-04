@@ -360,15 +360,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     });
   };
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    const isInEditableState = dataItem.isParentOwner
-    && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(dataItem.status);
     if (dataItem.id === documentRevision.id
       || dataItem.inEdit
       || isDisabled
       || dataItem.isDeleted
       || !dataItem.isEditEnabled
       || !dataItem.isParentOwner
-      || !isInEditableState
       || maxDialog.isOpen
     ) {
       // skipping edit for parent and click on edit item itself
