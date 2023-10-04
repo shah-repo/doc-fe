@@ -37,6 +37,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
             labelProps={labelStyle.labelProps} />
           <TextField
             value={consumerKey}
+            data-cy="consumer-key"
             variant="outlined"
             fullWidth
             onChange={onConsumerKeyChange} />
@@ -45,6 +46,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
             labelProps={labelStyle.labelProps} />
           <TextField
             value={tenantID}
+            data-cy="tenant-id"
             variant="outlined"
             fullWidth
             onChange={onTenantIDChange} />
@@ -53,6 +55,7 @@ const PrintingPresenter: React.FunctionComponent<PrinterProps> = ({
             labelProps={labelStyle.labelProps} />
           <TextField
             value={printerSerial}
+            data-cy="printer-serial"
             variant="outlined"
             fullWidth
             onChange={onPrinterSerialChange} />
