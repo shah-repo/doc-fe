@@ -7,7 +7,7 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import { TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, extendDataItem, filterBy, mapTree, orderBy, treeToFlat } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { chain, get, isEmpty, isNil, map, omit, replace, tail, take, uniq } from 'lodash';
+import { chain, get, isEmpty, isNil, isObject, map, omit, replace, tail, take, uniq } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -271,7 +271,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     initialValues: {},
     onSubmit: (values) => {
       const partInfo = omit(values, [MODE_FIELD, 'dataItem']);
-      partInfo.unit = get(partInfo, 'unit.value');
+      if (isObject(partInfo.unit)) {
+        partInfo.unit = get(partInfo, 'unit.value');
+      }
       if (values[ADD_FIELD]) {
         if (!partInfo.parentNodeRevId) {
           partInfo.parentNodeRevId = documentRevision.id;
@@ -351,16 +353,24 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       inEdit: [newBOM],
     });
   };
-
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id || dataItem.inEdit || isDisabled || dataItem.isDeleted || !dataItem.isEditEnabled || !dataItem.isParentOwner) {
+    const isInEditableState = dataItem.isParentOwner
+    && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(dataItem.status);
+    if (dataItem.id === documentRevision.id
+      || dataItem.inEdit
+      || isDisabled
+      || dataItem.isDeleted
+      || !dataItem.isEditEnabled
+      || !dataItem.isParentOwner
+      || !isInEditableState
+    ) {
       // skipping edit for parent and click on edit item itself
       return;
     }
     _documentRevisionFormState?.setDirty(true);
     setSelectedPartLevel({ dataItem, level });
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
-      state.data = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
+      state.data = updateDataAtLevels([...state.data], level, dataItem, false) as BOM[];
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
