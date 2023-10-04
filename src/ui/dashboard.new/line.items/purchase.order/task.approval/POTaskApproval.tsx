@@ -263,12 +263,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   wrap="nowrap"
                   justify="flex-start"
                   alignItems="center"
+                  className={classes.textOverlapMobile}
                 >
                   <Grid item={true} >
                     <Typography
                       component="span"
                       variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
+                      className={`${classes.typographyBold} ${classes.margin5} `}
                       color="textSecondary"
                       noWrap
                     >
@@ -279,19 +280,19 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
+                      className={`${classes.typography} ${classes.margin5} `}
                       color="textPrimary"
                       noWrap
                     >
                       <Text translation="require.approval" />
                     </Typography>
+                    <DocId
+                      url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                      docId={docId}
+                    />
                   </Grid>
                 </Grid>
                 <Grid item={true}>
-                  <DocId
-                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
-                    docId={docId}
-                  />
                   <DocTitle
                     url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
@@ -434,7 +435,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             {dismissLineItem && (
-              <DismissAction classes={classes} onClick={handleDismiss} />
+              <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
             )}
           </Box>
         )}
@@ -454,7 +455,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </span>
         )}
         {hoverItem && dismissLineItem && (
-          <DismissAction classes={classes} onClick={handleDismiss} />
+          <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

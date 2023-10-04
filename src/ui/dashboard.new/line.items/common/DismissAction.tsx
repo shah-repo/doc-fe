@@ -5,13 +5,14 @@ import { StyleTooltip } from './StyleTooltip';
 interface Props {
   classes: any
   onClick: () => void
+  alignCloseClass?: string
 }
 
 const DismissAction: React.FC<Props> = (props) => {
-  const { classes, onClick } = props;
+  const { classes, onClick, alignCloseClass } = props;
 
   return (
-    <span className={classes.actionIcon}>
+    <span className={`${classes.actionIcon} ${alignCloseClass}`}>
       <StyleTooltip
         title="Dismiss"
         placement="top"

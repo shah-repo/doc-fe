@@ -25,6 +25,9 @@ export default makeStyles((theme) => ({
   viewIconMobile: {
     display: 'block',
   },
+  textArlapMobile: {
+    flexWrap: 'nowrap',
+  },
   [theme.breakpoints.down('xs')]: {
     actionIcons: {
       display: 'none',
@@ -56,6 +59,9 @@ export default makeStyles((theme) => ({
     },
     viewIconMobile: {
       display: 'none',
+    },
+    textArlapMobile: {
+      flexWrap: 'wrap',
     },
   },
 }));

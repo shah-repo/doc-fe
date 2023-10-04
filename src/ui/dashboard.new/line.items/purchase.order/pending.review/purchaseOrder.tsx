@@ -22,6 +22,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import { getStatusLabel } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
@@ -33,7 +34,6 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -49,25 +49,25 @@ interface Props {
   displaystatus: string
   docTypeGroup: string
   timestamp: string
-  docRevPendingApprovals: {
+  docRevPendingApprovals: Array<{
     userName: string
     employeeId: string
     userAvatar: Nullable<string>
     userInitialColor: string
     approvalStatus: string
-  }[]
-  docRevApprovedApprovals: {
+  }>
+  docRevApprovedApprovals: Array<{
     userName: string
     employeeId: string
     userAvatar: Nullable<string>
     userInitialColor: string
     approvalStatus: string
-  }[]
-  purchaseOrderAttachments: {
+  }>
+  purchaseOrderAttachments: Array<{
     name: string
     type: string
     id: string
-  }[]
+  }>
   purchaseOrdeLineItemCount: number
   purchaseOrderDescription: string
   pinned: boolean
@@ -225,7 +225,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <POIcon height={30} width={30} />
@@ -233,7 +233,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'}>
+              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile}>
                 <Grid item={true}>
                   <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
                 </Grid>
@@ -351,7 +351,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                 />
+                />
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -383,19 +383,19 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               </span>
             )}
             <StyleTooltip
-                title={<Text translation="common.download.pdf" />}
-                placement="top"
-                arrow
-              >
-                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
-                  <DownloadHtmlPreview
-                    id={docRevId}
-                    data-cy="transition-download-pdf"
-                    downloadPdfHover={downloadPdfHover}
-                    dialogPDF={dialogPDF}
-                  />
-                </span>
-              </StyleTooltip>
+              title={<Text translation="common.download.pdf" />}
+              placement="top"
+              arrow
+            >
+              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={downloadPdfHover}
+                  dialogPDF={dialogPDF}
+                />
+              </span>
+            </StyleTooltip>
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon
@@ -467,7 +467,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               disableRipple
             >
               <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
+                <Grid item md={3} sm={6} xs={4}>
                   <Typography
                     component="span"
                     variant="caption"
@@ -477,7 +477,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                     {poItem.ltext}
                   </Typography>
                 </Grid>
-                <Grid item md={9} sm={6}>
+                <Grid item md={9} sm={6} xs={8}>
                   {poItem.isSupplier && (
                     <RouterLink
                       to={

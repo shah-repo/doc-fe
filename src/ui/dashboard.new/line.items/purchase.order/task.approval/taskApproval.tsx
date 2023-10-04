@@ -183,6 +183,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   wrap="nowrap"
                   justify="flex-start"
                   alignItems="center"
+                  className={classes.textOverlapMobile}
                 >
                   <Grid item={true}>
                     <Typography

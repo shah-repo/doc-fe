@@ -169,6 +169,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   wrap="nowrap"
                   justify="flex-start"
                   alignItems="center"
+                  className={classes.textArlapMobile}
                 >
                   <Grid item={true}>
                     <Typography
@@ -191,11 +192,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     >
                       <Text translation="require.approval" />
                     </Typography>
+                    <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId} />
                   </Grid>
-
                 </Grid>
                 <Grid item={true}>
-                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId} />
                   <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={title || ''} />
                 </Grid>
               </Grid>
@@ -311,7 +311,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             {dismissLineItem && (
-              <DismissAction classes={classes} onClick={handleDismiss} />
+              <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
             )}
           </Box>
         )}
@@ -331,7 +331,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </span>
         )}
         {hoverItem && dismissLineItem && (
-          <DismissAction classes={classes} onClick={handleDismiss} />
+          <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

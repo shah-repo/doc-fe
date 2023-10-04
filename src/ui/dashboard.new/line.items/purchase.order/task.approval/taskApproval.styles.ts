@@ -38,6 +38,9 @@ export default makeStyles((theme) => ({
   path: {
     color: 'red',
   },
+  textOverlapMobile: {
+    flexWrap: 'nowrap',
+  },
   [theme.breakpoints.down('xs')]: {
     poActionIconsWidth: {
       display: 'none',
@@ -72,6 +75,9 @@ export default makeStyles((theme) => ({
     },
     collapseIcon: {
       visibility: 'unset',
+    },
+    textOverlapMobile: {
+      flexWrap: 'wrap',
     },
   },
 }));
