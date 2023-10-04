@@ -1,3 +1,4 @@
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -11,7 +12,7 @@ import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocomplete
 import { FB } from '../helpers';
 import { SupplierOption, UnitOption, UseOptionsHook } from './types';
 
-export const useOptions: UseOptionsHook = () => {
+export const useOptions: UseOptionsHook = (vendors) => {
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
   const async = useAsync<DocumentRevisionStatus[]>({ onSuccess: response => saveStatuses(response ?? []) });
@@ -47,6 +48,29 @@ export const useOptions: UseOptionsHook = () => {
       return asyncData ? Array.from(asyncData.values()).map(item => item.text) : [];
     },
   );
+
+  useEffect(() => {
+    if (suppliersAsync.loading) {
+      return;
+    }
+    const missedVendors = vendors.filter(
+      vendor => !vendor.displayStatus && !suppliers.some(option => option.id === vendor.id),
+    );
+    missedVendors.forEach(vendor => suppliersAsync.fetchAutocompleteOption(vendor.id, FBAutocompleteAsyncOption.suppliers));
+  }, [suppliers, vendors]);
+
+  useEffect(() => reaction(
+    () => suppliersAsync.autocompleteValueApi.data,
+    (data) => {
+      if (data) {
+        FBAutocompleteAsyncStore.add(FBAutocompleteAsyncOption.suppliers, data.id, {
+          ...data,
+          isUnselectable: true,
+        });
+      }
+    },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
 
   return {
     suppliers,

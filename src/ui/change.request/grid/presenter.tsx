@@ -19,9 +19,6 @@ export function DocumentListPresenter({
 }: KendoPresenterProps) {
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = React.useState<ChangeRequest[]>([]);
-  const handleExportData = (dataToBeExported: ChangeRequest[]) => {
-    setDataToBeExported(dataToBeExported);
-  };
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const headers = map(columns, (column) => ({
@@ -29,6 +26,7 @@ export function DocumentListPresenter({
     key: column.field,
   }));
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
+
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -39,7 +37,7 @@ export function DocumentListPresenter({
           tableName={tableName}
           tableCriteria={tableCriteria}
           schema={schema}
-          exportDataChanges={handleExportData}
+          exportDataChanges={setDataToBeExported}
           onRowClick={onRowClick}
           queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
           defaultPayloadData={{}}

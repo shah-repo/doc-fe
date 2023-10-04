@@ -1,5 +1,13 @@
 /* eslint-disable max-len */
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, USER_MANAGEMENT_ROOT_URL } from '../../../ui/constants/urls';
+import {
+  CHANGE_REQUEST_LIST_URL,
+  DOCUMENT_REVISION_LIST_URL,
+  DOCUMENT_TYPE_MANAGEMENT_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
+  HOME_URL,
+  PAGE_DETAILS_MANAGEMENT_URL,
+  USER_MANAGEMENT_ROOT_URL,
+} from '../../../ui/constants/urls';
 import { GroupTag } from '../auth/types';
 import { NavigationItem } from './types';
 
