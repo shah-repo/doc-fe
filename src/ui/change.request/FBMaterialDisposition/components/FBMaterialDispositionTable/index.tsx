@@ -6,9 +6,7 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { map } from 'lodash';
 import React, { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -22,8 +20,7 @@ import useStyles from './styles';
 
 const FBMaterialDispositionTable: React.FunctionComponent = () => {
   const classes = useStyles();
-  const [editedMDItem, setEditedMDItem] = React.useState<Partial<EditableMDItem>>();
-  const isMDItemAdded = editedMDItem?.[MODE_FIELD] === Mode.add;
+  const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const editMDItem = ({ dataItem }: MDItemEditEvent) => setEditedMDItem(dataItem);
   const discardMDItem = () => setEditedMDItem(undefined);
   const removeVendor = () => {
@@ -71,14 +68,9 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
     setColumns(dataColumns);
   };
 
-  const createDraftMDItem = () => setEditedMDItem({
-    id: uuidv4(),
-    [MODE_FIELD]: Mode.add,
-  });
-
   const rowRender: DataGridProps<MaterialDispositionItem>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as MaterialDispositionItem;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
+    const isUpdating = [Mode.edit].includes(item[MODE_FIELD]);
     if (!isUpdating) {
       return row;
     }
@@ -97,7 +89,7 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
     );
   };
 
-  const MDItemList = data.reduce((list, item) => {
+  const MDItemList = data.reduce<EditableMDItem[]>((list, item) => {
     const isMDItemEdited = editedMDItem && editedMDItem.id === item.id;
 
     return [
@@ -107,11 +99,11 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
         [MODE_FIELD]: isMDItemEdited ? Mode.edit : Mode.show,
       },
     ];
-  }, isMDItemAdded ? [editedMDItem] : []);
+  }, []);
 
   return (<>
     <KendoDataGrid<EditableMDItem>
-      data={MDItemList as EditableMDItem[]}
+      data={MDItemList}
       schema={getColumns()}
       fullWidth
       hasBoxScrollbars
@@ -168,15 +160,6 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
         </Grid>
       </GridToolbar>
     </KendoDataGrid>
-    <Button
-      kind="add"
-      fullWidth
-      attached
-      onClick={createDraftMDItem}
-      data-cy="add-button"
-    >
-      {translate('approvalRequest.material.disposition.add')}
-    </Button>
   </>);
 };
 
