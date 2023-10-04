@@ -53,7 +53,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
             id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
-            isEditEnabled: ![DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(parentPartRelation.status),
+            isEditEnabled: [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(parentPartRelation.status),
           }),
         );
       });
