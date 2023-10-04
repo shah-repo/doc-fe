@@ -58,5 +58,21 @@ export const styles = makeStyles((theme: Theme) =>
       width: '500px',
       marginTop: '50px',
     },
+    [theme.breakpoints.down('xs')]: {
+      paper: {
+        width: 'auto',
+      },
+      boldTitle: {
+        width: 'auto',
+      },
+      submit: {
+        width: '335px',
+        borderRadius: '50px',
+        height: '50px',
+      },
+      marginTitle: {
+        width: '92%',
+      },
+    },
   }),
 );
