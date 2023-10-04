@@ -23,13 +23,6 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const editMDItem = ({ dataItem }: MDItemEditEvent) => setEditedMDItem(dataItem);
   const discardMDItem = () => setEditedMDItem(undefined);
-  const removeVendor = () => {
-    if (!editedMDItem) {
-      return;
-    }
-    // TO to delete MDItem via API
-    discardMDItem();
-  };
   const getColumns = () => {
     return columns.filter(({ show }) => show);
   };
@@ -53,7 +46,6 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
     onRowClick: editMDItem,
     onConfirm: submitForm,
     onDiscard: discardMDItem,
-    onDelete: removeVendor,
   });
 
   const [columns, setColumns] = React.useState<Array<ColumnDefinition<EditableMDItem>>>(schema);
