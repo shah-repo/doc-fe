@@ -70,7 +70,7 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   closeIconMobile: {
     paddingTop: 0,
     [theme.breakpoints.down('xs')]: {
-      paddingTop: 65,
+      paddingTop: 25,
     },
   },
   attachmentIcon: {
