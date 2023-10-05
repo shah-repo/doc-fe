@@ -1,5 +1,5 @@
 export const EMPTY_VALUE_PLACEHOLDER = '-';
-
+export const EXCEL_FILE_NAME = 'materialDisposition.xlsx';
 export const OPTIONS = ['Must conform', 'Rework', 'Use as-is', 'Re-inspect', 'Return to vendor', 'Scrap', 'N/A'];
 
 // To be removed after API Integration

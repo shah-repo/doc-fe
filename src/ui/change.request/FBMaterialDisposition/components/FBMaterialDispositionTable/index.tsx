@@ -1,6 +1,7 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
+import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -13,10 +14,11 @@ import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDat
 import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
-import { data } from './constants';
+import { data, EXCEL_FILE_NAME } from './constants';
 import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
+import { getExcelColumns } from './utils';
 
 const FBMaterialDispositionTable: React.FunctionComponent = () => {
   const classes = useStyles();
@@ -93,65 +95,74 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
     ];
   }, []);
 
+  const _export = React.useRef<ExcelExport | null>(null);
+  const exportToExcel = () => {
+    if (_export.current !== null) {
+      _export.current.save(MDItemList, getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+    }
+  };
+
   return (<>
-    <KendoDataGrid<EditableMDItem>
-      data={MDItemList}
-      schema={getColumns()}
-      fullWidth
-      hasBoxScrollbars
-      onRowClick={editMDItem}
-      rowRender={rowRender}
-    >
-      <GridToolbar>
-        <Grid container justify="flex-end"
-          className={classes.toolbarContainer}
-        >
-          <Grid item>
-            <Grid container justify="flex-end">
-              <Grid className={classes.refreshContainer}
-              >
-                <StyleTooltip
-                  title={translate('Refresh')}
-                  placement="top"
-                  arrow
+    <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
+      <KendoDataGrid<EditableMDItem>
+        data={MDItemList}
+        schema={getColumns()}
+        fullWidth
+        hasBoxScrollbars
+        onRowClick={editMDItem}
+        rowRender={rowRender}
+      >
+        <GridToolbar>
+          <Grid container justify="flex-end"
+            className={classes.toolbarContainer}
+          >
+            <Grid item>
+              <Grid container justify="flex-end">
+                <Grid className={classes.refreshContainer}
                 >
-                  <Grid container>
-                    <FontAwesomeIcon icon={regular('arrows-rotate')} className={classes.icon} />
-                    <Typography
-                      variant="h6"
-                      component="h6"
-                      className={classes.refreshText}
-                    >
-                      <Text message="As of July 22, 2023" />
-                    </Typography>
-                  </Grid>
-                </StyleTooltip>
-              </Grid>
-              <Grid item >
-                <StyleTooltip
-                  title={translate('common.download')}
-                  placement="top"
-                  arrow
+                  <StyleTooltip
+                    title={translate('Refresh')}
+                    placement="top"
+                    arrow
+                  >
+                    <Grid container>
+                      <FontAwesomeIcon icon={regular('arrows-rotate')} className={classes.icon} />
+                      <Typography
+                        variant="h6"
+                        component="h6"
+                        className={classes.refreshText}
+                      >
+                        <Text message="As of July 22, 2023" />
+                      </Typography>
+                    </Grid>
+                  </StyleTooltip>
+                </Grid>
+                <Grid item >
+                  <StyleTooltip
+                    title={translate('common.download')}
+                    placement="top"
+                    arrow
+                  >
+                    <FontAwesomeIcon data-cy="excel-download"
+                      className={classes.icon}
+                      onClick={exportToExcel}
+                      icon={solid('arrow-down-to-line')} />
+                  </StyleTooltip>
+                </Grid>
+                <Grid item
+                  data-cy="show-hide-columns"
                 >
-                  <FontAwesomeIcon data-cy="excel-download"
-                    className={classes.icon}
-                    onClick={() => ({})}
-                    icon={solid('arrow-down-to-line')} />
-                </StyleTooltip>
-              </Grid>
-              <Grid item
-                data-cy="show-hide-columns"
-              >
-                <ColumnShowHideMDMenu
-                  columnDefinition={columns}
-                  onChange={(item) => onColumnShowHide(item)}
-                />
+                  <ColumnShowHideMDMenu
+                    columnDefinition={columns}
+                    onChange={(item) => onColumnShowHide(item)}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </GridToolbar>
-    </KendoDataGrid>
+        </GridToolbar>
+      </KendoDataGrid>
+    </ExcelExport>
   </>);
 };
 
