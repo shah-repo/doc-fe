@@ -271,7 +271,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
 
   const cancelPartEdit = () => {
-    dispatch(documentRevisionsActions.cancelPartEdit(documentRevision.id));
+    if (isDocumentRevisionInDraft(status)) {
+      dispatch(documentRevisionsActions.cancelPartEdit(documentRevision.id));
+    }
   };
 
   if (

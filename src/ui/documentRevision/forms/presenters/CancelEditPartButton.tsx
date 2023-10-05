@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popover, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
-import { ChangeControlOptions, DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { ChangeControlOptions, DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
 import { styles } from './cancelEditPartButton.styles';
@@ -46,6 +46,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
         id="cancelEditPartButton"
         data-cy="cancelEditPartButton"
         onClick={cancelPartEdit}
+        className={documentRevision.status !== DocumentRevisionStatus.Draft ? classes.disabled : ''}
       >
         <Text message="Cancel Edit" />
       </Button>
