@@ -50,6 +50,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(3),
       marginBottom: theme.spacing(3),
       marginLeft: 0,
+      marginRight: 0,
       width: 'inherit',
       borderRadius: '50px',
       height: '50px',
@@ -57,6 +58,21 @@ export const styles = makeStyles((theme: Theme) =>
     formStyle: {
       width: '500px',
       marginTop: '50px',
+    },
+    [theme.breakpoints.down('xs')]: {
+      paper: {
+        width: 'auto',
+        padding: theme.spacing(3),
+      },
+      boldTitle: {
+        width: 'auto',
+      },
+      submit: {
+        width: '100%',
+      },
+      marginTitle: {
+        textAlign: 'center',
+      },
     },
   }),
 );
