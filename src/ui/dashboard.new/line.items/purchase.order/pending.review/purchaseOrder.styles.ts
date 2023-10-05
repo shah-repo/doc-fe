@@ -21,8 +21,5 @@ export default makeStyles((theme) => ({
     actionIcons: {
       display: 'none',
     },
-    margin7: {
-      pointerEvents: 'none',
-    },
   },
 }));

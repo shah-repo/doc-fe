@@ -1,9 +1,10 @@
-import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { Box, Button, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/close.svg';
 import { ReactComponent as CloseSolidIcon } from '../../../../../assets/images/close_solid.svg';
+import { ReactComponent as CloseWhiteIcon } from '../../../../../assets/images/close_whiteIcon.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PendingReviewIcon } from '../../../../../assets/images/pending_approval.svg';
@@ -433,6 +434,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
               </Box>
             </StyledListItem>
           ))}
+          <Grid className={classes.closeAlign}>
+            <Button className={classes.closeButton} onClick={handleCloseClick}>
+              <CloseWhiteIcon className={classes.cursorPointer} />
+              <Text message="common.close" />
+            </Button></Grid>
         </List>
       </Collapse>
       <ApproveDialogueContainer
