@@ -172,6 +172,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
+    if (!isExactBOMViewWindow()) {
+      return;
+    }
     const expanded = event.value
       ? state.expanded.filter((id) => id !== event.dataItem.id)
       : [...state.expanded, event.dataItem.id];
@@ -182,6 +185,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   };
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
+    if (!isExactBOMViewWindow()) {
+      return;
+    }
     updateState({
       ...state,
       dataState: event.dataState,
@@ -721,10 +727,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   };
 
   const onColumnReorder = (event: TreeListColumnReorderEvent) => {
+    if (!isExactBOMViewWindow()) {
+      return;
+    }
     setColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
   const onFilterChange = (event: TreeListFilterChangeEvent) => {
+    if (!isExactBOMViewWindow()) {
+      return;
+    }
     const { dataState, data } = state;
     dataState.filter = event.filter;
     const expanded = getAllItemIds(data);
