@@ -5,8 +5,9 @@ export default makeStyles((theme) => ({
   '@global': {
     '.k-grid': {
       '& .k-grid-container tbody td': {
-        height: '24px',
-        padding: theme.spacing(1, 1.75),
+        height: 42,
+        padding: theme.spacing(0, 1.75),
+        verticalAlign: 'middle !important',
       },
       '& .k-grid-container tbody td:first-child': {
         paddingLeft: theme.spacing(2.5),
