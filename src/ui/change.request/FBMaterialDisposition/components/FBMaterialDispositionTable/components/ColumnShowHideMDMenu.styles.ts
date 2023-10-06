@@ -14,11 +14,23 @@ export const styles = makeStyles(() =>
       color: Colors.almost_black,
     },
     headerMenuItem: {
+      width: '250px',
       background: Colors.water,
       cursor: 'default',
       '&:hover': {
         background: Colors.water,
       },
+    },
+    box: {
+      maxHeight: 350,
+      padding: 0,
+      overflow: 'auto',
+    },
+    viewIcon: {
+      color: Colors.almost_black,
+      cursor: 'pointer',
+      height: 14,
+      width: 14,
     },
   }),
 );
