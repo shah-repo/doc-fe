@@ -171,7 +171,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition />
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} />
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE

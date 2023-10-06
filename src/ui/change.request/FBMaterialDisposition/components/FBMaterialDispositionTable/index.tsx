@@ -5,35 +5,72 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { map } from 'lodash';
+import { map, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { translate } from '../../../../../common/intl';
+import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
+import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
-import { data, EXCEL_FILE_NAME } from './constants';
+import { EXCEL_FILE_NAME, FIELDS_TO_OMIT } from './constants';
 import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { getExcelColumns } from './utils';
 
-const FBMaterialDispositionTable: React.FunctionComponent = () => {
+interface props {
+  changeRequest?: ChangeRequest
+}
+
+const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequest }) => {
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
+  const [data, setData] = React.useState<EditableMDItem[]>([]);
   const editMDItem = ({ dataItem }: MDItemEditEvent) => setEditedMDItem(dataItem);
   const discardMDItem = () => setEditedMDItem(undefined);
   const getColumns = () => {
     return columns.filter(({ show }) => show);
   };
 
+  const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
+  const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
+  const materialDispositionAsync = useAsync({
+    onSuccess: (data) => {
+      setData(data as EditableMDItem[]);
+    },
+    onError: (err) => {
+      toastError(err);
+    },
+  });
+
+  const partAsync = useAsync({
+    onSuccess: (response) => {
+      if (response?.affected > 0) {
+        materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+      }
+    },
+    onError: (err) => {
+      toastError(err);
+    },
+  });
+
+  useEffect(() => {
+    materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+  }, []);
+
   const formik = useFormik<Partial<EditableMDItem>>({
     initialValues: {},
     onSubmit: (values) => {
+      const partToSave = omit(values, FIELDS_TO_OMIT);
+      partAsync.start(updateItem, changeRequest?.id, values.id, partToSave, partAsync);
       discardMDItem();
-      // TO DO to Integrate API
     },
   });
 
@@ -111,6 +148,7 @@ const FBMaterialDispositionTable: React.FunctionComponent = () => {
         hasBoxScrollbars
         onRowClick={editMDItem}
         rowRender={rowRender}
+        loading={materialDispositionAsync.isLoading || partAsync.isLoading}
       >
         <GridToolbar>
           <Grid container justify="flex-end"

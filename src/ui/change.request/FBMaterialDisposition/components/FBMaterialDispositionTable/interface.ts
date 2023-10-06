@@ -3,17 +3,19 @@ import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDat
 
 export interface MaterialDispositionItem {
   id: string
-  partId: string
-  lot: string
-  rev: string
-  onOrder: string
-  Inspection: string
-  Inventory: string
-  wip: string
+  partDocRevId: string
+  partDocId: string
+  revisionsFromTo: string
+  lotDocId: string
+  arId: string
+  onOrderPOAction: string
+  inInspectionAction: string
+  inInventoryAction: string
+  inWipAction: string
   whereUsed: number
-  finishedGoods: string
-  field: string
-  comments: string
+  asFinishedGoodsAction: string
+  usedLocation: string
+  comment: string
 }
 
 export interface EditableMDItem extends MaterialDispositionItem {

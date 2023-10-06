@@ -25,7 +25,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   );
 };
 
-export const CommentsCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+export const TextInputCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
