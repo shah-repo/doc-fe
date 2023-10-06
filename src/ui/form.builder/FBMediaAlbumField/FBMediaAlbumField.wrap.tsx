@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
+import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
@@ -32,7 +33,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     autosave = true,
     ...props
   }: T) => {
-
     const { workspaceState, formState, mediaAlbumState, dialogState } = FB.useStores();
     const { document: { id = '' } = {} } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) || editorConfig;
@@ -80,6 +80,11 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       const duplicateNamedFiles: string[] = [];
 
       const validFiles: File[] = filter(eventFiles, (file) => {
+        const filesSize = file.size;
+        if (filesSize > FILE_UPLOAD_LIMIT) {
+          handleFileSizeExceedLimit(filesSize, event);
+          return;
+        }
         const fileName = get(file, 'name', '');
         const name = fileName.split('.')[0];
 
@@ -184,7 +189,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function isPreview(): boolean {
+    function isPreview (): boolean {
       if (isTemplate) {
         return ![FBWorkspaceModeOptions.DESIGN, FBWorkspaceModeOptions.FORM]
           .includes(workspaceState?.mode as FBWorkspaceModeOptions);

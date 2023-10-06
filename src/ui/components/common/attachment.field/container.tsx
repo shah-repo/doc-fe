@@ -13,6 +13,7 @@ import { useFormContext } from '../../forms/FormContext';
 import { withFormik } from '../../hoc/formik';
 import { toastError } from '../../notifications';
 import Presenter from './presenter';
+import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from './utils';
 import { AttachmentContainerProps } from './utils/types';
 
 const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
@@ -88,6 +89,12 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlertedNoDocFiles = false;
     let isUserAlrtedCleanCopyMismatch = false;
+    const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
+    if (filesSize > FILE_UPLOAD_LIMIT) {
+      handleFileSizeExceedLimit(filesSize, event);
+      return;
+    }
+
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split('.').pop();
@@ -111,7 +118,6 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
     if (filteredFiles.length === 0) {
       return;
     }
-
     handleUpload(filteredFiles, lineType, cleanCopyRequired);
   };
 
