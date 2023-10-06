@@ -10,6 +10,7 @@ export interface MaterialDispositionItem {
   Inspection: string
   Inventory: string
   wip: string
+  whereUsed: number
   finishedGoods: string
   field: string
   comments: string

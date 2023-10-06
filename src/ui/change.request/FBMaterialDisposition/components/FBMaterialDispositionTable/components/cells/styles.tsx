@@ -5,6 +5,7 @@ export const styles = makeStyles((theme) => ({
   contentCenter: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   dot: {
     height: 10,
