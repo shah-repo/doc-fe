@@ -1,7 +1,7 @@
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/cells/ActionsCellTemplate';
-import { CommentsCellTemplate } from './components/cells/CommentsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
+import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
 import { OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './interface';
@@ -15,23 +15,23 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableMDItem>> => {
   return [
     {
-      id: 'partId',
-      field: 'partId',
+      id: 'partDocId',
+      field: 'partDocId',
       title: 'approvalRequest.grid.heading.partId',
       show: true,
       width: 201,
     },
     {
-      id: 'rev',
-      field: 'rev',
+      id: 'revisionsFromTo',
+      field: 'revisionsFromTo',
       title: 'approvalRequest.grid.heading.rev',
       show: true,
       width: 201,
       sortable: false,
     },
     {
-      id: 'lot',
-      field: 'lot',
+      id: 'lotDocId',
+      field: 'lotDocId',
       title: 'approvalRequest.grid.heading.lot',
       show: true,
       width: 201,
@@ -45,58 +45,59 @@ export const buildSchema = ({
       width: 112,
     },
     {
-      id: 'onOrder',
-      field: 'onOrder',
+      id: 'onOrderPOAction',
+      field: 'onOrderPOAction',
       title: 'approvalRequest.grid.heading.onOrder',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
       width: 201,
     },
     {
-      id: 'Inspection',
-      field: 'Inspection',
+      id: 'inInspectionAction',
+      field: 'inInspectionAction',
       title: 'approvalRequest.grid.heading.Inspection',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
       width: 201,
     },
     {
-      id: 'Inventory',
-      field: 'Inventory',
+      id: 'inInventoryAction',
+      field: 'inInventoryAction',
       title: 'approvalRequest.grid.heading.Inventory',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
       width: 201,
     },
     {
-      id: 'wip',
-      field: 'wip',
+      id: 'inWipAction',
+      field: 'inWipAction',
       title: 'approvalRequest.grid.heading.wip',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
       width: 201,
     },
     {
-      id: 'finishedGoods',
-      field: 'finishedGoods',
+      id: 'asFinishedGoodsAction',
+      field: 'asFinishedGoodsAction',
       title: 'approvalRequest.grid.heading.finishedGoods',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
       width: 201,
     },
     {
-      field: 'field',
-      id: 'field',
+      field: 'usedLocation',
+      id: 'usedLocation',
       title: 'approvalRequest.grid.heading.field',
       show: true,
+      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
-      id: 'comments',
-      field: 'comments',
+      id: 'comment',
+      field: 'comment',
       title: 'approvalRequest.grid.heading.comments',
       show: true,
-      template: (props) => <CommentsCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
       width: 324,
     },
     {
