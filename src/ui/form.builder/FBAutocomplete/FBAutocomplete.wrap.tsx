@@ -163,7 +163,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     if (isUndefined(defaultValue)) {
       defaultValue = '';
     }
-    if(multiple && isEmpty(defaultValue) && disabled && workspaceState?.document?.status === DocumentRevisionStatus.Draft) {
+    if(isEmpty(defaultValue) && disabled && workspaceState?.document?.status === DocumentRevisionStatus.Draft) {
       multiple = false;
     }
     return Component({
