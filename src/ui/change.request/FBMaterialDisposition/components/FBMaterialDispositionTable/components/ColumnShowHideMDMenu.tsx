@@ -1,5 +1,8 @@
 import {
   Box,
+  Card,
+  CardContent,
+  CardHeader,
   FormControl,
   IconButton,
   ListItemText,
@@ -47,7 +50,7 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
         arrow
       >
         <IconButton onClick={handleClick} data-cy="manageColumnsBtn">
-          <ViewGridIcon />
+          <ViewGridIcon className={classes.viewIcon} />
         </IconButton>
       </StyleTooltip>
       <Menu
@@ -57,9 +60,9 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
         open={open}
         onClose={handleClose}
       >
-        <MenuItem className={classes.headerMenuItem}>
-          <ListItemText
-            primary={
+        <Card>
+          <CardHeader className={classes.headerMenuItem}
+            title={
               <Typography
                 component="span"
                 variant="body2"
@@ -70,37 +73,39 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
               </Typography>
             }
           />
-        </MenuItem>
-        {columnDefinition.map((item: ColumnDefinition<EditableMDItem>) => (
-          <MenuItem
-            key={item.title}
-            value={item.field as string}
-            disabled={item.disabled}
-          >
-            <ListItemText
-              id={item.field as string}
-              primary={
-                <Typography className={classes.menuItem}>
-                  {getTranslatedText(item.title as string).toUpperCase()}
-                </Typography>
-              }
-            />
-            <Box flexGrow={1} mr={5} />
-            {item.show ? (
-              <SolidIcon
-                onClick={() => {
-                  onChange(item);
-                }}
-              />
-            ) : (
-              <ViewChecked
-                onClick={() => {
-                  onChange(item);
-                }}
-              />
-            )}
-          </MenuItem>
-        ))}
+          <CardContent className={classes.box}>
+            {columnDefinition.map((item: ColumnDefinition<EditableMDItem>) => (
+              <MenuItem
+                key={item.title}
+                value={item.field as string}
+                disabled={item.disabled}
+              >
+                <ListItemText
+                  id={item.field as string}
+                  primary={
+                    <Typography className={classes.menuItem}>
+                      {getTranslatedText(item.title as string).toUpperCase()}
+                    </Typography>
+                  }
+                />
+                <Box flexGrow={1} mr={5} />
+                {item.show ? (
+                  <SolidIcon
+                    onClick={() => {
+                      onChange(item);
+                    }}
+                  />
+                ) : (
+                  <ViewChecked
+                    onClick={() => {
+                      onChange(item);
+                    }}
+                  />
+                )}
+              </MenuItem>
+            ))}
+          </CardContent>
+        </Card>
       </Menu>
     </FormControl>
   );
