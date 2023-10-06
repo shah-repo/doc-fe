@@ -4,14 +4,17 @@ import { Button, Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
+import { materialDispositionActions } from '../../../state/ducks/materialDisposition';
+import { toastError } from '../../components/notifications';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
-import KendoTextField from './KendoTextField';
 
 const ApprovalRequestEditGridItem: React.FunctionComponent<{
   disabledOptions: string[]
@@ -37,6 +40,18 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId);
 
+  const [revFromTo, setRevFromTo] = useState('');
+
+  const getPartRevisions = useActionCreator(materialDispositionActions.getMaterialDispositionRevisions);
+  const partRevisionsAsync = useAsync({
+    onSuccess: (data) => {
+      setRevFromTo(data as string);
+    },
+    onError: (err) => {
+      toastError(err);
+    },
+  });
+
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
@@ -49,6 +64,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
                 placeholder="form.builder.select"
                 optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
                 optionValueType="id"
+                onChange={(_ev: any, value) => {
+                  partRevisionsAsync.start(getPartRevisions, value?.id, partRevisionsAsync);
+                }}
                 rules="required"
                 {...{ disabledOptions }}
                 shouldReloadOnInit
@@ -58,12 +76,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <KendoTextField
-              name="revFromTo"
-              label="form.builder.rev"
-              placeholder="form.builder.enter"
-              rules="required"
-            />
+            {revFromTo}
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
