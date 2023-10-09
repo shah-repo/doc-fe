@@ -83,7 +83,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
         ...state,
         data: [...bomProccessedData],
         inEdit: [],
-        expanded: [...state.expanded, ...[bomProccessedData[0].id]],
+        expanded: uniq([...state.expanded, ...[bomProccessedData[0].id]]),
       });
     },
     onError: (err) => {
@@ -168,7 +168,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
     const expanded = event.value
       ? state.expanded.filter((id) => id !== event.dataItem.id)
-      : [...state.expanded, event.dataItem.id];
+      : uniq([...state.expanded, event.dataItem.id]);
     updateState({
       ...state,
       expanded,
