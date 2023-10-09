@@ -39,9 +39,10 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
     return (qtyUnits.map((item, i) => (
       <Grid item key={i} className={qtyClasses.qtyLabel} >
         <FormField label="print.label.dialog.field.quantity.units" />
-        <FormField label={`(Label ${i + 1})`} >
+        <FormField data-cy={`label-count-${i}`} label={`(Label ${i + 1})`} >
           <TextField
             type="number"
+            data-cy="quantity-units"
             value={item}
             onChange={e => onQtyUnitsChange(e, i)} />
         </FormField>
@@ -53,7 +54,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
     <Dialog open={isOpen} fullWidth={true} maxWidth="md" >
       <DialogTitle disableTypography className={classes.dialogTitle}>
         <Typography variant="h6"><Text translation="common.print" /></Typography>
-        <IconButton className={classes.closeIcon} data-cy="change-owner-close-icon" onClick={closeDialog}>
+        <IconButton className={classes.closeIcon} data-cy="close-icon" onClick={closeDialog}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
@@ -65,12 +66,18 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           spacing={2} >
           <Grid item xs={8}>
             <FormField label="print.label.dialog.field.partId">
-              <TextField disabled value={initialValues?.partId} />
+              <TextField
+                disabled
+                value={initialValues?.partId}
+                data-cy="part-id" />
             </FormField>
           </Grid>
           <Grid item xs={4}>
             <FormField label="print.label.dialog.field.revision">
-              <TextField disabled value={initialValues?.revision} />
+              <TextField
+                disabled
+                value={initialValues?.revision}
+                data-cy="revision" />
             </FormField>
           </Grid>
           <Grid item xs={12}>
@@ -82,11 +89,15 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             </Box>
             <TextField
               value={description.slice(0, 90)}
+              data-cy="description"
               onChange={onDescriptionChange} />
           </Grid>
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.lot">
-              <TextField disabled value={initialValues?.lotId} />
+              <TextField
+                disabled
+                value={initialValues?.lotId}
+                data-cy="lot" />
             </FormField>
           </Grid>
           <Grid item xs={6}>
@@ -97,6 +108,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 labelProps={labelPropsStyle} />
             </Box>
             <TextField
+              data-cy="serial"
               onChange={onSerialChange}
               value={serial.slice(0, 14)} />
           </Grid>
@@ -104,6 +116,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             <FormField label="print.label.dialog.field.by">
               <Autocomplete
                 value={selectedOption}
+                data-cy="by"
                 options={companyEmployees}
                 getOptionLabel={(option) => `${option.text} (${option.email})`}
                 onChange={(e, value: SelectOption) => setSelectedOption(value)}
@@ -114,6 +127,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             <FormField label="print.label.dialog.field.date">
               <Datepicker
                 value={selectedDate}
+                data-cy="date"
                 size="medium"
                 onChange={handleDateChange}
               />
@@ -124,6 +138,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               <Autocomplete
                 disableClearable
                 value={selectedNumberOfLabel}
+                data-cy="number-of-labels"
                 options={range(1, 11, 1)}
                 getOptionLabel={(option) => typeof (option) == 'number' ? String(option) : option}
                 onChange={(e, value: Number) => onNumberOfLabelChange(value)} />
@@ -137,8 +152,8 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           variant="outlined"
           className={classes.clearButton}
           onClick={closeDialog}
-          id="printButton"
-          data-cy="printButton"
+          id="printCancelButton"
+          data-cy="print-cancel-button"
         >
           <Text translation="document.action.cancel" />
         </Button>
@@ -147,7 +162,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           className={classes.printButton}
           onClick={onPrintClick}
           id="printButton"
-          data-cy="printButton"
+          data-cy="print-button"
         >
           <Text translation="common.print" />
         </Button>

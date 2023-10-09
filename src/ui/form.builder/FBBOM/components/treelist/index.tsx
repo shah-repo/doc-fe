@@ -766,7 +766,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   );
 
   const onRowDrop = (event: TreeListRowDragEvent) => {
-    if (isDisabled) {
+    if (isDisabled || !event?.draggedItem?.isEditEnabled || event?.draggedItem?.isDeleted) {
       return false;
     }
     if (

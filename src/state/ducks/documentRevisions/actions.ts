@@ -510,22 +510,23 @@ const deleteBOMBranch = (
     handlers,
   });
 
-const fetchAlternateParts = (
-  parentNodeRevId,
-  handlers: Handlers,
-): ApiAction<BOM[]> =>
-  apiActionWithCallbacks({
-    url: `${FETCH_ALTERNATE_PART}/${parentNodeRevId}`,
-    method: 'get',
-    handlers,
-  });
-
 const fetchVendors = (
   parentNodeRevId,
   handlers: Handlers,
 ): ApiAction<Vendor[]> =>
   apiActionWithCallbacks({
     url: `${FETCH_VENDORS}/${parentNodeRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchAlternateParts = (
+  basePartRevId: string,
+  partRevId: string,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_ALTERNATE_PART}/${basePartRevId}/${partRevId}`,
     method: 'get',
     handlers,
   });
@@ -542,13 +543,13 @@ const addAlternatePart = (
   });
 
 const deleteAlternatePart = (
-  parentRevId: string,
-  alternatePartNodeRevId: string,
-  basePartNodeRevId: string,
+  partRevId: string,
+  alternatePartRevId: string,
+  basePartRevId: string,
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}/${basePartNodeRevId}`,
+    url: `${DELETE_ALTERNATE_PART}/${basePartRevId}/${partRevId}/${alternatePartRevId}`,
     method: 'delete',
     handlers,
   });

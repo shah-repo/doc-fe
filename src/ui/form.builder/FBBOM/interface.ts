@@ -36,6 +36,7 @@ export interface BOM {
   availableRevisions?: AvailableRevisions
   changeRequestDetails?: ChangeRequestDetails
   costRollUp?: number
+  isEditEnabled?: boolean
 }
 
 export interface EditableBOM extends BOM {
@@ -47,7 +48,6 @@ export interface EditableBOM extends BOM {
   childNodeDocumentId?: string
   newChildNodeRevId?: string
   isParentOwner?: boolean
-  isEditEnabled?: boolean
   alternatePartsCount?: number
   attachmentNames?: string[]
   isDisabled?: boolean
