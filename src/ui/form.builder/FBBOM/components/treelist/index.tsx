@@ -28,8 +28,6 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
-import FBDataStore from '../../../FBStore/FBDataStore';
-import { FB } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
@@ -44,7 +42,6 @@ import WhereUsedDialog from './WhereUsedDialog';
 const FBBOMTreeList: React.FC<FBBOMProps> = (
   { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false }) => {
   const { _tabsState } = SM.useStores();
-  const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
 
@@ -151,8 +148,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     (loading) => {
       if (loading && documentRevision) {
         _documentRevisionFormState?.setBOMChangesInProgress(false);
-        workspaceState?.setFormInputData(documentRevision);
-        FBDataStore.setRefreshData(documentRevision);
+        dispatch(documentRevisionsActions.reload(documentRevision?.id));
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
