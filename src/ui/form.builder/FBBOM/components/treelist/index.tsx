@@ -845,7 +845,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     <>
       <Grid item>
         <FormikProvider value={formik}>
-          <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide }}>
+          <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide, isMaximizedView: _documentRevisionFormState?.isMaximizedView ?? false }}>
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>
                 <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
@@ -862,7 +862,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
                     data={processData()}
                     onDataStateChange={handleDataStateChange}
                     columns={sortedColumnDefinitions}
-                    columnMenu={(props) => (
+                    columnMenu={_documentRevisionFormState?.isMaximizedView ? undefined : (props) => (
                       <CustomColumnMenu
                         {...props}
                         columns={getColumns()}
