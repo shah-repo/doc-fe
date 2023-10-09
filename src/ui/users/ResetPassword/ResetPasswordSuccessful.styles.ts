@@ -44,5 +44,16 @@ export const styles = makeStyles((theme: Theme) =>
       width: '700px',
       color: Colors.dark_gray,
     },
+    [theme.breakpoints.down('xs')]: {
+      passwordSuccessfulInfo: {
+        width: '100%',
+      },
+      logo: {
+        margin: theme.spacing(4),
+      },
+      submit: {
+        width: '80%',
+      },
+    },
   }),
 );
