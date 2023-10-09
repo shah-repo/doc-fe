@@ -46,7 +46,15 @@ export const styles = makeStyles((theme: Theme) =>
     },
     formStyle: {
       width: '500px',
-
+    },
+    [theme.breakpoints.down('xs')]: {
+      formStyle: {
+        width: '100%',
+        padding: theme.spacing(2),
+      },
+      logo: {
+        margin: theme.spacing(4),
+      },
     },
   }),
 );

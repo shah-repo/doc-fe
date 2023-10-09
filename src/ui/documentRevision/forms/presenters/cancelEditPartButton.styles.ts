@@ -39,5 +39,13 @@ export const styles = makeStyles((theme: Theme) =>
     listItemValue: {
       marginLeft: theme.spacing(0.5),
     },
+    disabled: {
+      backgroundColor: Colors.whitest_grey,
+      color: Colors.gray,
+      cursor: 'not-allowed',
+      '&:hover': {
+        backgroundColor: Colors.whitest_grey,
+      },
+    },
   }),
 );
