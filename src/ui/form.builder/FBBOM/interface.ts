@@ -37,6 +37,7 @@ export interface BOM {
   changeRequestDetails?: ChangeRequestDetails
   costRollUp?: number
   isEditEnabled?: boolean
+  uniqid?: string
   enabledFieldsForEditing?: string[]
 }
 
