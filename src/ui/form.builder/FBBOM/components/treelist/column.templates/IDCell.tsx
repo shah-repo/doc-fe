@@ -46,7 +46,7 @@ interface MultipleFormInitialValues {
 const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { _documentRevisionFormState } = SM.useStores();
   const { colSpan, id, style, dataItem, field, level } = props;
-  const isEditMode = isEditBOM(dataItem);
+  const isEditMode = isEditBOM(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, submitForm } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);

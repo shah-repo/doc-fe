@@ -23,7 +23,7 @@ import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-import { substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
+import { bomDisabledChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -64,6 +64,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
 
   const [showTree, setShowTree] = useState(false);
   isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
+  const isEditingLineItemsDisallowed = bomDisabledChangeControl(documentRevision);
+  const enabledFieldsForEditing = getEnabledFieldsForEditing(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -356,7 +358,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
     if (dataItem.id === documentRevision.id
       || dataItem.inEdit
-      || isDisabled
+      || (isDisabled && isEditingLineItemsDisallowed)
       || dataItem.isDeleted
       || !dataItem.isEditEnabled
       || !dataItem.isParentOwner
@@ -409,6 +411,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   };
 
   const removeBOM = (dataItem) => {
+    if (dataItem.isDisabled) {
+      return;
+    }
     confirmationDialog.open();
     setSelectedPart(dataItem);
   };
@@ -486,6 +491,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     const item = props.dataItem as EditableBOM;
     item.isDisabled = isDisabled;
     item.isUpgradeDisabled = isUpgradeDisabled;
+    item.enabledFieldsForEditing = enabledFieldsForEditing;
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }

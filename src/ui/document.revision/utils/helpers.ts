@@ -116,6 +116,9 @@ export const CHANGE_CONTROL_OPTIONS_TOOLTIP_MAPPING = {
   return has(dataToSubmit, "description") || getFormInputHasTextField;
 }; */
 
+export const cccKeyNamesOrder = ['attribute-changes', 'bom-line-changes', 'bom-fields-edit', 'approved-supplier-list',
+  'changes-to-attachments', 'changes-to-references', 'substituting-superseded', 'auto-update-child-rev'];
+
 // Based on the controlOptions - if attribute-changes is set to yes,
 // then editing any of these will need a new revision
 export const formFieldsDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
@@ -140,6 +143,16 @@ export const bomDisabledChangeControl = (documentRevision: DocumentRevision | un
 
 export const substitutingSupersededDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   return doesFieldChangeAffectRev(documentRevision, SUBSTITUTING_SUPERSEDED_KEY);
+};
+
+export const getEnabledFieldsForEditing = (documentRevision: DocumentRevision | undefined): string[] => {
+  let fieldNames: string[] = ['refDesignator', 'comment', 'quantity', 'unit', 'alternatePart'];
+  if (documentRevision?.isBeingEditedAfterRelease
+    && documentRevision?.changeControlOptions
+    && documentRevision?.changeControlOptions.formInput) {
+    fieldNames = documentRevision?.changeControlOptions.formInput['bom-fields-edit'] ?? [];
+  }
+  return fieldNames;
 };
 
 export const disableOtherFieldsChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {

@@ -22,7 +22,7 @@ const UnitCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
-  const isEditMode = isEditBOM(dataItem);
+  const isEditMode = isEditBOM(dataItem) && dataItem.enabledFieldsForEditing?.includes(field ?? '');
   const data = unitsOptions.map(item => ({ ...item, text: translate(item.text) }));
   const getValue = () => find(data, { value: isString(values[field]) ? values[field] : values[field]?.value });
 
