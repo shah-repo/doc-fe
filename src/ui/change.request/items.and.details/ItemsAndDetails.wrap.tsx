@@ -53,7 +53,7 @@ ItemsAndDetailsWrapperProps & {name: string}
   };
 
   const handleUpdate = () => {
-    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision }
+    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate }
       = formState?.getValues() as FBDocumentRevisionsValue;
     const orderItemsUpdated = itemsAndDetailsState.approvalRequestItemsList
       .map((item: ApprovalRequestGridItem) => {
@@ -61,7 +61,7 @@ ItemsAndDetailsWrapperProps & {name: string}
           return item;
         }
 
-        return { ...item, justificationOfChange, descriptionOfChange };
+        return { ...item, justificationOfChange, descriptionOfChange, autoUpdate };
       });
 
     const dataToSend: FBDocumentRevisionsValue[]
