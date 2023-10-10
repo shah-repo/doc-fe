@@ -14,6 +14,7 @@ interface ColumnMenuContextProps {
   columns: CustomTreeListColumnProps[]
   onColumnShowHide: (params) => void
   onLock: (params) => void
+  isMaximizedView: boolean
 }
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);
