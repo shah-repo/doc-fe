@@ -73,6 +73,12 @@ export const styles = makeStyles((theme: Theme) =>
       marginTitle: {
         textAlign: 'center',
       },
+      title: {
+        width: 'auto',
+      },
+      formStyle: {
+        width: 'auto',
+      },
     },
   }),
 );
