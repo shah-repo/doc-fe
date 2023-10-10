@@ -61,11 +61,11 @@ export const styles = makeStyles((theme: Theme) =>
     },
     [theme.breakpoints.down('xs')]: {
       paper: {
-        width: 'auto',
+        width: '100%',
         padding: theme.spacing(3),
       },
       boldTitle: {
-        width: 'auto',
+        width: '100%',
       },
       submit: {
         width: '100%',
@@ -73,8 +73,15 @@ export const styles = makeStyles((theme: Theme) =>
       marginTitle: {
         textAlign: 'center',
       },
+      logo: {
+        margin: theme.spacing(4),
+      },
       title: {
         width: 'auto',
+      },
+      verficEmailmobile:
+      {
+        overflowWrap: 'break-word',
       },
       formStyle: {
         width: 'auto',
