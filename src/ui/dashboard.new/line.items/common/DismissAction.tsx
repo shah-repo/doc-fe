@@ -1,3 +1,4 @@
+import classInone from 'classnames';
 import React from 'react';
 import { ReactComponent as CloseIcon } from '../../../../assets/images/model_close.svg';
 import { StyleTooltip } from './StyleTooltip';
@@ -12,7 +13,7 @@ const DismissAction: React.FC<Props> = (props) => {
   const { classes, onClick, alignCloseClass } = props;
 
   return (
-    <span className={`${classes.actionIcon} ${alignCloseClass}`}>
+    <span className={classInone(classes.actionIcon, alignCloseClass)}>
       <StyleTooltip
         title="Dismiss"
         placement="top"

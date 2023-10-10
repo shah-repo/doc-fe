@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../../layout/theme/utils/colors';
+import Colors from '../../../../layout/theme-next/colors';
 import { grayDotStyles, lineItemStyles } from '../../common/styles';
 
 export default makeStyles((theme) => ({
@@ -27,7 +27,7 @@ export default makeStyles((theme) => ({
   gridWeb: {
     display: 'flex',
     justifyContent: 'center',
-    background: Colors.background_white,
+    background: Colors.primaryHighlight,
   },
   buttoncursor: {
     paddingLeft: 1,
@@ -53,17 +53,17 @@ export default makeStyles((theme) => ({
     },
     rejectButton: {
       borderRadius: 25,
-      background: Colors.latest_red_varient,
-      color: Colors.white_smoke,
+      background: Colors.error,
+      color: Colors.gray,
       display: 'inline-flex',
-      paddingRight: 20,
+      paddingRight: theme.spacing(2.4),
     },
     approvalButton: {
       borderRadius: 25,
-      background: Colors.latest_green_varient,
-      color: Colors.white_smoke,
+      background: Colors.success,
+      color: Colors.gray,
       display: 'inline-flex',
-      paddingRight: 20,
+      paddingRight: theme.spacing(2.4),
 
     },
     nested: {
@@ -71,7 +71,7 @@ export default makeStyles((theme) => ({
       marginLeft: 0,
     },
     cursorPointer: {
-      marginRight: 8,
+      marginRight: theme.spacing(1),
     },
     collapseIcon: {
       visibility: 'unset',

@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../../layout/theme/utils/colors';
+import Colors from '../../../../layout/theme-next/colors';
 import { grayDotStyles, lineItemStyles } from '../../common/styles';
 
 export default makeStyles((theme) => ({
@@ -18,8 +18,8 @@ export default makeStyles((theme) => ({
   [theme.breakpoints.down('xs')]: {
     closeButton: {
       borderRadius: 10,
-      background: Colors.font_gray,
-      color: Colors.white_smoke,
+      background: Colors.textGray,
+      color: Colors.gray,
       display: 'inline-flex',
       width: '50%',
     },
@@ -27,8 +27,8 @@ export default makeStyles((theme) => ({
       display: 'none',
     },
     cursorPointer: {
-      marginRight: 8,
-      marginBottom: 3,
+      marginRight: theme.spacing(1),
+      marginBottom: theme.spacing(0.3),
     },
   },
 }));

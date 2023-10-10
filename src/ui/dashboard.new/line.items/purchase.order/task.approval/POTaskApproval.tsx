@@ -585,7 +585,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
 
                 )}
-              </span>  <Text message="common.approve" />
+              </span>
+              <Text message="common.approve" />
             </Button></Grid>
         </List>
       </Collapse>

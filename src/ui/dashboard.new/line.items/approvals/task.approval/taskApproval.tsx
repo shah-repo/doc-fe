@@ -466,7 +466,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     className={classes.cursorPointer}
                   />
                 )}
-              </span>  <Text message="common.reject" />
+              </span>
+              <Text message="common.reject" />
             </Button>
             <Button className={classes.approvalButton} onClick={handleApproveClick}>
               <span className={classes.actionIcon}>
