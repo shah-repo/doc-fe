@@ -939,6 +939,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       isDisabled
       || !event?.draggedItem?.isEditEnabled
       || event?.draggedItem?.isDeleted
+      || !event?.draggedItem.isParentOwner
     ) {
       return false;
     }
