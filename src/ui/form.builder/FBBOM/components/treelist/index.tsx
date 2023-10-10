@@ -1,13 +1,44 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dialog, DialogContent, DialogTitle, Grid, IconButton } from '@material-ui/core';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+} from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
+import {
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy,
+  TreeList,
+  TreeListCellProps,
+  TreeListColumnReorderEvent,
+  TreeListDataStateChangeEvent,
+  TreeListDraggableRow,
+  TreeListFilterChangeEvent,
+  TreeListRowDragEvent,
+  treeToFlat,
+} from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { chain, get, isEmpty, isNil, isObject, map, omit, replace, tail, take, uniq } from 'lodash';
+import {
+  chain,
+  get,
+  isEmpty,
+  isNil,
+  isObject,
+  map,
+  omit,
+  replace,
+  tail,
+  take,
+  uniq,
+} from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
@@ -34,23 +65,58 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { FBBOM } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
-import { ColumnMenuContext, CustomColumnMenu } from './column.templates/CustomColumnMenu';
+import {
+  ColumnMenuContext,
+  CustomColumnMenu,
+} from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
-import { ADD_FIELD, CELL_EMPTY_VALUE, DATA_ITEM_KEY, DOC_ID_FIELD, EXCEL_FILE_NAME, EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TREELIST_CONFIG } from './constants';
-import { BOMState, CustomTreeListColumnProps, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
+import {
+  ADD_FIELD,
+  CELL_EMPTY_VALUE,
+  DATA_ITEM_KEY,
+  DOC_ID_FIELD,
+  EXCEL_FILE_NAME,
+  EXPAND_FIELD,
+  ID_FIELD,
+  MODE_FIELD,
+  SELECTED_PART_KEY_SEPARATOR,
+  SUB_ITEMS_FIELD,
+  TREELIST_CONFIG,
+} from './constants';
+import {
+  BOMState,
+  CustomTreeListColumnProps,
+  CustomTreeListExpandChangeEvent,
+  CustomTreeListRowProps,
+  FBBOMProps,
+} from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
-import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
+import {
+  getExcelColumns,
+  hasSameParent,
+  processBOMData,
+  updateDataAtLevels,
+} from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
-const FBBOMTreeList: React.FC<FBBOMProps> = (
-  { documentRevision, isDisabled, isDiffViewEnabled = false, isShowOnly = false, isUpgradeDisabled = false, isMaxDialogOpen = false }) => {
+const FBBOMTreeList: React.FC<FBBOMProps> = ({
+  documentRevision,
+  isDisabled,
+  isDiffViewEnabled = false,
+  isShowOnly = false,
+  isUpgradeDisabled = false,
+  isMaxDialogOpen = false,
+}) => {
   const { _tabsState } = SM.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
 
-  const classes = useStyles({ size, isMaximizeView: _documentRevisionFormState?.isMaximizedView });
+  const classes = useStyles({
+    size,
+    isMaximizeView: _documentRevisionFormState?.isMaximizedView,
+  });
   const [state, setState] = React.useState<BOMState>({
     data: [],
     dataState: {
@@ -61,11 +127,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     inEdit: [],
   });
   const maxDialog = useDialog();
-  const [selectedPartLevel, setSelectedPartLevel] = React.useState<{level: number[], dataItem: EditableBOM}>();
+  const [selectedPartLevel, setSelectedPartLevel] = React.useState<{
+    level: number[]
+    dataItem: EditableBOM
+  }>();
   const treeListRef = useRef(null);
 
   const [showTree, setShowTree] = useState(false);
-  isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
+  isUpgradeDisabled
+    = isUpgradeDisabled
+    || substitutingSupersededDisabledChangeControl(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -121,13 +192,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     },
   });
   const reloadBOM = () => {
-  _documentRevisionFormState?.setBOMChangesInProgress(false);
-  treeListAsync.start(
-    fetchBOMTreeList,
-    documentRevision.id,
-    documentRevision.documentId,
-    treeListAsync,
-  );
+    _documentRevisionFormState?.setBOMChangesInProgress(false);
+    treeListAsync.start(
+      fetchBOMTreeList,
+      documentRevision.id,
+      documentRevision.documentId,
+      treeListAsync,
+    );
   };
   useEffect(() => {
     if (!documentRevision || isShowOnly) {
@@ -163,7 +234,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
           treeListAsync,
         );
       }
-    });
+    },
+  );
 
   const [columns, setColumns]
     = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
@@ -201,7 +273,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     whereUsedDialog.close();
   };
 
-  const fetchHasATreeAction = useActionCreator(documentRevisionsActions.fetchHasATree);
+  const fetchHasATreeAction = useActionCreator(
+    documentRevisionsActions.fetchHasATree,
+  );
   const fetchHasATreeAsync = useAsync({
     onSuccess: (statusObj: BOM | undefined) => {
       if (statusObj && statusObj[documentRevision?.id]) {
@@ -210,25 +284,24 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     },
   });
   const fetchHasATree = (docRevId) => {
-    fetchHasATreeAsync.start(fetchHasATreeAction, [docRevId], fetchHasATreeAsync);
+    fetchHasATreeAsync.start(
+      fetchHasATreeAction,
+      [docRevId],
+      fetchHasATreeAsync,
+    );
   };
 
   useEffect(() => {
     if (!isShowOnly) {
       fetchHasATree(documentRevision?.id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevision?.id]);
 
   const [selectedPart, setSelectedPart] = useState<EditableBOM>();
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
     const partInfo = selectedPart?.id?.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
-    partAsync.start(
-      deleteBOMBranch,
-      partInfo[1],
-      partInfo[0],
-      partAsync,
-    );
+    partAsync.start(deleteBOMBranch, partInfo[1], partInfo[0], partAsync);
     discardBOM(selectedPart);
     confirmationDialog.close();
   };
@@ -250,15 +323,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
 
   const processData = () => {
     const { data, dataState } = state;
-    const filter = [...dataState.filter as FilterDescriptor[]];
-    const docIDField = filter?.find(val => val.field === ID_FIELD);
-    const docIDFieldIndex = filter?.findIndex(val => val.field === ID_FIELD);
+    const filter = [...(dataState.filter as FilterDescriptor[])];
+    const docIDField = filter?.find((val) => val.field === ID_FIELD);
+    const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);
 
     if (docIDField) {
-      filter?.splice(docIDFieldIndex, 1, { ...docIDField, field: DOC_ID_FIELD });
+      filter?.splice(docIDFieldIndex, 1, {
+        ...docIDField,
+        field: DOC_ID_FIELD,
+      });
     }
     const filteredData
-  = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+      = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
       = dataState.sort
       && filteredData
@@ -363,7 +439,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     });
   };
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (dataItem.id === documentRevision.id
+    if (
+      dataItem.id === documentRevision.id
       || dataItem.inEdit
       || isDisabled
       || dataItem.isDeleted
@@ -377,7 +454,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     _documentRevisionFormState?.setDirty(true);
     setSelectedPartLevel({ dataItem, level });
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
-      state.data = updateDataAtLevels([...state.data], level, dataItem, false) as BOM[];
+      state.data = updateDataAtLevels(
+        [...state.data],
+        level,
+        dataItem,
+        false,
+      ) as BOM[];
     }
     const editBOMInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     const childRevId = editBOMInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
@@ -396,7 +478,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   const discardBOM = (dataItem?) => {
     if (dataItem && dataItem[ADD_FIELD]) {
       if (selectedPartLevel?.level) {
-        const updatedData = updateDataAtLevels([...state.data], selectedPartLevel?.level, dataItem, false) as BOM[];
+        const updatedData = updateDataAtLevels(
+          [...state.data],
+          selectedPartLevel?.level,
+          dataItem,
+          false,
+        ) as BOM[];
         updateState({
           ...state,
           data: [...updatedData],
@@ -442,7 +529,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     // TODO
   };
   const isExactBOMViewWindow = () => {
-    return (_documentRevisionFormState?.isMaximizedView && isMaxDialogOpen) || (!isMaxDialogOpen && !_documentRevisionFormState?.isMaximizedView);
+    return _documentRevisionFormState?.isMaximizedView === isMaxDialogOpen;
   };
   const onChildPartAdd = (dataItem: EditableBOM, updatedState?: BOMState) => {
     if (isDisabled || !isExactBOMViewWindow()) {
@@ -451,11 +538,20 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     const newBOM: EditableBOM = createNewItem();
     newBOM.parentNodeDocumentId = dataItem.documentId;
     newBOM.parentNodeRevId = dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
-    const updatedBOMState = _documentRevisionFormState?.getBOMInfo ? toJS(_documentRevisionFormState?.getBOMInfo) : undefined;
-    const level = updatedState ? toJS(_documentRevisionFormState?.getChildPartInfo?.level) : selectedPartLevel?.level;
+    const updatedBOMState = _documentRevisionFormState?.getBOMInfo
+      ? toJS(_documentRevisionFormState?.getBOMInfo)
+      : undefined;
+    const level = updatedState
+      ? toJS(_documentRevisionFormState?.getChildPartInfo?.level)
+      : selectedPartLevel?.level;
     const stateData = updatedState ? updatedBOMState?.data : state.data;
     if (stateData) {
-      const updatedData = updateDataAtLevels([...stateData], level, newBOM, true) as BOM[];
+      const updatedData = updateDataAtLevels(
+        [...stateData],
+        level,
+        newBOM,
+        true,
+      ) as BOM[];
       const expanded = updatedState ? updatedState.expanded : state.expanded;
       updateState({
         ...state,
@@ -510,24 +606,41 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.deletedBg]: item.isDeleted || (isDiffViewEnabled && item.replacementStatus),
+        [classes.deletedBg]:
+          item.isDeleted || (isDiffViewEnabled && item.replacementStatus),
         [classes.inprogressBg]: item.inProgress && isDiffViewEnabled,
       }),
     };
-    if (!item[MODE_FIELD] || (!isNil(item.isEditEnabled) && !item.isEditEnabled) || (!isNil(item.isEditEnabled) && !item.isParentOwner)) {
-      return React.cloneElement(row, { ...modifiedProps, ['data-cy' as string]: `bom-row-${item.docId}` });
+    if (
+      !item[MODE_FIELD]
+      || (!isNil(item.isEditEnabled) && !item.isEditEnabled)
+      || (!isNil(item.isEditEnabled) && !item.isParentOwner)
+    ) {
+      return React.cloneElement(row, {
+        ...modifiedProps,
+        ['data-cy' as string]: `bom-row-${item.docId}`,
+      });
     }
     const isOwner = item.isOwner;
-    const isAddPartEnabled = isOwner
-      && ![DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete,
-        DocumentRevisionStatus.Released].includes(item.status);
+    const isAddPartEnabled
+      = isOwner
+      && ![
+        DocumentRevisionStatus.Deprecated,
+        DocumentRevisionStatus.Voided,
+        DocumentRevisionStatus.Obsolete,
+        DocumentRevisionStatus.Released,
+      ].includes(item.status);
     const actions = (
       <td className={classes.actionsCell}>
         <ActionsCell
           dataItem={item}
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
-          onDelete={(isOwner || item.isParentOwner || (item?.childNodes || []).length > 0) ? removeBOM : undefined}
+          onDelete={
+            isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
+              ? removeBOM
+              : undefined
+          }
           onRestore={onRestore}
           onReorder={onReorder}
           isAddPartEnabled={isAddPartEnabled}
@@ -553,10 +666,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
-      if (
-        item[SUB_ITEMS_FIELD]
-        && !isEmpty(item[SUB_ITEMS_FIELD])
-      ) {
+      if (item[SUB_ITEMS_FIELD] && !isEmpty(item[SUB_ITEMS_FIELD])) {
         ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD] as BOM[]));
       }
     });
@@ -582,9 +692,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   let _export;
 
   const exportToExcel = () => {
-    const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
-    const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD)
-      .map(part => {
+    const ArIdAllowedStatusList = [
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.PendingChange,
+      DocumentRevisionStatus.InReview,
+    ];
+    const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD).map(
+      (part) => {
         const availableRevisions = part?.availableRevisions;
         const changeReqDetails = availableRevisions?.changeRequestDetails;
         const isReleased = availableRevisions?.isReleased;
@@ -598,13 +712,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
         } else {
           cellValue = changeReqDetails?.crId;
         }
-        return ({
+        return {
           ...part,
           attachmentsCount: part?.attachmentNames?.length,
-          changeRequestDetails: { crId: ArIdAllowedStatusList.includes(part?.status) ? part?.changeRequestDetails?.crId : '' },
+          changeRequestDetails: {
+            crId: ArIdAllowedStatusList.includes(part?.status)
+              ? part?.changeRequestDetails?.crId
+              : '',
+          },
           hasChanges: cellValue,
-        });
-      });
+        };
+      },
+    );
     const tableColumns = getExcelColumns(columns);
     const options = _export.workbookOptions(data, tableColumns);
 
@@ -612,21 +731,28 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   };
   const openMaximizeDialog = () => {
     maxDialog.open();
-  _documentRevisionFormState?.setIsMaximizedView(true);
+    _documentRevisionFormState?.setIsMaximizedView(true);
   };
   const closeMaximizeDialog = () => {
     maxDialog.close();
-  _documentRevisionFormState?.setIsMaximizedView(false);
-  reloadBOM();
+    _documentRevisionFormState?.setIsMaximizedView(false);
+    reloadBOM();
   };
-  const [maxmizeIconContainerRef, isMaxIconHovered] = useHover<HTMLButtonElement>();
+  const [maxmizeIconContainerRef, isMaxIconHovered]
+    = useHover<HTMLButtonElement>();
   const renderToolbar = (
     <GridToolbar>
-      <Grid container justify="space-between" className={classes.toolbarContainer}>
+      <Grid
+        container
+        justify="space-between"
+        className={classes.toolbarContainer}
+      >
         <Grid
           item
           data-cy="collapse-expand-collapse"
-          className={cx(classes.toggleExpandCollapse, { [classes.disabled]: isShowOnly })}
+          className={cx(classes.toggleExpandCollapse, {
+            [classes.disabled]: isShowOnly,
+          })}
           alignItems="center"
           justify="center"
         >
@@ -639,67 +765,108 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
         </Grid>
         <Grid item>
           <Grid container justify="flex-end">
-            {showDiffView && <Grid item
-              data-cy="show-hide-diff"
-              className={cx(classes.diffContainer, { [classes.disabled]: isShowOnly })}
-            >
-              <span data-cy="bom-hide-show-diff-button" className={classes.toggleIconContainer} onClick={showHideDiff}>
-                <FontAwesomeIcon
-                  className={classes.toggleIcon}
-                  size="lg"
-                  icon={isDiffViewEnabled ? regular('toggle-large-on') : regular('toggle-large-off')}
-                />
-                <span className={classes.toggleIconLabel}>{translate(isDiffViewEnabled ? 'bom.hide.diff' : 'bom.show.diff')}</span>
-              </span>
-            </Grid>}
-            <Grid item
+            {showDiffView && (
+              <Grid
+                item
+                data-cy="show-hide-diff"
+                className={cx(classes.diffContainer, {
+                  [classes.disabled]: isShowOnly,
+                })}
+              >
+                <span
+                  data-cy="bom-hide-show-diff-button"
+                  className={classes.toggleIconContainer}
+                  onClick={showHideDiff}
+                >
+                  <FontAwesomeIcon
+                    className={classes.toggleIcon}
+                    size="lg"
+                    icon={
+                      isDiffViewEnabled
+                        ? regular('toggle-large-on')
+                        : regular('toggle-large-off')
+                    }
+                  />
+                  <span className={classes.toggleIconLabel}>
+                    {translate(
+                      isDiffViewEnabled ? 'bom.hide.diff' : 'bom.show.diff',
+                    )}
+                  </span>
+                </span>
+              </Grid>
+            )}
+            <Grid
+              item
               data-cy="excel-export"
-              className ={cx({ [classes.disabled]: isShowOnly })}
+              className={cx({ [classes.disabled]: isShowOnly })}
             >
               <StyleTooltip
                 title={translate('common.download')}
                 placement="top"
                 arrow
               >
-                <FontAwesomeIcon data-cy="excel-download" className={classes.exportExcelIcon} onClick={exportToExcel} icon={solid('arrow-down-to-line')} />
-              </StyleTooltip>
-            </Grid>
-            { showTree && <Grid item
-              data-cy="where-used-view"
-              className ={cx({ [classes.disabled]: isShowOnly })}
-            >
-              <StyleTooltip
-                title={translate('bom.whereUsed.dialog.title')}
-                placement="top"
-                arrow
-              >
-                <FontAwesomeIcon className={classes.viewIcon} icon={solid('tree-deciduous')}
-                  onClick={openWhereUsedDialog}
+                <FontAwesomeIcon
+                  data-cy="excel-download"
+                  className={classes.exportExcelIcon}
+                  onClick={exportToExcel}
+                  icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
-            </Grid>}
-            <Grid item
+            </Grid>
+            {showTree && (
+              <Grid
+                item
+                data-cy="where-used-view"
+                className={cx({ [classes.disabled]: isShowOnly })}
+              >
+                <StyleTooltip
+                  title={translate('bom.whereUsed.dialog.title')}
+                  placement="top"
+                  arrow
+                >
+                  <FontAwesomeIcon
+                    className={classes.viewIcon}
+                    icon={solid('tree-deciduous')}
+                    onClick={openWhereUsedDialog}
+                  />
+                </StyleTooltip>
+              </Grid>
+            )}
+            <Grid
+              item
               data-cy="show-hide-columns"
-              className ={cx({ [classes.disabled]: isShowOnly })}>
+              className={cx({ [classes.disabled]: isShowOnly })}
+            >
               <ColumnShowHideTreeMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
               />
             </Grid>
-            {!isMaxDialogOpen && <Grid item data-cy="maximize" className={classes.maximizeIconContainer}>
-              <StyleTooltip
-                title={translate('bom.maximize.tooltip')}
-                placement="top"
-                arrow
-                ref={maxmizeIconContainerRef}
-                onClick={openMaximizeDialog}
+            {!isMaxDialogOpen && (
+              <Grid
+                item
+                data-cy="maximize"
+                className={classes.maximizeIconContainer}
               >
-                <FontAwesomeIcon icon={isMaxIconHovered ? solid('arrows-maximize') : regular('arrows-maximize')} />
-              </StyleTooltip>
-            </Grid>}
+                <StyleTooltip
+                  title={translate('bom.maximize.tooltip')}
+                  placement="top"
+                  arrow
+                  ref={maxmizeIconContainerRef}
+                  onClick={openMaximizeDialog}
+                >
+                  <FontAwesomeIcon
+                    icon={
+                      isMaxIconHovered
+                        ? solid('arrows-maximize')
+                        : regular('arrows-maximize')
+                    }
+                  />
+                </StyleTooltip>
+              </Grid>
+            )}
           </Grid>
         </Grid>
-
       </Grid>
     </GridToolbar>
   );
@@ -754,7 +921,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       const column = columns[index];
       if (column) {
         const newColumns = [...columns];
-        newColumns.splice(index, 1, { ...column, locked: !locked, reorderable: locked, orderIndex: !locked ? 0 : column.mainOrderIndex });
+        newColumns.splice(index, 1, {
+          ...column,
+          locked: !locked,
+          reorderable: locked,
+          orderIndex: !locked ? 0 : column.mainOrderIndex,
+        });
         setColumns(newColumns);
         closeMenu?.();
       }
@@ -763,7 +935,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
   );
 
   const onRowDrop = (event: TreeListRowDragEvent) => {
-    if (isDisabled || !event?.draggedItem?.isEditEnabled || event?.draggedItem?.isDeleted) {
+    if (
+      isDisabled
+      || !event?.draggedItem?.isEditEnabled
+      || event?.draggedItem?.isDeleted
+    ) {
       return false;
     }
     if (
@@ -788,7 +964,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
             reorderBOMBranch,
             draggedChild.parentNodeRevId,
             {
-              childNodeRevId: draggedChild.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+              childNodeRevId: draggedChild.id.split(
+                SELECTED_PART_KEY_SEPARATOR,
+              )[0],
               newPos: draggedOverChildIndex,
             },
             partChangeOrderAsync,
@@ -814,18 +992,25 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
       .value();
   };
 
-  useEffect(() => reaction(
-    () => _documentRevisionFormState?.childPartInfo,
-    (info) => {
-      if (info?.dataItem) {
-        const dataItem = toJS(info?.dataItem) as EditableBOM;
-        const level = toJS(info?.level);
-        setSelectedPartLevel({ dataItem, level });
-        _documentRevisionFormState?.setBOMChangesInProgress(true);
-        onChildPartAdd(dataItem, toJS(_documentRevisionFormState?.getBOMInfo));
-      }
-    },
-  ), [_documentRevisionFormState?.childPartInfo]);
+  useEffect(
+    () =>
+      reaction(
+        () => _documentRevisionFormState?.childPartInfo,
+        (info) => {
+          if (info?.dataItem) {
+            const dataItem = toJS(info?.dataItem) as EditableBOM;
+            const level = toJS(info?.level);
+            setSelectedPartLevel({ dataItem, level });
+            _documentRevisionFormState?.setBOMChangesInProgress(true);
+            onChildPartAdd(
+              dataItem,
+              toJS(_documentRevisionFormState?.getBOMInfo),
+            );
+          }
+        },
+      ),
+    [_documentRevisionFormState?.childPartInfo],
+  );
 
   SM.reaction(
     () => _documentRevisionFormState?.getRestorePartInfo,
@@ -845,10 +1030,22 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
     <>
       <Grid item>
         <FormikProvider value={formik}>
-          <ColumnMenuContext.Provider value={{ columns: getColumns(), onLock, onColumnShowHide, isMaximizedView: _documentRevisionFormState?.isMaximizedView ?? false }}>
+          <ColumnMenuContext.Provider
+            value={{
+              columns: getColumns(),
+              onLock,
+              onColumnShowHide,
+              isMaximizedView:
+                _documentRevisionFormState?.isMaximizedView ?? false,
+            }}
+          >
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>
-                <ExcelExport ref={(exporter) => (_export = exporter)} hierarchy fileName={EXCEL_FILE_NAME}>
+                <ExcelExport
+                  ref={(exporter) => (_export = exporter)}
+                  hierarchy
+                  fileName={EXCEL_FILE_NAME}
+                >
                   <TreeList
                     {...state.dataState}
                     tableProps={{ style: { width: '2681px' } }}
@@ -862,16 +1059,20 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
                     data={processData()}
                     onDataStateChange={handleDataStateChange}
                     columns={sortedColumnDefinitions}
-                    columnMenu={_documentRevisionFormState?.isMaximizedView ? undefined : (props) => (
-                      <CustomColumnMenu
-                        {...props}
-                        columns={getColumns()}
-                        {...{
-                          onLock,
-                          onColumnShowHide,
-                        }}
-                      />
-                    )}
+                    columnMenu={
+                      _documentRevisionFormState?.isMaximizedView
+                        ? undefined
+                        : (props) => (
+                          <CustomColumnMenu
+                            {...props}
+                            columns={getColumns()}
+                            {...{
+                              onLock,
+                              onColumnShowHide,
+                            }}
+                          />
+                        )
+                    }
                     onRowClick={editBOM}
                     onColumnReorder={onColumnReorder}
                     onFilterChange={onFilterChange}
@@ -884,7 +1085,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
                     row={TreeListDraggableRow}
                   />
                 </ExcelExport>
-                {(treeListAsync.isLoading || partAsync.isLoading || partChangeOrderAsync.isLoading) && <Loader />}
+                {(treeListAsync.isLoading
+                  || partAsync.isLoading
+                  || partChangeOrderAsync.isLoading) && <Loader />}
               </Grid>
               {confirmationDialog.isOpen && (
                 <AlertDialog
@@ -899,25 +1102,26 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
         </FormikProvider>
       </Grid>
       <Grid item>
-        {!isDisabled && <AddButton
-          fullWidth
-          attached
-          kind="add"
-          className={classes.bottomAddButtom}
-          data-cy="fb-control-btn"
-          onClick={addBOM}
-        >
-          {translate('form.builder.add.item')}
-        </AddButton>}
+        {!isDisabled && (
+          <AddButton
+            fullWidth
+            attached
+            kind="add"
+            className={classes.bottomAddButtom}
+            data-cy="fb-control-btn"
+            onClick={addBOM}
+          >
+            {translate('form.builder.add.item')}
+          </AddButton>
+        )}
       </Grid>
-      {
-        whereUsedDialog.isOpen
-        && <WhereUsedDialog
+      {whereUsedDialog.isOpen && (
+        <WhereUsedDialog
           docRevId={documentRevision.id}
           whereUsedDialog={whereUsedDialog}
-          closeDialog = {closeWhereUsedDialog}
+          closeDialog={closeWhereUsedDialog}
         />
-      }
+      )}
       <Dialog
         open={maxDialog.isOpen}
         fullScreen
@@ -940,8 +1144,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = (
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <FBBOM documentRevision={documentRevision} isDisabled={isDisabled} isShowOnly={isShowOnly}
-            isUpgradeDisabled={isUpgradeDisabled} isMaxDialogOpen={true}
+          <FBBOM
+            documentRevision={documentRevision}
+            isDisabled={isDisabled}
+            isShowOnly={isShowOnly}
+            isUpgradeDisabled={isUpgradeDisabled}
+            isMaxDialogOpen={true}
           />
         </DialogContent>
       </Dialog>
