@@ -12,7 +12,7 @@ export default (theme: Theme) =>
     drawerPaper: {
       width: DRAWER_WIDTH,
       background: Colors.mirage,
-      zIndex: theme.zIndex.drawer + 2,
+      zIndex: 20,
       overflow: 'hidden',
       borderRight: 'none',
     },

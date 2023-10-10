@@ -55,6 +55,7 @@ export interface EditableBOM extends BOM {
   isDisabled?: boolean
   isUpgradeDisabled?: boolean
   replacementStatus?: string
+  isMaximizedWindow?: boolean
 }
 
 export interface BOMEditEvent {

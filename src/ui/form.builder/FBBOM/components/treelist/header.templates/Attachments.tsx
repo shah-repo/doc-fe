@@ -9,7 +9,7 @@ import { styles } from './styles';
 
 export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (props) => {
   const classes = styles();
-  const { onLock, columns, onColumnShowHide } = React.useContext(ColumnMenuContext);
+  const { onLock, columns, onColumnShowHide, isMaximizedView } = React.useContext(ColumnMenuContext);
   const { field } = props;
 
   return (
@@ -26,7 +26,7 @@ export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (props
       >
         <FontAwesomeIcon icon={solid('paperclip')} className={classes.icon} />
       </Tooltip>
-      <div>
+      {!isMaximizedView && <div>
         <CustomColumnMenu
           {...{
             field,
@@ -35,7 +35,7 @@ export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (props
             onColumnShowHide,
           }}
         />
-      </div>
+      </div>}
     </Grid>
   );
 };

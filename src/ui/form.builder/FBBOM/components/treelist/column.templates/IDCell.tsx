@@ -348,10 +348,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
   };
   const setChildInfo = (dataItem, level) => {
+    if ((!dataItem?.isMaximizedWindow && !_documentRevisionFormState?.isMaximizedView)
+    || (dataItem?.isMaximizedWindow && _documentRevisionFormState?.isMaximizedView)) {
     _documentRevisionFormState?.setDirty(true);
     if (!_documentRevisionFormState?.bomChangesInProgress) {
       _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level });
       _documentRevisionFormState?.setBOMChangesInProgress(true);
+    }
     }
   };
 
