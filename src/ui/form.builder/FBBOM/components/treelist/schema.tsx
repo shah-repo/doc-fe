@@ -109,7 +109,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     field: 'leadTime',
     locked: false,
     title: translate('bom.treelist.treeColumns.field.leadTime.title'),
-    width: 171,
+    width: 60,
     filter: TreeListTextFilter,
     mainOrderIndex: 8,
     cell: LeadTimeCell,

@@ -19,7 +19,8 @@ import useStyles from './styles';
 interface FBBOMDetailDrawerProps {
   isDrawerOpened: boolean
   closeDrawer: () => void
-  parentRevId?: string
+  partRevId?: string
+  basePartRevId?: string
   docId?: string
   status?: string
   revision?: string
@@ -29,7 +30,8 @@ interface FBBOMDetailDrawerProps {
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
   isDrawerOpened,
   closeDrawer,
-  parentRevId,
+  partRevId,
+  basePartRevId,
   docId,
   status,
   revision,
@@ -106,7 +108,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             </Grid>
           </Grid>
           <Divider className={classes.divider} />
-          <FBBOMDrawerTable parentRevId={parentRevId} isDisabled={isDisabled} />
+          <FBBOMDrawerTable partRevId={partRevId} basePartRevId={basePartRevId} isDisabled={isDisabled} />
         </Box>
       )}
     </Drawer>

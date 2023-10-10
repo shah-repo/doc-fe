@@ -11,6 +11,7 @@ export interface FBBOMProps {
   isDiffViewEnabled?: boolean
   isShowOnly?: boolean
   isUpgradeDisabled?: boolean
+  isMaxDialogOpen?: boolean
 }
 
 export interface BOMState {
@@ -26,7 +27,8 @@ interface DataState {
 }
 
 export interface FBBOMDrawerTableProps {
-  parentRevId?: string
+  partRevId?: string
+  basePartRevId?: string
   isDisabled?: boolean
 }
 
