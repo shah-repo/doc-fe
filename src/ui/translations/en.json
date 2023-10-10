@@ -1675,6 +1675,7 @@
   "bom.replaced.doc.rev": "Replacing",
   "bom.order.error.message": "Change the order of the parts within the same parent",
   "bom.whereUsed.dialog.title": "Where Used View",
+  "bom.maximize.tooltip": "Maximize",
   "bom.documentRevision.dialog.title": "Quick View",
   "bom.ar.child.draft.option": "Rev {revision} - {title}",  
   "bom.ar.child.draft.add.action.message": "{count, plural, one {Action required on # item} other {Action required on # items}}",

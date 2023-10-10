@@ -83,6 +83,9 @@ export const styles = makeStyles((theme: Theme) =>
       {
         overflowWrap: 'break-word',
       },
+      formStyle: {
+        width: 'auto',
+      },
     },
   }),
 );
