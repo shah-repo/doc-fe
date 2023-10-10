@@ -111,7 +111,7 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   const removePrePopulatedField = () => {
-    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange'];
+    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange', 'autoUpdate'];
     removeKeys.forEach((item) => {
       formState.setFieldValue(item, undefined);
     });
@@ -135,12 +135,13 @@ const ItemsAndDetails: React.FunctionComponent<{
     })}>
       { itemsAndDetailsState.loadingState && <Loader /> }
       <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible} />
-      <ApprovalRequestGridHeader />
+      <ApprovalRequestGridHeader lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute} />
       { isEditRowVisible && <ApprovalRequestEditGridItem
         {...{ formState }}
         disabledOptions={disabledOptions()}
         addRevisionToChangeRequest={addRevisionToChangeRequest}
         resetAndCancelEdit={resetAndCancelEdit}
+        lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
       />}
       {
         itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (
@@ -153,6 +154,7 @@ const ItemsAndDetails: React.FunctionComponent<{
             handleUpdate = {handleUpdate}
             viewItemActionsVisible = {itemsAndDetailsState.viewItemActionsVisible}
             itemsAndDetailsState = {itemsAndDetailsState}
+            lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
           />
         ))
       }

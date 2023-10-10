@@ -15,6 +15,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   handleUpdate: () => void
   viewItemActionsVisible: boolean
   itemsAndDetailsState: ItemsAndDetailsState
+  lineItemPartCanSubstitute?: boolean
 }> = ({
   entry,
   formState,
@@ -23,16 +24,16 @@ const ApprovalRequestItem: React.FunctionComponent<{
   handleUpdate,
   viewItemActionsVisible,
   itemsAndDetailsState,
+  lineItemPartCanSubstitute,
 }) => {
-
   const [isEditMode, setEditMode] = useState(false);
 
-  function resetAndCancelEdit() {
+  function resetAndCancelEdit () {
     setEditMode(false);
     itemsAndDetailsState.setViewItemActionsVisibility(true);
   }
 
-  function addRevisionToChangeRequest() {
+  function addRevisionToChangeRequest () {
     const { justificationOfChange, descriptionOfChange }
       = formState?.getValues() as FBDocumentRevisionsValue;
 
@@ -44,8 +45,9 @@ const ApprovalRequestItem: React.FunctionComponent<{
     handleUpdate();
   }
 
-  function editItem() {
+  function editItem () {
     const values = [
+      { key: 'autoUpdate', value: entry.autoUpdate },
       { key: 'proposedDocumentRevision', value: { id: entry.docRevId } },
       { key: 'descriptionOfChange', value: entry.descriptionOfChange },
       { key: 'justificationOfChange', value: entry.justificationOfChange },
@@ -69,6 +71,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
             titleText={entry.titleText}
             handleRemove={handleRemove}
             entry={entry}
+            lineItemPartCanSubstitute={lineItemPartCanSubstitute}
           />
       }
       { !isEditMode
@@ -77,6 +80,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
           editItem={editItem}
           handleRemove={handleRemove}
           viewItemActionsVisible={viewItemActionsVisible}
+          lineItemPartCanSubstitute={lineItemPartCanSubstitute}
         /> }
     </>
   ));
