@@ -90,8 +90,9 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
     let isUserAlertedNoDocFiles = false;
     let isUserAlrtedCleanCopyMismatch = false;
     const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
+    const names = Array.from(event.currentTarget.files || []).map(file => file.name);
     if (filesSize > FILE_UPLOAD_LIMIT) {
-      handleFileSizeExceedLimit(filesSize, event);
+      handleFileSizeExceedLimit(names, filesSize, event);
       return;
     }
 

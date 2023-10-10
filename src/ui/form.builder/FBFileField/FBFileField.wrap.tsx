@@ -61,8 +61,10 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       const invalidFiles: string[] = [];
 
       const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
+      const names = Array.from(event.currentTarget.files || []).map(file => file.name);
       if (filesSize > FILE_UPLOAD_LIMIT) {
-        handleFileSizeExceedLimit(filesSize, event);
+        handleFileSizeExceedLimit(names, filesSize, event);
+
         return;
       }
       const validFiles: File[] = filter(eventFiles, (file) => {

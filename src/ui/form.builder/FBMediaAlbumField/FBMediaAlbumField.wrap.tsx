@@ -78,13 +78,13 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       const eventFiles = get(event, 'currentTarget.files', []);
       const invalidFiles: string[] = [];
       const duplicateNamedFiles: string[] = [];
-
+      const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
+      const names = Array.from(event.currentTarget.files || []).map(file => file.name);
+      if (filesSize > FILE_UPLOAD_LIMIT) {
+        handleFileSizeExceedLimit(names, filesSize, event);
+        return;
+      }
       const validFiles: File[] = filter(eventFiles, (file) => {
-        const filesSize = file.size;
-        if (filesSize > FILE_UPLOAD_LIMIT) {
-          handleFileSizeExceedLimit(filesSize, event);
-          return;
-        }
         const fileName = get(file, 'name', '');
         const name = fileName.split('.')[0];
 
