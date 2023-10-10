@@ -9,7 +9,7 @@ import { styles } from './styles';
 
 export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = (props) => {
   const classes = styles();
-  const { onLock, columns, onColumnShowHide } = React.useContext(ColumnMenuContext);
+  const { onLock, columns, onColumnShowHide, isMaximizedView } = React.useContext(ColumnMenuContext);
   const { field } = props;
 
   return (
@@ -28,7 +28,7 @@ export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = (props) => 
           <FontAwesomeIcon icon={solid('star')} className={classes.star} />
         </span>
       </Tooltip>
-      <div>
+      {!isMaximizedView && <div>
         <CustomColumnMenu
           {...{
             field,
@@ -37,7 +37,7 @@ export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = (props) => 
             onColumnShowHide,
           }}
         />
-      </div>
+      </div>}
     </Grid>
   );
 };
