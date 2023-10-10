@@ -10,7 +10,7 @@ import { styles } from './styles';
 export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = (props) => {
   const classes = styles();
   const [isHovered, setIsHovered] = useState(false);
-  const { onLock, columns, onColumnShowHide } = React.useContext(ColumnMenuContext);
+  const { onLock, columns, onColumnShowHide, isMaximizedView } = React.useContext(ColumnMenuContext);
   const { field } = props;
 
   return (
@@ -35,7 +35,7 @@ export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = (props) => 
           />
         </Tooltip>
       </div>
-      <div>
+      {!isMaximizedView && <div>
         <CustomColumnMenu
           {...{
             field,
@@ -44,7 +44,7 @@ export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = (props) => 
             onColumnShowHide,
           }}
         />
-      </div>
+      </div>}
     </Grid>
   );
 };
