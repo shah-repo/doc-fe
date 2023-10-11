@@ -25,6 +25,7 @@ import YesNoOptionsFilter from './column.templates/YesNoOptionsFilter';
 import { AlternatePartsList } from './header.templates/AlternatePartsList';
 import { Attachments } from './header.templates/Attachments';
 import { Issues } from './header.templates/Issues';
+import { LeadTime } from './header.templates/LeadTime';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 import { CustomTreeListColumnProps } from './interface';
@@ -111,6 +112,7 @@ export const TreeColumns: CustomTreeListColumnProps[] = [
     title: translate('bom.treelist.treeColumns.field.leadTime.title'),
     width: 60,
     filter: TreeListTextFilter,
+    headerCell: LeadTime,
     mainOrderIndex: 8,
     cell: LeadTimeCell,
   },
