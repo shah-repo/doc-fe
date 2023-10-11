@@ -8,4 +8,20 @@ export default makeStyles((theme) => ({
     marginLeft: 4,
     marginRight: 5,
   }),
+  innerWrap: {
+    display: 'inline-flex',
+  },
+  truncateMobile: {
+    overFlow: 'unset',
+  },
+  [theme.breakpoints.down('xs')]: {
+    innerWrap: {
+      display: 'block',
+    },
+    truncateMobile: {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      wordBreak: 'break-all',
+    },
+  },
 }));

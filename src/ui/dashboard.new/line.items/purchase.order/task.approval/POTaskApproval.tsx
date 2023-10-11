@@ -1,4 +1,4 @@
-import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
@@ -23,6 +23,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
@@ -31,7 +32,6 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -53,11 +53,11 @@ interface Props {
   purchaseOrderTotalAmount: string
   purchaseOrderDescription: string
   purchaseOrdeLineItemCount: string
-  purchaseOrderAttachments: {
+  purchaseOrderAttachments: Array<{
     name: string
     type: string
     id: string
-  }[]
+  }>
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
   pinned: boolean
@@ -233,9 +233,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick}  />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick}  />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
@@ -257,41 +257,42 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyBold} ${classes.margin5}`}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {docRevOwnerName}
-                  </Typography>
+              <Grid item={true} lg={12} className={classes.innerWrap}>
+                <Grid
+                  container={true}
+                  wrap="nowrap"
+                  justify="flex-start"
+                  alignItems="center"
+                  className={classes.textOverlapMobile}
+                >
+                  <Grid item={true} >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyBold} ${classes.margin5} `}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docRevOwnerName}
+                    </Typography>
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5} `}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="require.approval" />
+                    </Typography>
+                    <DocId
+                      url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                      docId={docId}
+                    />
+                  </Grid>
                 </Grid>
                 <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={`${classes.typography} ${classes.margin5}`}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text translation="require.approval" />
-                  </Typography>
-                </Grid>
-                <Grid item={true}>
-                  <DocId
-                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
-                    docId={docId}
-                  />
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
                     url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
@@ -337,22 +338,22 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               </span>
             )}
             <StyleTooltip
-                title={<Text translation="common.download.pdf" />}
-                placement="top"
-                arrow
-              >
-                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
-                  <DownloadHtmlPreview
-                    id={docRevId}
-                    data-cy="transition-download-pdf"
-                    downloadPdfHover={downloadPdfHover}
-                    dialogPDF={dialogPDF}
-                  />
-                </span>
-              </StyleTooltip>
+              title={<Text translation="common.download.pdf" />}
+              placement="top"
+              arrow
+            >
+              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={downloadPdfHover}
+                  dialogPDF={dialogPDF}
+                />
+              </span>
+            </StyleTooltip>
             <span className={classes.actionIcon}>
               {!rejectHover && (
-                <RejectIcon
+                <RejectIcon fill={Colors.raven} stroke={Colors.raven}
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
                   className={classes.cursorPointer}
@@ -375,7 +376,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon
+                <ApproveIcon fill={Colors.raven}
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
                   className={classes.cursorPointer}
@@ -434,7 +435,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             {dismissLineItem && (
-              <DismissAction classes={classes} onClick={handleDismiss} />
+              <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
             )}
           </Box>
         )}
@@ -454,7 +455,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </span>
         )}
         {hoverItem && dismissLineItem && (
-          <DismissAction classes={classes} onClick={handleDismiss} />
+          <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -467,7 +468,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               disableRipple
             >
               <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
+                <Grid item md={3} sm={6} xs={4}>
                   <Typography
                     component="span"
                     variant="caption"
@@ -477,7 +478,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     {poItem.ltext}
                   </Typography>
                 </Grid>
-                <Grid item md={9} sm={6}>
+                <Grid item md={9} sm={6} xs={8}>
                   {poItem.isSupplier && (
                     <RouterLink
                       to={
@@ -511,13 +512,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     />
                   )}
                   {poItem.isAttachments && (
-                    <Grid
+                    <Grid item
                       container
                       justify="space-between"
                       alignContent="center"
+                      xs={12}
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} xs={12}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
@@ -544,6 +546,48 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridWeb}>
+            <Button className={classes.rejectButton} onClick={handleRejectClick}>
+              <span className={classes.actionIcon}>
+                {!rejectHover && (
+                  <RejectIcon fill={Colors.white_smoke} stroke={Colors.white_smoke}
+                    data-cy="transition-reject"
+                    onMouseEnter={onMouseHoverRejectIcon}
+                    className={classes.cursorPointer}
+                  />
+                )}
+                {rejectHover && (
+                  <RejectIcon fill={Colors.white_smoke}
+                    data-cy="transition-reject"
+                    onClick={handleRejectClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
+                  />
+                )}
+              </span>  <Text message="common.reject" />
+            </Button>
+            <Button className={classes.approvalButton} onClick={handleApproveClick}>
+              <span className={classes.actionIcon}>
+                {!approveHover && (
+                  <ApproveIcon fill={Colors.white_smoke}
+                    data-cy="transition-approve"
+                    onMouseEnter={onMouseHoverApproveIcon}
+                    className={classes.cursorPointer}
+                  />
+                )}
+                {approveHover && (
+
+                  <ApproveIcon fill={Colors.white_smoke}
+                    data-cy="transition-approve"
+                    onClick={handleApproveClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
+                  />
+
+                )}
+              </span>
+              <Text message="common.approve" />
+            </Button></Grid>
         </List>
       </Collapse>
       <ApproveDialogueContainer

@@ -1491,6 +1491,7 @@
   "dashboard.lineItems.status": "Notification dismissed.",
   "dashboard.preventive.maintenance.due": "is Due for Preventative Maintenance in {noOfDays} days",
   "header.welcome.back": "Welcome Back",
+  "header.design.make": "Design To Make",
   "training.on": "Training on",
   "assigned.users.count": "Assigned to {count} user.",
   "assigned.users.counts": "Assigned to {count} users.",

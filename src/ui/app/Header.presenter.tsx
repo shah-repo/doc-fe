@@ -1,13 +1,14 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
+import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_logo.svg';
 import Text from '../components/Text';
-import styles from './Header.styles';
 import AutosaveToggle from './autosave/autosave';
+import styles from './Header.styles';
 
 export interface HeaderPresenterProps {
   name: string
@@ -27,6 +28,12 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   canToggleCustomLabels,
 }) => (
   <AppBar className={classes.appBar}>
+    <Grid className={classes.mobileMake}>
+      <MobileLogo />
+      <Typography variant="caption" className={classes.textMake} component="div">
+        <Text translation="header.design.make" />
+      </Typography>
+    </Grid>
     <Toolbar className={classes.toolbar}>
       <Grid
         container
@@ -35,7 +42,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         wrap="nowrap"
         spacing={2}
       >
-        <Grid item xs>
+        <Grid item xs className={classes.mobileGrwFlex}>
           {!fullHeight && (
             <SearchBar />
           )}
@@ -49,13 +56,13 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             </Typography>
           )}
           {canToggleCustomLabels && (
-            <FormControlLabel
+            <FormControlLabel className={classes.mobileStyle}
               control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
               label={<Text translation="form.builder.header.control.label" />}
             />
           )}
-          <AutosaveToggle />
-          <HelpCenter />
+          <AutosaveToggle className={classes.mobileStyle} />
+          <HelpCenter className={classes.mobileStyle} />
         </Grid>
       </Grid>
     </Toolbar>

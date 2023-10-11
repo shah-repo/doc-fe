@@ -17,6 +17,7 @@ import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
 import Colors from '../../../../layout/theme/utils/colors';
 import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import DismissAction from '../../common/DismissAction';
 import { getDocIcon } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
@@ -27,7 +28,6 @@ import { DocTypeGroups } from '../../common/types';
 import { getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './pendingReview.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -37,21 +37,21 @@ interface Props {
   arChangeRequestId: string
   arStatus: string
   timestamp: string
-  pendingApprovers: {
+  pendingApprovers: Array<{
     userName: string
     employeeId: string
     userAvatar: Nullable<string>
     userInitialColor: string
     approvalStatus: string
-  }[]
-  approvedApprovers: {
+  }>
+  approvedApprovers: Array<{
     userName: string
     employeeId: string
     userAvatar: Nullable<string>
     userInitialColor: string
     approvalStatus: string
-  }[]
-  docRevs: {
+  }>
+  docRevs: Array<{
     docTypeGroup: DocTypeGroups
     documentRevisionId: string
     documentId: string
@@ -60,7 +60,7 @@ interface Props {
     name: string
     justificationOfChange: string
     descriptionOfChange: string
-  }[]
+  }>
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
   pinned: boolean
@@ -155,7 +155,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon height={30} width={30} />
@@ -169,12 +169,13 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 justify="flex-start"
                 alignItems="center"
                 data-cy={arId + 'InReview'}
+                className={classes.innerReview}
               >
                 <Grid item={true}>
-                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title} />
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={title} />
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -272,7 +273,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                 />
+                />
                 <Grid item={true}>
                   <Typography
                     component="span"

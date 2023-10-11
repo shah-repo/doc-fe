@@ -2,7 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import Colors from '../layout/theme/utils/colors';
 
 export const loadMoreStyles = (theme: Theme) => ({
-  margin: theme.spacing(5, 1, .5),
+  margin: theme.spacing(5, 1, 0.5),
 });
 
 export default makeStyles((theme) => ({
@@ -36,5 +36,13 @@ export default makeStyles((theme) => ({
   searchContainer: {
     maxWidth: 500,
     marginTop: -78,
+  },
+  [theme.breakpoints.down('xs')]: {
+    searchContainer: {
+      display: 'none',
+    },
+    box: {
+      margin: theme.spacing(0, 1.25),
+    },
   },
 }));

@@ -1,7 +1,7 @@
-import { createStyles } from '@material-ui/core';
+import { createStyles, Theme } from '@material-ui/core';
 import Colors from '../../../../../layout/theme/utils/colors';
 
-export default () =>
+export default (theme: Theme) =>
   createStyles({
     form: {
       minWidth: 400,
@@ -86,5 +86,22 @@ export default () =>
     },
     ScheduleIcon: {
       margin: '0px 5px 0px 0px',
+    },
+    [theme.breakpoints.down('xs')]: {
+      pendingBox: {
+        width: '100%',
+        padding: 0,
+      },
+      form: {
+        minWidth: '100%',
+      },
+      closeLaterDiscription: {
+        display: 'flex',
+        flexWrap: 'nowrap',
+        textAlign: 'center',
+      },
+      closeLaterSubmitButton: {
+        width: '100%',
+      },
     },
   });
