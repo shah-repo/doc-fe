@@ -34,7 +34,7 @@ export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (
       >
         <span ref={attachmentsRef} className={classes.iconContainer}>
           <FontAwesomeIcon
-            icon={isHovered ? regular('paperclip') : solid('paperclip')}
+            icon={isHovered ? solid('paperclip') : regular('paperclip')}
             className={classes.icon}
           />
         </span>

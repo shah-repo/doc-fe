@@ -34,7 +34,7 @@ export const PrimaryAttachments: React.FC<TreeListHeaderCellProps> = (
       >
         <span ref={primaryAttachmentsRef} className={classes.iconContainer}>
           <FontAwesomeIcon
-            icon={isHovered ? regular('paperclip') : regular('paperclip')}
+            icon={isHovered ? solid('paperclip') : regular('paperclip')}
             className={classes.icon}
           />
           <FontAwesomeIcon icon={solid('star')} className={classes.star} />
