@@ -11,6 +11,7 @@
   font-display: block;
   src: url("../../assets/fonts/fa-regular-400-set.woff2") format("woff2");
 }
+
 @font-face {
   font-family: FontAwesome;
   font-style: normal;
@@ -96,4 +97,10 @@
 
 .MuiFormGroup-row .MuiRadio-root {
   padding-left: 11px;
+}
+
+@media (max-width: 600px) {
+  .Toastify__toast-container {
+    padding-left: 50px !important;
+  }
 }
