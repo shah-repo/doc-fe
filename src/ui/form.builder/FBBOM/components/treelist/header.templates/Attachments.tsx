@@ -1,16 +1,24 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../../../common/intl';
-import { ColumnMenuContext, CustomColumnMenu } from '../column.templates/CustomColumnMenu';
+import useHover from '../../../../../hooks/useHover';
+import {
+  ColumnMenuContext,
+  CustomColumnMenu,
+} from '../column.templates/CustomColumnMenu';
 import { styles } from './styles';
 
-export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (props) => {
+export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (
+  props,
+) => {
   const classes = styles();
-  const { onLock, columns, onColumnShowHide, isMaximizedView } = React.useContext(ColumnMenuContext);
+  const { onLock, columns, onColumnShowHide, isMaximizedView }
+    = React.useContext(ColumnMenuContext);
   const { field } = props;
+  const [attachmentsRef, isHovered] = useHover<HTMLButtonElement>();
 
   return (
     <Grid
@@ -24,18 +32,25 @@ export const Attachments: React.FC<TreeListHeaderCellProps> | undefined = (props
         placement="top"
         arrow
       >
-        <FontAwesomeIcon icon={solid('paperclip')} className={classes.icon} />
+        <span ref={attachmentsRef} className={classes.iconContainer}>
+          <FontAwesomeIcon
+            icon={isHovered ? solid('paperclip') : regular('paperclip')}
+            className={classes.icon}
+          />
+        </span>
       </Tooltip>
-      {!isMaximizedView && <div>
-        <CustomColumnMenu
-          {...{
-            field,
-            onLock,
-            columns,
-            onColumnShowHide,
-          }}
-        />
-      </div>}
+      {!isMaximizedView && (
+        <div>
+          <CustomColumnMenu
+            {...{
+              field,
+              onLock,
+              columns,
+              onColumnShowHide,
+            }}
+          />
+        </div>
+      )}
     </Grid>
   );
 };

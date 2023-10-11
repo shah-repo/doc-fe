@@ -8,4 +8,18 @@ export default makeStyles((theme) => ({
     marginLeft: 4,
     marginRight: 5,
   }),
+  textPoReviewlapMobile: {
+    flexWrap: 'nowrap',
+  },
+  [theme.breakpoints.down('xs')]: {
+    textPoReviewlapMobile: {
+      flexWrap: 'wrap',
+    },
+    link: {
+      pointerEvents: 'none',
+    },
+    actionIcons: {
+      display: 'none',
+    },
+  },
 }));

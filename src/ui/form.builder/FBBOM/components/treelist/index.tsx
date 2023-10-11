@@ -56,7 +56,7 @@ import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-import { substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
+import { bomDisabledChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -134,9 +134,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const treeListRef = useRef(null);
 
   const [showTree, setShowTree] = useState(false);
-  isUpgradeDisabled
-    = isUpgradeDisabled
-    || substitutingSupersededDisabledChangeControl(documentRevision);
+  isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
+  const isEditingLineItemsDisallowed = bomDisabledChangeControl(documentRevision);
+  const enabledFieldsForEditing = getEnabledFieldsForEditing(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -442,7 +442,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     if (
       dataItem.id === documentRevision.id
       || dataItem.inEdit
-      || isDisabled
+      || (isDisabled && isEditingLineItemsDisallowed)
       || dataItem.isDeleted
       || !dataItem.isEditEnabled
       || !dataItem.isParentOwner
@@ -506,6 +506,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
 
   const removeBOM = (dataItem) => {
+    if (dataItem.isDisabled) {
+      return;
+    }
     confirmationDialog.open();
     setSelectedPart(dataItem);
   };
@@ -595,6 +598,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     item.isDisabled = isDisabled;
     item.isMaximizedWindow = isMaxDialogOpen;
     item.isUpgradeDisabled = isUpgradeDisabled;
+    item.enabledFieldsForEditing = enabledFieldsForEditing;
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }

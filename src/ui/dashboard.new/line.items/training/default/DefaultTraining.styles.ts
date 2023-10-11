@@ -35,4 +35,9 @@ export default makeStyles((theme: Theme) => ({
     position: 'relative',
     background: Colors.latest_yellow_varient,
   },
+  [theme.breakpoints.down('xs')]: {
+    itemlistMobile: {
+      flexWrap: 'wrap',
+    },
+  },
 }));

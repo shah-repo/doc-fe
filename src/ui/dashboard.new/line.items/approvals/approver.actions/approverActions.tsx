@@ -12,6 +12,7 @@ import { getInitalsFromName } from '../../../../components/icons/avatar/helpers'
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
@@ -21,7 +22,6 @@ import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalS
 import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import useStyles from './approverActions.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -116,96 +116,97 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
       <ListItemText
         primary={
           <>
-            <Grid
-              container={true}
-              wrap="nowrap"
-              justify="flex-start"
-              alignItems="center"
-            >
-              <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={`${classes.typographyBold} ${classes.margin5}`}
-                  color="textSecondary"
-                  noWrap
-                >
-                  {approverName}
-                </Typography>
-              </Grid>
-              {STATUS_TYPES_LABEL.REJECTED === status && (
+            <Grid item={true} lg={12} className={classes.innerWrap}>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
-                    className={`${classes.typographyStatus} ${classes.margin5}`}
+                    className={`${classes.typographyBold} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {!hoverItem && (
-                      <RejectedNormalStyleChip
-                        size="small"
-                        color="primary"
-                        icon={<RejectIcon data-cy="transition-reject" />}
-                        label={STATUS_TYPES_LABEL[status]}
-                      />
-                    )}
-                    {hoverItem && (
-                      <RejectedHoverStyleChip
-                        color="primary"
-                        size="small"
-                        icon={<RejectSolidIcon data-cy="transition-reject" />}
-                        label={STATUS_TYPES_LABEL[status]}
-                      />
-                    )}
+                    {approverName}
                   </Typography>
                 </Grid>
-              )}
-              {STATUS_TYPES_LABEL.APPROVED === status && (
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyStatus} ${classes.margin5}`}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {!hoverItem && (
-                      <NormalStyleChip
-                        size="small"
-                        color="primary"
-                        icon={<ApprovedIcon data-cy="transition-approve" />}
-                        label={STATUS_TYPES_LABEL[status]}
-                      />
-                    )}
-                    {hoverItem && (
-                      <HoverStyleChip
-                        color="primary"
-                        size="small"
-                        icon={
-                          <ApprovedWhiteIcon data-cy="transition-approve" />
-                        }
-                        label={STATUS_TYPES_LABEL[status]}
-                      />
-                    )}
-                  </Typography>
-                </Grid>
-              )}
-              {STATUS_TYPES_LABEL.APPROVED !== status
+                {STATUS_TYPES_LABEL.REJECTED === status && (
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {!hoverItem && (
+                        <RejectedNormalStyleChip
+                          size="small"
+                          color="primary"
+                          icon={<RejectIcon data-cy="transition-reject" />}
+                          label={STATUS_TYPES_LABEL[status]}
+                        />
+                      )}
+                      {hoverItem && (
+                        <RejectedHoverStyleChip
+                          color="primary"
+                          size="small"
+                          icon={<RejectSolidIcon data-cy="transition-reject" />}
+                          label={STATUS_TYPES_LABEL[status]}
+                        />
+                      )}
+                    </Typography>
+                  </Grid>
+                )}
+                {STATUS_TYPES_LABEL.APPROVED === status && (
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {!hoverItem && (
+                        <NormalStyleChip
+                          size="small"
+                          color="primary"
+                          icon={<ApprovedIcon data-cy="transition-approve" />}
+                          label={STATUS_TYPES_LABEL[status]}
+                        />
+                      )}
+                      {hoverItem && (
+                        <HoverStyleChip
+                          color="primary"
+                          size="small"
+                          icon={
+                            <ApprovedWhiteIcon data-cy="transition-approve" />
+                          }
+                          label={STATUS_TYPES_LABEL[status]}
+                        />
+                      )}
+                    </Typography>
+                  </Grid>
+                )}
+                {STATUS_TYPES_LABEL.APPROVED !== status
                   && STATUS_TYPES_LABEL.REJECTED !== status && (
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyStatus} ${classes.margin5}`}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {status}
-                  </Typography>
-                </Grid>
-              )}
-              {/* <Grid item={true}>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {status}
+                    </Typography>
+                  </Grid>
+                )}
+                {/* <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -216,10 +217,10 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
+              </Grid>
               <Grid item={true}>
                 <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId= {docId} />
-              </Grid>
-              {/* {docRevName && (
+                {/* {docRevName && (
                   <Grid item={true}>
                     <Typography
                       component="span"
@@ -232,7 +233,6 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     </Typography>
                   </Grid>
                 )} */}
-              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <DocTitle
                   url={documentVersionPath(docRevId || '', docDocumentId)}
                   docRevVersion={docRevVersion} docRevName={docRevName}

@@ -7,9 +7,9 @@ import useGetHasPermission from '../../hooks/useGetHasPermission';
 import Colors from '../../layout/theme/utils/colors';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const AutosaveToggle: React.FunctionComponent<any> = (location) => {
+const AutosaveToggle: React.FunctionComponent<any> = ({ pathname, className }) => {
   const dispatch = useDispatch();
-  const isNewDashboard = location.pathname === '/';
+  const isNewDashboard = pathname === '/';
   const canToggleAutosave = useGetHasPermission(Permission.DEVELOPERS);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
@@ -23,6 +23,7 @@ const AutosaveToggle: React.FunctionComponent<any> = (location) => {
 
   return (
     <FormControlLabel
+      {...{ className }}
       control={
         <Switch
           name="toggleAutosave"

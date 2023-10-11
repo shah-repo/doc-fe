@@ -7,8 +7,8 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     display: 'inline',
   },
   link: {
-    'color': Colors.black,
-    'textDecoration': 'none',
+    color: Colors.black,
+    textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
     },
@@ -67,8 +67,14 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   actionIcon: {
     paddingLeft: theme.spacing(1.25),
   },
+  closeIconMobile: {
+    paddingTop: 0,
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: 25,
+    },
+  },
   attachmentIcon: {
-    paddingTop: theme.spacing(.25),
+    paddingTop: theme.spacing(0.25),
   },
   cursorPointer: {
     cursor: 'pointer',
@@ -83,10 +89,10 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     marginRight: 7,
   },
   typography: {
-    'fontSize': 14,
-    'fontWeight': 400,
+    fontSize: 14,
+    fontWeight: 400,
     '& > p': { margin: 0 },
-    'letterSpacing': 0,
+    letterSpacing: 0,
   },
   typographyBold: {
     fontSize: 14,
@@ -136,7 +142,7 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
 });
 
-export const grayDotStyles = (theme: Theme, additional?: CSSProperties ) => createStyles({
+export const grayDotStyles = (theme: Theme, additional?: CSSProperties) => createStyles({
   grayDot: {
     width: 4,
     height: 4,

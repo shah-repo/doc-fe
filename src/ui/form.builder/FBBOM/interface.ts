@@ -38,6 +38,7 @@ export interface BOM {
   costRollUp?: number
   isEditEnabled?: boolean
   uniqid?: string
+  enabledFieldsForEditing?: string[]
 }
 
 export interface EditableBOM extends BOM {
