@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM_APP_CONFIG } from '../../../../common/constants';
-import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import { companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
@@ -16,7 +15,6 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { getLotStatusLabel } from '../../common/header/HeaderLotStatus';
 import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
-import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
@@ -58,8 +56,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
           if(!isEmptyArray(referenceTo)) {
             const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
-            const description = documentRevision[documentRevision.length - 1].description;
-            setDescription(convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')));
+            const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
+            setDescription(description);
           }
           setData(data);
       },
