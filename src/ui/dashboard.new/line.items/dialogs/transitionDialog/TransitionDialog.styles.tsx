@@ -95,5 +95,9 @@ export default (theme: Theme) =>
       paper: {
         padding: '12px 9px',
       },
+      modeltitle: {
+        marginTop: theme.spacing(0.5),
+        marginLeft: theme.spacing(1),
+      },
     },
   });

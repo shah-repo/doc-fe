@@ -102,6 +102,8 @@ export default (theme: Theme) =>
       },
       closeLaterSubmitButton: {
         width: '100%',
+        margin: `0 ${theme.spacing(2)}px`,
+        position: 'initial',
       },
     },
   });
