@@ -81,7 +81,7 @@ export const styles = makeStyles((theme: Theme) =>
         width: 'auto',
         textAlign: 'center',
       },
-      verficEmailmobile: {
+      verificationEmailMobile: {
         textAlign: 'center',
         overflowWrap: 'break-word',
       },

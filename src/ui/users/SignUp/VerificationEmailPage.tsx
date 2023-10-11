@@ -24,7 +24,7 @@ const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo, me
         <Typography id="VerificationEmailPage-title" variant="h4" className={classes.title}>
           <Text translation="signup.verification" />
         </Typography>
-        <Typography id="VerificationEmailPage-email" variant="h4" className={classMerge(classes.boldTitle, classes.verficEmailmobile)}>
+        <Typography id="VerificationEmailPage-email" variant="h4" className={classMerge(classes.boldTitle, classes.verificationEmailMobile)}>
           {`"${email.toLowerCase()}"`}
         </Typography>
         <Typography id="VerificationEmailPage-message" variant="subtitle1" className={classes.title}>

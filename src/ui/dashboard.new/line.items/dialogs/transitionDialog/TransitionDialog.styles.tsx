@@ -3,7 +3,7 @@ import Colors from '../../../../layout/theme/utils/colors';
 
 export default (theme: Theme) =>
   createStyles({
-    modeltitle: {
+    modalTitle: {
       position: 'static',
       width: '194.98px',
       height: '18px',
@@ -95,7 +95,7 @@ export default (theme: Theme) =>
       paper: {
         padding: '12px 9px',
       },
-      modeltitle: {
+      modalTitle: {
         marginTop: theme.spacing(0.5),
         marginLeft: theme.spacing(1),
       },

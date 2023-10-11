@@ -23,7 +23,7 @@ export const styles = makeStyles((theme: Theme) =>
       background: Colors.sky_blue,
       borderRadius: '8px',
     },
-    modeltitle: {
+    modalTitle: {
       position: 'static',
       width: '194.98px',
       height: '18px',
