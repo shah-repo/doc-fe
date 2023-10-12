@@ -56,7 +56,13 @@ export const styles = makeStyles((theme: Theme) =>
     [theme.breakpoints.down('xs')]: {
       container: {
         width: '100%',
-        padding: theme.spacing(2),
+        padding: theme.spacing(3),
+      },
+      title: {
+        textAlign: 'center',
+      },
+      subtitle: {
+        textAlign: 'center',
       },
       companyButton: {
         width: '100%',

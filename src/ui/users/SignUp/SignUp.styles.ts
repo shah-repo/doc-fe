@@ -66,6 +66,7 @@ export const styles = makeStyles((theme: Theme) =>
       },
       boldTitle: {
         width: '100%',
+        textAlign: 'center',
       },
       submit: {
         width: '100%',
@@ -78,9 +79,10 @@ export const styles = makeStyles((theme: Theme) =>
       },
       title: {
         width: 'auto',
+        textAlign: 'center',
       },
-      verficEmailmobile:
-      {
+      verificationEmailMobile: {
+        textAlign: 'center',
         overflowWrap: 'break-word',
       },
       formStyle: {
