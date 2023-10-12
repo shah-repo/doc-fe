@@ -1,17 +1,12 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
-import { materialDispositionActions } from '../../../state/ducks/materialDisposition';
-import { toastError } from '../../components/notifications';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
-import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
@@ -25,6 +20,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   titleText?: string
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
+  documentRevision?: DocumentRevision
 }> = ({
   disabledOptions,
   formState,
@@ -34,23 +30,12 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   titleText,
   handleRemove,
   entry,
+  documentRevision,
 }) => {
   const classes = useStyles();
 
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId);
-
-  const [revFromTo, setRevFromTo] = useState('');
-
-  const getPartRevisions = useActionCreator(materialDispositionActions.getMaterialDispositionRevisions);
-  const partRevisionsAsync = useAsync({
-    onSuccess: (data) => {
-      setRevFromTo(data as string);
-    },
-    onError: (err) => {
-      toastError(err);
-    },
-  });
 
   return (
     <FBForm {...{ formState }} >
@@ -64,9 +49,6 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
                 placeholder="form.builder.select"
                 optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
                 optionValueType="id"
-                onChange={(_ev: any, value) => {
-                  partRevisionsAsync.start(getPartRevisions, value?.id, partRevisionsAsync);
-                }}
                 rules="required"
                 {...{ disabledOptions }}
                 shouldReloadOnInit
@@ -76,7 +58,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {revFromTo}
+            {entry?.revisionFormTo ?? (documentRevision?.revision || '-')}
           </div>
           <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
@@ -95,9 +77,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             />
           </div>
           <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <Tooltip title="" placement="top" arrow >
-              <FontAwesomeIcon icon={regular('circle')} className={classes.dot} />
-            </Tooltip>
+            -
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>

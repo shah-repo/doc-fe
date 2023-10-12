@@ -4,7 +4,10 @@ import cx from 'classnames';
 import { isEmpty, map, some } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { ApplicationState } from '../../../state/reducers';
 import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
@@ -82,6 +85,10 @@ const ItemsAndDetails: React.FunctionComponent<{
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
 
+  const documentRevision = useSelector(
+    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, itemsAndDetailsState.approvalRequstItemInEditMode),
+  );
+
   useEffect(() => {
     if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
       formState.setFieldValue('proposedDocumentRevision', { id: itemsAndDetailsState.approvalRequstItemInEditMode });
@@ -141,6 +148,7 @@ const ItemsAndDetails: React.FunctionComponent<{
         disabledOptions={disabledOptions()}
         addRevisionToChangeRequest={addRevisionToChangeRequest}
         resetAndCancelEdit={resetAndCancelEdit}
+        documentRevision={documentRevision}
       />}
       {
         itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (

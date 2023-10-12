@@ -1,4 +1,4 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -8,17 +8,15 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
-import { materialDispositionActions } from '../../../state/ducks/materialDisposition';
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import Tooltip from '../../components/common/kendo/Tooltip';
-import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
-import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
+import WhereUsedDialog from '../../form.builder/FBBOM/components/treelist/WhereUsedDialog';
+import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
@@ -37,9 +35,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const classes = useStyles();
 
   const {
-    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, revisionFormTo, whereUsedView,
   } = entry;
 
+  const isWhereUsedTreeExists = whereUsedView?.length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts]
@@ -91,21 +90,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     }
   };
 
-  const [revFromTo, setRevFromTo] = useState('');
-
-  const getPartRevisions = useActionCreator(materialDispositionActions.getMaterialDispositionRevisions);
-  const partRevisionsAsync = useAsync({
-    onSuccess: (data) => {
-      setRevFromTo(data as string);
-    },
-    onError: (err) => {
-      toastError(err);
-    },
-  });
-
   useEffect(() => {
     getDocumentDetails();
-    partRevisionsAsync.start(getPartRevisions, docRevId, partRevisionsAsync);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -120,6 +106,15 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const getTableItemElementData = () => {
     return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
+  };
+
+  const whereUsedDialog = useDialog();
+  const openWhereUsedDialog = (e) => {
+    isWhereUsedTreeExists && whereUsedDialog.open();
+    e.stopPropagation();
+  };
+  const closeWhereUsedDialog = () => {
+    whereUsedDialog.close();
   };
 
   return (
@@ -149,7 +144,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revFromTo} childrenElement={getTableElementData(revFromTo, 'rev-from-to')} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
         </div>
         <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
@@ -158,9 +153,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data=""
-            childrenElement={<FontAwesomeIcon icon={regular('circle')} className={classes.dot} />}
-          />
+          <FontAwesomeIcon icon={isWhereUsedTreeExists ? solid('circle') : regular('circle')} onClick={openWhereUsedDialog} className={classes.dot} />
         </div>
       </div>
       {
@@ -191,6 +184,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             }
           </ul>
         </div>
+      }
+      {
+        whereUsedDialog.isOpen
+        && <WhereUsedDialog
+          docRevId={docRevId}
+          whereUsedDialog={whereUsedDialog}
+          closeDialog = {closeWhereUsedDialog}
+        />
       }
     </div>
   );

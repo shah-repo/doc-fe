@@ -32,6 +32,8 @@ export const formDataToStoreData = (
       titleText: '',
       displayRevision: '',
       isPart: false,
+      revisionFormTo: item.revisionFormTo,
+      whereUsedView: item.whereUsedView,
     };
 
     const docRevId = item.proposedDocumentRevision.id;

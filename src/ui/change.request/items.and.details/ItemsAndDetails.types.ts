@@ -19,6 +19,14 @@ export interface FBDocumentRevisionResponse {
   }
 }
 
+export interface WhereUsed {
+  name: string
+  parentDocId: string
+  depth: number
+  revision: string
+  status: string
+}
+
 export interface FBDocumentRevisionsValue {
   id: string
   proposedDocumentRevision: {
@@ -26,6 +34,8 @@ export interface FBDocumentRevisionsValue {
   }
   justificationOfChange: string
   descriptionOfChange: string
+  revisionFormTo?: string
+  whereUsedView?: WhereUsed[]
 }
 
 export interface ApprovalRequestGridItem {
@@ -37,6 +47,8 @@ export interface ApprovalRequestGridItem {
   titleText: string
   displayRevision: string
   isPart: boolean
+  revisionFormTo?: string
+  whereUsedView?: WhereUsed[]
 }
 
 export interface ItemsAndDetailsWrapperProps {
