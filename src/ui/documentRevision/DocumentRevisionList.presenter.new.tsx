@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { SM } from '../../App';
 import DocumentRevisionSidebarState from '../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state';
 import { GroupTag } from '../../state/ducks/auth/types';
@@ -16,6 +16,7 @@ import SummaryInfo from '../common/summary/SummaryInfo';
 import DateFormatter from '../components/Date';
 import Text from '../components/Text';
 import { documentVersionPath } from '../document.revision/utils/paths';
+import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../hooks/docCustomization/CustomLabelTooltip';
 import { useDocumentStatus } from '../hooks/docCustomization/useCustomization';
 import useGetHasTag from '../hooks/useGetHasTag';
@@ -35,6 +36,7 @@ interface Props {
   isInlineApproval: boolean
   isRecord: boolean
   _documentRevisionSidebarState?: DocumentRevisionSidebarState
+  isSliderView?: boolean
 }
 
 const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -47,8 +49,10 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   isInlineApproval,
   isRecord,
   _documentRevisionSidebarState,
+  isSliderView,
 }) => {
   const classes = styles();
+  const history = useHistory();
   const link = documentVersionPath(
     documentRevision.id,
     documentId,
@@ -72,7 +76,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDraft = isDocumentRevisionInDraft(status);
   const isReleased = isDocumentRevisionReleased(status);
   const isDeprecated = isDocumentRevisionDeprecated(status);
-  const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
+  const isAlphaReleased = isDocumentAlphaReleased(documentRevision.revisionStage);
   const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ''));
@@ -115,6 +119,13 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   }
 
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
+  const handleClick = () => {
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentId, documentRevision };
+    } else {
+      history.push(link);
+    }
+  };
 
   return (
     <div
@@ -124,10 +135,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       }) : classes.container}
       data-cy="DocumentRevisionList-item"
     >
-      <NavLink
-        to={link}
+      <div
         className={isSelected ? classes.activeLinkBox : classes.inActiveLinkBox}
-        activeClassName={classes.activeLinkTitle}
+        onClick={handleClick}
       >
         <Typography
           component="span"
@@ -150,13 +160,13 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
             </Typography>
           )}
         </Typography>
-      </NavLink>
-      <NavLink
-        to={link}
+      </div>
+      <div
         key={documentRevision.id}
         className={
           isSelected ? classes.activeLinkBody : classes.inActiveLinkBody
         }
+        onClick={handleClick}
       >
         <SummaryInfo
           dataCy="common.docId"
@@ -174,7 +184,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           label={isRecord ? recordDateLabel : 'common.effective.date'}
           value={<DateFormatter value={getDateValue()} />}
         />
-      </NavLink>
+      </div>
     </div>
   );
 };

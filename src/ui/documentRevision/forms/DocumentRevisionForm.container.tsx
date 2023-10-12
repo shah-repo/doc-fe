@@ -64,6 +64,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean
   type?: DocumentCloneType
   isNewVersion?: boolean
+  isSliderView?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -86,6 +87,7 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  isSliderView,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -271,6 +273,7 @@ DocumentRevisionFormContainerProps
         documentTypesById,
         canChangeOwnerShip,
         isNewVersion,
+        isSliderView,
         showAdministrativeAndVoidChange,
         document,
         redlineActive,

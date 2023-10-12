@@ -64,6 +64,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   mode,
   workspaceState,
   isCreateUrl,
+  isSliderView,
   dirty = false,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
@@ -187,6 +188,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               {() => (
                 <DocumentRevisionSidebar
                   canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
+                  isSliderView={isSliderView}
                 />
               )}
             </Observer>
@@ -320,7 +322,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                                 <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled} isShowOnly={isPartForm}
-                                  isUpgradeDisabled={isRelatedTogetherPart}
+                                  isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView}
                                 />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (

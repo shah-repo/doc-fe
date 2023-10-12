@@ -12,11 +12,12 @@ export const styles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     activeLinkBox: {
-      'color': Colors.navy,
-      'textDecoration': 'none',
-      'fontWeight': 600,
-      'fontSize': '14px',
-      'lineHeight': '24px',
+      color: Colors.navy,
+      cursor: 'pointer',
+      textDecoration: 'none',
+      fontWeight: 600,
+      fontSize: '14px',
+      lineHeight: '24px',
       '& span': {
         color: Colors.navy,
       },
@@ -24,6 +25,7 @@ export const styles = makeStyles((theme: Theme) =>
     inActiveLinkBox: {
       color: Colors.font_gray,
       textDecoration: 'none',
+      cursor: 'pointer',
       fontWeight: 600,
       fontFamily: 'Sora',
       fontSize: '14px',
@@ -36,6 +38,7 @@ export const styles = makeStyles((theme: Theme) =>
     activeLinkBody: {
       textDecoration: 'none',
       color: Colors.almost_black,
+      cursor: 'pointer',
       fontFamily: 'Sora',
       fontSize: '14px',
       lineHeight: '24px',
@@ -43,6 +46,7 @@ export const styles = makeStyles((theme: Theme) =>
     inActiveLinkBody: {
       textDecoration: 'none',
       color: Colors.font_gray,
+      cursor: 'pointer',
       fontFamily: 'Sora',
       fontSize: '14px',
       lineHeight: '24px',

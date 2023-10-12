@@ -32,6 +32,7 @@ interface Props {
   onDirtyFlagChange?: (dirty: boolean) => void
   canChangeOwnerShip?: boolean
   isNewVersion?: boolean
+  isSliderView?: boolean
 }
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
@@ -42,6 +43,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   documentId,
   canChangeOwnerShip,
   isNewVersion,
+  isSliderView,
 }) => {
   const dispatch = useDispatch();
   const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -84,7 +86,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState && !documentRevision?.isBeingEditedAfterRelease) {
     return (
-      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }} />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isSliderView }} />
     );
   }
 
@@ -229,6 +231,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
+        isSliderView={isSliderView}
       />
     </FormContext.Provider>
   );

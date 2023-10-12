@@ -12,6 +12,7 @@ export interface FBBOMProps {
   isShowOnly?: boolean
   isUpgradeDisabled?: boolean
   isMaxDialogOpen?: boolean
+  isSliderView?: boolean
 }
 
 export interface BOMState {

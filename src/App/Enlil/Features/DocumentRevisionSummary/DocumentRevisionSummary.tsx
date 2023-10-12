@@ -34,6 +34,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
   isSideBarHidden = false,
+  isSliderView,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
@@ -125,7 +126,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       header= {
         <SummaryHeader
           canShowCreateVersionButton={true}
-          {...{ documentRevision, canChangeOwnerShip }}
+          {...{ documentRevision, canChangeOwnerShip, isSliderView }}
         />
       }
     >
@@ -138,7 +139,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           rightSidebar: (
             <Observer>
               {() => (
-                <DocumentRevisionSidebar />
+                <DocumentRevisionSidebar isSliderView={isSliderView} />
               )}
             </Observer>
           ),
