@@ -1,4 +1,4 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -16,6 +16,8 @@ import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
+import WhereUsedDialog from '../../form.builder/FBBOM/components/treelist/WhereUsedDialog';
+import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
@@ -36,9 +38,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const classes = useStyles();
 
   const {
-    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, whereUsedView,
   } = entry;
 
+  const isWhereUsedTreeExists = whereUsedView?.length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts]
@@ -108,6 +111,15 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
   };
 
+  const whereUsedDialog = useDialog();
+  const openWhereUsedDialog = (e) => {
+    isWhereUsedTreeExists && whereUsedDialog.open();
+    e.stopPropagation();
+  };
+  const closeWhereUsedDialog = () => {
+    whereUsedDialog.close();
+  };
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -148,6 +160,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </Link>
           }
         </div>
+        <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
+        </div>
         <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
@@ -155,9 +170,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data=""
-            childrenElement={<FontAwesomeIcon icon={regular('circle')} className={classes.dot} />}
-          />
+          <FontAwesomeIcon icon={isWhereUsedTreeExists ? solid('circle') : regular('circle')} onClick={openWhereUsedDialog} className={classes.dot} />
         </div>
       </div>
       {
@@ -188,6 +201,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             }
           </ul>
         </div>
+      }
+      {
+        whereUsedDialog.isOpen
+        && <WhereUsedDialog
+          docRevId={docRevId}
+          whereUsedDialog={whereUsedDialog}
+          closeDialog = {closeWhereUsedDialog}
+        />
       }
     </div>
   );

@@ -1,12 +1,11 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Checkbox as MuiCheckbox, FormControlLabel, Tooltip } from '@material-ui/core';
+import { Button, Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
@@ -22,6 +21,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
   lineItemPartCanSubstitute?: boolean
+  documentRevision?: DocumentRevision
 }> = ({
   disabledOptions,
   formState,
@@ -32,6 +32,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   handleRemove,
   lineItemPartCanSubstitute,
   entry,
+  documentRevision,
 }) => {
   const classes = useStyles();
 
@@ -77,6 +78,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             }
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
+          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
+            {entry?.revisionFormTo ?? (documentRevision?.revision || '-')}
+          </div>
           <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
@@ -96,9 +100,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             />
           </div>
           <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)}>
-            <Tooltip title="" placement="top" arrow >
-              <FontAwesomeIcon icon={regular('circle')} className={classes.dot} />
-            </Tooltip>
+            -
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>
