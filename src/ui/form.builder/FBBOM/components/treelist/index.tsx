@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
@@ -22,7 +22,7 @@ import {
   TreeListDraggableRow,
   TreeListFilterChangeEvent,
   TreeListRowDragEvent,
-  treeToFlat
+  treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -37,7 +37,7 @@ import {
   replace,
   tail,
   take,
-  uniq
+  uniq,
 } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -67,7 +67,7 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import { ActionsCell } from './column.templates/Actions';
 import {
   ColumnMenuContext,
-  CustomColumnMenu
+  CustomColumnMenu,
 } from './column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
@@ -81,14 +81,14 @@ import {
   MODE_FIELD,
   SELECTED_PART_KEY_SEPARATOR,
   SUB_ITEMS_FIELD,
-  TREELIST_CONFIG
+  TREELIST_CONFIG,
 } from './constants';
 import {
   BOMState,
   CustomTreeListColumnProps,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBBOMProps
+  FBBOMProps,
 } from './interface';
 import { TreeColumns } from './schema';
 import useStyles from './styles';
@@ -96,7 +96,7 @@ import {
   getExcelColumns,
   hasSameParent,
   processBOMData,
-  updateDataAtLevels
+  updateDataAtLevels,
 } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
 
