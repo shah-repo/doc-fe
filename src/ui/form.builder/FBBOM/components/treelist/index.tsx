@@ -11,10 +11,6 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy,
   TreeList,
   TreeListCellProps,
   TreeListColumnReorderEvent,
@@ -22,6 +18,10 @@ import {
   TreeListDraggableRow,
   TreeListFilterChangeEvent,
   TreeListRowDragEvent,
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy,
   treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
@@ -51,10 +51,10 @@ import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../components/Text';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
-import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { bomDisabledChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -64,6 +64,7 @@ import useHover from '../../../../hooks/useHover';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { FBBOM } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import {
   ColumnMenuContext,
@@ -98,7 +99,6 @@ import {
   processBOMData,
   updateDataAtLevels,
 } from './utils';
-import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({
   documentRevision,
@@ -448,6 +448,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       || !dataItem.isEditEnabled
       || !dataItem.isParentOwner
       || maxDialog.isOpen
+      || isNewBOMAdditionInProgress()
     ) {
       // skipping edit for parent and click on edit item itself
       return;
