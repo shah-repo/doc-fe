@@ -1633,6 +1633,8 @@
   "releaseButton.option.existingAR": "Existing AR",
   "approvalRequest.dialog.title": "Quick Edit",
   "approvalRequest.material.disposition.add": "Add Material Disposition",
+  "approvalRequest.material.disposition.refresh.date": "As of {date}",
+  "approvalRequest.material.disposition.refresh": "Refresh",
   "approvalRequest.tasks.list.add": "Add Task",
   "approvalRequest.tasks.list.section.heading": "Tasks List",
   "approvalRequest.tasks.list.assignee.complete": "Complete",

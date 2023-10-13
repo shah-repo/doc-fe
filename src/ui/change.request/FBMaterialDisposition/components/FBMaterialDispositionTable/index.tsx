@@ -8,6 +8,7 @@ import { FormikProvider, useFormik } from 'formik';
 import { map, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { translate } from '../../../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -61,8 +62,12 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     },
   });
 
-  useEffect(() => {
+  const fetchMaterialDispositionTableData = () => {
     materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+  };
+
+  useEffect(() => {
+    fetchMaterialDispositionTableData();
   }, []);
 
   const formik = useFormik<Partial<EditableMDItem>>({
@@ -139,6 +144,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
   };
 
+  const currentDate = new Date();
+
   return (<>
     <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
       <KendoDataGrid<EditableMDItem>
@@ -159,22 +166,24 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
               <Grid container justify="flex-end">
                 <Grid className={classes.refreshContainer}
                 >
-                  <StyleTooltip
-                    title={translate('Refresh')}
-                    placement="top"
-                    arrow
-                  >
-                    <Grid container>
-                      <FontAwesomeIcon icon={regular('arrows-rotate')} className={classes.icon} />
-                      <Typography
-                        variant="h6"
-                        component="h6"
-                        className={classes.refreshText}
-                      >
-                        <Text message="As of July 22, 2023" />
-                      </Typography>
-                    </Grid>
-                  </StyleTooltip>
+                  <Grid container>
+                    <StyleTooltip
+                      title={translate('approvalRequest.material.disposition.refresh')}
+                      placement="top"
+                      arrow
+                    >
+                      <FontAwesomeIcon icon={regular('arrows-rotate')} onClick={fetchMaterialDispositionTableData} className={classes.icon} />
+                    </StyleTooltip>
+                    <Typography
+                      variant="h6"
+                      component="h6"
+                      className={classes.refreshText}
+                    >
+                      <Text translation="approvalRequest.material.disposition.refresh.date"
+                        values={{ date: getFormattedDateString(currentDate, MomentFormats.BriefDate) }}
+                      />
+                    </Typography>
+                  </Grid>
                 </Grid>
                 <Grid item >
                   <StyleTooltip
