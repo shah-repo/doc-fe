@@ -1,4 +1,4 @@
-import { isArray } from 'lodash';
+import { isArray, isNull } from 'lodash';
 import { action, observable, set } from 'mobx';
 import { intl } from '../../../common/intl';
 import { toastError, toastSuccess } from '../../components/notifications';
@@ -38,7 +38,7 @@ class GeneralSettingsState {
       url: COMPANY_SETTINGS_URL,
       method: 'get',
     }, (data, error) => {
-      if (data) {
+      if (data && !isNull(data?.zebraPrint)) {
         const { apiKey, tenantId, printers } = data?.zebraPrint;
         this.setConsumerKey(apiKey);
         this.setTenantID(tenantId);
