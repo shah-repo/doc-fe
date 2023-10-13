@@ -2,24 +2,21 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
-  '@global': {
-    '.k-grid': {
-      '& .k-grid-container tbody td': {
-        height: 42,
-        padding: theme.spacing(0, 1.75),
-        verticalAlign: 'middle !important',
-      },
-      '& .k-grid-container tbody td:first-child': {
-        paddingLeft: theme.spacing(2.5),
-      },
-      '& .k-grid-header thead th:first-child': {
-        paddingLeft: theme.spacing(2.5),
-      },
-      '& .k-grid-header thead th': {
-        textTransform: 'uppercase',
-        color: Colors.textBlack,
-      },
-
+  rootMDTable: {
+    '& .k-grid-container tbody td': {
+      height: 42,
+      padding: theme.spacing(0, 1.75),
+      verticalAlign: 'middle !important',
+    },
+    '& .k-grid-container tbody td:first-child': {
+      paddingLeft: theme.spacing(2.5),
+    },
+    '& .k-grid-header thead th:first-child': {
+      paddingLeft: theme.spacing(2.5),
+    },
+    '& .k-grid-header thead th': {
+      textTransform: 'uppercase',
+      color: Colors.textBlack,
     },
   },
   toolbarContainer: {

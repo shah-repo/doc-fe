@@ -3,9 +3,9 @@ import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { Autocomplete, FormikField } from '../../../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import OverflowingContent from '../../../commonCells/OveflowContent';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps, EditableMDItem } from '../../interface';
-import OverflowingContent from '../OveflowContent';
 
 interface Props extends CustomTemplateProps {
   options: string[]

@@ -1,7 +1,7 @@
 import { makeStyles, Popper } from '@material-ui/core';
 import React, { useRef } from 'react';
-import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
-import Actions, { ActionsProps } from '../../../../../../form.builder/FBApprovalMatrixRoles/components/Actions';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import Actions, { ActionsProps } from '../../../../form.builder/FBApprovalMatrixRoles/components/Actions';
 
 const useStyles = makeStyles({
   popperHolder: {

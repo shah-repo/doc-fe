@@ -1,5 +1,5 @@
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ActionsCellTemplate } from './components/cells/ActionsCellTemplate';
+import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
