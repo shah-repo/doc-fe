@@ -159,6 +159,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
+                onClick={handleClick}
               >
                 <Grid item={true}>
                   <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />

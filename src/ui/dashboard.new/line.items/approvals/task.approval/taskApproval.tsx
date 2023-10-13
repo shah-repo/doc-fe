@@ -163,7 +163,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid item={true} lg={12} className={classes.innerWrap}>
+              <Grid item={true} lg={12} className={classes.innerWrap} onClick={handleClick}>
                 <Grid
                   container={true}
                   wrap="nowrap"
