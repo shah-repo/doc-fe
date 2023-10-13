@@ -145,6 +145,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         data={MDItemList}
         schema={getColumns()}
         fullWidth
+        className={classes.rootMDTable}
         hasBoxScrollbars
         onRowClick={editMDItem}
         rowRender={rowRender}
