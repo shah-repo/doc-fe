@@ -153,7 +153,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               contentBoxProps={{
                 overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
               }}
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} isSliderView={isSliderView} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
               <Observer>

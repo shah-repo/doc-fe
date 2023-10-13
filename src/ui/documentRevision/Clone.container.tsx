@@ -20,6 +20,7 @@ interface OwnProps {
   documentRevision: DocumentRevision
   type: DocumentCloneType
   isNewVersion: boolean
+  isSliderView?: boolean
 }
 
 interface StateProps {
@@ -37,6 +38,7 @@ export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   disableCreateNewVersion,
   type,
   isNewVersion,
+  isSliderView,
 }) => {
   const redirect = (
     ((type === 'newVersion') && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true))
@@ -48,7 +50,7 @@ export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   }
 
   return (
-    <DocumentRevisionCreateContainer documentRevision={documentRevision} type={type} isNewVersion={isNewVersion} />
+    <DocumentRevisionCreateContainer documentRevision={documentRevision} type={type} isNewVersion={isNewVersion} isSliderView={isSliderView} />
   );
 };
 

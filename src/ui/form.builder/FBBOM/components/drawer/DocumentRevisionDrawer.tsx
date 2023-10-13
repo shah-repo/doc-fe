@@ -11,6 +11,7 @@ import {
 import { DOCUMENT_REVISION_GET_ASYNC_DRAWER } from '../../../../../state/ducks/documentRevisions/constants';
 import { ApplicationState } from '../../../../../state/reducers';
 import AsyncGate from '../../../../components/AsyncGate';
+import CloneContainer from '../../../../documentRevision/Clone.container';
 import DocumentRevisionUpdateContainer from '../../../../documentRevision/DocumentRevisionUpdate.container';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import Theme from '../../../../layout/theme/provider';
@@ -61,6 +62,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
   const loadAction = () =>
     loadDocumentRevision(docRevId, DOCUMENT_REVISION_GET_ASYNC_DRAWER);
   useObserver(() => {
+    console.log('FBDataStore.selectedSliderInfo :', FBDataStore.selectedSliderInfo);
     if (
       isSliderView
       && documentRevision
@@ -75,7 +77,12 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
         seDocRevId(FBDataStore.selectedSliderInfo?.documentRevision?.id);
       }
     }
+    if (FBDataStore?.selectedSliderInfo?.rerender) {
+      FBDataStore.selectedSliderInfo.rerender = false;
+      setRerender(!rerender);
+    }
   });
+  console.log('DocumentRevision ::', documentRevision);
 
   return (
     <Theme>
@@ -95,7 +102,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
             </IconButton>
           </div>
         </Grid>
-        {rerender && (
+        {rerender && !FBDataStore.selectedSliderInfo?.displayClonerContainer && (
           <AsyncGate
             asyncAction={loadAction}
             asyncState={loadDocumentRevisionAsyncState}
@@ -110,7 +117,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
             )}
           </AsyncGate>
         )}
-        {!rerender && (
+        {!rerender && !FBDataStore.selectedSliderInfo?.displayClonerContainer && (
           <AsyncGate
             asyncAction={loadAction}
             asyncState={loadDocumentRevisionAsyncState}
@@ -125,6 +132,8 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
             )}
           </AsyncGate>
         )}
+        {rerender && FBDataStore.selectedSliderInfo?.displayClonerContainer && <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={FBDataStore.selectedSliderInfo?.isNewVersion ?? true} isSliderView={true} />}
+        {!rerender && FBDataStore.selectedSliderInfo?.displayClonerContainer && <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={FBDataStore.selectedSliderInfo?.isNewVersion ?? true} isSliderView={true} />}
       </Box>
     </Theme>
   );

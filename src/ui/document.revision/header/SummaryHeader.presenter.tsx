@@ -76,6 +76,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
             canShowCreateVersionButton={canShowCreateVersionButton}
             hasAccess={documentRevision.document.canAccess}
             canChangeOwnerShip={canChangeOwnerShip || false}
+            isSliderView={isSliderView}
           />
         </Grid>
       </Grid>

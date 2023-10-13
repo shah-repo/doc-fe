@@ -167,6 +167,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         <DocumentRevisionHeader
           {...{ bannerPortal, shouldShowUpgrade, setDoNotPrompt }}
           documentRevisionId={documentRevision?.id}
+          isSliderView={isSliderView}
         />
       }
     >

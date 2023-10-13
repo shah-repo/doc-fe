@@ -11,15 +11,18 @@ import ChangeRequestEditDialog from '../../change.request/dialogs/ChangeRequestE
 import { changeRequestEditPath } from '../../change.request/utils/paths';
 import Text from '../../components/Text';
 import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
+import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import AllApprovalRequestsButton from './allApprovalRequestsButton';
 import useStyles from './changeRequestLink.styles';
 
-type Props = DataProps<DocumentRevision>;
+type Props = DataProps<DocumentRevision> & {
+  isSliderView?: boolean
+};
 
-const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp }) => {
+const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp, isSliderView }) => {
   const [associatedChangeRequests, setAssociatedChangeRequests] = useState<IAssociatedChangeRequest[]>([]);
 
   const getAllApprovalRequestsAsync = useAsync({
@@ -68,7 +71,11 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp }) => {
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
-    dispatch(documentRevisionsActions.load(dataProp?.id));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: dataProp?.id, documentRevision: dataProp, rerender: true };
+    } else {
+      dispatch(documentRevisionsActions.load(dataProp?.id));
+    }
   };
 
   return (

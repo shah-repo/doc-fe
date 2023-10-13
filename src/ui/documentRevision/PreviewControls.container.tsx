@@ -38,6 +38,7 @@ import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
 import { documentNewVersionPath } from '../document.revision/utils/paths';
 import { useHandleCreateDoc } from '../documentType/list/CreateDocumentByType';
+import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../hooks/docCustomization/CustomLabelTooltip';
 import { useReviseDocument, useUpdateDocument } from '../hooks/docCustomization/useCustomization';
 import useActionCreator from '../hooks/useActionCreator';
@@ -57,11 +58,11 @@ interface OwnProps {
   canShowCreateVersionButton?: boolean
   hasAccess: boolean
   canChangeOwnerShip: boolean
+  isSliderView?: boolean
 }
 
 interface StateProps {
   disableCreateNewVersion: boolean
-  isSliderView?: boolean
 }
 
 type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
@@ -163,8 +164,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     } catch (e) {}
     cloneDocument();
   };
-
-  const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+  const cloneDocument = () => {
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.id, documentRevision, displayClonerContainer: true, isNewVersion: true };
+    } else {
+      history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+    }
+  };
 
   const setDocRevToDraft = () => {
     dispatch(documentRevisionsActions.update(documentRevision.id, {
@@ -172,7 +178,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       displayStatus: 'Draft',
     }));
 
-    dispatch(documentRevisionsActions.load(documentRevision.id));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.id, documentRevision };
+    } else {
+      dispatch(documentRevisionsActions.load(documentRevision.id));
+    }
   };
 
   const cloneOutputDocument = () => {

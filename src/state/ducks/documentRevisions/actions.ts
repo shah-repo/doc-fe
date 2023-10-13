@@ -8,6 +8,7 @@ import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionCon
 import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { Vendor } from '../../../ui/form.builder/FBPartVendors/types';
+import FBDataStore from '../../../ui/form.builder/FBStore/FBDataStore';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
@@ -220,6 +221,7 @@ const approveAndRelease = (
   id: string,
   body: ApproveAndReleaseRequest,
   password,
+  isSliderView,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
@@ -227,8 +229,12 @@ const approveAndRelease = (
   data: body,
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
-    dispatch(load(id));
-    dispatch(loadDocument(docRev.document.id));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: docRev.document.id, documentRevision: docRev, rerender: true };
+    } else {
+      dispatch(load(id));
+      dispatch(loadDocument(docRev.document.id));
+    }
   },
   handlers,
 });
