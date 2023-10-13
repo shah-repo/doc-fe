@@ -1,9 +1,10 @@
-import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { Box, Button, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/close.svg';
 import { ReactComponent as CloseSolidIcon } from '../../../../../assets/images/close_solid.svg';
+import { ReactComponent as CloseWhiteIcon } from '../../../../../assets/images/close_whiteIcon.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PendingReviewIcon } from '../../../../../assets/images/pending_approval.svg';
@@ -19,6 +20,7 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import DismissAction from '../../common/DismissAction';
 import { getDocIcon } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
@@ -28,7 +30,6 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import { DocTypeGroups } from '../../common/types';
 import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
 import useStyles from './approvalApproved.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -38,7 +39,7 @@ interface Props {
   arChangeRequestId: string
   arStatus: string
   timestamp: string
-  docRevs: {
+  docRevs: Array<{
     docTypeGroup: DocTypeGroups
     documentRevisionId: string
     documentId: string
@@ -47,7 +48,7 @@ interface Props {
     name: string
     justificationOfChange: string
     descriptionOfChange: string
-  }[]
+  }>
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
   pinned: boolean
@@ -158,6 +159,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
+                onClick={handleClick}
               >
                 <Grid item={true}>
                   <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
@@ -433,6 +435,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
               </Box>
             </StyledListItem>
           ))}
+          <Grid className={classes.closeAlign}>
+            <Button className={classes.closeButton} onClick={handleCloseClick}>
+              <CloseWhiteIcon className={classes.cursorPointer} />
+              <Text message="common.close" />
+            </Button></Grid>
         </List>
       </Collapse>
       <ApproveDialogueContainer

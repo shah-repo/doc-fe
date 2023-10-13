@@ -13,6 +13,7 @@ import { Nullable } from '../../../../../state/ducks/common/types';
 import { TrainingStatus, TrainingStatusLabels } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import { StyledListItem } from '../../common/StyledListItem';
@@ -20,7 +21,6 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import { HoverStyleChip } from './DefaultHoverStyleChip';
 import { NormalStyleChip } from './DefaultNormalStyleChip';
 import useStyles from './DefaultTraining.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -104,6 +104,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               wrap="nowrap"
               justify="flex-start"
               alignItems="center"
+              className={classes.itemlistMobile}
             >
               {TrainingStatus.ASSIGNED !== status && (
                 <Grid item={true}>
@@ -208,7 +209,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         ? classes.redDot
                         : classes.yellowDot
                   }
-                 />
+                />
               )}
               {TrainingStatus[status] && TrainingStatus.COMPLETED !== status && (
                 <Grid item={true}>

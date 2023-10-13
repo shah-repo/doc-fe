@@ -62,7 +62,16 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         </Tooltip>
         {!isAlteratePartsExists && fetchDotIcon()}
       </div>
-      <AlternatePartsDrawer {...{ isDrawerOpened, closeDrawer, partRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], basePartRevId: dataItem.parentNodeRevId, revision: dataItem.displayRevision, status: dataItem.displayStatus, docId: dataItem.docId }} />
+      <AlternatePartsDrawer {...{
+        isDrawerOpened,
+        closeDrawer,
+        partRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+        basePartRevId: dataItem.parentNodeRevId,
+        revision: dataItem.displayRevision,
+        status: dataItem.displayStatus,
+        docId: dataItem.docId,
+        isDisabled: !dataItem.enabledFieldsForEditing?.includes('alternatePart'),
+      }} />
     </td>
   );
 };

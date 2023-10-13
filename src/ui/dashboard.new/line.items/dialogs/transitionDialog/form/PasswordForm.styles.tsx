@@ -3,9 +3,6 @@ import Colors from '../../../../../layout/theme/utils/colors';
 
 export default (theme: Theme) =>
   createStyles({
-    form: {
-      minWidth: 400,
-    },
     submitButton: {
       display: 'flex',
       flexDirection: 'row',

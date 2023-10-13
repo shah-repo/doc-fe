@@ -4,13 +4,7 @@ import { Colors } from '../../../../../layout/theme-next';
 export const styles = makeStyles((theme) => ({
   icon: {
     height: 17,
-    width: 15,
-    cursor: 'pointer',
-  },
-  issues: {
-    height: 17,
     width: 17,
-    cursor: 'pointer',
   },
   star: {
     color: Colors.statusDraft,
@@ -18,5 +12,9 @@ export const styles = makeStyles((theme) => ({
     width: 11,
     top: 8,
     position: 'absolute',
+  },
+  iconContainer: {
+    padding: theme.spacing(0.43),
+    cursor: 'pointer',
   },
 }));

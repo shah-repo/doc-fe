@@ -79,4 +79,13 @@ export default (theme: Theme) =>
       borderRadius: '8px',
       flexWrap: 'wrap',
     },
+    [theme.breakpoints.down('xs')]: {
+      form: {
+        minWidth: 'auto',
+        width: 'auto',
+      },
+      pendingBox: {
+        width: 'auto',
+      },
+    },
   });

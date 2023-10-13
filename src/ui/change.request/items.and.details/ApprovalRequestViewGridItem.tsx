@@ -1,3 +1,4 @@
+import { FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
@@ -22,16 +23,18 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   editItem: () => void
   handleRemove: (docRevId: string) => void
   viewItemActionsVisible: boolean
+  lineItemPartCanSubstitute?: boolean
 }> = ({
   entry,
   editItem,
   handleRemove,
   viewItemActionsVisible,
+  lineItemPartCanSubstitute,
 }) => {
   const classes = useStyles();
 
   const {
-    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate,
   } = entry;
 
   const [docTitle, setDocTitle] = useState(titleText);
@@ -110,6 +113,20 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       })}
       data-cy="enclosing-div-view-item">
       <div className={classes.itemRow} data-cy="ar-item-view-row">
+        {lineItemPartCanSubstitute && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+          <FormControlLabel
+            color="primary"
+            control={
+              <MuiCheckbox
+                checked={autoUpdate}
+                name="autoUpdate"
+                color="primary"
+                disabled={true}
+              />
+            }
+            label=""
+          />
+        </div> }
         <div className={classes.cellOne}>
           {
             docRelatedParts.length > 0
@@ -129,10 +146,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </Link>
           }
         </div>
-        <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
-        <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
       </div>

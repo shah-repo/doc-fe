@@ -16,7 +16,7 @@ import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.deta
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../ui/document.revision/form/attachments';
-import { bomDisabledChangeControl, disableOtherFieldsChangeControl, referencesDisabledChangeControl } from '../../../../ui/document.revision/utils/helpers';
+import { disableOtherFieldsChangeControl, referencesDisabledChangeControl } from '../../../../ui/document.revision/utils/helpers';
 import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisplay.container';
 import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
@@ -91,8 +91,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
 
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
-  const isBomDisabled = isDisabledInput || bomDisabledChangeControl(documentRevision) || isPartForm
-    || !hasPermissionToEditBOM || isRelatedTogetherPart;
+  const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({

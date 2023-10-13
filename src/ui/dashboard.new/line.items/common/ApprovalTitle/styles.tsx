@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme) =>
   createStyles({
     typographyBold: {
       fontSize: '14px',
@@ -12,10 +12,15 @@ export const styles = makeStyles(() =>
       marginRight: '5px',
     },
     link: {
-      'color': Colors.black,
-      'textDecoration': 'none',
+      color: Colors.black,
+      textDecoration: 'none',
       '&:hover': {
         textDecoration: 'underline',
+      },
+    },
+    [theme.breakpoints.down('xs')]: {
+      link: {
+        pointerEvents: 'none',
       },
     },
   }),

@@ -61,17 +61,32 @@ export const styles = makeStyles((theme: Theme) =>
     },
     [theme.breakpoints.down('xs')]: {
       paper: {
-        width: 'auto',
+        width: '100%',
         padding: theme.spacing(3),
       },
       boldTitle: {
-        width: 'auto',
+        width: '100%',
+        textAlign: 'center',
       },
       submit: {
         width: '100%',
       },
       marginTitle: {
         textAlign: 'center',
+      },
+      logo: {
+        margin: theme.spacing(4),
+      },
+      title: {
+        width: 'auto',
+        textAlign: 'center',
+      },
+      verificationEmailMobile: {
+        textAlign: 'center',
+        overflowWrap: 'break-word',
+      },
+      formStyle: {
+        width: 'auto',
       },
     },
   }),

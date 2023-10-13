@@ -99,7 +99,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
             variant="h2"
             component="h2"
             id="simple-modal-title"
-            className={classes.modeltitle}
+            className={classes.modalTitle}
           >
             <Text translation="email.title" />
           </Typography>
@@ -154,7 +154,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
             variant="h2"
             component="h2"
             id="simple-modal-title"
-            className={classes.modeltitle}
+            className={classes.modalTitle}
           >
             <Text translation="modal.title" />
           </Typography>

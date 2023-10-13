@@ -96,7 +96,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             variant="h2"
             component="h2"
             id="simple-modal-title"
-            className={classes.modeltitle}
+            className={classes.modalTitle}
           >
             <Text translation="training.email.title" />
           </Typography>
@@ -150,7 +150,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             variant="h2"
             component="h2"
             id="simple-modal-title"
-            className={classes.modeltitle}
+            className={classes.modalTitle}
           >
             <Text translation="training.modal.title" />
           </Typography>

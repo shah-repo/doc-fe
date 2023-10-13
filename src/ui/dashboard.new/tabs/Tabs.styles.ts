@@ -36,4 +36,9 @@ export default makeStyles((theme) => ({
     fontWeight: 400,
     marginLeft: 5,
   },
+  [theme.breakpoints.down('xs')]: {
+    mobileTab: {
+      display: 'none',
+    },
+  },
 }));

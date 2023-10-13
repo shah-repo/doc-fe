@@ -6,6 +6,7 @@ import { translate } from '../../../../common/intl';
 import { ChangeControlOptions, DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
+import { cccKeyNamesOrder } from '../../../document.revision/utils/helpers';
 import { styles } from './cancelEditPartButton.styles';
 
 interface Props {
@@ -83,11 +84,13 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
           <span className={classes.formDetails}>{docId} rev{displayRevision}</span>
         </Typography>
         <ul className={classes.optionsList}>
-          {Object.keys(formInput).map((key: string) => (
-            <li key={key} className={classes.listItem}>
-              <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
-              <span className={classes.listItemValue}>{formInput[key]}</span>
-            </li>
+          {cccKeyNamesOrder.map((key: string) => (
+            <>
+              { schemaMap[key] && <li key={key} className={classes.listItem}>
+                <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
+                <span className={classes.listItemValue}>{key === 'bom-fields-edit' ? formInput[key]?.join(' , ') : formInput[key]}</span>
+              </li>}
+            </>
           ))}
         </ul>
       </Popover>

@@ -21,6 +21,7 @@ export interface FBDocumentRevisionResponse {
 
 export interface FBDocumentRevisionsValue {
   id: string
+  autoUpdate: boolean
   proposedDocumentRevision: {
     id: string
   }
@@ -32,6 +33,7 @@ export interface ApprovalRequestGridItem {
   id: string
   docRevId: string
   documentId: string
+  autoUpdate: boolean
   justificationOfChange: string
   descriptionOfChange: string
   titleText: string

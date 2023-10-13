@@ -8,4 +8,12 @@ export default makeStyles((theme) => ({
     marginLeft: 4,
     marginRight: 5,
   }),
+  innerWrap: {
+    display: 'inline-flex',
+  },
+  [theme.breakpoints.down('xs')]: {
+    innerWrap: {
+      display: 'block',
+    },
+  },
 }));

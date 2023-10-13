@@ -37,6 +37,8 @@ export interface BOM {
   changeRequestDetails?: ChangeRequestDetails
   costRollUp?: number
   isEditEnabled?: boolean
+  uniqid?: string
+  enabledFieldsForEditing?: string[]
 }
 
 export interface EditableBOM extends BOM {
@@ -53,6 +55,7 @@ export interface EditableBOM extends BOM {
   isDisabled?: boolean
   isUpgradeDisabled?: boolean
   replacementStatus?: string
+  isMaximizedWindow?: boolean
 }
 
 export interface BOMEditEvent {

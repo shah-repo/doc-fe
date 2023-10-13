@@ -53,5 +53,20 @@ export const styles = makeStyles((theme: Theme) =>
     companyName: {
       margin: '18px 0 18px 16px',
     },
+    [theme.breakpoints.down('xs')]: {
+      container: {
+        width: '100%',
+        padding: theme.spacing(3),
+      },
+      title: {
+        textAlign: 'center',
+      },
+      subtitle: {
+        textAlign: 'center',
+      },
+      companyButton: {
+        width: '100%',
+      },
+    },
   }),
 );
