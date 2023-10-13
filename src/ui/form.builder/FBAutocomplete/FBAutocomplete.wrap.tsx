@@ -46,7 +46,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name])
       && !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
-    const multiple = editorProperties?.includes('multiple') || props.multiple;
     const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     disabled
@@ -74,6 +73,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
       disabled = true;
     }
+    const isTemplate = isEmpty(defaultValue) && disabled && workspaceState?.document?.status === DocumentRevisionStatus.Draft;
+    const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
 
     useEffect(() => {
       setModifiedOptions(options);
