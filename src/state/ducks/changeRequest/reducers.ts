@@ -60,6 +60,22 @@ export const approversById = (
       return state;
   }
 };
+
+export const tempApproversById = (
+  state: ChangeRequestsApproversByIdState = {},
+  action: ChangeRequestListApproversAction,
+): ChangeRequestsApproversByIdState => {
+  switch (action.type) {
+    case CHANGE_REQUEST_LIST_APPROVERS:
+      return keyBy<ChangeRequestAvailableApprovers>(
+        action.payload,
+        (approver) => approver.id,
+      );
+    default:
+      return state;
+  }
+};
+
 export const approversAllIds = (
   state: ChangeRequestsApproversAllIdsState = [],
   action: ChangeRequestListApproversAction,
@@ -132,4 +148,5 @@ export default combineReducers({
   auditsByCRId,
   auditsAllId,
   dependentOnDocRevs,
+  tempApproversById,
 });
