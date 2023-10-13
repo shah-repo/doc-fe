@@ -72,7 +72,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp, isSliderV
   const closeCRDialog = () => {
     approvalRequestDialog.close();
     if (isSliderView) {
-      FBDataStore.selectedSliderInfo = { documentId: dataProp?.id, documentRevision: dataProp, rerender: true };
+      FBDataStore.selectedSliderInfo = { documentId: dataProp?.id, documentRevision: dataProp, reRender: true };
     } else {
       dispatch(documentRevisionsActions.load(dataProp?.id));
     }

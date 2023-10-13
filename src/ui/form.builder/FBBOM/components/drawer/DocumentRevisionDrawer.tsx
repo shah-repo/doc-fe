@@ -35,7 +35,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
       ? FBDataStore.selectedSliderInfo?.documentId
       : dataItem?.documentId,
   );
-  const [rerender, setRerender] = useState(false);
+  const [reRender, setRerender] = useState(false);
   const documentRevisionId = FBDataStore.selectedSliderInfo?.documentRevision
     ?.id
     ? FBDataStore.selectedSliderInfo?.documentRevision?.id
@@ -53,7 +53,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
   useEffect(() => {
     if (docRevId !== documentRevision?.id) {
       setTimeout(() => {
-        setRerender(!rerender);
+        setRerender(!reRender);
       }, 1000);
     }
   }, [docRevId]);
@@ -62,27 +62,23 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
   const loadAction = () =>
     loadDocumentRevision(docRevId, DOCUMENT_REVISION_GET_ASYNC_DRAWER);
   useObserver(() => {
-    console.log('FBDataStore.selectedSliderInfo :', FBDataStore.selectedSliderInfo);
+    const selectedDocRev = FBDataStore.selectedSliderInfo?.documentRevision;
+    const selectedDocRevId = selectedDocRev?.id;
     if (
       isSliderView
       && documentRevision
-      && FBDataStore.selectedSliderInfo?.documentRevision
-      && FBDataStore.selectedSliderInfo?.documentRevision?.id !== docRevId
+      && selectedDocRev
+      && selectedDocRevId !== docRevId
+      && documentRevision.id !== selectedDocRevId
     ) {
-      if (
-        documentRevision?.id
-        !== FBDataStore.selectedSliderInfo?.documentRevision?.id
-      ) {
-        seDocId(FBDataStore.selectedSliderInfo?.documentId);
-        seDocRevId(FBDataStore.selectedSliderInfo?.documentRevision?.id);
-      }
+      seDocId(FBDataStore.selectedSliderInfo.documentId);
+      seDocRevId(selectedDocRevId);
     }
-    if (FBDataStore?.selectedSliderInfo?.rerender) {
-      FBDataStore.selectedSliderInfo.rerender = false;
-      setRerender(!rerender);
+    if (FBDataStore?.selectedSliderInfo?.reRender) {
+      FBDataStore.selectedSliderInfo.reRender = false;
+      setRerender(!reRender);
     }
   });
-  console.log('DocumentRevision ::', documentRevision);
 
   return (
     <Theme>
@@ -102,7 +98,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
             </IconButton>
           </div>
         </Grid>
-        {rerender && !FBDataStore.selectedSliderInfo?.displayClonerContainer && (
+        {reRender && !FBDataStore.selectedSliderInfo?.displayCloneContainer && (
           <AsyncGate
             asyncAction={loadAction}
             asyncState={loadDocumentRevisionAsyncState}
@@ -117,7 +113,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
             )}
           </AsyncGate>
         )}
-        {!rerender && !FBDataStore.selectedSliderInfo?.displayClonerContainer && (
+        {!reRender && !FBDataStore.selectedSliderInfo?.displayCloneContainer && (
           <AsyncGate
             asyncAction={loadAction}
             asyncState={loadDocumentRevisionAsyncState}
@@ -132,8 +128,8 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
             )}
           </AsyncGate>
         )}
-        {rerender && FBDataStore.selectedSliderInfo?.displayClonerContainer && <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={FBDataStore.selectedSliderInfo?.isNewVersion ?? true} isSliderView={true} />}
-        {!rerender && FBDataStore.selectedSliderInfo?.displayClonerContainer && <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={FBDataStore.selectedSliderInfo?.isNewVersion ?? true} isSliderView={true} />}
+        {reRender && FBDataStore.selectedSliderInfo?.displayCloneContainer && <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={FBDataStore.selectedSliderInfo?.isNewVersion ?? true} isSliderView={true} />}
+        {!reRender && FBDataStore.selectedSliderInfo?.displayCloneContainer && <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={FBDataStore.selectedSliderInfo?.isNewVersion ?? true} isSliderView={true} />}
       </Box>
     </Theme>
   );

@@ -166,7 +166,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   };
   const cloneDocument = () => {
     if (isSliderView) {
-      FBDataStore.selectedSliderInfo = { documentId: documentRevision.id, documentRevision, displayClonerContainer: true, isNewVersion: true };
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.id, documentRevision, displayCloneContainer: true, isNewVersion: true };
     } else {
       history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
     }

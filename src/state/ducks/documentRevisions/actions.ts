@@ -230,7 +230,7 @@ const approveAndRelease = (
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     if (isSliderView) {
-      FBDataStore.selectedSliderInfo = { documentId: docRev.document.id, documentRevision: docRev, rerender: true };
+      FBDataStore.selectedSliderInfo = { documentId: docRev.document.id, documentRevision: docRev, reRender: true };
     } else {
       dispatch(load(id));
       dispatch(loadDocument(docRev.document.id));

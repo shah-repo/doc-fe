@@ -387,7 +387,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const closeCRDialog = () => {
     approvalRequestDialog.close();
     if (isSliderView) {
-      FBDataStore.selectedSliderInfo = { documentId: documentRevision.document.id, documentRevision: documentRevision, rerender: true };
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.document.id, documentRevision: documentRevision, reRender: true };
     } else {
       dispatch(documentRevisionsActions.load(docRevId));
     }
