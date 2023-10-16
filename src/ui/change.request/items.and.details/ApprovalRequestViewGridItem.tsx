@@ -41,7 +41,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, whereUsedView,
   } = entry;
 
-  const isWhereUsedTreeExists = whereUsedView?.length > 1;
+  const isWhereUsedTreeExists = (whereUsedView ?? []).length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts]
@@ -161,7 +161,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
         </div>
         <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
-          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo as string} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
         </div>
         <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
