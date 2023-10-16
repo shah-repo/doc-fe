@@ -37,6 +37,7 @@ interface OwnProps {
   documentRevisionId: string
   isNewVersion?: boolean
   isNewOutput?: boolean
+  isSliderView?: boolean
 }
 
 export let isOperator = React.createContext<boolean>(false);
@@ -77,6 +78,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   currentEmployeeId,
   isCompanyAdmin,
   selectedDocument,
+  isSliderView,
 }) => {
   const loadDocumentRevisionAction = useCallback(() => {
     if (documentRevisionId) {
@@ -146,6 +148,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
           documentId={documentId}
           canChangeOwnerShip={canChangeOwnerShip}
           isNewVersion={isNewVersion as boolean}
+          isSliderView={isSliderView}
         />
       )}
       {canPreview && (

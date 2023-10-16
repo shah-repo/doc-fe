@@ -107,6 +107,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   isShowOnly = false,
   isUpgradeDisabled = false,
   isMaxDialogOpen = false,
+  isSliderView = false,
 }) => {
   const { _tabsState } = SM.useStores();
   const dispatch = useDispatch();

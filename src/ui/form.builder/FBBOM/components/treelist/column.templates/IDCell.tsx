@@ -30,6 +30,7 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
+import FBDataStore from '../../../../FBStore/FBDataStore';
 import { EditableBOM } from '../../../interface';
 import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
@@ -162,6 +163,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
+    FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
   };
 
@@ -252,7 +254,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem, closeDrawer }} />
+      <DocumentRevisionDrawer {...{ dataItem, closeDrawer, isSliderView: isPartsDrawerOpened }} />
     </FBBOMDetailDrawer>
   );
 

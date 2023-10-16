@@ -43,6 +43,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   docId = '',
   intl,
   canEdit = false,
+  isSliderView,
 }) => {
   const classes = useStyles();
 
@@ -150,6 +151,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                         documentRevisions={docRevsWithoutCanceled || []}
                         selectedDocumentRevision={documentRevisionId}
                         documentTypeId={documentTypeId}
+                        isSliderView={isSliderView}
                         {...{
                           isInlineApproval,
                           isRecord,
