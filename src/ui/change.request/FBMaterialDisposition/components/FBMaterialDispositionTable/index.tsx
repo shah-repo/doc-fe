@@ -11,6 +11,7 @@ import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -19,8 +20,9 @@ import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
-import { EXCEL_FILE_NAME, FIELDS_TO_OMIT } from './constants';
+import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_OMIT } from './constants';
 import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -34,11 +36,23 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const [data, setData] = React.useState<EditableMDItem[]>([]);
-  const editMDItem = ({ dataItem }: MDItemEditEvent) => setEditedMDItem(dataItem);
+  const editMDItem = ({ dataItem }: MDItemEditEvent) => {
+    const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
+    const prepareDataItem = {
+      ...updatedDataItem,
+      onOrderPOAction: dataItem.onOrderPOAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
+      inInspectionAction: dataItem.inInspectionAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
+      inInventoryAction: dataItem.inInventoryAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
+      inWipAction: dataItem.inWipAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
+      asFinishedGoodsAction: dataItem.asFinishedGoodsAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
+    };
+    setEditedMDItem(prepareDataItem as EditableMDItem);
+  };
   const discardMDItem = () => setEditedMDItem(undefined);
   const getColumns = () => {
     return columns.filter(({ show }) => show);
   };
+  const dialog = useDialog();
 
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
@@ -73,13 +87,38 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const formik = useFormik<Partial<EditableMDItem>>({
     initialValues: {},
     onSubmit: (values) => {
-      const partToSave = omit(values, FIELDS_TO_OMIT);
-      partAsync.start(updateItem, changeRequest?.id, values.id, partToSave, partAsync);
-      discardMDItem();
+      const count = DROPDOWN_FIELDS.reduce((count, fieldName) => {
+        if (values[fieldName] !== EMPTY_DROPDOWN_PLACEHOLDER) {
+          return count + 1;
+        }
+        return count;
+      }, 0);
+      if (count > 1) {
+        onOpen();
+      } else {
+        updateMaterialDispositionTableData();
+        discardMDItem();
+      }
     },
   });
 
   const { submitForm, resetForm, setValues } = formik;
+
+  const updateMaterialDispositionTableData = () => {
+    const values = formik.values;
+    const partToSave = omit(values, FIELDS_TO_OMIT);
+    partAsync.start(updateItem, changeRequest?.id, values.id, partToSave, partAsync);
+  };
+
+  const onConfirm = () => {
+    updateMaterialDispositionTableData();
+    dialog.close();
+    discardMDItem();
+  };
+
+  const onOpen = () => {
+    dialog.open();
+  };
 
   useEffect(() => {
     resetForm({ values: editedMDItem ?? {} });
@@ -211,6 +250,9 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         </GridToolbar>
       </KendoDataGrid>
     </ExcelExport>
+    <AlertDialog dialog={dialog}
+      message="approvalRequest.material.disposition.warning.alert"
+      confirmAction={onConfirm} />
   </>);
 };
 

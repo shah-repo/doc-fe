@@ -1640,6 +1640,7 @@
   "approvalRequest.material.disposition.add": "Add Material Disposition",
   "approvalRequest.material.disposition.refresh.date": "As of {date}",
   "approvalRequest.material.disposition.refresh": "Refresh",
+  "approvalRequest.material.disposition.warning.alert": "The Lot Status and part revision will not be auto updated in the Lot item as there are conflicting selections.\n\nWould you like to proceed?",
   "approvalRequest.tasks.list.add": "Add Task",
   "approvalRequest.tasks.list.section.heading": "Tasks List",
   "approvalRequest.tasks.list.assignee.complete": "Complete",
