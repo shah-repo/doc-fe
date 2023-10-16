@@ -24,6 +24,7 @@ interface OwnProps {
   documentRevision: DocumentRevision
   type?: DocumentCloneType
   isNewVersion: boolean
+  isSliderView?: boolean
 }
 
 interface StateProps {
@@ -67,6 +68,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   proposedDocId,
   loadDocument,
   isNewVersion,
+  isSliderView,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
 
@@ -90,9 +92,13 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
       if (createdDocumentRevision) {
         setDoNotPrompt(true);
         loadDocument(createdDocumentRevision.document.id);
-        history.push(
-          documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
-        );
+        if (isSliderView) {
+          FBDataStore.selectedSliderInfo = { documentId: createdDocumentRevision.document.id, documentRevision: createdDocumentRevision };
+        } else {
+          history.push(
+            documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+          );
+        }
       }
     },
   });

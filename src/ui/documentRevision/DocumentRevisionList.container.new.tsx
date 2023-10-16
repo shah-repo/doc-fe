@@ -21,6 +21,7 @@ interface OwnProps {
   isInlineApproval: boolean
   isRecord: boolean
   _documentRevisionSidebarState?: DocumentRevisionSidebarState
+  isSliderView?: boolean
 }
 
 type DocumentRevisionListContainerProps = OwnProps;
@@ -37,6 +38,7 @@ DocumentRevisionListContainerProps
   isInlineApproval,
   isRecord,
   _documentRevisionSidebarState,
+  isSliderView,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -71,6 +73,7 @@ DocumentRevisionListContainerProps
                 isDocumentPO,
                 isRecord,
                 _documentRevisionSidebarState,
+                isSliderView,
               }}
             />
           ),

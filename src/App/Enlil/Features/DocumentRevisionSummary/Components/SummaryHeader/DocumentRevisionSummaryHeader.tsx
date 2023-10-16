@@ -19,12 +19,13 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
   name,
   descriptionLabel,
   description,
+  isSliderView,
 }) => (
   <Observer>
     {() => (
       <Box px={4} paddingBottom={2.5}>
         {isCRLinkVisible && documentRevision.changeRequest && <Box py={0}>
-          <ChangeRequestLink dataProp={documentRevision} />
+          <ChangeRequestLink dataProp={documentRevision} isSliderView={isSliderView} />
         </Box>}
         <Box paddingBottom={0}>
           {isTitleVisible && (
