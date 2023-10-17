@@ -73,7 +73,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
       disabled = true;
     }
-    const isTemplate = isEmpty(defaultValue) && disabled && workspaceState?.document?.status === DocumentRevisionStatus.Draft;
+    const isTemplate = isEmpty(defaultValue) && disabled && (workspaceState?.document?.status === DocumentRevisionStatus.Draft || workspaceState?.document?.status === DocumentRevisionStatus.Released);
     const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
 
     useEffect(() => {
