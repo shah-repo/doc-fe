@@ -10,7 +10,7 @@ interface props {
 const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest }) => {
   return (<>
     <FBMaterialDispositionTable {...{ changeRequest }} />
-    <FBTasksListTable />
+    <FBTasksListTable {...{ changeRequest }} />
   </>);
 };
 
