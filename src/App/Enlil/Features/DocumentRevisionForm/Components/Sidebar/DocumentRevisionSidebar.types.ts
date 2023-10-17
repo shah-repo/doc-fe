@@ -21,6 +21,7 @@ export type DocumentRevisionSidebarProps =
   isNewOutput?: boolean
   title?: string
   canEdit?: boolean
+  isSliderView?: boolean
 };
 
 export interface DocumentRevisionSidebarStateProps {

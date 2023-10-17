@@ -53,6 +53,7 @@ export interface EditableBOM extends BOM {
   alternatePartsCount?: number
   attachmentNames?: string[]
   isDisabled?: boolean
+  isSliderView?: boolean
   isUpgradeDisabled?: boolean
   replacementStatus?: string
   isMaximizedWindow?: boolean

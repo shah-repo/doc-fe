@@ -5,9 +5,9 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
@@ -23,7 +23,6 @@ import { documentsActions } from '../../state/ducks/documents';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
-import Text from '../components/Text';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -33,30 +32,33 @@ import { RequestType } from '../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
+import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
 import { documentNewVersionPath } from '../document.revision/utils/paths';
 import { useHandleCreateDoc } from '../documentType/list/CreateDocumentByType';
+import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../hooks/docCustomization/CustomLabelTooltip';
 import { useReviseDocument, useUpdateDocument } from '../hooks/docCustomization/useCustomization';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
-import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from './PreviewControls.container.types';
-import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from './PreviewControls.container.types';
 
 interface OwnProps {
   documentRevision: DocumentRevision
   canShowCreateVersionButton?: boolean
   hasAccess: boolean
   canChangeOwnerShip: boolean
+  isSliderView?: boolean
 }
 
 interface StateProps {
@@ -71,7 +73,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip, isSliderView,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
@@ -162,8 +164,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     } catch (e) {}
     cloneDocument();
   };
-
-  const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+  const cloneDocument = () => {
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.id, documentRevision, displayCloneContainer: true, isNewVersion: true };
+    } else {
+      history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+    }
+  };
 
   const setDocRevToDraft = () => {
     dispatch(documentRevisionsActions.update(documentRevision.id, {
@@ -171,7 +178,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       displayStatus: 'Draft',
     }));
 
-    dispatch(documentRevisionsActions.load(documentRevision.id));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.id, documentRevision };
+    } else {
+      dispatch(documentRevisionsActions.load(documentRevision.id));
+    }
   };
 
   const cloneOutputDocument = () => {

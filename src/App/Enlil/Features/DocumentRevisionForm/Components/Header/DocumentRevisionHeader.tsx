@@ -13,6 +13,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
   documentRevisionId,
   shouldShowUpgrade,
   setDoNotPrompt,
+  isSliderView,
 }) => {
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   return (
@@ -22,6 +23,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
           <FormHeader
             isCreateDocumentDisabled={_documentRevisionFormState?.createDocumentDisabled || false}
             {...{ setDoNotPrompt }}
+            isSliderView={isSliderView}
           />
         )}
       </Observer>

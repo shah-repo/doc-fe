@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
+import { getStartOfDayDateString, TIME_ZONE } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
@@ -25,12 +25,13 @@ import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRe
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
-import Text from '../../../../components/Text';
-import { FormContext } from '../../../../components/forms/FormContext';
 import { Button } from '../../../../components/forms/fields-next';
+import { FormContext } from '../../../../components/forms/FormContext';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { FB } from '../../../../form.builder';
 import { BOM } from '../../../../form.builder/FBBOM/interface';
+import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -58,6 +59,7 @@ interface Props {
   renderAsButton?: boolean
   isBOMExists?: boolean
   isPart?: boolean
+  isSliderView?: boolean
 }
 
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
@@ -75,6 +77,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   renderAsButton,
   isBOMExists = false,
   isPart = false,
+  isSliderView,
 }) => {
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
@@ -383,7 +386,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
-    dispatch(documentRevisionsActions.load(docRevId));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.document.id, documentRevision: documentRevision, reRender: true };
+    } else {
+      dispatch(documentRevisionsActions.load(docRevId));
+    }
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
@@ -446,6 +453,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         formDocument: { id: formDocument },
       },
       password,
+      isSliderView,
       async,
     );
   };

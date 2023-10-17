@@ -22,11 +22,13 @@ import useStyles from './FormHeader.styles';
 interface Props {
   isCreateDocumentDisabled: boolean
   setDoNotPrompt?: (value: boolean) => void
+  isSliderView?: boolean
 }
 
 const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
   setDoNotPrompt,
+  isSliderView,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
@@ -72,7 +74,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
               loading={asyncState.status === AsyncStatus.Active || asyncSecurityState.status === AsyncStatus.Active}
             />
           )}
-          <DocRevActions {...{ isCreateDocumentDisabled, setDoNotPrompt }} />
+          <DocRevActions {...{ isCreateDocumentDisabled, setDoNotPrompt, isSliderView }} />
         </Grid>
       </Grid>
       <FormMessage asyncState={asyncState} data-cy="Document-Save-Progress-Bar" />
