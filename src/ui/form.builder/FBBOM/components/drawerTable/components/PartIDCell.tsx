@@ -1,4 +1,7 @@
-import { Box } from '@material-ui/core';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Tooltip } from '@material-ui/core';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent, useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
@@ -9,13 +12,16 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
 import { SELECTED_PART_KEY_SEPARATOR } from '../../treelist/constants';
-import { CustomTemplateProps } from '../types';
 import { AlternatePart } from '../../treelist/interface';
+import { CustomTemplateProps } from '../types';
+import { styles } from './styles';
 
 const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
   const { dataItem, field } = props;
+  const classes = styles();
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
   const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
 
@@ -26,6 +32,18 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
       setParts(data);
     },
   });
+
+  const openRevChangeDialog = () => {
+    console.log('Info');
+  };
+
+  const getInfoIcon = () => (
+    <span className={cx(classes.infoIcon, classes.defaultIcon)} onClick={openRevChangeDialog}>
+      <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
+        <FontAwesomeIcon data-cy="new-revision-available" color={Colors.primaryLight} className={cx(classes.defaultIcon)} icon={solid('circle-exclamation')} />
+      </Tooltip>
+    </span>
+  );
 
   const fetchSelectedPartAsync = useAsync<AlternatePart[]>({
     onSuccess: (data) => {
@@ -118,6 +136,7 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
 
   return (
     <Box onClick={onRowClick}>
+      {dataItem.availableRevisions?.isReleased && getInfoIcon()}
       {isAddMode && getFieldInfo()}
       {!isAddMode && <span>{dataItem[field]}</span> }
     </Box>
