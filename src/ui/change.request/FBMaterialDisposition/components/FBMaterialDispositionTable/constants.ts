@@ -6,4 +6,4 @@ export const EXCEL_FILE_NAME = 'materialDisposition.xlsx';
 export const OPTIONS = ['Must conform', 'Rework', 'Use as-is', 'Re-inspect', 'Return to vendor', 'Scrap', 'N/A'];
 export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction'];
 
-export const FIELDS_TO_OMIT = [MODE_FIELD, 'arId', 'id', 'createdAt', 'revisionsFromTo', 'updatedAt', 'partDocId', 'lotDocId', 'partDocRevId', 'lotDocRevId'];
+export const FIELDS_TO_OMIT = [MODE_FIELD, 'arId', 'id', 'createdAt', 'revisionsFromTo', 'updatedAt', 'partDocId', 'lotDocId', 'partDocRevId', 'lotDocRevId', 'qtyInHand', 'basePartDocRevId'];
