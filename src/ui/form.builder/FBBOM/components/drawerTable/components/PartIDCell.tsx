@@ -4,7 +4,7 @@ import { Box, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isNil } from 'lodash';
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, MouseEventHandler, useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
@@ -37,12 +37,12 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, onRefresh, ...prop
   });
 
   const dialog = useDialog();
-  const openRevChangeDialog = (event: { stopPropagation: () => void }) => {
+  const openRevChangeDialog: MouseEventHandler = (event) => {
     dialog.open();
     event.stopPropagation();
   };
 
-  const onRevChange = (event: { stopPropagation: () => void }) => {
+  const onRevChange: MouseEventHandler = (event) => {
     event?.stopPropagation();
     if (isNil(dataItem.availableRevisions)) {
       return;
