@@ -5,3 +5,7 @@ import { EditableMDItem } from './interface';
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableMDItem>>): Array<ColumnDefinition<EditableMDItem>> => {
   return [...columns].map(col => ({ ...col, title: translate(col.title) }));
 };
+
+export const generateDocTitleText = (docId: string, displayRevision: string) => (
+  `${docId} • Rev ${displayRevision}`
+);

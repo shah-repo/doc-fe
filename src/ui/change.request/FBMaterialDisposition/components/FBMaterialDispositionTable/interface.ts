@@ -16,6 +16,7 @@ export interface MaterialDispositionItem {
   asFinishedGoodsAction: string
   usedLocation: string
   comment: string
+  openedPO: any[]
 }
 
 export interface EditableMDItem extends MaterialDispositionItem {

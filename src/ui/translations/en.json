@@ -1638,6 +1638,7 @@
   "releaseButton.option.existingAR": "Existing AR",
   "approvalRequest.dialog.title": "Quick Edit",
   "approvalRequest.material.disposition.add": "Add Material Disposition",
+  "approvalRequest.material.disposition.po.preview.title": "{partDocId}-On Order (PO)",
   "approvalRequest.material.disposition.refresh.date": "As of {date}",
   "approvalRequest.material.disposition.refresh": "Refresh",
   "approvalRequest.material.disposition.warning.alert": "The Lot Status and part revision will not be auto updated in the Lot item as there are conflicting selections.\n\nWould you like to proceed?",

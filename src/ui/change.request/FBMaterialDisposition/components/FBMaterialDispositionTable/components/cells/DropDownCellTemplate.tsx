@@ -1,25 +1,34 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { find, get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
+import { translate } from '../../../../../../../common/intl';
+import { Dialog } from '../../../../../../components/dialogs';
 import { Autocomplete, FormikField } from '../../../../../../components/forms/fields-next';
+import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import useDialog from '../../../../../../hooks/useDialog';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
+import { EMPTY_VALUE_PLACEHOLDER, ON_ORDER_PO_ACTION_COLUMN } from '../../constants';
 import { CustomTemplateProps, EditableMDItem } from '../../interface';
+import { generateDocTitleText } from '../../utils';
+import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {
-  options: string[]
+  options: OptionType[]
 }
 
 const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMDItem>();
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: string) => {
-    setFieldValue(field, value);
+  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    setFieldValue(field, value?.value);
   };
 
-  const value = values[field] as string;
+  const value = find(options, { value: values[field] });
 
   return (
     <FormikField
@@ -31,6 +40,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
         blurOnSelect
         options={options}
         onChange={handleChange}
+        getOptionLabel={(option: OptionType) => option.label}
         value={value}
         size="small"
         disabled={isEmpty(values)}
@@ -40,20 +50,43 @@ const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
 };
 
 export const DropDownCellTemplate: React.FC<Props> = (props) => {
-  const { dataItem, field, onClick } = props;
+  const classes = styles();
+  const { dataItem, field, onClick, options } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  const handleClick = () => onClick?.({ dataItem });
+  const dialog = useDialog();
 
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
+  const { partDocId, openedPO } = dataItem;
+  const isOnOrderPOActionColumn = field === ON_ORDER_PO_ACTION_COLUMN;
+  const openedPOsAvailable = openedPO.length > 0;
+  const poDocIds = openedPO.map(po => ({ docId: po?.document?.docId, displayRevision: po.displayRevision }));
+
+  const handleClick = () => onClick?.({ dataItem });
+  const handleClickPOs = (e) => {
+    dialog.open();
+    e.stopPropagation();
+  };
+
+  const displayValue = find(options, { value: get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) });
 
   return (
     <OverflowingContent onClick={handleClick}>
-      {displayValue}
+      {displayValue?.label}
+      { isOnOrderPOActionColumn && openedPOsAvailable && <FontAwesomeIcon icon={solid('circle')} onClick={handleClickPOs} className={cx(classes.dot, classes.poPreviewDot)} />}
+      <Dialog title={translate('approvalRequest.material.disposition.po.preview.title', { partDocId })}
+        open={dialog.isOpen}
+        onClose={() => dialog.close()}
+        onConfirm={() => dialog.close()}
+        confirmLabel="common.close"
+      >
+        <div className={classes.poPreviewModal}>
+          {poDocIds.map(({ docId, displayRevision }) => (<div className={classes.poPreviewModalItem}>{generateDocTitleText(docId, displayRevision)}</div>))}
+        </div>
+      </Dialog>
     </OverflowingContent>
   );
 };

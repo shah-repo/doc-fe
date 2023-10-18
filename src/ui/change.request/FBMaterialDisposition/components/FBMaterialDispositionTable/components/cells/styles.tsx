@@ -17,4 +17,18 @@ export const styles = makeStyles((theme) => ({
   deselectedDot: {
     color: Colors.dark_gray2,
   },
+  poPreviewDot: {
+    marginLeft: theme.spacing(1.875),
+    verticalAlign: 'baseline',
+    cursor: 'pointer',
+  },
+  poPreviewModal: {
+    color: `${Colors.navy_active} !important`,
+    width: 343,
+  },
+  poPreviewModalItem: {
+    '&:first-child': {
+      marginBottom: theme.spacing(1.875),
+    },
+  },
 }));
