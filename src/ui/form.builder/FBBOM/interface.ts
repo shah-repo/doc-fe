@@ -70,7 +70,7 @@ interface ChangeRequestDetails {
   crId: string
 }
 
-interface AvailableRevisions {
+export interface AvailableRevisions {
   isReleased: boolean
   name: string
   id: string
