@@ -56,7 +56,7 @@ import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-import { bomDisabledChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
+import { bomDisabledChangeControl, disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -138,6 +138,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
   const isEditingLineItemsDisallowed = bomDisabledChangeControl(documentRevision);
   const enabledFieldsForEditing = getEnabledFieldsForEditing(documentRevision);
+  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -440,19 +441,32 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     });
   };
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
-    if (
-      dataItem.id === documentRevision.id
-      || dataItem.inEdit
-      || (isDisabled && isEditingLineItemsDisallowed)
-      || dataItem.isDeleted
-      || !dataItem.isEditEnabled
-      || !dataItem.isParentOwner
-      || maxDialog.isOpen
-      || isNewBOMAdditionInProgress()
-    ) {
-      // skipping edit for parent and click on edit item itself
+    if (dataItem.id === documentRevision.id) {
       return;
     }
+
+    if (dataItem.inEdit || dataItem.isDeleted || !dataItem.isEditEnabled) {
+      return;
+    }
+
+    if (isNewBOMAdditionInProgress()) {
+      return;
+    }
+
+    if (maxDialog.isOpen) {
+      return;
+    }
+
+    if (!inRestrictedEditMode) {
+      if (isDisabled || !dataItem.isParentOwner) {
+        return;
+      }
+    }
+
+    if (inRestrictedEditMode && isEditingLineItemsDisallowed) {
+      return;
+    }
+
     _documentRevisionFormState?.setDirty(true);
     setSelectedPartLevel({ dataItem, level });
     if (isNewBOMAdditionInProgress() && !dataItem[ADD_FIELD]) {
