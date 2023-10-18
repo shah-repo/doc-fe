@@ -24,6 +24,11 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const isAlteratePartsExists = alternatePartsCount > 0;
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
   const { _documentRevisionFormState } = SM.useStores();
+
+  const alternatePartActionsDiabled = !hasPermissionToEditBOM
+    || (dataItem.inRestrictedEditMode && !dataItem.enabledFieldsForEditing?.includes('alternatePart'))
+    || (!dataItem.inRestrictedEditMode && !dataItem.isParentOwner);
+
   const handleToggle = () => {
     if (!dataItem.parentNodeRevId) {
       return;
@@ -74,7 +79,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         revision: dataItem.displayRevision,
         status: dataItem.displayStatus,
         docId: dataItem.docId,
-        isDisabled: !dataItem.enabledFieldsForEditing?.includes('alternatePart') || !hasPermissionToEditBOM,
+        isDisabled: alternatePartActionsDiabled,
       }} />
     </td>
   );
