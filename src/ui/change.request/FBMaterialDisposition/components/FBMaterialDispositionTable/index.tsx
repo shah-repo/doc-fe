@@ -5,7 +5,7 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { map, omit } from 'lodash';
+import { map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
@@ -22,7 +22,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
-import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_OMIT } from './constants';
+import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK } from './constants';
 import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -106,7 +106,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const updateMaterialDispositionTableData = () => {
     const values = formik.values;
-    const partToSave = omit(values, FIELDS_TO_OMIT);
+    const partToSave = pick(values, FIELDS_TO_PICK);
     partAsync.start(updateItem, changeRequest?.id, values.id, partToSave, partAsync);
   };
 
