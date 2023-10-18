@@ -52,6 +52,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
             id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${aData.uniqid}`,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
+            parentDocId: parentPartRelation.docId,
             isEditEnabled: [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(parentPartRelation.status),
           }),
         );
