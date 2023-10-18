@@ -493,6 +493,17 @@ const updateBOMBranch = (
     handlers,
   });
 
+const alternatePartRevUpdate = (
+  data,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_ALTERNATE_PART}`,
+    method: 'patch',
+    data,
+    handlers,
+  });
+
 const changeOrderBOMBranch = (
   parentNodeRevId,
   data,
@@ -690,6 +701,7 @@ export default {
   changeOrderBOMBranch,
   fetchWhereUsedTree,
   fetchHasATree,
+  alternatePartRevUpdate,
   updateLotStatus,
   getAllApprovalRequests,
 };
