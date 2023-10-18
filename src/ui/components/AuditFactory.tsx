@@ -156,9 +156,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'securityEmployees':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
-      case 'documentRevisions':
-        returnValue = (audit.nextValue as DocumentRevision).name;
+      case 'documentRevisions': {
+        const { displayRevision, document } = audit.nextValue as DocumentRevision;
+        returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}</div>);
         break;
+      }
       case 'tasks.dueDate':
       case 'effectiveDate':
         returnValue = getFormattedDateString(audit.nextValue as string, MomentFormats.MonthDateYear);
