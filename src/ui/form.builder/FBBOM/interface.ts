@@ -39,6 +39,7 @@ export interface BOM {
   isEditEnabled?: boolean
   uniqid?: string
   enabledFieldsForEditing?: string[]
+  inRestrictedEditMode?: boolean
 }
 
 export interface EditableBOM extends BOM {

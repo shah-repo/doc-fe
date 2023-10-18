@@ -615,6 +615,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     item.isMaximizedWindow = isMaxDialogOpen;
     item.isUpgradeDisabled = isUpgradeDisabled;
     item.enabledFieldsForEditing = enabledFieldsForEditing;
+    item.inRestrictedEditMode = inRestrictedEditMode;
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }
