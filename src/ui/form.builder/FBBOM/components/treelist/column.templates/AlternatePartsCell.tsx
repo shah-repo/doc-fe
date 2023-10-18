@@ -70,7 +70,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         revision: dataItem.displayRevision,
         status: dataItem.displayStatus,
         docId: dataItem.docId,
-        isDisabled: !dataItem.enabledFieldsForEditing?.includes('alternatePart'),
+        isDisabled: !dataItem.enabledFieldsForEditing?.includes('alternatePart') || dataItem.isDisabled,
       }} />
     </td>
   );
