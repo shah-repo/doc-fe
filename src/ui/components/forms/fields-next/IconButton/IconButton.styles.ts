@@ -23,13 +23,13 @@ interface IconButtonStylesProps {
 }
 
 export default makeStyles((theme) => createStyles({
-  button: ({ size = 'medium' }: IconButtonStylesProps) => ({
+  button: ({ size = 'medium', iconSize }: IconButtonStylesProps) => ({
     width: BUTTON_SIZES[size],
     height: BUTTON_SIZES[size],
     minHeight: BUTTON_SIZES[size],
+    fontSize: iconSize,
     padding: 0,
     minWidth: 0,
-    fontSize: 16,
   }),
   square: ({ size = 'medium' }: IconButtonStylesProps) => ({
     width: SQUARE_BUTTON_SIZES[size],
