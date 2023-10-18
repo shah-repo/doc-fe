@@ -29,7 +29,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const excludeFewAuditRecords = (change: Audit): boolean => {
     const fieldName = change.field.replace(/\[(.+?)\]/g, '');
     return fieldName.includes('proposedDocumentRevision.id')
-    || fieldName.includes('documentRevisions.id');
+    || fieldName.includes('documentRevisions.id')
+    || fieldName.includes('approver.id')
+    || fieldName.includes('signatureGroupId.id')
+    || fieldName.includes('formInput.approvers');
   };
 
   const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
@@ -121,11 +124,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         }
 
-        if (change.fbSchemaItem?.type === 'documentRevisions') {
-          if (excludeFewAuditRecords(change)) {
-            return null;
-          }
+        if (excludeFewAuditRecords(change)) {
+          return null;
         }
+
         singleFields.push(
           <Box
             mb={1}
