@@ -11,7 +11,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import { AlternatePartsHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
 import { Vendor } from '../../../FBPartVendors/types';
 import PartVendorsTable from '../drawerTable/vendors';
@@ -102,7 +102,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<VendorTableProps> = ({
                 size="small"
                 className={cx(
                   classes.chip,
-                  classes[FormHeaderStatusClassMapping[status ?? '']],
+                  classes[AlternatePartsHeaderStatusClassMapping[status ?? '']],
                 )}
                 label={status}
                 data-cy="header-info-status"
