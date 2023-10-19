@@ -32,7 +32,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest }) => 
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
   // GET API Here
   const [data, setData] = React.useState<Array<Partial<EditableTLItem>>>([]);
-  const [isShowOnly, setShowOnly] = React.useState<boolean>(false);
+  const [isShowOnly] = React.useState<boolean>(false);
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
     !isShowOnly && setEditedTLItem(dataItem);
   };
@@ -174,8 +174,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest }) => 
           size="small"
           className={classes.addButton}
           startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-          onClick={() => setShowOnly(true)}
-          data-cy="add-link"
+          onClick={createDraftTLItem}
+          data-cy="add-task-small-btn"
         >
           {translate('approvalRequest.tasks.list.add')}
         </Button>}
@@ -194,7 +194,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest }) => 
         fullWidth
         attached
         onClick={createDraftTLItem}
-        data-cy="add-button"
+        data-cy="add-task"
       >
         {translate('approvalRequest.tasks.list.add')}
       </Button>}

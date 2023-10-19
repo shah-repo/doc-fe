@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -112,12 +112,13 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   };
 
   const whereUsedDialog = useDialog();
-  const openWhereUsedDialog = (e) => {
+  const openWhereUsedDialog: MouseEventHandler = (e) => {
     isWhereUsedTreeExists && whereUsedDialog.open();
     e.stopPropagation();
   };
-  const closeWhereUsedDialog = () => {
+  const closeWhereUsedDialog: MouseEventHandler = (e) => {
     whereUsedDialog.close();
+    e.stopPropagation();
   };
 
   return (
