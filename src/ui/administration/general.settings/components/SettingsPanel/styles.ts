@@ -5,17 +5,21 @@ import { MAX_PANEL_WIDTH } from '../../constants';
 export default makeStyles(theme => ({
   root: {
     maxWidth: MAX_PANEL_WIDTH,
-    marginBottom: theme.spacing(1),
+    margin: theme.spacing(0, 0, 3.75),
     border: `1px solid ${Colors.stroke}`,
     borderRadius: theme.spacing(0.5),
     boxShadow: 'none',
+
+    '&.Mui-expanded': {
+      margin: theme.spacing(0, 0, 3.75),
+    },
   },
   summary: {
     flexDirection: 'row-reverse',
     alignItems: 'center',
     padding: theme.spacing(2, 1.5),
 
-    '&$expanded': {
+    '&.Mui-expanded': {
       minHeight: 0,
       color: Colors.primary,
     },
@@ -23,7 +27,7 @@ export default makeStyles(theme => ({
   icon: {
     marginRight: theme.spacing(1.25),
 
-    '&$expanded': {
+    '&.Mui-expanded': {
       color: Colors.primary,
       transform: 'rotate(90deg)',
     },
@@ -36,7 +40,7 @@ export default makeStyles(theme => ({
   content: {
     margin: 0,
 
-    '&$expanded': {
+    '&.Mui-expanded': {
       margin: 0,
     },
   },

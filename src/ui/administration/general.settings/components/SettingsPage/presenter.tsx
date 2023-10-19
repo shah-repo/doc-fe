@@ -16,7 +16,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
 }) => {
   const classes = useStyles();
 
-  const [expandedPanels, setExpanedPanels] = useState<GeneralSettingsTabs[]>([GeneralSettingsTabs.AR]);
+  const [expandedPanels, setExpanedPanels] = useState<GeneralSettingsTabs[]>([]);
   const allPanelsExpaned = expandedPanels.length === panels.length;
 
   const toggleAllPanels = () => setExpanedPanels(allPanelsExpaned ? [] : panels.map(panel => panel.key));
