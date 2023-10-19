@@ -11,7 +11,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import { AlternatePartsHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
@@ -101,7 +101,7 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={cx(classes.chip, classes[FormHeaderStatusClassMapping[status ?? '']])}
+                className={cx(classes.chip, classes[AlternatePartsHeaderStatusClassMapping[status ?? '']])}
                 label={status}
                 data-cy="header-info-status"
               />

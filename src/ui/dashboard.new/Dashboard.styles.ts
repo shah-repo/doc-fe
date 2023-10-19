@@ -44,5 +44,8 @@ export default makeStyles((theme) => ({
     box: {
       margin: theme.spacing(0, 1.25),
     },
+    stats: {
+      display: 'none',
+    },
   },
 }));
