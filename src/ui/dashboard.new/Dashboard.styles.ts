@@ -45,7 +45,7 @@ export default makeStyles((theme) => ({
       margin: theme.spacing(0, 1.25),
     },
   },
-  [theme.breakpoints.between('xs', 'sm')]: {
+  [theme.breakpoints.down('sm')]: {
     stats: {
       display: 'none',
     },
