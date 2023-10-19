@@ -31,7 +31,6 @@ export default makeStyles((theme) => ({
   stats: {
     height: '100%',
     paddingTop: 56,
-
   },
   loadMore: loadMoreStyles(theme),
   searchContainer: {
