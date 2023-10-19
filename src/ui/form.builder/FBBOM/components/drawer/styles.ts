@@ -5,15 +5,17 @@ import OldColors from '../../../../layout/theme/utils/colors';
 export default makeStyles((theme: Theme) =>
   createStyles({
     chip: {
-      display: 'flex',
+      display: 'inline-flex',
       flexDirection: 'row',
       borderRadius: 3,
+      border: `1px solid ${OldColors.steel_blue}`,
       background: OldColors.light_cyan,
       fontWeight: 600,
       fontSize: 10,
       lineHeight: 1.3,
       alignItems: 'center',
       justifyContent: 'center',
+      color: OldColors.lochmara,
       cursor: 'pointer',
       textTransform: 'uppercase',
     },
