@@ -135,7 +135,7 @@ export interface RedlineAction {
   payload: RedlineState
 }
 
-export interface ZebraPrintSettings {
+interface ZebraPrintSettings {
   apiKey: string
   tenantId: string
   printers: Array<{
