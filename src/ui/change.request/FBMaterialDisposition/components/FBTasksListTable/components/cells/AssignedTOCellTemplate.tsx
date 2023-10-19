@@ -12,7 +12,6 @@ import { getInitalsFromName } from '../../../../../../components/icons/avatar/he
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import Colors from '../../../../../../layout/theme/utils/colors';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps, EditableTLItem } from '../../interface';
 import { styles } from './styles';
 
@@ -21,7 +20,7 @@ const renderUsers = (selectedUsers, removeUser?) => {
   const approvers = useSelector((state: ApplicationState) => {
     return state.changeRequests.tempApproversById;
   });
-  const users = selectedUsers.map(({ value }) => approvers[value]);
+  const users = selectedUsers?.map(({ value, employeeId }) => approvers[value || employeeId]);
   return (
     <>
       {!isEmpty(users) && users.map(({ id, user }, index) => (
@@ -108,7 +107,7 @@ export const AssignedTOCellTemplate: React.FC<CustomTemplateProps> = (props) => 
   }
 
   const handleClick = () => onClick?.({ dataItem });
-  const selectedUsers = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
+  const selectedUsers = get(dataItem, field, []);
 
   return (
     <OverflowingContent onClick={handleClick}>
