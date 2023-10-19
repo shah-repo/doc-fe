@@ -31,6 +31,7 @@ export default makeStyles((theme) => ({
   stats: {
     height: '100%',
     paddingTop: 56,
+
   },
   loadMore: loadMoreStyles(theme),
   searchContainer: {
@@ -43,6 +44,11 @@ export default makeStyles((theme) => ({
     },
     box: {
       margin: theme.spacing(0, 1.25),
+    },
+  },
+  [theme.breakpoints.between('xs', 'sm')]: {
+    stats: {
+      display: 'none',
     },
   },
 }));
