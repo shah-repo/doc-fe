@@ -1,8 +1,9 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
-import React from 'react';
-import { IconButton } from '../../../../components/forms/fields-next';
+import React, { MouseEventHandler } from 'react';
+import { translate } from '../../../../../common/intl';
+import { Button, IconButton } from '../../../../components/forms/fields-next';
 import { SettingsPanelProps } from '../../types';
 import useStyles from './styles';
 
@@ -10,9 +11,15 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   title,
   children,
   onToggle,
+  onAddNew,
   ...props
 }) => {
   const classes = useStyles();
+
+  const handleAddNew: MouseEventHandler = (e) => {
+    e.stopPropagation();
+    onAddNew?.();
+  };
 
   return (
     <ExpansionPanel
@@ -38,6 +45,17 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         )}
       >
         <Typography variant="h2" className={classes.title}>{title}</Typography>
+        {onAddNew && (
+          <Button
+            kind="ghost"
+            size="small"
+            startIcon={<FontAwesomeIcon icon={regular('circle-plus')} />}
+            onClick={handleAddNew}
+            data-cy="add-new"
+          >
+            {translate('common.add.new')}
+          </Button>
+        )}
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.details}>
         {children}

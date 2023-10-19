@@ -39,6 +39,9 @@ export default makeStyles(theme => ({
   },
   content: {
     margin: 0,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
 
     '&.Mui-expanded': {
       margin: 0,

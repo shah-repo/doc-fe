@@ -246,6 +246,7 @@
   "cr.justification": "Justification Of Changes",
   "cr.title": "AR Title",
   "common.add": "Add",
+  "common.add.new": "Add New",
   "common.update": "Update",
   "common.submit": "Submit",
   "common.delete": "Delete",

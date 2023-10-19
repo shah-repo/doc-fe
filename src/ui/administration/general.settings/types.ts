@@ -16,6 +16,7 @@ export interface GeneralSettingsProps {
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   onToggle: () => void
+  onAddNew?: () => void
 }
 
 export interface SwitchControlProps extends SwitchProps {
