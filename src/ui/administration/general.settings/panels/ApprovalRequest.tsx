@@ -4,21 +4,17 @@ import { translate } from '../../../../common/intl';
 import { GeneralSettings } from '../../../../state/ducks/company/types';
 import SettingsPanel from '../components/SettingsPanel';
 import SwitchControl from '../components/SwitchControl';
+import { SettingsPanelProps } from '../types';
 
-interface Props {
-  expanded: boolean
-  onToggle: () => void
-}
-
-const ApprovalRequestsSettingsPanel: React.FC<Props> = (props) => {
+const ApprovalRequestsSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
 
   return (
-    <SettingsPanel title={translate('administration.general.settings.ar')} {...props}>
+    <SettingsPanel {...props} title={translate('administration.general.settings.ar')}>
       <SwitchControl
-        label={translate('administration.general.settings.ar.allow.edit')}
         {...getFieldProps('approvalRequestAdmin')}
         checked={values.approvalRequestAdmin}
+        label={translate('administration.general.settings.ar.allow.edit')}
       />
     </SettingsPanel>
   );

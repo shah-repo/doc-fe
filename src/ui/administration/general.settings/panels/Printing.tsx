@@ -4,17 +4,13 @@ import { translate } from '../../../../common/intl';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import SettingsPanel from '../components/SettingsPanel';
 import SettingsPanelSection from '../components/SettingsPanelSection';
+import { SettingsPanelProps } from '../types';
 
-interface Props {
-  expanded: boolean
-  onToggle: () => void
-}
-
-const PrintingSettingsPanel: React.FC<Props> = (props) => {
+const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps } = useFormikContext();
 
   return (
-    <SettingsPanel title={translate('administration.general.settings.printing')} {...props}>
+    <SettingsPanel {...props} title={translate('administration.general.settings.printing')}>
       <SettingsPanelSection>{translate('administration.general.settings.printing.title')}</SettingsPanelSection>
       <FormikField
         name="zebraPrint.apiKey"
