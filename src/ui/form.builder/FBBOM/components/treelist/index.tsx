@@ -11,18 +11,16 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  TreeList,
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy, TreeList,
   TreeListCellProps,
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent,
   TreeListDraggableRow,
   TreeListFilterChangeEvent,
-  TreeListRowDragEvent,
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy,
-  treeToFlat,
+  TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -51,10 +49,10 @@ import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import Text from '../../../../components/Text';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { bomDisabledChangeControl, disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -64,7 +62,6 @@ import useHover from '../../../../hooks/useHover';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { FBBOM } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
-import WhereUsedDialog from './WhereUsedDialog';
 import { ActionsCell } from './column.templates/Actions';
 import {
   ColumnMenuContext,
@@ -99,6 +96,7 @@ import {
   processBOMData,
   updateDataAtLevels,
 } from './utils';
+import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({
   documentRevision,
@@ -611,6 +609,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
+    const parentChildRelkey = item.parentDocId ? `bom-row-${item.parentDocId}-${item.docId}` : `bom-row-${item.docId}`;
     item.isDisabled = isDisabled;
     item.isMaximizedWindow = isMaxDialogOpen;
     item.isUpgradeDisabled = isUpgradeDisabled;
@@ -640,6 +639,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       return React.cloneElement(row, {
         ...modifiedProps,
         ['data-cy' as string]: `bom-row-${item.docId}`,
+        ['data-parent-rel' as string]: parentChildRelkey,
       });
     }
     const isOwner = item.isOwner;
@@ -676,6 +676,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       {
         ...modifiedProps,
         ['data-cy' as string]: `bom-row-${item.docId}`,
+        ['data-parent-rel' as string]: parentChildRelkey,
         className: cx(row.props.className, classes.updatingRow),
       },
       [row.props.children, actions],
