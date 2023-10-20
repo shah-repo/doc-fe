@@ -84,7 +84,8 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         asyncState={asyncState}
         onClick={onFormClick}
         dataCy={label}
-        label={label} />
+        label={label}
+      />
       {renderTransitionButton(canSendToReview, 'in_review')}
       <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown />
     </Grid>

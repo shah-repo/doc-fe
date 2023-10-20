@@ -608,6 +608,37 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       },
     },
   },
+  MuiSwitch: {
+    root: {
+      width: 30,
+      height: 20,
+      padding: 0,
+      borderRadius: 20,
+    },
+    switchBase: {
+      padding: 3,
+
+      '&$checked': {
+        transform: 'translateX(9px)',
+        color: Colors.white,
+
+        '& + $track': {
+          opacity: 1,
+          backgroundColor: Colors.primaryLight,
+        },
+      },
+    },
+    thumb: {
+      width: 14,
+      height: 14,
+      boxShadow: 'none',
+      color: Colors.white,
+    },
+    track: {
+      opacity: 1,
+      backgroundColor: Colors.textGray,
+    },
+  },
 });
 
 export default overrides;

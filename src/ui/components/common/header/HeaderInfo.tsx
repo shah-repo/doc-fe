@@ -16,12 +16,13 @@ import { ApplicationState } from '../../../../state/reducers';
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from '../../../constants/urls';
 import { DocCategories, DocTypeGroups } from '../../../dashboard.new/line.items/common/types';
 import { documentPreviewPath } from '../../../document.revision/utils/paths';
-import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from '../../../documentRevision/helpers/documentRevisionStatus';
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocumentStatus, useTitle } from '../../../hooks/docCustomization/useCustomization';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import Text from '../../Text';
+import { useFormContext } from '../../forms/FormContext';
 import { styles } from './HeaderInfo.styles';
 import { FormHeaderStatusClassMapping } from './Helpers';
 import { StyledBreadcrumb } from './StyledBreadcrumb';
@@ -54,7 +55,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   relatedParentPartDetails,
   documentTypeAcronym,
 }) => {
-
+  const formContext = useFormContext();
   const intl = useIntl();
   const { _documentRevisionFormState } = SM.useStores();
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
@@ -67,6 +68,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ''));
   const isPO = checkIsDocumentPO(documentType?.groupOptions);
+  const isChangeRequest = checkIsDocumentChangeRequest(documentType?.groupOptions);
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
@@ -85,8 +87,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       title = intl.formatMessage({ id: 'form.builder.equipment' });
     } else if (documentTypeAcronym) {
       title = documentTypeAcronym;
-    }
-    else if (SM.isNewLayout) {
+    } else if (SM.isNewLayout) {
       title = intl.formatMessage({ id: 'navigation.document.list' });
     }
     return title;
@@ -193,6 +194,9 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       headerInfoStatus = STATUS_TYPES_LABEL.APPROVED;
     }
   }
+  if (isChangeRequest && formContext.isEditing) {
+    headerInfoStatus = STATUS_TYPES_LABEL.EDIT;
+  }
 
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>
@@ -218,7 +222,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
-                  </Link>   // need to remove this link for Approval Request modal
+                  </Link> // need to remove this link for Approval Request modal
                 }
                 {
                   isTypeMpiOutput

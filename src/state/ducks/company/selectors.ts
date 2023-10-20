@@ -1,4 +1,4 @@
-import { chain, filter, find, pick } from 'lodash';
+import { chain, filter, find, omit, pick } from 'lodash';
 import { createSelector } from 'reselect';
 import { sortStringsByKey } from '../../../common/utils/helpers';
 import Config from '../../../config';
@@ -71,6 +71,22 @@ const getAllEmployees = (state: ApplicationState) => state.company.companyMine.e
 
 const getAllLocations = (state: ApplicationState) => state.company.companyMine.locations;
 
+const getGeneralSettings = (state: ApplicationState) => omit(
+  state.company.generalSettings,
+  ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
+);
+
+const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;
+
+const isAprovalRequestEditingEnabled = (state: ApplicationState) => state.company.generalSettings.approvalRequestAdmin;
+
+const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.generalSettings.updatedAt;
+
+const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
+  status: state.company.generalSettings.status,
+  message: state.company.generalSettings.message,
+});
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -92,4 +108,9 @@ export default {
   getAllEmployees,
   getActiveLocations,
   getAllLocations,
+  getGeneralSettings,
+  getGeneralSettingsAsyncState,
+  getGeneralSettingsUpdatedAt,
+  getZebraPrintSettings,
+  isAprovalRequestEditingEnabled,
 };

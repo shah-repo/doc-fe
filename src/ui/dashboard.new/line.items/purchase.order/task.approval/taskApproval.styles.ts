@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme-next/colors';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 import { grayDotStyles, lineItemStyles } from '../../common/styles';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
   ...grayDotStyles(theme, {
     right: 4,
@@ -47,7 +48,7 @@ export default makeStyles((theme) => ({
   pdfActionIcon: {
     paddingLeft: 0,
   },
-  [theme.breakpoints.down('xs')]: {
+  [theme.media.mobile]: {
     poActionIconsWidth: {
       display: 'none',
     },

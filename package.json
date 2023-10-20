@@ -66,6 +66,7 @@
     "hellosign-embedded": "^2.6.0",
     "html-react-parser": "^0.10.1",
     "html-to-draftjs": "1.5.0",
+    "is-mobile": "^4.0.0",
     "jest-junit": "8.0.0",
     "lodash": "4.17.15",
     "marked": "^0.8.0",
