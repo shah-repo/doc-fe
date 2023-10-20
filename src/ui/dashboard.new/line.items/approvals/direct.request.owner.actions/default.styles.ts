@@ -15,7 +15,7 @@ export default makeStyles((theme: NextTheme) => ({
   innerRelease: {
     flexWrap: 'initial',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     innerLotRelease: {
       display: 'block',
     },

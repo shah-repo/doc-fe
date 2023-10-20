@@ -19,7 +19,7 @@ export const styles = makeStyles((theme: NextTheme) =>
         textDecoration: 'underline',
       },
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       link: {
         pointerEvents: 'none',
       },

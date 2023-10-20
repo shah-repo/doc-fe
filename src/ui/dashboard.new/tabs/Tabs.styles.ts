@@ -37,7 +37,7 @@ export default makeStyles((theme: NextTheme) => ({
     fontWeight: 400,
     marginLeft: 5,
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     mobileTab: {
       display: 'none',
     },

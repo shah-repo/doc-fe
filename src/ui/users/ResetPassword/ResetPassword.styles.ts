@@ -48,7 +48,7 @@ export const styles = makeStyles((theme: NextTheme) =>
     formStyle: {
       width: '500px',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       formStyle: {
         width: '100%',
         padding: theme.spacing(2),

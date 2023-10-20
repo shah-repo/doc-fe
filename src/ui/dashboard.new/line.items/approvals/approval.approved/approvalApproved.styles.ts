@@ -16,7 +16,7 @@ export default makeStyles((theme: NextTheme) => ({
   closeAlign: {
     textAlign: 'center',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     closeButton: {
       borderRadius: 10,
       background: Colors.textGray,

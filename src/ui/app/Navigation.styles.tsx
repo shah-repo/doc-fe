@@ -105,7 +105,7 @@ export default (theme: NextTheme) =>
     userInfo: {
       height: 55,
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       drawer: {
         display: 'none',
       },

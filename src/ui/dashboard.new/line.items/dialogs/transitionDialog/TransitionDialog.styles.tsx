@@ -92,7 +92,7 @@ export default (theme: NextTheme) =>
         borderRadius: 11,
       },
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       paper: {
         padding: '12px 9px',
       },

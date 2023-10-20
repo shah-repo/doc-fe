@@ -36,7 +36,7 @@ export default makeStyles((theme: NextTheme) => ({
     position: 'relative',
     background: Colors.latest_yellow_varient,
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     itemlistMobile: {
       flexWrap: 'wrap',
     },

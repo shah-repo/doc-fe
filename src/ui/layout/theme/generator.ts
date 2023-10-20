@@ -13,7 +13,7 @@ const createAppTheme = (customColors: WhiteLabelingColors) => createMuiTheme(
     palette: createAppPalette(Config.Theme as ThemeEnv, customColors),
   },
   {
-    custom: themeNext.custom,
+    media: themeNext.media,
   },
 ) as NextTheme;
 

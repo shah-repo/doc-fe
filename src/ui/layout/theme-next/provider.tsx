@@ -17,7 +17,7 @@ const baseTheme = createTheme({
 });
 
 export interface NextTheme extends MuiTheme {
-  custom: {
+  media: {
     mobile: string
   }
 }
@@ -29,8 +29,8 @@ export const themeNext = createTheme(
     props: props(baseTheme),
   },
   {
-    custom: {
-      mobile: baseTheme.breakpoints.down(isMobile() ? 'md' : 'xs'),
+    media: {
+      mobile: baseTheme.breakpoints.down(isMobile() ? 'sm' : 'xs'),
     },
   },
 ) as NextTheme;

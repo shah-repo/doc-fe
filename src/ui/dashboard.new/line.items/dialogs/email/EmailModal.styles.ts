@@ -220,7 +220,7 @@ export const styles = makeStyles((theme: NextTheme) =>
       right: '7px',
       top: '7px',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       paper: {
         left: '2%',
         width: '95%',

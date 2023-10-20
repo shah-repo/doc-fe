@@ -55,7 +55,7 @@ export default (theme: NextTheme) =>
     mobileMake: {
       display: 'none',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       welcomeText: {
         fontSize: '1.25rem',
         marginRight: 0,

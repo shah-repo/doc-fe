@@ -15,7 +15,7 @@ export default makeStyles((theme: NextTheme) => ({
   truncateMobile: {
     overFlow: 'unset',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     innerWrap: {
       display: 'block',
     },

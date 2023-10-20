@@ -38,7 +38,7 @@ export default makeStyles((theme: NextTheme) => ({
     maxWidth: 500,
     marginTop: -78,
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     searchContainer: {
       display: 'none',
     },

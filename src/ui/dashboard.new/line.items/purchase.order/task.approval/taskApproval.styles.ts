@@ -42,7 +42,7 @@ export default makeStyles((theme: NextTheme) => ({
   textOverlapMobile: {
     flexWrap: 'nowrap',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     poActionIconsWidth: {
       display: 'none',
     },

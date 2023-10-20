@@ -12,7 +12,7 @@ export default makeStyles((theme: NextTheme) => ({
   textPoReviewlapMobile: {
     flexWrap: 'nowrap',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     textPoReviewlapMobile: {
       flexWrap: 'wrap',
     },

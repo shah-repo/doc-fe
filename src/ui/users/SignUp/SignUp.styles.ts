@@ -60,7 +60,7 @@ export const styles = makeStyles((theme: NextTheme) =>
       width: '500px',
       marginTop: '50px',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       paper: {
         width: '100%',
         padding: theme.spacing(3),

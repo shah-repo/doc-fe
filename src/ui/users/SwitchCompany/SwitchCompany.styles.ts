@@ -54,7 +54,7 @@ export const styles = makeStyles((theme: NextTheme) =>
     companyName: {
       margin: '18px 0 18px 16px',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       container: {
         width: '100%',
         padding: theme.spacing(3),

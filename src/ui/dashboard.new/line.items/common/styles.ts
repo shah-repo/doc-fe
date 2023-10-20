@@ -70,7 +70,7 @@ export const lineItemStyles = (theme: NextTheme) => createStyles({
   },
   closeIconMobile: {
     paddingTop: 0,
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       paddingTop: 25,
     },
   },

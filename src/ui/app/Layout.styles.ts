@@ -13,7 +13,7 @@ export default makeStyles((theme: NextTheme) => createStyles({
     left: open ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
     backgroundColor: Colors.alabaster,
   }),
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     root: {
       left: '0 !important',
       top: '112px !important',

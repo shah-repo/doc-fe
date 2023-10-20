@@ -61,7 +61,7 @@ export default (theme: NextTheme) =>
     input: {
       marginTop: '5px !important',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       title: {
         width: '100%',
         marginBottom: theme.spacing(2.5),

@@ -80,7 +80,7 @@ export default (theme: NextTheme) =>
       borderRadius: '8px',
       flexWrap: 'wrap',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       form: {
         minWidth: 'auto',
         width: 'auto',

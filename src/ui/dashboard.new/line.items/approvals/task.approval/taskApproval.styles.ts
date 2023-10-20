@@ -29,7 +29,7 @@ export default makeStyles((theme: NextTheme) => ({
   textArlapMobile: {
     flexWrap: 'nowrap',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     actionIcons: {
       display: 'none',
     },

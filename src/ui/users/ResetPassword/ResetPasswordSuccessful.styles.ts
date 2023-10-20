@@ -45,7 +45,7 @@ export const styles = makeStyles((theme: NextTheme) =>
       width: '700px',
       color: Colors.dark_gray,
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       passwordSuccessfulInfo: {
         width: '100%',
       },

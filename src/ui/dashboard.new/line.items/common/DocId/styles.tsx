@@ -19,7 +19,7 @@ export const styles = makeStyles((theme: NextTheme) =>
       fontWeight: 400,
       letterSpacing: 0,
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       link: {
         pointerEvents: 'none',
       },

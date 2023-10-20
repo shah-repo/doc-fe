@@ -88,7 +88,7 @@ export default (theme: NextTheme) =>
     ScheduleIcon: {
       margin: '0px 5px 0px 0px',
     },
-    [theme.custom.mobile]: {
+    [theme.media.mobile]: {
       pendingBox: {
         width: '100%',
         padding: 0,

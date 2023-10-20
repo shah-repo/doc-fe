@@ -15,7 +15,7 @@ export default makeStyles((theme: NextTheme) => ({
   innerReview: {
     flexWrap: 'initial',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     innerPedingReview: {
       display: 'block',
     },

@@ -12,7 +12,7 @@ export default makeStyles((theme: NextTheme) => ({
   innerWrap: {
     display: 'inline-flex',
   },
-  [theme.custom.mobile]: {
+  [theme.media.mobile]: {
     innerWrap: {
       display: 'block',
     },
