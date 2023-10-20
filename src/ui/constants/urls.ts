@@ -8,6 +8,7 @@ export const CHANGE_REQUEST_CREATE_URL = '/change_request/:formId/create/:docume
 export const CHANGE_REQUEST_LIST_URL = '/change_request';
 export const CHANGE_REQUEST_ROOT_URL = `${CHANGE_REQUEST_LIST_URL}/:changeRequestId`;
 export const CHANGE_REQUEST_UPDATE_URL = `${CHANGE_REQUEST_ROOT_URL}/update`;
+export const CHANGE_REQUEST_EDIT_URL = `${CHANGE_REQUEST_ROOT_URL}/edit`;
 export const CHANGE_REQUEST_PREVIEW_URL = `${CHANGE_REQUEST_ROOT_URL}/preview`;
 
 export const DOCUMENT_REVISION_CREATE_URL = '/document_revision/create';

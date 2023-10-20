@@ -1,5 +1,5 @@
 import { some } from 'lodash';
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
@@ -28,6 +28,7 @@ export const checkIfDocumentHasOptions = (
 export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
 export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
 export const checkIsDocumentDirectApproved = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL);
+export const checkIsDocumentChangeRequest = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CHANGE_REQUEST);
 export const checkIsDocumentPart = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
 export const checkIsDocumentEB = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD);
 export const checkIsDocumentPO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PO);

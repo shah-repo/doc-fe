@@ -21,7 +21,8 @@ import useDocumentTitle from '../../hooks/useDocumentTitle';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../form/transform';
 import { ChangeRequestFormValues } from '../form/types';
-import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from '../utils/helpers';
+import { canEditChangeRequest } from '../helpers';
+import { canChangeCROwner, canEditApprovers, statesWithLastSavedEnabled } from '../utils/helpers';
 import { changeRequestEditPath } from '../utils/paths';
 import ChangeSummaryForm from './ChangeSummaryForm';
 
@@ -61,13 +62,13 @@ const Container: React.FunctionComponent<Props> = ({
     changeRequest.owner.id,
     isCompanyAdmin,
     hasOwnershipTag);
-  const canEdit = canEditApprovers({ dataProp: changeRequest, currentUserEmail });
+  const canEdit = canEditApprovers(changeRequest, currentEmployeeId);
   const save = useActionCreator(changeRequestsActions.save);
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
-  const schema = changeRequest.formDocument?.formTemplate?.schema || [];
+  const schema = changeRequest.formDocument?.formTemplate?.schema ?? [];
 
   const async = useAsync<ChangeRequest>();
-  if (canEditChangeRequest({ dataProp: changeRequest, currentUserEmail })) {
+  if (canEditChangeRequest(changeRequest, currentEmployeeId)) {
     return <Redirect to={changeRequestEditPath(changeRequest.id)} />;
   }
 

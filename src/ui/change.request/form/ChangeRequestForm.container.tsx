@@ -23,7 +23,7 @@ interface OwnProps {
   doNotPrompt?: boolean
   chosenForm?: FBDocumentRevisionProps
   hideSideBar?: boolean
-  currentDocRevId? : string
+  currentDocRevId?: string
   inDialog?: boolean
 }
 
@@ -31,9 +31,7 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 
 type ChangeRequestFormContainerProps = OwnProps & SMFormHOCProps;
 
-const ChangeRequestFormContainer: React.FunctionComponent<
-  ChangeRequestFormContainerProps
-> = ({
+const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
   onSubmit,
   asyncState,
   initialValues,
