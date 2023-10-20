@@ -1,5 +1,6 @@
 import { Avatar, Box } from '@material-ui/core';
 import { get } from 'lodash';
+import React from 'react';
 import { getInitalsFromName } from '../../icons/avatar/helpers';
 import Tooltip from '../kendo/Tooltip';
 import { CustomGridCellProps } from '../kendo/types';
@@ -18,8 +19,9 @@ export const UserAvatar = ({
   const userName = get(dataItem, field || '');
   const userDetails = userName ? get(dataItem, field ? field.replace('.name', '') : '') : undefined;
   const owner = userDetails ? userDetails.name : '';
-  const avatar = userDetails ? userDetails.avatar : undefined;
+  const avatar = userDetails ? userDetails.avatar : '';
   const initialColor = userDetails ? userDetails.initialColor : '';
+  console.log(React);
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
@@ -36,9 +38,9 @@ export const UserAvatar = ({
       <Box className={classes.avatar}>
         {(avatar && owner)
           ? <Avatar className={classes.icon} alt={owner} src={avatar} />
-          : (owner ? (<Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
+          : (owner && (<Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
             {getInitalsFromName(owner)}
-          </Avatar>) : '')
+          </Avatar>))
         }
         <Tooltip data={owner} />
       </Box>
