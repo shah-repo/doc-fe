@@ -95,6 +95,7 @@ export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, Documen
 
 const ATTRIBUTE_CHANGES_KEY = 'attribute-changes';
 const BOM_LINE_CHANGES_KEY = 'bom-line-changes';
+const BOM_FIELDS_CHANGES_KEY = 'bom-fields-edit';
 const APPROVED_SUPPLIER_LIST_KEY = 'approved-supplier-list';
 const CHANGES_TO_ATTACHMENTS_KEY = 'changes-to-attachments';
 const CHANGES_TO_REFERENCES_KEY = 'changes-to-references';
@@ -104,6 +105,7 @@ export const CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME = 'Change Control Configuration
 export const CHANGE_CONTROL_OPTIONS_TOOLTIP_MAPPING = {
   [ATTRIBUTE_CHANGES_KEY]: translate('ccc.attribute.changes.tooltip'),
   [BOM_LINE_CHANGES_KEY]: translate('ccc.bom.line.changes.tooltip'),
+  [BOM_FIELDS_CHANGES_KEY]: translate('ccc.bom.selected.fields.changes.tooltip'),
   [APPROVED_SUPPLIER_LIST_KEY]: translate('ccc.approved.supplier.list.changes.tooltip'),
   [CHANGES_TO_ATTACHMENTS_KEY]: translate('ccc.changes.to.attachments.tooltip'),
   [CHANGES_TO_REFERENCES_KEY]: translate('ccc.changes.to.references.tooltip'),
