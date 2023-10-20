@@ -8,9 +8,9 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
-import { canEditChangeRequest } from '../utils/helpers';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { canEditChangeRequest } from '../helpers';
 import { changeRequestEditPath, changeRequestPreviewPath } from '../utils/paths';
 import gridConfiguration from './column.definition';
 import { DocumentListPresenter } from './presenter';
@@ -22,7 +22,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(CR_TABLE_NAME));
   const history = useHistory();
-  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
   const setSearchStatus = (
     dataState: DataStateProps,
@@ -75,7 +75,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       return false;
     }
     let urlPath = changeRequestPreviewPath(dataItem.id);
-    if (canEditChangeRequest({ dataProp: dataItem, currentUserEmail })) {
+    if (canEditChangeRequest(dataItem, currentEmployeeId)) {
       urlPath = changeRequestEditPath(dataItem.id);
     }
     history.push({ pathname: urlPath });

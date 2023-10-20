@@ -9,4 +9,5 @@ export { default as IconButton } from './IconButton/IconButton';
 export { default as Radio } from './Radio/Radio';
 export { default as SplitButton } from './SplitButton/SplitButton';
 export { default as SplitButtonMenu } from './SplitButton/SplitButtonMenu';
+export { default as Switch } from './Switch/Switch';
 export { default as TextField } from './TextField/TextField';

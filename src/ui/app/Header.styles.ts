@@ -1,15 +1,16 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import EnlilLogo from '../../assets/images/enlil_logo.svg';
 import Colors from '../layout/theme/utils/colors';
 import { HeaderPresenterProps } from './Header.presenter';
 import { DRAWER_WIDTH } from './Navigation.styles';
+import { NextTheme } from '../layout/theme-next/provider';
 
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
 export const HEADER_GAP = 96;
 export const COLLAPSE_BAR_SPACE = 72;
 
-export default (theme: Theme) =>
+export default (theme: NextTheme) =>
   createStyles({
     appBar: {
       position: 'absolute',
@@ -54,7 +55,7 @@ export default (theme: Theme) =>
     mobileMake: {
       display: 'none',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.media.mobile]: {
       welcomeText: {
         fontSize: '1.25rem',
         marginRight: 0,
