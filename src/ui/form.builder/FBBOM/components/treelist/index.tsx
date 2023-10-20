@@ -465,10 +465,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       }
     }
 
-    if (inRestrictedEditMode) {
-      if (!hasPermisstionToEditRestrictedPart || isEditingLineItemsDisallowed) {
-        return;
-      }
+    if (inRestrictedEditMode && (!hasPermisstionToEditRestrictedPart || isEditingLineItemsDisallowed)) {
+      return;
     }
 
     _documentRevisionFormState?.setDirty(true);
