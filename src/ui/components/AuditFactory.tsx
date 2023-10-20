@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -25,8 +25,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
+import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -247,7 +247,16 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         );
         break;
       case 'lotStatus':
-        returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        try {
+          const obj = JSON.parse(audit.nextValue as string);
+          returnValue = <Text
+            dataCy={dataCy}
+            translation={obj.comments ? 'changeRequest.audit.lotStatus.update.with.comments' : 'changeRequest.audit.lotStatus.update.with.out.comments'}
+            values={{ ...obj, ...{ ownerName: audit.ownerName } } }
+          />;
+        } catch (e) {
+          returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        }
         break;
       case 'EMAIL_SENT':
         returnValue = (
