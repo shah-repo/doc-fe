@@ -18,7 +18,7 @@ export const useFormContext = () => {
   const formik = useFormikContext();
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
-  function isOutputSchema(): boolean {
+  function isOutputSchema (): boolean {
     const values = formik.values as any;
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};
     return (
@@ -27,7 +27,7 @@ export const useFormContext = () => {
     );
   }
 
-  function setFBValue() {
+  function setFBValue () {
     const values = formik.values as any;
     const workspaceSchema = _documentRevisionFormState?.schema;
     const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
@@ -35,7 +35,7 @@ export const useFormContext = () => {
       case 'design':
         formik.setFieldValue('formTemplate', {
           outputDocumentTypes: (values.outputDocumentTypes || [])
-            .map((outputDoc) => ({ id: outputDoc.value }) ),
+            .map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
         break;
@@ -55,7 +55,7 @@ export const useFormContext = () => {
     }
   }
 
-  function setReferences(relation: SubmitFormRelation) {
+  function setReferences (relation: SubmitFormRelation) {
     if (!_documentRevisionFormState) { return; }
     const { type, name, prevValue, nextValue } = relation;
     let prevDocument: DocumentRevision | undefined;
@@ -79,14 +79,14 @@ export const useFormContext = () => {
       // made according to issues with autosave(caused by this to other fields)
       const currentPoReference = _documentRevisionFormState?.documentRevision?.formInput?.[name];
       const refWithoutPrevValue = _documentRevisionFormState?.documentRevision?.referenceTo.filter((e) => {
-        const docRevIds = e.documentRevisions?.map((i) => i.id );
+        const docRevIds = e.documentRevisions?.map((i) => i.id);
         if (docRevIds?.includes(currentPoReference)) {
           return null;
         }
         return e;
       });
       if (!isEmpty(refWithoutPrevValue)) {
-        refValues = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
+        refValues = refWithoutPrevValue?.map((e) => ({ id: e.id })) as ReferenceToEditRequest[];
       }
       formik.setFieldValue('referenceTo', [...refValues, { id: nextValueId }]);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
