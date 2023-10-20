@@ -21,7 +21,6 @@ export const UserAvatar = ({
   const owner = userDetails ? userDetails.name : '';
   const avatar = userDetails ? userDetails.avatar : '';
   const initialColor = userDetails ? userDetails.initialColor : '';
-  console.log(React);
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
