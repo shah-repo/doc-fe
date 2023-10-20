@@ -94,8 +94,8 @@ export const getLatestRevisionId = (revisions: DocumentRevision[] = []): string 
 export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
 
 const ATTRIBUTE_CHANGES_KEY = 'attribute-changes';
-const BOM_LINE_CHANGES_KEY = 'bom-line-changes';
-const BOM_FIELDS_CHANGES_KEY = 'bom-fields-edit';
+export const BOM_LINE_CHANGES_KEY = 'bom-line-changes';
+export const BOM_FIELDS_CHANGES_KEY = 'bom-fields-edit';
 const APPROVED_SUPPLIER_LIST_KEY = 'approved-supplier-list';
 const CHANGES_TO_ATTACHMENTS_KEY = 'changes-to-attachments';
 const CHANGES_TO_REFERENCES_KEY = 'changes-to-references';
