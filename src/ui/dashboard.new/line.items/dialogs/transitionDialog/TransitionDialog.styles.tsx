@@ -94,7 +94,7 @@ export default (theme: NextTheme) =>
     },
     [theme.media.mobile]: {
       paper: {
-        padding: '12px 9px',
+        padding: theme.spacing(1.5, 1),
       },
       modalTitle: {
         marginTop: theme.spacing(0.5),

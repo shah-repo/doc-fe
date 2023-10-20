@@ -16,7 +16,7 @@ export default makeStyles((theme: NextTheme) => createStyles({
   [theme.media.mobile]: {
     root: {
       left: '0 !important',
-      top: '112px !important',
+      marginTop: theme.spacing(2.5),
     },
   },
 }));

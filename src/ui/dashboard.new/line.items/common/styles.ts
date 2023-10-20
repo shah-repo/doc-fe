@@ -71,7 +71,7 @@ export const lineItemStyles = (theme: NextTheme) => createStyles({
   closeIconMobile: {
     paddingTop: 0,
     [theme.media.mobile]: {
-      paddingTop: 25,
+      paddingTop: theme.spacing(3),
     },
   },
   attachmentIcon: {
