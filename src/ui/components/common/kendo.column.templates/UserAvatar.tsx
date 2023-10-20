@@ -19,15 +19,13 @@ export const UserAvatar = ({
   const userName = get(dataItem, field || '');
   const userDetails = userName ? get(dataItem, field ? field.replace('.name', '') : '') : undefined;
   const owner = userDetails ? userDetails.name : '';
-  const avatar = userDetails ? userDetails.avatar : '';
+  const avatar = userDetails ? userDetails.avatar : undefined;
   const initialColor = userDetails ? userDetails.initialColor : '';
+  console.log(React);
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
-  if (!owner) {
-    return null;
-  }
   return (
     <td
       colSpan={colSpan}
@@ -38,11 +36,11 @@ export const UserAvatar = ({
       onClick={cellClickEvent}
     >
       <Box className={classes.avatar}>
-        {avatar
+        {(avatar && owner)
           ? <Avatar className={classes.icon} alt={owner} src={avatar} />
-          : <Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
+          : (owner ? (<Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
             {getInitalsFromName(owner)}
-          </Avatar>
+          </Avatar>) : '-')
         }
         <Tooltip data={owner} />
       </Box>
