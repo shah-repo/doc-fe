@@ -44,6 +44,9 @@ export default makeStyles((theme) => ({
   downloadMobile: {
     display: 'none',
   },
+  pdfActionIcon: {
+    paddingLeft: 0,
+  },
   [theme.breakpoints.down('xs')]: {
     poActionIconsWidth: {
       display: 'none',
@@ -87,15 +90,12 @@ export default makeStyles((theme) => ({
       background: Colors.textGray,
       color: Colors.white,
       display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-      '&:hover,': {
-        background: Colors.textGray,
-      },
-
+      paddingRight: theme.spacing(0.4),
+      width: 131.53,
+      height: 43.4,
     },
     pdfActionIcon: {
-      paddingLeft: 10,
-      marginTop: 4,
+      paddingLeft: theme.spacing(1.4),
     },
   },
 }));

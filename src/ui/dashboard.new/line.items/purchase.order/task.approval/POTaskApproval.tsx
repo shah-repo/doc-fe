@@ -6,6 +6,7 @@ import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
+import { ReactComponent as DownloadPdfIconMobile } from '../../../../../assets/images/download_pdfMobile.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
@@ -16,8 +17,8 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
-import Text from '../../../../components/Text';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -27,8 +28,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -352,7 +353,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   id={docRevId}
                   data-cy="transition-download-pdf"
                   downloadPdfHover={downloadPdfHover}
-                  dialogPDF={dialogPDF}
+                  dialogPDF={dialogPDF} downloadMobileViewPdf={false}
                 />
               </span>
             </StyleTooltip>
@@ -598,13 +599,16 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             <Button className={classes.downloadMobile}
               onClick={onButtonClick}
             >
-              <DownloadHtmlPreview
-                id={docRevId}
-                data-cy="transition-download-pdf"
-                downloadPdfHover={false}
-                dialogPDF={dialogPDF}
-                downloadMobileViewPdf={downloadMobileViewPdf}
-              />
+              <DownloadPdfIconMobile />
+              <span className={classes.pdfActionIcon}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={false}
+                  dialogPDF={dialogPDF}
+                  downloadMobileViewPdf={downloadMobileViewPdf}
+                />
+              </span>
               <Text translation="common.download" />
             </Button>
           </Grid>
