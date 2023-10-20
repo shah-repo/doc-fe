@@ -3,7 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
+import { getHasPermission } from '../../../../../../common/utils/selectors';
+import { Permission } from '../../../../../../state/ducks/auth/types';
 import AlternatePartsDrawer from '../../drawer/AlternateParts';
 import { ALTERNATE_PARTS_COUNT_KEY, CELL_EMPTY_VALUE, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
@@ -19,7 +22,13 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const classes = styles();
   const alternatePartsCount = dataItem[ALTERNATE_PARTS_COUNT_KEY] ?? 0;
   const isAlteratePartsExists = alternatePartsCount > 0;
+  const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
   const { _documentRevisionFormState } = SM.useStores();
+
+  const alternatePartActionsDiabled = !hasPermissionToEditBOM
+    || (dataItem.inRestrictedEditMode && !dataItem.enabledFieldsForEditing?.includes('alternatePart'))
+    || (!dataItem.inRestrictedEditMode && !dataItem.isParentOwner);
+
   const handleToggle = () => {
     if (!dataItem.parentNodeRevId) {
       return;
@@ -70,7 +79,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         revision: dataItem.displayRevision,
         status: dataItem.displayStatus,
         docId: dataItem.docId,
-        isDisabled: !dataItem.enabledFieldsForEditing?.includes('alternatePart'),
+        isDisabled: alternatePartActionsDiabled,
       }} />
     </td>
   );

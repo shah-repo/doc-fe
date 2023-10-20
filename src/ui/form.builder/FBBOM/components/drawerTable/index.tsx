@@ -81,6 +81,15 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ part
     );
   }, [partRevId]);
 
+  const onRefresh = () => {
+    fetchAlternatePartAsync.start(
+      fetchAlternateParts,
+      basePartRevId,
+      partRevId,
+      fetchAlternatePartAsync,
+    );
+  };
+
   const handleAddAlternatePart = () => setEditedAlternatePart({
     id: uuidv4(),
     [MODE_FIELD]: Mode.add,
@@ -107,6 +116,8 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ part
 
   const rowRender: DataGridProps<EditableAlternatePart>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableAlternatePart;
+    item.basePartRevId = basePartRevId;
+    item.partRevId = partRevId;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
 
     if (!isUpdating) {
@@ -139,6 +150,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ part
     onConfirm: formik.submitForm,
     onDiscard: discardAlternatePart,
     onDelete: deleteAlternatePart,
+    onRefresh,
     isDisabled,
   });
 

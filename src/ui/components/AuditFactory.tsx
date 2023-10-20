@@ -156,9 +156,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'securityEmployees':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
-      case 'documentRevisions':
-        returnValue = (audit.nextValue as DocumentRevision).name;
+      case 'documentRevisions': {
+        const { displayRevision, document } = audit.nextValue as DocumentRevision;
+        returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}</div>);
         break;
+      }
       case 'tasks.dueDate':
       case 'effectiveDate':
         returnValue = getFormattedDateString(audit.nextValue as string, MomentFormats.MonthDateYear);
@@ -393,6 +395,26 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'bomAlternateParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
+      case 'bomItemUpgraded':
+        try {
+          const prevValue: string = audit.previousValue as string;
+          const { displayRevision: oldDisplayRevision, docId: oldDocId } = JSON.parse(prevValue);
+
+          const nextValue: string = audit.nextValue as string;
+          const { displayRevision: newDisplayRevision, docId: newDocId, arId } = JSON.parse(nextValue);
+
+          const values = {
+            oldDisplayRevision, oldDocId, newDisplayRevision, newDocId,
+          };
+
+          const text = arId
+            ? intl.formatMessage({ id: 'documentRevision.audit.bomItemUpgraded.lineItem.upgraded.arId' }, { ...values, arId })
+            : intl.formatMessage({ id: 'documentRevision.audit.bomItemUpgraded.lineItem.upgraded' }, { ...values });
+          returnValue = (<div data-cy={`${dataCy}-bom-item-upgraded`}>{text}</div>);
+        } catch (err) {
+          // do nothing
+        }
         break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {

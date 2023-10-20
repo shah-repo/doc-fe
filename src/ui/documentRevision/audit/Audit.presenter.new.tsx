@@ -31,6 +31,8 @@ interface OwnProps {
 
 type AuditPresenterProps = OwnProps;
 
+const SERVER_OWNED = 'Server Automation';
+
 const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
   approvals,
@@ -67,9 +69,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty, ownerName } = change;
       const isPOAutoChange
-        = change.field === 'poStatus' && ownerName === 'Server Automation';
+        = change.field === 'poStatus' && ownerName === SERVER_OWNED;
       const changeOwner = find([owner, ownerUser, ownerThirdParty], 'user.name');
-      const finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
+      let finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
+
+      if (ownerName === SERVER_OWNED) {
+        finalOwner = { name: SERVER_OWNED } as User;
+      }
 
       if (!renderChanges(audit[groupId], key)) {
         return null;
