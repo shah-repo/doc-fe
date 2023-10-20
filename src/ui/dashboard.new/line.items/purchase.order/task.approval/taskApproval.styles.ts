@@ -41,6 +41,9 @@ export default makeStyles((theme) => ({
   textOverlapMobile: {
     flexWrap: 'nowrap',
   },
+  downloadMobile: {
+    display: 'none',
+  },
   [theme.breakpoints.down('xs')]: {
     poActionIconsWidth: {
       display: 'none',
@@ -78,6 +81,21 @@ export default makeStyles((theme) => ({
     },
     textOverlapMobile: {
       flexWrap: 'wrap',
+    },
+    downloadMobile: {
+      borderRadius: 25,
+      background: Colors.textGray,
+      color: Colors.white,
+      display: 'inline-flex',
+      paddingRight: theme.spacing(2.4),
+      '&:hover,': {
+        background: Colors.textGray,
+      },
+
+    },
+    pdfActionIcon: {
+      paddingLeft: 10,
+      marginTop: 4,
     },
   },
 }));

@@ -6,6 +6,7 @@ import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
+import { ReactComponent as DownloadPdfIconMobie } from '../../../../../assets/images/download_pdfMobile.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
@@ -587,6 +588,28 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 )}
               </span>
               <Text message="common.approve" />
+            </Button>
+          </Grid>
+          <Grid className={classes.gridWeb}>
+            <Button className={classes.downloadMobile} >
+              {!downloadPdfHover && (
+                <span className={classes.pdfActionIcon}>
+                  <DownloadPdfIconMobie
+                    data-cy="transition-download-pdf"
+                    onClick={onMouseHoverDownloadPdfIcon}
+                    className={classes.cursorPointer}
+                  />
+                </span>
+              )}
+              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={downloadPdfHover}
+                  dialogPDF={dialogPDF}
+                />
+                <Text message="common.download" />
+              </span>
             </Button></Grid>
         </List>
       </Collapse>
