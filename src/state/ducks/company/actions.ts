@@ -1,9 +1,9 @@
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL } from '../../../ui/constants/urls';
-import { apiActionWithCallbacks } from '../../factories';
+import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from './constants';
-import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
+import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
@@ -42,7 +42,7 @@ ApiAction<Company> => apiActionWithCallbacks({
   handlers,
 });
 
-const updateNavigationMenuItem = ( label: string, isOpen: boolean): UpdateNavigationMenuItem => ({
+const updateNavigationMenuItem = (label: string, isOpen: boolean): UpdateNavigationMenuItem => ({
   type: UPDATE_NAVIGATION_ITEM,
   payload: { label, isOpen },
 });
@@ -56,6 +56,31 @@ const redlineConfig = (redlineActive: boolean) => ({
   payload: { redlineActive },
 });
 
+const setGeneralSettings = (
+  settings: GeneralSettingsState,
+): GeneralSettingsAction => ({
+  type: SET_GENERAL_SETTINGS,
+  payload: settings,
+});
+
+const getGeneralSettings = (): ApiAction => apiAction({
+  url: COMPANY_SETTINGS_URL,
+  method: 'get',
+  onSuccess: (data, dispatch) => {
+    dispatch(setGeneralSettings(data));
+  },
+});
+
+const updateGeneralSettings = (body: GeneralSettings): ApiAction<GeneralSettingsState> => apiAction({
+  url: COMPANY_SETTINGS_URL,
+  method: 'post',
+  data: body,
+  asyncType: SET_GENERAL_SETTINGS,
+  onSuccess: (data, dispatch) => {
+    dispatch(setGeneralSettings(data));
+  },
+});
+
 export default {
   selectCompany,
   getCompanyMine,
@@ -63,4 +88,6 @@ export default {
   updateNavigationMenuItem,
   autosaveConfig,
   redlineConfig,
+  getGeneralSettings,
+  updateGeneralSettings,
 };

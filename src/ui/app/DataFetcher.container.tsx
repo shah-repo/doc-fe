@@ -7,6 +7,7 @@ import Config from '../../config';
 import { authActions, authSelectors } from '../../state/ducks/auth';
 import { setIotCreds } from '../../state/ducks/auth/actions';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
+import { companyActions } from '../../state/ducks/company';
 import { documentTypeActions } from '../../state/ducks/documentRevisions/documentType';
 import { GroupWithGroupOptions } from '../../state/ducks/documentRevisions/documentType/types';
 import { pageDetailsActions } from '../../state/ducks/pageDetails';
@@ -23,6 +24,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (employeeId) {
+      dispatch(companyActions.getGeneralSettings());
       dispatch(pageDetailsActions.allPageDetails());
       dispatch(documentTypeActions.loadTabConfiguration());
       dispatch(documentTypeActions.loadList());

@@ -54,6 +54,9 @@ const props = (theme: Theme): ComponentsProps => ({
   MuiChip: {
     deleteIcon: <DeleteButton />,
   },
+  MuiSwitch: {
+    color: 'default',
+  },
 });
 
 export default props;
