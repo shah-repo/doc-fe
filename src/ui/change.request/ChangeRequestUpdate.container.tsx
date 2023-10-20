@@ -15,7 +15,7 @@ import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import useAsync from '../hooks/useAsync';
-import { canEditChangeRequest } from './helpers';
+import { useCanUpdateChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
 
 interface StateProps {
@@ -117,6 +117,13 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       async,
     );
   };
+
+  useEffect(() => {
+    FBDataStore?.setRefreshData({
+      ...FBDataStore?.refreshData,
+      changeRequest: { ...FBDataStore?.refreshData?.changeRequest, formInput: initialValues.formInput },
+    });
+  }, []);
 
   const debouncedSubmit = debounce(onSubmit, 1000);
 
