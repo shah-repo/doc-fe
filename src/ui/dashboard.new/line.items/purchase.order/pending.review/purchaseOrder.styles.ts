@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core';
 import { grayDotStyles, lineItemStyles } from '../../common/styles';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
   ...grayDotStyles(theme, {
     right: 4,
@@ -11,7 +12,7 @@ export default makeStyles((theme) => ({
   textPoReviewlapMobile: {
     flexWrap: 'nowrap',
   },
-  [theme.breakpoints.down('xs')]: {
+  [theme.custom.mobile]: {
     textPoReviewlapMobile: {
       flexWrap: 'wrap',
     },

@@ -1,9 +1,10 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import Colors from '../layout/theme/utils/colors';
+import { NextTheme } from '../layout/theme-next/provider';
 
 export const DRAWER_WIDTH = 240;
 
-export default (theme: Theme) =>
+export default (theme: NextTheme) =>
   createStyles({
     drawer: {
       width: DRAWER_WIDTH,
@@ -104,7 +105,7 @@ export default (theme: Theme) =>
     userInfo: {
       height: 55,
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.custom.mobile]: {
       drawer: {
         display: 'none',
       },

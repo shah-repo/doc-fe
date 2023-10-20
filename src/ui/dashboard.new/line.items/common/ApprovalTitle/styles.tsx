@@ -1,7 +1,8 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme) =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     typographyBold: {
       fontSize: '14px',
@@ -18,7 +19,7 @@ export const styles = makeStyles((theme) =>
         textDecoration: 'underline',
       },
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.custom.mobile]: {
       link: {
         pointerEvents: 'none',
       },

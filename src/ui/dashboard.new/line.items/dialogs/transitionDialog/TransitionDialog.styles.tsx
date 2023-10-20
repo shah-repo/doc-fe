@@ -1,7 +1,8 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export default (theme: Theme) =>
+export default (theme: NextTheme) =>
   createStyles({
     modalTitle: {
       position: 'static',
@@ -91,7 +92,7 @@ export default (theme: Theme) =>
         borderRadius: 11,
       },
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.custom.mobile]: {
       paper: {
         padding: '12px 9px',
       },

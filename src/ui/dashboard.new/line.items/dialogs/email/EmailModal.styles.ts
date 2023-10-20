@@ -1,7 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     listrootpending: {
       overflow: 'auto',
@@ -219,7 +220,7 @@ export const styles = makeStyles((theme: Theme) =>
       right: '7px',
       top: '7px',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.custom.mobile]: {
       paper: {
         left: '2%',
         width: '95%',

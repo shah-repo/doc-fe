@@ -1,6 +1,7 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
+import { NextTheme } from '../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -59,7 +60,7 @@ export const styles = makeStyles((theme: Theme) =>
       width: '500px',
       marginTop: '50px',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.custom.mobile]: {
       paper: {
         width: '100%',
         padding: theme.spacing(3),
