@@ -24,15 +24,15 @@ import useStyles from './styles';
 
 interface props {
   changeRequest?: ChangeRequest
+  isShowOnly?: boolean
 }
 
-const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest }) => {
+const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly }) => {
   const classes = useStyles();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
   // GET API Here
   const [data, setData] = React.useState<Array<Partial<EditableTLItem>>>([]);
-  const [isShowOnly] = React.useState<boolean>(false);
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
     !isShowOnly && setEditedTLItem(dataItem);
   };

@@ -13,6 +13,7 @@ import { AsyncState } from '../../../state/types';
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
+import FBMaterialDisposition from '../FBMaterialDisposition';
 import ChangeRequestSidebar from '../form/ChangeRequest.sidebar';
 import { toChangeRequestFormValues } from '../form/transform';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
@@ -78,6 +79,14 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+    tabConfig.splice(2, 0, {
+      labelId: 'tabId.materialDisposition',
+      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
+      type: TabTypeOptions.MATERIAL_DISPOSITION,
+    });
+  }
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
@@ -85,8 +94,12 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       values={toChangeRequestFormValues(changeRequest)}
       header= {
         <SummaryHeader {...{
-          dataProp: changeRequest, canChangeOwnership, asyncState,
-          errors, canEdit, displayLastSaved,
+          dataProp: changeRequest,
+          canChangeOwnership,
+          asyncState,
+          errors,
+          canEdit,
+          displayLastSaved,
         }} />
       }
     >
@@ -131,7 +144,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index} pt={.25}>
+                        <SMBox key={index} pt={0.25}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
                             && <FBWorkspace
                               isPortal={false}
@@ -154,6 +167,10 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
+                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} />
+                          }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                               && <FBWorkspace

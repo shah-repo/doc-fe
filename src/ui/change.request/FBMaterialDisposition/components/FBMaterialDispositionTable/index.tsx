@@ -30,13 +30,17 @@ import { getExcelColumns } from './utils';
 
 interface props {
   changeRequest?: ChangeRequest
+  isShowOnly?: boolean
 }
 
-const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequest }) => {
+const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly }) => {
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const [data, setData] = React.useState<EditableMDItem[]>([]);
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
+    if (isShowOnly) {
+      return;
+    }
     const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
     const prepareDataItem = {
       ...updatedDataItem,
