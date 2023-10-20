@@ -1,5 +1,6 @@
-import { createMuiTheme as createTheme, ThemeProvider } from '@material-ui/core';
+import { createMuiTheme as createTheme, ThemeProvider, Theme as MuiTheme } from '@material-ui/core';
 import * as React from 'react';
+import isMobile from 'is-mobile';
 import { shape, spacing } from './consts';
 import overrides from './overrides';
 import palette from './palete';
@@ -15,11 +16,24 @@ const baseTheme = createTheme({
   shape,
 });
 
-export const themeNext = createTheme({
-  ...baseTheme,
-  overrides: overrides(baseTheme),
-  props: props(baseTheme),
-});
+export interface NextTheme extends MuiTheme {
+  custom: {
+    mobile: string
+  }
+}
+
+export const themeNext = createTheme(
+  {
+    ...baseTheme,
+    overrides: overrides(baseTheme),
+    props: props(baseTheme),
+  },
+  {
+    custom: {
+      mobile: baseTheme.breakpoints.down(isMobile() ? 'md' : 'xs'),
+    },
+  },
+) as NextTheme;
 
 const Theme: React.FC = ({
   children,
