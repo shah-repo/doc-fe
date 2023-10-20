@@ -1,6 +1,5 @@
 import { Avatar, Box } from '@material-ui/core';
 import { get } from 'lodash';
-import React from 'react';
 import { getInitalsFromName } from '../../icons/avatar/helpers';
 import Tooltip from '../kendo/Tooltip';
 import { CustomGridCellProps } from '../kendo/types';
@@ -21,7 +20,6 @@ export const UserAvatar = ({
   const owner = userDetails ? userDetails.name : '';
   const avatar = userDetails ? userDetails.avatar : undefined;
   const initialColor = userDetails ? userDetails.initialColor : '';
-  console.log(React);
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
