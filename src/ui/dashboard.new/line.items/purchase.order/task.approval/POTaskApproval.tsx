@@ -6,7 +6,6 @@ import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
-import { ReactComponent as DownloadPdfIconMobie } from '../../../../../assets/images/download_pdfMobile.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
@@ -17,8 +16,8 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
-import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import Text from '../../../../components/Text';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -28,8 +27,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -100,6 +99,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
+  const [downloadMobileViewPdf, setDownloadMobileViewPdf] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
@@ -184,6 +184,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setApproveHover(false);
     setRejectHover(false);
     setDownloadPdfHover(true);
+  };
+
+  const onButtonClick = () => {
+    setDownloadMobileViewPdf(prev => !prev);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -591,26 +595,19 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             </Button>
           </Grid>
           <Grid className={classes.gridWeb}>
-            <Button className={classes.downloadMobile} >
-              {!downloadPdfHover && (
-                <span className={classes.pdfActionIcon}>
-                  <DownloadPdfIconMobie
-                    data-cy="transition-download-pdf"
-                    onClick={onMouseHoverDownloadPdfIcon}
-                    className={classes.cursorPointer}
-                  />
-                </span>
-              )}
-              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
-                <DownloadHtmlPreview
-                  id={docRevId}
-                  data-cy="transition-download-pdf"
-                  downloadPdfHover={downloadPdfHover}
-                  dialogPDF={dialogPDF}
-                />
-                <Text message="common.download" />
-              </span>
-            </Button></Grid>
+            <Button className={classes.downloadMobile}
+              onClick={onButtonClick}
+            >
+              <DownloadHtmlPreview
+                id={docRevId}
+                data-cy="transition-download-pdf"
+                downloadPdfHover={false}
+                dialogPDF={dialogPDF}
+                downloadMobileViewPdf={downloadMobileViewPdf}
+              />
+              <Text translation="common.download" />
+            </Button>
+          </Grid>
         </List>
       </Collapse>
       <ApproveDialogueContainer

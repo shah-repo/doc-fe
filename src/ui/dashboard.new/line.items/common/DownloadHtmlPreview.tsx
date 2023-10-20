@@ -19,12 +19,14 @@ import useMqttSubscription from '../../../hooks/useMqttSubscription';
 interface Props {
   id: string
   downloadPdfHover: boolean
+  downloadMobileViewPdf: boolean
   dialogPDF: DialogHandler
 }
 const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
   id,
   downloadPdfHover,
   dialogPDF,
+  downloadMobileViewPdf,
 }) => {
   const intl = useIntl();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
@@ -68,6 +70,11 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
       dialogPDF.close();
     },
   });
+  React.useEffect(() => {
+    if (downloadMobileViewPdf) {
+      handleClick();
+    }
+  }, [downloadMobileViewPdf]);
 
   return (
     <>
