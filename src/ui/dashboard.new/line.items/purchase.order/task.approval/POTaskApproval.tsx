@@ -236,6 +236,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
+        onClick={handleClick}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
