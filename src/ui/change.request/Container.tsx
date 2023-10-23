@@ -6,7 +6,7 @@ import { changeRequestsActions, changeRequestsSelectors } from '../../state/duck
 import { ApplicationState } from '../../state/reducers';
 import Switch from '../app/Switch';
 import AsyncGate from '../components/AsyncGate';
-import { CHANGE_REQUEST_PREVIEW_URL, CHANGE_REQUEST_UPDATE_URL } from '../constants/urls';
+import { CHANGE_REQUEST_EDIT_URL, CHANGE_REQUEST_PREVIEW_URL, CHANGE_REQUEST_UPDATE_URL } from '../constants/urls';
 import ChangeRequestUpdateContainer from './ChangeRequestUpdate.container';
 import ChangeRequestSockets from './Sockets';
 import ChangeRequestSummaryContainer from './summary/container';
@@ -34,15 +34,30 @@ const Container: React.FunctionComponent<Props> = ({
   const changeRequestId = match.params.changeRequestId;
 
   const loadAction = () => load(changeRequestId);
-  const updateRenderer = () => <ChangeRequestUpdateContainer changeRequest={dataProp} />;
-  const summaryRenderer = () =>
-    <ChangeRequestSummaryContainer changeRequest={dataProp} currentUserEmail={currentUserEmail} />;
+  const updateRenderer = () => (
+    <ChangeRequestUpdateContainer
+      changeRequest={dataProp}
+    />
+  );
+  const editRenderer = () => (
+    <ChangeRequestUpdateContainer
+      changeRequest={dataProp}
+      isEditing
+    />
+  );
+  const summaryRenderer = () => (
+    <ChangeRequestSummaryContainer
+      changeRequest={dataProp}
+      currentUserEmail={currentUserEmail}
+    />
+  );
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       {dataProp && <ChangeRequestSockets changeRequest={dataProp} />}
       <Switch>
         <Route path={CHANGE_REQUEST_UPDATE_URL} exact={true} render={updateRenderer} />
+        <Route path={CHANGE_REQUEST_EDIT_URL} exact={true} render={editRenderer} />
         <Route path={CHANGE_REQUEST_PREVIEW_URL} exact={true} render={summaryRenderer} />
       </Switch>
     </AsyncGate>

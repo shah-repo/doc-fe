@@ -1,7 +1,8 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import Colors from '../../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../../layout/theme-next/provider';
 
-export default (theme: Theme) =>
+export default (theme: NextTheme) =>
   createStyles({
     form: {
       minWidth: 400,
@@ -87,7 +88,7 @@ export default (theme: Theme) =>
     ScheduleIcon: {
       margin: '0px 5px 0px 0px',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.media.mobile]: {
       pendingBox: {
         width: '100%',
         padding: 0,

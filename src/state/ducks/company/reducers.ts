@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 import { setNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
+import { AsyncStatus } from '../../types';
 import { LOGOUT_USER } from '../auth/constants';
 import { LogoutUserAction } from '../auth/types';
-import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
-import { AutosaveAction, AutosaveState, CompanyMineAction, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from './types';
+import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
+import { AutosaveAction, AutosaveState, CompanyMineAction, GeneralSettingsAction, GeneralSettingsState, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: '',
@@ -22,6 +23,7 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   helloSignAppId: '',
   teamId: '',
   addresses: [],
+  locations: [],
   acctCodes: [],
   helloSignIntegrationEnabled: false,
   navigation: DEFAULT_NAVIGATION_ITEMS,
@@ -34,6 +36,20 @@ const AUTOSAVE_DEFAULT_STATE = {
 
 const REDLINE_DEFAULT_STATE = {
   redlineActive: false,
+};
+
+const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
+  zebraPrint: {
+    apiKey: '',
+    tenantId: '',
+    printers: [{
+      sn: '',
+      isActive: false,
+    }],
+  },
+  approvalRequestAdmin: false,
+  status: AsyncStatus.Idle,
+  message: '',
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
@@ -135,9 +151,25 @@ const redlineConfig = (
   }
 };
 
+const generalSettings = (
+  state: GeneralSettingsState = GENERAL_SETTINGS_DEFAULT_STATE,
+  action: GeneralSettingsAction,
+) => {
+  switch (action.type) {
+    case SET_GENERAL_SETTINGS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selectedCompany,
   companyMine,
   redlineConfig,
   autosaveConfig,
+  generalSettings,
 });
