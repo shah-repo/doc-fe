@@ -91,12 +91,7 @@ export default makeStyles((theme: NextTheme) => ({
       background: Colors.textGray,
       color: Colors.white,
       display: 'inline-flex',
-      paddingRight: theme.spacing(0.4),
-      width: 131.53,
-      height: 43.4,
-    },
-    pdfActionIcon: {
-      paddingLeft: theme.spacing(1.4),
+      padding: `${theme.spacing(1.5)}px ${theme.spacing(3)}px`,
     },
   },
 }));

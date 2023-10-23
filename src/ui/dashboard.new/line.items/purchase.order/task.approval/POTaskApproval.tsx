@@ -6,7 +6,6 @@ import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
-import { ReactComponent as DownloadPdfIconMobile } from '../../../../../assets/images/download_pdfMobile.svg';
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
@@ -340,6 +339,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
                   className={classes.cursorPointer}
+                  stroke={Colors.font_gray}
                 />
               </span>
             )}
@@ -597,20 +597,17 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </Grid>
           <Grid className={classes.gridWeb}>
             <Button className={classes.downloadMobile}
-              onClick={onButtonClick}
-            >
-              <DownloadPdfIconMobile />
-              <span className={classes.pdfActionIcon}>
-                <DownloadHtmlPreview
-                  id={docRevId}
-                  data-cy="transition-download-pdf"
-                  downloadPdfHover={false}
-                  dialogPDF={dialogPDF}
-                  downloadMobileViewPdf={downloadMobileViewPdf}
-                />
-              </span>
-              <Text translation="common.download" />
+              onClick={onButtonClick} >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
             </Button>
+            <DownloadHtmlPreview
+              id={docRevId}
+              data-cy="transition-download-pdf"
+              downloadPdfHover={false}
+              dialogPDF={dialogPDF}
+              downloadMobileViewPdf={downloadMobileViewPdf}
+            />
           </Grid>
         </List>
       </Collapse>
