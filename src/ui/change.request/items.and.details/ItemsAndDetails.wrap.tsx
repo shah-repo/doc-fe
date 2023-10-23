@@ -6,9 +6,9 @@ import { AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from '../../form.builder';
 import ItemsAndDetailsState from '../items.and.details/ItemsAndDetails.state';
-import { formDataToStoreData, storeDataToFormData } from './helpers';
 import ItemsAndDetails from './ItemsAndDetails';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from './ItemsAndDetails.types';
+import { formDataToStoreData, storeDataToFormData } from './helpers';
 
 const ItemsAndDetailsContainer: React.FunctionComponent<
 ItemsAndDetailsWrapperProps & {name: string}
@@ -23,6 +23,7 @@ ItemsAndDetailsWrapperProps & {name: string}
   const { formState: parentFormState } = FB.useStores();
   const formState = FB.useRef(FBFormState, {});
   const initialAsyncStatus = useRef(asyncState?.status);
+  const formContext = useFormContext();
 
   const { submitForm } = useFormContext();
 
@@ -71,7 +72,7 @@ ItemsAndDetailsWrapperProps & {name: string}
 
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
-    if (autosave) {
+    if (autosave && !formContext.isEditing) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
       initialAsyncStatus.current = asyncState?.status;

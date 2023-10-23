@@ -1,8 +1,9 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import { CSSProperties } from 'react';
 import Colors from '../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../layout/theme-next/provider';
 
-export const lineItemStyles = (theme: Theme) => createStyles({
+export const lineItemStyles = (theme: NextTheme) => createStyles({
   inline: {
     display: 'inline',
   },
@@ -69,8 +70,8 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
   closeIconMobile: {
     paddingTop: 0,
-    [theme.breakpoints.down('xs')]: {
-      paddingTop: 25,
+    [theme.media.mobile]: {
+      paddingTop: theme.spacing(3),
     },
   },
   attachmentIcon: {
@@ -142,7 +143,7 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
 });
 
-export const grayDotStyles = (theme: Theme, additional?: CSSProperties) => createStyles({
+export const grayDotStyles = (theme: NextTheme, additional?: CSSProperties) => createStyles({
   grayDot: {
     width: 4,
     height: 4,

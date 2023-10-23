@@ -1,5 +1,6 @@
 import { generatePath } from 'react-router-dom';
 import {
+  CHANGE_REQUEST_EDIT_URL,
   CHANGE_REQUEST_PREVIEW_URL,
   CHANGE_REQUEST_UPDATE_URL,
 } from '../../constants/urls';
@@ -10,6 +11,9 @@ const changeRequestPath = (path: string, routeParams: RouteParams) =>
 
 export const changeRequestEditPath = (changeRequestId: string) =>
   changeRequestPath(CHANGE_REQUEST_UPDATE_URL, { changeRequestId });
+
+export const changeRequestUpdatePath = (changeRequestId: string) =>
+  changeRequestPath(CHANGE_REQUEST_EDIT_URL, { changeRequestId });
 
 export const changeRequestPreviewPath = (changeRequestId: string) =>
   changeRequestPath(CHANGE_REQUEST_PREVIEW_URL, { changeRequestId });

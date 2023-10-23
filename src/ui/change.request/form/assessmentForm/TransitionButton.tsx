@@ -6,10 +6,10 @@ import { StyledButton } from '../../../../App/Shifamed/Components/forms/presente
 import { changeRequestsActions, changeRequestsSelectors } from '../../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
 import { AsyncStatus } from '../../../../state/types';
+import Text from '../../../components/Text';
 import FormMessage from '../../../components/forms/FormMessage';
 import FormProgress from '../../../components/forms/FormProgress';
 import SubmitButton from '../../../components/forms/SubmitButton';
-import Text from '../../../components/Text';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -74,7 +74,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
     return (
       <React.Fragment>
         <FormMessage asyncState={async.asyncState} />
-        <FormProgress asyncState={async.asyncState} />
+        <FormProgress asyncState={async.asyncState} attached />
         <SubmitButton
           id="transitionButton"
           showNewButton={true}

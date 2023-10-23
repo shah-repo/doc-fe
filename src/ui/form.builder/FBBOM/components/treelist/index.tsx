@@ -28,7 +28,6 @@ import {
   chain,
   get,
   isEmpty,
-  isNil,
   isObject,
   map,
   omit,
@@ -41,11 +40,13 @@ import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/leftPanel/close.svg';
 import { translate } from '../../../../../common/intl';
+import { getHasPermission } from '../../../../../common/utils/selectors';
+import { Permission } from '../../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
@@ -137,6 +138,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const isEditingLineItemsDisallowed = bomDisabledChangeControl(documentRevision);
   const enabledFieldsForEditing = getEnabledFieldsForEditing(documentRevision);
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
 
   const treeListAsync = useAsync({
     onSuccess: ({
@@ -409,6 +411,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       attachmentNames: [],
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
+      isEditEnabled: true,
+      isParentOwner: true,
     };
   };
 
@@ -461,7 +465,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       }
     }
 
-    if (inRestrictedEditMode && isEditingLineItemsDisallowed) {
+    if (inRestrictedEditMode && (!hasPermisstionToEditRestrictedPart || isEditingLineItemsDisallowed)) {
       return;
     }
 
@@ -631,11 +635,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         [classes.inprogressBg]: item.inProgress && isDiffViewEnabled,
       }),
     };
-    if (
-      !item[MODE_FIELD]
-      || (!isNil(item.isEditEnabled) && !item.isEditEnabled)
-      || (!isNil(item.isEditEnabled) && !item.isParentOwner)
-    ) {
+    const showWithoutActions = !item[MODE_FIELD]
+      || !item.isEditEnabled
+      || (!inRestrictedEditMode && !item.isParentOwner)
+      || (inRestrictedEditMode && (!hasPermisstionToEditRestrictedPart || isEditingLineItemsDisallowed));
+    if (showWithoutActions) {
       return React.cloneElement(row, {
         ...modifiedProps,
         ['data-cy' as string]: `bom-row-${item.docId}`,

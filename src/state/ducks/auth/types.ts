@@ -220,6 +220,8 @@ export enum Permission {
   // restricted edit part
   RESTRICTED_PART_EDIT_ADMIN = 'RESTRICTED_PART_EDIT_ADMIN',
   EDIT_BOM = 'EDIT_BOM',
+  // AR
+  AR_IN_REVIEW_EDIT = 'AR_IN_REVIEW_EDIT',
 }
 
 export enum GroupTag {

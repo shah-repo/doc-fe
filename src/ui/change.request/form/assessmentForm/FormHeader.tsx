@@ -18,13 +18,14 @@ const FormHeader: React.FC<Props> = ({
   changeRequest,
   asyncState,
 }) => (
-  <Header>
+  <Header status={changeRequest?.state}>
     {changeRequest && (
       <HeaderInfo
         status={changeRequest.state}
         id={changeRequest.crId}
         name={changeRequest.title}
         documentTypeAcronym={changeRequest?.documentType?.documentTypeAcronym}
+        documentTypeId={changeRequest?.documentType?.id}
       />
     )}
     <Grid item xs={changeRequest ? 6 : 12} justify="flex-end">

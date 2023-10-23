@@ -6,6 +6,7 @@ import React from 'react';
 import { SM } from '../../../../App';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 // import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
+import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import Colors from '../../../layout/theme/utils/colors';
 import { headerBackgroundStyles } from './Header.background.styles';
@@ -31,7 +32,7 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 interface Props{
-  status?: DocumentRevisionStatus
+  status?: DocumentRevisionStatus | ChangeRequestStatus
   displayStatus?: DocumentRevisionStatus
 }
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
