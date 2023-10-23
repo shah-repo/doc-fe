@@ -25,9 +25,6 @@ export const UserAvatar = ({
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
-  if (!owner) {
-    return null;
-  }
   return (
     <td
       colSpan={colSpan}
@@ -38,11 +35,11 @@ export const UserAvatar = ({
       onClick={cellClickEvent}
     >
       <Box className={classes.avatar}>
-        {avatar
+        {(avatar && owner)
           ? <Avatar className={classes.icon} alt={owner} src={avatar} />
-          : <Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
+          : (owner && (<Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
             {getInitalsFromName(owner)}
-          </Avatar>
+          </Avatar>))
         }
         <Tooltip data={owner} />
       </Box>
