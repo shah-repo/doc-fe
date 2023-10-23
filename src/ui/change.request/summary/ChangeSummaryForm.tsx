@@ -5,7 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
-import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
@@ -61,6 +61,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _formState?.setMode(mode);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
+  const isApproved = changeRequest.state === ChangeRequestStatus.Approved;
 
   const changeSidebarOpenStatus = (status) => {
     setOpen(status);
@@ -169,7 +170,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} />
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} isApproved={isApproved} />
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE

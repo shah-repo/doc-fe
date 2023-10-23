@@ -45,13 +45,67 @@ export const styles = makeStyles((theme) => ({
       marginBottom: theme.spacing(0),
     },
   },
-  assigneeAction: {
-    display: 'flex',
+  employeeResponseFields: {
     marginBottom: theme.spacing(1.25),
-    padding: theme.spacing(1, 1.75),
-    minHeight: '30px',
     '&:last-child': {
       marginBottom: theme.spacing(0),
+    },
+  },
+  assigneeAction: {
+    display: 'flex',
+    padding: theme.spacing(1, 1.75),
+    minHeight: '30px',
+  },
+  assigneeActionStatusContainer: {
+    display: 'flex',
+    fontSize: 12,
+  },
+  assigneeActionStatus: {
+    color: Colors.almost_black,
+
+    fontWeight: 700,
+    marginLeft: theme.spacing(0.625),
+  },
+  assigneeActionStatusDate: {
+    color: Colors.font_gray,
+
+    fontWeight: 400,
+    marginLeft: theme.spacing(0.5),
+    wordWrap: 'break-word',
+  },
+  uploadEvidenceField: {
+    height: 20,
+    padding: theme.spacing(0.625, 1.25),
+    marginBottom: theme.spacing(1.25),
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  uploadEvidenceFieldIcon: {
+    transform: 'rotate(45deg)',
+    height: '0.7em',
+    width: '0.7em',
+  },
+  uploadEvidenceFieldLabel: {
+    fontSize: 12,
+    fontWeight: 400,
+    marginLeft: theme.spacing(0.75),
+  },
+  attachmentName: {
+    color: Colors.navy,
+    fontSize: 12,
+    marginBottom: theme.spacing(1.25),
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+    '& span': {
+      marginBottom: theme.spacing(0),
+      marginLeft: theme.spacing(0.75),
+    },
+    '& svg': {
+      transform: 'rotate(45deg)',
+      height: '0.7em',
+      width: '0.7em',
     },
   },
 }));

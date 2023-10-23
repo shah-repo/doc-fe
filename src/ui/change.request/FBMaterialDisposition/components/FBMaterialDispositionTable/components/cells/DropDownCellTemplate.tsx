@@ -71,6 +71,11 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     e.stopPropagation();
   };
 
+  const handleClosePOs = (e) => {
+    dialog.close();
+    e.stopPropagation();
+  };
+
   const displayValue = find(options, { value: get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) });
 
   return (
@@ -79,8 +84,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
       { isOnOrderPOActionColumn && openedPOsAvailable && <FontAwesomeIcon icon={solid('circle')} onClick={handleClickPOs} className={cx(classes.dot, classes.poPreviewDot)} />}
       <Dialog title={translate('approvalRequest.material.disposition.po.preview.title', { partDocId })}
         open={dialog.isOpen}
-        onClose={() => dialog.close()}
-        onConfirm={() => dialog.close()}
+        onClose={handleClosePOs}
+        onConfirm={handleClosePOs}
         confirmLabel="common.close"
       >
         <div className={classes.poPreviewModal}>

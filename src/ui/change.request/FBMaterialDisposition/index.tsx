@@ -6,12 +6,13 @@ import FBTasksListTable from './components/FBTasksListTable';
 interface props {
   changeRequest?: ChangeRequest
   isShowOnly?: boolean
+  isApproved?: boolean
 }
 
-const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest, isShowOnly }) => {
+const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, isApproved }) => {
   return (<>
-    <FBMaterialDispositionTable {...{ changeRequest }} isShowOnly={isShowOnly} />
-    <FBTasksListTable {...{ changeRequest }} isShowOnly={isShowOnly} />
+    <FBMaterialDispositionTable {...{ changeRequest, isShowOnly }} />
+    <FBTasksListTable {...{ changeRequest, isShowOnly, isApproved }} />
   </>);
 };
 

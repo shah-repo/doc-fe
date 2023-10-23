@@ -14,4 +14,7 @@ export type FBFileFieldProps =
   fileFieldState?: FBFileFieldState
   loading?: boolean
   typeToAccept?: string
+  className?: string
+  labelClassName?: string
+  iconClassName?: string
 };

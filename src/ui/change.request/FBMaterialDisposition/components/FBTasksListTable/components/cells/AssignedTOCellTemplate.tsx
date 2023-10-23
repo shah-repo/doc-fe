@@ -18,9 +18,9 @@ import { styles } from './styles';
 const renderUsers = (selectedUsers, removeUser?) => {
   const classes = styles();
   const approvers = useSelector((state: ApplicationState) => {
-    return state.changeRequests.tempApproversById;
+    return state.changeRequests.approversByIdMap;
   });
-  const users = selectedUsers?.map(({ value, employeeId }) => approvers[value || employeeId]);
+  const users = selectedUsers?.map(({ employeeId }) => approvers[employeeId]);
   return (
     <>
       {!isEmpty(users) && users.map(({ id, user }, index) => (
@@ -64,12 +64,12 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableTLItem>();
   const selectedUsers = values[field] ?? [];
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: string) => {
-    setFieldValue(field, [...selectedUsers, value]);
+  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    setFieldValue(field, [...selectedUsers, { employeeId: value?.value }]);
   };
 
   const removeUser = (id) => {
-    setFieldValue(field, selectedUsers.filter(user => user.value !== id));
+    setFieldValue(field, selectedUsers.filter(({ employeeId }) => employeeId !== id));
   };
 
   const availableApprovers = useSelector((state: ApplicationState) => {
@@ -90,7 +90,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
           getOptionLabel={(option: OptionType) => option.label}
           value={{ label: 'Add user' }}
           size="small"
-          disabled={isEmpty(values)}
         />
       </FormikField>
       {renderUsers(selectedUsers, removeUser)}

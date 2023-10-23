@@ -1,17 +1,22 @@
 import { useFormikContext } from 'formik';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React from 'react';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { ASSIGNED_TO_FIELD, ASSIGNEE_ACTIONS_FIELD, COMMENTS_FIELD } from '../../constants';
+import { COMMENTS_FIELD, EMPLOYEE_RESPONSE_FIELD } from '../../constants';
 import { CustomTemplateProps } from '../../interface';
 import { styles } from './styles';
 
-const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
+const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, employeeCommentUpdates }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps } = useFormikContext();
+  const { values, getFieldProps } = useFormikContext();
   const classes = styles();
-
+  const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
+  const { taskId } = dataItem;
+  const onBlur = () => {
+    const value = get(values, field, '');
+    !isEmpty(value) && employeeCommentUpdates?.(taskId, employeeResponse);
+  };
   return (
     <FormikField
       name={field}
@@ -22,6 +27,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         defaultValue={undefined}
         type="text"
         size="small"
+        onBlur={onBlur}
       />
     </FormikField>
   );
@@ -31,17 +37,20 @@ export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
 
-  const assigneList = get(dataItem, ASSIGNED_TO_FIELD, []);
-  const assigneeActions = get(dataItem, ASSIGNEE_ACTIONS_FIELD, []);
-  const assigneeComments = get(dataItem, COMMENTS_FIELD, {});
+  const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
+  const assigneeComments = dataItem.employeeResponse?.reduce((empObj, emp) => ({
+    ...empObj,
+    [emp.employeeId]: emp.comment,
+  }), {});
 
   return (<>
-    {assigneList?.map(({ value: id }) => {
-      return <>
-        {(!assigneeActions.includes(id))
-          ? <Editor {...props} {...{ field: `${dataItem.id}.${COMMENTS_FIELD}.${id}` }} />
-          : <OverflowingContent> <div className={classes.commentCell} >{assigneeComments[id]}</div></OverflowingContent>}
-      </>;
-    })}
+    <OverflowingContent>
+      {assigneList?.map(({ employeeId }) => {
+        return <div className={classes.commentCell} >
+          {(isEmpty(assigneeComments[employeeId])) && <Editor {...props} {...{ field: `${COMMENTS_FIELD}.${employeeId}` }} /> }
+          {(!isEmpty(assigneeComments[employeeId])) && assigneeComments[employeeId]}
+        </div>;
+      })}
+    </OverflowingContent>
   </>);
 };

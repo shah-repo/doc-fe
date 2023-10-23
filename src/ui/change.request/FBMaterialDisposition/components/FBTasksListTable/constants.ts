@@ -1,4 +1,7 @@
 export const EMPTY_VALUE_PLACEHOLDER = '-';
-export const ASSIGNED_TO_FIELD = 'assignedTo';
-export const ASSIGNEE_ACTIONS_FIELD = 'assigneeActions';
+export const EMPLOYEE_RESPONSE_FIELD = 'employeeResponse';
+export const ASSIGNEE_ATTACHMENT_FIELD = 'assigneeAttachment';
 export const COMMENTS_FIELD = 'comments';
+export enum EmployeeStatus {
+  Done = 'DONE',
+}

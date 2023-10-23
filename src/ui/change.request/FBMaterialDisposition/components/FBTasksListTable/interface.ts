@@ -1,14 +1,19 @@
-import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { User } from '../../../../../state/ducks/common/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
+export interface EmployeeResponse extends User{
+  employeeId: string
+  comment: string
+  status: string
+  attachmentId: string
+  updatedAt: string
+}
 export interface TasksListItem {
-  id: string
+  taskId: string
   number: string
-  instructions: string
-  assignedTo: OptionType[]
-  comments: any
-  assigneeActions: string[]
+  instruction: string
+  employeeResponse: EmployeeResponse[]
 }
 
 export interface EditableTLItem extends TasksListItem {
@@ -25,8 +30,12 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: () => void
   onRowClick?: (e: TLItemEditEvent) => void
+  employeeCommentUpdates: (taskId: string, employeeResponse: EmployeeResponse[]) => void
+  employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableTLItem> {
   onClick?: (e: TLItemEditEvent) => void
+  employeeCommentUpdates?: (taskId: string, employeeResponse: EmployeeResponse[]) => void
+  employeeStatusUpdates?: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
 }

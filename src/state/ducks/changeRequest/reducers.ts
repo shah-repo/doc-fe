@@ -61,7 +61,7 @@ export const approversById = (
   }
 };
 
-export const tempApproversById = (
+export const approversByIdMap = (
   state: ChangeRequestsApproversByIdState = {},
   action: ChangeRequestListApproversAction,
 ): ChangeRequestsApproversByIdState => {
@@ -148,5 +148,5 @@ export default combineReducers({
   auditsByCRId,
   auditsAllId,
   dependentOnDocRevs,
-  tempApproversById,
+  approversByIdMap,
 });

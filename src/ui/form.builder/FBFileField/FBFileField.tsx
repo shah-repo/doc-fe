@@ -16,7 +16,10 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
   loading = false,
   disabled,
   typeToAccept = '*',
-}) =>  (
+  className,
+  labelClassName,
+  iconClassName,
+}) => (
 
   <Observer>
     {() => (
@@ -26,6 +29,7 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
         borderColor={Colors.medium_gray}
         border={1}
         py={2}
+        className={className}
         style={{ pointerEvents: (disabled || formState?.isBackdropOpen) ? 'none' : 'auto' }}
       >
         <input
@@ -43,8 +47,8 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
           >
             <Box pl={1} display="flex" flexDirection="row">
               {loading && <Box mt={0.3} mr={1}><CircularProgress size={18} /></Box>}
-              {!loading && <AttachFile width={20} height={20} />}
-              <FBText locale="common.upload.files" boxProps={{ mt: 0.2 }} />
+              {!loading && <AttachFile className={iconClassName} width={20} height={20} />}
+              <FBText locale="common.upload.files" boxProps={{ mt: 0.2, className: labelClassName }} />
             </Box>
           </Link>
         </label>
