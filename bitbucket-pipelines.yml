@@ -18,7 +18,6 @@ definitions:
         max-time: 20
         size: 2x
         caches:
-          - node
           - yarn-node-modules
 
     - step: &COMMON_BUILD
@@ -30,7 +29,6 @@ definitions:
         max-time: 20
         size: 2x
         caches:
-          - node
           - yarn-node-modules
 
     - step: &COMMON_DEPLOY
@@ -60,7 +58,6 @@ definitions:
         name: Tests
         size: 2x
         caches:
-          - node
           - yarn-node-modules
         artifacts:
           - test-results/**
