@@ -24,10 +24,10 @@ import useStyles from './styles';
 interface props {
   changeRequest?: ChangeRequest
   isShowOnly?: boolean
-  isApproved?: boolean
+  showAdditionalColumns?: boolean
 }
 
-const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, isApproved }) => {
+const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, showAdditionalColumns }) => {
   const classes = useStyles();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
@@ -125,8 +125,10 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   });
 
   const deleteTaskItem = () => {
-    const { taskId } = editedTLItem;
-    deleteTaskAsync.start(deleteTask, taskId, deleteTaskAsync);
+    if (!editedTLItem?.taskId) {
+      return;
+    }
+    deleteTaskAsync.start(deleteTask, editedTLItem?.taskId, deleteTaskAsync);
   };
 
   const employeeCommentUpdates = (taskId: string, employeeResponse: EmployeeResponse[]) => {
@@ -172,7 +174,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   });
 
   const getColumns = () => {
-    return schema.filter(({ show }) => show || isApproved);
+    return schema.filter(({ show }) => show || showAdditionalColumns);
   };
 
   const rowRender: DataGridProps<TasksListItem>['rowRender'] = (row, { dataItem }) => {

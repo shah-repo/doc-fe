@@ -16,9 +16,9 @@ import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
 import FBMaterialDisposition from '../FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
+import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
 import ChangeRequestFormHeader from './ChangeRequestFormHeader';
-import FormHeader from './assessmentForm/FormHeader';
 import { ChangeRequestFormValues } from './types';
 
 type ChangeRequestFormProps =
