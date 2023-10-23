@@ -1663,6 +1663,7 @@
   "approvalRequest.items.section.heading": "Items and Details",
   "approvalRequest.items.button.addText": "Add Item",
   "approvalRequest.grid.heading.autoUpdate": "Auto Update",
+  "approvalRequest.grid.heading.autoUpdate.title": "Part revision will be auto updated in the parent BOM",
   "approvalRequest.grid.heading.item": "Item",
   "approvalRequest.grid.heading.rev": "Rev (From-To)",
   "approvalRequest.grid.heading.description.of.change": "Description of change",

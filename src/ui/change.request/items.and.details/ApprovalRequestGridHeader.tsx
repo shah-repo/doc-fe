@@ -1,9 +1,9 @@
-import useStyles from './ApprovalRequestGrid.styles';
-
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import Text from '../../components/Text';
+import useStyles from './ApprovalRequestGrid.styles';
 
 const ApprovalRequestGridHeader: React.FunctionComponent<{
   lineItemPartCanSubstitute?: boolean}> = ({ lineItemPartCanSubstitute }) => {
@@ -11,7 +11,7 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{
   return (
     <div className={classes.header}>
       { lineItemPartCanSubstitute && <div className={classes.cellautoUpdate}>
-        <Tooltip title="Part revision will be auto updated in the parent BOM" placement="right"
+        <Tooltip title={translate('approvalRequest.grid.heading.autoUpdate.title')} placement="right"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           arrow>
           <span><Text translation="approvalRequest.grid.heading.autoUpdate" /></span>
@@ -27,12 +27,12 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{
           <Text translation="approvalRequest.grid.heading.rev" />
         </span>
       </div>
-      <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther)}>
+      <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.description.of.change" />
         </span>
       </div>
-      <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther)}>
+      <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.justification.of.change" />
         </span>

@@ -95,11 +95,11 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
     cellautoUpdate: {
-      width: '10%',
+      width: '5%',
       display: 'flex',
       alignItems: 'center',
       '& > #field-autoUpdate': {
-        margin: 0, // Need to be "10.5px 14px"
+        margin: 0,
       },
     },
     cellOne: {
@@ -112,23 +112,17 @@ export default makeStyles((theme) =>
         width: '100%',
       },
     },
-    smallCellOther: {
-      width: '33%',
-      '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
-      },
-    },
     cellOther: {
       width: '25%',
       '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
+        padding: theme.spacing(1.28, 1.75),
       },
     },
     cellRev: {
       width: '18%',
     },
     cellWhereUsed: {
-      width: '14%',
+      width: '10%',
       textAlign: 'center',
     },
     hiddenLegend: {
