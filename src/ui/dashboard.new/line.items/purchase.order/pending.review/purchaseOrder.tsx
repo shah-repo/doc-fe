@@ -379,6 +379,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
                   className={classes.cursorPointer}
+                  stroke={Colors.font_gray}
                 />
               </span>
             )}

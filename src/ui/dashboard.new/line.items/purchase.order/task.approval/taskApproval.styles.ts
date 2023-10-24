@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme-next/colors';
-import { grayDotStyles, lineItemStyles } from '../../common/styles';
 import { NextTheme } from '../../../../layout/theme-next/provider';
+import { grayDotStyles, lineItemStyles } from '../../common/styles';
 
 export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
@@ -16,19 +16,39 @@ export default makeStyles((theme: NextTheme) => ({
   nonPoActionIconsWidth: {
     width: 112,
   },
-  approvalButton: {
-    display: 'none',
-  },
   innerWrap: {
     display: 'inline-flex',
   },
-  rejectButton: {
+  gridMobile: {
     display: 'none',
-  },
-  gridWeb: {
-    display: 'flex',
     justifyContent: 'center',
-    background: Colors.primaryHighlight,
+    flexWrap: 'wrap',
+    '& > button': {
+      borderRadius: 25,
+      color: Colors.white,
+      padding: `${theme.spacing(1.5)}px ${theme.spacing(3)}px`,
+      '& svg': {
+        marginRight: theme.spacing(0.5),
+      },
+    },
+  },
+  rejectButton: {
+    background: Colors.error,
+    '&:hover': {
+      background: Colors.error,
+    },
+  },
+  approvalButton: {
+    background: Colors.success,
+    '&:hover': {
+      background: Colors.success,
+    },
+  },
+  downloadButton: {
+    background: Colors.textGray,
+    '&:hover': {
+      background: Colors.textGray,
+    },
   },
   buttoncursor: {
     paddingLeft: 1,
@@ -52,20 +72,8 @@ export default makeStyles((theme: NextTheme) => ({
     innerWrap: {
       display: 'block',
     },
-    rejectButton: {
-      borderRadius: 25,
-      background: Colors.error,
-      color: Colors.gray,
-      display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-    },
-    approvalButton: {
-      borderRadius: 25,
-      background: Colors.success,
-      color: Colors.gray,
-      display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-
+    gridMobile: {
+      display: 'flex',
     },
     nested: {
       borderLeft: 'none',
