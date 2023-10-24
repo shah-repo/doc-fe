@@ -6,6 +6,9 @@ import { translate } from '../../../common/intl';
 import useDialog from '../../hooks/useDialog';
 import { AlertDialog } from '../dialogs';
 
+const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
+const cancelBeforeUnload = () => { window.onbeforeunload = noop; };
+
 export interface Props {
   dirty: boolean
   message?: string
@@ -29,9 +32,6 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
-    const cancelBeforeUnload = () => { window.onbeforeunload = noop; };
-
     if (onDirtyFlagChange) {
       onDirtyFlagChange(dirty);
     }
