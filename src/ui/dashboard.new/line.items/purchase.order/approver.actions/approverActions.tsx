@@ -23,6 +23,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
@@ -34,7 +35,6 @@ import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { formatCurrency } from '../../common/Utils';
 import useStyles from './approverActions.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -49,11 +49,11 @@ interface Props {
   status: string
   timestamp: string
   purchaseOrderAttachments?:
-  | {
+  | Array<{
     name: string
     type: string
     id: string
-  }[]
+  }>
   purchaseOrdeLineItemCount?: number
   purchaseOrderDescription?: string
   purchaseOrderCurrency?: string
@@ -195,7 +195,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         && open ? (
             <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
           ) : (
-            <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+            <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
           )}
         <ListItemAvatar>
           {approverAvatar ? (
@@ -373,23 +373,24 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
                   className={classes.cursorPointer}
+                  stroke={Colors.font_gray}
                 />
               </span>
             )}
             <StyleTooltip
-                title={<Text translation="common.download.pdf" />}
-                placement="top"
-                arrow
-              >
-                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
-                  <DownloadHtmlPreview
-                    id={docRevId}
-                    data-cy="transition-download-pdf"
-                    downloadPdfHover={downloadPdfHover}
-                    dialogPDF={dialogPDF}
-                  />
-                </span>
-              </StyleTooltip>
+              title={<Text translation="common.download.pdf" />}
+              placement="top"
+              arrow
+            >
+              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={downloadPdfHover}
+                  dialogPDF={dialogPDF}
+                />
+              </span>
+            </StyleTooltip>
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon
