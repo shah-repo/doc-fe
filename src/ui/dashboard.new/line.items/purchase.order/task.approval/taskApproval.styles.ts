@@ -62,9 +62,6 @@ export default makeStyles((theme: NextTheme) => ({
   textOverlapMobile: {
     flexWrap: 'nowrap',
   },
-  pdfActionIcon: {
-    paddingLeft: 0,
-  },
   [theme.media.mobile]: {
     poActionIconsWidth: {
       display: 'none',

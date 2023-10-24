@@ -99,7 +99,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
-  const [downloadMobileViewPdf, setDownloadMobileViewPdf] = React.useState(false);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
@@ -186,9 +186,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setDownloadPdfHover(true);
   };
 
-  const onButtonClick = () => {
-    setDownloadMobileViewPdf(prev => !prev);
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
   };
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -198,7 +202,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     onSuccess: () => {
       transitionDialog.close();
     },
-    onError: (error) => {
+    onError: () => {
       transitionDialog.close();
     },
   });
@@ -354,7 +358,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   id={docRevId}
                   data-cy="transition-download-pdf"
                   downloadPdfHover={downloadPdfHover}
-                  dialogPDF={dialogPDF} downloadMobileViewPdf={false}
+                  dialogPDF={dialogPDF}
                 />
               </span>
             </StyleTooltip>
@@ -562,17 +566,18 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               <ApproveIcon fill={Colors.white} />
               <Text message="common.approve" />
             </Button>
-            <Button className={classes.downloadMobile} onClick={onButtonClick}>
+            <Button className={classes.downloadButton} onClick={handleDownloadClick}>
               <DownloadPdfIcon stroke={Colors.white_smoke} />
               <Text translation="common.download.pdf" />
             </Button>
-            <DownloadHtmlPreview
-              id={docRevId}
-              data-cy="transition-download-pdf"
-              downloadPdfHover={false}
-              dialogPDF={dialogPDF}
-              downloadMobileViewPdf={downloadMobileViewPdf}
-            />
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadImmediately
+              />
+            )}
           </Grid>
         </List>
       </Collapse>
