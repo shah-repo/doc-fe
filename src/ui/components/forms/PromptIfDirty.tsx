@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PromptProps } from 'react-router';
 import { Prompt, useHistory } from 'react-router-dom';
 import { translate } from '../../../common/intl';
@@ -14,7 +14,7 @@ export interface Props {
   doNotPrompt?: boolean
   isPOEditState?: boolean
   isDialog?: boolean
-  onConfirm?: () => Promise<void>
+  onConfirm?: () => Promise<void> | void
   onDirtyFlagChange?: (dirty: boolean) => void
   setDoNotPrompt?: (value: boolean) => void
   setDocumentRevision?: (documentRevision?: DocumentRevision) => void
@@ -27,12 +27,14 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   isDialog = false,
   onDirtyFlagChange,
   setDoNotPrompt,
+  onConfirm,
   setDocumentRevision,
 }) => {
   const history = useHistory();
   const dialog = useDialog();
-  const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
+  const [lastLocation, setLastLocation] = useState<Location | null | undefined>(null);
   const { workspaceState } = FB.useStores();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
@@ -83,9 +85,14 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   };
 
   const handleConfirm = async () => {
+    setIsLoading(true);
     if (isPOEditState) {
       await handleConfirmNavigationClick();
     }
+    if (onConfirm) {
+      await onConfirm();
+    }
+    setIsLoading(false);
     dialog.close();
     history.push(lastLocation?.pathname);
   };
@@ -115,6 +122,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
         cancelLabel="common.no.stay"
         confirmLabel="common.yes.proceed"
         onCancel={dialog.close}
+        loading={isLoading}
         onConfirm={handleConfirm}
         disableBackdropClick
       >

@@ -33,6 +33,7 @@ type ChangeRequestFormProps =
   asyncState: AsyncState
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
+  setDoNotPrompt?: (state: boolean) => void
   changeOpenStatus: (status: boolean) => void
   schema?: FBSchemaProps[]
   mode: FBWorkspaceMode
@@ -49,6 +50,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   asyncState,
   changeRequest,
   doNotPrompt,
+  setDoNotPrompt,
   changeOpenStatus,
   schema,
   mode,
@@ -69,10 +71,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
-  const changeSidebarOpenStatus = (status) => {
+  const changeSidebarOpenStatus = (status: boolean) => {
     setOpen(status);
     changeOpenStatus(status);
   };
+
+  const handlePromptConfirm = () => setDoNotPrompt?.(true);
 
   const docTypeGroup = changeRequest?.documentType.group ?? 'OTHER';
   const tabConfig = useSelector((state: ApplicationState) =>
@@ -114,23 +118,24 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       }
     >
       <PromptIfDirty
+        isDialog
         dirty={_formState?.isDirty ?? false}
         doNotPrompt={doNotPrompt}
-        isPOEditState
+        onConfirm={handlePromptConfirm}
       />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
         contentBoxProps={{ stretchY: '100%' }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && !hideSideBar && {
+        {...(changeRequest?.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
                 setOpen={changeSidebarOpenStatus} fromEdit={true} />}
             </Observer>
           ),
-        }}
+        })}
       >
         <Observer>
           {() => (
