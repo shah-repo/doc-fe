@@ -71,7 +71,15 @@ const DownloadHtmlPreview: React.FC<Props> = ({
   const assetAction = useActionCreator(attachmentsActions.getAssetUrl);
   const assetAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
-      setURL(downloadInfo?.url ?? '');
+      const url = downloadInfo?.url ?? '';
+
+      if (downloadImmediately) {
+        window.open(url);
+        handleClose();
+        return;
+      }
+
+      setURL(url);
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'document.revision.download.pdf.error' }));
