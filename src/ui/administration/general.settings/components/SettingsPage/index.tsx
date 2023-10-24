@@ -38,7 +38,9 @@ const GeneralSettingsContainer: React.FC = () => {
 
   return (
     <FormikProvider value={formik}>
-      <PromptIfDirty dirty={dirty} />
+      <PromptIfDirty
+        dirty={dirty}
+      />
       <GeneralSettingsPresenter
         onSave={formik.submitForm}
         updatedAt={updatedAt}
