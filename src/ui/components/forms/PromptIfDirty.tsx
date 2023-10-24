@@ -3,10 +3,10 @@ import { Prompt, useHistory } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { FB } from '../../form.builder';
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDialog from '../../hooks/useDialog';
+import { AlertDialog } from '../dialogs';
 
 export interface Props {
   dirty: boolean
@@ -81,6 +81,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
         when={dirty && !doNotPrompt}
         message={isPOEditState ? handleBlockedNavigation : translate('common.navigate.away.prompt') }
       />
+      {/*
       <AlertDialog
         confirmAction={handleConfirmNavigationClick}
         cancelAction={dialog.close}
@@ -89,6 +90,17 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
         message="common.navigate.away.po.prompt"
         {...{ dialog }}
       />
+      */}
+      <AlertDialog
+        handler={dialog}
+        cancelLabel="common.no.stay"
+        confirmLabel="common.yes.proceed"
+        onCancel={dialog.close}
+        onConfirm={handleConfirmNavigationClick}
+        disableBackdropClick
+      >
+        {translate('common.navigate.away.prompt')}
+      </AlertDialog>
     </>
   );
 };

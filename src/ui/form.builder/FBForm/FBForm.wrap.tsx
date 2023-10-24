@@ -19,7 +19,6 @@ export const withFBForm = <T extends FBFormProps>(
     children,
     ...props
   }: T) => {
-
     const { workspaceState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
     !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
@@ -42,7 +41,6 @@ export const withFBForm = <T extends FBFormProps>(
       if (!formState) { return; }
       formState.errorValidation = errorValidation;
       formState.workspaceMode = workspaceMode;
-
     }, [formState, errorValidation, workspaceMode]);
 
     useEffect(() => {
