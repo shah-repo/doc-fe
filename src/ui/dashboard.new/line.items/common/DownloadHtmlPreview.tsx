@@ -1,6 +1,6 @@
+import React, { useEffect } from 'react';
 import { Backdrop, Dialog, DialogContent, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { ReactComponent as DownloadPdfSolidIcon } from '../../../../assets/images/download_pdf_solid.svg';
@@ -18,20 +18,28 @@ import useMqttSubscription from '../../../hooks/useMqttSubscription';
 
 interface Props {
   id: string
-  downloadPdfHover: boolean
-  downloadMobileViewPdf: boolean
   dialogPDF: DialogHandler
+  onClose?: () => void
+  downloadPdfHover?: boolean
+  downloadImmediately?: boolean
 }
-const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
+
+const DownloadHtmlPreview: React.FC<Props> = ({
   id,
-  downloadPdfHover,
   dialogPDF,
-  downloadMobileViewPdf,
+  onClose,
+  downloadPdfHover = false,
+  downloadImmediately = false,
 }) => {
   const intl = useIntl();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const [URL, setURL] = React.useState<string>('');
   const classes = styles({ isPDF: true });
+
+  const handleClose = () => {
+    dialogPDF.close();
+    onClose?.();
+  };
 
   const templateAction = useActionCreator(documentRevisionsActions.getRenderTemplatePreview);
   const templateAsync = useAsync({
@@ -40,7 +48,7 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'document.revision.download.pdf.error' }));
-      dialogPDF.close();
+      handleClose();
     },
   });
   const handleClick = () => {
@@ -63,24 +71,26 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
   const assetAction = useActionCreator(attachmentsActions.getAssetUrl);
   const assetAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
-      setURL(downloadInfo?.url || '');
+      setURL(downloadInfo?.url ?? '');
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'document.revision.download.pdf.error' }));
-      dialogPDF.close();
+      handleClose();
     },
   });
-  React.useEffect(() => {
-    if (downloadMobileViewPdf) {
+
+  useEffect(() => {
+    if (downloadImmediately) {
       handleClick();
     }
-  }, [downloadMobileViewPdf]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
       <Backdrop open={dialogPDF.isOpen} className={classes.backdrop}>
         {dialogPDF.isOpen && <Dialog
-          onClose={dialogPDF.close}
+          onClose={handleClose}
           open={dialogPDF.isOpen}
           classes={{
             paper: classes.paper,
@@ -93,7 +103,7 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
             <IconButton
               data-cy="dialog-close"
               className={classes.closeButton}
-              onClick={dialogPDF.close}
+              onClick={handleClose}
             >
               <CloseIcon />
             </IconButton>
@@ -103,7 +113,7 @@ const DownloadHtmlPreview: React.FunctionComponent<Props> = ({
               asyncState={assetAsync.asyncState}
               url={URL}
               type="PDF"
-              handleClose={dialogPDF.close}
+              handleClose={handleClose}
             />
           </DialogContent>
         </Dialog>}
