@@ -8,7 +8,6 @@ import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../interface';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
 
   return (

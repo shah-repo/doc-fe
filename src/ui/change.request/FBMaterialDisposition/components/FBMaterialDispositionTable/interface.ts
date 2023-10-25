@@ -1,3 +1,4 @@
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
@@ -16,7 +17,17 @@ export interface MaterialDispositionItem {
   asFinishedGoodsAction: string
   usedLocation: string
   comment: string
-  openedPO: any[]
+  openedPO: DocumentRevision[]
+}
+
+export interface MDItemEditRequestBody{
+  onOrderPOAction: string
+  inInspectionAction: string
+  inInventoryAction: string
+  inWipAction: string
+  asFinishedGoodsAction: string
+  usedLocation: string
+  comment: string
 }
 
 export interface EditableMDItem extends MaterialDispositionItem {

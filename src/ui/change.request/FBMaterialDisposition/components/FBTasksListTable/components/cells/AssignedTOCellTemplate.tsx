@@ -60,7 +60,6 @@ const renderUsers = (selectedUsers, removeUser?) => {
 };
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableTLItem>();
   const selectedUsers = values[field] ?? [];
 

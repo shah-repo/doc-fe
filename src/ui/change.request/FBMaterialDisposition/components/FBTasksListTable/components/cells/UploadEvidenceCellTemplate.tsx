@@ -9,7 +9,6 @@ import FBAttachmentNamePresenter from '../FBAttachmentNamePresenter';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { setFieldValue } = useFormikContext();
   const classes = styles();
   const { fileUploadState } = FB.useStores();
@@ -27,7 +26,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     return () => {
       disposer();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

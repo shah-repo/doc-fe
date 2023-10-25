@@ -16,6 +16,12 @@ export interface TasksListItem {
   employeeResponse: EmployeeResponse[]
 }
 
+export interface TasksListEditRequestBody {
+  employeeIds: string[]
+  instruction: string
+  partOf: string
+}
+
 export interface EditableTLItem extends TasksListItem {
   [MODE_FIELD]: Mode
 }

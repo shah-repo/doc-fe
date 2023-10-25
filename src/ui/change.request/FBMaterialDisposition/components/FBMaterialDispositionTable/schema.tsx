@@ -2,7 +2,6 @@ import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoData
 import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
-import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
 import { OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './interface';
 import React from 'react';
@@ -35,14 +34,6 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.lot',
       show: true,
       width: 201,
-    },
-    {
-      id: 'whereUsed',
-      field: 'whereUsed',
-      title: 'approvalRequest.grid.heading.where.used',
-      show: true,
-      cell: (props) => <WhereUsedCellTemplate {...props} />,
-      width: 112,
     },
     {
       id: 'onOrderPOAction',

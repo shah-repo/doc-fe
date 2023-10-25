@@ -8,7 +8,6 @@ import { CustomTemplateProps } from '../../interface';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, employeeCommentUpdates }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps } = useFormikContext();
   const classes = styles();
   const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);

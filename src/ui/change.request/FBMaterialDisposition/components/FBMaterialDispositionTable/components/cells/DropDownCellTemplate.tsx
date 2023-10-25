@@ -11,7 +11,7 @@ import { OptionType } from '../../../../../../components/forms/fields/Autocomple
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EMPTY_VALUE_PLACEHOLDER, ON_ORDER_PO_ACTION_COLUMN } from '../../constants';
+import { EMPTY_DROPDOWN_PLACEHOLDER, ON_ORDER_PO_ACTION_COLUMN } from '../../constants';
 import { CustomTemplateProps, EditableMDItem } from '../../interface';
 import { generateDocTitleText } from '../../utils';
 import { styles } from './styles';
@@ -20,8 +20,7 @@ interface Props extends CustomTemplateProps {
   options: OptionType[]
 }
 
-const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+const Editor: React.FC<Props> = ({ field, options }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMDItem>();
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
@@ -40,10 +39,9 @@ const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
         blurOnSelect
         options={options}
         onChange={handleChange}
-        getOptionLabel={(option: OptionType) => option.label}
+        getOptionLabel={(option: OptionType) => translate(option.label)}
         value={value}
         size="small"
-        disabled={isEmpty(values)}
       />
     </FormikField>
   );
@@ -76,11 +74,11 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     e.stopPropagation();
   };
 
-  const displayValue = find(options, { value: get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) });
+  const displayValue = find(options, { value: get(dataItem, field, EMPTY_DROPDOWN_PLACEHOLDER) as string });
 
   return (
     <OverflowingContent onClick={handleClick}>
-      {displayValue?.label}
+      {translate(displayValue?.label)}
       { isOnOrderPOActionColumn && openedPOsAvailable && <FontAwesomeIcon icon={solid('circle')} onClick={handleClickPOs} className={cx(classes.dot, classes.poPreviewDot)} />}
       <Dialog title={translate('approvalRequest.material.disposition.po.preview.title', { partDocId })}
         open={dialog.isOpen}

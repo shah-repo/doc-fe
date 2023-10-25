@@ -1,3 +1,4 @@
+import { TasksListEditRequestBody, TasksListItem } from '../../../ui/change.request/FBMaterialDisposition/components/FBTasksListTable/interface';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { FETCH_ALL_TASKS_LIST, TASKS_LIST } from './constants';
@@ -9,7 +10,7 @@ const fetchTasksList = (arId: string, handlers: Handlers): ApiAction =>
     handlers,
   });
 
-const addTask = (data, handlers: Handlers): ApiAction<EditableTLItem> =>
+const addTask = (data: TasksListEditRequestBody, handlers: Handlers): ApiAction<TasksListItem, TasksListEditRequestBody> =>
   apiActionWithCallbacks({
     url: `${TASKS_LIST}`,
     method: 'post',
@@ -20,9 +21,9 @@ const addTask = (data, handlers: Handlers): ApiAction<EditableTLItem> =>
 const updateTask = (
   arId: string,
   taskId: string,
-  data,
+  data: TasksListEditRequestBody,
   handlers: Handlers,
-): ApiAction =>
+): ApiAction<TasksListItem, TasksListEditRequestBody> =>
   apiActionWithCallbacks({
     url: `${TASKS_LIST}/${arId}/${taskId}`,
     method: 'patch',

@@ -5,16 +5,16 @@ export const styles = makeStyles(() =>
   createStyles({
     columnsCus: {
       fontWeight: 600,
-      fontSize: '14px',
+      fontSize: 14,
       color: Colors.almost_black,
     },
     menuItem: {
-      fontSize: '12px',
+      fontSize: 12,
       fontWeight: 400,
       color: Colors.almost_black,
     },
     headerMenuItem: {
-      width: '250px',
+      width: 250,
       background: Colors.water,
       cursor: 'default',
       '&:hover': {
