@@ -74,8 +74,8 @@ const DownloadHtmlPreview: React.FC<Props> = ({
       const url = downloadInfo?.url ?? '';
 
       if (downloadImmediately) {
-        window.open(url);
         handleClose();
+        window.location.href = url;
         return;
       }
 
