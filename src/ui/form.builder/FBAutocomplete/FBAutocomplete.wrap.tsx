@@ -115,6 +115,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
     !getOptionLabel && (getOptionLabel = (option) => {
+      if (Array.isArray(option)) {
+        return '';
+      }
       if (freeSolo && isString(defaultValue) && isString(option)) {
         return option;
       }
