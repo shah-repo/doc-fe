@@ -77,7 +77,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     <>
       <Prompt
         when={dirty && !doNotPrompt}
-        message={handlePromptMessage}
+        message={isDialog ? handlePromptMessage : translate(message)}
       />
       <AlertDialog
         handler={dialog}
