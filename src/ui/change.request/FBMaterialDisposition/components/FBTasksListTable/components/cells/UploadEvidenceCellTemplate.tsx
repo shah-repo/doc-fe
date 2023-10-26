@@ -9,9 +9,10 @@ import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {
   employeeId: string
+  name: string
 }
 
-const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, disabled }) => {
+const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, name, disabled }) => {
   const classes = styles();
   const { fileUploadState } = FB.useStores();
   React.useEffect(() => {
@@ -34,6 +35,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
       labelClassName={classes.uploadEvidenceFieldLabel}
       iconClassName={classes.uploadEvidenceFieldIcon}
       disabled={disabled}
+      name={name}
     />);
 };
 
@@ -41,12 +43,12 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
   const { dataItem, employeeEvidenceUpdates } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
-  const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
   return (<>
-    {assigneList?.map(({ employeeId, attachmentId, status }) => {
+    {assigneList?.map(({ employeeId, attachmentId, status, name }) => {
+      const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
       return <div className={classes.employeeResponseFields}>
         {(!attachmentId && !(status === EmployeeStatus.Done)) ? (<FBProvider {...{ fileUploadState }}>
-          <Editor {...props} {...{ employeeId } } />
+          <Editor {...props} {...{ employeeId, name } } />
         </FBProvider>)
           : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status }} boxProps={{ className: classes.attachmentName }} />}
       </div>;

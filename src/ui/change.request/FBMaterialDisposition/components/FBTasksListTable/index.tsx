@@ -262,7 +262,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         className={classes.rootTasksList}
         hasBoxScrollbars
         onRowClick={editTLItem}
-        loading={addTaskAsync.isLoading || deleteTaskAsync.isLoading || updateTaskAsync.isLoading}
+        loading={tasksAsync.isLoading || addTaskAsync.isLoading || deleteTaskAsync.isLoading || updateTaskAsync.isLoading}
         rowRender={rowRender}
         containerRef={containerRef}
       />
