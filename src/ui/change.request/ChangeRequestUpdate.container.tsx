@@ -58,6 +58,16 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const history = useHistory();
 
+  useEffect(() => {
+    FBDataStore?.setRefreshData({
+      ...FBDataStore?.refreshData,
+      changeRequest: {
+        ...FBDataStore?.refreshData?.changeRequest,
+        formInput: initialValues.formInput,
+      },
+    });
+  }, [initialValues.formInput]);
+
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
       setDoNotPrompt(true);
@@ -118,13 +128,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     );
   };
 
-  useEffect(() => {
-    FBDataStore?.setRefreshData({
-      ...FBDataStore?.refreshData,
-      changeRequest: { ...FBDataStore?.refreshData?.changeRequest, formInput: initialValues.formInput },
-    });
-  }, []);
-
   const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
@@ -135,6 +138,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         initialValues={initialValues}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
+        setDoNotPrompt={setDoNotPrompt}
         hideSideBar={hideSideBar}
         currentDocRevId={currentDocRevId}
         inDialog={inDialog}
