@@ -362,7 +362,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <Grid className={classes.gridWeb}>
+        <Grid className={classes.gridMobile}>
           <Button className={classes.rejectButton} onClick={handleRejectClick}>
             <span className={classes.actionIcon}>
               {!rejectHover && (

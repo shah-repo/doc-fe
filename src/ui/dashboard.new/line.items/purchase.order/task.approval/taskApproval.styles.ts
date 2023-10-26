@@ -35,11 +35,6 @@ export default makeStyles((theme: NextTheme) => ({
   rejectButton: {
     display: 'none',
   },
-  gridWeb: {
-    display: 'flex',
-    justifyContent: 'center',
-    background: Colors.primaryHighlight,
-  },
   approvalButton: {
     display: 'none',
   },
@@ -73,6 +68,8 @@ export default makeStyles((theme: NextTheme) => ({
     },
     gridMobile: {
       display: 'flex',
+      justifyContent: 'center',
+      background: Colors.primaryHighlight,
     },
     rejectButton: {
       borderRadius: 25,
