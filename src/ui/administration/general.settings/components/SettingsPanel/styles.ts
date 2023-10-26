@@ -25,7 +25,7 @@ export default makeStyles(theme => ({
     },
   },
   icon: {
-    marginRight: theme.spacing(1.25),
+    marginRight: theme.spacing(1),
 
     '&.Mui-expanded': {
       color: Colors.primary,
