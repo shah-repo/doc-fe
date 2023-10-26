@@ -20,7 +20,7 @@ const getDiff = (transformedValues, transformedInitialValues) => {
     if (key === 'formTemplate') {
       const initialFormTemplate = {
         outputDocumentTypes: (transformedInitialValues?.formTemplate?.outputDocumentTypes || [])
-          .map((outputDoc) => ({ id: outputDoc.value }) ),
+          .map((outputDoc) => ({ id: outputDoc.value })),
         schema: transformedInitialValues?.formTemplate?.schema,
       };
       const newFormTemplateValue = {
@@ -89,13 +89,15 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const updatedFormInput = has(transformedValues.formInput, 'formInput')
     ? transformedValues.formInput.formInput : transformedValues.formInput;
 
+  // TEMPORARY FIX FOR BE VALIDATION
+  // formInput: transformedValues.formInput,
+  const formInputToSave = omit(
+    updatedFormInput,
+    ['partType', 'childForRevise'],
+  );
+
   return {
     ...diff,
-    // TEMPORARY FIX FOR BE VALIDATION
-    // formInput: transformedValues.formInput,
-    formInput: omit(
-      updatedFormInput,
-      ['partType', 'childForRevise'],
-    ),
+    ...(!isEmpty(formInputToSave) ? { formInput: formInputToSave } : {}),
   };
 };

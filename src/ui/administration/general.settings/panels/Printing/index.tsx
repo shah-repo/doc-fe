@@ -1,10 +1,10 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { translate } from '../../../../common/intl';
-import { FormikField, TextField } from '../../../components/forms/fields-next';
-import SettingsPanel from '../components/SettingsPanel';
-import SettingsPanelSection from '../components/SettingsPanelSection';
-import { SettingsPanelProps } from '../types';
+import { translate } from '../../../../../common/intl';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
+import SettingsPanel from '../../components/SettingsPanel';
+import SettingsPanelSection from '../../components/SettingsPanelSection';
+import { SettingsPanelProps } from '../../types';
 
 const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps } = useFormikContext();

@@ -21,6 +21,7 @@ interface OwnProps {
   asyncState: AsyncState
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
+  setDoNotPrompt?: (state: boolean) => void
   chosenForm?: FBDocumentRevisionProps
   hideSideBar?: boolean
   currentDocRevId?: string
@@ -33,6 +34,7 @@ type ChangeRequestFormContainerProps = OwnProps & SMFormHOCProps;
 
 const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
   onSubmit,
+  setDoNotPrompt,
   asyncState,
   initialValues,
   changeRequest,
@@ -50,7 +52,8 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
     const formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
 
     return {
-      ...initialValues, formInput,
+      ...initialValues,
+      formInput,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues, FBDataStore?.refreshData]);
@@ -87,6 +90,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
       asyncState={asyncState}
       changeRequest={changeRequest}
       doNotPrompt={doNotPrompt}
+      setDoNotPrompt={setDoNotPrompt}
       changeOpenStatus={changeOpenStatus}
       schema={schemaData}
       mode={FBWorkspaceModeOptions.FORM}

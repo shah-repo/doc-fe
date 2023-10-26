@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
@@ -14,6 +14,7 @@ const GeneralSettingsContainer: React.FC = () => {
   const updatedAt = useSelector(companySelectors.getGeneralSettingsUpdatedAt);
   const asyncState = useSelector(companySelectors.getGeneralSettingsAsyncState);
   const isLoading = asyncState.status === AsyncStatus.Active;
+  const [doNotPrompt, setDoNotPrompt] = useState(false);
 
   const formik = useFormik<GeneralSettings>({
     initialValues,
@@ -36,9 +37,16 @@ const GeneralSettingsContainer: React.FC = () => {
     }
   }, [asyncState]);
 
+  const handlePromptConfirm = () => setDoNotPrompt(true);
+
   return (
     <FormikProvider value={formik}>
-      <PromptIfDirty dirty={dirty} />
+      <PromptIfDirty
+        isDialog
+        dirty={dirty}
+        doNotPrompt={doNotPrompt}
+        onConfirm={handlePromptConfirm}
+      />
       <GeneralSettingsPresenter
         onSave={formik.submitForm}
         updatedAt={updatedAt}
