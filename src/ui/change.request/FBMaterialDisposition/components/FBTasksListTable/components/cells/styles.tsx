@@ -98,14 +98,14 @@ export const styles = makeStyles((theme) => ({
     '&:last-child': {
       marginBottom: theme.spacing(0),
     },
-    '& span': {
-      marginBottom: theme.spacing(0),
-      marginLeft: theme.spacing(0.75),
-    },
-    '& svg': {
+    '& svg:first-child': {
       transform: 'rotate(45deg)',
       height: '0.7em',
       width: '0.7em',
+    },
+    '& svg:last-child': {
+      height: '1em',
+      width: '1em',
     },
   },
 }));

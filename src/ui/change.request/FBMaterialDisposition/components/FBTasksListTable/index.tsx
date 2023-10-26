@@ -6,7 +6,7 @@ import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
 import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -16,7 +16,7 @@ import { toastError } from '../../../../components/notifications';
 import { FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { ASSIGNEE_ATTACHMENT_FIELD, COMMENTS_FIELD, EmployeeStatus } from './constants';
+import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -38,7 +38,6 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   };
   const discardTLItem = () => setEditedTLItem(undefined);
   const fetchTasksList = useActionCreator(taskActions.fetchTasksList);
-  // const updateTask = useActionCreator(taskActions.updateTask);
   const addTask = useActionCreator(taskActions.addTask);
   const updateTask = useActionCreator(taskActions.updateTask);
   const deleteTask = useActionCreator(taskActions.deleteTask);
@@ -136,14 +135,13 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     const payload = {
       employeeUpdates: employeeResponse?.map(data => ({
         employeeId: data.employeeId,
-        comment: values?.[COMMENTS_FIELD]?.[data?.employeeId],
+        comment: values?.[taskId]?.[COMMENTS_FIELD]?.[data?.employeeId],
       })),
     };
     updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
   };
 
   const employeeStatusUpdates = (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => {
-    const { values } = formik;
     const payload = {
       employeeUpdates: employeeResponse?.map(data => {
         if (data.employeeId !== employeeId) {
@@ -156,7 +154,28 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         return {
           employeeId: data.employeeId,
           status: employeeId === data.employeeId ? EmployeeStatus.Done : data.status,
-          attachmentId: data.attachmentId ?? values?.[ASSIGNEE_ATTACHMENT_FIELD]?.[data.employeeId]?.[0]?.id,
+          attachmentId: data.attachmentId,
+        };
+      }),
+    };
+    updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
+  };
+
+  const employeeEvidenceUpdates = (dataItem: TasksListItem, employeeId: string, attachmentId: string) => {
+    const { taskId, employeeResponse } = dataItem;
+    const payload = {
+      employeeUpdates: employeeResponse?.map(data => {
+        if (data.employeeId !== employeeId) {
+          return {
+            employeeId: data.employeeId,
+            status: data.status,
+            attachmentId: data.attachmentId,
+          };
+        }
+        return {
+          employeeId: data.employeeId,
+          status: data.status,
+          attachmentId: attachmentId,
         };
       }),
     };
@@ -171,6 +190,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     onDelete: deleteTaskItem,
     employeeCommentUpdates: employeeCommentUpdates,
     employeeStatusUpdates: employeeStatusUpdates,
+    employeeEvidenceUpdates: employeeEvidenceUpdates,
+    disabled: ChangeRequestStatus.Closed === changeRequest?.state,
   });
 
   const getColumns = () => {

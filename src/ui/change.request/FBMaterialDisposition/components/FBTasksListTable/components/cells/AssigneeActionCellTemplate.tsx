@@ -12,7 +12,7 @@ import { styles } from './styles';
 
 export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
-  const { dataItem, employeeStatusUpdates } = props;
+  const { dataItem, employeeStatusUpdates, disabled } = props;
   const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const { taskId } = dataItem;
   const handleClick = (employeeId: string) => {
@@ -28,6 +28,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (props)
             className={classes.assigneeAction}
             onClick={() => handleClick(employeeId)}
             data-cy="assignee-action-button"
+            disabled={disabled}
           >
             {translate('approvalRequest.tasks.list.assignee.complete')}
           </Button>

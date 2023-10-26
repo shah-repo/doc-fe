@@ -35,13 +35,17 @@ export interface SchemaOptions {
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void
+  disabled: boolean
   onRowClick?: (e: TLItemEditEvent) => void
   employeeCommentUpdates: (taskId: string, employeeResponse: EmployeeResponse[]) => void
   employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
+  employeeEvidenceUpdates: (dataItem: TasksListItem, employeeId: string, attachmentId: string) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableTLItem> {
   onClick?: (e: TLItemEditEvent) => void
+  disabled?: boolean
   employeeCommentUpdates?: (taskId: string, employeeResponse: EmployeeResponse[]) => void
   employeeStatusUpdates?: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
+  employeeEvidenceUpdates?: (dataItem: TasksListItem, employeeId: string, attachmentId: string) => void
 }

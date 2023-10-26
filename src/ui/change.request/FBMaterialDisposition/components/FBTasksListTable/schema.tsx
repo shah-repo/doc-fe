@@ -14,8 +14,10 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  disabled,
   employeeCommentUpdates,
   employeeStatusUpdates,
+  employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTLItem>> => {
   return [
     {
@@ -31,7 +33,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.instructions',
       show: true,
       template: (props) => <InstructionsCellTemplate {...props} onClick={onRowClick} />,
-      width: 1100,
+      width: 600,
       sortable: false,
     },
     {
@@ -47,7 +49,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'approvalRequest.grid.heading.attachments',
       show: false,
-      template: (props) => <UploadEvidenceCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, disabled }} />,
       width: 324,
     },
     {
@@ -55,14 +57,14 @@ export const buildSchema = ({
       field: 'comments',
       title: 'approvalRequest.grid.heading.comments',
       show: false,
-      template: (props) => <CommentCellTemplate {...props} employeeCommentUpdates={employeeCommentUpdates} />,
+      template: (props) => <CommentCellTemplate {...props} {...{ employeeCommentUpdates, disabled }} />,
       width: 324,
     },
     {
       id: 'assigneeAction',
       title: 'approvalRequest.grid.heading.assignee.action',
       show: false,
-      template: (props) => <AssigneeActionCellTemplate {...props} employeeStatusUpdates={employeeStatusUpdates} />,
+      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, disabled }} />,
       width: 290,
     },
     {
