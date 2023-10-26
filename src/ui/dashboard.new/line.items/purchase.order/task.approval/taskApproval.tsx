@@ -363,11 +363,19 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Grid className={classes.gridMobile}>
-          <Button className={classes.rejectButton} onClick={handleRejectClick}>
+          <Button
+            className={classes.rejectButton}
+            data-cy="transition-reject"
+            onClick={handleRejectClick}
+          >
             <RejectIcon fill={Colors.white} />
             <Text message="common.reject" />
           </Button>
-          <Button className={classes.approvalButton} onClick={handleApproveClick}>
+          <Button
+            className={classes.approvalButton}
+            data-cy="transition-approve"
+            onClick={handleApproveClick}
+          >
             <ApproveIcon fill={Colors.white} />
             <Text message="common.approve" />
           </Button>
