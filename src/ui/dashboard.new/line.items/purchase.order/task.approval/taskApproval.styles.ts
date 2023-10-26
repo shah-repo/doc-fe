@@ -33,16 +33,15 @@ export default makeStyles((theme: NextTheme) => ({
     },
   },
   rejectButton: {
-    background: Colors.error,
-    '&:hover': {
-      background: Colors.error,
-    },
+    display: 'none',
+  },
+  gridWeb: {
+    display: 'flex',
+    justifyContent: 'center',
+    background: Colors.primaryHighlight,
   },
   approvalButton: {
-    background: Colors.success,
-    '&:hover': {
-      background: Colors.success,
-    },
+    display: 'none',
   },
   downloadButton: {
     background: Colors.textGray,
@@ -74,6 +73,21 @@ export default makeStyles((theme: NextTheme) => ({
     },
     gridMobile: {
       display: 'flex',
+    },
+    rejectButton: {
+      borderRadius: 25,
+      background: Colors.error,
+      color: Colors.gray,
+      display: 'inline-flex',
+      paddingRight: theme.spacing(2.4),
+    },
+    approvalButton: {
+      borderRadius: 25,
+      background: Colors.success,
+      color: Colors.gray,
+      display: 'inline-flex',
+      paddingRight: theme.spacing(2.4),
+
     },
     nested: {
       borderLeft: 'none',
