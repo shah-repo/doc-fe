@@ -1,8 +1,5 @@
+import { noop } from 'lodash';
 import { useEffect, useRef } from 'react';
-
-const noop = () => {
-  // do nothing
-};
 
 const useInterval = (
   callback: () => void,
@@ -17,7 +14,7 @@ const useInterval = (
 
   // Set up the interval.
   useEffect(() => {
-    function tick() {
+    function tick () {
       savedCallback.current();
     }
     if (delay !== null) {

@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { getHasPermission } from '../../../../common/utils/selectors';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -22,10 +23,11 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import FBDataStore from '../../../../ui/form.builder/FBStore/FBDataStore';
 import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
@@ -174,9 +176,23 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       <PromptIfDirty
         dirty={dirty}
         doNotPrompt={doNotPrompt}
-        setDoNotPrompt={setDoNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        {...{ isPOEditState }}
+        onConfirm={async () => {
+          setDoNotPrompt?.(true);
+          if (isPOEditState) {
+            const prevPODoc = await getPOSavedInfo();
+
+            if (!prevPODoc.length) {
+              return;
+            }
+
+            await workspaceState?.undoPO(prevPODoc[0]);
+            await clearPOSavedInfo();
+            FBDataStore.setRefreshData(undefined);
+          }
+        }}
+        isDialog={isPOEditState}
+        message={isPOEditState ? 'common.navigate.away.po.prompt' : undefined}
       />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}

@@ -1,6 +1,6 @@
 import { BoxProps } from '@material-ui/core';
 import { FormikProps } from 'formik';
-import { cloneDeep, map } from 'lodash';
+import { cloneDeep, isEmpty, map } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,10 @@ import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/do
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
+import { compareValuesToSubmit } from '../../components/forms/helpers';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
+import { FBFormStateContext } from '../../form.builder/FBForm/FBForm.wrap';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
 import FBMaterialDisposition from '../FBMaterialDisposition';
@@ -19,7 +22,8 @@ import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
 import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
 import ChangeRequestFormHeader from './ChangeRequestFormHeader';
-import { ChangeRequestFormValues } from './types';
+import { toChangeRequestEditRequestBody } from './transform';
+import { ChangeRequestFormValues, ReactContext } from './types';
 
 type ChangeRequestFormProps =
 & Pick<SMProviderProps, '_formState' | '_documentRevisionFormState'>
@@ -30,6 +34,7 @@ type ChangeRequestFormProps =
   asyncState: AsyncState
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
+  setDoNotPrompt?: (state: boolean) => void
   changeOpenStatus: (status: boolean) => void
   schema?: FBSchemaProps[]
   mode: FBWorkspaceMode
@@ -46,6 +51,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   asyncState,
   changeRequest,
   doNotPrompt,
+  setDoNotPrompt,
   changeOpenStatus,
   schema,
   mode,
@@ -59,16 +65,19 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   inDialog = false,
 }) => {
   const { _tabsState } = SM.useStores();
+  const formStateContext = FBFormStateContext as ReactContext;
 
   _formState?.setMode(mode);
   _formState?.setAutosave(autosave);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
-  const changeSidebarOpenStatus = (status) => {
+  const changeSidebarOpenStatus = (status: boolean) => {
     setOpen(status);
     changeOpenStatus(status);
   };
+
+  const handlePromptConfirm = () => setDoNotPrompt?.(true);
 
   const docTypeGroup = changeRequest?.documentType.group ?? 'OTHER';
   const tabConfig = useSelector((state: ApplicationState) =>
@@ -97,6 +106,17 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (_formState) {
+      const dataToSubmit = compareValuesToSubmit(
+        formValues.initialValues,
+        { ...formValues.values, formInput: formStateContext?._currentValue },
+        toChangeRequestEditRequestBody,
+      );
+      _formState.isDirty = !isEmpty(dataToSubmit);
+    }
+  }, [_formState, formStateContext, formValues.initialValues, formValues.values]);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
@@ -106,19 +126,25 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         <FormHeader {...{ changeRequest, asyncState }} />
       }
     >
+      <PromptIfDirty
+        isDialog
+        dirty={_formState?.isDirty ?? false}
+        doNotPrompt={doNotPrompt}
+        onConfirm={handlePromptConfirm}
+      />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
         contentBoxProps={{ stretchY: '100%' }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && !hideSideBar && {
+        {...(changeRequest?.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
                 setOpen={changeSidebarOpenStatus} fromEdit={true} />}
             </Observer>
           ),
-        }}
+        })}
       >
         <Observer>
           {() => (

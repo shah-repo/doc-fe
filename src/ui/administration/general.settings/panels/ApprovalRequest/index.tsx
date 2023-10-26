@@ -1,10 +1,10 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { translate } from '../../../../common/intl';
-import { GeneralSettings } from '../../../../state/ducks/company/types';
-import SettingsPanel from '../components/SettingsPanel';
-import SwitchControl from '../components/SwitchControl';
-import { SettingsPanelProps } from '../types';
+import { translate } from '../../../../../common/intl';
+import { GeneralSettings } from '../../../../../state/ducks/company/types';
+import SettingsPanel from '../../components/SettingsPanel';
+import SwitchControl from '../../components/SwitchControl';
+import { SettingsPanelProps } from '../../types';
 
 const ApprovalRequestsSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
