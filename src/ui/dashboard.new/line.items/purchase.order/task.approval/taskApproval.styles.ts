@@ -21,6 +21,7 @@ export default makeStyles((theme: NextTheme) => ({
   },
   gridMobile: {
     display: 'none',
+    backgroundColor: Colors.primaryHighlight,
     justifyContent: 'center',
     flexWrap: 'wrap',
     '& > button': {

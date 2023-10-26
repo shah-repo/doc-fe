@@ -10,18 +10,34 @@ export default makeStyles((theme: NextTheme) => ({
     marginLeft: 4,
     marginRight: 5,
   }),
-  approvalButton: {
-    display: 'none',
-  },
-  rejectButton: {
-    display: 'none',
-  },
   innerWrap: {
     display: 'inline-flex',
   },
-  gridWeb: {
-    display: 'flex',
+  gridMobile: {
+    display: 'none',
+    backgroundColor: Colors.primaryHighlight,
     justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > button': {
+      borderRadius: 25,
+      color: Colors.white,
+      padding: `${theme.spacing(1.5)}px ${theme.spacing(3)}px`,
+      '& svg': {
+        marginRight: theme.spacing(0.5),
+      },
+    },
+  },
+  rejectButton: {
+    background: Colors.error,
+    '&:hover': {
+      background: Colors.error,
+    },
+  },
+  approvalButton: {
+    background: Colors.success,
+    '&:hover': {
+      background: Colors.success,
+    },
   },
   viewIconMobile: {
     display: 'block',
@@ -36,20 +52,8 @@ export default makeStyles((theme: NextTheme) => ({
     innerWrap: {
       display: 'block',
     },
-    rejectButton: {
-      borderRadius: 25,
-      background: Colors.error,
-      color: Colors.gray,
-      display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-    },
-    approvalButton: {
-      borderRadius: 25,
-      background: Colors.success,
-      color: Colors.gray,
-      display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-
+    gridMobile: {
+      display: 'flex',
     },
     nested: {
       borderLeft: 'none',
