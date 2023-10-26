@@ -465,7 +465,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       }
     }
 
-    if (inRestrictedEditMode && (!hasPermisstionToEditRestrictedPart || isEditingLineItemsDisallowed)) {
+    if (disableEditInRestrictedEditMode(dataItem)) {
       return;
     }
 
@@ -611,6 +611,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     }
   };
 
+  const disableEditInRestrictedEditMode = (item) => {
+    return inRestrictedEditMode && ((!item.isParentOwner && !hasPermisstionToEditRestrictedPart) || isEditingLineItemsDisallowed);
+  };
+
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableBOM;
     const parentChildRelkey = item.parentDocId ? `bom-row-${item.parentDocId}-${item.docId}` : `bom-row-${item.docId}`;
@@ -638,7 +642,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     const showWithoutActions = !item[MODE_FIELD]
       || !item.isEditEnabled
       || (!inRestrictedEditMode && !item.isParentOwner)
-      || (inRestrictedEditMode && (!hasPermisstionToEditRestrictedPart || isEditingLineItemsDisallowed));
+      || disableEditInRestrictedEditMode(item);
     if (showWithoutActions) {
       return React.cloneElement(row, {
         ...modifiedProps,
