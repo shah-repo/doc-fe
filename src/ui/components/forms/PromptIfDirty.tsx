@@ -69,15 +69,11 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     history.push(lastLocation?.pathname);
   };
 
-  const handlePromptMessage: PromptProps['message'] = (args) => {
-    return isDialog ? handleBlockedNavigation(args) : translate(message);
-  };
-
   return (
     <>
       <Prompt
         when={dirty && !doNotPrompt}
-        message={isDialog ? handlePromptMessage : translate(message)}
+        message={isDialog ? handleBlockedNavigation : translate(message)}
       />
       <AlertDialog
         handler={dialog}
