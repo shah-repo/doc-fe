@@ -49,6 +49,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       inInventoryAction: dataItem.inInventoryAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
       inWipAction: dataItem.inWipAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
       asFinishedGoodsAction: dataItem.asFinishedGoodsAction ?? EMPTY_DROPDOWN_PLACEHOLDER,
+      usedLocation: dataItem.usedLocation ?? EMPTY_DROPDOWN_PLACEHOLDER,
     };
     setEditedMDItem(prepareDataItem as EditableMDItem);
   };

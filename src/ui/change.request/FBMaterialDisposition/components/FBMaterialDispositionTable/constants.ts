@@ -10,6 +10,6 @@ export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.scrap', value: 'SCRAP' },
   { label: 'common.not.applicable', value: 'N/A' },
 ];
-export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction'];
+export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction', 'usedLocation'];
 export const ON_ORDER_PO_ACTION_COLUMN = 'onOrderPOAction';
-export const FIELDS_TO_PICK = [...DROPDOWN_FIELDS, 'comment', 'usedLocation'];
+export const FIELDS_TO_PICK = [...DROPDOWN_FIELDS, 'comment'];
