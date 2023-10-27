@@ -61,7 +61,7 @@ export const approversById = (
   }
 };
 
-export const usersById = (
+const usersById = (
   state: ChangeRequestsApproversByIdState = {},
   action: ChangeRequestListApproversAction,
 ): ChangeRequestsApproversByIdState => {
