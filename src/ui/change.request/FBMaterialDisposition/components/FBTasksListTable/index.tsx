@@ -31,6 +31,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const classes = useStyles();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
+  const increasedBy = isTasksListAdded ? 2 : 1;
   const [data, setData] = React.useState<Array<Partial<EditableTLItem>>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
@@ -232,11 +233,11 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
 
   const MDItemList = data.reduce<Array<Partial<EditableTLItem>>>((list, item, index) => {
     const isMDItemEdited = editedTLItem && editedTLItem.taskId === item.taskId;
-
+    const number = `${index + increasedBy}`;
     return [
       ...list,
       {
-        ...(isMDItemEdited ? { ...editedTLItem, number: `${index + 1}` } : { ...item, number: `${index + 1}` }),
+        ...(isMDItemEdited ? { ...editedTLItem, number } : { ...item, number }),
         [MODE_FIELD]: isMDItemEdited ? Mode.edit : Mode.show,
       },
     ];

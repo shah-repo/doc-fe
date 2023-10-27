@@ -80,7 +80,7 @@ export const buildSchema = ({
       id: 'usedLocation',
       title: 'approvalRequest.grid.heading.field',
       show: true,
-      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
       width: 201,
     },
     {

@@ -17,9 +17,7 @@ import { styles } from './styles';
 
 const renderUsers = (selectedUsers, removeUser?) => {
   const classes = styles();
-  const approvers = useSelector((state: ApplicationState) => {
-    return state.changeRequests.approversByIdMap;
-  });
+  const approvers = useSelector((state: ApplicationState) => changeRequestsSelectors.usersById(state));
   const users = selectedUsers?.map(({ employeeId }) => approvers[employeeId]);
   return (
     <>
