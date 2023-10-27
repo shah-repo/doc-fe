@@ -6,6 +6,7 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import Text from '../../components/Text';
+import { useFormContext } from '../../components/forms/FormContext';
 import { FBFormState } from '../../form.builder';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
 import useStyles from './ApprovalRequestGrid.styles';
@@ -81,6 +82,7 @@ const ItemsAndDetails: React.FunctionComponent<{
 }) => {
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
+  const { isEditing } = useFormContext();
 
   useEffect(() => {
     if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
@@ -134,7 +136,7 @@ const ItemsAndDetails: React.FunctionComponent<{
       [classes.tabContentInactive]: itemsAndDetailsState.loadingState,
     })}>
       { itemsAndDetailsState.loadingState && <Loader /> }
-      <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible} />
+      <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible && !isEditing} />
       <ApprovalRequestGridHeader lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute} />
       { isEditRowVisible && <ApprovalRequestEditGridItem
         {...{ formState }}
@@ -155,6 +157,7 @@ const ItemsAndDetails: React.FunctionComponent<{
             viewItemActionsVisible = {itemsAndDetailsState.viewItemActionsVisible}
             itemsAndDetailsState = {itemsAndDetailsState}
             lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
+            isDeletionDisabled={isEditing}
           />
         ))
       }

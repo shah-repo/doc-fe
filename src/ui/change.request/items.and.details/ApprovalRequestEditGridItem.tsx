@@ -1,4 +1,4 @@
-import { Button, Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
+import { Button, FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
@@ -20,6 +20,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
   lineItemPartCanSubstitute?: boolean
+  isDeletionDisabled?: boolean
 }> = ({
   disabledOptions,
   formState,
@@ -30,11 +31,11 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   handleRemove,
   lineItemPartCanSubstitute,
   entry,
+  isDeletionDisabled,
 }) => {
   const classes = useStyles();
-
   const location = useLocation();
-  const showDeleteButton = !location.pathname.includes(entry?.docRevId);
+  const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
 
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
 
