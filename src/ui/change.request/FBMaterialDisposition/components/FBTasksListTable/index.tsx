@@ -136,6 +136,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
       employeeUpdates: employeeResponse?.map(data => ({
         employeeId: data.employeeId,
         comment: values?.[taskId]?.[COMMENTS_FIELD]?.[data?.employeeId],
+        status: data.status,
+        attachmentId: data.attachmentId,
       })),
     };
     updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);

@@ -28,7 +28,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
     return () => {
       disposer();
     };
-  }, []);
+  }, [dataItem, employeeEvidenceUpdates]);
 
   return (
     <FBFileField className={classes.uploadEvidenceField}
