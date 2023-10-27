@@ -151,6 +151,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         onMouseEnter={onMouseHoverListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.buttoncursor}
+        onClick={handleClick}
       >
         {open ? (
           <CollapseIcon className={`${classes.icon} ${classes.collapseIcon}`} data-cy="collapse-icon" onClick={handleClick} />
@@ -361,47 +362,24 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <Grid className={classes.gridWeb}>
-          <Button className={classes.rejectButton} onClick={handleRejectClick}>
-            <span className={classes.actionIcon}>
-              {!rejectHover && (
-                <RejectIcon fill={Colors.white_smoke} stroke={Colors.white_smoke}
-                  data-cy="transition-reject"
-                  onMouseEnter={onMouseHoverRejectIcon}
-                  className={classes.cursorPointer}
-                />
-              )}
-              {rejectHover && (
-                <RejectIcon fill={Colors.white_smoke}
-                  data-cy="transition-reject"
-                  onClick={handleRejectClick}
-                  onMouseLeave={onMouseLeaveActionIcons}
-                  className={classes.cursorPointer}
-                />
-              )}
-            </span>  <Text message="common.reject" />
+        <Grid className={classes.gridMobile}>
+          <Button
+            className={classes.rejectButton}
+            data-cy="transition-reject"
+            onClick={handleRejectClick}
+          >
+            <RejectIcon fill={Colors.white} />
+            <Text message="common.reject" />
           </Button>
-          <Button className={classes.approvalButton} onClick={handleApproveClick}>
-            <span className={classes.actionIcon}>
-              {!approveHover && (
-                <ApproveIcon fill={Colors.white_smoke}
-                  data-cy="transition-approve"
-                  onMouseEnter={onMouseHoverApproveIcon}
-                  className={classes.cursorPointer}
-                />
-              )}
-              {approveHover && (
-
-                <ApproveIcon fill={Colors.white_smoke}
-                  data-cy="transition-approve"
-                  onClick={handleApproveClick}
-                  onMouseLeave={onMouseLeaveActionIcons}
-                  className={classes.cursorPointer}
-                />
-
-              )}
-            </span>  <Text message="common.approve" />
-          </Button></Grid>
+          <Button
+            className={classes.approvalButton}
+            data-cy="transition-approve"
+            onClick={handleApproveClick}
+          >
+            <ApproveIcon fill={Colors.white} />
+            <Text message="common.approve" />
+          </Button>
+        </Grid>
       </Collapse>
       <ApproveDialogueContainer
         transition="approve"
