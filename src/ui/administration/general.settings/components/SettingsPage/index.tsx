@@ -19,6 +19,9 @@ const GeneralSettingsContainer: React.FC = () => {
   const formik = useFormik<GeneralSettings>({
     initialValues,
     onSubmit: (values) => {
+      if (!values.zebraPrint?.apiKey) {
+        values.zebraPrint = undefined;
+      }
       dispatch(companyActions.updateGeneralSettings(values));
     },
   });

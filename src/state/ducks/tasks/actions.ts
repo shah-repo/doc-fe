@@ -1,7 +1,7 @@
 import { TasksListEditRequestBody, TasksListItem } from '../../../ui/change.request/FBMaterialDisposition/components/FBTasksListTable/interface';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { FETCH_ALL_TASKS_LIST, TASKS_LIST } from './constants';
+import { FETCH_ALL_TASKS_LIST, FETCH_PENDING_TASKS_COUNT, TASKS_LIST } from './constants';
 
 const fetchTasksList = (arId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
@@ -56,11 +56,22 @@ const UpdateEmployeeDetails = (
     handlers,
   });
 
+const getPendingTasksCount = (
+  arId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${FETCH_PENDING_TASKS_COUNT}/${arId}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   fetchTasksList,
   fetchTask,
   addTask,
   updateTask,
   UpdateEmployeeDetails,
+  getPendingTasksCount,
   deleteTask,
 };
