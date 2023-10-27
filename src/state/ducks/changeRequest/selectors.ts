@@ -9,6 +9,7 @@ import { ChangeRequestDependentOnDocRevsState } from './types';
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
 const approversById = (state: ApplicationState) => state.changeRequests.approversById;
+const usersById = (state: ApplicationState) => state.changeRequests.usersById;
 const approversAllIds = (state: ApplicationState) => state.changeRequests.approversAllIds;
 const auditsByCRId = (state: ApplicationState) => state.changeRequests.auditsByCRId;
 
@@ -106,4 +107,5 @@ export default {
   getAssignessList,
   makeGetAudit,
   getDependentOnDocRevsState,
+  usersById,
 };

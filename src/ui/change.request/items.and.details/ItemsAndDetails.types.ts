@@ -19,7 +19,7 @@ export interface FBDocumentRevisionResponse {
   }
 }
 
-export interface WhereUsed {
+interface WhereUsed {
   name: string
   parentDocId: string
   depth: number
