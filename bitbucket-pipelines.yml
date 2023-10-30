@@ -3,7 +3,10 @@ clone:
 
 definitions:
   caches:
-    yarncustom:
+    yarn-node-modules:
+      key:
+        files:
+          - yarn.lock
       path: ./node_modules
   steps:
     - step: &COMMON
@@ -15,8 +18,7 @@ definitions:
         max-time: 20
         size: 2x
         caches:
-          - node
-          - yarncustom
+          - yarn-node-modules
 
     - step: &COMMON_BUILD
         image:
@@ -27,8 +29,7 @@ definitions:
         max-time: 20
         size: 2x
         caches:
-          - node
-          - yarncustom
+          - yarn-node-modules
 
     - step: &COMMON_DEPLOY
         image:
@@ -57,8 +58,7 @@ definitions:
         name: Tests
         size: 2x
         caches:
-          - node
-          - yarncustom
+          - yarn-node-modules
         artifacts:
           - test-results/**
           - jest-config/**

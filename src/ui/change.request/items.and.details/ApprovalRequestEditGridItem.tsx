@@ -22,6 +22,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   entry?: ApprovalRequestGridItem
   lineItemPartCanSubstitute?: boolean
   documentRevision?: DocumentRevision
+  isDeletionDisabled?: boolean
 }> = ({
   disabledOptions,
   formState,
@@ -33,11 +34,11 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   lineItemPartCanSubstitute,
   entry,
   documentRevision,
+  isDeletionDisabled,
 }) => {
   const classes = useStyles();
-
   const location = useLocation();
-  const showDeleteButton = !location.pathname.includes(entry?.docRevId);
+  const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
 
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
 

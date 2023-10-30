@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
-import { ChangeRequest, ChangeRequestEditRequestBody } from '../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
 import { ApplicationState } from '../../state/reducers';
 import ChangeRequestFormContainer from '../change.request/form/ChangeRequestForm.container';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../change.request/form/transform';
@@ -57,6 +57,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const history = useHistory();
+  const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
 
   useEffect(() => {
     FBDataStore?.setRefreshData({
@@ -83,6 +84,11 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       }
     },
   });
+
+  if (isEditing && !isInReview) {
+    return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
+  }
+
   if (!canEditChangeRequest) {
     if (inDialog) {
       return (

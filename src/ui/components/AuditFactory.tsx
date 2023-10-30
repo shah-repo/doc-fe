@@ -157,8 +157,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
       case 'documentRevisions': {
-        const { displayRevision, document } = audit.nextValue as DocumentRevision;
-        returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}</div>);
+        const { displayRevision, document, name } = audit.nextValue as DocumentRevision;
+        const displayName = name ? ` - ${name}` : '';
+        returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}{displayName}</div>);
         break;
       }
       case 'tasks.dueDate':
