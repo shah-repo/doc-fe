@@ -152,10 +152,10 @@ export const getEnabledFieldsForEditing = (documentRevision: DocumentRevision | 
   if (documentRevision?.isBeingEditedAfterRelease
     && documentRevision?.changeControlOptions
     && documentRevision?.changeControlOptions.formInput) {
-    if (documentRevision?.changeControlOptions.formInput['bom-line-changes'] === 'Yes') {
+    if (documentRevision?.changeControlOptions.formInput[BOM_LINE_CHANGES_KEY] === 'Yes') {
       fieldNames = [];
     } else {
-      fieldNames = documentRevision?.changeControlOptions.formInput['bom-fields-edit'] ?? [];
+      fieldNames = documentRevision?.changeControlOptions.formInput[BOM_FIELDS_CHANGES_KEY] ?? [];
     }
   }
   return fieldNames;
