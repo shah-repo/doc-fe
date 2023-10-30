@@ -1,4 +1,3 @@
-import { Context } from 'react';
 import { Attachment as AttachmentInterface } from '../../../state/ducks/attachments/types';
 import { Id, Nullable } from '../../../state/ducks/common/types';
 import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
@@ -58,8 +57,4 @@ export interface ApproverPayload {
   signatureGroupId: {
     id: Nullable<string>
   }
-}
-
-export interface ReactContext<T = unknown> extends Context<T> {
-  _currentValue: unknown
 }
