@@ -33,7 +33,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
     setAnchorEl(null);
   };
 
-  const changeControlOptions = documentRevision.changeControlOptions as ChangeControlOptions;
+  const changeControlOptions = (documentRevision.changeControlOptions ?? {}) as ChangeControlOptions;
   const formInput = changeControlOptions?.formInput ?? {};
   const schemaMap = changeControlOptions?.schemaMap ?? {};
   const { docId, displayRevision } = changeControlOptions;
