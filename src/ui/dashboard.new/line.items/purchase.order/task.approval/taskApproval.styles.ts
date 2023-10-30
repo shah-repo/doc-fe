@@ -21,6 +21,7 @@ export default makeStyles((theme: NextTheme) => ({
   },
   gridMobile: {
     display: 'none',
+    backgroundColor: Colors.primaryHighlight,
     justifyContent: 'center',
     flexWrap: 'wrap',
     '& > button': {
@@ -33,10 +34,16 @@ export default makeStyles((theme: NextTheme) => ({
     },
   },
   rejectButton: {
-    display: 'none',
+    background: Colors.error,
+    '&:hover': {
+      background: Colors.error,
+    },
   },
   approvalButton: {
-    display: 'none',
+    background: Colors.success,
+    '&:hover': {
+      background: Colors.success,
+    },
   },
   downloadButton: {
     background: Colors.textGray,
@@ -68,23 +75,6 @@ export default makeStyles((theme: NextTheme) => ({
     },
     gridMobile: {
       display: 'flex',
-      justifyContent: 'center',
-      background: Colors.primaryHighlight,
-    },
-    rejectButton: {
-      borderRadius: 25,
-      background: Colors.error,
-      color: Colors.gray,
-      display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-    },
-    approvalButton: {
-      borderRadius: 25,
-      background: Colors.success,
-      color: Colors.gray,
-      display: 'inline-flex',
-      paddingRight: theme.spacing(2.4),
-
     },
     nested: {
       borderLeft: 'none',

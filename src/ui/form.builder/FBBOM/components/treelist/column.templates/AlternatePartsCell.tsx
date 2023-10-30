@@ -23,11 +23,18 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const alternatePartsCount = dataItem[ALTERNATE_PARTS_COUNT_KEY] ?? 0;
   const isAlteratePartsExists = alternatePartsCount > 0;
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
+
   const { _documentRevisionFormState } = SM.useStores();
 
+  const disabledInRestrictedMode = dataItem.inRestrictedEditMode
+    && ((!dataItem.isParentOwner && !hasPermisstionToEditRestrictedPart)
+      || !dataItem.enabledFieldsForEditing?.includes('alternatePart')
+    );
+
   const alternatePartActionsDiabled = !hasPermissionToEditBOM
-    || (dataItem.inRestrictedEditMode && !dataItem.enabledFieldsForEditing?.includes('alternatePart'))
-    || (!dataItem.inRestrictedEditMode && !dataItem.isParentOwner);
+    || disabledInRestrictedMode
+    || (!dataItem.inRestrictedEditMode && (!dataItem.isParentOwner || !dataItem.isEditEnabled));
 
   const handleToggle = () => {
     if (!dataItem.parentNodeRevId) {
