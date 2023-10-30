@@ -1,5 +1,6 @@
 import { Box, Button, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/close.svg';
@@ -13,9 +14,13 @@ import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin
 import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
 import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { taskActions } from '../../../../../state/ducks/tasks';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
+import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
@@ -79,6 +84,33 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState('');
   const transitionDialog = useDialog();
   const hoverItem = hoverItemId === id;
+  const tasksDialog = useDialog();
+  const lotStatusDialog = useDialog();
+  const fetchPendingTasksCount = useActionCreator(taskActions.getPendingTasksCount);
+  const settings = useSelector(companySelectors.getGeneralSettings);
+
+  const tasksAsync = useAsync({
+    onSuccess: (res?: {pendingTasksCount: number}) => {
+      if (res && res?.pendingTasksCount > 0) {
+        tasksDialog.open();
+      } else {
+        openClosedDialog();
+      }
+    },
+    onError: () => {
+      transitionDialog.close();
+    },
+  });
+  const onConfirm = () => {
+    tasksDialog.close();
+    if (settings?.autoUpdateLotStatus) {
+      // consider MD items count and modified values
+      // i.e Scrap or Use-as-is selected or not
+      lotStatusDialog.open();
+    } else {
+      openClosedDialog();
+    }
+  };
 
   const handleClick = () => {
     setOpen(!open);
@@ -93,7 +125,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
     unPinLineItem?.(id);
   };
   const handleCloseClick = () => {
-    openClosedDialog();
+    tasksAsync.start(fetchPendingTasksCount, arChangeRequestId, tasksAsync);
     setClosed(!closed);
   };
   const openClosedDialog = () => {
@@ -450,6 +482,27 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
         title={title}
         transitionDialog={transitionDialog}
         label="transition.action.reject"
+      />
+      <AlertDialog
+        dialog={tasksDialog}
+        message="approvalRequest.tasks.incomplete.message"
+        type="warning"
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={onConfirm}
+      />
+      <AlertDialog
+        dialog={lotStatusDialog}
+        message="approvalRequest.lot.status.alert.message"
+        type="info"
+        title="approvalRequest.lot.status.alert.title"
+        confirmLabel="common.ok.proceed"
+        cancelLabel="common.cancel"
+        confirmAction={() => {
+          lotStatusDialog.close();
+          openClosedDialog();
+        }}
       />
     </>
   );

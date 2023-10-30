@@ -1,4 +1,7 @@
+import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import { isNil } from 'lodash';
 import React from 'react';
 import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
 import Text from '../../components/Text';
@@ -13,6 +16,15 @@ interface Props {
   dialog: DialogHandler
   confirmLabel?: Translation
   cancelLabel?: Translation
+  type?: string
+  title?: Translation
+}
+
+enum DialogTypes {
+  Warning = 'warning',
+  Info = 'info',
+  Alert = 'alert',
+
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -30,8 +42,11 @@ const AlertDialog: React.FunctionComponent<Props> = ({
   cancelAction = dialog.close,
   confirmLabel = 'common.yes.im.sure',
   cancelLabel = 'common.cancel',
+  type,
+  title,
 }) => {
   const classes = styles();
+  const isAlert = isNil(type) || type === DialogTypes.Alert;
   return (
     <>
       {
@@ -46,11 +61,13 @@ const AlertDialog: React.FunctionComponent<Props> = ({
             <DialogContentText>
               <Grid container className={classes.contentContainer}>
                 <Grid item className={classes.alertIcon}>
-                  <AlertIcon />
+                  {type === DialogTypes.Warning && <FontAwesomeIcon className={classes.warningIcon} icon={light('circle-exclamation')} />}
+                  {type === DialogTypes.Info && <FontAwesomeIcon className={classes.infoIcon} icon={light('circle-exclamation')} />}
+                  {isAlert && <AlertIcon />}
                 </Grid>
                 <Grid item >
                   <Typography data-cy="dialog-header" className={classes.alertTitle}>
-                    <Text translation="common.alert" />!
+                    <Text translation={title || 'common.alert'} />{isAlert ? '!' : ''}
                   </Typography>
                   <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text translation={message} />
