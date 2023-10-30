@@ -6,7 +6,7 @@ import { translate } from '../../../../common/intl';
 import { ChangeControlOptions, DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
-import { cccKeyNamesOrder } from '../../../document.revision/utils/helpers';
+import { BOM_LINE_CHANGES_KEY, cccKeyNamesOrder } from '../../../document.revision/utils/helpers';
 import { styles } from './cancelEditPartButton.styles';
 
 interface Props {
@@ -37,6 +37,11 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
   const formInput = changeControlOptions?.formInput ?? {};
   const schemaMap = changeControlOptions?.schemaMap ?? {};
   const { docId, displayRevision } = changeControlOptions;
+
+  let cccKeyNamesToUse = cccKeyNamesOrder;
+  if (formInput[BOM_LINE_CHANGES_KEY] === 'Yes') {
+    cccKeyNamesToUse = cccKeyNamesToUse.filter(keyName => keyName !== 'bom-fields-edit');
+  }
 
   return (
     <ButtonGroup
@@ -84,7 +89,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
           <span className={classes.formDetails}>{docId} rev{displayRevision}</span>
         </Typography>
         <ul className={classes.optionsList}>
-          {cccKeyNamesOrder.map((key: string) => (
+          {cccKeyNamesToUse.map((key: string) => (
             <>
               { schemaMap[key] && <li key={key} className={classes.listItem}>
                 <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
