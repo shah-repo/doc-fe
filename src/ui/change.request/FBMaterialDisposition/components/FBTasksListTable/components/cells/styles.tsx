@@ -62,7 +62,7 @@ export const styles = makeStyles((theme) => ({
   },
   assigneeActionStatus: {
     color: Colors.almost_black,
-
+    fontSize: 12,
     fontWeight: 700,
     marginLeft: theme.spacing(0.625),
   },

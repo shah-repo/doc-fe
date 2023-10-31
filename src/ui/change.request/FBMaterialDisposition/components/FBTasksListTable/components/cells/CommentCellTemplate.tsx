@@ -22,7 +22,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, empl
   };
 
   const employee = find(employeeResponse, { employeeId });
-  const value = get(values, field, undefined) ?? employee.comment;
+  const value = get(values, field, undefined) ?? employee?.comment;
 
   return (
     <FormikField
@@ -44,7 +44,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, empl
 
 export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
-  const { dataItem } = props;
+  const { dataItem, disabled } = props;
   const { taskId } = dataItem;
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const assigneeComments = dataItem.employeeResponse?.reduce((empObj, emp) => ({
@@ -56,8 +56,8 @@ export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
     <OverflowingContent>
       {assigneList?.map(({ employeeId, status }) => {
         return <div className={classes.commentCell} >
-          {!(status === EmployeeStatus.Done) && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
-          {(status === EmployeeStatus.Done) && (assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER)}
+          {(status !== EmployeeStatus.Done && !disabled) && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
+          {(status === EmployeeStatus.Done || disabled) && (assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER)}
         </div>;
       })}
     </OverflowingContent>

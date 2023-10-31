@@ -20,18 +20,28 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (props)
   };
 
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
+
+  const getAssigneeActionButton = (status, employeeId) => {
+    if (status !== EmployeeStatus.Done && disabled) {
+      return (<span className={classes.assigneeActionStatus}>
+        {translate('approvalRequest.tasks.list.assignee.status.notCompleted')}
+      </span>);
+    }
+    return (<>
+      <Button
+        className={classes.assigneeAction}
+        onClick={() => handleClick(employeeId)}
+        data-cy="assignee-action-button"
+        disabled={disabled}
+      >
+        {translate('approvalRequest.tasks.list.assignee.complete')}
+      </Button>
+    </>);
+  };
   return (<>
     {assigneList?.map(({ employeeId, status, updatedAt }) => {
       return (<div className={classes.employeeResponseFields}>
-        {!(status === EmployeeStatus.Done)
-          ? <Button
-            className={classes.assigneeAction}
-            onClick={() => handleClick(employeeId)}
-            data-cy="assignee-action-button"
-            disabled={disabled}
-          >
-            {translate('approvalRequest.tasks.list.assignee.complete')}
-          </Button>
+        {!(status === EmployeeStatus.Done) ? getAssigneeActionButton(status, employeeId)
           : <OverflowingContent>
             <div className={classes.assigneeActionStatusContainer}>
               <CompletedIcon />

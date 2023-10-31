@@ -12,6 +12,7 @@ interface Props extends FBFilesPresenterProps {
   employeeId: string
   status: string
   dataItem: TasksListItem
+  disabled?: boolean
   employeeEvidenceUpdates?: (dataItem: TasksListItem, employeeId: string, attachmentId: string) => void
 }
 
@@ -21,10 +22,9 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   employeeId,
   dataItem,
   status,
+  disabled,
   employeeEvidenceUpdates,
 }) => {
-  // const { setFieldValue } = useFormikContext();
-
   const removeAttachment = () => {
     employeeEvidenceUpdates?.(dataItem, employeeId, '');
   };
@@ -40,7 +40,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                 <span>{`${name}.${type}`}</span>
               </OverflowingContent>
             </Box>
-            {!(status === EmployeeStatus.Done) && <CloseIcon cursor="pointer" onClick={removeAttachment} />}
+            {(status !== EmployeeStatus.Done && !disabled) && <CloseIcon cursor="pointer" onClick={removeAttachment} />}
           </>);
         }}
       </FBMapWrapper>

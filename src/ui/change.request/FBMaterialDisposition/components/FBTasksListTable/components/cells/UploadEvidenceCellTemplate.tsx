@@ -40,7 +40,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
 };
 
 export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, employeeEvidenceUpdates } = props;
+  const { dataItem, employeeEvidenceUpdates, disabled } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   return (<>
@@ -50,7 +50,7 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
         {(!attachmentId && !(status === EmployeeStatus.Done)) ? (<FBProvider {...{ fileUploadState }}>
           <Editor {...props} {...{ employeeId, name } } />
         </FBProvider>)
-          : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status }} boxProps={{ className: classes.attachmentName }} />}
+          : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status, disabled }} boxProps={{ className: classes.attachmentName }} />}
       </div>;
     })}
   </>);
