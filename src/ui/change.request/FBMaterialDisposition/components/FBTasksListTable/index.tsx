@@ -194,7 +194,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     employeeCommentUpdates: employeeCommentUpdates,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: employeeEvidenceUpdates,
-    disabled: (ChangeRequestStatus.Closed === changeRequest?.state || isShowOnly),
+    disabled: ChangeRequestStatus.Closed === changeRequest?.state,
     currentState: changeRequest?.state,
   });
 

@@ -1,6 +1,9 @@
 import { useFormikContext } from 'formik';
 import { find, get, isEmpty } from 'lodash';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../../../../state/ducks/auth';
+import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { COMMENTS_FIELD, EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
@@ -44,21 +47,23 @@ const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, empl
 
 export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
-  const { dataItem, disabled } = props;
+  const { dataItem, currentState } = props;
   const { taskId } = dataItem;
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const assigneeComments = dataItem.employeeResponse?.reduce((empObj, emp) => ({
     ...empObj,
     [emp.employeeId]: emp.comment,
   }), {});
-  console.log('disabled :', disabled);
+  const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const isClosedAR = currentState === ChangeRequestStatus.Closed;
+  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosedAR && status !== EmployeeStatus.Done;
 
   return (<>
     <OverflowingContent>
       {assigneList?.map(({ employeeId, status }) => {
         return <div className={classes.commentCell} >
-          {(!disabled && status !== EmployeeStatus.Done) && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
-          {(status === EmployeeStatus.Done || disabled) && (assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER)}
+          {showEditor(employeeId, status) && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
+          {!showEditor(employeeId, status) && (assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER)}
         </div>;
       })}
     </OverflowingContent>

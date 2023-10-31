@@ -5,7 +5,6 @@ import { ReactComponent as CloseIcon } from '../../../../../../assets/images/tra
 import { FBAttachment, FBFilesPresenterProps, FBMapWrapper } from '../../../../../form.builder';
 import { withFBFilesPresenter } from '../../../../../form.builder/FBFilesPresenter/FBFilesPresenter.wrap';
 import OverflowingContent from '../../commonCells/OveflowContent';
-import { EmployeeStatus } from '../constants';
 import { TasksListItem } from '../interface';
 
 interface Props extends FBFilesPresenterProps {
@@ -40,7 +39,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                 <span>{`${name}.${type}`}</span>
               </OverflowingContent>
             </Box>
-            {(status !== EmployeeStatus.Done && !disabled) && <CloseIcon cursor="pointer" onClick={removeAttachment} />}
+            {!disabled && <CloseIcon cursor="pointer" onClick={removeAttachment} />}
           </>);
         }}
       </FBMapWrapper>

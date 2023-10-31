@@ -1,6 +1,9 @@
 import { get, isEmpty } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../../../../../state/ducks/auth';
+import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { FB, FBFileField, FBFileUploadState, FBProvider } from '../../../../../../form.builder';
 import { EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../interface';
@@ -40,17 +43,21 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
 };
 
 export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, employeeEvidenceUpdates, disabled } = props;
+  const { dataItem, employeeEvidenceUpdates, currentState } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
+  const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const isClosedAR = currentState === ChangeRequestStatus.Closed;
+  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosedAR && status !== EmployeeStatus.Done;
+
   return (<>
     {assigneList?.map(({ employeeId, attachmentId, status, name }) => {
       const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
       return <div className={classes.employeeResponseFields}>
-        {(!attachmentId && !(status === EmployeeStatus.Done)) ? (<FBProvider {...{ fileUploadState }}>
+        {(!attachmentId && showEditor(employeeId, status)) ? (<FBProvider {...{ fileUploadState }}>
           <Editor {...props} {...{ employeeId, name } } />
         </FBProvider>)
-          : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status, disabled }} boxProps={{ className: classes.attachmentName }} />}
+          : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status, disabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentName }} />}
       </div>;
     })}
   </>);
