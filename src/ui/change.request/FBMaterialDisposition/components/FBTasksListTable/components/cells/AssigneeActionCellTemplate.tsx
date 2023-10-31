@@ -1,48 +1,40 @@
 // import { useFormikContext } from 'formik';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get } from 'lodash';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { ReactComponent as CompletedIcon } from '../../../../../../../assets/images/approved_status.svg';
 import { translate } from '../../../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../../../common/utils/date';
+import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { Button } from '../../../../../../components/forms/fields-next';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EmployeeStatus, EMPLOYEE_RESPONSE_FIELD } from '../../constants';
+import { EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../interface';
 import { styles } from './styles';
 
 export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
-  const { dataItem, employeeStatusUpdates, disabled } = props;
+  const { dataItem, employeeStatusUpdates, disabled, currentState } = props;
   const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const { taskId } = dataItem;
   const handleClick = (employeeId: string) => {
     employeeStatusUpdates?.(taskId, employeeResponse, employeeId);
   };
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
+  const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  console.log('currentState ::', currentState);
+  console.log('currentUserEmail ::', currentUserEmail, currentUserId);
 
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
-
-  const getAssigneeActionButton = (status, employeeId) => {
-    if (status !== EmployeeStatus.Done && disabled) {
-      return (<span className={classes.assigneeActionStatus}>
-        {translate('approvalRequest.tasks.list.assignee.status.notCompleted')}
-      </span>);
-    }
-    return (<>
-      <Button
-        className={classes.assigneeAction}
-        onClick={() => handleClick(employeeId)}
-        data-cy="assignee-action-button"
-        disabled={disabled}
-      >
-        {translate('approvalRequest.tasks.list.assignee.complete')}
-      </Button>
-    </>);
-  };
+  // loggedin user is same as repeat user show complete button else pending icon
   return (<>
     {assigneList?.map(({ employeeId, status, updatedAt }) => {
       return (<div className={classes.employeeResponseFields}>
-        {!(status === EmployeeStatus.Done) ? getAssigneeActionButton(status, employeeId)
-          : <OverflowingContent>
+        {/* completed then show completed info */}
+        {status === EmployeeStatus.Done
+          ? <OverflowingContent>
             <div className={classes.assigneeActionStatusContainer}>
               <CompletedIcon />
               <span className={classes.assigneeActionStatus}>
@@ -53,6 +45,20 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (props)
               </span>
             </div>
           </OverflowingContent>
+          : employeeId === currentUserId ? disabled ? EMPTY_VALUE_PLACEHOLDER : <Button
+            className={classes.assigneeAction}
+            onClick={() => handleClick(employeeId)}
+            data-cy="assignee-action-button"
+            disabled={disabled}
+          >
+            {translate('approvalRequest.tasks.list.assignee.complete')}
+          </Button>
+            : <div className={classes.assigneeActionStatusContainer}>
+              <FontAwesomeIcon icon={solid('circle-check')} className={classes.pendingIcon} />
+              <span className={classes.assigneeActionStatus}>
+                {translate('approvalRequest.tasks.list.assignee.status.pending')}
+              </span>
+            </div>
         }
       </div>);
     })}

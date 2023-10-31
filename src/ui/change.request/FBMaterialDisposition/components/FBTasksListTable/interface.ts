@@ -1,3 +1,4 @@
+import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { User } from '../../../../../state/ducks/common/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -36,6 +37,7 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: () => void
   disabled: boolean
+  currentState?: ChangeRequestStatus
   onRowClick?: (e: TLItemEditEvent) => void
   employeeCommentUpdates: (taskId: string, employeeResponse: EmployeeResponse[]) => void
   employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
@@ -45,6 +47,7 @@ export interface SchemaOptions {
 export interface CustomTemplateProps extends CellTemplateProps<EditableTLItem> {
   onClick?: (e: TLItemEditEvent) => void
   disabled?: boolean
+  currentState?: ChangeRequestStatus
   employeeCommentUpdates?: (taskId: string, employeeResponse: EmployeeResponse[]) => void
   employeeStatusUpdates?: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
   employeeEvidenceUpdates?: (dataItem: TasksListItem, employeeId: string, attachmentId: string) => void

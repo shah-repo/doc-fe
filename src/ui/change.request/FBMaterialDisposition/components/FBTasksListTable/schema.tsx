@@ -1,3 +1,4 @@
+import React from 'react';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { AssignedTOCellTemplate } from './components/cells/AssignedTOCellTemplate';
@@ -6,7 +7,6 @@ import { CommentCellTemplate } from './components/cells/CommentCellTemplate';
 import { InstructionsCellTemplate } from './components/cells/InstructionsCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/cells/UploadEvidenceCellTemplate';
 import { EditableTLItem, SchemaOptions } from './interface';
-import React from 'react';
 
 export const buildSchema = ({
   actionsClass,
@@ -15,6 +15,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   disabled,
+  currentState,
   employeeCommentUpdates,
   employeeStatusUpdates,
   employeeEvidenceUpdates,
@@ -49,7 +50,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'approvalRequest.grid.heading.attachments',
       show: false,
-      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, disabled }} />,
+      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, disabled, currentState }} />,
       width: 324,
     },
     {
@@ -57,14 +58,14 @@ export const buildSchema = ({
       field: 'comments',
       title: 'approvalRequest.grid.heading.comments',
       show: false,
-      template: (props) => <CommentCellTemplate {...props} {...{ employeeCommentUpdates, disabled }} />,
+      template: (props) => <CommentCellTemplate {...props} {...{ employeeCommentUpdates, disabled, currentState }} />,
       width: 324,
     },
     {
       id: 'assigneeAction',
       title: 'approvalRequest.grid.heading.assignee.action',
       show: false,
-      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, disabled }} />,
+      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, disabled, currentState }} />,
       width: 290,
     },
     {

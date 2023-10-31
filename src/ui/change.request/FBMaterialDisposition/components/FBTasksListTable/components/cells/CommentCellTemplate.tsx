@@ -51,12 +51,13 @@ export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
     ...empObj,
     [emp.employeeId]: emp.comment,
   }), {});
+  console.log('disabled :', disabled);
 
   return (<>
     <OverflowingContent>
       {assigneList?.map(({ employeeId, status }) => {
         return <div className={classes.commentCell} >
-          {(status !== EmployeeStatus.Done && !disabled) && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
+          {(!disabled && status !== EmployeeStatus.Done) && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
           {(status === EmployeeStatus.Done || disabled) && (assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER)}
         </div>;
       })}

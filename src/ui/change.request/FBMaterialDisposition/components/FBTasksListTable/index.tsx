@@ -27,7 +27,7 @@ interface props {
   showAdditionalColumns?: boolean
 }
 
-const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, showAdditionalColumns }) => {
+const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly = false, showAdditionalColumns }) => {
   const classes = useStyles();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
@@ -194,7 +194,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     employeeCommentUpdates: employeeCommentUpdates,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: employeeEvidenceUpdates,
-    disabled: ChangeRequestStatus.Closed === changeRequest?.state,
+    disabled: (ChangeRequestStatus.Closed === changeRequest?.state || isShowOnly),
+    currentState: changeRequest?.state,
   });
 
   const getColumns = () => {

@@ -1669,7 +1669,7 @@
   "approvalRequest.tasks.list.section.heading": "Tasks List",
   "approvalRequest.tasks.list.assignee.complete": "Complete",
   "approvalRequest.tasks.list.assignee.status.completed": "Completed",
-  "approvalRequest.tasks.list.assignee.status.notCompleted": "Not Completed",
+  "approvalRequest.tasks.list.assignee.status.pending": "Pending",
   "approvalRequest.tasks.incomplete.message": "One or more tasks are incomplete, Would you like to continue anyway?",
   "approvalRequest.lot.status.alert.title": "Lot status update",
   "approvalRequest.lot.status.alert.message": "Lot status and part revision will be automatically updated based on your Material Disposition settings",

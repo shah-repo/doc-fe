@@ -58,6 +58,7 @@ export const styles = makeStyles((theme) => ({
   },
   assigneeActionStatusContainer: {
     display: 'flex',
+    alignItems: 'center',
     fontSize: 12,
   },
   assigneeActionStatus: {
@@ -90,6 +91,12 @@ export const styles = makeStyles((theme) => ({
     fontSize: 12,
     fontWeight: 400,
     marginLeft: theme.spacing(0.75),
+  },
+  pendingIcon: {
+    width: 14,
+    height: 14,
+    borderRadius: 3,
+    color: Colors.light_yellow_warning,
   },
   attachmentName: {
     color: Colors.navy,
