@@ -1,9 +1,9 @@
 import { createStyles } from '@material-ui/core';
 import EnlilLogo from '../../assets/images/enlil_logo.svg';
+import { NextTheme } from '../layout/theme-next/provider';
 import Colors from '../layout/theme/utils/colors';
 import { HeaderPresenterProps } from './Header.presenter';
 import { DRAWER_WIDTH } from './Navigation.styles';
-import { NextTheme } from '../layout/theme-next/provider';
 
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
@@ -93,6 +93,13 @@ export default (theme: NextTheme) =>
         '&::before': {
           display: 'none',
         },
+      },
+      avatarMobile: {
+        width: 35,
+        height: 35,
+        marginLeft: 65,
+        margin: `${theme.spacing(1)} 0 0 ${theme.spacing(4)}`,
+        borderRadius: '50%',
       },
 
     },
